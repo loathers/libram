@@ -1,0 +1,14 @@
+{
+  "name": "libram",
+  "version": "0.0.1",
+  "description": "JavaScript helper library for KoLmafia",
+  "main": "index.js",
+  "repository": "https://github.com/Loathing-Associates-Scripting-Society/libram",
+  "author": "Samuel Gaus <sam@gaus.co.uk>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/node": "^14.14.7",
+    "prettier": "^2.1.2"
+  }
+}

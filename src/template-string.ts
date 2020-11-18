@@ -7,23 +7,46 @@ const concatTemplateString = (
     ""
   );
 
-const createMafiaConstant = <T extends typeof MafiaType>(Type: T) => (
-  literals: TemplateStringsArray,
-  ...placeholders: string[]
-) => Type.get(concatTemplateString(literals, ...placeholders));
+const createSingleConstant = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T)
+) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
+  const input = concatTemplateString(literals, ...placeholders);
+  type I = InstanceType<typeof Type>;
+  return Type.get<I>(input);
+}
 
-const createMafiaConstants = <T extends typeof MafiaType>(Type: T) => (
-  literals: TemplateStringsArray,
-  ...placeholders: string[]
-) =>
-  concatTemplateString(literals, ...placeholders)
-    .split(",")
-    .map((id) => Type.get(id));
+const createPluralConstant = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T)
+) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
+  const input = concatTemplateString(literals, ...placeholders);
 
-export const $item = createMafiaConstant(Item);
-export const $items = createMafiaConstants(Item);
+  type I = InstanceType<typeof Type>;
 
-export const $monster = createMafiaConstant(Monster);
-export const $monsters = createMafiaConstants(Monster);
+  if (input === "") {
+    return Type.all<I>();
+  }
 
-const lime = $item`lime`;
+  return Type.get<I>(input.split(","));
+};
+
+/**
+ * An Item specified by name.
+ */
+export const $item = createSingleConstant(Item);
+
+/**
+ * A list of Items specified by a comma-separated list of names.
+ * For a list of all possible Items, leave the template string blank.
+ */
+export const $items = createPluralConstant(Item);
+
+/**
+ * A Monster specified by name.
+ */
+export const $monster = createSingleConstant(Monster);
+
+/**
+ * A list of Monsters specified by a comma-separated list of names.
+ * For a list of all possible Monsters, leave the template string blank.
+ */
+export const $monsters = createPluralConstant(Monster);

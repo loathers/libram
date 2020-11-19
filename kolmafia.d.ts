@@ -135,6 +135,11 @@ declare class Familiar extends MafiaClass {}
 
 declare class Item extends MafiaClass {
   /**
+   * Item
+   */
+  readonly item: string;
+
+  /**
    * Plural
    */
   readonly plural: string;

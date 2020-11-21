@@ -5,5 +5,5 @@ const citrus = $items`lime, lemon`;
 const allItems = $items``;
 
 if (lime.discardable) {
-  Lib.print(lime.name);
+  Lib.print(`I have ${Lib.itemAmount(lime)} ${lime.quality} ${lime.plural}`);
 }

@@ -1,3 +1,5 @@
+import { Bounty, Class, Coinmaster, Effect, Element, Familiar, Item, Location, Monster, Phylum, Servant, Skill, Slot, Stat, Thrall, MafiaClass } from "kolmafia";
+
 const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]

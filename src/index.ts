@@ -1,1 +1,2 @@
-export * from './template-string';
+export * from "./template-string";
+export * as clan from "./clan";

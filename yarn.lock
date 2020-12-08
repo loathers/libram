@@ -2367,6 +2367,13 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
+node-html-parser@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-2.0.0.tgz#fe03a9e99efac16819969802e17a9e51d968d65f"
+  integrity sha512-3wJdYSxiVIBxuiFm9UtfNWAlBw2P+Vb/RN1nqf40q2JeZDpcJ1HsrWuWV3j15SSJ25TvfnOoac2Q+uDU9iY0sw==
+  dependencies:
+    he "1.2.0"
+
 node-releases@^1.1.66:
   version "1.1.67"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.67.tgz#28ebfcccd0baa6aad8e8d4d8fe4cbc49ae239c12"

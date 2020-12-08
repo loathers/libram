@@ -1,4 +1,4 @@
-import { Bounty, Class, Coinmaster, Effect, Element, Familiar, Item, Location, Monster, Phylum, Servant, Skill, Slot, Stat, Thrall, MafiaClass } from "kolmafia";
+import { MafiaClass } from "kolmafia";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,
@@ -15,7 +15,7 @@ const createSingleConstant = <T extends MafiaClass>(
   const input = concatTemplateString(literals, ...placeholders);
   type I = InstanceType<typeof Type>;
   return Type.get<I>(input);
-}
+};
 
 const createPluralConstant = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T)

@@ -3,15 +3,17 @@ import {
   getClanName,
   visitUrl,
   toMonster,
-  print,
   getPlayerId,
 } from "kolmafia";
 import { parse } from "node-html-parser";
 
-import { notNull } from "./utils";
+import { notNull, parseNumber } from "./utils";
 
 const clanIdCache: { [clanName: string]: number } = {};
 
+/**
+ * Get list of clans to which the player is whitelisted
+ */
 export function getWhitelist() {
   const root = parse(visitUrl("clan_signup.php"));
 
@@ -23,6 +25,10 @@ export function getWhitelist() {
     }));
 }
 
+/**
+ * Join a clan
+ * @param clanIdOrName Clan id or name
+ */
 export function join(clanIdOrName: string | number) {
   let clanId;
 
@@ -57,20 +63,32 @@ export function join(clanIdOrName: string | number) {
   return result.includes("clanhalltop.gif");
 }
 
+/**
+ * Return the name and id of the current clan
+ */
 export function get() {
   return { id: getClanId(), name: getClanName() };
 }
 
+/**
+ * Return the id of the current clan
+ */
 export function getId() {
   return getClanId();
 }
 
+/**
+ * Return the name of the current clan
+ */
 export function getName() {
   return getClanName();
 }
 
 const CLAN_LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 
+/**
+ * Return the monster that is currently in the current clan's fax machine if any
+ */
 export function getCurrentFax() {
   const logs = visitUrl("clan_log.php");
 
@@ -87,6 +105,9 @@ export function getCurrentFax() {
 
 const CLAN_WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
+/**
+ * List available ranks (name, degree and id) from the current clan
+ */
 export function getRanks() {
   const root = parse(visitUrl("clan_whitelist.php"));
 
@@ -108,6 +129,13 @@ export function getRanks() {
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
+/**
+ * Add a player to the current clan's whitelist.
+ * If the player is already in the whitelist this will change their rank or title.
+ * @param player Player id or name
+ * @param rankName Rank to give the player. If not provided they will be given the lowest rank
+ * @param title Title to give the player. If not provided, will be blank
+ */
 export function addPlayerToWhitelist(
   player: string | number,
   rankName?: string,
@@ -132,6 +160,11 @@ export function addPlayerToWhitelist(
   );
 }
 
+/**
+ * Remove a player from the current clan's whitelist
+ * @param player Player id or name
+ */
+
 export function removePlayerFromWhitelist(player: string | number) {
   const playerId = toPlayerId(player);
 
@@ -140,4 +173,26 @@ export function removePlayerFromWhitelist(player: string | number) {
   );
 
   return result.includes("Whitelist updated.");
+}
+
+/**
+ * Return the amount of meat in the current clan's coffer.
+ */
+export function getMeatInCoffer() {
+  const page = visitUrl("clan_stash.php");
+  const [, meat] = page.match(
+    /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./
+  ) || ["0", "0"];
+  return parseNumber(meat);
+}
+
+/**
+ * Add the given amount of meat to the current clan's coffer.
+ * @param amount Amount of meat to put in coffer
+ */
+export function putMeatInCoffer(amount: number) {
+  const result = visitUrl(
+    `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
+  );
+  return result.includes("You contributed");
 }

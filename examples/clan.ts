@@ -1,4 +1,4 @@
-import { clan } from "../src/index";
+import { console, clan } from "../src/index";
 
 clan.join("The Piglets of Fate");
 console.log(clan.getCurrentFax());

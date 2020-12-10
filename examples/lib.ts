@@ -1,5 +1,5 @@
-import { songCount, $monster, getMonsterLocations } from "../src";
+import { getSongCount, $monster, getMonsterLocations } from "../src";
 
-console.log(songCount());
+console.log(getSongCount());
 
 console.log(getMonsterLocations($monster`zobmie`));

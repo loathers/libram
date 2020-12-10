@@ -134,9 +134,9 @@ export function have(
 }
 
 /**
- * Return whether an item is in the player's campsite
+ * Return whether an item is in the player's campground
  */
-export function haveInCampsite(item: Item) {
+export function haveInCampground(item: Item) {
   return (
     Object.keys(getCampground())
       .map((i) => toItem(i))

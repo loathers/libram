@@ -1,78 +1,110 @@
-import { appearanceRates, availableAmount, booleanModifier, fullnessLimit, haveEffect, haveFamiliar, haveServant, haveSkill, inebrietyLimit, itemAmount, myEffects, myFullness, myInebriety, mySpleenUse, myThrall, numericModifier, spleenLimit, toEffect, toInt, toSkill } from "kolmafia";
+import {
+  appearanceRates,
+  availableAmount,
+  booleanModifier,
+  fullnessLimit,
+  getCampground,
+  haveEffect,
+  haveFamiliar,
+  haveServant,
+  haveSkill,
+  inebrietyLimit,
+  myEffects,
+  myFullness,
+  myInebriety,
+  mySpleenUse,
+  myThrall,
+  numericModifier,
+  spleenLimit,
+  toEffect,
+  toInt,
+  toItem,
+  toSkill,
+} from "kolmafia";
 
 import { $class } from "./template-string";
 
 /**
- * Returns the current maximum Accordion Thief songs you can have in your head
+ * Returns the current maximum Accordion Thief songs the player can have in their head
  */
-export function songLimit() {
-  return 3 + (booleanModifier("Four Songs") ? 1 : 0) + numericModifier("Additional Song");
+export function getSongLimit() {
+  return (
+    3 +
+    (booleanModifier("Four Songs") ? 1 : 0) +
+    numericModifier("Additional Song")
+  );
 }
 
 /**
- * Tells you if the Skill or Effect provided is an Accordion Thief song
+ * Return whether the Skill or Effect provided is an Accordion Thief song
  * @param skillOrEffect The Skill or Effect
  */
 export function isSong(skillOrEffect: Skill | Effect) {
-  const skill = (skillOrEffect instanceof Effect) ? toSkill(skillOrEffect) : skillOrEffect;
+  const skill =
+    skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
 
   return toInt(skill.class) === toInt($class`Accordion Thief`) && skill.buff;
 }
 
 /**
- * Lists all active Effects
+ * List all active Effects
  */
-export function activeEffects() {
-  return Object.keys(myEffects()).map(e => toEffect(e));
+export function getActiveEffects() {
+  return Object.keys(myEffects()).map((e) => toEffect(e));
 }
 
 /**
- * Lists currently active Accordion Thief songs
+ * List currently active Accordion Thief songs
  */
-export function activeSongs() {
-  return activeEffects().filter(isSong);
+export function getActiveSongs() {
+  return getActiveEffects().filter(isSong);
 }
 
 /**
- * Lists number of active Accordion Thief songs
+ * List number of active Accordion Thief songs
  */
-export function songCount() {
-  return activeSongs().length;
+export function getSongCount() {
+  return getActiveSongs().length;
 }
 
 /**
- * Returns the locations in which the given monster can be encountered naturally
+ * Return the locations in which the given monster can be encountered naturally
  * @param monster Monster to find
  */
 export function getMonsterLocations(monster: Monster) {
-  return Location.all().filter(location => monster.name in appearanceRates(location));
+  return Location.all().filter(
+    (location) => monster.name in appearanceRates(location)
+  );
 }
 
 /**
- * Returns your remaining liver space
+ * Return the player's remaining liver space
  */
-export function remainingLiver() {
+export function getRemainingLiver() {
   return inebrietyLimit() - myInebriety();
 }
 
 /**
- * Returns your remaining stomach space
+ * Return the player's remaining stomach space
  */
-export function remainingStomach() {
+export function getRemainingStomach() {
   return fullnessLimit() - myFullness();
 }
 
 /**
- * Returns your remaining spleen space
+ * Return the player's remaining spleen space
  */
-export function remainingSpleen() {
+export function getRemainingSpleen() {
   return spleenLimit() - mySpleenUse();
 }
 
 /**
- * Polymorphic function that will tell you if you "have" any entity which one could feasibly "have".
+ * Return whether the player "has" any entity which one could feasibly "have".
  */
-export function have(thing: Effect | Familiar | Item | Servant | Skill | Thrall, quantity = 1) {
+export function have(
+  thing: Effect | Familiar | Item | Servant | Skill | Thrall,
+  quantity = 1
+) {
   if (thing instanceof Effect) {
     return haveEffect(thing) >= quantity;
   }
@@ -88,7 +120,7 @@ export function have(thing: Effect | Familiar | Item | Servant | Skill | Thrall,
   if (thing instanceof Servant) {
     return haveServant(thing);
   }
-  
+
   if (thing instanceof Skill) {
     return haveSkill(thing);
   }
@@ -99,4 +131,15 @@ export function have(thing: Effect | Familiar | Item | Servant | Skill | Thrall,
   }
 
   return false;
+}
+
+/**
+ * Return whether an item is in the player's campsite
+ */
+export function haveInCampsite(item: Item) {
+  return (
+    Object.keys(getCampground())
+      .map((i) => toItem(i))
+      .find((i) => toInt(i) === toInt(item)) !== undefined
+  );
 }

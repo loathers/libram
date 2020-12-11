@@ -6,7 +6,7 @@ import {
   toSkill,
 } from "kolmafia";
 
-import { $effect, $item, $skill, haveInCampground } from "../";
+import { $effect, $item, $skill, haveInCampground } from "..";
 
 function isKeyOfObject<T extends Effect | Skill | Item>(
   needle: T,
@@ -166,6 +166,14 @@ export function getChips() {
 }
 
 /**
+ * Return number of times digitize was cast today
+ */
+export function getDigitizeUses() {
+  return Number.parseInt(getProperty("_sourceTerminalDigitzeUses"));
+}
+
+
+/**
  * Return Monster that is currently digitized, else null
  */
 export function getDigitizeMonster() {
@@ -180,11 +188,9 @@ export function getDigitizeMonsterCount() {
   return Number.parseInt(getProperty("_sourceTerminalDigitizeMonsterCount"));
 }
 
-/**
- * Return number of times digitize was cast today
- */
-export function getDigitizes() {
-  return Number.parseInt(getProperty("_sourceTerminalDigitzeUses"));
+
+export function getNextDigitizeMonster() {
+  return Number.parseInt(getProperty("_source"));
 }
 
 /**
@@ -204,7 +210,7 @@ export function getMaximumDigitizes() {
 export function canDigitize() {
   return (
     !!getSkills().find((s) => toInt(s) === toInt(Skills.Digitize)) &&
-    getDigitizes() < getMaximumDigitizes()
+    getDigitizeUses() < getMaximumDigitizes()
   );
 }
 

@@ -1,1 +1,1 @@
-export * as sourceTerminal from "./sourceTerminal";
+export * as SourceTerminal from "./SourceTerminal";

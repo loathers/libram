@@ -1,5 +1,5 @@
 import { print } from "kolmafia";
 import { console } from "../src";
-import { sourceTerminal } from "../src/resources";
+import { SourceTerminal } from "../src/resources";
 
-console.log(sourceTerminal.canDigitize());
+console.log(SourceTerminal.canDigitize());

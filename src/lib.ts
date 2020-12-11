@@ -4,6 +4,7 @@ import {
   booleanModifier,
   fullnessLimit,
   getCampground,
+  getCounters,
   haveEffect,
   haveFamiliar,
   haveServant,
@@ -142,4 +143,38 @@ export function haveInCampground(item: Item) {
       .map((i) => toItem(i))
       .find((i) => toInt(i) === toInt(item)) !== undefined
   );
+}
+
+export enum Wanderer {
+  Digitize = 'Digitize Monster',
+  Enamorang = 'Enamoranged Monster',
+  Holiday = 'Holiday Monster',
+  Portscan = 'portscan.edu',
+  Romantic = 'Romantic Monster',
+  Vote = 'Vote Monster',
+};
+
+const absoluteWanderers = [Wanderer.Digitize, Wanderer.Portscan, Wanderer.Vote];
+
+/**
+ * Return whether the player has the queried counter
+ */
+export function haveCounter(counterName: string, upper = 500) {
+  return getCounters(counterName, 0, upper) === counterName;
+}
+
+/**
+ * Return whether the player has the queried wandering monster counter
+ */
+export function haveWandererCounter(wanderer: Wanderer) {
+  if (absoluteWanderers.includes(wanderer)) {
+    return haveCounter(wanderer);
+  }
+  const begin = wanderer + ' window begin';
+  const end = wanderer + ' window end';
+  return haveCounter(begin) || haveCounter(end);
+}
+
+export function isWandererNow(wanderer: Wanderer) {
+  return getCounters(wanderer, 0, 0) == wanderer;
 }

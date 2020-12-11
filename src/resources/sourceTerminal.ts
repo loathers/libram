@@ -1,7 +1,6 @@
 import {
   cliExecute,
   getProperty,
-  MafiaClass,
   toInt,
   toMonster,
   toSkill,
@@ -54,7 +53,7 @@ export function enhance(buff: Effect) {
     return false;
   }
 
-  return cliExecute(`enhance ${buff.name}`);
+  return cliExecute(`terminal enhance ${buff.name}`);
 }
 
 /**
@@ -81,7 +80,7 @@ export function enquiry(rolloverBuff: Effect) {
     return false;
   }
 
-  return cliExecute(`enquiry ${rolloverBuff.name}`);
+  return cliExecute(`terminal enquiry ${rolloverBuff.name}`);
 }
 
 /**
@@ -113,7 +112,7 @@ export function educate(skill: Skill) {
     return false;
   }
 
-  return cliExecute(`educate ${skill.name}`);
+  return cliExecute(`terminal educate ${skill.name}`);
 }
 
 /**
@@ -156,7 +155,7 @@ export function extrude(item: Item) {
     return false;
   }
 
-  return cliExecute(`extrude ${item.name}`);
+  return cliExecute(`terminal extrude ${item.name}`);
 }
 
 /**

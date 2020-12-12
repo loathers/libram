@@ -154,20 +154,20 @@ export enum Wanderer {
   Vote = 'Vote Monster',
 };
 
-const absoluteWanderers = [Wanderer.Digitize, Wanderer.Portscan, Wanderer.Vote];
+const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan, Wanderer.Vote];
 
 /**
  * Return whether the player has the queried counter
  */
-export function haveCounter(counterName: string, upper = 500) {
-  return getCounters(counterName, 0, upper) === counterName;
+export function haveCounter(counterName: string, minTurns = 0, maxTurns = 500) {
+  return getCounters(counterName, minTurns, maxTurns) === counterName;
 }
 
 /**
- * Return whether the player has the queried wandering monster counter
+ * Return whether the player has the queried wandering counter
  */
 export function haveWandererCounter(wanderer: Wanderer) {
-  if (absoluteWanderers.includes(wanderer)) {
+  if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer);
   }
   const begin = wanderer + ' window begin';
@@ -175,6 +175,18 @@ export function haveWandererCounter(wanderer: Wanderer) {
   return haveCounter(begin) || haveCounter(end);
 }
 
+/**
+ * For deterministic wanderers:
+ * Return whether the player will encounter the queried wanderer on the next turn
+ *
+ * For variable wanderers:
+ * Return whether the player is within an encounter window for the queried wanderer
+ */
 export function isWandererNow(wanderer: Wanderer) {
-  return getCounters(wanderer, 0, 0) == wanderer;
+  if (deterministicWanderers.includes(wanderer)) {
+    return haveCounter(wanderer, 0, 0);
+  }
+  const begin = wanderer + ' window begin';
+  const end = wanderer + ' window end';
+  return !haveCounter(begin, 1) && haveCounter(end);
 }

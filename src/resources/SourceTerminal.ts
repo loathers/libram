@@ -115,6 +115,17 @@ export function educate(skill: Skill) {
   return cliExecute(`terminal educate ${skill.name}`);
 }
 
+export function multiEducate(skills: Skill[]) {
+  skills.forEach(skill => {
+    if (!isKeyOfObject(skill, Skills)) {
+      return false;
+    }
+    cliExecute(`terminal educate ${skill.name}`);
+  });
+
+  return true;
+}
+
 /**
  * Return the Skills currently available from Source Terminal
  */
@@ -188,11 +199,6 @@ export function getDigitizeMonsterCount() {
   return Number.parseInt(getProperty("_sourceTerminalDigitizeMonsterCount"));
 }
 
-
-export function getNextDigitizeMonster() {
-  return Number.parseInt(getProperty("_source"));
-}
-
 /**
  * Return maximum number of digitizes player can cast
  */
@@ -204,13 +210,28 @@ export function getMaximumDigitizes() {
 }
 
 /**
- * Returns whether the player can cast Digitize
- * This only considers whether the player has learned the skill and has sufficient daily casts remaining, not whether they have sufficient MP
+ * Returns the current day's number of remaining digitize uses
+ */
+export function digitizesRemaining() {
+  return getMaximumDigitizes() - getDigitizeUses();
+}
+
+/**
+ * Returns whether the player could theoretically cast Digitize
+ */
+export function couldDigitize() {
+  return getDigitizeUses() < getMaximumDigitizes();
+}
+
+/**
+ * Returns whether the player can cast Digitize immediately
+ * This only considers whether the player has learned the skill
+ * and has sufficient daily casts remaining, not whether they have sufficient MP
  */
 export function canDigitize() {
   return (
-    !!getSkills().find((s) => toInt(s) === toInt(Skills.Digitize)) &&
-    getDigitizeUses() < getMaximumDigitizes()
+    couldDigitize() &&
+    !!getSkills().find((s) => toInt(s) === toInt(Skills.Digitize))
   );
 }
 

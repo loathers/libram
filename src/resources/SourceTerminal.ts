@@ -107,16 +107,14 @@ export const Skills = {
  * @param skill Skill to learn
  * @see Skills
  */
-export function educate(skill: Skill) {
-  if (!isKeyOfObject(skill, Skills)) {
-    return false;
+export function educate(skills: Skill | [Skill, Skill]) {
+  let skillsArray: Skill[];
+  if (Array.isArray(skills)) {
+    skillsArray = skills.slice(0, 2);
+  } else {
+    skillsArray = [skills];
   }
-
-  return cliExecute(`terminal educate ${skill.name}`);
-}
-
-export function multiEducate(skills: Skill[]) {
-  skills.forEach(skill => {
+  skillsArray.forEach(skill => {
     if (!isKeyOfObject(skill, Skills)) {
       return false;
     }

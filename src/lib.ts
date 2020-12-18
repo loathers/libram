@@ -20,7 +20,6 @@ import {
   numericModifier,
   spleenLimit,
   toEffect,
-  toInt,
   toItem,
   toSkill,
   totalTurnsPlayed,
@@ -47,7 +46,7 @@ export function isSong(skillOrEffect: Skill | Effect) {
   const skill =
     skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
 
-  return toInt(skill.class) === toInt($class`Accordion Thief`) && skill.buff;
+  return skill.class === $class`Accordion Thief` && skill.buff;
 }
 
 /**
@@ -144,7 +143,7 @@ export function haveInCampground(item: Item) {
   return (
     Object.keys(getCampground())
       .map((i) => toItem(i))
-      .find((i) => toInt(i) === toInt(item)) !== undefined
+      .includes(item)
   );
 }
 

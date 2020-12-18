@@ -1,23 +1,11 @@
 import {
   cliExecute,
   getProperty,
-  toInt,
   toMonster,
   toSkill,
 } from "kolmafia";
 
-import { $effect, $item, $skill, haveInCampground } from "..";
-
-function isKeyOfObject<T extends Effect | Skill | Item>(
-  needle: T,
-  haystack: { [key: string]: T }
-) {
-  return (
-    // @ts-ignore For some reason this cares about other classes not just the ones that T extends
-    Object.values(haystack).find((n) => toInt(n) === toInt(needle)) !==
-    undefined
-  );
-}
+import { $monster, $effect, $item, $skill, haveInCampground } from "..";
 
 export const item = $item`Source Terminal`;
 
@@ -49,7 +37,7 @@ export const Buffs = {
  * @see Buffs
  */
 export function enhance(buff: Effect) {
-  if (!isKeyOfObject(buff, Buffs)) {
+  if (!Object.values(Buffs).includes(buff)) {
     return false;
   }
 
@@ -76,7 +64,7 @@ export const RolloverBuffs = {
  * @see RolloverBuffs
  */
 export function enquiry(rolloverBuff: Effect) {
-  if (!isKeyOfObject(rolloverBuff, RolloverBuffs)) {
+  if (!Object.values(RolloverBuffs).includes(rolloverBuff)) {
     return false;
   }
 
@@ -115,7 +103,7 @@ export function educate(skills: Skill | [Skill, Skill]) {
     skillsArray = [skills];
   }
   skillsArray.forEach(skill => {
-    if (!isKeyOfObject(skill, Skills)) {
+    if (!Object.values(Skills).includes(skill)) {
       return false;
     }
     cliExecute(`terminal educate ${skill.name}`);
@@ -160,7 +148,7 @@ export const Items = {
  * @see Items
  */
 export function extrude(item: Item) {
-  if (!isKeyOfObject(item, Items)) {
+  if (!Object.values(Items).includes(item)) {
     return false;
   }
 
@@ -187,7 +175,7 @@ export function getDigitizeUses() {
  */
 export function getDigitizeMonster() {
   const monster = toMonster(getProperty("_sourceTerminalDigitizeMonster"));
-  return monster.name === "none" ? null : monster;
+  return monster === $monster`none` ? null : monster;
 }
 
 /**
@@ -210,7 +198,7 @@ export function getMaximumDigitizes() {
 /**
  * Returns the current day's number of remaining digitize uses
  */
-export function digitizesRemaining() {
+export function getDigitizesRemaining() {
   return getMaximumDigitizes() - getDigitizeUses();
 }
 
@@ -229,27 +217,27 @@ export function couldDigitize() {
 export function canDigitize() {
   return (
     couldDigitize() &&
-    !!getSkills().find((s) => toInt(s) === toInt(Skills.Digitize))
+    getSkills().includes(Skills.Digitize)
   );
 }
 
 /**
  * Return number of times duplicate was cast today
  */
-export function getDuplicates() {
+export function getDuplicateUses() {
   return Number.parseInt(getProperty("_sourceTerminalDuplicateUses"));
 }
 
 /**
  * Return number of times enhance was cast today
  */
-export function getEnhances() {
+export function getEnhanceUses() {
   return Number.parseInt(getProperty("_sourceTerminalEnhanceUses"));
 }
 
 /**
  * Return number of times portscan was cast today
  */
-export function getPortscans() {
+export function getPortscanUses() {
   return Number.parseInt(getProperty("_sourceTerminalPortscanUses"));
 }

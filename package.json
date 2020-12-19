@@ -9,7 +9,8 @@
   "private": false,
   "scripts": {
     "build": "yarn run tsc src/**/*",
-    "postinstall": "patch-package"
+    "format": "yarn run prettier --write src/**/* examples/**/*",
+    "prepare": "patch-package"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",

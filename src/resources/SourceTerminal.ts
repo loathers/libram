@@ -1,9 +1,4 @@
-import {
-  cliExecute,
-  getProperty,
-  toMonster,
-  toSkill,
-} from "kolmafia";
+import { cliExecute, getProperty, toMonster, toSkill } from "kolmafia";
 
 import { $monster, $effect, $item, $skill, haveInCampground } from "..";
 
@@ -102,7 +97,7 @@ export function educate(skills: Skill | [Skill, Skill]) {
   } else {
     skillsArray = [skills];
   }
-  skillsArray.forEach(skill => {
+  skillsArray.forEach((skill) => {
     if (!Object.values(Skills).includes(skill)) {
       return false;
     }
@@ -169,7 +164,6 @@ export function getDigitizeUses() {
   return Number.parseInt(getProperty("_sourceTerminalDigitzeUses"));
 }
 
-
 /**
  * Return Monster that is currently digitized, else null
  */
@@ -215,10 +209,7 @@ export function couldDigitize() {
  * and has sufficient daily casts remaining, not whether they have sufficient MP
  */
 export function canDigitize() {
-  return (
-    couldDigitize() &&
-    getSkills().includes(Skills.Digitize)
-  );
+  return couldDigitize() && getSkills().includes(Skills.Digitize);
 }
 
 /**

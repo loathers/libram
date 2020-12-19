@@ -1,6 +1,12 @@
-import { console, clan } from "../src/index";
+import { console, Clan } from "../src/index";
 
-clan.join("The Piglets of Fate");
-console.log(clan.getCurrentFax());
-clan.addPlayerToWhitelist("onweb");
-clan.removePlayerFromWhitelist("onweb");
+const piglets = Clan.join("The Piglets of Fate");
+Clan.join("The Hogs of Exploitery");
+
+try {
+  console.log(piglets.getMeatInCoffer());
+} catch (e) {
+  console.log(e.message);
+}
+
+Clan.join("The Piglets of Fate");

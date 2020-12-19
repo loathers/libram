@@ -9,12 +9,15 @@
   "private": false,
   "scripts": {
     "build": "yarn run tsc src/**/*",
-    "postinstall": "patch-package"
+    "format": "yarn run prettier --write src/**/* examples/**/*",
+    "prepare": "patch-package"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/compat-data": "^7.12.7",
     "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "babel-loader": "^8.2.2",

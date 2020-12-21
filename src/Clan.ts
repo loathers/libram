@@ -9,7 +9,11 @@ import { parse } from "node-html-parser";
 
 import { notNull, parseNumber } from "./utils";
 
-function validate<T extends Function>(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<T>) {
+function validate<T extends Function>(
+  target: any,
+  propertyName: string,
+  descriptor: TypedPropertyDescriptor<T>
+) {
   if (!descriptor?.value) return;
 
   const method = descriptor.value;
@@ -57,7 +61,7 @@ export class Clan {
 
         if (!clan) {
           throw new Error("Player is not whitelisted to clan");
-        };
+        }
 
         clanIdCache[clanName] = clan.id;
       }
@@ -82,8 +86,8 @@ export class Clan {
   }
 
   /**
-  * Return player's current Clan
-  */
+   * Return player's current Clan
+   */
   static get() {
     return new Clan(getClanId(), getClanName());
   }
@@ -158,7 +162,11 @@ export class Clan {
 
         const [, name, degree] = match;
 
-        return { name, degree: Number.parseInt(degree), id: Number.parseInt(id) };
+        return {
+          name,
+          degree: Number.parseInt(degree),
+          id: Number.parseInt(id),
+        };
       })
       .filter(notNull);
   }
@@ -234,4 +242,3 @@ export class Clan {
     return result.includes("You contributed");
   }
 }
-

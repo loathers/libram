@@ -2,17 +2,17 @@ import {
   $item,
   have as haveItem,
   haveWandererCounter,
-  property,
   Wanderer,
+  prop,
 } from "..";
 import { Copier } from "../Copier";
 
 export function have(): boolean {
-  return property.getBoolean("loveTunnelAvailable");
+  return prop("loveTunnelAvailable");
 }
 
 export function isUsed(): boolean {
-  return property.getBoolean("_loveTunnelUsed");
+  return prop("_loveTunnelUsed");
 }
 
 export function haveLovEnamorang(): boolean {
@@ -20,7 +20,7 @@ export function haveLovEnamorang(): boolean {
 }
 
 export function getLovEnamorangUses(): number {
-  return property.getNumber("_enamorangs");
+  return prop("_enamorangs");
 }
 
 export function couldUseLoveEnamorang(): boolean {
@@ -32,7 +32,7 @@ export function couldUseLoveEnamorang(): boolean {
 }
 
 export function getLovEnamorangMonster(): Monster | null {
-  return property.getMonster("enamorangMonster");
+  return prop("enamorangMonster");
 }
 
 export const LovEnamorang = new Copier(

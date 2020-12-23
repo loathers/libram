@@ -5,7 +5,7 @@ import {
   $item,
   $skill,
   haveInCampground,
-  property
+  prop,
 } from "..";
 import { Copier } from "../Copier";
 
@@ -113,8 +113,8 @@ export function educate(skills: Skill | [Skill, Skill]): boolean {
  * Return the Skills currently available from Source Terminal
  */
 export function getSkills(): Skill[] {
-  return ["sourceTerminalEducate1", "sourceTerminalEducate2"]
-    .map((prop) => property.get(prop))
+  return (["sourceTerminalEducate1", "sourceTerminalEducate2"] as const)
+    .map((p) => prop(p))
     .filter((s) => s !== "")
     .map((s) => toSkill(s.substring(0, -4)));
 }
@@ -163,28 +163,28 @@ export function extrude(item: Item): boolean {
  * Return chips currently installed to player's Source Terminal
  */
 export function getChips(): string[] {
-  return property.get("sourceTerminalChips").split(",");
+  return prop("sourceTerminalChips").split(",");
 }
 
 /**
  * Return number of times digitize was cast today
  */
 export function getDigitizeUses(): number {
-  return property.getNumber("_sourceTerminalDigitzeUses");
+  return prop("_sourceTerminalDigitizeUses");
 }
 
 /**
  * Return Monster that is currently digitized, else null
  */
 export function getDigitizeMonster(): Monster | null {
-  return property.getMonster("_sourceTerminalDigitizeMonster");
+  return prop("_sourceTerminalDigitizeMonster");
 }
 
 /**
  * Return number of digitized monsters encountered since it was last cast
  */
 export function getDigitizeMonsterCount(): number {
-  return property.getNumber("_sourceTerminalDigitizeMonsterCount");
+  return prop("_sourceTerminalDigitizeMonsterCount");
 }
 
 /**
@@ -239,19 +239,19 @@ export const Digitize = new Copier(
  * Return number of times duplicate was cast today
  */
 export function getDuplicateUses(): number {
-  return property.getNumber("_sourceTerminalDuplicateUses");
+  return prop("_sourceTerminalDuplicateUses");
 }
 
 /**
  * Return number of times enhance was cast today
  */
 export function getEnhanceUses(): number {
-  return property.getNumber("_sourceTerminalEnhanceUses");
+  return prop("_sourceTerminalEnhanceUses");
 }
 
 /**
  * Return number of times portscan was cast today
  */
 export function getPortscanUses(): number {
-  return property.getNumber("_sourceTerminalPortscanUses");
+  return prop("_sourceTerminalPortscanUses");
 }

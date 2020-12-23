@@ -11,15 +11,15 @@ import { Copier } from "../Copier";
 
 export const sheet = $item`Spooky Putty sheet`;
 
-export function have() {
+export function have(): boolean {
   return getFoldGroup(sheet).some((item) => haveItem(item));
 }
 
-export function getSpookyPuttySheetCopiesMade() {
+export function getSpookyPuttySheetCopiesMade(): number {
   return Math.max(0, property.getNumber("spookyPuttyCopiesMade"));
 }
 
-export function couldUseSpookyPuttySheet() {
+export function couldUseSpookyPuttySheet(): boolean {
   return (
     have() &&
     getSpookyPuttySheetCopiesMade() < 5 &&
@@ -27,18 +27,18 @@ export function couldUseSpookyPuttySheet() {
   );
 }
 
-export function prepareSpookyPuttySheet() {
+export function prepareSpookyPuttySheet(): boolean {
   if (!have()) return false;
   if (haveItem(sheet)) return true;
 
   return cliExecute("fold Spooky putty sheet");
 }
 
-export function getSpookyPuttySheetMonster() {
+export function getSpookyPuttySheetMonster(): Monster | null {
   return property.getMonster("spookyPuttyMonster");
 }
 
-export function useSpookyPuttySheet() {
+export function useSpookyPuttySheet(): boolean {
   return use(sheet);
 }
 

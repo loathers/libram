@@ -7,23 +7,23 @@ import {
 } from "..";
 import { Copier } from "../Copier";
 
-export function have() {
+export function have(): boolean {
   return property.getBoolean("loveTunnelAvailable");
 }
 
-export function isUsed() {
+export function isUsed(): boolean {
   return property.getBoolean("_loveTunnelUsed");
 }
 
-export function haveLovEnamorang() {
+export function haveLovEnamorang(): boolean {
   return haveItem($item`LOV Enamorang`);
 }
 
-export function getLovEnamorangUses() {
+export function getLovEnamorangUses(): number {
   return property.getNumber("_enamorangs");
 }
 
-export function couldUseLoveEnamorang() {
+export function couldUseLoveEnamorang(): boolean {
   return (
     !haveWandererCounter(Wanderer.Enamorang) &&
     getLovEnamorangUses() < 3 &&
@@ -31,7 +31,7 @@ export function couldUseLoveEnamorang() {
   );
 }
 
-export function getLovEnamorangMonster() {
+export function getLovEnamorangMonster(): Monster | null {
   return property.getMonster("enamorangMonster");
 }
 

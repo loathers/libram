@@ -20,9 +20,6 @@ import {
   myTurncount,
   numericModifier,
   spleenLimit,
-  toEffect,
-  toItem,
-  toMonster,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
@@ -34,7 +31,7 @@ import { SpookyPutty, RainDoh } from "./resources";
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
  */
-export function getSongLimit() {
+export function getSongLimit(): number {
   return (
     3 +
     (booleanModifier("Four Songs") ? 1 : 0) +
@@ -46,7 +43,7 @@ export function getSongLimit() {
  * Return whether the Skill or Effect provided is an Accordion Thief song
  * @param skillOrEffect The Skill or Effect
  */
-export function isSong(skillOrEffect: Skill | Effect) {
+export function isSong(skillOrEffect: Skill | Effect): boolean {
   const skill =
     skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
 
@@ -56,21 +53,21 @@ export function isSong(skillOrEffect: Skill | Effect) {
 /**
  * List all active Effects
  */
-export function getActiveEffects() {
-  return Object.keys(myEffects()).map((e) => toEffect(e));
+export function getActiveEffects(): Effect[] {
+  return Object.keys(myEffects()).map((e) => Effect.get(e));
 }
 
 /**
  * List currently active Accordion Thief songs
  */
-export function getActiveSongs() {
+export function getActiveSongs(): Effect[] {
   return getActiveEffects().filter(isSong);
 }
 
 /**
  * List number of active Accordion Thief songs
  */
-export function getSongCount() {
+export function getSongCount(): number {
   return getActiveSongs().length;
 }
 
@@ -78,7 +75,7 @@ export function getSongCount() {
  * Return the locations in which the given monster can be encountered naturally
  * @param monster Monster to find
  */
-export function getMonsterLocations(monster: Monster) {
+export function getMonsterLocations(monster: Monster): Location[] {
   return Location.all().filter(
     (location) => monster.name in appearanceRates(location)
   );
@@ -87,21 +84,21 @@ export function getMonsterLocations(monster: Monster) {
 /**
  * Return the player's remaining liver space
  */
-export function getRemainingLiver() {
+export function getRemainingLiver(): number {
   return inebrietyLimit() - myInebriety();
 }
 
 /**
  * Return the player's remaining stomach space
  */
-export function getRemainingStomach() {
+export function getRemainingStomach(): number {
   return fullnessLimit() - myFullness();
 }
 
 /**
  * Return the player's remaining spleen space
  */
-export function getRemainingSpleen() {
+export function getRemainingSpleen(): number {
   return spleenLimit() - mySpleenUse();
 }
 
@@ -111,7 +108,7 @@ export function getRemainingSpleen() {
 export function have(
   thing: Effect | Familiar | Item | Servant | Skill | Thrall,
   quantity = 1
-) {
+): boolean {
   if (thing instanceof Effect) {
     return haveEffect(thing) >= quantity;
   }
@@ -143,9 +140,9 @@ export function have(
 /**
  * Return whether an item is in the player's campground
  */
-export function haveInCampground(item: Item) {
+export function haveInCampground(item: Item): boolean {
   return Object.keys(getCampground())
-    .map((i) => toItem(i))
+    .map((i) => Item.get(i))
     .includes(item);
 }
 
@@ -166,7 +163,11 @@ const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 /**
  * Return whether the player has the queried counter
  */
-export function haveCounter(counterName: string, minTurns = 0, maxTurns = 500) {
+export function haveCounter(
+  counterName: string,
+  minTurns = 0,
+  maxTurns = 500
+): boolean {
   return getCounters(counterName, minTurns, maxTurns) === counterName;
 }
 
@@ -174,7 +175,7 @@ export function haveCounter(counterName: string, minTurns = 0, maxTurns = 500) {
  * Returns the player's total number of Artistic Goth Kid and/or Mini-Hipster
  * wanderers encountered today
  */
-export function getTotalFamiliarWanderers() {
+export function getTotalFamiliarWanderers(): number {
   const hipsterFights = property.getNumber("_hipsterAdv");
   const gothFights = property.getNumber("_gothKidFights");
   return hipsterFights + gothFights;
@@ -183,7 +184,7 @@ export function getTotalFamiliarWanderers() {
 /**
  * Return whether the player has the queried wandering counter
  */
-export function haveWandererCounter(wanderer: Wanderer) {
+export function haveWandererCounter(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer);
   }
@@ -196,7 +197,7 @@ export function haveWandererCounter(wanderer: Wanderer) {
  * Returns whether the player will encounter a vote wanderer on the next turn,
  * providing an "I Voted!" sticker is equipped.
  */
-export function isVoteWandererNow() {
+export function isVoteWandererNow(): boolean {
   return totalTurnsPlayed() % 11 == 1;
 }
 
@@ -210,7 +211,7 @@ export function isVoteWandererNow() {
  * For variable wanderers (chance per turn):
  * Returns true unless the player has exhausted the number of wanderers possible
  */
-export function isWandererNow(wanderer: Wanderer) {
+export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0);
   }
@@ -232,7 +233,7 @@ export function isWandererNow(wanderer: Wanderer) {
  * Returns the float chance the player will encounter a sausage goblin on the
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
  */
-export function getKramcoWandererChance() {
+export function getKramcoWandererChance(): number {
   const fights = property.getNumber("_sausageFights");
   const lastFight = property.getNumber("_lastSausageMonsterTurn");
   const totalTurns = totalTurnsPlayed();
@@ -254,7 +255,7 @@ export function getKramcoWandererChance() {
  * can encounter any wanderers. Consequently,ƒ the first combat with the
  * Artist Goth Kid is effectively 0% chance to encounter a wanderer.
  */
-export function getFamiliarWandererChance() {
+export function getFamiliarWandererChance(): number {
   const totalFights = getTotalFamiliarWanderers();
   const probability = [0.5, 0.4, 0.3, 0.2];
   if (totalFights < 4) {
@@ -267,7 +268,7 @@ export function getFamiliarWandererChance() {
  * Returns the float chance the player will encounter the queried wanderer
  * on the next turn.
  */
-export function getWandererChance(wanderer: Wanderer) {
+export function getWandererChance(wanderer: Wanderer): number {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0) ? 1.0 : 0.0;
   }
@@ -295,21 +296,21 @@ export function getWandererChance(wanderer: Wanderer) {
   return 0.0;
 }
 
-export function isCurrentFamiliar(familiar: Familiar) {
+export function isCurrentFamiliar(familiar: Familiar): boolean {
   return myFamiliar() === familiar;
 }
 
-export function getFoldGroup(item: Item) {
+export function getFoldGroup(item: Item): Item[] {
   return Object.entries(getRelated(item, "fold"))
     .sort(([, a], [, b]) => a - b)
     .map(([i]) => Item.get(i));
 }
 
-export function getZapGroup(item: Item) {
+export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
 }
 
-export function getTotalPuttyLikeCopiesMade() {
+export function getTotalPuttyLikeCopiesMade(): number {
   return (
     SpookyPutty.getSpookyPuttySheetCopiesMade() +
     RainDoh.getRainDohBlackBoxCopiesMade()

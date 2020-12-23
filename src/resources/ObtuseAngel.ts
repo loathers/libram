@@ -5,31 +5,31 @@ import { isCurrentFamiliar } from "../lib";
 
 export const familiar = $familiar`Obtuse Angel`;
 
-export function have() {
+export function have(): boolean {
   return haveFamiliar(familiar);
 }
 
-export function getBadlyRomanticArrowUses() {
+export function getBadlyRomanticArrowUses(): number {
   return Math.max(0, property.getNumber("_badlyRomanticArrows"));
 }
 
-export function haveBadlyRomanticArrowUsesRemaining() {
+export function haveBadlyRomanticArrowUsesRemaining(): boolean {
   return getBadlyRomanticArrowUses() === 0;
 }
 
-export function couldUseBadlyRomanticArrow() {
+export function couldUseBadlyRomanticArrow(): boolean {
   return have() && haveBadlyRomanticArrowUsesRemaining();
 }
 
-export function prepareBadlyRomanticArrow() {
+export function prepareBadlyRomanticArrow(): boolean {
   return useFamiliar(familiar);
 }
 
-export function canUseBadlyRomanticArrow() {
+export function canUseBadlyRomanticArrow(): boolean {
   return isCurrentFamiliar(familiar) && haveBadlyRomanticArrowUsesRemaining();
 }
 
-export function getBadlyRomanticArrowMonster() {
+export function getBadlyRomanticArrowMonster(): Monster | null {
   return property.getMonster("romanticTarget");
 }
 

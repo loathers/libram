@@ -1,11 +1,9 @@
 import { getProperty, MafiaClass } from "kolmafia";
 
-import { $monster, $skill } from "./template-string";
-
 export const createPropertyGetter = <T>(transform: (value: string) => T) => (
   property: string,
   default_?: T
-) => {
+): T => {
   const value = getProperty(property);
   if (default_ !== undefined && value === "") {
     return default_;
@@ -16,7 +14,7 @@ export const createPropertyGetter = <T>(transform: (value: string) => T) => (
 
 export const createMafiaClassPropertyGetter = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T)
-) =>
+): ((property: string, default_?: T | null) => T | null) =>
   createPropertyGetter((value) => {
     const v = Type.get<T>(value);
     return v === Type.get<T>("none") ? null : v;

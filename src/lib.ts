@@ -5,13 +5,14 @@ import {
   fullnessLimit,
   getCampground,
   getCounters,
-  getProperty,
+  getRelated,
   haveEffect,
   haveFamiliar,
   haveServant,
   haveSkill,
   inebrietyLimit,
   myEffects,
+  myFamiliar,
   myFullness,
   myInebriety,
   mySpleenUse,
@@ -21,11 +22,14 @@ import {
   spleenLimit,
   toEffect,
   toItem,
+  toMonster,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
 
 import { $class } from "./template-string";
+import { property } from ".";
+import { SpookyPutty, RainDoh } from "./resources";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -140,24 +144,22 @@ export function have(
  * Return whether an item is in the player's campground
  */
 export function haveInCampground(item: Item) {
-  return (
-    Object.keys(getCampground())
-      .map((i) => toItem(i))
-      .includes(item)
-  );
+  return Object.keys(getCampground())
+    .map((i) => toItem(i))
+    .includes(item);
 }
 
 export enum Wanderer {
-  Digitize = 'Digitize Monster',
-  Enamorang = 'Enamorang Monster',
-  Familiar = 'Familiar',
-  Holiday = 'Holiday Monster',
-  Kramco = 'Kramco',
-  Nemesis = 'Nemesis Assassin',
-  Portscan = 'portscan.edu',
-  Romantic = 'Romantic Monster',
-  Vote = 'Vote Monster',
-};
+  Digitize = "Digitize Monster",
+  Enamorang = "Enamorang Monster",
+  Familiar = "Familiar",
+  Holiday = "Holiday Monster",
+  Kramco = "Kramco",
+  Nemesis = "Nemesis Assassin",
+  Portscan = "portscan.edu",
+  Romantic = "Romantic Monster",
+  Vote = "Vote Monster",
+}
 
 const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 
@@ -173,8 +175,8 @@ export function haveCounter(counterName: string, minTurns = 0, maxTurns = 500) {
  * wanderers encountered today
  */
 export function getTotalFamiliarWanderers() {
-  const hipsterFights = parseInt(getProperty("_hipsterAdv"));
-  const gothFights = parseInt(getProperty("_gothKidFights"));
+  const hipsterFights = property.getNumber("_hipsterAdv");
+  const gothFights = property.getNumber("_gothKidFights");
   return hipsterFights + gothFights;
 }
 
@@ -185,8 +187,8 @@ export function haveWandererCounter(wanderer: Wanderer) {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer);
   }
-  const begin = wanderer + ' window begin';
-  const end = wanderer + ' window end';
+  const begin = wanderer + " window begin";
+  const end = wanderer + " window end";
   return haveCounter(begin) || haveCounter(end);
 }
 
@@ -204,7 +206,7 @@ export function isVoteWandererNow() {
  *
  * For variable wanderers (window):
  * Return whether the player is within an encounter window for the queried wanderer
- * 
+ *
  * For variable wanderers (chance per turn):
  * Returns true unless the player has exhausted the number of wanderers possible
  */
@@ -221,8 +223,8 @@ export function isWandererNow(wanderer: Wanderer) {
   if (wanderer === Wanderer.Familiar) {
     return getTotalFamiliarWanderers() < 7;
   }
-  const begin = wanderer + ' window begin';
-  const end = wanderer + ' window end';
+  const begin = wanderer + " window begin";
+  const end = wanderer + " window end";
   return !haveCounter(begin, 1) && haveCounter(end);
 }
 
@@ -231,29 +233,30 @@ export function isWandererNow(wanderer: Wanderer) {
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
  */
 export function getKramcoWandererChance() {
-  const fights = parseInt(getProperty("_sausageFights"));
-  const lastFight = parseInt(getProperty("(_lastSausageMonsterTurn"));
+  const fights = property.getNumber("_sausageFights");
+  const lastFight = property.getNumber("_lastSausageMonsterTurn");
   const totalTurns = totalTurnsPlayed();
   if (fights < 1) {
-    return (lastFight === totalTurns && myTurncount() < 1) ? 0.5 : 1.0;
+    return lastFight === totalTurns && myTurncount() < 1 ? 0.5 : 1.0;
   }
-  const turnsSinceLastFight =  totalTurns - lastFight;
-  return (
-    Math.min(1.0, (turnsSinceLastFight + 1)  /  (5 + fights * 3 + Math.max(0, fights - 5)**3))
+  const turnsSinceLastFight = totalTurns - lastFight;
+  return Math.min(
+    1.0,
+    (turnsSinceLastFight + 1) / (5 + fights * 3 + Math.max(0, fights - 5) ** 3)
   );
 }
 
 /**
  * Returns the float chance the player will encounter an Artistic Goth Kid or
  * Mini-Hipster wanderer on the next turn, providing a familiar is equipped.
- * 
+ *
  * NOTE: You must complete one combat with the Artistic Goth Kid before you
- * can encounter any wanderers. Consequently, the first combat with the
+ * can encounter any wanderers. Consequently,ƒ the first combat with the
  * Artist Goth Kid is effectively 0% chance to encounter a wanderer.
  */
 export function getFamiliarWandererChance() {
   const totalFights = getTotalFamiliarWanderers();
-  const probability = [0.5, 0.4, 0.3, 0.2]
+  const probability = [0.5, 0.4, 0.3, 0.2];
   if (totalFights < 4) {
     return probability[totalFights];
   }
@@ -277,17 +280,38 @@ export function getWandererChance(wanderer: Wanderer) {
   if (wanderer === Wanderer.Familiar) {
     getFamiliarWandererChance();
   }
-  const begin = wanderer + ' window begin';
-  const end = wanderer + ' window end';
+  const begin = wanderer + " window begin";
+  const end = wanderer + " window end";
   if (haveCounter(begin, 1, 100)) {
     return 0.0;
   }
-  const counters = getProperty("relayCounters");
-  const re = new RegExp('(\\d+):' + end);
+  const counters = property.get("relayCounters");
+  const re = new RegExp("(\\d+):" + end);
   const matches = counters.match(re);
   if (matches && matches.length === 2) {
-    const window = parseInt(matches[1]) - myTurncount();
+    const window = Number.parseInt(matches[1]) - myTurncount();
     return 1.0 / window;
   }
-  return 0.0
+  return 0.0;
+}
+
+export function isCurrentFamiliar(familiar: Familiar) {
+  return myFamiliar() === familiar;
+}
+
+export function getFoldGroup(item: Item) {
+  return Object.entries(getRelated(item, "fold"))
+    .sort(([, a], [, b]) => a - b)
+    .map(([i]) => Item.get(i));
+}
+
+export function getZapGroup(item: Item) {
+  return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
+}
+
+export function getTotalPuttyLikeCopiesMade() {
+  return (
+    SpookyPutty.getSpookyPuttySheetCopiesMade() +
+    RainDoh.getRainDohBlackBoxCopiesMade()
+  );
 }

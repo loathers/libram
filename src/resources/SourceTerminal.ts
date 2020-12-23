@@ -1,6 +1,14 @@
-import { cliExecute, getProperty, toMonster, toSkill } from "kolmafia";
+import { cliExecute, toSkill } from "kolmafia";
 
-import { $monster, $effect, $item, $skill, haveInCampground } from "..";
+import {
+  $monster,
+  $effect,
+  $item,
+  $skill,
+  haveInCampground,
+  property,
+} from "..";
+import { Copier } from "../Copier";
 
 export const item = $item`Source Terminal`;
 
@@ -91,18 +99,13 @@ export const Skills = {
  * @see Skills
  */
 export function educate(skills: Skill | [Skill, Skill]) {
-  let skillsArray: Skill[];
-  if (Array.isArray(skills)) {
-    skillsArray = skills.slice(0, 2);
-  } else {
-    skillsArray = [skills];
-  }
-  skillsArray.forEach((skill) => {
-    if (!Object.values(Skills).includes(skill)) {
-      return false;
-    }
+  const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+
+  for (const skill of skillsArray) {
+    if (Object.values(Skills).includes(skill)) return false;
+
     cliExecute(`terminal educate ${skill.name}`);
-  });
+  }
 
   return true;
 }
@@ -112,9 +115,16 @@ export function educate(skills: Skill | [Skill, Skill]) {
  */
 export function getSkills() {
   return ["sourceTerminalEducate1", "sourceTerminalEducate2"]
-    .map((prop) => getProperty(prop))
+    .map((prop) => property.get(prop))
     .filter((s) => s !== "")
     .map((s) => toSkill(s.substring(0, -4)));
+}
+
+export function isCurrentSkill(skills: Skill | [Skill, Skill]) {
+  const currentSkills = getSkills();
+  const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+
+  return skillsArray.every((skill) => currentSkills.includes(skill));
 }
 
 /**
@@ -154,35 +164,34 @@ export function extrude(item: Item) {
  * Return chips currently installed to player's Source Terminal
  */
 export function getChips() {
-  return getProperty("sourceTerminalChips").split(",");
+  return property.get("sourceTerminalChips").split(",");
 }
 
 /**
  * Return number of times digitize was cast today
  */
 export function getDigitizeUses() {
-  return Number.parseInt(getProperty("_sourceTerminalDigitzeUses"));
+  return property.getNumber("_sourceTerminalDigitzeUses");
 }
 
 /**
  * Return Monster that is currently digitized, else null
  */
 export function getDigitizeMonster() {
-  const monster = toMonster(getProperty("_sourceTerminalDigitizeMonster"));
-  return monster === $monster`none` ? null : monster;
+  return property.getMonster("_sourceTerminalDigitizeMonster");
 }
 
 /**
  * Return number of digitized monsters encountered since it was last cast
  */
 export function getDigitizeMonsterCount() {
-  return Number.parseInt(getProperty("_sourceTerminalDigitizeMonsterCount"));
+  return property.getNumber("_sourceTerminalDigitizeMonsterCount");
 }
 
 /**
  * Return maximum number of digitizes player can cast
  */
-export function getMaximumDigitizes() {
+export function getMaximumDigitizeUses() {
   const chips = getChips();
   return (
     1 + (chips.includes("TRAM") ? 1 : 0) + (chips.includes("TRIGRAM") ? 1 : 0)
@@ -192,15 +201,22 @@ export function getMaximumDigitizes() {
 /**
  * Returns the current day's number of remaining digitize uses
  */
-export function getDigitizesRemaining() {
-  return getMaximumDigitizes() - getDigitizeUses();
+export function getDigitizeUsesRemaining() {
+  return getMaximumDigitizeUses() - getDigitizeUses();
 }
 
 /**
  * Returns whether the player could theoretically cast Digitize
  */
 export function couldDigitize() {
-  return getDigitizeUses() < getMaximumDigitizes();
+  return getDigitizeUses() < getMaximumDigitizeUses();
+}
+
+export function prepareDigitize() {
+  if (!isCurrentSkill(Skills.Digitize)) {
+    return educate(Skills.Digitize);
+  }
+  return true;
 }
 
 /**
@@ -212,23 +228,30 @@ export function canDigitize() {
   return couldDigitize() && getSkills().includes(Skills.Digitize);
 }
 
+export const Digitize = new Copier(
+  () => couldDigitize(),
+  () => prepareDigitize(),
+  () => canDigitize(),
+  () => getDigitizeMonster()
+);
+
 /**
  * Return number of times duplicate was cast today
  */
 export function getDuplicateUses() {
-  return Number.parseInt(getProperty("_sourceTerminalDuplicateUses"));
+  return property.getNumber("_sourceTerminalDuplicateUses");
 }
 
 /**
  * Return number of times enhance was cast today
  */
 export function getEnhanceUses() {
-  return Number.parseInt(getProperty("_sourceTerminalEnhanceUses"));
+  return property.getNumber("_sourceTerminalEnhanceUses");
 }
 
 /**
  * Return number of times portscan was cast today
  */
 export function getPortscanUses() {
-  return Number.parseInt(getProperty("_sourceTerminalPortscanUses"));
+  return property.getNumber("_sourceTerminalPortscanUses");
 }

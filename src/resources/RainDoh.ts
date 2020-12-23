@@ -11,15 +11,15 @@ import { Copier } from "../Copier";
 
 export const box = $item`Rain-Doh black box`;
 
-export function have() {
+export function have(): boolean {
   return getFoldGroup(box).some((item) => haveItem(item));
 }
 
-export function getRainDohBlackBoxCopiesMade() {
+export function getRainDohBlackBoxCopiesMade(): number {
   return Math.max(0, property.getNumber("_raindohCopiesMade"));
 }
 
-export function couldUseRainDohBlackBox() {
+export function couldUseRainDohBlackBox(): boolean {
   return (
     have() &&
     getRainDohBlackBoxCopiesMade() < 5 &&
@@ -27,11 +27,11 @@ export function couldUseRainDohBlackBox() {
   );
 }
 
-export function getRainDohBlackBoxMonster() {
+export function getRainDohBlackBoxMonster(): Monster | null {
   return property.getMonster("rainDohMonster");
 }
 
-export function useRainDohBlackBox() {
+export function useRainDohBlackBox(): boolean {
   return use(box);
 }
 

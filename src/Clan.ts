@@ -1,14 +1,18 @@
-import {
-  getClanId,
-  getClanName,
-  visitUrl,
-  toMonster,
-  getPlayerId,
-} from "kolmafia";
+import { getClanId, getClanName, visitUrl, getPlayerId } from "kolmafia";
 import { parse } from "node-html-parser";
 
 import { notNull, parseNumber } from "./utils";
 
+export interface Rank {
+  name: string;
+  degree: number;
+  id: number;
+}
+
+// It would be fantastic to have this function properly typed
+// But until someone can work out how to do it, it gets the
+// comment blocks of shame
+/* eslint-disable */
 function validate<T extends Function>(
   target: any,
   propertyName: string,
@@ -28,6 +32,7 @@ function validate<T extends Function>(
     return method.apply(this, args);
   };
 }
+/* eslint-enable */
 
 const clanIdCache: { [clanName: string]: number } = {};
 
@@ -88,14 +93,14 @@ export class Clan {
   /**
    * Return player's current Clan
    */
-  static get() {
+  static get(): Clan {
     return new Clan(getClanId(), getClanName());
   }
 
   /**
    * Get list of clans to which the player is whitelisted
    */
-  static getWhitelisted() {
+  static getWhitelisted(): Clan[] {
     const root = parse(visitUrl("clan_signup.php"));
 
     return root
@@ -115,7 +120,7 @@ export class Clan {
   /**
    * Join clan
    */
-  join() {
+  join(): Clan {
     const result = visitUrl(
       `showclan.php?recruiter=1&whichclan=${this.id}&pwd&whichclan=${this.id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
     );
@@ -131,7 +136,7 @@ export class Clan {
    * Return the monster that is currently in the current clan's fax machine if any
    */
   @validate
-  getCurrentFax() {
+  getCurrentFax(): Monster | null {
     const logs = visitUrl("clan_log.php");
 
     const lastFax = logs.match(Clan.LOG_FAX_PATTERN);
@@ -142,14 +147,14 @@ export class Clan {
 
     if (!monsterName) return null;
 
-    return toMonster(monsterName);
+    return Monster.get(monsterName);
   }
 
   /**
    * List available ranks (name, degree and id) from the current clan
    */
   @validate
-  getRanks() {
+  getRanks(): Rank[] {
     const root = parse(visitUrl("clan_whitelist.php"));
 
     return root
@@ -182,8 +187,8 @@ export class Clan {
   addPlayerToWhitelist(
     player: string | number,
     rankName?: string,
-    title: string = ""
-  ) {
+    title = ""
+  ): boolean {
     const playerId = toPlayerId(player);
 
     const ranks = this.getRanks();
@@ -208,7 +213,7 @@ export class Clan {
    * @param player Player id or name
    */
   @validate
-  removePlayerFromWhitelist(player: string | number) {
+  removePlayerFromWhitelist(player: string | number): boolean {
     const playerId = toPlayerId(player);
 
     const result = visitUrl(
@@ -222,7 +227,7 @@ export class Clan {
    * Return the amount of meat in the current clan's coffer.
    */
   @validate
-  public getMeatInCoffer() {
+  public getMeatInCoffer(): number {
     const page = visitUrl("clan_stash.php");
     const [, meat] = page.match(
       /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./
@@ -235,7 +240,7 @@ export class Clan {
    * @param amount Amount of meat to put in coffer
    */
   @validate
-  putMeatInCoffer(amount: number) {
+  putMeatInCoffer(amount: number): boolean {
     const result = visitUrl(
       `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
     );

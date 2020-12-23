@@ -1,18 +1,17 @@
 import { cliExecute, toSkill } from "kolmafia";
 
 import {
-  $monster,
   $effect,
   $item,
   $skill,
   haveInCampground,
-  property,
+  property
 } from "..";
 import { Copier } from "../Copier";
 
 export const item = $item`Source Terminal`;
 
-export function have() {
+export function have(): boolean {
   return haveInCampground(item);
 }
 
@@ -39,7 +38,7 @@ export const Buffs = {
  * @param buff The buff to acquire
  * @see Buffs
  */
-export function enhance(buff: Effect) {
+export function enhance(buff: Effect): boolean {
   if (!Object.values(Buffs).includes(buff)) {
     return false;
   }
@@ -66,7 +65,7 @@ export const RolloverBuffs = {
  * @param buff The buff to acquire
  * @see RolloverBuffs
  */
-export function enquiry(rolloverBuff: Effect) {
+export function enquiry(rolloverBuff: Effect): boolean {
   if (!Object.values(RolloverBuffs).includes(rolloverBuff)) {
     return false;
   }
@@ -98,7 +97,7 @@ export const Skills = {
  * @param skill Skill to learn
  * @see Skills
  */
-export function educate(skills: Skill | [Skill, Skill]) {
+export function educate(skills: Skill | [Skill, Skill]): boolean {
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
 
   for (const skill of skillsArray) {
@@ -113,14 +112,14 @@ export function educate(skills: Skill | [Skill, Skill]) {
 /**
  * Return the Skills currently available from Source Terminal
  */
-export function getSkills() {
+export function getSkills(): Skill[] {
   return ["sourceTerminalEducate1", "sourceTerminalEducate2"]
     .map((prop) => property.get(prop))
     .filter((s) => s !== "")
     .map((s) => toSkill(s.substring(0, -4)));
 }
 
-export function isCurrentSkill(skills: Skill | [Skill, Skill]) {
+export function isCurrentSkill(skills: Skill | [Skill, Skill]): boolean {
   const currentSkills = getSkills();
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
 
@@ -152,7 +151,7 @@ export const Items = {
  * @param item Item to collect
  * @see Items
  */
-export function extrude(item: Item) {
+export function extrude(item: Item): boolean {
   if (!Object.values(Items).includes(item)) {
     return false;
   }
@@ -163,35 +162,35 @@ export function extrude(item: Item) {
 /**
  * Return chips currently installed to player's Source Terminal
  */
-export function getChips() {
+export function getChips(): string[] {
   return property.get("sourceTerminalChips").split(",");
 }
 
 /**
  * Return number of times digitize was cast today
  */
-export function getDigitizeUses() {
+export function getDigitizeUses(): number {
   return property.getNumber("_sourceTerminalDigitzeUses");
 }
 
 /**
  * Return Monster that is currently digitized, else null
  */
-export function getDigitizeMonster() {
+export function getDigitizeMonster(): Monster | null {
   return property.getMonster("_sourceTerminalDigitizeMonster");
 }
 
 /**
  * Return number of digitized monsters encountered since it was last cast
  */
-export function getDigitizeMonsterCount() {
+export function getDigitizeMonsterCount(): number {
   return property.getNumber("_sourceTerminalDigitizeMonsterCount");
 }
 
 /**
  * Return maximum number of digitizes player can cast
  */
-export function getMaximumDigitizeUses() {
+export function getMaximumDigitizeUses(): number {
   const chips = getChips();
   return (
     1 + (chips.includes("TRAM") ? 1 : 0) + (chips.includes("TRIGRAM") ? 1 : 0)
@@ -201,21 +200,22 @@ export function getMaximumDigitizeUses() {
 /**
  * Returns the current day's number of remaining digitize uses
  */
-export function getDigitizeUsesRemaining() {
+export function getDigitizeUsesRemaining(): number {
   return getMaximumDigitizeUses() - getDigitizeUses();
 }
 
 /**
  * Returns whether the player could theoretically cast Digitize
  */
-export function couldDigitize() {
+export function couldDigitize(): boolean {
   return getDigitizeUses() < getMaximumDigitizeUses();
 }
 
-export function prepareDigitize() {
+export function prepareDigitize(): boolean {
   if (!isCurrentSkill(Skills.Digitize)) {
     return educate(Skills.Digitize);
   }
+
   return true;
 }
 
@@ -224,7 +224,7 @@ export function prepareDigitize() {
  * This only considers whether the player has learned the skill
  * and has sufficient daily casts remaining, not whether they have sufficient MP
  */
-export function canDigitize() {
+export function canDigitize(): boolean {
   return couldDigitize() && getSkills().includes(Skills.Digitize);
 }
 
@@ -238,20 +238,20 @@ export const Digitize = new Copier(
 /**
  * Return number of times duplicate was cast today
  */
-export function getDuplicateUses() {
+export function getDuplicateUses(): number {
   return property.getNumber("_sourceTerminalDuplicateUses");
 }
 
 /**
  * Return number of times enhance was cast today
  */
-export function getEnhanceUses() {
+export function getEnhanceUses(): number {
   return property.getNumber("_sourceTerminalEnhanceUses");
 }
 
 /**
  * Return number of times portscan was cast today
  */
-export function getPortscanUses() {
+export function getPortscanUses(): number {
   return property.getNumber("_sourceTerminalPortscanUses");
 }

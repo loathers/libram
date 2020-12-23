@@ -1,6 +1,8 @@
 import { getProperty, MafiaClass } from "kolmafia";
 
-export const createPropertyGetter = <T>(transform: (value: string) => T) => (
+import { NumericProperty, BooleanProperty, isNumericProperty, isBooleanProperty, MonsterProperty, StringProperty, LocationProperty, isMonsterProperty, isLocationProperty } from "./propertyTyping";
+
+export const createPropertyGetter = <T>(transform: (value: string, property: string) => T) => (
   property: string,
   default_?: T
 ): T => {
@@ -9,10 +11,12 @@ export const createPropertyGetter = <T>(transform: (value: string) => T) => (
     return default_;
   }
 
-  return transform(value);
+  return transform(value, property);
 };
 
-export const createMafiaClassPropertyGetter = <T extends MafiaClass>(
+type MafiaClasses = Bounty | Class | Coinmaster | Effect | Element | Familiar | Item | Location | Monster | Phylum | Servant | Skill | Slot | Stat | Thrall;
+
+export const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T)
 ): ((property: string, default_?: T | null) => T | null) =>
   createPropertyGetter((value) => {
@@ -20,7 +24,7 @@ export const createMafiaClassPropertyGetter = <T extends MafiaClass>(
     return v === Type.get<T>("none") ? null : v;
   });
 
-export const get = createPropertyGetter((value) => value);
+export const getString = createPropertyGetter((value) => value);
 
 export const getCommaSeparated = createPropertyGetter((value) =>
   value.split(/, ?/)
@@ -28,9 +32,7 @@ export const getCommaSeparated = createPropertyGetter((value) =>
 
 export const getBoolean = createPropertyGetter((value) => value === "true");
 
-export const getNumber = createPropertyGetter((value) =>
-  Number.parseInt(value)
-);
+export const getNumber = createPropertyGetter((value) => Number(value));
 
 export const getBounty = createMafiaClassPropertyGetter(Bounty);
 
@@ -61,3 +63,35 @@ export const getSlot = createMafiaClassPropertyGetter(Slot);
 export const getStat = createMafiaClassPropertyGetter(Stat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall);
+
+export function get(property: NumericProperty): number;
+export function get(property: BooleanProperty): boolean;
+export function get(property: MonsterProperty): Monster | null;
+export function get(property: LocationProperty): Location | null;
+export function get(property: StringProperty | string): string;
+export function get<T extends string>(property: T): string | number | boolean | Monster | Location | null {
+  const value = getString(property);
+
+  if (isMonsterProperty(property)) {
+    return getMonster(property);
+  }
+
+  if (isLocationProperty(property)) {
+    return getLocation(property);
+  }
+
+  if (value === "") {
+    return value;
+  }
+
+  if (isBooleanProperty(property, value)) {
+    return getBoolean(property);
+  }
+
+  if (isNumericProperty(property, value)) {
+    return getNumber(property);
+  }
+
+  return value;
+}
+

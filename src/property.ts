@@ -64,6 +64,11 @@ export const getStat = createMafiaClassPropertyGetter(Stat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall);
 
+/**
+ * Returns the value of a mafia property, either built in or custom
+ * @param property Name of the property
+ * @param _default Default value for the property to take if not set
+ */
 export function get<_D, P extends KnownProperty>(property: P, _default?: PropertyValue<P>): PropertyValue<P>;
 export function get<D = string, P extends string = string>(property: P, _default?: D): PropertyValue<P, D>;
 export function get<_D, P extends string>(property: P, _default?: PropertyValue<P>): unknown {
@@ -92,6 +97,11 @@ export function get<_D, P extends string>(property: P, _default?: PropertyValue<
   return value;
 }
 
+/**
+ * Sets the value of a mafia property, either built in or custom
+ * @param property Name of the property
+ * @param value Value to give the property
+ */
 export function set<P extends KnownProperty>(property: P, value: PropertyValue<P>): void;
 export function set<P extends string>(property: P, value: PropertyValue<P>): void;
 export function set<P extends string>(property: P, value: PropertyValue<P>): void {

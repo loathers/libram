@@ -64,29 +64,29 @@ export const getStat = createMafiaClassPropertyGetter(Stat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall);
 
-export function get<P extends KnownProperty>(property: P): PropertyValue<P>;
-export function get<P extends string>(property: P): PropertyValue<P, string>;
-export function get(property: string): unknown {
+export function get<P extends KnownProperty>(property: P, _default?: PropertyValue<P>): PropertyValue<P>;
+export function get<P extends string, D>(property: P, _default?: D): PropertyValue<P, D>;
+export function get<P extends string>(property: P, _default?: PropertyValue<P>): unknown {
   const value = getString(property);
 
   if (isMonsterProperty(property)) {
-    return getMonster(property);
+    return getMonster(property, _default);
   }
 
   if (isLocationProperty(property)) {
-    return getLocation(property);
+    return getLocation(property, _default);
   }
 
   if (value === "") {
-    return value;
+    return _default;
   }
 
   if (isBooleanProperty(property, value)) {
-    return getBoolean(property);
+    return getBoolean(property, _default);
   }
 
   if (isNumericProperty(property, value)) {
-    return getNumber(property);
+    return getNumber(property, _default);
   }
 
   return value;

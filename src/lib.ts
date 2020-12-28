@@ -25,7 +25,7 @@ import {
 } from "kolmafia";
 
 import { $class } from "./template-string";
-import { property } from ".";
+import { get } from ".";
 import { SpookyPutty, RainDoh } from "./resources";
 
 /**
@@ -176,8 +176,8 @@ export function haveCounter(
  * wanderers encountered today
  */
 export function getTotalFamiliarWanderers(): number {
-  const hipsterFights = property.getNumber("_hipsterAdv");
-  const gothFights = property.getNumber("_gothKidFights");
+  const hipsterFights = get("_hipsterAdv");
+  const gothFights = get("_gothKidFights");
   return hipsterFights + gothFights;
 }
 
@@ -234,8 +234,8 @@ export function isWandererNow(wanderer: Wanderer): boolean {
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
  */
 export function getKramcoWandererChance(): number {
-  const fights = property.getNumber("_sausageFights");
-  const lastFight = property.getNumber("_lastSausageMonsterTurn");
+  const fights = get("_sausageFights");
+  const lastFight = get("_lastSausageMonsterTurn");
   const totalTurns = totalTurnsPlayed();
   if (fights < 1) {
     return lastFight === totalTurns && myTurncount() < 1 ? 0.5 : 1.0;
@@ -286,7 +286,7 @@ export function getWandererChance(wanderer: Wanderer): number {
   if (haveCounter(begin, 1, 100)) {
     return 0.0;
   }
-  const counters = property.get("relayCounters");
+  const counters = get("relayCounters");
   const re = new RegExp("(\\d+):" + end);
   const matches = counters.match(re);
   if (matches && matches.length === 2) {

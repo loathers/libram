@@ -3,9 +3,9 @@ import { cliExecute, use } from "kolmafia";
 import {
   $item,
   have as haveItem,
-  property,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
+  get,
 } from "..";
 import { Copier } from "../Copier";
 
@@ -16,7 +16,7 @@ export function have(): boolean {
 }
 
 export function getSpookyPuttySheetCopiesMade(): number {
-  return Math.max(0, property.getNumber("spookyPuttyCopiesMade"));
+  return Math.max(0, get("spookyPuttyCopiesMade"));
 }
 
 export function couldUseSpookyPuttySheet(): boolean {
@@ -35,7 +35,7 @@ export function prepareSpookyPuttySheet(): boolean {
 }
 
 export function getSpookyPuttySheetMonster(): Monster | null {
-  return property.getMonster("spookyPuttyMonster");
+  return get("spookyPuttyMonster");
 }
 
 export function useSpookyPuttySheet(): boolean {

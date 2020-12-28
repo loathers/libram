@@ -1,6 +1,6 @@
 const { DefinePlugin, ProvidePlugin } = require("webpack");
 const path = require("path");
-const fs = require('fs');
+const fs = require("fs");
 
 module.exports = {
   mode: 'development',

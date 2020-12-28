@@ -3,9 +3,9 @@ import { use } from "kolmafia";
 import {
   $item,
   have as haveItem,
-  property,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
+  get,
 } from "..";
 import { Copier } from "../Copier";
 
@@ -16,7 +16,7 @@ export function have(): boolean {
 }
 
 export function getRainDohBlackBoxCopiesMade(): number {
-  return Math.max(0, property.getNumber("_raindohCopiesMade"));
+  return Math.max(0, get("_raindohCopiesMade"));
 }
 
 export function couldUseRainDohBlackBox(): boolean {
@@ -28,7 +28,7 @@ export function couldUseRainDohBlackBox(): boolean {
 }
 
 export function getRainDohBlackBoxMonster(): Monster | null {
-  return property.getMonster("rainDohMonster");
+  return get("rainDohMonster");
 }
 
 export function useRainDohBlackBox(): boolean {

@@ -5,7 +5,7 @@ import {
   have as haveItem,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
-  prop,
+  get,
 } from "..";
 import { Copier } from "../Copier";
 
@@ -16,7 +16,7 @@ export function have(): boolean {
 }
 
 export function getSpookyPuttySheetCopiesMade(): number {
-  return Math.max(0, prop("spookyPuttyCopiesMade"));
+  return Math.max(0, get("spookyPuttyCopiesMade"));
 }
 
 export function couldUseSpookyPuttySheet(): boolean {
@@ -35,7 +35,7 @@ export function prepareSpookyPuttySheet(): boolean {
 }
 
 export function getSpookyPuttySheetMonster(): Monster | null {
-  return prop("spookyPuttyMonster");
+  return get("spookyPuttyMonster");
 }
 
 export function useSpookyPuttySheet(): boolean {

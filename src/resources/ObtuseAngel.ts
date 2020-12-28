@@ -1,5 +1,5 @@
 import { haveFamiliar, useFamiliar } from "kolmafia";
-import { $familiar, prop } from "../";
+import { $familiar, get } from "../";
 import { Copier } from "../Copier";
 import { isCurrentFamiliar } from "../lib";
 
@@ -10,7 +10,7 @@ export function have(): boolean {
 }
 
 export function getBadlyRomanticArrowUses(): number {
-  return Math.max(0, prop("_badlyRomanticArrows"));
+  return Math.max(0, get("_badlyRomanticArrows"));
 }
 
 export function haveBadlyRomanticArrowUsesRemaining(): boolean {
@@ -30,7 +30,7 @@ export function canUseBadlyRomanticArrow(): boolean {
 }
 
 export function getBadlyRomanticArrowMonster(): Monster | null {
-  return prop("romanticTarget");
+  return get("romanticTarget");
 }
 
 export const BadlyRomanticArrow = new Copier(

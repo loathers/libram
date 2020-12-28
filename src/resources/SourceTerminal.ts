@@ -5,7 +5,7 @@ import {
   $item,
   $skill,
   haveInCampground,
-  prop,
+  get,
 } from "..";
 import { Copier } from "../Copier";
 
@@ -114,7 +114,7 @@ export function educate(skills: Skill | [Skill, Skill]): boolean {
  */
 export function getSkills(): Skill[] {
   return (["sourceTerminalEducate1", "sourceTerminalEducate2"] as const)
-    .map((p) => prop(p))
+    .map((p) => get(p))
     .filter((s) => s !== "")
     .map((s) => toSkill(s.substring(0, -4)));
 }
@@ -163,28 +163,28 @@ export function extrude(item: Item): boolean {
  * Return chips currently installed to player's Source Terminal
  */
 export function getChips(): string[] {
-  return prop("sourceTerminalChips").split(",");
+  return get("sourceTerminalChips").split(",");
 }
 
 /**
  * Return number of times digitize was cast today
  */
 export function getDigitizeUses(): number {
-  return prop("_sourceTerminalDigitizeUses");
+  return get("_sourceTerminalDigitizeUses");
 }
 
 /**
  * Return Monster that is currently digitized, else null
  */
 export function getDigitizeMonster(): Monster | null {
-  return prop("_sourceTerminalDigitizeMonster");
+  return get("_sourceTerminalDigitizeMonster");
 }
 
 /**
  * Return number of digitized monsters encountered since it was last cast
  */
 export function getDigitizeMonsterCount(): number {
-  return prop("_sourceTerminalDigitizeMonsterCount");
+  return get("_sourceTerminalDigitizeMonsterCount");
 }
 
 /**
@@ -239,19 +239,19 @@ export const Digitize = new Copier(
  * Return number of times duplicate was cast today
  */
 export function getDuplicateUses(): number {
-  return prop("_sourceTerminalDuplicateUses");
+  return get("_sourceTerminalDuplicateUses");
 }
 
 /**
  * Return number of times enhance was cast today
  */
 export function getEnhanceUses(): number {
-  return prop("_sourceTerminalEnhanceUses");
+  return get("_sourceTerminalEnhanceUses");
 }
 
 /**
  * Return number of times portscan was cast today
  */
 export function getPortscanUses(): number {
-  return prop("_sourceTerminalPortscanUses");
+  return get("_sourceTerminalPortscanUses");
 }

@@ -1,6 +1,6 @@
-import { getProperty, MafiaClass } from "kolmafia";
+import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
-import { NumericProperty, BooleanProperty, isNumericProperty, isBooleanProperty, MonsterProperty, StringProperty, LocationProperty, isMonsterProperty, isLocationProperty } from "./propertyTyping";
+import { KnownProperty, PropertyValue, isNumericProperty, isBooleanProperty, isMonsterProperty, isLocationProperty } from "./propertyTyping";
 
 export const createPropertyGetter = <T>(transform: (value: string, property: string) => T) => (
   property: string,
@@ -64,12 +64,9 @@ export const getStat = createMafiaClassPropertyGetter(Stat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall);
 
-export function get(property: NumericProperty): number;
-export function get(property: BooleanProperty): boolean;
-export function get(property: MonsterProperty): Monster | null;
-export function get(property: LocationProperty): Location | null;
-export function get(property: StringProperty | string): string;
-export function get<T extends string>(property: T): string | number | boolean | Monster | Location | null {
+export function get<P extends KnownProperty>(property: P): PropertyValue<P>;
+export function get<P extends string>(property: P): PropertyValue<P, string>;
+export function get(property: string): unknown {
   const value = getString(property);
 
   if (isMonsterProperty(property)) {
@@ -95,3 +92,9 @@ export function get<T extends string>(property: T): string | number | boolean | 
   return value;
 }
 
+export function set<P extends KnownProperty>(property: P, value: PropertyValue<P>): void;
+export function set<P extends string>(property: P, value: PropertyValue<P>): void;
+export function set<P extends string>(property: P, value: PropertyValue<P>): void {
+  const stringValue = value === null ? "" : value.toString();
+  setProperty(property, stringValue);
+}

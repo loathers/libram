@@ -1,4 +1,4 @@
-import { $item, haveInCampground, have as haveItem, prop } from "..";
+import { $item, haveInCampground, have as haveItem, get } from "..";
 import { Copier } from "../Copier";
 
 export function have(): boolean {
@@ -10,7 +10,7 @@ export function haveUnfinishedIceSculpture(): boolean {
 }
 
 export function isUnfinishedIceSculptureUsed(): boolean {
-  return prop("_iceSculptureUsed");
+  return get("_iceSculptureUsed");
 }
 
 export function couldUseUnfinishedIceSculpture(): boolean {
@@ -21,7 +21,7 @@ export function couldUseUnfinishedIceSculpture(): boolean {
 }
 
 export function getUnfinishedIceSculptureMonster(): Monster | null {
-  return prop("iceSculptureMonster");
+  return get("iceSculptureMonster");
 }
 
 export const UnfinishedIceSculpture = new Copier(

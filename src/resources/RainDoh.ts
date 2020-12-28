@@ -5,7 +5,7 @@ import {
   have as haveItem,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
-  prop
+  get
 } from "..";
 import { Copier } from "../Copier";
 
@@ -16,7 +16,7 @@ export function have(): boolean {
 }
 
 export function getRainDohBlackBoxCopiesMade(): number {
-  return Math.max(0, prop("_raindohCopiesMade"));
+  return Math.max(0, get("_raindohCopiesMade"));
 }
 
 export function couldUseRainDohBlackBox(): boolean {
@@ -28,7 +28,7 @@ export function couldUseRainDohBlackBox(): boolean {
 }
 
 export function getRainDohBlackBoxMonster(): Monster | null {
-  return prop("rainDohMonster");
+  return get("rainDohMonster");
 }
 
 export function useRainDohBlackBox(): boolean {

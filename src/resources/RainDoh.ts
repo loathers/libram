@@ -5,7 +5,7 @@ import {
   have as haveItem,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
-  get
+  get,
 } from "..";
 import { Copier } from "../Copier";
 

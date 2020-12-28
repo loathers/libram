@@ -70,7 +70,7 @@ export const getThrall = createMafiaClassPropertyGetter(Thrall);
  * @param _default Default value for the property to take if not set
  */
 export function get<_D, P extends KnownProperty>(property: P, _default?: PropertyValue<P>): PropertyValue<P>;
-export function get<D = string, P extends string = string>(property: P, _default?: D): PropertyValue<P, D>;
+export function get<D = string | boolean | number, P extends string = string>(property: P, _default?: D): PropertyValue<P, D>;
 export function get<_D, P extends string>(property: P, _default?: PropertyValue<P>): unknown {
   const value = getString(property);
 
@@ -83,7 +83,7 @@ export function get<_D, P extends string>(property: P, _default?: PropertyValue<
   }
 
   if (value === "") {
-    return _default;
+    return _default === undefined ? "" : _default;
   }
 
   if (isBooleanProperty(property, value)) {

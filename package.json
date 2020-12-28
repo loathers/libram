@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JavaScript helper library for KoLmafia",
   "main": "index.js",
   "repository": "https://github.com/Loathing-Associates-Scripting-Society/libram",
@@ -12,6 +12,7 @@
     "format": "yarn run prettier --write src/**/* examples/**/*",
     "prepare": "patch-package"
   },
+  "files": ["src/"],
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/compat-data": "^7.12.7",

@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn run tsc src/**/*",
+    "build": "yarn run tsc",
     "format": "yarn run prettier --write src/**/* examples/**/*",
     "prepare": "patch-package"
   },

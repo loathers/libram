@@ -4,7 +4,6 @@ import {
   getAutoAttack,
   getProperty,
   inMultiFight,
-  print,
   removeProperty,
   runCombat,
   toInt,
@@ -17,6 +16,10 @@ import { get, set } from "./property";
 import { $item } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
+/**
+ * Get the KoL native ID of the macro with name Script Autoattack Macro.
+ * @return {number} The macro ID.
+ */
 export function getMacroId(): number {
   const macroMatches = xpath(
     visitUrl("account_combatmacros.php"),
@@ -44,10 +47,41 @@ export class Macro {
 
   components: string[] = [];
 
+  /**
+   * Convert macro to string.
+   */
   toString(): string {
     return this.components.join(";");
   }
 
+  /**
+   * Save a macro to a Mafia property for use in a consult script.
+   */
+  save(): void {
+    set(Macro.SAVED_MACRO_PROPERTY, this.toString());
+  }
+
+  /**
+   * Load a saved macro from the Mafia property.
+   */
+  static load(): Macro {
+    return new Macro().step(
+      ...get<string>(Macro.SAVED_MACRO_PROPERTY).split(";")
+    );
+  }
+
+  /**
+   * Clear the saved macro in the Mafia property.
+   */
+  static clearSaved(): void {
+    removeProperty(Macro.SAVED_MACRO_PROPERTY);
+  }
+
+  /**
+   * Statefully add one or several steps to a macro.
+   * @param nextSteps The steps to add to the macro.
+   * @return {Macro} This object itself.
+   */
   step(...nextSteps: (string | Macro)[]): Macro {
     const nextStepsStrings = ([] as string[]).concat(
       ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
@@ -59,27 +93,20 @@ export class Macro {
     return this;
   }
 
-  save(): void {
-    set(Macro.SAVED_MACRO_PROPERTY, this.toString());
-  }
-
-  static load(): Macro {
-    return new Macro().step(
-      ...get<string>(Macro.SAVED_MACRO_PROPERTY).split(";")
-    );
-  }
-
-  static clearSaved(): void {
-    removeProperty(Macro.SAVED_MACRO_PROPERTY);
-  }
-
+  /**
+   * Statefully add one or several steps to a macro.
+   * @param nextSteps The steps to add to the macro.
+   * @return {Macro} This object itself.
+   */
   static step(...nextSteps: (string | Macro)[]): Macro {
     return new Macro().step(...nextSteps);
   }
 
+  /**
+   * Submit the built macro to KoL. Only works inside combat.
+   */
   submit(): string {
     const final = this.toString();
-    print(`Submitting macro: ${final}`);
     return visitUrl(
       `fight.php?action=macro&macrotext=${urlEncode(final)}`,
       true,
@@ -87,6 +114,9 @@ export class Macro {
     );
   }
 
+  /**
+   * Set this macro as a KoL native autoattack.
+   */
   setAutoAttack(): void {
     if (Macro.cachedMacroId === null) Macro.cachedMacroId = getMacroId();
     if (
@@ -112,46 +142,95 @@ export class Macro {
     Macro.cachedAutoAttack = this.toString();
   }
 
+  /**
+   * Add an "abort" step to this macro.
+   * @return {Macro} This object itself.
+   */
   abort(): Macro {
     return this.step("abort");
   }
 
+  /**
+   * Create a new macro with an "abort" step.
+   * @return {Macro} This object itself.
+   */
   static abort(): Macro {
     return new Macro().abort();
   }
 
+  /**
+   * Add an "if" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @return {Macro} This object itself.
+   */
   if_(condition: string, ifTrue: string | Macro): Macro {
     return this.step(`if ${condition}`).step(ifTrue).step("endif");
   }
 
+  /**
+   * Create a new macro with an "if" statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @return {Macro} This object itself.
+   */
   static if_(condition: string, ifTrue: string | Macro): Macro {
     return new Macro().if_(condition, ifTrue);
   }
 
+  /**
+   * Add a "while" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param contents Loop to repeat while the condition is true.
+   * @return {Macro} This object itself.
+   */
   while_(condition: string, contents: string | Macro): Macro {
     return this.step(`while ${condition}`).step(contents).step("endwhile");
   }
 
+  /**
+   * Create a new macro with a "while" statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param contents Loop to repeat while the condition is true.
+   * @return {Macro} This object itself.
+   */
   static while_(condition: string, contents: string | Macro): Macro {
     return new Macro().while_(condition, contents);
   }
 
-  externalIf(condition: boolean, ...next: (string | Macro)[]): Macro {
-    return condition ? this.step(...next) : this;
+  /**
+   * Conditionally add a step to a macro based on a condition evaluated at the time of building the macro.
+   * @param condition The JS condition.
+   * @param ifTrue Continuation to add if the condition is true.
+   * @return {Macro} This object itself.
+   */
+  externalIf(condition: boolean, ifTrue: string | Macro): Macro {
+    return condition ? this.step(ifTrue) : this;
   }
 
-  static externalIf(condition: boolean, ...next: (string | Macro)[]): Macro {
-    return new Macro().externalIf(condition, ...next);
+  /**
+   * Create a new macro with a condition evaluated at the time of building the macro.
+   * @param condition The JS condition.
+   * @param ifTrue Continuation to add if the condition is true.
+   * @return {Macro} This object itself.
+   */
+  static externalIf(condition: boolean, ifTrue: string | Macro): Macro {
+    return new Macro().externalIf(condition, ifTrue);
   }
 
+  /**
+   * Add a repeat step to the macro.
+   * @return {Macro} This object itself.
+   */
   repeat(): Macro {
     return this.step("repeat");
   }
 
-  repeatSubmit(): string {
-    return this.step("repeat").submit();
-  }
-
+  /**
+   * Add one or more skill cast steps to the macro.
+   * @param skills Skills to cast.
+   * @return {Macro} This object itself.
+   */
   skill(...skills: Skill[]): Macro {
     return this.step(
       ...skills.map((skill) => {
@@ -163,10 +242,20 @@ export class Macro {
     );
   }
 
+  /**
+   * Create a new macro with one or more skill cast steps.
+   * @param skills Skills to cast.
+   * @return {Macro} This object itself.
+   */
   static skill(...skills: Skill[]): Macro {
     return new Macro().skill(...skills);
   }
 
+  /**
+   * Add one or more skill cast steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @return {Macro} This object itself.
+   */
   trySkill(...skills: Skill[]): Macro {
     return this.step(
       ...skills.map((skill) => {
@@ -178,18 +267,45 @@ export class Macro {
     );
   }
 
+  /**
+   * Create a new macro with one or more skill cast steps, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @return {Macro} This object itself.
+   */
   static trySkill(...skills: Skill[]): Macro {
     return new Macro().trySkill(...skills);
   }
 
-  skillRepeat(skill: Skill): Macro {
-    return this.skill(skill).repeat();
+  /**
+   * Add one or more skill-cast-and-repeat steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @return {Macro} This object itself.
+   */
+  trySkillRepeat(...skills: Skill[]): Macro {
+    return this.step(
+      ...skills.map((skill) => {
+        const skillName = skill.name.match(/^[A-Za-z ]+$/)
+          ? skill.name
+          : toInt(skill);
+        return Macro.if_(`hasskill ${skillName}`, Macro.skill(skill).repeat());
+      })
+    );
   }
 
-  static skillRepeat(skill: Skill): Macro {
-    return new Macro().skillRepeat(skill);
+  /**
+   * Create a new macro with one or more skill-cast-and-repeat steps, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @return {Macro} This object itself.
+   */
+  static trySkillRepeat(...skills: Skill[]): Macro {
+    return new Macro().trySkillRepeat(...skills);
   }
 
+  /**
+   * Add one or more item steps to the macro.
+   * @param items Items to use.
+   * @return {Macro} This object itself.
+   */
   item(...items: Item[]): Macro {
     return this.step(
       ...items.map((item) => {
@@ -201,29 +317,52 @@ export class Macro {
     );
   }
 
+  /**
+   * Create a new macro with one or more item steps.
+   * @param items Items to use.
+   * @return {Macro} This object itself.
+   */
   static item(...items: Item[]): Macro {
     return new Macro().item(...items);
   }
 
+  /**
+   * Add one or more item steps to the macro, where each step checks to see if you have the item first.
+   * @param items Items to try using.
+   * @return {Macro} This object itself.
+   */
   tryItem(...items: Item[]): Macro {
     return this.step(
       ...items.map((item) => {
         const itemName = item.name.match(/^[A-Za-z ]+$/)
           ? item.name
           : toInt(item);
-        return Macro.if_(`hasitem ${itemName}`, `use ${itemName}`);
+        return Macro.if_(`hascombatitem ${itemName}`, `use ${itemName}`);
       })
     );
   }
 
+  /**
+   * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
+   * @param items Items to try using.
+   * @return {Macro} This object itself.
+   */
   static tryItem(...items: Item[]): Macro {
     return new Macro().tryItem(...items);
   }
 
+  /**
+   * Add an attack step to the macro.
+   * @return {Macro} This object itself.
+   */
   attack(): Macro {
     return this.step("attack");
   }
 
+  /**
+   * Create a new macro with an attack step.
+   * @return {Macro} This object itself.
+   */
   static attack(): Macro {
     return new Macro().attack();
   }
@@ -247,7 +386,13 @@ export function banishedMonsters(): Map<Item | Skill, Monster> {
   return result;
 }
 
-// To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
+/**
+ * Adventure in a location and handle all combats with a given macro.
+ * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
+ * See examples/consult.ts for an example.
+ * @param loc Location to adventure in.
+ * @param macro Macro to execute.
+ */
 export function adventureMacro(loc: Location, macro: Macro): void {
   macro.save();
   try {
@@ -259,7 +404,14 @@ export function adventureMacro(loc: Location, macro: Macro): void {
   }
 }
 
-// Sets autoattack. You will have to unset autoattack manually. (setAutoAttack(0))
+/**
+ * Adventure in a location and handle all combats with a given autoattack and manual macro.
+ * To use the nextMacro parameter you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
+ * See examples/consult.ts for an example.
+ * @param loc Location to adventure in.
+ * @param autoMacro Macro to execute via KoL autoattack.
+ * @param nextMacro Macro to execute manually after autoattack completes.
+ */
 export function adventureMacroAuto(
   loc: Location,
   autoMacro: Macro,

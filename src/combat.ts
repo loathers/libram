@@ -50,7 +50,8 @@ function itemOrItemsBallsMacroName(
   if (Array.isArray(itemOrItems)) {
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
-    return itemOrItems.toString();
+    const item = itemOrNameToItem(itemOrItems);
+    return item.name;
   }
 }
 
@@ -387,7 +388,7 @@ export class Macro {
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
    * @returns {Macro} This object itself.
    */
-  static tryItem(...items: Item[]): Macro {
+  static tryItem(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
     return new Macro().tryItem(...items);
   }
 

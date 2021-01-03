@@ -11,7 +11,8 @@
   "scripts": {
     "build": "yarn run tsc",
     "format": "yarn run prettier --write src/**/* examples/**/*",
-    "prepare": "patch-package"
+    "prepare": "patch-package",
+    "prepublishOnly": "yarn run build"
   },
   "files": ["src/"],
   "devDependencies": {

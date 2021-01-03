@@ -2,15 +2,19 @@
   "name": "libram",
   "version": "0.0.3",
   "description": "JavaScript helper library for KoLmafia",
-  "main": "src/index.ts",
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
   "repository": "https://github.com/Loathing-Associates-Scripting-Society/libram",
   "author": "Samuel Gaus <sam@gaus.co.uk>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn run tsc src/**/*",
+    "build": "yarn run tsc",
+    "clean": "rm -f src/*.js src/*.d.ts src/**/*.js src/**/*.d.ts",
     "format": "yarn run prettier --write src/**/* examples/**/*",
-    "prepare": "patch-package"
+    "lint": "yarn run eslint src --ext .ts",
+    "prepare": "patch-package",
+    "prepublishOnly": "yarn run build"
   },
   "files": [
     "src/"

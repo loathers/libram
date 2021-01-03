@@ -9,7 +9,9 @@
   "private": false,
   "scripts": {
     "build": "yarn run tsc src/**/*",
+    "clean": "rm -f src/*.js src/*.d.ts src/**/*.js src/**/*.d.ts",
     "format": "yarn run prettier --write src/**/* examples/**/*",
+    "lint": "yarn run eslint src --ext .ts",
     "prepare": "patch-package"
   },
   "files": ["src/"],

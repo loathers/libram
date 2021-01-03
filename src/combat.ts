@@ -79,6 +79,8 @@ function skillBallsMacroName(skillOrName: SkillOrName) {
   return skill.name.match(/^[A-Za-z ]+$/) ? skill.name : toInt(skill);
 }
 
+type Constructor<T> = { new (): T };
+
 /**
  * BALLS macro builder for direct submission to KoL.
  * Create a new macro with `new Macro()` and add steps using the instance methods.
@@ -111,8 +113,8 @@ export class Macro {
   /**
    * Load a saved macro from the Mafia property.
    */
-  static load(): Macro {
-    return new Macro().step(
+  static load<T extends Macro>(this: Constructor<T>): T {
+    return new this().step(
       ...get<string>(Macro.SAVED_MACRO_PROPERTY).split(";")
     );
   }
@@ -129,7 +131,7 @@ export class Macro {
    * @param nextSteps The steps to add to the macro.
    * @returns {Macro} This object itself.
    */
-  step(...nextSteps: (string | Macro)[]): Macro {
+  step(...nextSteps: (string | Macro)[]): this {
     const nextStepsStrings = ([] as string[]).concat(
       ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
     );
@@ -145,8 +147,11 @@ export class Macro {
    * @param nextSteps The steps to add to the macro.
    * @returns {Macro} This object itself.
    */
-  static step(...nextSteps: (string | Macro)[]): Macro {
-    return new Macro().step(...nextSteps);
+  static step<T extends Macro>(
+    this: Constructor<T>,
+    ...nextSteps: (string | Macro)[]
+  ): T {
+    return new this().step(...nextSteps);
   }
 
   /**
@@ -193,7 +198,7 @@ export class Macro {
    * Add an "abort" step to this macro.
    * @returns {Macro} This object itself.
    */
-  abort(): Macro {
+  abort(): this {
     return this.step("abort");
   }
 
@@ -201,8 +206,8 @@ export class Macro {
    * Create a new macro with an "abort" step.
    * @returns {Macro} This object itself.
    */
-  static abort(): Macro {
-    return new Macro().abort();
+  static abort<T extends Macro>(this: Constructor<T>): T {
+    return new this().abort();
   }
 
   /**
@@ -211,7 +216,7 @@ export class Macro {
    * @param ifTrue Continuation if the condition is true.
    * @returns {Macro} This object itself.
    */
-  if_(condition: string, ifTrue: string | Macro): Macro {
+  if_(condition: string, ifTrue: string | Macro): this {
     return this.step(`if ${condition}`).step(ifTrue).step("endif");
   }
 
@@ -221,8 +226,12 @@ export class Macro {
    * @param ifTrue Continuation if the condition is true.
    * @returns {Macro} This object itself.
    */
-  static if_(condition: string, ifTrue: string | Macro): Macro {
-    return new Macro().if_(condition, ifTrue);
+  static if_<T extends Macro>(
+    this: Constructor<T>,
+    condition: string,
+    ifTrue: string | Macro
+  ): T {
+    return new this().if_(condition, ifTrue);
   }
 
   /**
@@ -231,7 +240,7 @@ export class Macro {
    * @param contents Loop to repeat while the condition is true.
    * @returns {Macro} This object itself.
    */
-  while_(condition: string, contents: string | Macro): Macro {
+  while_(condition: string, contents: string | Macro): this {
     return this.step(`while ${condition}`).step(contents).step("endwhile");
   }
 
@@ -241,8 +250,12 @@ export class Macro {
    * @param contents Loop to repeat while the condition is true.
    * @returns {Macro} This object itself.
    */
-  static while_(condition: string, contents: string | Macro): Macro {
-    return new Macro().while_(condition, contents);
+  static while_<T extends Macro>(
+    this: Constructor<T>,
+    condition: string,
+    contents: string | Macro
+  ): T {
+    return new this().while_(condition, contents);
   }
 
   /**
@@ -251,7 +264,7 @@ export class Macro {
    * @param ifTrue Continuation to add if the condition is true.
    * @returns {Macro} This object itself.
    */
-  externalIf(condition: boolean, ifTrue: string | Macro): Macro {
+  externalIf(condition: boolean, ifTrue: string | Macro): this {
     return condition ? this.step(ifTrue) : this;
   }
 
@@ -261,15 +274,19 @@ export class Macro {
    * @param ifTrue Continuation to add if the condition is true.
    * @returns {Macro} This object itself.
    */
-  static externalIf(condition: boolean, ifTrue: string | Macro): Macro {
-    return new Macro().externalIf(condition, ifTrue);
+  static externalIf<T extends Macro>(
+    this: Constructor<T>,
+    condition: boolean,
+    ifTrue: string | Macro
+  ): T {
+    return new this().externalIf(condition, ifTrue);
   }
 
   /**
    * Add a repeat step to the macro.
    * @returns {Macro} This object itself.
    */
-  repeat(): Macro {
+  repeat(): this {
     return this.step("repeat");
   }
 
@@ -278,7 +295,7 @@ export class Macro {
    * @param skills Skills to cast.
    * @returns {Macro} This object itself.
    */
-  skill(...skills: SkillOrName[]): Macro {
+  skill(...skills: SkillOrName[]): this {
     return this.step(
       ...skills.map((skill) => {
         return `use ${skillBallsMacroName(skill)}`;
@@ -291,8 +308,11 @@ export class Macro {
    * @param skills Skills to cast.
    * @returns {Macro} This object itself.
    */
-  static skill(...skills: SkillOrName[]): Macro {
-    return new Macro().skill(...skills);
+  static skill<T extends Macro>(
+    this: Constructor<T>,
+    ...skills: SkillOrName[]
+  ): T {
+    return new this().skill(...skills);
   }
 
   /**
@@ -300,7 +320,7 @@ export class Macro {
    * @param skills Skills to try casting.
    * @returns {Macro} This object itself.
    */
-  trySkill(...skills: SkillOrName[]): Macro {
+  trySkill(...skills: SkillOrName[]): this {
     return this.step(
       ...skills.map((skill) => {
         return Macro.if_(
@@ -316,8 +336,11 @@ export class Macro {
    * @param skills Skills to try casting.
    * @returns {Macro} This object itself.
    */
-  static trySkill(...skills: SkillOrName[]): Macro {
-    return new Macro().trySkill(...skills);
+  static trySkill<T extends Macro>(
+    this: Constructor<T>,
+    ...skills: SkillOrName[]
+  ): T {
+    return new this().trySkill(...skills);
   }
 
   /**
@@ -325,7 +348,7 @@ export class Macro {
    * @param skills Skills to try repeatedly casting.
    * @returns {Macro} This object itself.
    */
-  trySkillRepeat(...skills: SkillOrName[]): Macro {
+  trySkillRepeat(...skills: SkillOrName[]): this {
     return this.step(
       ...skills.map((skill) => {
         return Macro.if_(
@@ -341,8 +364,11 @@ export class Macro {
    * @param skills Skills to try repeatedly casting.
    * @returns {Macro} This object itself.
    */
-  static trySkillRepeat(...skills: SkillOrName[]): Macro {
-    return new Macro().trySkillRepeat(...skills);
+  static trySkillRepeat<T extends Macro>(
+    this: Constructor<T>,
+    ...skills: SkillOrName[]
+  ): T {
+    return new this().trySkillRepeat(...skills);
   }
 
   /**
@@ -350,7 +376,7 @@ export class Macro {
    * @param items Items to use. Pass a tuple [item1, item2] to funksling.
    * @returns {Macro} This object itself.
    */
-  item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
+  item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): this {
     return this.step(
       ...items.map((itemOrItems) => {
         return `use ${itemOrItemsBallsMacroName(itemOrItems)}`;
@@ -363,8 +389,11 @@ export class Macro {
    * @param items Items to use. Pass a tuple [item1, item2] to funksling.
    * @returns {Macro} This object itself.
    */
-  static item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
-    return new Macro().item(...items);
+  static item<T extends Macro>(
+    this: Constructor<T>,
+    ...items: (ItemOrName | [ItemOrName, ItemOrName])[]
+  ): T {
+    return new this().item(...items);
   }
 
   /**
@@ -372,7 +401,7 @@ export class Macro {
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
    * @returns {Macro} This object itself.
    */
-  tryItem(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
+  tryItem(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): this {
     return this.step(
       ...items.map((item) => {
         return Macro.if_(
@@ -388,15 +417,18 @@ export class Macro {
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
    * @returns {Macro} This object itself.
    */
-  static tryItem(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
-    return new Macro().tryItem(...items);
+  static tryItem<T extends Macro>(
+    this: Constructor<T>,
+    ...items: (ItemOrName | [ItemOrName, ItemOrName])[]
+  ): T {
+    return new this().tryItem(...items);
   }
 
   /**
    * Add an attack step to the macro.
    * @returns {Macro} This object itself.
    */
-  attack(): Macro {
+  attack(): this {
     return this.step("attack");
   }
 
@@ -404,8 +436,8 @@ export class Macro {
    * Create a new macro with an attack step.
    * @returns {Macro} This object itself.
    */
-  static attack(): Macro {
-    return new Macro().attack();
+  static attack<T extends Macro>(this: Constructor<T>): T {
+    return new this().attack();
   }
 }
 

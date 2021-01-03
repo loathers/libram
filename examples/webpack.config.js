@@ -8,9 +8,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
-  entry: fs.readdirSync('./examples/')
-    .filter(f => f.match(/.*\.(ts|js)$/))
-    .reduce((a, f) => ({ ...a, [f.split('.').slice(0, -1).join('.')]: path.join(__dirname, `examples/${f}`) }), {}),
+  entry: fs.readdirSync(__dirname)
+    .filter(f => f.match(/.*\.(ts|js)$/) && !/webpack.config.js/i.test(f))
+    .reduce((a, f) => ({ ...a, [f.split('.').slice(0, -1).join('.')]: path.join(__dirname, f) }), {}),
   output: {
     libraryTarget: 'commonjs',
     filename: 'libram-example-[name].js',
@@ -33,7 +33,7 @@ module.exports = {
     }),
     new ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      console: path.resolve(path.join(__dirname, 'src/console')),
+      console: path.resolve(path.join(__dirname, '../src/console')),
     }),
   ],
   externals: {

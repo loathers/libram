@@ -18,7 +18,7 @@ import { $item } from "./template-string";
 const MACRO_NAME = "Script Autoattack Macro";
 /**
  * Get the KoL native ID of the macro with name Script Autoattack Macro.
- * @return {number} The macro ID.
+ * @returns {number} The macro ID.
  */
 export function getMacroId(): number {
   const macroMatches = xpath(
@@ -39,6 +39,52 @@ export function getMacroId(): number {
   }
 }
 
+type ItemOrName = Item | string;
+function itemOrNameToItem(itemOrName: ItemOrName) {
+  return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
+}
+
+function itemOrItemsBallsMacroName(
+  itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
+): string {
+  if (Array.isArray(itemOrItems)) {
+    return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
+  } else {
+    return itemOrItems.toString();
+  }
+}
+
+function itemOrItemsBallsMacroPredicate(
+  itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
+): string {
+  if (Array.isArray(itemOrItems)) {
+    return itemOrItems.map(itemOrItemsBallsMacroName).join(" && ");
+  } else {
+    return `hascombatitem ${itemOrItems}`;
+  }
+}
+
+type SkillOrName = Skill | string;
+function skillOrNameToSkill(skillOrName: SkillOrName) {
+  if (typeof skillOrName === "string") {
+    return Skill.get(skillOrName);
+  } else {
+    return skillOrName;
+  }
+}
+
+function skillBallsMacroName(skillOrName: SkillOrName) {
+  const skill = skillOrNameToSkill(skillOrName);
+  return skill.name.match(/^[A-Za-z ]+$/) ? skill.name : toInt(skill);
+}
+
+/**
+ * BALLS macro builder for direct submission to KoL.
+ * Create a new macro with `new Macro()` and add steps using the instance methods.
+ * Uses a fluent interface, so each step returns the object for easy chaining of steps.
+ * Each method is also defined as a static method that creates a new Macro with only that step.
+ * For example, you can do `Macro.skill('Saucestorm').attack()`.
+ */
 export class Macro {
   static SAVED_MACRO_PROPERTY = "libram_savedMacro";
 
@@ -80,7 +126,7 @@ export class Macro {
   /**
    * Statefully add one or several steps to a macro.
    * @param nextSteps The steps to add to the macro.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   step(...nextSteps: (string | Macro)[]): Macro {
     const nextStepsStrings = ([] as string[]).concat(
@@ -96,7 +142,7 @@ export class Macro {
   /**
    * Statefully add one or several steps to a macro.
    * @param nextSteps The steps to add to the macro.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static step(...nextSteps: (string | Macro)[]): Macro {
     return new Macro().step(...nextSteps);
@@ -144,7 +190,7 @@ export class Macro {
 
   /**
    * Add an "abort" step to this macro.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   abort(): Macro {
     return this.step("abort");
@@ -152,7 +198,7 @@ export class Macro {
 
   /**
    * Create a new macro with an "abort" step.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static abort(): Macro {
     return new Macro().abort();
@@ -162,7 +208,7 @@ export class Macro {
    * Add an "if" statement to this macro.
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   if_(condition: string, ifTrue: string | Macro): Macro {
     return this.step(`if ${condition}`).step(ifTrue).step("endif");
@@ -172,7 +218,7 @@ export class Macro {
    * Create a new macro with an "if" statement.
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static if_(condition: string, ifTrue: string | Macro): Macro {
     return new Macro().if_(condition, ifTrue);
@@ -182,7 +228,7 @@ export class Macro {
    * Add a "while" statement to this macro.
    * @param condition The BALLS condition for the if statement.
    * @param contents Loop to repeat while the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   while_(condition: string, contents: string | Macro): Macro {
     return this.step(`while ${condition}`).step(contents).step("endwhile");
@@ -192,7 +238,7 @@ export class Macro {
    * Create a new macro with a "while" statement.
    * @param condition The BALLS condition for the if statement.
    * @param contents Loop to repeat while the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static while_(condition: string, contents: string | Macro): Macro {
     return new Macro().while_(condition, contents);
@@ -202,7 +248,7 @@ export class Macro {
    * Conditionally add a step to a macro based on a condition evaluated at the time of building the macro.
    * @param condition The JS condition.
    * @param ifTrue Continuation to add if the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   externalIf(condition: boolean, ifTrue: string | Macro): Macro {
     return condition ? this.step(ifTrue) : this;
@@ -212,7 +258,7 @@ export class Macro {
    * Create a new macro with a condition evaluated at the time of building the macro.
    * @param condition The JS condition.
    * @param ifTrue Continuation to add if the condition is true.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static externalIf(condition: boolean, ifTrue: string | Macro): Macro {
     return new Macro().externalIf(condition, ifTrue);
@@ -220,7 +266,7 @@ export class Macro {
 
   /**
    * Add a repeat step to the macro.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   repeat(): Macro {
     return this.step("repeat");
@@ -229,15 +275,12 @@ export class Macro {
   /**
    * Add one or more skill cast steps to the macro.
    * @param skills Skills to cast.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  skill(...skills: Skill[]): Macro {
+  skill(...skills: SkillOrName[]): Macro {
     return this.step(
       ...skills.map((skill) => {
-        const skillName = skill.name.match(/^[A-Za-z ]+$/)
-          ? skill.name
-          : toInt(skill);
-        return `use ${skillName}`;
+        return `use ${skillBallsMacroName(skill)}`;
       })
     );
   }
@@ -245,24 +288,24 @@ export class Macro {
   /**
    * Create a new macro with one or more skill cast steps.
    * @param skills Skills to cast.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  static skill(...skills: Skill[]): Macro {
+  static skill(...skills: SkillOrName[]): Macro {
     return new Macro().skill(...skills);
   }
 
   /**
    * Add one or more skill cast steps to the macro, where each step checks if you have the skill first.
    * @param skills Skills to try casting.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  trySkill(...skills: Skill[]): Macro {
+  trySkill(...skills: SkillOrName[]): Macro {
     return this.step(
       ...skills.map((skill) => {
-        const skillName = skill.name.match(/^[A-Za-z ]+$/)
-          ? skill.name
-          : toInt(skill);
-        return Macro.if_(`hasskill ${skillName}`, `use ${skillName}`);
+        return Macro.if_(
+          `hasskill ${skillBallsMacroName(skill)}`,
+          Macro.skill(skill)
+        );
       })
     );
   }
@@ -270,24 +313,24 @@ export class Macro {
   /**
    * Create a new macro with one or more skill cast steps, where each step checks if you have the skill first.
    * @param skills Skills to try casting.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  static trySkill(...skills: Skill[]): Macro {
+  static trySkill(...skills: SkillOrName[]): Macro {
     return new Macro().trySkill(...skills);
   }
 
   /**
    * Add one or more skill-cast-and-repeat steps to the macro, where each step checks if you have the skill first.
    * @param skills Skills to try repeatedly casting.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  trySkillRepeat(...skills: Skill[]): Macro {
+  trySkillRepeat(...skills: SkillOrName[]): Macro {
     return this.step(
       ...skills.map((skill) => {
-        const skillName = skill.name.match(/^[A-Za-z ]+$/)
-          ? skill.name
-          : toInt(skill);
-        return Macro.if_(`hasskill ${skillName}`, Macro.skill(skill).repeat());
+        return Macro.if_(
+          `hasskill ${skillBallsMacroName(skill)}`,
+          Macro.skill(skill).repeat()
+        );
       })
     );
   }
@@ -295,57 +338,54 @@ export class Macro {
   /**
    * Create a new macro with one or more skill-cast-and-repeat steps, where each step checks if you have the skill first.
    * @param skills Skills to try repeatedly casting.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
-  static trySkillRepeat(...skills: Skill[]): Macro {
+  static trySkillRepeat(...skills: SkillOrName[]): Macro {
     return new Macro().trySkillRepeat(...skills);
   }
 
   /**
    * Add one or more item steps to the macro.
-   * @param items Items to use.
-   * @return {Macro} This object itself.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {Macro} This object itself.
    */
-  item(...items: Item[]): Macro {
+  item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
     return this.step(
-      ...items.map((item) => {
-        const itemName = item.name.match(/^[A-Za-z ]+$/)
-          ? item.name
-          : toInt(item);
-        return `use ${itemName}`;
+      ...items.map((itemOrItems) => {
+        return `use ${itemOrItemsBallsMacroName(itemOrItems)}`;
       })
     );
   }
 
   /**
    * Create a new macro with one or more item steps.
-   * @param items Items to use.
-   * @return {Macro} This object itself.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {Macro} This object itself.
    */
-  static item(...items: Item[]): Macro {
+  static item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
     return new Macro().item(...items);
   }
 
   /**
    * Add one or more item steps to the macro, where each step checks to see if you have the item first.
-   * @param items Items to try using.
-   * @return {Macro} This object itself.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {Macro} This object itself.
    */
-  tryItem(...items: Item[]): Macro {
+  tryItem(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): Macro {
     return this.step(
       ...items.map((item) => {
-        const itemName = item.name.match(/^[A-Za-z ]+$/)
-          ? item.name
-          : toInt(item);
-        return Macro.if_(`hascombatitem ${itemName}`, `use ${itemName}`);
+        return Macro.if_(
+          `hascombatitem ${itemOrItemsBallsMacroPredicate(item)}`,
+          `use ${itemOrItemsBallsMacroName(item)}`
+        );
       })
     );
   }
 
   /**
    * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
-   * @param items Items to try using.
-   * @return {Macro} This object itself.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {Macro} This object itself.
    */
   static tryItem(...items: Item[]): Macro {
     return new Macro().tryItem(...items);
@@ -353,7 +393,7 @@ export class Macro {
 
   /**
    * Add an attack step to the macro.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   attack(): Macro {
     return this.step("attack");
@@ -361,7 +401,7 @@ export class Macro {
 
   /**
    * Create a new macro with an attack step.
-   * @return {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static attack(): Macro {
     return new Macro().attack();

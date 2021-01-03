@@ -298,7 +298,7 @@ export class Macro {
   skill(...skills: SkillOrName[]): this {
     return this.step(
       ...skills.map((skill) => {
-        return `use ${skillBallsMacroName(skill)}`;
+        return `skill ${skillBallsMacroName(skill)}`;
       })
     );
   }

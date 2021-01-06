@@ -1,13 +1,13 @@
 import { use } from "kolmafia";
 
+import { Copier } from "../Copier";
 import {
-  $item,
-  have as haveItem,
   getFoldGroup,
   getTotalPuttyLikeCopiesMade,
-  get,
-} from "..";
-import { Copier } from "../Copier";
+  have as haveItem,
+} from "../lib";
+import { get } from "../property";
+import { $item } from "../template-string";
 
 export const box = $item`Rain-Doh black box`;
 

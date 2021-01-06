@@ -4,3 +4,5 @@ export * as SourceTerminal from "./SourceTerminal";
 export * as SpookyPutty from "./SpookyPutty";
 export * as WinterGarden from "./WinterGarden";
 export * as Witchess from "./Witchess";
+
+export * from "./putty-likes";

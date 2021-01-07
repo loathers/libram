@@ -54,5 +54,6 @@
   },
   "lint-staged": {
     "src/**/*.{ts,js}": "prettier --write"
-  }
+  },
+  "sideEffects": false
 }

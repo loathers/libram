@@ -1,4 +1,5 @@
-import { $item, haveInCampground } from "../";
+import { haveInCampground } from "../lib";
+import { $item } from "../template-string";
 
 export const item = $item`Witchess Set`;
 

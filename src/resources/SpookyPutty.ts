@@ -1,13 +1,8 @@
 import { cliExecute, use } from "kolmafia";
 
-import {
-  $item,
-  have as haveItem,
-  getFoldGroup,
-  getTotalPuttyLikeCopiesMade,
-  get,
-} from "..";
-import { Copier } from "../Copier";
+import { getFoldGroup, have as haveItem } from "../lib";
+import { get } from "../property";
+import { $item } from "../template-string";
 
 export const sheet = $item`Spooky Putty sheet`;
 
@@ -17,14 +12,6 @@ export function have(): boolean {
 
 export function getSpookyPuttySheetCopiesMade(): number {
   return Math.max(0, get("spookyPuttyCopiesMade"));
-}
-
-export function couldUseSpookyPuttySheet(): boolean {
-  return (
-    have() &&
-    getSpookyPuttySheetCopiesMade() < 5 &&
-    getTotalPuttyLikeCopiesMade() < 6
-  );
 }
 
 export function prepareSpookyPuttySheet(): boolean {
@@ -41,11 +28,3 @@ export function getSpookyPuttySheetMonster(): Monster | null {
 export function useSpookyPuttySheet(): boolean {
   return use(sheet);
 }
-
-export const SpookyPuttySheet = new Copier(
-  () => couldUseSpookyPuttySheet(),
-  () => prepareSpookyPuttySheet(),
-  () => couldUseSpookyPuttySheet(),
-  () => getSpookyPuttySheetMonster(),
-  () => useSpookyPuttySheet()
-);

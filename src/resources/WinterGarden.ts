@@ -1,5 +1,7 @@
-import { $item, haveInCampground, have as haveItem, get } from "..";
 import { Copier } from "../Copier";
+import { get } from "../property";
+import { have as haveItem, haveInCampground } from "../lib";
+import { $item } from "../template-string";
 
 export function have(): boolean {
   return haveInCampground($item`packet of winter seeds`);

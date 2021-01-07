@@ -25,8 +25,7 @@ import {
 } from "kolmafia";
 
 import { $class } from "./template-string";
-import { get } from ".";
-import { SpookyPutty, RainDoh } from "./resources";
+import { get } from "./property";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -308,11 +307,4 @@ export function getFoldGroup(item: Item): Item[] {
 
 export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
-}
-
-export function getTotalPuttyLikeCopiesMade(): number {
-  return (
-    SpookyPutty.getSpookyPuttySheetCopiesMade() +
-    RainDoh.getRainDohBlackBoxCopiesMade()
-  );
 }

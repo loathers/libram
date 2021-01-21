@@ -2,12 +2,17 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": true,
-    "lib": ["es2019"],
+    "lib": [
+      "es2019"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "outDir": "dist"
   },
-  "include": ["src/"]
+  "include": [
+    "src/"
+  ]
 }

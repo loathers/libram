@@ -3,15 +3,28 @@ import { haveInCampground } from "../lib";
 import { get } from "../property";
 import { $item } from "../template-string";
 
+export const item = $item`Witchess Set`;
 export function have(): boolean {
-  return haveInCampground($item`Witchess Set`);
+  return haveInCampground(item);
 }
 
 export function fightsDone(): number {
   return get("_witchessFights");
 }
 
+const pieceNames = [
+  "Pawn",
+  "Knight",
+  "Bishop",
+  "Rook",
+  "Queen",
+  "King",
+  "Witch",
+  "Ox",
+].map((name) => `Witchess ${name}`);
+export const pieces = Monster.get(pieceNames);
 export function fightPiece(piece: Monster): string {
+  if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
       "whichchoice value=1181"

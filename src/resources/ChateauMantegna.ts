@@ -6,7 +6,7 @@ export function have(): boolean {
 }
 
 export function paintingMonster(): Monster | null {
-  return get("chateauMonster") ?? null;
+  return get("chateauMonster");
 }
 
 export function paintingFought(): boolean {

@@ -19,7 +19,7 @@ import {
   useSkill,
 } from "kolmafia";
 import { get } from "./property";
-import { $skill } from "./template-string";
+import { $item, $skill } from "./template-string";
 import { clamp } from "./utils";
 
 abstract class MoodElement {
@@ -87,14 +87,42 @@ class PotionMoodElement extends MoodElement {
       // print(`${effect}: going for ${turns} turns, currently ${effectTurns}`);
       const uses = (ensureTurns - effectTurns) / turnsPerUse;
       const quantityToBuy = clamp(uses - availableAmount(this.potion), 0, 100);
-      const quantityAcquired = buy(
-        quantityToBuy,
-        this.potion,
-        this.maxPricePerTurn * turnsPerUse
-      );
-      use(quantityAcquired + availableAmount(this.potion), this.potion);
+      buy(quantityToBuy, this.potion, this.maxPricePerTurn * turnsPerUse);
+      const quantityToUse = clamp(uses, 0, availableAmount(this.potion));
+      use(quantityToUse, this.potion);
     }
     return haveEffect(effect) >= ensureTurns;
+  }
+}
+
+class GenieMoodElement extends MoodElement {
+  effect: Effect;
+
+  constructor(effect: Effect) {
+    super();
+    this.effect = effect;
+  }
+
+  execute(ensureTurns: number): boolean {
+    if (haveEffect(this.effect) >= ensureTurns) return true;
+    const neededWishes = Math.ceil(
+      (haveEffect(this.effect) - ensureTurns) / 20
+    );
+    const wishesToBuy = clamp(
+      neededWishes - availableAmount($item`pocket wish`),
+      0,
+      20
+    );
+    buy(wishesToBuy, $item`pocket wish`, 50000);
+    let wishesToUse = clamp(
+      neededWishes,
+      0,
+      availableAmount($item`pocket wish`)
+    );
+    for (; wishesToUse > 0; wishesToUse--) {
+      cliExecute(`genie effect ${this.effect.name}`);
+    }
+    return haveEffect(this.effect) >= ensureTurns;
   }
 }
 
@@ -178,8 +206,17 @@ export class Mood {
   }
 
   /**
+   * Add an effect to acquire via pocket wishes to the mood.
+   * @param effect Effect to wish for in the mood.
+   */
+  genie(effect: Effect): void {
+    this.elements.push(new GenieMoodElement(effect));
+  }
+
+  /**
    * Execute the mood, trying to ensure {ensureTurns} of each effect.
    * @param ensureTurns Turns of each effect to try and achieve.
+   * @returns Whether or not we successfully got this many turns of every effect in the mood.
    */
   execute(ensureTurns = 1): boolean {
     return this.elements

@@ -19,14 +19,8 @@ import {
   useSkill,
 } from "kolmafia";
 import { get } from "./property";
-import { $class, $skill } from "./template-string";
+import { $skill } from "./template-string";
 import { clamp } from "./utils";
-
-export function isSong(effectOrSkill: Effect | Skill): boolean {
-  const skill =
-    effectOrSkill instanceof Skill ? effectOrSkill : toSkill(effectOrSkill);
-  return skill.type === "buff" && skill.class === $class`Accordion Thief`;
-}
 
 abstract class MoodElement {
   abstract execute(ensureTurns: number): boolean;
@@ -126,6 +120,9 @@ class CustomMoodElement extends MoodElement {
   }
 }
 
+/**
+ * Class representing a mood object. Set options using the static methods, and add mood elements using the instance methods.
+ */
 export class Mood {
   static songSlots: Effect[][] = [];
   static useSausages = true;
@@ -138,6 +135,9 @@ export class Mood {
     if (options.useSausages) Mood.useSausages = options.useSausages;
   }
 
+  /**
+   * Get the MP available for casting skills.
+   */
   static availableMp(): number {
     let result = myMp();
     if (Mood.useSausages)
@@ -147,10 +147,18 @@ export class Mood {
 
   elements: MoodElement[] = [];
 
+  /**
+   * Add a skill to the mood.
+   * @param skill Skill to add.
+   */
   skill(skill: Skill): void {
     this.elements.push(new SkillMoodElement(skill));
   }
 
+  /**
+   * Add an effect to the mood, with casting based on {effect.default}.
+   * @param effect Effect to add.
+   */
   effect(effect: Effect): void {
     const skill = toSkill(effect);
     if (skill !== $skill`none`) {
@@ -160,10 +168,19 @@ export class Mood {
     }
   }
 
+  /**
+   * Add a potion to the mood.
+   * @param potion Potion to add.
+   * @param maxPricePerTurn Maximum price to pay per turn of the effect.
+   */
   potion(potion: Item, maxPricePerTurn: number): void {
     this.elements.push(new PotionMoodElement(potion, maxPricePerTurn));
   }
 
+  /**
+   * Execute the mood, trying to ensure {ensureTurns} of each effect.
+   * @param ensureTurns Turns of each effect to try and achieve.
+   */
   execute(ensureTurns = 1): boolean {
     return this.elements
       .map((element) => element.execute(ensureTurns))

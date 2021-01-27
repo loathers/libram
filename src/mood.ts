@@ -186,13 +186,14 @@ export class Mood {
   /**
    * Add an effect to the mood, with casting based on {effect.default}.
    * @param effect Effect to add.
+   * @param gainEffect How to gain the effect. Only runs if we don't have the effect.
    */
-  effect(effect: Effect): void {
+  effect(effect: Effect, gainEffect?: () => void): void {
     const skill = toSkill(effect);
-    if (skill !== $skill`none`) {
+    if (!gainEffect && skill !== $skill`none`) {
       this.skill(skill);
     } else {
-      this.elements.push(new CustomMoodElement(effect));
+      this.elements.push(new CustomMoodElement(effect, gainEffect));
     }
   }
 

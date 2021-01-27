@@ -1,7 +1,7 @@
 import { myHash, runChoice, runCombat, toInt, visitUrl } from "kolmafia";
-import { haveInCampground } from "../lib";
-import { get } from "../property";
-import { $item } from "../template-string";
+import { haveInCampground } from "../../lib";
+import { get } from "../../property";
+import { $item } from "../../template-string";
 
 export const item = $item`Witchess Set`;
 export function have(): boolean {

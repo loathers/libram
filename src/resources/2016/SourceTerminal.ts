@@ -1,9 +1,9 @@
 import { cliExecute, toSkill } from "kolmafia";
 
-import { Copier } from "../Copier";
-import { haveInCampground } from "../lib";
-import { get } from "../property";
-import { $effect, $item, $skill } from "../template-string";
+import { Copier } from "../../Copier";
+import { haveInCampground } from "../../lib";
+import { get } from "../../property";
+import { $effect, $item, $skill } from "../../template-string";
 
 export const item = $item`Source Terminal`;
 

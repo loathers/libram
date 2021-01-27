@@ -1,5 +1,5 @@
 import { runCombat, visitUrl } from "kolmafia";
-import { get } from "../property";
+import { get } from "../../property";
 
 export function have(): boolean {
   return get("chateauAvailable");

@@ -1,8 +1,8 @@
 import { adv1 } from "kolmafia";
-import { Copier } from "../Copier";
-import { have as haveItem, haveWandererCounter, Wanderer } from "../lib";
-import { get, set } from "../property";
-import { $item, $location } from "../template-string";
+import { Copier } from "../../Copier";
+import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib";
+import { get, set } from "../../property";
+import { $item, $location } from "../../template-string";
 
 export function have(): boolean {
   return get("loveTunnelAvailable");

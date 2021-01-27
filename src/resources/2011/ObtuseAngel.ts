@@ -1,8 +1,8 @@
 import { haveFamiliar, useFamiliar } from "kolmafia";
-import { Copier } from "../Copier";
-import { isCurrentFamiliar } from "../lib";
-import { get } from "../property";
-import { $familiar } from "../template-string";
+import { Copier } from "../../Copier";
+import { isCurrentFamiliar } from "../../lib";
+import { get } from "../../property";
+import { $familiar } from "../../template-string";
 
 export const familiar = $familiar`Obtuse Angel`;
 

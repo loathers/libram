@@ -1,8 +1,8 @@
 import { cliExecute, use } from "kolmafia";
 
-import { getFoldGroup, have as haveItem } from "../lib";
-import { get } from "../property";
-import { $item } from "../template-string";
+import { getFoldGroup, have as haveItem } from "../../lib";
+import { get } from "../../property";
+import { $item } from "../../template-string";
 
 export const sheet = $item`Spooky Putty sheet`;
 

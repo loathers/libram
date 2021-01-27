@@ -12,17 +12,16 @@ export function fightsDone(): number {
   return get("_witchessFights");
 }
 
-const pieceNames = [
-  "Pawn",
-  "Knight",
-  "Bishop",
-  "Rook",
-  "Queen",
-  "King",
-  "Witch",
-  "Ox",
-].map((name) => `Witchess ${name}`);
-export const pieces = Monster.get(pieceNames);
+export const pieces = Monster.get([
+  "Witchess Pawn",
+  "Witchess Knight",
+  "Witchess Bishop",
+  "Witchess Rook",
+  "Witchess Queen",
+  "Witchess King",
+  "Witchess Witch",
+  "Witchess Ox",
+]);
 export function fightPiece(piece: Monster): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (

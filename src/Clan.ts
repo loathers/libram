@@ -1,4 +1,4 @@
-import { getClanId, getClanName, visitUrl, getPlayerId } from "kolmafia";
+import { getClanId, getClanName, getPlayerId, visitUrl } from "kolmafia";
 import { parse } from "node-html-parser";
 
 import { notNull, parseNumber } from "./utils";

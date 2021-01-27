@@ -1,17 +1,17 @@
 import { Copier } from "../Copier";
 import {
-  getRainDohBlackBoxCopiesMade,
-  getRainDohBlackBoxMonster,
-  have as haveRainDoh,
-  useRainDohBlackBox,
-} from "./RainDoh";
-import {
   getSpookyPuttySheetCopiesMade,
   getSpookyPuttySheetMonster,
   have as haveSpookyPutty,
   prepareSpookyPuttySheet,
   useSpookyPuttySheet,
-} from "./SpookyPutty";
+} from "./2009/SpookyPutty";
+import {
+  getRainDohBlackBoxCopiesMade,
+  getRainDohBlackBoxMonster,
+  have as haveRainDoh,
+  useRainDohBlackBox,
+} from "./2012/RainDoh";
 
 export function getTotalPuttyLikeCopiesMade(): number {
   return getSpookyPuttySheetCopiesMade() + getRainDohBlackBoxCopiesMade();

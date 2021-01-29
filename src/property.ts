@@ -1,11 +1,17 @@
 import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
-import { KnownProperty, PropertyValue, isNumericProperty, isBooleanProperty, isMonsterProperty, isLocationProperty } from "./propertyTyping";
+import {
+  isBooleanProperty,
+  isLocationProperty,
+  isMonsterProperty,
+  isNumericProperty,
+  KnownProperty,
+  PropertyValue,
+} from "./propertyTyping";
 
-export const createPropertyGetter = <T>(transform: (value: string, property: string) => T) => (
-  property: string,
-  default_?: T
-): T => {
+export const createPropertyGetter = <T>(
+  transform: (value: string, property: string) => T
+) => (property: string, default_?: T): T => {
   const value = getProperty(property);
   if (default_ !== undefined && value === "") {
     return default_;
@@ -14,7 +20,22 @@ export const createPropertyGetter = <T>(transform: (value: string, property: str
   return transform(value, property);
 };
 
-type MafiaClasses = Bounty | Class | Coinmaster | Effect | Element | Familiar | Item | Location | Monster | Phylum | Servant | Skill | Slot | Stat | Thrall;
+type MafiaClasses =
+  | Bounty
+  | Class
+  | Coinmaster
+  | Effect
+  | Element
+  | Familiar
+  | Item
+  | Location
+  | Monster
+  | Phylum
+  | Servant
+  | Skill
+  | Slot
+  | Stat
+  | Thrall;
 
 export const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T)
@@ -69,9 +90,18 @@ export const getThrall = createMafiaClassPropertyGetter(Thrall);
  * @param property Name of the property
  * @param _default Default value for the property to take if not set
  */
-export function get<_D, P extends KnownProperty>(property: P, _default?: PropertyValue<P>): PropertyValue<P>;
-export function get<D = string | boolean | number, P extends string = string>(property: P, _default?: D): PropertyValue<P, D>;
-export function get<_D, P extends string>(property: P, _default?: PropertyValue<P>): unknown {
+export function get<_D, P extends KnownProperty>(
+  property: P,
+  _default?: PropertyValue<P>
+): PropertyValue<P>;
+export function get<D = string | boolean | number, P extends string = string>(
+  property: P,
+  _default?: D
+): PropertyValue<P, D>;
+export function get<_D, P extends string>(
+  property: P,
+  _default?: PropertyValue<P>
+): unknown {
   const value = getString(property);
 
   if (isMonsterProperty(property)) {
@@ -102,9 +132,18 @@ export function get<_D, P extends string>(property: P, _default?: PropertyValue<
  * @param property Name of the property
  * @param value Value to give the property
  */
-export function set<P extends KnownProperty>(property: P, value: PropertyValue<P>): void;
-export function set<P extends string>(property: P, value: PropertyValue<P>): void;
-export function set<P extends string>(property: P, value: PropertyValue<P>): void {
+export function set<P extends KnownProperty>(
+  property: P,
+  value: PropertyValue<P>
+): void;
+export function set<P extends string>(
+  property: P,
+  value: PropertyValue<P>
+): void;
+export function set<P extends string>(
+  property: P,
+  value: PropertyValue<P>
+): void {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
 }

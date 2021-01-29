@@ -1,0 +1,25 @@
+name: Publish docs
+
+on:
+  push:
+    branches:
+      - master
+      - jsdoc
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v1
+
+      - name: Generate static docs
+        run: |
+          yarn
+          yarn run typedoc
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

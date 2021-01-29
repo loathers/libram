@@ -13,19 +13,20 @@ export function have(): boolean {
 
 /**
  * Buffs that can be acquired from Enhance
+ * 
+ * - Items: +30% Item Drop
+ * - Meat: +60% Meat Drop
+ * - Init: +50% Initiative
+ * - Critical: +10% chance of Critical Hit, +10% chance of Spell Critical Hit
+ * - Damage: +5 Prismatic Damage
+ * - Substats: +3 Stats Per Fight
  */
 export const Buffs = {
-  /** +30% Item Drop */
   Items: $effect`items.enh`,
-  /** +60% Meat Drop */
   Meat: $effect`meat.enh`,
-  /** +50% Initiative */
   Init: $effect`init.enh`,
-  /** +10% chance of Critical Hit, +10% chance of Spell Critical Hit */
   Critical: $effect`critical.enh`,
-  /** +5 Prismatic Damage */
   Damage: $effect`damage.enh`,
-  /** +3 Stats Per Fight */
   Substats: $effect`substats.enh`,
 };
 

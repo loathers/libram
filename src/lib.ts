@@ -1,3 +1,5 @@
+/** @module GeneralLibrary */
+
 import {
   appearanceRates,
   availableAmount,
@@ -29,6 +31,8 @@ import { get } from "./property";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
+ *
+ * @category General
  */
 export function getSongLimit(): number {
   return (
@@ -40,6 +44,8 @@ export function getSongLimit(): number {
 
 /**
  * Return whether the Skill or Effect provided is an Accordion Thief song
+ * 
+ * @category General
  * @param skillOrEffect The Skill or Effect
  */
 export function isSong(skillOrEffect: Skill | Effect): boolean {
@@ -51,6 +57,8 @@ export function isSong(skillOrEffect: Skill | Effect): boolean {
 
 /**
  * List all active Effects
+ * 
+ * @category General
  */
 export function getActiveEffects(): Effect[] {
   return Object.keys(myEffects()).map((e) => Effect.get(e));
@@ -58,6 +66,8 @@ export function getActiveEffects(): Effect[] {
 
 /**
  * List currently active Accordion Thief songs
+ * 
+ * @category General
  */
 export function getActiveSongs(): Effect[] {
   return getActiveEffects().filter(isSong);
@@ -65,6 +75,8 @@ export function getActiveSongs(): Effect[] {
 
 /**
  * List number of active Accordion Thief songs
+ * 
+ * @category General
  */
 export function getSongCount(): number {
   return getActiveSongs().length;
@@ -72,6 +84,8 @@ export function getSongCount(): number {
 
 /**
  * Return the locations in which the given monster can be encountered naturally
+ * 
+ * @category General
  * @param monster Monster to find
  */
 export function getMonsterLocations(monster: Monster): Location[] {
@@ -82,6 +96,8 @@ export function getMonsterLocations(monster: Monster): Location[] {
 
 /**
  * Return the player's remaining liver space
+ * 
+ * @category General
  */
 export function getRemainingLiver(): number {
   return inebrietyLimit() - myInebriety();
@@ -89,6 +105,8 @@ export function getRemainingLiver(): number {
 
 /**
  * Return the player's remaining stomach space
+ * 
+ * @category General
  */
 export function getRemainingStomach(): number {
   return fullnessLimit() - myFullness();
@@ -96,6 +114,8 @@ export function getRemainingStomach(): number {
 
 /**
  * Return the player's remaining spleen space
+ * 
+ * @category General
  */
 export function getRemainingSpleen(): number {
   return spleenLimit() - mySpleenUse();
@@ -103,6 +123,10 @@ export function getRemainingSpleen(): number {
 
 /**
  * Return whether the player "has" any entity which one could feasibly "have".
+ * 
+ * @category General
+ * @param thing Thing to check
+ * @param quantity Number to check that the player has
  */
 export function have(
   thing: Effect | Familiar | Item | Servant | Skill | Thrall,
@@ -138,6 +162,9 @@ export function have(
 
 /**
  * Return whether an item is in the player's campground
+ * 
+ * @category General
+ * @param item The item mafia uses to represent the campground item
  */
 export function haveInCampground(item: Item): boolean {
   return Object.keys(getCampground())
@@ -161,6 +188,8 @@ const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 
 /**
  * Return whether the player has the queried counter
+ * 
+ * @category General
  */
 export function haveCounter(
   counterName: string,
@@ -173,6 +202,8 @@ export function haveCounter(
 /**
  * Returns the player's total number of Artistic Goth Kid and/or Mini-Hipster
  * wanderers encountered today
+ * 
+ * @category Wanderers
  */
 export function getTotalFamiliarWanderers(): number {
   const hipsterFights = get("_hipsterAdv");
@@ -182,6 +213,8 @@ export function getTotalFamiliarWanderers(): number {
 
 /**
  * Return whether the player has the queried wandering counter
+ * 
+ * @category Wanderers
  */
 export function haveWandererCounter(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
@@ -195,20 +228,28 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
 /**
  * Returns whether the player will encounter a vote wanderer on the next turn,
  * providing an "I Voted!" sticker is equipped.
+ * 
+ * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
   return totalTurnsPlayed() % 11 == 1;
 }
 
 /**
- * For deterministic wanderers:
- * Return whether the player will encounter the queried wanderer on the next turn
+ * Tells us whether we can expect a given wanderer now. Behaves differently
+ * for different types of wanderer.
+ * 
+ * - For deterministic wanderers, return whether the player will encounter 
+ *   the queried wanderer on the next turn
  *
- * For variable wanderers (window):
- * Return whether the player is within an encounter window for the queried wanderer
+ * - For variable wanderers (window), return whether the player is within
+ *   an encounter window for the queried wanderer
  *
- * For variable wanderers (chance per turn):
- * Returns true unless the player has exhausted the number of wanderers possible
+ * - For variable wanderers (chance per turn), returns true unless the player
+ *   has exhausted the number of wanderers possible
+ * 
+ * @category Wanderers
+ * @param wanderer Wanderer to check
  */
 export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
@@ -231,6 +272,8 @@ export function isWandererNow(wanderer: Wanderer): boolean {
 /**
  * Returns the float chance the player will encounter a sausage goblin on the
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
+ * 
+ * @category Wanderers
  */
 export function getKramcoWandererChance(): number {
   const fights = get("_sausageFights");
@@ -253,6 +296,8 @@ export function getKramcoWandererChance(): number {
  * NOTE: You must complete one combat with the Artistic Goth Kid before you
  * can encounter any wanderers. Consequently,ƒ the first combat with the
  * Artist Goth Kid is effectively 0% chance to encounter a wanderer.
+ * 
+ * @category Wanderers
  */
 export function getFamiliarWandererChance(): number {
   const totalFights = getTotalFamiliarWanderers();
@@ -266,6 +311,9 @@ export function getFamiliarWandererChance(): number {
 /**
  * Returns the float chance the player will encounter the queried wanderer
  * on the next turn.
+ * 
+ * @category Wanderers
+ * @param wanderer Wanderer to check
  */
 export function getWandererChance(wanderer: Wanderer): number {
   if (deterministicWanderers.includes(wanderer)) {
@@ -295,16 +343,57 @@ export function getWandererChance(wanderer: Wanderer): number {
   return 0.0;
 }
 
+/**
+ * Returns true if the player's current familiar is equal to the one supplied
+ * 
+ * @category General
+ * @param familiar Familiar to check
+ */
 export function isCurrentFamiliar(familiar: Familiar): boolean {
   return myFamiliar() === familiar;
 }
 
+/**
+ * Returns the fold group (if any) of which the given item is a part
+ * 
+ * @category General
+ * @param item Item that is part of the required fold group
+ */
 export function getFoldGroup(item: Item): Item[] {
   return Object.entries(getRelated(item, "fold"))
     .sort(([, a], [, b]) => a - b)
     .map(([i]) => Item.get(i));
 }
 
+/**
+ * Returns the zap group (if any) of which the given item is a part
+ *
+ * @category General
+ * @param item Item that is part of the required zap group
+ */
 export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
+}
+
+/**
+ * Get a map of banished monsters keyed by what banished them
+ * 
+ * @category General
+ */
+export function getBanishedMonsters(): Map<Item | Skill, Monster> {
+  const banishedstring = get("banishedMonsters");
+  const banishedComponents = banishedstring.split(":");
+  const result = new Map<Item | Skill, Monster>();
+  if (banishedComponents.length < 3) return result;
+  for (let idx = 0; idx < banishedComponents.length / 3 - 1; idx++) {
+    const foe = Monster.get(banishedComponents[idx * 3]);
+    const banisher = banishedComponents[idx * 3 + 1];
+    // toItem doesn"t error if the item doesn"t exist, so we have to use that.
+    const banisherItem = Item.get(banisher);
+    const banisherObject = [Item.get("none"), null].includes(banisherItem)
+      ? Skill.get(banisher)
+      : banisherItem;
+    result.set(banisherObject, foe);
+  }
+  return result;
 }

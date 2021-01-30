@@ -9,7 +9,7 @@ import {
   PropertyValue,
 } from "./propertyTyping";
 
-export const createPropertyGetter = <T>(
+const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T
 ) => (property: string, default_?: T): T => {
   const value = getProperty(property);
@@ -37,7 +37,7 @@ type MafiaClasses =
   | Stat
   | Thrall;
 
-export const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
+const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T)
 ): ((property: string, default_?: T | null) => T | null) =>
   createPropertyGetter((value) => {

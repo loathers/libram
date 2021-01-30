@@ -10,9 +10,13 @@
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "stripInternal": true
   },
   "include": [
     "src/"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"]
+  }
 }

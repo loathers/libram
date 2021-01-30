@@ -18,6 +18,8 @@ import { $item } from "./template-string";
 const MACRO_NAME = "Script Autoattack Macro";
 /**
  * Get the KoL native ID of the macro with name Script Autoattack Macro.
+ * 
+ * @category Combat
  * @returns {number} The macro ID.
  */
 export function getMacroId(): number {
@@ -441,28 +443,12 @@ export class Macro {
   }
 }
 
-export function banishedMonsters(): Map<Item | Skill, Monster> {
-  const banishedstring = getProperty("banishedMonsters");
-  const banishedComponents = banishedstring.split(":");
-  const result = new Map<Item | Skill, Monster>();
-  if (banishedComponents.length < 3) return result;
-  for (let idx = 0; idx < banishedComponents.length / 3 - 1; idx++) {
-    const foe = Monster.get(banishedComponents[idx * 3]);
-    const banisher = banishedComponents[idx * 3 + 1];
-    // toItem doesn"t error if the item doesn"t exist, so we have to use that.
-    const banisherItem = toItem(banisher);
-    const banisherObject = [$item`none`, null].includes(banisherItem)
-      ? Skill.get(banisher)
-      : banisherItem;
-    result.set(banisherObject, foe);
-  }
-  return result;
-}
-
 /**
  * Adventure in a location and handle all combats with a given macro.
  * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
+ * 
+ * @category Combat
  * @param loc Location to adventure in.
  * @param macro Macro to execute.
  */
@@ -481,6 +467,8 @@ export function adventureMacro(loc: Location, macro: Macro): void {
  * Adventure in a location and handle all combats with a given autoattack and manual macro.
  * To use the nextMacro parameter you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
+ * 
+ * @category Combat
  * @param loc Location to adventure in.
  * @param autoMacro Macro to execute via KoL autoattack.
  * @param nextMacro Macro to execute manually after autoattack completes.

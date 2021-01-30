@@ -39,10 +39,10 @@ const clanIdCache: { [clanName: string]: number } = {};
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
-export class Clan {
-  static LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
-  static WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
+const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
+const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
+export class Clan {
   readonly id: number;
   readonly name: string;
 
@@ -139,7 +139,7 @@ export class Clan {
   getCurrentFax(): Monster | null {
     const logs = visitUrl("clan_log.php");
 
-    const lastFax = logs.match(Clan.LOG_FAX_PATTERN);
+    const lastFax = logs.match(LOG_FAX_PATTERN);
 
     if (!lastFax) return null;
 
@@ -160,7 +160,7 @@ export class Clan {
     return root
       .querySelectorAll("select[name=level] option")
       .map((option) => {
-        const match = option.text.match(Clan.WHITELIST_DEGREE_PATTERN);
+        const match = option.text.match(WHITELIST_DEGREE_PATTERN);
         const id = option.getAttribute("value");
 
         if (!match || !id) return null;

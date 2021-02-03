@@ -172,17 +172,17 @@ export function haveInCampground(item: Item): boolean {
     .includes(item);
 }
 
-export enum Wanderer {
-  Digitize = "Digitize Monster",
-  Enamorang = "Enamorang Monster",
-  Familiar = "Familiar",
-  Holiday = "Holiday Monster",
-  Kramco = "Kramco",
-  Nemesis = "Nemesis Assassin",
-  Portscan = "portscan.edu",
-  Romantic = "Romantic Monster",
-  Vote = "Vote Monster",
-}
+export const Wanderer = {
+  Digitize: "Digitize Monster",
+  Enamorang: "Enamorang Monster",
+  Familiar: "Familiar",
+  Holiday: "Holiday Monster",
+  Kramco: "Kramco",
+  Nemesis: "Nemesis Assassin",
+  Portscan: "portscan.edu",
+  Romantic: "Romantic Monster",
+  Vote: "Vote Monster",
+} as const;
 
 const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 

@@ -4,6 +4,7 @@ import {
   appearanceRates,
   availableAmount,
   booleanModifier,
+  cliExecute,
   fullnessLimit,
   getCampground,
   getCounters,
@@ -82,6 +83,16 @@ export function getActiveSongs(): Effect[] {
  */
 export function getSongCount(): number {
   return getActiveSongs().length;
+}
+
+/**
+ * Returns whether they player can remember another Accordion Thief song
+ *
+ * @category General
+ * @param quantity Number of songs to test the space for
+ */
+export function canRememberSong(quantity = 1): boolean {
+  return getSongLimit() - getSongCount() >= quantity;
 }
 
 /**
@@ -397,4 +408,14 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     result.set(banisherObject, Monster.get(foe));
   }
   return result;
+}
+
+/**
+ * Remove an effect
+ *
+ * @category General
+ * @param effect Effect to remove
+ */
+export function uneffect(effect: Effect): boolean {
+  return cliExecute(`uneffect ${effect.name}`);
 }

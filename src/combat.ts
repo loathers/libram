@@ -2,18 +2,15 @@ import {
   adv1,
   choiceFollowsFight,
   getAutoAttack,
-  getProperty,
   inMultiFight,
   removeProperty,
   runCombat,
   toInt,
-  toItem,
   urlEncode,
   visitUrl,
   xpath,
 } from "kolmafia";
 import { get, set } from "./property";
-import { $item } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**

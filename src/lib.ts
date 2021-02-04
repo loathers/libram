@@ -22,12 +22,14 @@ import {
   myTurncount,
   numericModifier,
   spleenLimit,
+  toItem,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
 
 import { $class } from "./template-string";
 import { get } from "./property";
+import { chunk } from "./utils";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -381,19 +383,18 @@ export function getZapGroup(item: Item): Item[] {
  * @category General
  */
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
-  const banishedstring = get("banishedMonsters");
-  const banishedComponents = banishedstring.split(":");
+  const banishes = chunk(get("banishedMonsters").split(":"), 3);
+
   const result = new Map<Item | Skill, Monster>();
-  if (banishedComponents.length < 3) return result;
-  for (let idx = 0; idx < banishedComponents.length / 3 - 1; idx++) {
-    const foe = Monster.get(banishedComponents[idx * 3]);
-    const banisher = banishedComponents[idx * 3 + 1];
+
+  for (const [foe, banisher] of banishes) {
+    if (foe === undefined || banisher === undefined) break;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
-    const banisherItem = Item.get(banisher);
+    const banisherItem = toItem(banisher);
     const banisherObject = [Item.get("none"), null].includes(banisherItem)
       ? Skill.get(banisher)
       : banisherItem;
-    result.set(banisherObject, foe);
+    result.set(banisherObject, Monster.get(foe));
   }
   return result;
 }

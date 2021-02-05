@@ -86,7 +86,7 @@ export function getSongCount(): number {
 }
 
 /**
- * Returns whether they player can remember another Accordion Thief song
+ * Returns true if the player can remember another Accordion Thief song
  *
  * @category General
  * @param quantity Number of songs to test the space for

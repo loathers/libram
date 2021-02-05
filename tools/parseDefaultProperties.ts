@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
+import * as _importForGlobals from "kolmafia";
 
-import {isNumericProperty, isBooleanProperty, isMonsterProperty, isLocationProperty } from "../src/propertyTyping.js";
+import { isBooleanProperty, isLocationProperty, isMonsterProperty, isNumericOrStringProperty, isNumericProperty } from "../src/propertyTyping";
 
 const PROPS_FILE = "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
 
@@ -15,6 +16,7 @@ async function main() {
     MonsterProperty: [],
     LocationProperty: [],
     StringProperty: [],
+    NumericOrStringProperty: [],
   };
 
   for (const prop of props) {
@@ -25,6 +27,8 @@ async function main() {
       propTypes.MonsterProperty.push(property);
     } else if (isLocationProperty(property)) {
       propTypes.LocationProperty.push(property)
+    } else if (isNumericOrStringProperty(property)) {
+      propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {
       propTypes.StringProperty.push(property);
     } else if (isBooleanProperty(property, defaultValue)) {
@@ -37,7 +41,7 @@ async function main() {
   }
 
   Object.entries(propTypes).forEach(([type, values]) => {
-    console.log(`type ${type} = ${values.map(v => `"${v}"`).join(" | ")}`);
+    console.log(`export type ${type} = ${values.map(v => `"${v}"`).join(" | ")};`);
   });
 }
 

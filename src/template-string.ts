@@ -28,7 +28,7 @@ const createPluralConstant = <T extends MafiaClass>(
     return Type.all<I>();
   }
 
-  return Type.get<I>(input.split(","));
+  return Type.get<I>(input.split(/\s*,\s*/));
 };
 
 /**

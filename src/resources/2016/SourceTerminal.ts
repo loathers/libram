@@ -13,7 +13,7 @@ export function have(): boolean {
 
 /**
  * Buffs that can be acquired from Enhance
- * 
+ *
  * - Items: +30% Item Drop
  * - Meat: +60% Meat Drop
  * - Init: +50% Initiative

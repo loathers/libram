@@ -1,4 +1,5 @@
-// eslint-disable-next-line no-undef
+/* global module */
+
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",

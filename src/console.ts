@@ -1,8 +1,7 @@
 import { print } from "kolmafia";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const logColor = (color?: string) => (...args: any[]) => {
-  const output = args.map((x) => x.toString()).join(" ");
+const logColor = (color?: string) => (...args: unknown[]) => {
+  const output = args.join(" ");
   if (color) {
     print(output, color);
   } else {

@@ -105,10 +105,12 @@ export function get<_D, P extends string>(
   const value = getString(property);
 
   if (isMonsterProperty(property)) {
+    // @ts-expect-error This needs a more dedicated fix
     return getMonster(property, _default);
   }
 
   if (isLocationProperty(property)) {
+    // @ts-expect-error This needs a more dedicated fix
     return getLocation(property, _default);
   }
 
@@ -117,10 +119,12 @@ export function get<_D, P extends string>(
   }
 
   if (isBooleanProperty(property, value)) {
+    // @ts-expect-error This needs a more dedicated fix
     return getBoolean(property, _default);
   }
 
   if (isNumericProperty(property, value)) {
+    // @ts-expect-error This needs a more dedicated fix
     return getNumber(property, _default);
   }
 
@@ -144,6 +148,6 @@ export function set<P extends string>(
   property: P,
   value: PropertyValue<P>
 ): void {
-  const stringValue = value === null ? "" : value.toString();
+  const stringValue = value === null ? "" : String(value);
   setProperty(property, stringValue);
 }

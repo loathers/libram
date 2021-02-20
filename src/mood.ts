@@ -260,7 +260,7 @@ export class Mood {
    * Construct a new Mood instance.
    * @param options Options for mood.
    */
-  constructor(options: MoodOptionsParameter) {
+  constructor(options: MoodOptionsParameter = {}) {
     this.options = { ...Mood.defaultOptions, ...options };
   }
 

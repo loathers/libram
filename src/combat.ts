@@ -2,23 +2,20 @@ import {
   adv1,
   choiceFollowsFight,
   getAutoAttack,
-  getProperty,
   inMultiFight,
   removeProperty,
   runCombat,
   toInt,
-  toItem,
   urlEncode,
   visitUrl,
   xpath,
 } from "kolmafia";
 import { get, set } from "./property";
-import { $item } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
  * Get the KoL native ID of the macro with name Script Autoattack Macro.
- * 
+ *
  * @category Combat
  * @returns {number} The macro ID.
  */
@@ -447,7 +444,7 @@ export class Macro {
  * Adventure in a location and handle all combats with a given macro.
  * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
- * 
+ *
  * @category Combat
  * @param loc Location to adventure in.
  * @param macro Macro to execute.
@@ -467,7 +464,7 @@ export function adventureMacro(loc: Location, macro: Macro): void {
  * Adventure in a location and handle all combats with a given autoattack and manual macro.
  * To use the nextMacro parameter you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
- * 
+ *
  * @category Combat
  * @param loc Location to adventure in.
  * @param autoMacro Macro to execute via KoL autoattack.

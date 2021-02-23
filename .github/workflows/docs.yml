@@ -16,7 +16,7 @@ jobs:
       - name: Generate static docs
         run: |
           yarn
-          yarn run typedoc
+          yarn run docs
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

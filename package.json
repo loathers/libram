@@ -47,6 +47,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "core-js": "3.9.0",
     "kolmafia": "^1.0.3",
     "node-html-parser": "^2.0.0"
   },

@@ -63,8 +63,8 @@ export function couldRunaway(considerWeightAdjustment = true): boolean {
   return have() && getRemainingRunaways(considerWeightAdjustment) > 0;
 }
 
-const odeSkill = $skill`Ode to Booze`;
-const odeEffect = $effect`The Ode to Booze`;
+const odeSkill = $skill`The Ode to Booze`;
+const odeEffect = $effect`Ode to Booze`;
 
 /**
  * Returns true if the player can use their Bandersnatch to get a

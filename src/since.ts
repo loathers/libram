@@ -1,5 +1,6 @@
 /**
- * @file Utilities for writing JavaScript code that runs in KoLmafia.
+ * Provides functions for checking KoLmafia's version and revision.
+ * @packageDocumentation
  */
 
 import { getRevision, getVersion } from "kolmafia";
@@ -44,6 +45,12 @@ function getScriptName(): string {
  * @throws {KolmafiaVersionError}
  *    If KoLmafia's revision number is less than `revision`.
  * @throws {TypeError} If `revision` is not an integer
+ *
+ * @example
+ * ```ts
+ * // Throws if KoLmafia revision is less than r20500
+ * sinceKolmafiaRevision(20500);
+ * ```
  */
 export function sinceKolmafiaRevision(revision: number): void {
   if (!Number.isInteger(revision)) {
@@ -73,6 +80,12 @@ export function sinceKolmafiaRevision(revision: number): void {
  *    versions are equal but the minor version is less than `minorVersion`
  * @throws {TypeError}
  *    If either `majorVersion` or `minorVersion` are not integers
+ *
+ * @example
+ * ```ts
+ * // Throws if KoLmafia version is less than 20.7
+ * sinceKolmafiaVersion(20, 7);
+ * ```
  */
 export function sinceKolmafiaVersion(
   majorVersion: number,

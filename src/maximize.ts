@@ -1,7 +1,7 @@
 import { maximize, myBasestat, myFamiliar } from "kolmafia";
 import { $stats } from "./template-string";
 
-type MaximizeOptions = {
+export type MaximizeOptions = {
   updateOnFamiliarChange?: boolean;
   updateOnStatThreshold?: number | null;
   forceEquip?: Item[];
@@ -17,6 +17,16 @@ const defaultMaximizeOptions = {
   bonusEquip: new Map(),
 };
 
+/**
+ *
+ * @param options Default options for each maximizer run.
+ * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
+ * @param options.updateOnStatThreshold Re-run the maximizer if a stat has newly passed an even multiple
+ * of this number (for new equip requirements), or null otherwise. Default 10.
+ * @param options.forceEquip Equipment to force-equip ("equip X").
+ * @param options.preventEquip Equipment to prevent equipping ("-equip X").
+ * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
+ */
 export function setDefaultMaximizeOptions(options: MaximizeOptions): void {
   Object.assign(defaultMaximizeOptions, options);
 }
@@ -25,6 +35,17 @@ let cachedObjective: string | null = null;
 let cachedStats = [0, 0, 0];
 let cachedFamiliar: Familiar | null = null;
 
+/**
+ * Run the maximizer, but only if the objective and certain pieces of game state haven't changed since it was last run.
+ * @param objectives Objectives to maximize for.
+ * @param options Options for this run of the maximizer.
+ * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
+ * @param options.updateOnStatThreshold Re-run the maximizer if a stat has newly passed an even multiple
+ * of this number (for new equip requirements), or null otherwise. Default 10.
+ * @param options.forceEquip Equipment to force-equip ("equip X").
+ * @param options.preventEquip Equipment to prevent equipping ("-equip X").
+ * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
+ */
 export function maximizeCached(
   objectives: string[],
   options: MaximizeOptions

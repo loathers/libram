@@ -4,6 +4,7 @@ import {
   appearanceRates,
   availableAmount,
   booleanModifier,
+  cliExecute,
   fullnessLimit,
   getCampground,
   getCounters,
@@ -22,12 +23,14 @@ import {
   myTurncount,
   numericModifier,
   spleenLimit,
+  toItem,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
 
 import { $class } from "./template-string";
 import { get } from "./property";
+import { chunk } from "./utils";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -44,7 +47,7 @@ export function getSongLimit(): number {
 
 /**
  * Return whether the Skill or Effect provided is an Accordion Thief song
- * 
+ *
  * @category General
  * @param skillOrEffect The Skill or Effect
  */
@@ -57,7 +60,7 @@ export function isSong(skillOrEffect: Skill | Effect): boolean {
 
 /**
  * List all active Effects
- * 
+ *
  * @category General
  */
 export function getActiveEffects(): Effect[] {
@@ -66,7 +69,7 @@ export function getActiveEffects(): Effect[] {
 
 /**
  * List currently active Accordion Thief songs
- * 
+ *
  * @category General
  */
 export function getActiveSongs(): Effect[] {
@@ -75,7 +78,7 @@ export function getActiveSongs(): Effect[] {
 
 /**
  * List number of active Accordion Thief songs
- * 
+ *
  * @category General
  */
 export function getSongCount(): number {
@@ -83,8 +86,18 @@ export function getSongCount(): number {
 }
 
 /**
+ * Returns true if the player can remember another Accordion Thief song
+ *
+ * @category General
+ * @param quantity Number of songs to test the space for
+ */
+export function canRememberSong(quantity = 1): boolean {
+  return getSongLimit() - getSongCount() >= quantity;
+}
+
+/**
  * Return the locations in which the given monster can be encountered naturally
- * 
+ *
  * @category General
  * @param monster Monster to find
  */
@@ -96,7 +109,7 @@ export function getMonsterLocations(monster: Monster): Location[] {
 
 /**
  * Return the player's remaining liver space
- * 
+ *
  * @category General
  */
 export function getRemainingLiver(): number {
@@ -105,7 +118,7 @@ export function getRemainingLiver(): number {
 
 /**
  * Return the player's remaining stomach space
- * 
+ *
  * @category General
  */
 export function getRemainingStomach(): number {
@@ -114,7 +127,7 @@ export function getRemainingStomach(): number {
 
 /**
  * Return the player's remaining spleen space
- * 
+ *
  * @category General
  */
 export function getRemainingSpleen(): number {
@@ -123,7 +136,7 @@ export function getRemainingSpleen(): number {
 
 /**
  * Return whether the player "has" any entity which one could feasibly "have".
- * 
+ *
  * @category General
  * @param thing Thing to check
  * @param quantity Number to check that the player has
@@ -162,7 +175,7 @@ export function have(
 
 /**
  * Return whether an item is in the player's campground
- * 
+ *
  * @category General
  * @param item The item mafia uses to represent the campground item
  */
@@ -188,7 +201,7 @@ const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 
 /**
  * Return whether the player has the queried counter
- * 
+ *
  * @category General
  */
 export function haveCounter(
@@ -202,7 +215,7 @@ export function haveCounter(
 /**
  * Returns the player's total number of Artistic Goth Kid and/or Mini-Hipster
  * wanderers encountered today
- * 
+ *
  * @category Wanderers
  */
 export function getTotalFamiliarWanderers(): number {
@@ -213,7 +226,7 @@ export function getTotalFamiliarWanderers(): number {
 
 /**
  * Return whether the player has the queried wandering counter
- * 
+ *
  * @category Wanderers
  */
 export function haveWandererCounter(wanderer: Wanderer): boolean {
@@ -228,7 +241,7 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
 /**
  * Returns whether the player will encounter a vote wanderer on the next turn,
  * providing an "I Voted!" sticker is equipped.
- * 
+ *
  * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
@@ -238,8 +251,8 @@ export function isVoteWandererNow(): boolean {
 /**
  * Tells us whether we can expect a given wanderer now. Behaves differently
  * for different types of wanderer.
- * 
- * - For deterministic wanderers, return whether the player will encounter 
+ *
+ * - For deterministic wanderers, return whether the player will encounter
  *   the queried wanderer on the next turn
  *
  * - For variable wanderers (window), return whether the player is within
@@ -247,7 +260,7 @@ export function isVoteWandererNow(): boolean {
  *
  * - For variable wanderers (chance per turn), returns true unless the player
  *   has exhausted the number of wanderers possible
- * 
+ *
  * @category Wanderers
  * @param wanderer Wanderer to check
  */
@@ -272,7 +285,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
 /**
  * Returns the float chance the player will encounter a sausage goblin on the
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
- * 
+ *
  * @category Wanderers
  */
 export function getKramcoWandererChance(): number {
@@ -296,7 +309,7 @@ export function getKramcoWandererChance(): number {
  * NOTE: You must complete one combat with the Artistic Goth Kid before you
  * can encounter any wanderers. Consequently,ƒ the first combat with the
  * Artist Goth Kid is effectively 0% chance to encounter a wanderer.
- * 
+ *
  * @category Wanderers
  */
 export function getFamiliarWandererChance(): number {
@@ -311,7 +324,7 @@ export function getFamiliarWandererChance(): number {
 /**
  * Returns the float chance the player will encounter the queried wanderer
  * on the next turn.
- * 
+ *
  * @category Wanderers
  * @param wanderer Wanderer to check
  */
@@ -345,7 +358,7 @@ export function getWandererChance(wanderer: Wanderer): number {
 
 /**
  * Returns true if the player's current familiar is equal to the one supplied
- * 
+ *
  * @category General
  * @param familiar Familiar to check
  */
@@ -355,7 +368,7 @@ export function isCurrentFamiliar(familiar: Familiar): boolean {
 
 /**
  * Returns the fold group (if any) of which the given item is a part
- * 
+ *
  * @category General
  * @param item Item that is part of the required fold group
  */
@@ -377,23 +390,32 @@ export function getZapGroup(item: Item): Item[] {
 
 /**
  * Get a map of banished monsters keyed by what banished them
- * 
+ *
  * @category General
  */
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
-  const banishedstring = get("banishedMonsters");
-  const banishedComponents = banishedstring.split(":");
+  const banishes = chunk(get("banishedMonsters").split(":"), 3);
+
   const result = new Map<Item | Skill, Monster>();
-  if (banishedComponents.length < 3) return result;
-  for (let idx = 0; idx < banishedComponents.length / 3 - 1; idx++) {
-    const foe = Monster.get(banishedComponents[idx * 3]);
-    const banisher = banishedComponents[idx * 3 + 1];
+
+  for (const [foe, banisher] of banishes) {
+    if (foe === undefined || banisher === undefined) break;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
-    const banisherItem = Item.get(banisher);
+    const banisherItem = toItem(banisher);
     const banisherObject = [Item.get("none"), null].includes(banisherItem)
       ? Skill.get(banisher)
       : banisherItem;
-    result.set(banisherObject, foe);
+    result.set(banisherObject, Monster.get(foe));
   }
   return result;
+}
+
+/**
+ * Remove an effect
+ *
+ * @category General
+ * @param effect Effect to remove
+ */
+export function uneffect(effect: Effect): boolean {
+  return cliExecute(`uneffect ${effect.name}`);
 }

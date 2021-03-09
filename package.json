@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,10 +11,12 @@
   "scripts": {
     "build": "yarn run tsc",
     "clean": "rm -f {src,dist}/*.js {src,dist}/*.d.ts {src,dist}/**/*.js {src,dist}/**/*.d.ts",
+    "docs": "yarn run typedoc",
     "format": "yarn run prettier --write src/**/* examples/**/*",
     "lint": "yarn run eslint src --ext .ts",
     "prepare": "patch-package",
-    "prepublishOnly": "yarn run build"
+    "prepublishOnly": "yarn run build",
+    "updateProps": "yarn run ts-node ./tools/parseDefaultProperties.ts"
   },
   "files": [
     "dist/**/*.js",
@@ -45,6 +47,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "core-js": "3.9.0",
     "kolmafia": "^1.0.3",
     "node-html-parser": "^2.0.0"
   },

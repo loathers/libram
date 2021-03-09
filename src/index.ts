@@ -1,3 +1,5 @@
+import "core-js/features/object/values";
+
 export * from "./Clan";
 export * from "./combat";
 export * from "./lib";

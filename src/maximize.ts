@@ -1,4 +1,4 @@
-import { maximize, myBasestat, myFamiliar, print } from "kolmafia";
+import { maximize, myBasestat, myFamiliar } from "kolmafia";
 import { $stats } from "./template-string";
 
 export type MaximizeOptions = {

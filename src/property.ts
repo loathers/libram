@@ -41,6 +41,7 @@ const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T)
 ): ((property: string, default_?: T | null) => T | null) =>
   createPropertyGetter((value) => {
+    if (value === "") return null;
     const v = Type.get<T>(value);
     return v === Type.get<T>("none") ? null : v;
   });

@@ -1,4 +1,4 @@
-import { maximize, myBasestat, myFamiliar } from "kolmafia";
+import { maximize, myBasestat, myFamiliar, print } from "kolmafia";
 import { $stats } from "./template-string";
 
 export type MaximizeOptions = {
@@ -48,7 +48,7 @@ let cachedFamiliar: Familiar | null = null;
  */
 export function maximizeCached(
   objectives: string[],
-  options: MaximizeOptions
+  options: MaximizeOptions = {}
 ): void {
   const {
     updateOnFamiliarChange,

@@ -13,7 +13,7 @@ export function have(): boolean {
 
 /**
  * Buffs that can be acquired from Enhance
- * 
+ *
  * - Items: +30% Item Drop
  * - Meat: +60% Meat Drop
  * - Init: +50% Initiative
@@ -98,9 +98,9 @@ export function educate(skills: Skill | [Skill, Skill]): boolean {
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
 
   for (const skill of skillsArray) {
-    if (Object.values(Skills).includes(skill)) return false;
+    if (!Object.values(Skills).includes(skill)) return false;
 
-    cliExecute(`terminal educate ${skill.name}`);
+    cliExecute(`terminal educate ${skill.name.toLowerCase()}.edu`);
   }
 
   return true;

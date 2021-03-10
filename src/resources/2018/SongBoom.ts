@@ -3,7 +3,7 @@ import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
-export const item = $item`SongBoom™ Boom Box`;
+export const item = $item`SongBoom™ BoomBox`;
 export function have(): boolean {
   return haveItem(item);
 }
@@ -23,6 +23,14 @@ export const songBoomSongs = new Set<string>([
   "These Fists Were Made for Punchin'",
   "Total Eclipse of Your Meat",
 ]);
+
+const keywords = {
+  "Eye of the Giger": "spooky",
+  "Food Vibrations": "food",
+  "Remainin' Alive": "dr",
+  "These Fists Were Made for Punchin'": "damage",
+  "Total Eclipse of Your Meat": "meat",
+};
 
 /**
  * Current song.
@@ -46,7 +54,7 @@ export function songChangesLeft(): number {
 export function setSong(newSong: SongBoomSong): boolean {
   if (song() !== newSong) {
     if (songChangesLeft() === 0) throw new Error("Out of song changes!");
-    cliExecute(`boombox ${newSong}`);
+    cliExecute(`boombox ${newSong ? keywords[newSong] : "none"}`);
     return true;
   } else {
     return false;

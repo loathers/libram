@@ -96,6 +96,7 @@ export const Skills = {
  */
 export function educate(skills: Skill | [Skill, Skill]): boolean {
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+  if (getSkills() === skillsArray) return true;
 
   for (const skill of skillsArray) {
     if (!Object.values(Skills).includes(skill)) return false;
@@ -113,7 +114,7 @@ export function getSkills(): Skill[] {
   return (["sourceTerminalEducate1", "sourceTerminalEducate2"] as const)
     .map((p) => get(p))
     .filter((s) => s !== "")
-    .map((s) => toSkill(s.substring(0, -4)));
+    .map((s) => Skill.get(s.slice(0, -4)));
 }
 
 export function isCurrentSkill(skills: Skill | [Skill, Skill]): boolean {

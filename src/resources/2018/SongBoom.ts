@@ -8,22 +8,6 @@ export function have(): boolean {
   return haveItem(item);
 }
 
-type SongBoomSong =
-  | "Eye of the Giger"
-  | "Food Vibrations"
-  | "Remainin' Alive"
-  | "These Fists Were Made for Punchin'"
-  | "Total Eclipse of Your Meat"
-  | null;
-
-export const songBoomSongs = new Set<string>([
-  "Eye of the Giger",
-  "Food Vibrations",
-  "Remainin' Alive",
-  "These Fists Were Made for Punchin'",
-  "Total Eclipse of Your Meat",
-]);
-
 const keywords = {
   "Eye of the Giger": "spooky",
   "Food Vibrations": "food",
@@ -31,6 +15,10 @@ const keywords = {
   "These Fists Were Made for Punchin'": "damage",
   "Total Eclipse of Your Meat": "meat",
 };
+
+type SongBoomSong = keyof typeof keywords | null;
+
+export const songBoomSongs = new Set<string>(Object.keys(keywords));
 
 /**
  * Current song.

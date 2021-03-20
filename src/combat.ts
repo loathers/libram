@@ -404,7 +404,7 @@ export class Macro {
     return this.step(
       ...items.map((item) => {
         return Macro.if_(
-          `hascombatitem ${itemOrItemsBallsMacroPredicate(item)}`,
+          itemOrItemsBallsMacroPredicate(item),
           `use ${itemOrItemsBallsMacroName(item)}`
         );
       })

@@ -16,7 +16,7 @@ const keywords = {
   "Total Eclipse of Your Meat": "meat",
 };
 
-type SongBoomSong = keyof typeof keywords | null;
+export type SongBoomSong = keyof typeof keywords | null;
 
 export const songBoomSongs = new Set<string>(Object.keys(keywords));
 

@@ -48,7 +48,7 @@ let cachedFamiliar: Familiar | null = null;
  */
 export function maximizeCached(
   objectives: string[],
-  options: MaximizeOptions
+  options: MaximizeOptions = {}
 ): void {
   const {
     updateOnFamiliarChange,

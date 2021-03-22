@@ -27,6 +27,9 @@ import { $item, $skill } from "./template-string";
 import { clamp } from "./utils";
 
 export abstract class MpSource {
+  usesRemaining(): number | null {
+    return null;
+  }
   abstract availableMpMin(): number;
   availableMpMax(): number {
     return this.availableMpMin();
@@ -38,7 +41,11 @@ export class OscusSoda extends MpSource {
   static instance = new OscusSoda();
 
   available(): boolean {
-    return have($item`Oscus's neverending soda`) && !get("oscusSodaUsed");
+    return have($item`Oscus's neverending soda`);
+  }
+
+  usesRemaining(): number | null {
+    return get("oscusSodaUsed") ? 0 : 1;
   }
 
   availableMpMin(): number {
@@ -56,6 +63,10 @@ export class OscusSoda extends MpSource {
 
 export class MagicalSausages extends MpSource {
   static instance = new MagicalSausages();
+
+  usesRemaining(): number | null {
+    return 23 - get("_sausagesEaten");
+  }
 
   availableMpMin(): number {
     const maxSausages = Math.min(
@@ -172,7 +183,6 @@ class PotionMoodElement extends MoodElement {
       return false;
     }
     if (effectTurns < ensureTurns) {
-      // print(`${effect}: going for ${turns} turns, currently ${effectTurns}`);
       const uses = (ensureTurns - effectTurns) / turnsPerUse;
       const quantityToBuy = clamp(uses - availableAmount(this.potion), 0, 100);
       buy(quantityToBuy, this.potion, this.maxPricePerTurn * turnsPerUse);
@@ -275,8 +285,11 @@ export class Mood {
 
   moreMp(minimumTarget: number): void {
     for (const mpSource of this.options.mpSources) {
-      mpSource.execute();
-      if (myMp() >= minimumTarget) break;
+      const usesRemaining = mpSource.usesRemaining();
+      if (usesRemaining !== null && usesRemaining > 0) {
+        mpSource.execute();
+        if (myMp() >= minimumTarget) break;
+      }
     }
   }
 
@@ -343,7 +356,7 @@ export class Mood {
           element.turnIncrement();
         elementTurns = Math.min(ensureTurns, elementPotentialTurns);
       }
-      completeSuccess ||= element.execute(this, elementTurns);
+      completeSuccess = element.execute(this, elementTurns) || completeSuccess;
     }
     return completeSuccess;
   }

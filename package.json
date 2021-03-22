@@ -30,6 +30,7 @@
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
+    "@types/lodash-es": "^4.17.4",
     "@types/node-fetch": "^2.5.7",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
@@ -48,6 +49,7 @@
   },
   "dependencies": {
     "core-js": "3.9.0",
+    "lodash-es": "^4.17.21",
     "kolmafia": "^1.0.3",
     "node-html-parser": "^2.0.0"
   },

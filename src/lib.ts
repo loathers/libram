@@ -18,6 +18,7 @@ import {
   myFamiliar,
   myFullness,
   myInebriety,
+  myPath,
   mySpleenUse,
   myThrall,
   myTurncount,
@@ -28,7 +29,7 @@ import {
   totalTurnsPlayed,
 } from "kolmafia";
 
-import { $class } from "./template-string";
+import { $class, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
 
@@ -408,6 +409,78 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     result.set(banisherObject, Monster.get(foe));
   }
   return result;
+}
+
+/**
+ * Returns true if the item is usable
+ *
+ * This function will be an ongoing work in progress
+ *
+ * @param item Item to check
+ */
+export function canUse(item: Item): boolean {
+  const path = myPath();
+
+  if (path !== "Nuclear Autumn") {
+    if ($items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(item)) {
+      return false;
+    }
+  }
+
+  if (path === "G-Lover") {
+    if (!item.name.toLowerCase().includes("g")) return false;
+  }
+
+  if (path === "Bees Hate You") {
+    if (item.name.toLowerCase().includes("b")) return false;
+  }
+
+  return true;
+}
+
+/**
+ * Turn KoLmafia `none`s to JavaScript `null`s
+ *
+ * @param thing Thing that can have a mafia "none" value
+ */
+export function noneToNull<T>(thing: T): T | null {
+  if (thing instanceof Effect) {
+    return thing === Effect.get("none") ? null : thing;
+  }
+
+  if (thing instanceof Familiar) {
+    return thing === Familiar.get("none") ? null : thing;
+  }
+
+  if (thing instanceof Item) {
+    return thing === Item.get("none") ? null : thing;
+  }
+
+  return thing;
+}
+
+/**
+ * Return the average value from the sort of range that KoLmafia encodes as a string
+ *
+ * @param range KoLmafia-style range string
+ */
+export function getAverage(range: string): number {
+  if (range.indexOf("-") < 0) return Number(range);
+
+  const [,lower,upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? ["0","0","0"];
+
+  return (Number(lower) + Number(upper)) / 2;
+}
+
+/**
+ * Return average adventures expected from consuming an item
+ *
+ * If item is not a consumable, will just return "0".
+ *
+ * @param item Consumable item
+ */
+export function getAverageAdventures(item: Item): number {
+  return getAverage(item.adventures);
 }
 
 /**

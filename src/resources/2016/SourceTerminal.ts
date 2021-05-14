@@ -1,4 +1,5 @@
-import { cliExecute, toSkill } from "kolmafia";
+import { cliExecute } from "kolmafia";
+import { isEqual } from "lodash-es";
 
 import { Copier } from "../../Copier";
 import { haveInCampground } from "../../lib";
@@ -13,7 +14,7 @@ export function have(): boolean {
 
 /**
  * Buffs that can be acquired from Enhance
- * 
+ *
  * - Items: +30% Item Drop
  * - Meat: +60% Meat Drop
  * - Init: +50% Initiative
@@ -96,11 +97,12 @@ export const Skills = {
  */
 export function educate(skills: Skill | [Skill, Skill]): boolean {
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+  if (isEqual(skillsArray, getSkills())) return true;
 
   for (const skill of skillsArray) {
-    if (Object.values(Skills).includes(skill)) return false;
+    if (!Object.values(Skills).includes(skill)) return false;
 
-    cliExecute(`terminal educate ${skill.name}`);
+    cliExecute(`terminal educate ${skill.name.toLowerCase()}.edu`);
   }
 
   return true;
@@ -113,7 +115,7 @@ export function getSkills(): Skill[] {
   return (["sourceTerminalEducate1", "sourceTerminalEducate2"] as const)
     .map((p) => get(p))
     .filter((s) => s !== "")
-    .map((s) => toSkill(s.substring(0, -4)));
+    .map((s) => Skill.get(s.slice(0, -4)));
 }
 
 export function isCurrentSkill(skills: Skill | [Skill, Skill]): boolean {

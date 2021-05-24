@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import * as _importForGlobals from "kolmafia";
 
-import { isBooleanProperty, isLocationProperty, isMonsterProperty, isNumericOrStringProperty, isNumericProperty } from "../src/propertyTyping";
+import { isBooleanProperty, isFamiliarProperty, isLocationProperty, isMonsterProperty, isNumericOrStringProperty, isNumericProperty, isStatProperty } from "../src/propertyTyping";
 
 const PROPS_FILE = "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
 
@@ -15,6 +15,8 @@ async function main() {
     NumericProperty: [],
     MonsterProperty: [],
     LocationProperty: [],
+    FamiliarProperty: [],
+    StatProperty: [],
     StringProperty: [],
     NumericOrStringProperty: [],
   };
@@ -27,6 +29,10 @@ async function main() {
       propTypes.MonsterProperty.push(property);
     } else if (isLocationProperty(property)) {
       propTypes.LocationProperty.push(property)
+    } else if (isFamiliarProperty(property)) {
+      propTypes.FamiliarProperty.push(property);
+    } else if (isStatProperty(property)) {
+      propTypes.StatProperty.push(property);
     } else if (isNumericOrStringProperty(property)) {
       propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {

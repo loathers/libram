@@ -2,9 +2,11 @@ import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
 import {
   isBooleanProperty,
+  isFamiliarProperty,
   isLocationProperty,
   isMonsterProperty,
   isNumericProperty,
+  isStatProperty,
   KnownProperty,
   PropertyValue,
 } from "./propertyTyping";
@@ -111,6 +113,14 @@ export function get<_D, P extends string>(
 
   if (isLocationProperty(property)) {
     return getLocation(property, _default);
+  }
+
+  if (isFamiliarProperty(property)) {
+    return getFamiliar(property, _default);
+  }
+
+  if (isStatProperty(property)) {
+    return getStat(property, _default);
   }
 
   if (value === "") {

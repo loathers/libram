@@ -109,5 +109,5 @@ export function fightAll(
   set("choiceAdventure1226", effectChoice(effect));
   set("choiceAdventure1227", 1); // Fight LOV Equivocator
   set("choiceAdventure1228", extraChoice(extra));
-  adv1($location`The Tunnel of L.O.V.E.`, 0, "");
+  adv1($location`The Tunnel of L.O.V.E.`, 0, () => "");
 }

@@ -104,8 +104,9 @@ export class Clan {
 
     return xpath(page, '//select[@name="whichclan"]//option')
       .map((option) => {
-        const id = Number.parseInt(xpath(option, '//option/@value')[0]);
-        const name = xpath(option, '//option/text()')[0];
+        const validHtml = `<select>${option}</select>`;
+        const id = Number.parseInt(xpath(validHtml, '//@value')[0]);
+        const name = xpath(validHtml, '//text()')[0];
         return new Clan(id, name);
       });
   }
@@ -157,8 +158,9 @@ export class Clan {
 
     return xpath(page, '//select[@name="level"]//option')
       .map((option) => {
-        const match = xpath(option, '//option/text()')[0].match(WHITELIST_DEGREE_PATTERN);
-        const id = xpath(option, '//option/@value')[0];
+        const validHtml = `<select>${option}</select>`;
+        const match = xpath(validHtml, '//text()')[0].match(WHITELIST_DEGREE_PATTERN);
+        const id = xpath(validHtml, '//@value')[0];
 
         if (!match || !id) return null;
 

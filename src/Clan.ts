@@ -1,5 +1,4 @@
-import { getClanId, getClanName, getPlayerId, visitUrl } from "kolmafia";
-import { parse } from "node-html-parser";
+import { getClanId, getClanName, getPlayerId, visitUrl, xpath } from "kolmafia";
 
 import { notNull, parseNumber } from "./utils";
 
@@ -101,13 +100,12 @@ export class Clan {
    * Get list of clans to which the player is whitelisted
    */
   static getWhitelisted(): Clan[] {
-    const root = parse(visitUrl("clan_signup.php"));
+    const page = visitUrl("clan_signup.php");
 
-    return root
-      .querySelectorAll('select[name="whichclan"] option')
+    return xpath(page, '//select[@name="whichclan"]//option')
       .map((option) => {
-        const id = Number.parseInt(option.getAttribute("value") as string);
-        const name = option.text;
+        const id = Number.parseInt(xpath(option, '//option/@value')[0]);
+        const name = xpath(option, '//option/text()')[0];
         return new Clan(id, name);
       });
   }
@@ -155,13 +153,12 @@ export class Clan {
    */
   @validate
   getRanks(): Rank[] {
-    const root = parse(visitUrl("clan_whitelist.php"));
+    const page = visitUrl("clan_whitelist.php");
 
-    return root
-      .querySelectorAll("select[name=level] option")
+    return xpath(page, '//select[@name="level"]//option')
       .map((option) => {
-        const match = option.text.match(WHITELIST_DEGREE_PATTERN);
-        const id = option.getAttribute("value");
+        const match = xpath(option, '//option/text()')[0].match(WHITELIST_DEGREE_PATTERN);
+        const id = xpath(option, '//option/@value')[0];
 
         if (!match || !id) return null;
 

@@ -50,8 +50,7 @@
   "dependencies": {
     "core-js": "3.9.0",
     "kolmafia": "^1.0.3",
-    "lodash-es": "^4.17.21",
-    "node-html-parser": "^2.0.0"
+    "lodash-es": "^4.17.21"
   },
   "husky": {
     "hooks": {

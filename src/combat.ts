@@ -5,6 +5,7 @@ import {
   inMultiFight,
   removeProperty,
   runCombat,
+  setAutoAttack,
   toInt,
   urlEncode,
   visitUrl,
@@ -451,6 +452,7 @@ export class Macro {
  */
 export function adventureMacro(loc: Location, macro: Macro): void {
   macro.save();
+  setAutoAttack(0);
   try {
     adv1(loc, 0, "");
     while (inMultiFight()) runCombat();

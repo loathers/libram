@@ -479,5 +479,12 @@ export function adventureMacroAuto(
 ): void {
   nextMacro = nextMacro ?? Macro.abort();
   autoMacro.setAutoAttack();
-  adventureMacro(loc, nextMacro);
+  nextMacro.save();
+  try {
+    adv1(loc, 0, "");
+    while (inMultiFight()) runCombat();
+    if (choiceFollowsFight()) visitUrl("choice.php");
+  } finally {
+    Macro.clearSaved();
+  }
 }

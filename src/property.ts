@@ -6,6 +6,7 @@ import {
   isMonsterProperty,
   isNumericProperty,
   KnownProperty,
+  NumericOrStringProperty,
   PropertyValue,
 } from "./propertyTyping";
 
@@ -147,4 +148,39 @@ export function set<P extends string>(
 ): void {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
+}
+
+type Properties = Partial<{
+  [P in KnownProperty]: PropertyValue<P>;
+}>;
+
+export function setProperties(properties: Properties): void {
+  for (const [prop, value] of Object.entries(properties)) {
+    set(prop, value);
+  }
+}
+
+export function withProperties(properties: Properties, callback: () => void): void {
+  const propertiesBackup = Object.fromEntries(Object.entries(properties).map(([prop,]) => ([prop, get(prop)]))) as Properties;
+  setProperties(properties);
+  try {
+    callback();
+  } finally {
+    setProperties(propertiesBackup);
+  }
+}
+
+export function withProperty<P extends KnownProperty>(property: P, value: PropertyValue<P>, callback: () => void): void {
+  withProperties({ [property]: value }, callback);
+}
+
+export function withChoices(choices: { [choice: number]: number | string }, callback: () => void): void {
+  const properties = Object.fromEntries(
+    Object.entries(choices).map(([choice, option]) => [`choiceAdventure${choice}` as NumericOrStringProperty, option])
+  );
+  withProperties(properties, callback);
+}
+
+export function withChoice(choice: number, value: number | string, callback: () => void): void {
+  withChoices({ [choice]: value }, callback);
 }

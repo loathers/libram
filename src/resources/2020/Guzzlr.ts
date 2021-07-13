@@ -23,14 +23,12 @@ export function getPlatinum(): number {
   return get("guzzlrPlatinumDeliveries");
 }
 
-
 /**
  * Platinum deliveries completed today
  */
 export function getPlatinumToday(): number {
   return get("_guzzlrPlatinumDeliveries");
 }
-
 
 /**
  * Can do a platinum delivery (haven't done one today)
@@ -96,7 +94,7 @@ export function acceptGold(): boolean {
  * Bronze deliveries completed overall
  */
 export function getBronze(): number {
-  return get("guzzlrBronzeDeliveries")
+  return get("guzzlrBronzeDeliveries");
 }
 
 /**
@@ -141,7 +139,7 @@ export function getLocation(): Location | null {
 }
 
 /**
- * Get current Guzzlr quest tier 
+ * Get current Guzzlr quest tier
  */
 export function getTier(): "platinum" | "gold" | "bronze" | null {
   const tier = get("guzzlrQuestTier") as "platinum" | "gold" | "bronze" | "";
@@ -160,7 +158,7 @@ export function getBooze(): Item | null {
 /**
  * List of the platinum cocktails
  */
-export const Cocktails = $items`buttery boy, steamboat, ghiaccio golada, nog-on-the-cob, sourfinger`;
+export const Cocktails = $items`buttery boy, steamboat, ghiaccio colada, nog-on-the-cob, sourfinger`;
 
 /**
  * Returns true if the user has a platinum cocktail in their inventory

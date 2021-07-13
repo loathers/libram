@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -48,7 +48,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "core-js": "3.9.0",
+    "core-js": "3.15.2",
     "kolmafia": "^1.0.3",
     "lodash-es": "^4.17.21"
   },

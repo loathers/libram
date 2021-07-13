@@ -1,3 +1,4 @@
+import "core-js/features/object/values";
 import { cliExecute } from "kolmafia";
 import { isEqual } from "lodash-es";
 

@@ -1,4 +1,5 @@
 import "core-js/features/object/values";
+import "core-js/features/object/entries";
 
 export * from "./Clan";
 export * from "./combat";

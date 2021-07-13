@@ -165,6 +165,23 @@ export const Cocktails = $items`buttery boy, steamboat, ghiaccio golada, nog-on-
 /**
  * Returns true if the user has a platinum cocktail in their inventory
  */
-export function haveCocktail(): boolean {
+export function havePlatinumBooze(): boolean {
   return Cocktails.some(haveItem);
+}
+
+/**
+ * Returns true if the user has the cocktail that they need for their current quest
+ *
+ * If they have no quest, returns false
+ */
+export function haveBooze(): boolean {
+  const booze = getBooze();
+  switch (booze) {
+    case null:
+      return false;
+    case $item`Guzzlr cocktail set`:
+      return havePlatinumBooze();
+    default:
+      return haveItem(booze);
+  }
 }

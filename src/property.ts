@@ -1,3 +1,4 @@
+import "core-js/features/object/entries";
 import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
 import {

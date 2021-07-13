@@ -1,4 +1,5 @@
 /** @module GeneralLibrary */
+import "core-js/features/object/entries";
 
 import {
   appearanceRates,

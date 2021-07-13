@@ -2844,10 +2844,10 @@ klaw-sync@^6.0.0:
   dependencies:
     graceful-fs "^4.1.11"
 
-kolmafia@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-1.0.3.tgz#e6f9ad211eb20c54c2e999b4d9713bf25712b2da"
-  integrity sha512-e9H+mhYP/xqhfX56AcbVtc5aIsrWbH2LHNQoG5S2i5k0ST4NaMoIQLxBpkFxPs1rUjHPNDcqxxN1McPviqm/BQ==
+kolmafia@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-1.1.1.tgz#10beda4860ec7e7d140174832deb6e717b3569e7"
+  integrity sha512-JF3v3FBHr+y9C0quW3kfHI65eoOpD7NO8EEqIrhh9SxN6h+T44PBG6yvnVAZSYzzlATXW1+y6bVvuxkX0XWX2w==
 
 leven@^3.1.0:
   version "3.1.0"

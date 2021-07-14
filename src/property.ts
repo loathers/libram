@@ -1,4 +1,5 @@
 import "core-js/features/object/entries";
+import "core-js/features/object/from-entries";
 import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
 import {

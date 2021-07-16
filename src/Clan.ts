@@ -10,6 +10,15 @@ export interface Rank {
   id: number;
 }
 
+export class ClanError extends Error {
+  reason?: Error;
+  constructor(message: string, reason?: Error) {
+    super(message);
+    this.reason = reason;
+    Object.setPrototypeOf(this, ClanError.prototype);
+  }
+}
+
 // It would be fantastic to have this function properly typed
 // But until someone can work out how to do it, it gets the
 // comment blocks of shame
@@ -107,16 +116,19 @@ export class Clan {
    * @param clanIdOrName Clan id or name
    */
   static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T {
+    let internalError = null;
     const borrowed = Clan.with(clanIdOrName, clan => clan.take(items));
     try {
       return callback(borrowed);
+    } catch (error) {
+      internalError = error;
     } finally {
       if (borrowed.length > 0) {
         const returnedItems = Clan.with(clanIdOrName, clan => clan.put(borrowed));
         const diff = difference(borrowed, returnedItems);
         if (diff.length > 0) {
           // eslint-disable-next-line no-unsafe-finally
-          throw new Error(`Failed to return ${diff} to ${clanIdOrName}`);
+          throw new ClanError(`Failed to return ${diff} to ${clanIdOrName}`, internalError);
         }
       }
     }
@@ -337,16 +349,19 @@ export class Clan {
    */
   @validate
   withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T {
+    let internalError = null;
     const borrowed = this.take(items);
     try {
       return callback(borrowed);
+    } catch (error) {
+      internalError = error;
     } finally {
       if (borrowed.length > 0) {
         const returnedItems = this.put(borrowed);
         const diff = difference(borrowed, returnedItems);
         if (diff.length > 0) {
           // eslint-disable-next-line no-unsafe-finally
-          throw new Error(`Failed to return ${diff} to ${this.name}`);
+          throw new ClanError(`Failed to return ${diff} to ${this.name}`, internalError);
         }
       }
     }

@@ -1,5 +1,7 @@
-import { getClanId, getClanName, getPlayerId, visitUrl, xpath } from "kolmafia";
+import { cliExecute, getClanId, getClanName, getPlayerId, putStash, refreshStash, retrieveItem, stashAmount, takeStash, visitUrl, xpath } from "kolmafia";
+import { difference } from "lodash-es";
 
+import { getFoldGroup, have } from "./lib";
 import { notNull, parseNumber } from "./utils";
 
 export interface Rank {
@@ -78,15 +80,44 @@ export class Clan {
       }
     }
 
-    const result = visitUrl(
-      `showclan.php?recruiter=1&whichclan=${clanId}&pwd&whichclan=${clanId}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
-    );
+    return Clan._join(clanId);
+  }
 
-    if (!result.includes("clanhalltop.gif")) {
-      throw new Error("Could not join clan");
+  /**
+   * Execute callback as a member of a clan
+   * and then restore prior membership
+   * @param clanIdOrName Clan id or name
+   */
+  static with<T>(clanIdOrName: string | number, callback: (clan: Clan) => T): T {
+    const startingClan = Clan.get();
+    const clan = Clan.join(clanIdOrName);
+    try {
+      return callback(clan);
+    } finally {
+      startingClan.join();
     }
+  }
 
-    return Clan.get();
+  /**
+   * Execute callback with items from a clan stash
+   * and then restore those items to the stash
+   * 
+   * During the execution of the callback, player will not be in the stash clan
+   * 
+   * @param clanIdOrName Clan id or name
+   */
+  static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T {
+    const borrowed = Clan.with(clanIdOrName, clan => clan.take(items));
+    try {
+      return callback(borrowed);
+    } finally {
+      const returnedItems = Clan.with(clanIdOrName, clan => clan.put(borrowed));
+      const diff = difference(borrowed, returnedItems);
+      if (diff.length > 0) {
+        // eslint-disable-next-line no-unsafe-finally
+        throw new Error(`Failed to return ${diff} to ${clanIdOrName}`);
+      }
+    }
   }
 
   /**
@@ -111,6 +142,18 @@ export class Clan {
       });
   }
 
+  private static _join(id: number) {
+    const result = visitUrl(
+      `showclan.php?recruiter=1&whichclan=${id}&pwd&whichclan=${id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
+    );
+
+    if (!result.includes("clanhalltop.gif")) {
+      throw new Error("Could not join clan");
+    }
+
+    return Clan.get();
+  }
+
   private constructor(id: number, name: string) {
     this.id = id;
     this.name = name;
@@ -120,15 +163,7 @@ export class Clan {
    * Join clan
    */
   join(): Clan {
-    const result = visitUrl(
-      `showclan.php?recruiter=1&whichclan=${this.id}&pwd&whichclan=${this.id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
-    );
-
-    if (!result.includes("clanhalltop.gif")) {
-      throw new Error("Could not join clan");
-    }
-
-    return Clan.get();
+    return Clan._join(this.id);
   }
 
   /**
@@ -245,4 +280,67 @@ export class Clan {
     );
     return result.includes("You contributed");
   }
+
+  /**
+   * Take items from the stash
+   * 
+   * This function will also take equivalent foldables if the original item cannot be found
+   * 
+   * @param items Items to take
+   * @returns Items successfully taken
+   */
+  @validate
+  take(items: Item[]): Item[] {
+    return items.filter((item) => {
+      if (have(item)) return true;
+
+      const foldGroup = getFoldGroup(item);
+
+      if (foldGroup.some(fold => have(fold))) {
+        cliExecute(`fold ${item.name}`);
+        return true;
+      }
+
+      refreshStash();
+
+      return [item, ...foldGroup].some((matchingItem) => {
+        if (stashAmount(matchingItem) === 0) return false;
+        if (!takeStash(1, matchingItem)) return false;
+        if (matchingItem !== item) cliExecute(`fold ${item.name}`);
+        return true;
+      });
+    });
+  }
+
+  /**
+   * Put items in the stash
+   * @param items Items to put in the stash
+   * @returns Items successfully put in the stash
+   */
+  @validate
+  put(items: Item[]): Item[] {
+    return items.filter((item) => {
+      retrieveItem(1, item);
+      return putStash(1, item);
+    });
+  }
+
+  /**
+   * Return the monster that is currently in the current clan's fax machine if any
+   */
+  @validate
+  withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T {
+    const borrowed = this.take(items);
+    try {
+      return callback(borrowed);
+    } finally {
+      const returnedItems = this.put(borrowed);
+      const diff = difference(borrowed, returnedItems);
+      if (diff.length > 0) {
+        // eslint-disable-next-line no-unsafe-finally
+        throw new Error(`Failed to return ${diff} to ${this.name}`);
+      }
+    }
+  }
 }
+

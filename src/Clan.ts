@@ -1,7 +1,8 @@
-import { cliExecute, getClanId, getClanName, getPlayerId, putStash, refreshStash, retrieveItem, stashAmount, takeStash, visitUrl, xpath } from "kolmafia";
+import { cliExecute, getClanId, getClanName, getPlayerId, print, putStash, refreshStash, retrieveItem, stashAmount, takeStash, visitUrl, xpath } from "kolmafia";
 import { difference } from "lodash-es";
 
 import { getFoldGroup, have } from "./lib";
+import logger from "./logger";
 import { notNull, parseNumber } from "./utils";
 
 export interface Rank {
@@ -116,19 +117,15 @@ export class Clan {
    * @param clanIdOrName Clan id or name
    */
   static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T {
-    let internalError = null;
     const borrowed = Clan.with(clanIdOrName, clan => clan.take(items));
     try {
       return callback(borrowed);
-    } catch (error) {
-      internalError = error;
     } finally {
       if (borrowed.length > 0) {
         const returnedItems = Clan.with(clanIdOrName, clan => clan.put(borrowed));
         const diff = difference(borrowed, returnedItems);
         if (diff.length > 0) {
-          // eslint-disable-next-line no-unsafe-finally
-          throw new ClanError(`Failed to return ${diff} to ${clanIdOrName}`, internalError);
+          logger.error(`Failed to return <b>${diff.map(i => i.name).join(", ")}</b> to <b>${this.name}</b> stash`);
         }
       }
     }
@@ -349,19 +346,15 @@ export class Clan {
    */
   @validate
   withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T {
-    let internalError = null;
     const borrowed = this.take(items);
     try {
       return callback(borrowed);
-    } catch (error) {
-      internalError = error;
     } finally {
       if (borrowed.length > 0) {
         const returnedItems = this.put(borrowed);
         const diff = difference(borrowed, returnedItems);
         if (diff.length > 0) {
-          // eslint-disable-next-line no-unsafe-finally
-          throw new ClanError(`Failed to return ${diff} to ${this.name}`, internalError);
+          logger.error(`Failed to return <b>${diff.map(i => i.name).join(", ")}</b> to <b>${this.name}</b> stash`);
         }
       }
     }

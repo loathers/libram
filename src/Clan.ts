@@ -111,11 +111,13 @@ export class Clan {
     try {
       return callback(borrowed);
     } finally {
-      const returnedItems = Clan.with(clanIdOrName, clan => clan.put(borrowed));
-      const diff = difference(borrowed, returnedItems);
-      if (diff.length > 0) {
-        // eslint-disable-next-line no-unsafe-finally
-        throw new Error(`Failed to return ${diff} to ${clanIdOrName}`);
+      if (borrowed.length > 0) {
+        const returnedItems = Clan.with(clanIdOrName, clan => clan.put(borrowed));
+        const diff = difference(borrowed, returnedItems);
+        if (diff.length > 0) {
+          // eslint-disable-next-line no-unsafe-finally
+          throw new Error(`Failed to return ${diff} to ${clanIdOrName}`);
+        }
       }
     }
   }
@@ -339,11 +341,13 @@ export class Clan {
     try {
       return callback(borrowed);
     } finally {
-      const returnedItems = this.put(borrowed);
-      const diff = difference(borrowed, returnedItems);
-      if (diff.length > 0) {
-        // eslint-disable-next-line no-unsafe-finally
-        throw new Error(`Failed to return ${diff} to ${this.name}`);
+      if (borrowed.length > 0) {
+        const returnedItems = this.put(borrowed);
+        const diff = difference(borrowed, returnedItems);
+        if (diff.length > 0) {
+          // eslint-disable-next-line no-unsafe-finally
+          throw new Error(`Failed to return ${diff} to ${this.name}`);
+        }
       }
     }
   }

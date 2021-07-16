@@ -1,7 +1,7 @@
 import { printHtml } from "kolmafia";
 
 const defaultHandlers = {
-  info: (message: string) => printHtml(`<b>[Libram]</b>${message}`),
+  info: (message: string) => printHtml(`<b>[Libram]</b> ${message}`),
   warning: (message: string) => printHtml(`<span style="background: orange; color: white;"><b>[Libram]</b> ${message}</span>`),
   error: (error: string | Error) => printHtml(`<span style="background: red; color: white;"><b>[Libram]</b> ${error.toString()}</span>`),
 };

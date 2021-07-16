@@ -166,6 +166,10 @@ export class Clan {
     return Clan._join(this.id);
   }
 
+  check(): boolean {
+    return visitUrl("clan_hall.php").includes(`<b>${this.name}</b>`);
+  }
+
   /**
    * Return the monster that is currently in the current clan's fax machine if any
    */
@@ -319,6 +323,7 @@ export class Clan {
    */
   @validate
   put(items: Item[]): Item[] {
+    if (!this.check()) throw new Error(`Wanted to return ${items} to ${this.name} but KoLmafia's clan data is out of sync`);
     return items.filter((item) => {
       retrieveItem(1, item);
       return putStash(1, item);

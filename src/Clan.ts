@@ -292,13 +292,13 @@ export class Clan {
   @validate
   take(items: Item[]): Item[] {
     return items.filter((item) => {
-      if (have(item)) return true;
+      if (have(item)) return false;
 
       const foldGroup = getFoldGroup(item);
 
       if (foldGroup.some(fold => have(fold))) {
         cliExecute(`fold ${item.name}`);
-        return true;
+        return false;
       }
 
       refreshStash();

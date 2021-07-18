@@ -125,7 +125,7 @@ export function canAbandon(): boolean {
  */
 export function abandon(): boolean {
   if (!canAbandon()) return false;
-  visitUrl("inventory.php?tap=guzzlr");
+  visitUrl("inventory.php?tap=guzzlr", false);
   runChoice(1);
   runChoice(5);
   return true;

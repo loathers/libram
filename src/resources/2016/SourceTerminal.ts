@@ -1,6 +1,6 @@
 import "core-js/features/object/values";
 import { cliExecute } from "kolmafia";
-import { isEqual } from "lodash-es";
+import isEqual from "lodash/isEqual";
 
 import { Copier } from "../../Copier";
 import { haveInCampground } from "../../lib";

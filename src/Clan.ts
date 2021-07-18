@@ -1,3 +1,4 @@
+import "core-js/features/array/flat-map";
 import { availableAmount, cliExecute, getClanId, getClanName, getPlayerId, putStash, refreshStash, retrieveItem, stashAmount, takeStash, visitUrl, xpath } from "kolmafia";
 
 import { getFoldGroup } from "./lib";
@@ -64,6 +65,10 @@ function arrayToCountedMap<T>(array: T[] | Map<T, number>): Map<T, number> {
   return map;
 }
 
+function countedMapToArray<T>(map: Map<T, number>): T[] {
+  return [...map].flatMap(([item, quantity]) => Array(quantity).fill(item));
+}
+
 function countedMapToString<T>(map: Map<T, number>): string {
   return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
 }
@@ -85,27 +90,40 @@ export class Clan {
   }
 
   private static _withStash<T>(
+    borrowFn: () => Item[],
+    returnFn: (items: Item[]) => Item[],
+    callback: (borrowedItems: Item[]) => T
+  ): T
+  private static _withStash<T>(
     borrowFn: () => Map<Item, number>,
     returnFn: (items: Map<Item, number>) => Map<Item, number>,
     callback: (borrowedItems: Map<Item, number>) => T
+  ): T
+  private static _withStash<T>(
+    borrowFn: () => Item[] | Map<Item, number>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    returnFn: (items: any) => Item[] | Map<Item, number>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (borrowedItems: any) => T
   ): T {
     const borrowed = borrowFn();
+    const map = arrayToCountedMap(borrowed);
     try {
       return callback(borrowed);
     } finally {
-      if (borrowed.size > 0) {
-        const returned = returnFn(borrowed);
-        borrowed.forEach((quantity, item) => {
+      if (map.size > 0) {
+        const returned = arrayToCountedMap(returnFn(borrowed));
+        map.forEach((quantity, item) => {
           const remaining = quantity - (returned.get(item) || 0);
           if (remaining > 0) {
-            borrowed.set(item, remaining);
+            map.set(item, remaining);
           } else {
-            borrowed.delete(item);
+            map.delete(item);
           }
         });
 
-        if (borrowed.size > 0) {
-          logger.error(`Failed to return <b>${countedMapToString(borrowed)}</b> to <b>${this.name}</b> stash`);
+        if (map.size > 0) {
+          logger.error(`Failed to return <b>${countedMapToString(map)}</b> to <b>${this.name}</b> stash`);
         }
       }
     }
@@ -170,7 +188,10 @@ export class Clan {
    * 
    * @param clanIdOrName Clan id or name
    */
-  static withStash<T>(clanIdOrName: string | number, items: Item[] | Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T {
+  static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T
+  static withStash<T>(clanIdOrName: string | number, items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  static withStash<T>(clanIdOrName: string | number, items: any, callback: (borrowedItems: any) => T): T {
     return Clan._withStash(
       () => Clan.with(clanIdOrName, clan => clan.take(items)),
       (borrowed) => Clan.with(clanIdOrName, clan => clan.put(borrowed)),
@@ -339,8 +360,10 @@ export class Clan {
    * @param items Items to take
    * @returns Items successfully taken
    */
+  take(items: Item[]): Item[]
+  take(items: Map<Item, number>): Map<Item, number>
   @validate
-  take(items: Item[] | Map<Item, number>): Map<Item, number> {
+  take(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
     const map = arrayToCountedMap(items);
 
     map.forEach((quantity, item) => {
@@ -378,7 +401,7 @@ export class Clan {
       }
     });
 
-    return map;
+    return (Array.isArray(items)) ? countedMapToArray(map) : map;
   }
 
   /**
@@ -386,8 +409,10 @@ export class Clan {
    * @param items Items to put in the stash
    * @returns Items successfully put in the stash
    */
+  put(items: Item[]): Item[]
+  put(items: Map<Item, number>): Map<Item, number>
   @validate
-  put(items: Item[] | Map<Item, number>): Map<Item, number> {
+  put(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
     const map = arrayToCountedMap(items);
 
     if (!this.check()) throw new Error(`Wanted to return ${countedMapToString(map)} to ${this.name} but KoLmafia's clan data is out of sync`);
@@ -399,16 +424,20 @@ export class Clan {
       map.set(item, quantity - returned);
     });
 
-    return map;
+    return (Array.isArray(items)) ? countedMapToArray(map) : map;
   }
 
   /**
    * Return the monster that is currently in the current clan's fax machine if any
    */
+  withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T
+  withStash<T>(items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
   @validate
-  withStash<T>(items: Item[], callback: (borrowedItems: Map<Item, number>) => T): T {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  withStash<T>(items: Item[] | Map<Item, number>, callback: (borrowedItems: any) => T): T {
+    const map = arrayToCountedMap(items);
     return Clan._withStash(
-      () => this.take(items),
+      () => this.take(map),
       (borrowed) => this.put(borrowed),
       callback,
     );

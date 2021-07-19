@@ -10,7 +10,6 @@ import {
   itemAmount,
   mallPrice,
   mpCost,
-  myEffects,
   myHp,
   myMaxmp,
   myMp,
@@ -22,9 +21,9 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { have } from "./lib";
+import { getActiveSongs, have, isSong } from "./lib";
 import { get } from "./property";
-import { $class, $item, $skill } from "./template-string";
+import { $item, $skill } from "./template-string";
 import { clamp } from "./utils";
 
 export abstract class MpSource {
@@ -138,25 +137,14 @@ class SkillMoodElement extends MoodElement {
 
     // Deal with song slots.
     if (
-      mood.options.songSlots.length > 0 &&
-      this.skill.class === $class`Accordion Thief` &&
-      this.skill.buff
+      mood.options.songSlots.length > 0 && isSong(this.skill)
     ) {
-      for (const otherEffectName of Object.keys(myEffects())) {
-        const otherEffect = Effect.get(otherEffectName);
-        if (otherEffect === effect) continue;
-        const otherSkill = toSkill(otherEffect);
-        if (
-          otherSkill !== $skill`none` &&
-          otherSkill.class === $class`Accordion Thief` &&
-          otherSkill.buff
-        ) {
-          const slot = mood.options.songSlots.find((slot) =>
-            slot.includes(otherEffect)
-          );
-          if (!slot || slot.includes(effect))
-            cliExecute(`shrug ${otherEffect}`);
-        }
+      for (const song of getActiveSongs()) {
+        const slot = mood.options.songSlots.find((slot) =>
+          slot.includes(song)
+        );
+        if (!slot || slot.includes(effect))
+          cliExecute(`shrug ${song}`);
       }
     }
 

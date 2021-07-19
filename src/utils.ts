@@ -32,3 +32,23 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
 
   return result;
 }
+
+export function arrayToCountedMap<T>(array: T[] | Map<T, number>): Map<T, number> {
+  if (!Array.isArray(array)) return array;
+
+  const map = new Map<T, number>();
+
+  array.forEach((item) => {
+    map.set(item, (map.get(item) || 0) + 1);
+  });
+
+  return map;
+}
+
+export function countedMapToArray<T>(map: Map<T, number>): T[] {
+  return [...map].flatMap(([item, quantity]) => Array(quantity).fill(item));
+}
+
+export function countedMapToString<T>(map: Map<T, number>): string {
+  return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
+}

@@ -164,7 +164,7 @@ export const Cocktails = $items`buttery boy, steamboat, ghiaccio colada, nog-on-
  * Returns true if the user has a platinum cocktail in their inventory
  */
 export function havePlatinumBooze(): boolean {
-  return Cocktails.some(haveItem);
+  return Cocktails.some((cock) => haveItem(cock));
 }
 
 /**

@@ -96,11 +96,6 @@ type MoodOptions = {
   mpSources: MpSource[];
 };
 
-type MoodOptionsParameter = {
-  songSlots?: Effect[][];
-  mpSources?: MpSource[];
-};
-
 abstract class MoodElement {
   mpCostPerTurn(): number {
     return 0;
@@ -272,7 +267,7 @@ export class Mood {
    * Set default options for new Mood instances.
    * @param options Default options for new Mood instances.
    */
-  static setDefaultOptions(options: MoodOptionsParameter): void {
+  static setDefaultOptions(options: Partial<MoodOptions>): void {
     Mood.defaultOptions = { ...Mood.defaultOptions, ...options };
   }
 
@@ -283,7 +278,7 @@ export class Mood {
    * Construct a new Mood instance.
    * @param options Options for mood.
    */
-  constructor(options: MoodOptionsParameter = {}) {
+  constructor(options: Partial<MoodOptions> = {}) {
     this.options = { ...Mood.defaultOptions, ...options };
   }
 

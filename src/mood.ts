@@ -21,7 +21,7 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { have } from "./lib";
+import { getActiveSongs, have, isSong } from "./lib";
 import { get } from "./property";
 import { $item, $skill } from "./template-string";
 import { clamp } from "./utils";
@@ -96,11 +96,6 @@ type MoodOptions = {
   mpSources: MpSource[];
 };
 
-type MoodOptionsParameter = {
-  songSlots?: Effect[][];
-  mpSources?: MpSource[];
-};
-
 abstract class MoodElement {
   mpCostPerTurn(): number {
     return 0;
@@ -134,6 +129,19 @@ class SkillMoodElement extends MoodElement {
 
     if (!haveSkill(this.skill)) return false;
     if (initialTurns >= ensureTurns) return true;
+
+    // Deal with song slots.
+    if (
+      mood.options.songSlots.length > 0 && isSong(this.skill)
+    ) {
+      for (const song of getActiveSongs()) {
+        const slot = mood.options.songSlots.find((slot) =>
+          slot.includes(song)
+        );
+        if (!slot || slot.includes(effect))
+          cliExecute(`shrug ${song}`);
+      }
+    }
 
     let oldRemainingCasts = -1;
     let remainingCasts = Math.ceil(
@@ -259,7 +267,7 @@ export class Mood {
    * Set default options for new Mood instances.
    * @param options Default options for new Mood instances.
    */
-  static setDefaultOptions(options: MoodOptionsParameter): void {
+  static setDefaultOptions(options: Partial<MoodOptions>): void {
     Mood.defaultOptions = { ...Mood.defaultOptions, ...options };
   }
 
@@ -270,7 +278,7 @@ export class Mood {
    * Construct a new Mood instance.
    * @param options Options for mood.
    */
-  constructor(options: MoodOptionsParameter = {}) {
+  constructor(options: Partial<MoodOptions> = {}) {
     this.options = { ...Mood.defaultOptions, ...options };
   }
 

@@ -1,11 +1,23 @@
-import { getClanId, getClanName, getPlayerId, visitUrl, xpath } from "kolmafia";
+import "core-js/features/array/flat-map";
+import { availableAmount, cliExecute, getClanId, getClanName, getPlayerId, putStash, refreshStash, retrieveItem, stashAmount, takeStash, visitUrl, xpath } from "kolmafia";
 
+import { getFoldGroup } from "./lib";
+import logger from "./logger";
 import { notNull, parseNumber } from "./utils";
 
 export interface Rank {
   name: string;
   degree: number;
   id: number;
+}
+
+export class ClanError extends Error {
+  reason?: Error;
+  constructor(message: string, reason?: Error) {
+    super(message);
+    this.reason = reason;
+    Object.setPrototypeOf(this, ClanError.prototype);
+  }
 }
 
 // It would be fantastic to have this function properly typed
@@ -41,9 +53,81 @@ const toPlayerId = (player: string | number) =>
 const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
+function arrayToCountedMap<T>(array: T[] | Map<T, number>): Map<T, number> {
+  if (!Array.isArray(array)) return array;
+
+  const map = new Map<T, number>();
+
+  array.forEach((item) => {
+    map.set(item, (map.get(item) || 0) + 1);
+  });
+
+  return map;
+}
+
+function countedMapToArray<T>(map: Map<T, number>): T[] {
+  return [...map].flatMap(([item, quantity]) => Array(quantity).fill(item));
+}
+
+function countedMapToString<T>(map: Map<T, number>): string {
+  return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
+}
+
 export class Clan {
   readonly id: number;
   readonly name: string;
+
+  private static _join(id: number) {
+    const result = visitUrl(
+      `showclan.php?recruiter=1&whichclan=${id}&pwd&whichclan=${id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
+    );
+
+    if (!result.includes("clanhalltop.gif")) {
+      throw new Error("Could not join clan");
+    }
+
+    return Clan.get();
+  }
+
+  private static _withStash<T>(
+    borrowFn: () => Item[],
+    returnFn: (items: Item[]) => Item[],
+    callback: (borrowedItems: Item[]) => T
+  ): T
+  private static _withStash<T>(
+    borrowFn: () => Map<Item, number>,
+    returnFn: (items: Map<Item, number>) => Map<Item, number>,
+    callback: (borrowedItems: Map<Item, number>) => T
+  ): T
+  private static _withStash<T>(
+    borrowFn: () => Item[] | Map<Item, number>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    returnFn: (items: any) => Item[] | Map<Item, number>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (borrowedItems: any) => T
+  ): T {
+    const borrowed = borrowFn();
+    const map = arrayToCountedMap(borrowed);
+    try {
+      return callback(borrowed);
+    } finally {
+      if (map.size > 0) {
+        const returned = arrayToCountedMap(returnFn(borrowed));
+        map.forEach((quantity, item) => {
+          const remaining = quantity - (returned.get(item) || 0);
+          if (remaining > 0) {
+            map.set(item, remaining);
+          } else {
+            map.delete(item);
+          }
+        });
+
+        if (map.size > 0) {
+          logger.error(`Failed to return <b>${countedMapToString(map)}</b> to <b>${this.name}</b> stash`);
+        }
+      }
+    }
+  }
 
   /**
    * Join a clan and return its instance
@@ -78,15 +162,41 @@ export class Clan {
       }
     }
 
-    const result = visitUrl(
-      `showclan.php?recruiter=1&whichclan=${clanId}&pwd&whichclan=${clanId}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
-    );
+    return Clan._join(clanId);
+  }
 
-    if (!result.includes("clanhalltop.gif")) {
-      throw new Error("Could not join clan");
+  /**
+   * Execute callback as a member of a clan
+   * and then restore prior membership
+   * @param clanIdOrName Clan id or name
+   */
+  static with<T>(clanIdOrName: string | number, callback: (clan: Clan) => T): T {
+    const startingClan = Clan.get();
+    const clan = Clan.join(clanIdOrName);
+    try {
+      return callback(clan);
+    } finally {
+      startingClan.join();
     }
+  }
 
-    return Clan.get();
+  /**
+   * Execute callback with items from a clan stash
+   * and then restore those items to the stash
+   * 
+   * During the execution of the callback, player will not be in the stash clan
+   * 
+   * @param clanIdOrName Clan id or name
+   */
+  static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T
+  static withStash<T>(clanIdOrName: string | number, items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  static withStash<T>(clanIdOrName: string | number, items: any, callback: (borrowedItems: any) => T): T {
+    return Clan._withStash(
+      () => Clan.with(clanIdOrName, clan => clan.take(items)),
+      (borrowed) => Clan.with(clanIdOrName, clan => clan.put(borrowed)),
+      callback
+    );
   }
 
   /**
@@ -120,15 +230,11 @@ export class Clan {
    * Join clan
    */
   join(): Clan {
-    const result = visitUrl(
-      `showclan.php?recruiter=1&whichclan=${this.id}&pwd&whichclan=${this.id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
-    );
+    return Clan._join(this.id);
+  }
 
-    if (!result.includes("clanhalltop.gif")) {
-      throw new Error("Could not join clan");
-    }
-
-    return Clan.get();
+  check(): boolean {
+    return visitUrl("clan_hall.php").includes(`<b>${this.name}</b>`);
   }
 
   /**
@@ -244,5 +350,96 @@ export class Clan {
       `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
     );
     return result.includes("You contributed");
+  }
+
+  /**
+   * Take items from the stash
+   * 
+   * This function will also take equivalent foldables if the original item cannot be found
+   * 
+   * @param items Items to take
+   * @returns Items successfully taken
+   */
+  take(items: Item[]): Item[]
+  take(items: Map<Item, number>): Map<Item, number>
+  @validate
+  take(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    const map = arrayToCountedMap(items);
+
+    map.forEach((quantity, item) => {
+      let needed = Math.max(0, quantity - availableAmount(item));
+      if (needed === 0) {
+        return map.set(item, 0);
+      }
+
+      const foldGroup = getFoldGroup(item);
+
+      for (const foldable of foldGroup) {
+        const quantityToFold = Math.min(needed, availableAmount(foldable));
+        for (let i = 0; i < quantityToFold; i++) {
+          cliExecute(`fold ${item.name}`);
+          needed--;
+        }
+        return map.set(item, needed);
+      }
+
+      refreshStash();
+
+      for (const matchingItem of [item, ...foldGroup]) {
+        const quantityToTake = Math.min(needed, stashAmount(matchingItem));
+        if (quantityToTake === 0) continue;
+        // If we can't take from the stash, there's no sense in iterating through the whole fold group
+        if (!takeStash(quantityToTake, matchingItem)) return;
+        if (matchingItem === item) {
+          needed -= quantityToTake;
+        } else {
+          for (let i = 0; i < quantityToTake; i++) {
+            cliExecute(`fold ${matchingItem.name}`);
+            needed--;
+          }
+        }
+      }
+    });
+
+    return (Array.isArray(items)) ? countedMapToArray(map) : map;
+  }
+
+  /**
+   * Put items in the stash
+   * @param items Items to put in the stash
+   * @returns Items successfully put in the stash
+   */
+  put(items: Item[]): Item[]
+  put(items: Map<Item, number>): Map<Item, number>
+  @validate
+  put(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    const map = arrayToCountedMap(items);
+
+    if (!this.check()) throw new Error(`Wanted to return ${countedMapToString(map)} to ${this.name} but KoLmafia's clan data is out of sync`);
+
+    map.forEach((quantity, item) => {
+      retrieveItem(quantity, item);
+      const returned = Math.min(quantity, availableAmount(item));
+      putStash(returned, item);
+      map.set(item, quantity - returned);
+    });
+
+    return (Array.isArray(items)) ? countedMapToArray(map) : map;
+  }
+
+  /**
+   * Return the monster that is currently in the current clan's fax machine if any
+   */
+  withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T
+  withStash<T>(items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
+  @validate
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  withStash<T>(items: Item[] | Map<Item, number>, callback: (borrowedItems: any) => T): T {
+    const map = arrayToCountedMap(items);
+    return Clan._withStash(
+      () => this.take(map),
+      (borrowed) => this.put(borrowed),
+      callback,
+    );
   }
 }

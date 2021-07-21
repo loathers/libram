@@ -101,7 +101,7 @@ export function getBronze(): number {
  * Accept bronze delivery
  */
 export function acceptBronze(): boolean {
-  if (!canGold()) return false;
+  if (isQuestActive()) return false;
   useTabletWithChoice(2);
   return true;
 }
@@ -110,7 +110,7 @@ export function acceptBronze(): boolean {
  * Have fully unlocked the platinum delivery bonuses (done >= 30)
  */
 export function haveFullBronzeBonus(): boolean {
-  return getGold() >= 196;
+  return getBronze() >= 196;
 }
 
 /**

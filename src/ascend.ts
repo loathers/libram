@@ -67,7 +67,7 @@ export function ascend(
   playerClass: Class,
   lifestyle: lifestyle,
   moon: string | number,
-  consumable: Item | undefined = $item`astral six-pack`,
+  consumable: Item | undefined = $item`Astral Six-Pack`,
   pet: Item | undefined = undefined
 ): void {
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
@@ -136,19 +136,19 @@ export function ascend(
   if (toMoonId(moon) < 1) throw `Invalid moon ${moon}`;
   if (
     consumable &&
-    !$items`astral six-pack, astral hot dog dinner`.includes(consumable)
+    !$items`Astral Six-Pack, Astral Hot Dog Dinner`.includes(consumable)
   )
     throw `Invalid consumable ${consumable}`;
   if (
     pet &&
-    !$items`astral bludgeon,
-    astral shield, astral chapeau,
-    astral bracer, astral longbow,
-    astral shorts, astral mace,
-    astral ring, astral statuette,
-    astral pistol, astral mask,
-    astral pet sweater, astral shirt,
-    astral belt`.includes(pet)
+    !$items`Astral Bludgeon,
+    Astral Shield, Astral Chapeau,
+    Astral Bracer, Astral Longbow,
+    Astral Shorts, Astral Mace,
+    Astral Ring, Astral Statuette,
+    Astral Pistol, Astral Mask,
+    Astral Pet Sweater, Astral Shirt,
+    Astral Blt`.includes(pet)
   )
     throw `Invalid astral item ${pet}`;
 

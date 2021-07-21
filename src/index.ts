@@ -1,3 +1,4 @@
+export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
 export * from "./lib";

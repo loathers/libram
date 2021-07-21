@@ -8,100 +8,62 @@ export enum lifestyle {
   hardcore = 3,
 }
 
-export const Path = {
-  unrestricted: 0,
-  boozetafarian: 1,
-  booze: 1,
-  teetotaler: 2,
-  teet: 2,
-  oxygenarian: 3,
-  oxy: 3,
-  beesHateYou: 4,
-  bhy: 4,
-  wayOfTheSurprisingFist: 6,
-  wotsf: 6,
-  trendy: 7,
-  avatarOfBoris: 8,
-  aob: 8,
-  boris: 8,
-  bugbearInvasion: 9,
-  bugbear: 9,
-  zombieSlayer: 10,
-  zombie: 10,
-  zs: 10,
-  classAct: 11,
-  classAct1: 11,
-  classActI: 11,
-  avatarOfJarlsberg: 12,
-  aoj: 12,
-  jarlsberg: 12,
-  big: 14,
-  kolhs: 15,
-  hs: 15,
-  classAct2: 16,
-  classActII: 16,
-  avatarOfSneakyPete: 17,
-  aosp: 17,
-  sneakyPete: 17,
-  pete: 17,
-  slowAndSteady: 18,
-  heavyRains: 19,
-  hr: 19,
-  picky: 21,
-  standard: 22,
-  actuallyEdTheUndying: 23,
-  aetu: 23,
-  ed: 23,
-  edTheUndying: 23,
-  avatarOfEdTheUndying: 23,
-  aoetu: 23,
-  oneCrazyRandomSummer: 24,
-  ocrs: 24,
-  communityService: 25,
-  cs: 25,
-  avatarOfWestOfLoathing: 26,
-  aowol: 26,
-  wol: 26,
-  theSource: 27,
-  source: 27,
-  nuclearAutumn: 28,
-  na: 28,
-  gelatinousNoob: 29,
-  gn: 29,
-  licenseToAdventure: 30,
-  lta: 30,
-  liveAscendRepeat: 31,
-  lar: 31,
-  liveDotAscendDotRepeatDot: 31,
-  pocketFamiliars: 32,
-  pokeFam: 32,
-  gLover: 33,
-  disguisesDelimit: 34,
-  darkGyffte: 35,
-  dg: 35,
-  vampyre: 35,
-  vampire: 35,
-  twoCrazyRandomSummer: 36,
-  tcrs: 36,
-  kingdomOfExploathing: 37,
-  koe: 37,
-  exploathing: 37,
-  pathOfThePlumber: 38,
-  plumber: 38,
-  potp: 38,
-  avatarOfThePlumber: 38,
-  aotp: 38,
-  lowKeySummer: 39,
-  lks: 39,
-  greyGoo: 40,
-  youRobot: 41,
-  yr: 41,
-  quantumTerrarium: 42,
-  qt: 42,
+export class Path {
+  name: string;
+  id: number;
+  isAvatar: boolean; //here, we define avatar-ness around being its own class
+  constructor(name: string, id: number, isAvatar = false) {
+    this.name = name;
+    this.id = id;
+    this.isAvatar = isAvatar;
+  }
+}
+
+export const Paths = {
+  unrestricted: new Path("Unrestricted", 0),
+  boozetafarian: new Path("Boozetafarian", 2),
+  teetotaler: new Path("Teetotaler", 2),
+  oxygenarian: new Path("Oxygenarian", 3),
+  beesHateYou: new Path("Bees Hate You", 4),
+  wayOfTheSurprisingFist: new Path("Way of the Surprising Fist", 6),
+  trendy: new Path("Trendy", 6),
+  avatarOfBoris: new Path("Avatar of Boris", 8, true),
+  bugbearInvasion: new Path("Bugbear Invasion", 9),
+  zombieSlayer: new Path("Zombie Slayer", 10, true),
+  classAct: new Path("Class Act", 11),
+  avatarofJarlsberg: new Path("Avatar of Jarlsberg", 12, true),
+  big: new Path("BIG!", 14),
+  kolHs: new Path("KOLHS", 15),
+  classAct2: new Path("Class Act II: A Class For Pigs", 16),
+  avatarofSneakyPete: new Path("Avatar of Sneaky Pete", 17, true),
+  slowAndSteady: new Path("Slow and Steady", 18),
+  heavyRains: new Path("Heavy Rains", 19),
+  picky: new Path("Picky", 21),
+  standard: new Path("Standard", 22),
+  actuallyEdTheUndying: new Path("Actually Ed the Undying", 23, true),
+  oneCrazyRandomSummer: new Path("One Crazy Random Summer", 24),
+  communityService: new Path("Community Service", 25),
+  avatarOfWestOfLoathing: new Path("Avatar of West of Loathing", 26, true),
+  theSource: new Path("The Source", 27),
+  nuclearAutumn: new Path("Nuclear Autumn", 28),
+  gelatinousNoob: new Path("Gelatinous Noob", 29, true),
+  licenseToAdventure: new Path("License to Adventure", 30),
+  liveAscendRepeat: new Path("Live. Ascend. Repeat.", 31),
+  pocketFamiliars: new Path("Pocket Familiars", 32),
+  gLover: new Path("G-Lover", 33),
+  disguisesDelimit: new Path("Disguises Delimit", 34),
+  darkGyffte: new Path("Dark Gyffte", 35, true),
+  twoCrazyRandomSummer: new Path("Two Crazy Random Summer", 36),
+  kingdomOfExploathing: new Path("Kingdom of Exploathing", 37),
+  pathOfThePlumber: new Path("Path of the Plumber", 38, true),
+  lowKeySummer: new Path("Low Key Summer", 40),
+  greyGoo: new Path("Grey Goo", 40),
+  youRobot: new Path("You, Robot", 41),
+  quantumTerrarium: new Path("Quantum Terrarium", 42),
 };
 
 export function ascend(
-  pathId: number,
+  path: Path,
   playerClass: Class,
   lifestyle: lifestyle,
   moon: string | number,
@@ -117,7 +79,6 @@ export function ascend(
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
     throw "Failed to ascend.";
-  const avatarPathIds = [8, 10, 12, 17, 23, 26, 29, 35, 38];
   const toMoonId = (moon: string | number): number => {
     if (typeof moon === "number") return moon;
 
@@ -170,8 +131,8 @@ export function ascend(
         return -1;
     }
   };
-  const classid = avatarPathIds.includes(pathId) ? 0 : toInt(playerClass);
-  if (pathId < 0) throw `Invalid path ID ${pathId}`;
+  const classid = path.isAvatar ? 0 : toInt(playerClass);
+  if (path.id < 0) throw `Invalid path ID ${path.id}`;
   if (toMoonId(moon) < 1) throw `Invalid moon ${moon}`;
   if (
     consumable &&
@@ -200,7 +161,9 @@ export function ascend(
   visitUrl(
     `afterlife.php?action=ascend&confirmascend=1&whichsign=${toMoonId(
       moon
-    )}&gender=2&whichclass=${classid}&whichpath=${pathId}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
+    )}&gender=2&whichclass=${classid}&whichpath=${
+      path.id
+    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
     true
   );
 }

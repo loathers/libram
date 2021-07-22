@@ -1,3 +1,5 @@
+import { isTrendy } from "kolmafia";
+
 export class Path {
   name: string;
   id: number;
@@ -7,56 +9,47 @@ export class Path {
     this.id = id;
     this.isAvatar = isAvatar;
   }
-
-  static Unrestricted: Path = new Path("Unrestricted", 0);
-  static Boozetafarian: Path = new Path("Boozetafarian", 1);
-  static Teetotaler: Path = new Path("Teetotaler", 2);
-  static Oxygenarian: Path = new Path("Oxygenarian", 3);
-  static BeesHateYou: Path = new Path("Bees Hate You", 4);
-  static WayOfTheSurprisingFist: Path = new Path(
-    "Way of the Surprising Fist",
-    6
-  );
-  static Trendy: Path = new Path("Trendy", 6);
-  static AvatarOfBoris: Path = new Path("Avatar of Boris", 8, true);
-  static BugbearInvasion: Path = new Path("Bugbear Invasion", 9);
-  static ZombieSlayer: Path = new Path("Zombie Slayer", 10, true);
-  static ClassAct: Path = new Path("Class Act", 11);
-  static AvatarofJarlsberg: Path = new Path("Avatar of Jarlsberg", 12, true);
-  static Big: Path = new Path("BIG!", 14);
-  static KolHs: Path = new Path("KOLHS", 15);
-  static ClassAct2: Path = new Path("Class Act II: A Class For Pigs", 16);
-  static AvatarofSneakyPete: Path = new Path("Avatar of Sneaky Pete", 17, true);
-  static AlowAndSteady: Path = new Path("Slow and Steady", 18);
-  static HeavyRains: Path = new Path("Heavy Rains", 19);
-  static Picky: Path = new Path("Picky", 21);
-  static Standard: Path = new Path("Standard", 22);
-  static ActuallyEdTheUndying: Path = new Path(
-    "Actually Ed the Undying",
-    23,
-    true
-  );
-  static OneCrazyRandomSummer: Path = new Path("One Crazy Random Summer", 24);
-  static CommunityService: Path = new Path("Community Service", 25);
-  static AvatarOfWestOfLoathing: Path = new Path(
-    "Avatar of West of Loathing",
-    26,
-    true
-  );
-  static TheSource: Path = new Path("The Source", 27);
-  static NuclearAutumn: Path = new Path("Nuclear Autumn", 28);
-  static GelatinousNoob: Path = new Path("Gelatinous Noob", 29, true);
-  static LicenseToAdventure: Path = new Path("License to Adventure", 30);
-  static LiveAscendRepeat: Path = new Path("Live. Ascend. Repeat.", 31);
-  static PocketFamiliars: Path = new Path("Pocket Familiars", 32);
-  static GLover: Path = new Path("G-Lover", 33);
-  static DisguisesDelimit: Path = new Path("Disguises Delimit", 34);
-  static DarkGyffte: Path = new Path("Dark Gyffte", 35, true);
-  static TwoCrazyRandomSummer: Path = new Path("Two Crazy Random Summer", 36);
-  static KingdomOfExploathing: Path = new Path("Kingdom of Exploathing", 37);
-  static PathOfThePlumber: Path = new Path("Path of the Plumber", 38, true);
-  static LowKeySummer: Path = new Path("Low Key Summer", 40);
-  static GreyGoo: Path = new Path("Grey Goo", 40);
-  static YouRobot: Path = new Path("You, Robot", 41);
-  static QuantumTerrarium: Path = new Path("Quantum Terrarium", 42);
 }
+
+export const Paths = {
+  Unrestricted: new Path("Unrestricted", 0),
+  Boozetafarian: new Path("Boozetafarian", 1),
+  Teetotaler: new Path("Teetotaler", 2),
+  Oxygenarian: new Path("Oxygenarian", 3),
+  BeesHateYou: new Path("Bees Hate You", 4),
+  WayOfTheSurprisingFist: new Path("Way of the Surprising Fist", 6),
+  Trendy: new Path("Trendy", 6),
+  AvatarOfBoris: new Path("Avatar of Boris", 8, true),
+  BugbearInvasion: new Path("Bugbear Invasion", 9),
+  ZombieSlayer: new Path("Zombie Slayer", 10, true),
+  ClassAct: new Path("Class Act", 11),
+  AvatarofJarlsberg: new Path("Avatar of Jarlsberg", 12, true),
+  Big: new Path("BIG!", 14),
+  KolHs: new Path("KOLHS", 15),
+  ClassAct2: new Path("Class Act II: A Class For Pigs", 16),
+  AvatarofSneakyPete: new Path("Avatar of Sneaky Pete", 17, true),
+  SlowAndSteady: new Path("Slow and Steady", 18),
+  HeavyRains: new Path("Heavy Rains", 19),
+  Picky: new Path("Picky", 21),
+  Standard: new Path("Standard", 22),
+  ActuallyEdTheUndying: new Path("Actually Ed the Undying", 23, true),
+  OneCrazyRandomSummer: new Path("One Crazy Random Summer", 24),
+  CommunityService: new Path("Community Service", 25),
+  AvatarOfWestOfLoathing: new Path("Avatar of West of Loathing", 26, true),
+  TheSource: new Path("The Source", 27),
+  NuclearAutumn: new Path("Nuclear Autumn", 28),
+  GelatinousNoob: new Path("Gelatinous Noob", 29, true),
+  LicenseToAdventure: new Path("License to Adventure", 30),
+  LiveAscendRepeat: new Path("Live. Ascend. Repeat.", 31),
+  PocketFamiliars: new Path("Pocket Familiars", 32),
+  GLover: new Path("G-Lover", 33),
+  DisguisesDelimit: new Path("Disguises Delimit", 34),
+  DarkGyffte: new Path("Dark Gyffte", 35, true),
+  TwoCrazyRandomSummer: new Path("Two Crazy Random Summer", 36),
+  KingdomOfExploathing: new Path("Kingdom of Exploathing", 37),
+  PathOfThePlumber: new Path("Path of the Plumber", 38, true),
+  LowKeySummer: new Path("Low Key Summer", 40),
+  GreyGoo: new Path("Grey Goo", 40),
+  YouRobot: new Path("You, Robot", 41),
+  QuantumTerrarium: new Path("Quantum Terrarium", 42),
+};

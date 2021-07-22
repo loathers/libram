@@ -1,6 +1,5 @@
 import {
   containsText,
-  eudora,
   eudoraItem,
   getCampground,
   getWorkshed,
@@ -12,7 +11,6 @@ import {
 } from "kolmafia";
 import { $item, $items, $stat, get, have } from ".";
 import { ChateauMantegna } from "./resources";
-import { educate } from "./resources/2016/SourceTerminal";
 
 export enum lifestyle {
   casual = 1,

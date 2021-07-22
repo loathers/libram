@@ -9,4 +9,12 @@ export * from "./template-string";
 export { default as logger, LogLevel } from "./logger";
 export * as console from "./console";
 export * as property from "./property";
-export { get, set } from "./property";
+export {
+  get,
+  set,
+  setProperties,
+  withProperties,
+  withProperty,
+  withChoices,
+  withChoice,
+} from "./property";

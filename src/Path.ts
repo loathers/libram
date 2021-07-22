@@ -1,5 +1,3 @@
-import { isTrendy } from "kolmafia";
-
 export class Path {
   name: string;
   id: number;

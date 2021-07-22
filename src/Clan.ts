@@ -3,7 +3,7 @@ import { availableAmount, cliExecute, getClanId, getClanName, getPlayerId, putSt
 
 import { getFoldGroup } from "./lib";
 import logger from "./logger";
-import { notNull, parseNumber } from "./utils";
+import { arrayToCountedMap, countedMapToArray, countedMapToString, notNull, parseNumber } from "./utils";
 
 export interface Rank {
   name: string;
@@ -52,26 +52,6 @@ const toPlayerId = (player: string | number) =>
 
 const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
-
-function arrayToCountedMap<T>(array: T[] | Map<T, number>): Map<T, number> {
-  if (!Array.isArray(array)) return array;
-
-  const map = new Map<T, number>();
-
-  array.forEach((item) => {
-    map.set(item, (map.get(item) || 0) + 1);
-  });
-
-  return map;
-}
-
-function countedMapToArray<T>(map: Map<T, number>): T[] {
-  return [...map].flatMap(([item, quantity]) => Array(quantity).fill(item));
-}
-
-function countedMapToString<T>(map: Map<T, number>): string {
-  return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
-}
 
 export class Clan {
   readonly id: number;

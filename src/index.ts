@@ -6,6 +6,7 @@ export * from "./mood";
 export * from "./resources";
 export * from "./since";
 export * from "./template-string";
+export { default as Kmail } from "./Kmail";
 export { default as logger, LogLevel } from "./logger";
 export * as console from "./console";
 export * as property from "./property";

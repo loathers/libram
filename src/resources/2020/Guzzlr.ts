@@ -3,7 +3,7 @@ import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
 
-export const item = $item`guzzlr tablet`;
+export const item = $item`Guzzlr tablet`;
 export function have(): boolean {
   return haveItem(item);
 }
@@ -158,7 +158,7 @@ export function getBooze(): Item | null {
 /**
  * List of the platinum cocktails
  */
-export const Cocktails = $items`buttery boy, steamboat, ghiaccio colada, nog-on-the-cob, sourfinger`;
+export const Cocktails = $items`Buttery Boy, Steamboat, Ghiaccio Colada, Nog-on-the-Cob, Sourfinger`;
 
 /**
  * Returns true if the user has a platinum cocktail in their inventory

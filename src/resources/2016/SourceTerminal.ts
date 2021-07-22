@@ -7,7 +7,7 @@ import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $effect, $item, $skill } from "../../template-string";
 
-export const item = $item`Source Terminal`;
+export const item = $item`Source terminal`;
 
 export function have(): boolean {
   return haveInCampground(item);

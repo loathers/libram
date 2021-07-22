@@ -17,8 +17,7 @@ export function isUnfinishedIceSculptureUsed(): boolean {
 
 export function couldUseUnfinishedIceSculpture(): boolean {
   return (
-    haveItem($item`unfinished ice sculpture`) &&
-    !haveItem($item`finished ice sculpture`)
+    haveItem($item`unfinished ice sculpture`) && !haveItem($item`ice sculpture`)
   );
 }
 

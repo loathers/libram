@@ -2,7 +2,7 @@
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "libram"],
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
@@ -13,5 +13,6 @@ module.exports = {
         ignoreDeclarationSort: true,
       },
     ],
+    "libram/verify-constants": "error",
   },
 };

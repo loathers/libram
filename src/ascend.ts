@@ -32,7 +32,7 @@ export class Path {
 
 export const Paths = {
   unrestricted: new Path("Unrestricted", 0),
-  boozetafarian: new Path("Boozetafarian", 2),
+  boozetafarian: new Path("Boozetafarian", 1),
   teetotaler: new Path("Teetotaler", 2),
   oxygenarian: new Path("Oxygenarian", 3),
   beesHateYou: new Path("Bees Hate You", 4),

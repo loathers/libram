@@ -78,7 +78,7 @@ export function ascend(
   playerClass: Class,
   lifestyle: Lifestyle,
   moon: string | number,
-  consumable: Item | undefined = $item`Astral Six-Pack`,
+  consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined
 ): void {
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
@@ -96,19 +96,14 @@ export function ascend(
   if (moonId < 1 || moonId > 9) throw `Invalid moon ${moon}`;
   if (
     consumable &&
-    !$items`Astral Six-Pack, Astral Hot Dog Dinner`.includes(consumable)
+    !$items`astral six-pack, astral hot dog dinner`.includes(consumable)
   )
     throw `Invalid consumable ${consumable}`;
   if (
     pet &&
-    !$items`Astral Bludgeon,
-    Astral Shield, Astral Chapeau,
-    Astral Bracer, Astral Longbow,
-    Astral Shorts, Astral Mace,
-    Astral Ring, Astral Statuette,
-    Astral Pistol, Astral Mask,
-    Astral Pet Sweater, Astral Shirt,
-    Astral Belt`.includes(pet)
+    !$items`astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
+      pet
+    )
   )
     throw `Invalid astral item ${pet}`;
 
@@ -124,13 +119,13 @@ export function ascend(
   );
 }
 
-const worksheds = $items`Warbear LP-ROM Burner, Warbear Jackhammer Drill Press, Warbear Induction Oven, Warbear High-Efficiency Still, Warbear Chemistry Lab, Warbear Auto-Anvil, Spinning Wheel, Snow Machine, Little Geneticist DNA-Splicing Lab, Portable Mayo Clinic, Asdon Martin Keyfob, Diabolic Pizza Cube`;
-const gardens = $items`Packet of Pumpkin Seeds, Peppermint Pip Packet, Packet of Dragon's Teeth, Packet of Beer Seeds, Packet of Winter Seeds, Packet of Thanksgarden Seeds, Packet of Tall Grass Seeds, Packet of Mushroom Spores`;
-const eudorae = $items`My Own Pen-Pal Kit, GameInformPowerDailyPro Subscription Card, Xi Receiver Unit, New-You Club Membership Form`;
+const worksheds = $items`warbear LP-ROM burner, warbear jackhammer drill press, warbear induction oven, warbear high-efficiency still, warbear chemistry lab, warbear auto-anvil, spinning wheel, snow machine, Little Geneticist DNA-Splicing Lab, portable Mayo Clinic, Asdon Martin keyfob, diabolic pizza cube`;
+const gardens = $items`packet of pumpkin seeds, Peppermint Pip Packet, packet of dragon's teeth, packet of beer seeds, packet of winter seeds, packet of thanksgarden seeds, packet of tall grass seeds, packet of mushroom spores`;
+const eudorae = $items`My Own Pen Pal kit, GameInformPowerDailyPro subscription card, Xi Receiver Unit, New-You Club Membership Form`;
 
-const desks = $items`Fancy Stationary Set, Swiss Piggy Bank, Continental Juice Bar`;
-const ceilings = $items`Antler Chandelier, Ceiling Fan, Artificial Skylight`;
-const nightstands = $items`Foreign Language Tapes, Bottle of Potpourri, Electric Muscle Stimulator`;
+const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;
+const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
+const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
 
 export function prepareAscension(
   ascensionItems?: {

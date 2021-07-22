@@ -19,9 +19,9 @@ export function fightPainting(): string {
   return runCombat();
 }
 
-const desks = $items`Fancy Stationary Set, Swiss Piggy Bank, Continental Juice Bar`;
-const ceilings = $items`Antler Chandelier, Ceiling Fan, Artificial Skylight`;
-const nightstands = $items`Foreign Language Tapes, Bottle of Potpourri, Electric Muscle Stimulator`;
+const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;
+const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
+const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
 
 export function getDesk(): Item {
   return (

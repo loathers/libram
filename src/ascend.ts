@@ -12,66 +12,12 @@ import {
 import { $item, $items, $stat, get, have } from ".";
 import { ChateauMantegna } from "./resources";
 
-export enum lifestyle {
+export enum Lifestyle {
   casual = 1,
   softcore = 2,
   normal = 2,
   hardcore = 3,
 }
-
-export class Path {
-  name: string;
-  id: number;
-  isAvatar: boolean; //here, we define avatar-ness around being its own class
-  constructor(name: string, id: number, isAvatar = false) {
-    this.name = name;
-    this.id = id;
-    this.isAvatar = isAvatar;
-  }
-}
-
-export const Paths = {
-  unrestricted: new Path("Unrestricted", 0),
-  boozetafarian: new Path("Boozetafarian", 1),
-  teetotaler: new Path("Teetotaler", 2),
-  oxygenarian: new Path("Oxygenarian", 3),
-  beesHateYou: new Path("Bees Hate You", 4),
-  wayOfTheSurprisingFist: new Path("Way of the Surprising Fist", 6),
-  trendy: new Path("Trendy", 6),
-  avatarOfBoris: new Path("Avatar of Boris", 8, true),
-  bugbearInvasion: new Path("Bugbear Invasion", 9),
-  zombieSlayer: new Path("Zombie Slayer", 10, true),
-  classAct: new Path("Class Act", 11),
-  avatarofJarlsberg: new Path("Avatar of Jarlsberg", 12, true),
-  big: new Path("BIG!", 14),
-  kolHs: new Path("KOLHS", 15),
-  classAct2: new Path("Class Act II: A Class For Pigs", 16),
-  avatarofSneakyPete: new Path("Avatar of Sneaky Pete", 17, true),
-  slowAndSteady: new Path("Slow and Steady", 18),
-  heavyRains: new Path("Heavy Rains", 19),
-  picky: new Path("Picky", 21),
-  standard: new Path("Standard", 22),
-  actuallyEdTheUndying: new Path("Actually Ed the Undying", 23, true),
-  oneCrazyRandomSummer: new Path("One Crazy Random Summer", 24),
-  communityService: new Path("Community Service", 25),
-  avatarOfWestOfLoathing: new Path("Avatar of West of Loathing", 26, true),
-  theSource: new Path("The Source", 27),
-  nuclearAutumn: new Path("Nuclear Autumn", 28),
-  gelatinousNoob: new Path("Gelatinous Noob", 29, true),
-  licenseToAdventure: new Path("License to Adventure", 30),
-  liveAscendRepeat: new Path("Live. Ascend. Repeat.", 31),
-  pocketFamiliars: new Path("Pocket Familiars", 32),
-  gLover: new Path("G-Lover", 33),
-  disguisesDelimit: new Path("Disguises Delimit", 34),
-  darkGyffte: new Path("Dark Gyffte", 35, true),
-  twoCrazyRandomSummer: new Path("Two Crazy Random Summer", 36),
-  kingdomOfExploathing: new Path("Kingdom of Exploathing", 37),
-  pathOfThePlumber: new Path("Path of the Plumber", 38, true),
-  lowKeySummer: new Path("Low Key Summer", 40),
-  greyGoo: new Path("Grey Goo", 40),
-  youRobot: new Path("You, Robot", 41),
-  quantumTerrarium: new Path("Quantum Terrarium", 42),
-};
 
 export function ascend(
   path: Path,

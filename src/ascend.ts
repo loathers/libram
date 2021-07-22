@@ -10,6 +10,7 @@ import {
   xpath,
 } from "kolmafia";
 import { $item, $items, $stat, get, have } from ".";
+import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
 
 export enum Lifestyle {
@@ -19,10 +20,63 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+function toMoonId(moon: string | number, playerClass: Class): number {
+  if (typeof moon === "number") return moon;
+
+  const offset = (): number => {
+    switch (playerClass.primestat) {
+      case $stat`Muscle`:
+        return 0;
+      case $stat`Mysticality`:
+        return 1;
+      case $stat`Moxie`:
+        return 2;
+      default:
+        throw `unknown prime stat for ${playerClass}`;
+    }
+  };
+
+  switch ((moon as string).toLowerCase()) {
+    case "mongoose":
+      return 1;
+    case "wallaby":
+      return 2;
+    case "vole":
+      return 3;
+    case "platypus":
+      return 4;
+    case "opossum":
+      return 5;
+    case "marmot":
+      return 6;
+    case "wombat":
+      return 7;
+    case "blender":
+      return 8;
+    case "packrat":
+      return 9;
+    case "degrassi":
+    case "degrassi knoll":
+    case "friendly degrassi knoll":
+    case "knoll":
+      return 1 + offset();
+    case "canada":
+    case "canadia":
+    case "little canadia":
+      return 4 + offset();
+    case "gnomads":
+    case "gnomish":
+    case "gnomish gnomads camp":
+      return 7 + offset();
+    default:
+      return -1;
+  }
+}
+
 export function ascend(
   path: Path,
   playerClass: Class,
-  lifestyle: lifestyle,
+  lifestyle: Lifestyle,
   moon: string | number,
   consumable: Item | undefined = $item`Astral Six-Pack`,
   pet: Item | undefined = undefined
@@ -36,61 +90,10 @@ export function ascend(
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
     throw "Failed to ascend.";
-  const toMoonId = (moon: string | number): number => {
-    if (typeof moon === "number") return moon;
-
-    const offset = (): number => {
-      switch (playerClass.primestat) {
-        case $stat`Muscle`:
-          return 0;
-        case $stat`Mysticality`:
-          return 1;
-        case $stat`Moxie`:
-          return 2;
-        default:
-          throw `unknown prime stat for ${playerClass}`;
-      }
-    };
-
-    switch ((moon as string).toLowerCase()) {
-      case "mongoose":
-        return 1;
-      case "wallaby":
-        return 2;
-      case "vole":
-        return 3;
-      case "platypus":
-        return 4;
-      case "opossum":
-        return 5;
-      case "marmot":
-        return 6;
-      case "wombat":
-        return 7;
-      case "blender":
-        return 8;
-      case "packrat":
-        return 9;
-      case "degrassi":
-      case "degrassi knoll":
-      case "friendly degrassi knoll":
-      case "knoll":
-        return 1 + offset();
-      case "canada":
-      case "canadia":
-      case "little canadia":
-        return 4 + offset();
-      case "gnomads":
-      case "gnomish":
-      case "gnomish gnomads camp":
-        return 7 + offset();
-      default:
-        return -1;
-    }
-  };
   const classid = path.isAvatar ? 0 : toInt(playerClass);
   if (path.id < 0) throw `Invalid path ID ${path.id}`;
-  if (toMoonId(moon) < 1) throw `Invalid moon ${moon}`;
+  const moonId = toMoonId(moon, playerClass);
+  if (moonId < 1 || moonId > 9) throw `Invalid moon ${moon}`;
   if (
     consumable &&
     !$items`Astral Six-Pack, Astral Hot Dog Dinner`.includes(consumable)
@@ -116,11 +119,7 @@ export function ascend(
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
   visitUrl(
-    `afterlife.php?action=ascend&confirmascend=1&whichsign=${toMoonId(
-      moon
-    )}&gender=2&whichclass=${classid}&whichpath=${
-      path.id
-    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
+    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${classid}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
     true
   );
 }

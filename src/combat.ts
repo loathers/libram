@@ -11,7 +11,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $skill } from ".";
+import { $skills } from ".";
 import { get, set } from "./property";
 
 const MACRO_NAME = "Script Autoattack Macro";
@@ -77,7 +77,10 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
-  return skill.name.match(/^[A-Za-z ]+$/) && skill !== $skill`Meteor Shower`
+  return skill.name.match(/^[A-Za-z ]+$/) &&
+    !$skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Cleave, Boil, Slice, Rainbow`.includes(
+      skill
+    )
     ? skill.name
     : toInt(skill);
 }

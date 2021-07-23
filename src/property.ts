@@ -139,27 +139,29 @@ export function get<_D, P extends string>(
 export function set<P extends KnownProperty>(
   property: P,
   value: PropertyValue<P>
-): void;
+): PropertyValue<P>;
 export function set<P extends string>(
   property: P,
   value: PropertyValue<P>
-): void;
+): PropertyValue<P>;
 export function set<P extends string>(
   property: P,
   value: PropertyValue<P>
-): void {
+): PropertyValue<P> {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
+  return stringValue;
 }
 
 type Properties = Partial<{
   [P in KnownProperty]: PropertyValue<P>;
 }>;
 
-export function setProperties(properties: Properties): void {
+export function setProperties(properties: Properties): Properties {
   for (const [prop, value] of Object.entries(properties)) {
     set(prop, value);
   }
+  return properties;
 }
 
 export function withProperties(properties: Properties, callback: () => void): void {

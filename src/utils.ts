@@ -32,3 +32,7 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
 
   return result;
 }
+
+export function random<T>(array: T[]): T {
+  return array[Math.floor((Math.random() * array.length))];
+}

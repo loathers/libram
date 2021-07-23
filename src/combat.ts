@@ -11,6 +11,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
+import { $skill } from ".";
 import { get, set } from "./property";
 
 const MACRO_NAME = "Script Autoattack Macro";
@@ -76,7 +77,9 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
-  return skill.name.match(/^[A-Za-z ]+$/) ? skill.name : toInt(skill);
+  return skill.name.match(/^[A-Za-z ]+$/) && skill !== $skill`Meteor Shower`
+    ? skill.name
+    : toInt(skill);
 }
 
 type Constructor<T> = { new (): T };

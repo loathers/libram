@@ -1,4 +1,5 @@
 export * as Bandersnatch from "./2009/Bandersnatch";
+export * as Briefcase from "./2017/Briefcase";
 export * as ChateauMantegna from "./2015/ChateauMantegna";
 export * as ObtuseAngel from "./2011/ObtuseAngel";
 export * as RainDoh from "./2012/RainDoh";

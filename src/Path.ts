@@ -3,7 +3,7 @@ import { $classes } from ".";
 export class Path {
   name: string;
   id: number;
-  isAvatar: boolean; //here, we define avatar-ness around being its own class
+  hasAllPerms: boolean; //here, we define avatar-ness around being its own class
   hasCampground: boolean;
   hasTerrarium: boolean;
   stomachSize: number;
@@ -13,7 +13,7 @@ export class Path {
   constructor(
     name: string,
     id: number,
-    isAvatar = false,
+    hasAllPerms = true,
     hasCampground = true,
     hasTerrarium = true,
     stomachSize = 15,
@@ -23,7 +23,7 @@ export class Path {
   ) {
     this.name = name;
     this.id = id;
-    this.isAvatar = isAvatar;
+    this.hasAllPerms = hasAllPerms;
     this.hasCampground = hasCampground;
     this.hasTerrarium = hasTerrarium;
     this.stomachSize = stomachSize;
@@ -44,7 +44,7 @@ export const Paths = {
   AvatarOfBoris: new Path(
     "Avatar of Boris",
     8,
-    true,
+    false,
     true,
     false,
     20,
@@ -56,7 +56,7 @@ export const Paths = {
   ZombieSlayer: new Path(
     "Zombie Slayer",
     10,
-    true,
+    false,
     true,
     true,
     15,
@@ -64,11 +64,11 @@ export const Paths = {
     15,
     $classes`Zombie Master`
   ),
-  ClassAct: new Path("Class Act", 11),
+  ClassAct: new Path("Class Act", 11, false),
   AvatarofJarlsberg: new Path(
     "Avatar of Jarlsberg",
     12,
-    true,
+    false,
     true,
     false,
     10,
@@ -78,11 +78,11 @@ export const Paths = {
   ),
   Big: new Path("BIG!", 14),
   KolHs: new Path("KOLHS", 15),
-  ClassAct2: new Path("Class Act II: A Class For Pigs", 16),
+  ClassAct2: new Path("Class Act II: A Class For Pigs", 16, false),
   AvatarofSneakyPete: new Path(
     "Avatar of Sneaky Pete",
     17,
-    true,
+    false,
     true,
     false,
     5,
@@ -92,12 +92,12 @@ export const Paths = {
   ),
   SlowAndSteady: new Path("Slow and Steady", 18),
   HeavyRains: new Path("Heavy Rains", 19),
-  Picky: new Path("Picky", 21),
+  Picky: new Path("Picky", 21, false),
   Standard: new Path("Standard", 22),
   ActuallyEdTheUndying: new Path(
     "Actually Ed the Undying",
     23,
-    true,
+    false,
     false,
     false,
     0,
@@ -110,7 +110,7 @@ export const Paths = {
   AvatarOfWestOfLoathing: new Path(
     "Avatar of West of Loathing",
     26,
-    true,
+    false,
     true,
     true,
     10,
@@ -123,7 +123,7 @@ export const Paths = {
   GelatinousNoob: new Path(
     "Gelatinous Noob",
     29,
-    true,
+    false,
     true,
     true,
     0,
@@ -134,7 +134,7 @@ export const Paths = {
   LicenseToAdventure: new Path(
     "License to Adventure",
     30,
-    false,
+    true,
     true,
     false,
     0,
@@ -148,7 +148,7 @@ export const Paths = {
   DarkGyffte: new Path(
     "Dark Gyffte",
     35,
-    true,
+    false,
     true,
     false,
     5,
@@ -161,7 +161,7 @@ export const Paths = {
   PathOfThePlumber: new Path(
     "Path of the Plumber",
     38,
-    true,
+    false,
     true,
     true,
     20,
@@ -172,5 +172,5 @@ export const Paths = {
   LowKeySummer: new Path("Low Key Summer", 40),
   GreyGoo: new Path("Grey Goo", 40),
   YouRobot: new Path("You, Robot", 41, false, false, true, 0, 0, 0),
-  QuantumTerrarium: new Path("Quantum Terrarium", 42, false, true, false),
+  QuantumTerrarium: new Path("Quantum Terrarium", 42, true, true, false),
 };

@@ -90,7 +90,8 @@ export function ascend(
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
     throw "Failed to ascend.";
-  const classid = path.isAvatar ? 0 : toInt(playerClass);
+  if (!path.classes.includes(playerClass))
+    throw `Invalid class ${playerClass} for this path`;
   if (path.id < 0) throw `Invalid path ID ${path.id}`;
   const moonId = toMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw `Invalid moon ${moon}`;
@@ -114,7 +115,11 @@ export function ascend(
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
   visitUrl(
-    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${classid}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
+    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${toInt(
+      playerClass
+    )}&whichpath=${
+      path.id
+    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
     true
   );
 }

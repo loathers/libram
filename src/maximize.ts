@@ -1,9 +1,21 @@
-import { maximize, myBasestat, myFamiliar } from "kolmafia";
-import { $stats } from "./template-string";
+import {
+  canEquip,
+  enthroneFamiliar,
+  equip,
+  equippedAmount,
+  equippedItem,
+  maximize,
+  myBasestat,
+  myBjornedFamiliar,
+  myEnthronedFamiliar,
+  myFamiliar,
+} from "kolmafia";
+import { $familiar, $item, $slots, $stats } from "./template-string";
+import logger from "./logger";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange?: boolean;
-  updateOnStatThreshold?: number | null;
+  updateOnCanEquipChanged?: boolean;
   forceEquip?: Item[];
   preventEquip?: Item[];
   bonusEquip?: Map<Item, number>;
@@ -11,7 +23,7 @@ export type MaximizeOptions = {
 
 const defaultMaximizeOptions = {
   updateOnFamiliarChange: true,
-  updateOnStatThreshold: 10,
+  updateOnCanEquipChanged: true,
   forceEquip: [],
   preventEquip: [],
   bonusEquip: new Map(),
@@ -21,8 +33,7 @@ const defaultMaximizeOptions = {
  *
  * @param options Default options for each maximizer run.
  * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
- * @param options.updateOnStatThreshold Re-run the maximizer if a stat has newly passed an even multiple
- * of this number (for new equip requirements), or null otherwise. Default 10.
+ * @param options.updateOnCanEquipChanged Re-run the maximizer if stats have changed what can be equipped. Default true.
  * @param options.forceEquip Equipment to force-equip ("equip X").
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
@@ -31,17 +42,182 @@ export function setDefaultMaximizeOptions(options: MaximizeOptions): void {
   Object.assign(defaultMaximizeOptions, options);
 }
 
-let cachedObjective: string | null = null;
+// Subset of slots that are valid for caching.
+const cachedSlots = $slots`hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar`;
+
+class CacheEntry {
+  equipment: Map<Slot, Item>;
+  rider: Map<Item, Familiar>;
+  familiar: Familiar;
+  canEquipItemCount: number;
+
+  constructor(
+    equipment: Map<Slot, Item>,
+    rider: Map<Item, Familiar>,
+    familiar: Familiar,
+    canEquipItemCount: number
+  ) {
+    this.equipment = equipment;
+    this.rider = rider;
+    this.familiar = familiar;
+    this.canEquipItemCount = canEquipItemCount;
+  }
+}
+
+// Objective cache entries.
+const cachedObjectives: { [string: string]: CacheEntry } = {};
+// Cache to prevent rescanning all items unnecessarily
 let cachedStats = [0, 0, 0];
-let cachedFamiliar: Familiar | null = null;
+let cachedCanEquipItemCount = 0;
+
+/**
+ * Count the number of unique items that can be equipped.
+ * @returns The count of unique items.
+ */
+function canEquipItemCount(): number {
+  const stats = $stats`Muscle, Mysticality, Moxie`.map((stat) =>
+    Math.min(myBasestat(stat), 300)
+  );
+  if (stats.every((value, index) => value === cachedStats[index])) {
+    return cachedCanEquipItemCount;
+  }
+  cachedStats = stats;
+  cachedCanEquipItemCount = Item.all().filter((item) => canEquip(item)).length;
+  return cachedCanEquipItemCount;
+}
+
+/**
+ * Checks the objective cache for a valid entry.
+ * @param cacheKey The cache key to check.
+ * @param updateOnFamiliarChange Ignore cache if familiar has changed.
+ * @param updateOnCanEquipChanged Ignore cache if stats have changed what can be equipped.
+ * @returns A valid CacheEntry or null.
+ */
+function checkCache(
+  cacheKey: string,
+  updateOnFamiliarChange: boolean,
+  updateOnCanEquipChanged: boolean
+): CacheEntry | null {
+  const entry = cachedObjectives[cacheKey];
+  if (!entry) {
+    return null;
+  }
+
+  if (updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
+    logger.warning(
+      "Equipment found in maximize cache but familiar is different."
+    );
+    return null;
+  }
+
+  if (
+    updateOnCanEquipChanged &&
+    entry.canEquipItemCount !== canEquipItemCount()
+  ) {
+    logger.warning(
+      "Equipment found in maximize cache but equippable item list is out of date."
+    );
+    return null;
+  }
+
+  return entry;
+}
+
+/**
+ * Applies equipment that was found in the cache.
+ * @param entry The CacheEntry to apply
+ */
+function applyCached(entry: CacheEntry): void {
+  for (const [slot, item] of entry.equipment) {
+    if (equippedItem(slot) !== item) {
+      equip(slot, item);
+    }
+  }
+
+  if (equippedAmount($item`Crown of Thrones`) > 0) {
+    enthroneFamiliar(
+      entry.rider.get($item`Crown of Thrones`) || $familiar`none`
+    );
+  }
+
+  if (equippedAmount($item`Buddy Bjorn`) > 0) {
+    enthroneFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+  }
+}
+
+/**
+ * Verifies that a CacheEntry was applied successfully.
+ * @param entry The CacheEntry to verify
+ * @returns If all desired equipment was appliedn in the correct slots.
+ */
+function verifyCached(entry: CacheEntry): boolean {
+  let success = true;
+  for (const [slot, item] of entry.equipment) {
+    if (equippedItem(slot) !== item) {
+      logger.warning(`Failed to apply cached ${item} in ${slot}.`);
+      success = false;
+    }
+  }
+
+  if (equippedAmount($item`Crown of Thrones`) > 0) {
+    if (entry.rider.get($item`Crown of Thrones`) !== myEnthronedFamiliar()) {
+      logger.warning(
+        `Failed to apply ${entry.rider.get(
+          $item`Crown of Thrones`
+        )} in ${$item`Crown of Thrones`}.`
+      );
+      success = false;
+    }
+  }
+
+  if (equippedAmount($item`Buddy Bjorn`) > 0) {
+    if (entry.rider.get($item`Buddy Bjorn`) !== myBjornedFamiliar()) {
+      logger.warning(
+        `Failed to apply${entry.rider.get(
+          $item`Buddy Bjorn`
+        )} in ${$item`Buddy Bjorn`}.`
+      );
+      success = false;
+    }
+  }
+
+  return success;
+}
+
+/**
+ * Save current equipment to the objective cache.
+ * @param cacheKey The cache key to save.
+ */
+function saveCached(cacheKey: string): void {
+  const equipment: Map<Slot, Item> = new Map<Slot, Item>();
+  const rider: Map<Item, Familiar> = new Map<Item, Familiar>();
+
+  for (const slot of cachedSlots) {
+    equipment.set(slot, equippedItem(slot));
+  }
+
+  if (equippedAmount($item`Crown of Thrones`) > 0) {
+    rider.set($item`Crown of Thrones`, myEnthronedFamiliar());
+  }
+
+  if (equippedAmount($item`Buddy Bjorn`) > 0) {
+    rider.set($item`Buddy Bjorn`, myBjornedFamiliar());
+  }
+
+  cachedObjectives[cacheKey] = new CacheEntry(
+    equipment,
+    rider,
+    myFamiliar(),
+    canEquipItemCount()
+  );
+}
 
 /**
  * Run the maximizer, but only if the objective and certain pieces of game state haven't changed since it was last run.
  * @param objectives Objectives to maximize for.
  * @param options Options for this run of the maximizer.
  * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
- * @param options.updateOnStatThreshold Re-run the maximizer if a stat has newly passed an even multiple
- * of this number (for new equip requirements), or null otherwise. Default 10.
+ * @param options.updateOnCanEquipChanged Re-run the maximizer if stats have changed what can be equipped. Default true.
  * @param options.forceEquip Equipment to force-equip ("equip X").
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
@@ -52,48 +228,46 @@ export function maximizeCached(
 ): void {
   const {
     updateOnFamiliarChange,
-    updateOnStatThreshold,
+    updateOnCanEquipChanged,
     forceEquip,
     preventEquip,
     bonusEquip,
   }: {
     updateOnFamiliarChange: boolean;
-    updateOnStatThreshold: number | null;
+    updateOnCanEquipChanged: boolean;
     forceEquip: Item[];
     preventEquip: Item[];
     bonusEquip: Map<Item, number>;
   } = { ...defaultMaximizeOptions, ...options };
 
+  // Sort each group in objective to ensure consistent ordering in string
+  const collator = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
   const objective = [
-    ...objectives,
-    ...forceEquip.map((item) => `equip ${item}`),
-    ...preventEquip.map((item) => `-equip ${item}`),
-    ...Array.from(bonusEquip.entries()).map(
-      ([item, bonus]) => `${bonus} bonus ${item}`
-    ),
+    ...objectives.sort(collator.compare),
+    ...forceEquip.map((item) => `equip ${item}`).sort(collator.compare),
+    ...preventEquip.map((item) => `-equip ${item}`).sort(collator.compare),
+    ...Array.from(bonusEquip.entries())
+      .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
+      .sort(collator.compare),
   ].join(", ");
 
-  const stats = $stats`Muscle, Mysticality, Moxie`.map((stat) =>
-    myBasestat(stat)
+  const cacheEntry = checkCache(
+    objective,
+    updateOnFamiliarChange,
+    updateOnCanEquipChanged
   );
-  // The highest known equip requirement is 300, so don't check after that.
-  const statsChanged =
-    updateOnStatThreshold !== null &&
-    stats.some(
-      (newStat, i) =>
-        newStat > cachedStats[i] &&
-        cachedStats[i] < 300 &&
-        newStat % updateOnStatThreshold === 0
-    );
-
-  const familiarChanged =
-    updateOnFamiliarChange && cachedFamiliar !== myFamiliar();
-
-  if (statsChanged || familiarChanged || objective !== cachedObjective) {
-    maximize(objective, false);
+  if (cacheEntry) {
+    logger.info("Equipment found in maximize cache, equipping...");
+    applyCached(cacheEntry);
+    if (verifyCached(cacheEntry)) {
+      return;
+    }
+    logger.warning("Maximize cache application failed, maximizing...");
   }
 
-  cachedFamiliar = myFamiliar();
-  cachedStats = stats;
-  cachedObjective = objective;
+  maximize(objective, false);
+  saveCached(objective);
 }

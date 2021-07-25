@@ -173,4 +173,4 @@ export const Paths = {
   GreyGoo: new Path("Grey Goo", 40),
   YouRobot: new Path("You, Robot", 41, false, false, true, 0, 0, 0),
   QuantumTerrarium: new Path("Quantum Terrarium", 42, true, true, false),
-};
+} as const;

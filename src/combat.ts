@@ -11,7 +11,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $skills } from ".";
+import { $items, $skills } from ".";
 import { get, set } from "./property";
 
 const MACRO_NAME = "Script Autoattack Macro";
@@ -52,7 +52,11 @@ function itemOrItemsBallsMacroName(
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
     const item = itemOrNameToItem(itemOrItems);
-    return item.name;
+    return !$items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, adder, red button, pile of sand, mushroom, deluxe mushroom`.includes(
+      item
+    )
+      ? item.name
+      : toInt(item).toString();
   }
 }
 

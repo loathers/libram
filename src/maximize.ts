@@ -10,7 +10,7 @@ import {
   myEnthronedFamiliar,
   myFamiliar,
 } from "kolmafia";
-import { $familiar, $item, $slots, $stats } from "./template-string";
+import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
 
 export type MaximizeOptions = {
@@ -194,6 +194,10 @@ function saveCached(cacheKey: string): void {
 
   for (const slot of cachedSlots) {
     equipment.set(slot, equippedItem(slot));
+  }
+
+  if (equippedAmount($item`card sleeve`) > 0) {
+    equipment.set($slot`card-sleeve`, equippedItem($slot`card-sleeve`));
   }
 
   if (equippedAmount($item`Crown of Thrones`) > 0) {

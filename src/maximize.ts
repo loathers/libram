@@ -20,6 +20,8 @@ export type MaximizeOptions = {
   forceEquip?: Item[];
   preventEquip?: Item[];
   bonusEquip?: Map<Item, number>;
+  onlySlot?: Slot[];
+  preventSlot?: Slot[];
 };
 
 const defaultMaximizeOptions = {
@@ -28,6 +30,8 @@ const defaultMaximizeOptions = {
   forceEquip: [],
   preventEquip: [],
   bonusEquip: new Map(),
+  onlySlot: [],
+  preventSlot: [],
 };
 
 /**
@@ -135,13 +139,19 @@ function applyCached(entry: CacheEntry): void {
     }
   }
 
-  if (equippedAmount($item`Crown of Thrones`) > 0) {
+  if (
+    equippedAmount($item`Crown of Thrones`) > 0 &&
+    entry.rider.get($item`Crown of Thrones`)
+  ) {
     enthroneFamiliar(
       entry.rider.get($item`Crown of Thrones`) || $familiar`none`
     );
   }
 
-  if (equippedAmount($item`Buddy Bjorn`) > 0) {
+  if (
+    equippedAmount($item`Buddy Bjorn`) > 0 &&
+    entry.rider.get($item`Buddy Bjorn`)
+  ) {
     bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
   }
 }
@@ -189,7 +199,7 @@ function verifyCached(entry: CacheEntry): boolean {
  * Save current equipment to the objective cache.
  * @param cacheKey The cache key to save.
  */
-function saveCached(cacheKey: string): void {
+function saveCached(cacheKey: string, options: MaximizeOptions): void {
   const equipment: Map<Slot, Item> = new Map<Slot, Item>();
   const rider: Map<Item, Familiar> = new Map<Item, Familiar>();
 
@@ -207,6 +217,33 @@ function saveCached(cacheKey: string): void {
 
   if (equippedAmount($item`Buddy Bjorn`) > 0) {
     rider.set($item`Buddy Bjorn`, myBjornedFamiliar());
+  }
+
+  if (options.preventSlot) {
+    for (const slot of options.preventSlot) {
+      equipment.delete(slot);
+    }
+    if (options.preventSlot.includes($slot`buddy-bjorn`)) {
+      rider.delete($item`Buddy Bjorn`);
+    }
+    if (options.preventSlot.includes($slot`crown-of-thrones`)) {
+      rider.delete($item`Crown of Thrones`);
+    }
+  }
+
+  if (options.onlySlot) {
+    for (const slot of Slot.all()) {
+      if (!options.onlySlot.includes(slot)) {
+        equipment.delete(slot);
+      }
+    }
+
+    if (!options.onlySlot.includes($slot`buddy-bjorn`)) {
+      rider.delete($item`Buddy Bjorn`);
+    }
+    if (!options.onlySlot.includes($slot`crown-of-thrones`)) {
+      rider.delete($item`Crown of Thrones`);
+    }
   }
 
   cachedObjectives[cacheKey] = new CacheEntry(
@@ -237,12 +274,16 @@ export function maximizeCached(
     forceEquip,
     preventEquip,
     bonusEquip,
+    onlySlot,
+    preventSlot,
   }: {
     updateOnFamiliarChange: boolean;
     updateOnCanEquipChanged: boolean;
     forceEquip: Item[];
     preventEquip: Item[];
     bonusEquip: Map<Item, number>;
+    onlySlot: Slot[];
+    preventSlot: Slot[];
   } = { ...defaultMaximizeOptions, ...options };
 
   // Sort each group in objective to ensure consistent ordering in string
@@ -250,6 +291,8 @@ export function maximizeCached(
     ...objectives.sort(),
     ...forceEquip.map((item) => `equip ${item}`).sort(),
     ...preventEquip.map((item) => `-equip ${item}`).sort(),
+    ...onlySlot.map((slot) => `${slot}`).sort(),
+    ...preventSlot.map((slot) => `-${slot}`).sort(),
     ...Array.from(bonusEquip.entries())
       .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
       .sort(),
@@ -270,5 +313,5 @@ export function maximizeCached(
   }
 
   maximize(objective, false);
-  saveCached(objective);
+  saveCached(objective, options);
 }

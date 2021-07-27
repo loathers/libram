@@ -245,17 +245,13 @@ export function maximizeCached(
   } = { ...defaultMaximizeOptions, ...options };
 
   // Sort each group in objective to ensure consistent ordering in string
-  const collator = new Intl.Collator(undefined, {
-    numeric: true,
-    sensitivity: "base",
-  });
   const objective = [
-    ...objectives.sort(collator.compare),
-    ...forceEquip.map((item) => `equip ${item}`).sort(collator.compare),
-    ...preventEquip.map((item) => `-equip ${item}`).sort(collator.compare),
+    ...objectives.sort(),
+    ...forceEquip.map((item) => `equip ${item}`).sort(),
+    ...preventEquip.map((item) => `-equip ${item}`).sort(),
     ...Array.from(bonusEquip.entries())
       .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
-      .sort(collator.compare),
+      .sort(),
   ].join(", ");
 
   const cacheEntry = checkCache(

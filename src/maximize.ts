@@ -20,7 +20,6 @@ export type MaximizeOptions = {
   forceEquip?: Item[];
   preventEquip?: Item[];
   bonusEquip?: Map<Item, number>;
-  bonusCarry?: Map<Familiar, number>;
   onlySlot?: Slot[];
   preventSlot?: Slot[];
 };
@@ -31,7 +30,6 @@ const defaultMaximizeOptions = {
   forceEquip: [],
   preventEquip: [],
   bonusEquip: new Map(),
-  bonusCarry: new Map(),
   onlySlot: [],
   preventSlot: [],
 };
@@ -276,7 +274,6 @@ export function maximizeCached(
     forceEquip,
     preventEquip,
     bonusEquip,
-    bonusCarry,
     onlySlot,
     preventSlot,
   }: {
@@ -285,7 +282,6 @@ export function maximizeCached(
     forceEquip: Item[];
     preventEquip: Item[];
     bonusEquip: Map<Item, number>;
-    bonusCarry: Map<Familiar, number>;
     onlySlot: Slot[];
     preventSlot: Slot[];
   } = { ...defaultMaximizeOptions, ...options };
@@ -299,12 +295,6 @@ export function maximizeCached(
     ...preventSlot.map((slot) => `-${slot}`).sort(),
     ...Array.from(bonusEquip.entries())
       .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
-      .sort(),
-    ...Array.from(bonusCarry.entries())
-      .map(
-        ([familiar, bonus]) =>
-          `${Math.round(bonus * 100) / 100} bonus-carry ${familiar}`
-      )
       .sort(),
   ].join(", ");
 

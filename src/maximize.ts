@@ -1,4 +1,5 @@
 import {
+  bjornifyFamiliar,
   canEquip,
   enthroneFamiliar,
   equip,
@@ -141,7 +142,7 @@ function applyCached(entry: CacheEntry): void {
   }
 
   if (equippedAmount($item`Buddy Bjorn`) > 0) {
-    enthroneFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
   }
 }
 

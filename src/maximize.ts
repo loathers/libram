@@ -298,8 +298,14 @@ export function maximizeCached(
     ...objectives.sort(),
     ...forceEquip.map((item) => `equip ${item}`).sort(),
     ...preventEquip.map((item) => `-equip ${item}`).sort(),
-    ...onlySlot.map((slot) => `${slot}`).sort(),
-    ...preventSlot.map((slot) => `-${slot}`).sort(),
+    ...onlySlot
+      .filter((slot) => !$slots`buddy-bjorn, crown-of-thrones`.includes(slot))
+      .map((slot) => `${slot}`)
+      .sort(),
+    ...preventSlot
+      .filter((slot) => !$slots`buddy-bjorn, crown-of-thrones`.includes(slot))
+      .map((slot) => `-${slot}`)
+      .sort(),
     ...Array.from(bonusEquip.entries())
       .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
       .sort(),

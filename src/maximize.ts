@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   bjornifyFamiliar,
   canEquip,
   enthroneFamiliar,
@@ -134,7 +135,7 @@ function checkCache(
  */
 function applyCached(entry: CacheEntry): void {
   for (const [slot, item] of entry.equipment) {
-    if (equippedItem(slot) !== item) {
+    if (equippedItem(slot) !== item && availableAmount(item) > 0) {
       equip(slot, item);
     }
   }

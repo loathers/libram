@@ -170,7 +170,10 @@ function verifyCached(entry: CacheEntry): boolean {
     }
   }
 
-  if (equippedAmount($item`Crown of Thrones`) > 0) {
+  if (
+    equippedAmount($item`Crown of Thrones`) > 0 &&
+    entry.rider.get($item`Crown of Thrones`)
+  ) {
     if (entry.rider.get($item`Crown of Thrones`) !== myEnthronedFamiliar()) {
       logger.warning(
         `Failed to apply ${entry.rider.get(
@@ -181,7 +184,10 @@ function verifyCached(entry: CacheEntry): boolean {
     }
   }
 
-  if (equippedAmount($item`Buddy Bjorn`) > 0) {
+  if (
+    equippedAmount($item`Buddy Bjorn`) > 0 &&
+    entry.rider.get($item`Buddy Bjorn`)
+  ) {
     if (entry.rider.get($item`Buddy Bjorn`) !== myBjornedFamiliar()) {
       logger.warning(
         `Failed to apply${entry.rider.get(

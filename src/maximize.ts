@@ -226,7 +226,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     rider.set($item`Buddy Bjorn`, myBjornedFamiliar());
   }
 
-  if (options.preventSlot) {
+  if (options.preventSlot && options.preventSlot.length > 0) {
     for (const slot of options.preventSlot) {
       equipment.delete(slot);
     }
@@ -238,7 +238,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     }
   }
 
-  if (options.onlySlot) {
+  if (options.onlySlot && options.onlySlot.length > 0) {
     for (const slot of Slot.all()) {
       if (!options.onlySlot.includes(slot)) {
         equipment.delete(slot);

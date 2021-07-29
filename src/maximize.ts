@@ -320,6 +320,7 @@ export function maximizeCached(
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry);
     if (verifyCached(cacheEntry)) {
+      logger.info(`Equipped cached ${objective}`);
       return;
     }
     logger.warning("Maximize cache application failed, maximizing...");

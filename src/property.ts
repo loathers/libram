@@ -152,9 +152,11 @@ export function set<P extends string>(
   setProperty(property, stringValue);
 }
 
-type Properties = Partial<{
-  [P in KnownProperty]: PropertyValue<P>;
-}>;
+type Properties = Partial<
+  {
+    [P in KnownProperty]: PropertyValue<P>;
+  }
+>;
 
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {
@@ -162,8 +164,13 @@ export function setProperties(properties: Properties): void {
   }
 }
 
-export function withProperties(properties: Properties, callback: () => void): void {
-  const propertiesBackup = Object.fromEntries(Object.entries(properties).map(([prop,]) => ([prop, get(prop)]))) as Properties;
+export function withProperties(
+  properties: Properties,
+  callback: () => void
+): void {
+  const propertiesBackup = Object.fromEntries(
+    Object.entries(properties).map(([prop]) => [prop, get(prop)])
+  ) as Properties;
   setProperties(properties);
   try {
     callback();
@@ -172,17 +179,63 @@ export function withProperties(properties: Properties, callback: () => void): vo
   }
 }
 
-export function withProperty<P extends KnownProperty>(property: P, value: PropertyValue<P>, callback: () => void): void {
+export function withProperty<P extends KnownProperty>(
+  property: P,
+  value: PropertyValue<P>,
+  callback: () => void
+): void {
   withProperties({ [property]: value }, callback);
 }
 
-export function withChoices(choices: { [choice: number]: number | string }, callback: () => void): void {
+export function withChoices(
+  choices: { [choice: number]: number | string },
+  callback: () => void
+): void {
   const properties = Object.fromEntries(
-    Object.entries(choices).map(([choice, option]) => [`choiceAdventure${choice}` as NumericOrStringProperty, option])
+    Object.entries(choices).map(([choice, option]) => [
+      `choiceAdventure${choice}` as NumericOrStringProperty,
+      option,
+    ])
   );
   withProperties(properties, callback);
 }
 
-export function withChoice(choice: number, value: number | string, callback: () => void): void {
+export function withChoice(
+  choice: number,
+  value: number | string,
+  callback: () => void
+): void {
   withChoices({ [choice]: value }, callback);
+}
+
+export class PropertiesManager {
+  properties: Properties;
+  choices: { [choice: number]: number | string };
+  constructor() {
+    this.properties = {};
+    this.choices = {};
+  }
+
+  set(propertiesToSet: Properties): void {
+    this.properties = { ...this.properties, ...propertiesToSet };
+    Object.entries(propertiesToSet).forEach(([propertyName, propertyValue]) => {
+      set(propertyName, propertyValue);
+    });
+  }
+
+  setChoices(choicesToSet: { [choice: number]: number | string }): void {
+    this.choices = { ...this.choices, ...choicesToSet };
+    Object.entries(choicesToSet).forEach(([choiceNumber, choiceValue]) =>
+      set(`choiceAdventure${choiceNumber}`, choiceValue)
+    );
+  }
+
+  resetAll(): void {
+    Object.entries(this.properties).forEach(([propertyName, propertyValue]) =>
+      set(propertyName, propertyValue)
+    );
+    Object.entries(this.choices).forEach(([choiceNumber, choiceValue]) =>
+      set(`choiceAdventure${choiceNumber}`, choiceValue)
+    );
+  }
 }

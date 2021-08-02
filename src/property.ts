@@ -210,10 +210,8 @@ export function withChoice(
 
 export class PropertiesManager {
   properties: Properties;
-  choices: { [choice: number]: number | string };
   constructor() {
     this.properties = {};
-    this.choices = {};
   }
 
   set(propertiesToSet: Properties): void {
@@ -224,18 +222,19 @@ export class PropertiesManager {
   }
 
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
-    this.choices = { ...this.choices, ...choicesToSet };
-    Object.entries(choicesToSet).forEach(([choiceNumber, choiceValue]) =>
-      set(`choiceAdventure${choiceNumber}`, choiceValue)
+    this.set(
+      Object.fromEntries(
+        Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
+          `choiceAdventure${choiceNumber}`,
+          choiceValue,
+        ])
+      )
     );
   }
 
   resetAll(): void {
     Object.entries(this.properties).forEach(([propertyName, propertyValue]) =>
       set(propertyName, propertyValue)
-    );
-    Object.entries(this.choices).forEach(([choiceNumber, choiceValue]) =>
-      set(`choiceAdventure${choiceNumber}`, choiceValue)
     );
   }
 }

@@ -231,7 +231,7 @@ export class PropertiesManager {
     this.set(
       Object.fromEntries(
         Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
-          `choiceAdventure${choiceNumber}`,
+          `choiceAdventure${choiceNumber}` as NumericOrStringProperty,
           choiceValue,
         ])
       )

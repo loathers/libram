@@ -216,11 +216,11 @@ export class PropertiesManager {
 
   set(propertiesToSet: Properties): void {
     this.properties = {
-      ...this.properties,
       ...Object.keys(propertiesToSet).map((propertyName) => [
         propertyName,
         get(propertyName),
       ]),
+      ...this.properties,
     };
     Object.entries(propertiesToSet).forEach(([propertyName, propertyValue]) => {
       set(propertyName, propertyValue);

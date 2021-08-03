@@ -127,6 +127,13 @@ export function ascend(
 const worksheds = $items`warbear LP-ROM burner, warbear jackhammer drill press, warbear induction oven, warbear high-efficiency still, warbear chemistry lab, warbear auto-anvil, spinning wheel, snow machine, Little Geneticist DNA-Splicing Lab, portable Mayo Clinic, Asdon Martin keyfob, diabolic pizza cube`;
 const gardens = $items`packet of pumpkin seeds, Peppermint Pip Packet, packet of dragon's teeth, packet of beer seeds, packet of winter seeds, packet of thanksgarden seeds, packet of tall grass seeds, packet of mushroom spores`;
 const eudorae = $items`My Own Pen Pal kit, GameInformPowerDailyPro subscription card, Xi Receiver Unit, New-You Club Membership Form, Our Daily Candles™ order form`;
+const eudoraNames = [
+  "Pen Pal",
+  "GameInformPowerDailyPro Magazine",
+  "Xi Receiver Unit",
+  "New-You Club",
+  "Our Daily Candles",
+];
 
 const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;
 const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
@@ -181,18 +188,19 @@ export function prepareAscension(
     if (ascensionItems.eudora && eudoraItem() !== ascensionItems.eudora) {
       if (!eudorae.includes(ascensionItems.eudora) && throwOnFail)
         throw `Invalid eudora: ${ascensionItems.eudora}!`;
-      else if (
+      const eudoraNumber = eudorae.indexOf(ascensionItems.eudora);
+      if (
         !xpath(
           visitUrl("account.php?tab=correspondence"),
           `/select[@name="whichpenpal"]/option/text()`
-        ).includes(ascensionItems.eudora.name) &&
+        ).includes(eudoraNames[eudoraNumber]) &&
         throwOnFail
       )
         throw `I'm sorry buddy, but you don't seem to be subscribed to ${ascensionItems.eudora}. Which makes it REALLY hard to correspond with them.`;
       else
         visitUrl(
           `account.php?actions[]=whichpenpal&whichpenpal=${
-            1 + eudorae.indexOf(ascensionItems.eudora)
+            1 + eudoraNumber
           }&action=Update`,
           true
         );

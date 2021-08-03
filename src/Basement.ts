@@ -144,7 +144,7 @@ export function openDungeon(
     );
   } else {
     const stashText = visitUrl("clan_stash.php").match(
-      /Meat to the coffer \(You have (\S+) Meat.)/g
+      /Your Clan Coffer contains ([0-9,]+) Meat./g
     );
     const stashMeat = stashText ? parseInt(stashText[0].replace(",", "")) : 0;
     const payDifference = dungeon.openCost - stashMeat;

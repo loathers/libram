@@ -11,6 +11,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
+import { $items, $skills } from ".";
 import { get, set } from "./property";
 
 const MACRO_NAME = "Script Autoattack Macro";
@@ -44,6 +45,9 @@ function itemOrNameToItem(itemOrName: ItemOrName) {
   return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
 }
 
+const substringCombatItems = $items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, adder, red button, pile of sand, mushroom, deluxe mushroom`;
+const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Cleave, Boil, Slice, Rainbow`;
+
 function itemOrItemsBallsMacroName(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
 ): string {
@@ -51,7 +55,9 @@ function itemOrItemsBallsMacroName(
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
     const item = itemOrNameToItem(itemOrItems);
-    return item.name;
+    return !substringCombatItems.includes(item)
+      ? item.name
+      : toInt(item).toString();
   }
 }
 
@@ -76,7 +82,10 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
-  return skill.name.match(/^[A-Za-z ]+$/) ? skill.name : toInt(skill);
+  return skill.name.match(/^[A-Za-z ]+$/) &&
+    !substringCombatSkills.includes(skill)
+    ? skill.name
+    : toInt(skill);
 }
 
 type Constructor<T> = { new (): T };

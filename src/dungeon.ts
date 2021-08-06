@@ -7,7 +7,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $items } from ".";
+import { $items } from "./template-string";
 
 export class Dungeon {
   name: string;

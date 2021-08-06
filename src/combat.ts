@@ -11,7 +11,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $items, $skills } from ".";
+import { $items, $skills } from "./template-string";
 import { get, set } from "./property";
 
 const MACRO_NAME = "Script Autoattack Macro";

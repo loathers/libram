@@ -25,16 +25,15 @@ const nightstands = $items`foreign language tapes, bowl of potpourri, electric m
 
 export function getDesk(): Item {
   return (
-    desks.find((desk) =>
-      Object.getOwnPropertyNames(getChateau()).includes(desk.name)
-    ) || $item`none`
+    desks.find((desk) => Object.keys(getChateau()).includes(desk.name)) ||
+    $item`none`
   );
 }
 
 export function getCeiling(): Item {
   return (
     ceilings.find((ceiling) =>
-      Object.getOwnPropertyNames(getChateau()).includes(ceiling.name)
+      Object.keys(getChateau()).includes(ceiling.name)
     ) || $item`none`
   );
 }
@@ -42,7 +41,7 @@ export function getCeiling(): Item {
 export function getNightstand(): Item {
   return (
     nightstands.find((nightstand) =>
-      Object.getOwnPropertyNames(getChateau()).includes(nightstand.name)
+      Object.keys(getChateau()).includes(nightstand.name)
     ) || $item`none`
   );
 }

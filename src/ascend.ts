@@ -9,9 +9,11 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $item, $items, $stat, get, have } from ".";
+import { $item, $items, $stat } from "./template-string";
+import { get } from "./property";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
+import { have } from "./lib";
 
 export enum Lifestyle {
   casual = 1,

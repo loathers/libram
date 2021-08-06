@@ -1,5 +1,5 @@
 import { buy, getChateau, runCombat, visitUrl } from "kolmafia";
-import { $item, $items } from "../..";
+import { $item, $items } from "../../template-string";
 import { get } from "../../property";
 
 export function have(): boolean {

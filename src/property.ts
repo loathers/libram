@@ -232,7 +232,7 @@ export class PropertiesManager {
           `choiceAdventure${choiceNumber}` as KnownProperty,
           choiceValue,
         ])
-      )
+      ) as Properties
     );
   }
 

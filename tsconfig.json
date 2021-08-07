@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": true,
+    "importHelpers": true,
     "lib": [
       "es2019"
     ],

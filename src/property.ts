@@ -215,12 +215,14 @@ export class PropertiesManager {
   }
 
   set(propertiesToSet: Properties): void {
-    Object.entries(propertiesToSet).forEach(([propertyName, propertyValue]) => {
-      if (!((propertyName as KnownProperty) in this.properties)) {
+    for (const [propertyName, propertyValue] of Object.entries(
+      propertiesToSet
+    )) {
+      if (this.properties[propertyName as KnownProperty] !== undefined) {
         this.properties[propertyName as KnownProperty] = get(propertyName);
       }
       set(propertyName, propertyValue);
-    });
+    }
   }
 
   setChoices(choicesToSet: { [choice: number]: number | string }): void {

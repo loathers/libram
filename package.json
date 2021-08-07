@@ -10,7 +10,7 @@
   "private": false,
   "scripts": {
     "build": "yarn run tsc",
-    "clean": "rm -f {src,dist}/*.js {src,dist}/*.d.ts {src,dist}/**/*.js {src,dist}/**/*.d.ts",
+    "clean": "rm -rf dist",
     "docs": "yarn run typedoc",
     "format": "yarn run prettier --write src/**/* examples/**/*",
     "lint": "yarn run eslint src --ext .ts",

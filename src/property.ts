@@ -215,12 +215,14 @@ export class PropertiesManager {
   }
 
   set(propertiesToSet: Properties): void {
+    const oldProperties = this.properties;
     this.properties = {
-      ...Object.keys(propertiesToSet).map((propertyName) => [
-        propertyName,
-        get(propertyName),
-      ]),
-      ...this.properties,
+      ...Object.keys(propertiesToSet).map((propertyName) => {
+        return {
+          propertyName: get(propertyName),
+        };
+      }),
+      ...oldProperties,
     };
     Object.entries(propertiesToSet).forEach(([propertyName, propertyValue]) => {
       set(propertyName, propertyValue);

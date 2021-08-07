@@ -14,6 +14,7 @@ export * as console from "./console";
 export * as property from "./property";
 export {
   get,
+  PropertiesManager,
   set,
   setProperties,
   withProperties,

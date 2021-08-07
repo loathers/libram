@@ -218,7 +218,7 @@ export class PropertiesManager {
     for (const [propertyName, propertyValue] of Object.entries(
       propertiesToSet
     )) {
-      if (this.properties[propertyName as KnownProperty] !== undefined) {
+      if (this.properties[propertyName as KnownProperty] === undefined) {
         this.properties[propertyName as KnownProperty] = get(propertyName);
       }
       set(propertyName, propertyValue);

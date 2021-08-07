@@ -226,13 +226,14 @@ export class PropertiesManager {
   }
 
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
-    Object.entries(choicesToSet).forEach(([choiceNumber, choiceValue]) => {
-      const propertyName = `choiceAdventure${choiceNumber}`;
-      if (!((propertyName as KnownProperty) in this.properties)) {
-        this.properties[propertyName as KnownProperty] = get(propertyName);
-      }
-      set(propertyName, choiceValue);
-    });
+    this.set(
+      Object.fromEntries(
+        Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
+          `choiceAdventure${choiceNumber}` as KnownProperty,
+          choiceValue,
+        ])
+      )
+    );
   }
 
   resetAll(): void {

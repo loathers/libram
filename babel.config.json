@@ -6,7 +6,7 @@
       {
         "modules": false,
         "targets": {
-          "rhino": "1.7"
+          "rhino": "1.7.13"
         }
       }
     ]

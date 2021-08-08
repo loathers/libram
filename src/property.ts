@@ -218,10 +218,12 @@ export class PropertiesManager {
     for (const [propertyName, propertyValue] of Object.entries(
       propertiesToSet
     )) {
-      if (this.properties[propertyName as KnownProperty] === undefined) {
-        this.properties[propertyName as KnownProperty] = get(propertyName);
+      if (get(propertyName) !== propertyValue) {
+        if (this.properties[propertyName as KnownProperty] === undefined) {
+          this.properties[propertyName as KnownProperty] = get(propertyName);
+        }
+        set(propertyName, propertyValue);
       }
-      set(propertyName, propertyValue);
     }
   }
 

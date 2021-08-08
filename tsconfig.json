@@ -3,9 +3,7 @@
     "target": "es5",
     "declaration": true,
     "importHelpers": true,
-    "lib": [
-      "es2019"
-    ],
+    "lib": ["es2019"],
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "LF",
@@ -16,9 +14,7 @@
     "stripInternal": true,
     "downlevelIteration": true
   },
-  "include": [
-    "src/"
-  ],
+  "include": ["src/"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

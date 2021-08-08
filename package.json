@@ -12,7 +12,7 @@
     "build": "yarn run tsc",
     "clean": "rm -rf dist",
     "docs": "yarn run typedoc",
-    "format": "yarn run prettier --write src/**/* examples/**/*",
+    "format": "yarn run prettier --write .",
     "lint": "yarn run eslint src --ext .ts",
     "prepare": "patch-package",
     "prepublishOnly": "yarn run build",

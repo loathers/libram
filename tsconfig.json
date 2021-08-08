@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
     "declaration": true,
-    "importHelpers": true,
+    "emitDeclarationOnly": true,
     "lib": [
       "es2019"
     ],
@@ -13,8 +13,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "dist",
-    "stripInternal": true,
-    "downlevelIteration": true
+    "stripInternal": true
   },
   "include": [
     "src/"

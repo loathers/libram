@@ -9,7 +9,7 @@ import {
 } from "kolmafia";
 import { $items } from "./template-string";
 
-export class Dungeon {
+export default class Dungeon {
   name: string;
   loot: Item[];
   openAction: string;

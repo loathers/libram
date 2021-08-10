@@ -90,7 +90,7 @@ export default class Dungeon {
       );
     } else {
       const stashText = visitUrl("clan_stash.php").match(
-        /Your <b>Clan Coffer\/b> contains ([0-9,]+) Meat./
+        /Your <b>Clan Coffer<\/b> contains ([0-9,]+) Meat./
       );
       const stashMeat = stashText ? parseInt(stashText[1].replace(",", "")) : 0;
       const payDifference = this.openCost - stashMeat;

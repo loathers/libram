@@ -74,7 +74,7 @@ export default class Dungeon {
   }
 
   close(): boolean {
-    visitUrl(`clan_basement.php?action=${this.closeAction}&confirm=true`);
+    visitUrl(`clan_basement.php?action=${this.closeAction}&confirm=true`, true);
     const pageText = visitUrl("clan_basement.php");
     return pageText.includes(this.closedImage);
   }

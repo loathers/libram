@@ -331,23 +331,20 @@ export function maximizeCached(
 }
 
 export class Requirement {
-  maximizeParameters_: string[];
-  maximizeOptions_: MaximizeOptions;
+  #maximizeParameters: string[];
+  #maximizeOptions: MaximizeOptions;
 
-  constructor(
-    maximizeParameters_: string[],
-    maximizeOptions_: MaximizeOptions
-  ) {
-    this.maximizeParameters_ = maximizeParameters_;
-    this.maximizeOptions_ = maximizeOptions_;
+  constructor(maximizeParameters: string[], maximizeOptions: MaximizeOptions) {
+    this.#maximizeParameters = maximizeParameters;
+    this.#maximizeOptions = maximizeOptions;
   }
 
   maximizeParameters(): string[] {
-    return this.maximizeParameters_;
+    return this.#maximizeParameters;
   }
 
   maximizeOptions(): MaximizeOptions {
-    return this.maximizeOptions_;
+    return this.#maximizeOptions;
   }
 
   merge(other: Requirement): Requirement {

@@ -168,10 +168,21 @@ export class Clan {
    * 
    * @param clanIdOrName Clan id or name
    */
-  static withStash<T>(clanIdOrName: string | number, items: Item[], callback: (borrowedItems: Item[]) => T): T
-  static withStash<T>(clanIdOrName: string | number, items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  static withStash<T>(clanIdOrName: string | number, items: any, callback: (borrowedItems: any) => T): T {
+  static withStash<T>(
+    clanIdOrName: string | number,
+    items: Item[],
+    callback: (borrowedItems: Item[]) => T
+  ): T;
+  static withStash<T>(
+    clanIdOrName: string | number,
+    items: Map<Item, number>,
+    callback: (borrowedItems: Map<Item, number>) => T
+  ): T;
+  static withStash<T>(
+    clanIdOrName: string | number,
+    items: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  ): T {
     return Clan._withStash(
       () => Clan.with(clanIdOrName, clan => clan.take(items)),
       (borrowed) => Clan.with(clanIdOrName, clan => clan.put(borrowed)),
@@ -413,8 +424,10 @@ export class Clan {
   withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T
   withStash<T>(items: Map<Item, number>, callback: (borrowedItems: Map<Item, number>) => T): T
   @validate
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  withStash<T>(items: Item[] | Map<Item, number>, callback: (borrowedItems: any) => T): T {
+  withStash<T>(
+    items: Item[] | Map<Item, number>,
+    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): T {
     const map = arrayToCountedMap(items);
     return Clan._withStash(
       () => this.take(map),

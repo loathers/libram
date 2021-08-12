@@ -14,6 +14,7 @@ import {
 } from "kolmafia";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
+import _ from "lodash";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange?: boolean;
@@ -348,32 +349,7 @@ export class Requirement {
   }
 
   merge(other: Requirement): Requirement {
-    const optionsA = this.maximizeOptions();
-    const optionsB = other.maximizeOptions();
-    return new Requirement(
-      [...this.maximizeParameters(), ...other.maximizeParameters()],
-      {
-        ...optionsA,
-        ...optionsB,
-        bonusEquip: new Map([
-          ...(optionsA.bonusEquip?.entries() ?? []),
-          ...(optionsB.bonusEquip?.entries() ?? []),
-        ]),
-        forceEquip: [
-          ...(optionsA.forceEquip ?? []),
-          ...(optionsB.forceEquip ?? []),
-        ],
-        preventEquip: [
-          ...(optionsA.preventEquip ?? []),
-          ...(optionsB.preventEquip ?? []),
-        ],
-        onlySlot: [...(optionsA.onlySlot ?? []), ...(optionsB.onlySlot ?? [])],
-        preventSlot: [
-          ...(optionsA.preventSlot ?? []),
-          ...(optionsB.preventSlot ?? []),
-        ],
-      }
-    );
+    return _.merge(this, other);
   }
 
   static merge(allRequirements: Requirement[]): Requirement {

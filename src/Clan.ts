@@ -204,11 +204,10 @@ export class Clan {
     items: Map<Item, number>,
     callback: (borrowedItems: Map<Item, number>) => T
   ): T;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   static withStash<T>(
     clanIdOrName: string | number,
-    items: any,
-    callback: (borrowedItems: any) => T
+    items: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   ): T {
     return Clan._withStash(
       () => Clan.with(clanIdOrName, (clan) => clan.take(items)),
@@ -460,10 +459,9 @@ export class Clan {
     callback: (borrowedItems: Map<Item, number>) => T
   ): T;
   @validate
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withStash<T>(
     items: Item[] | Map<Item, number>,
-    callback: (borrowedItems: any) => T
+    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any
   ): T {
     const map = arrayToCountedMap(items);
     return Clan._withStash(

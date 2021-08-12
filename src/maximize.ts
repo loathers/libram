@@ -329,3 +329,65 @@ export function maximizeCached(
   maximize(objective, false);
   saveCached(objective, options);
 }
+
+export class Requirement {
+  maximizeParameters_: string[];
+  maximizeOptions_: MaximizeOptions;
+
+  constructor(
+    maximizeParameters_: string[],
+    maximizeOptions_: MaximizeOptions
+  ) {
+    this.maximizeParameters_ = maximizeParameters_;
+    this.maximizeOptions_ = maximizeOptions_;
+  }
+
+  maximizeParameters(): string[] {
+    return this.maximizeParameters_;
+  }
+
+  maximizeOptions(): MaximizeOptions {
+    return this.maximizeOptions_;
+  }
+
+  merge(other: Requirement): Requirement {
+    const optionsA = this.maximizeOptions();
+    const optionsB = other.maximizeOptions();
+    return new Requirement(
+      [...this.maximizeParameters(), ...other.maximizeParameters()],
+      {
+        ...optionsA,
+        ...optionsB,
+        bonusEquip: new Map([
+          ...(optionsA.bonusEquip?.entries() ?? []),
+          ...(optionsB.bonusEquip?.entries() ?? []),
+        ]),
+        forceEquip: [
+          ...(optionsA.forceEquip ?? []),
+          ...(optionsB.forceEquip ?? []),
+        ],
+        preventEquip: [
+          ...(optionsA.preventEquip ?? []),
+          ...(optionsB.preventEquip ?? []),
+        ],
+        onlySlot: [...(optionsA.onlySlot ?? []), ...(optionsB.onlySlot ?? [])],
+        preventSlot: [
+          ...(optionsA.preventSlot ?? []),
+          ...(optionsB.preventSlot ?? []),
+        ],
+      }
+    );
+  }
+
+  static merge(allRequirements: Requirement[]): Requirement {
+    return allRequirements.reduce((x, y) => x.merge(y));
+  }
+}
+
+export function maximizeRequirementsCached(requirements: Requirement[]): void {
+  const compiledRequirements = Requirement.merge(requirements);
+  maximizeCached(
+    compiledRequirements.maximizeParameters(),
+    compiledRequirements.maximizeOptions()
+  );
+}

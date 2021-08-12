@@ -5,6 +5,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
+import { Clan } from "./Clan";
 import { getPlayerFromIdOrName } from "./lib";
 import { $items } from "./template-string";
 
@@ -45,15 +46,15 @@ export default class Dungeon {
     const badLoot = lootList.find((lootItem) => !this.loot.includes(lootItem));
     if (badLoot) {
       throw new Error(
-        `Uh oh buddy, looks like ${badLoot} isn't a valid piece of dungeon loot. You may also have other invalid pieces of dungeon loot in this request. Stop that!`
+        `${badLoot} is not a valid piece of dungeon loot`
       );
     }
     const pageText = visitUrl("clan_basement.php");
     if (!pageText.match(player.name)) {
       throw new Error(
-        `Uh oh buddy, ${
+        `${
           player.name
-        } can't get loot from any dungeons in ${getClanName()}`
+        } cannot be distributed loot from ${getClanName()}`
       );
     }
     const itemNames = xpath(pageText, "//tr/td[2]/b/text()");
@@ -82,23 +83,16 @@ export default class Dungeon {
     const pageText = visitUrl("clan_basement.php");
     if (pageText.includes(this.openImage)) return true;
 
+    const clan = Clan.get();
+
     if (paymentPolicy === "All") {
-      visitUrl(
-        `clan_stash.php?action=contribute&howmuch=${this.openCost}`,
-        true
-      );
+      clan.putMeatInCoffer(this.openCost);
     } else {
-      const stashText = visitUrl("clan_stash.php").match(
-        /Your <b>Clan Coffer<\/b> contains ([0-9,]+) Meat./
-      );
-      const stashMeat = stashText ? parseInt(stashText[1].replace(",", "")) : 0;
+      const stashMeat = clan.getMeatInCoffer();
       const payDifference = this.openCost - stashMeat;
       if (payDifference > 0) {
         if (paymentPolicy === "None") return false;
-        visitUrl(
-          `clan_stash.php?action=contribute&howmuch=${payDifference}`,
-          true
-        );
+        clan.putMeatInCoffer(payDifference);
       }
     }
     visitUrl(`clan_basement.php?action=${this.openAction}`, true);

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 import "core-js/features/array/flat-map";
+>>>>>>> main
 import {
   availableAmount,
   cliExecute,

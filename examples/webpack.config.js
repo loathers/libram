@@ -29,7 +29,11 @@ module.exports = {
         // Include ts, tsx, js, and jsx files.
         test: /\.(ts|js)x?$/,
         // exclude: /node_modules(?!\/(libram|buffer))/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
+        exclude: [
+          /\bcore-js\b/,
+          /\bwebpack\/buildin\b/
+        ],
       },
     ],
   },

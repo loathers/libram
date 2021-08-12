@@ -1,5 +1,3 @@
-import "core-js/features/object/entries";
-
 import {
   extractItems,
   extractMeat,

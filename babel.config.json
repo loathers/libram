@@ -5,8 +5,10 @@
       "@babel/preset-env",
       {
         "targets": {
-          "rhino": "1.7"
-        }
+          "rhino": "1.7.13"
+        },
+        "useBuiltIns": "usage",
+        "corejs": 3
       }
     ]
   ],
@@ -18,5 +20,6 @@
       }
     ],
     "@babel/plugin-proposal-class-properties"
-  ]
+  ],
+  "sourceType": "unambiguous"
 }

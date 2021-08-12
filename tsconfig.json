@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
     "declaration": true,
-    "importHelpers": true,
-    "lib": ["es2019"],
+    "emitDeclarationOnly": true,
+    "lib": [
+      "es2019"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "LF",
@@ -11,8 +13,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "dist",
-    "stripInternal": true,
-    "downlevelIteration": true
+    "stripInternal": true
   },
   "include": ["src/"],
   "typedocOptions": {

@@ -23,6 +23,10 @@ module.exports = {
         test: /\.(ts|js)x?$/,
         // exclude: /node_modules(?!\/(libram|buffer))/,
         loader: 'babel-loader',
+        exclude: [
+          /\bcore-js\b/,
+          /\bwebpack\/buildin\b/
+        ],
       },
     ],
   },

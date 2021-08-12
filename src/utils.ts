@@ -8,7 +8,7 @@ export function parseNumber(n: string): number {
 
 /**
  * Clamp a number between lower and upper bounds.
- * 
+ *
  * @param n Number to clamp.
  * @param min Lower bound.
  * @param max Upper bound.
@@ -19,21 +19,23 @@ export function clamp(n: number, min: number, max: number): number {
 
 /**
  * Split an {@param array} into {@param chunkSize} sized chunks
- * 
+ *
  * @param array Array to split
  * @param chunkSize Size of chunk
  */
 export function chunk<T>(array: T[], chunkSize: number): T[][] {
   const result = [];
 
-  for (let i = 0; i < array.length; i+= chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
     result.push(array.slice(i, i + chunkSize));
   }
 
   return result;
 }
 
-export function arrayToCountedMap<T>(array: T[] | Map<T, number>): Map<T, number> {
+export function arrayToCountedMap<T>(
+  array: T[] | Map<T, number>
+): Map<T, number> {
   if (!Array.isArray(array)) return array;
 
   const map = new Map<T, number>();

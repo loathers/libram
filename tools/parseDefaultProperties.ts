@@ -1,13 +1,22 @@
 import fetch from "node-fetch";
 import * as _importForGlobals from "kolmafia";
 
-import { isBooleanProperty, isFamiliarProperty, isLocationProperty, isMonsterProperty, isNumericOrStringProperty, isNumericProperty, isStatProperty } from "../src/propertyTyping";
+import {
+  isBooleanProperty,
+  isFamiliarProperty,
+  isLocationProperty,
+  isMonsterProperty,
+  isNumericOrStringProperty,
+  isNumericProperty,
+  isStatProperty,
+} from "../src/propertyTyping";
 
-const PROPS_FILE = "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
+const PROPS_FILE =
+  "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
 
 async function main() {
   const response = await fetch(PROPS_FILE);
-  const text = await response.text()
+  const text = await response.text();
   const props = text.split("\n");
 
   const propTypes: { [key: string]: string[] } = {
@@ -47,7 +56,9 @@ async function main() {
   }
 
   Object.entries(propTypes).forEach(([type, values]) => {
-    console.log(`export type ${type} = ${values.map(v => `"${v}"`).join(" | ")};`);
+    console.log(
+      `export type ${type} = ${values.map((v) => `"${v}"`).join(" | ")};`
+    );
   });
 }
 

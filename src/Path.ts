@@ -1,4 +1,4 @@
-import { $classes } from ".";
+import { $classes } from "./template-string";
 
 export class Path {
   name: string;

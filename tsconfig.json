@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": true,
-    "lib": [
-      "es2019"
-    ],
+    "importHelpers": true,
+    "lib": ["es2019"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "newLine": "LF",
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -14,9 +14,7 @@
     "stripInternal": true,
     "downlevelIteration": true
   },
-  "include": [
-    "src/"
-  ],
+  "include": ["src/"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

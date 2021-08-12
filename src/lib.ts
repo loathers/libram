@@ -9,6 +9,8 @@ import {
   fullnessLimit,
   getCampground,
   getCounters,
+  getPlayerId,
+  getPlayerName,
   getRelated,
   haveEffect,
   haveFamiliar,
@@ -423,7 +425,11 @@ export function canUse(item: Item): boolean {
   const path = myPath();
 
   if (path !== "Nuclear Autumn") {
-    if ($items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(item)) {
+    if (
+      $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
+        item
+      )
+    ) {
       return false;
     }
   }
@@ -468,7 +474,11 @@ export function noneToNull<T>(thing: T): T | null {
 export function getAverage(range: string): number {
   if (range.indexOf("-") < 0) return Number(range);
 
-  const [,lower,upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? ["0","0","0"];
+  const [, lower, upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? [
+    "0",
+    "0",
+    "0",
+  ];
 
   return (Number(lower) + Number(upper)) / 2;
 }
@@ -492,4 +502,21 @@ export function getAverageAdventures(item: Item): number {
  */
 export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
+}
+
+export type Player = {
+  name: string;
+  id: number;
+};
+
+/**
+ * Get both the name and id of a player from either their name or id
+ *
+ * @param idOrName Id or name of player
+ * @returns Object containing id and name of player
+ */
+export function getPlayerFromIdOrName(idOrName: number | string): Player {
+  return typeof idOrName === "string"
+    ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
+    : { name: getPlayerName(idOrName), id: idOrName };
 }

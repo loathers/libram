@@ -29,7 +29,7 @@ export default class Kmail {
 
   /**
    * Parses a kmail from KoL's native format
-   * 
+   *
    * @param rawKmail Kmail in the format supplies by api.php
    * @returns Parsed kmail
    */
@@ -39,7 +39,7 @@ export default class Kmail {
 
   /**
    * Returns all of the player's kmails
-   * 
+   *
    * @returns Parsed kmails
    */
   static inbox(): Kmail[] {
@@ -50,14 +50,16 @@ export default class Kmail {
 
   /**
    * Bulk delete kmails
-   * 
+   *
    * @param kmails Kmails to delete
    * @returns Number of kmails deleted
    */
   static delete(kmails: Kmail[]): number {
-    const results = visitUrl(`messages.php?the_action=delete&box=Inbox&pwd&${kmails
-      .map((k) => `sel${k.id}=on`)
-      .join("&")}`);
+    const results = visitUrl(
+      `messages.php?the_action=delete&box=Inbox&pwd&${kmails
+        .map((k) => `sel${k.id}=on`)
+        .join("&")}`
+    );
 
     return Number(results.match(/<td>(\d) messages? deleted.<\/td>/)?.[1] ?? 0);
   }
@@ -68,8 +70,12 @@ export default class Kmail {
     items: Map<Item, number> | Item[],
     meat: number,
     chunkSize: number,
-    constructUrl: (meat: number, itemsQuery: string, chunkSize: number) => string,
-    successString: string,
+    constructUrl: (
+      meat: number,
+      itemsQuery: string,
+      chunkSize: number
+    ) => string,
+    successString: string
   ) {
     let m = meat;
 
@@ -83,13 +89,19 @@ export default class Kmail {
 
     // Split the items to be sent into chunks of max 11 item types
     for (const c of chunks.length > 0 ? chunks : [null]) {
-      const itemsQuery = c === null ? [] : c
-        .map(
-          ([item, quantity], index) =>
-            `whichitem${index + 1}=${toInt(item)}&howmany${index + 1}=${quantity}`
-        );
+      const itemsQuery =
+        c === null
+          ? []
+          : c.map(
+              ([item, quantity], index) =>
+                `whichitem${index + 1}=${toInt(item)}&howmany${
+                  index + 1
+                }=${quantity}`
+            );
 
-      const r = visitUrl(constructUrl(m, itemsQuery.join("&"), itemsQuery.length));
+      const r = visitUrl(
+        constructUrl(m, itemsQuery.join("&"), itemsQuery.length)
+      );
 
       if (r.includes("That player cannot receive Meat or items")) {
         return Kmail.gift(to, message, items, meat);
@@ -129,17 +141,20 @@ export default class Kmail {
       items,
       meat,
       11,
-      (meat, itemsQuery) => `sendmessage.php?action=send&pwd&towho=${to}&message=${message}${itemsQuery ? `&${itemsQuery}` : ""}&sendmeat=${meat}`,
-      ">Message sent.</",
+      (meat, itemsQuery) =>
+        `sendmessage.php?action=send&pwd&towho=${to}&message=${message}${
+          itemsQuery ? `&${itemsQuery}` : ""
+        }&sendmeat=${meat}`,
+      ">Message sent.</"
     );
   }
 
   /**
    * Sends a gift to a player
-   * 
+   *
    * Sends multiple kmails if more than 3 unique item types are attached.
    * Ignores any ungiftable items.
-   * 
+   *
    * @param to The player name or id to receive the gift
    * @param note The note on the outside of the gift
    * @param items The items to be attached
@@ -152,7 +167,7 @@ export default class Kmail {
     message = "",
     items: Map<Item, number> | Item[] = [],
     meat = 0,
-    insideNote = "",
+    insideNote = ""
   ): boolean {
     const baseUrl = `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=${message}&insidenote=${insideNote}&towho=${to}`;
     return Kmail._genericSend(
@@ -161,8 +176,11 @@ export default class Kmail {
       items,
       meat,
       3,
-      (m, itemsQuery, chunkSize) => `${baseUrl}&whichpackage=${chunkSize}${itemsQuery ? `&${itemsQuery}` : ""}&sendmeat=${m}`,
-      ">Package sent.</",
+      (m, itemsQuery, chunkSize) =>
+        `${baseUrl}&whichpackage=${chunkSize}${
+          itemsQuery ? `&${itemsQuery}` : ""
+        }&sendmeat=${m}`,
+      ">Package sent.</"
     );
   }
 

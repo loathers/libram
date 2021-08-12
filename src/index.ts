@@ -1,6 +1,7 @@
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
+export * from "./Dungeon";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";
@@ -14,6 +15,7 @@ export * as console from "./console";
 export * as property from "./property";
 export {
   get,
+  PropertiesManager,
   set,
   setProperties,
   withProperties,

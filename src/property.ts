@@ -215,26 +215,24 @@ export class PropertiesManager {
   }
 
   set(propertiesToSet: Properties): void {
-    this.properties = {
-      ...Object.keys(propertiesToSet).map((propertyName) => [
-        propertyName,
-        get(propertyName),
-      ]),
-      ...this.properties,
-    };
-    Object.entries(propertiesToSet).forEach(([propertyName, propertyValue]) => {
+    for (const [propertyName, propertyValue] of Object.entries(
+      propertiesToSet
+    )) {
+      if (this.properties[propertyName as KnownProperty] === undefined) {
+        this.properties[propertyName as KnownProperty] = get(propertyName);
+      }
       set(propertyName, propertyValue);
-    });
+    }
   }
 
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
     this.set(
       Object.fromEntries(
         Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
-          `choiceAdventure${choiceNumber}` as NumericOrStringProperty,
+          `choiceAdventure${choiceNumber}` as KnownProperty,
           choiceValue,
         ])
-      )
+      ) as Properties
     );
   }
 

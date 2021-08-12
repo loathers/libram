@@ -1,10 +1,4 @@
-import {
-  getClanName,
-  myId,
-  toItem,
-  visitUrl,
-  xpath,
-} from "kolmafia";
+import { getClanName, myId, toItem, visitUrl, xpath } from "kolmafia";
 import { Clan } from "./Clan";
 import { getPlayerFromIdOrName } from "./lib";
 import { $items } from "./template-string";
@@ -45,16 +39,12 @@ export default class Dungeon {
     const lootList = Array.isArray(loot) ? loot : [loot];
     const badLoot = lootList.find((lootItem) => !this.loot.includes(lootItem));
     if (badLoot) {
-      throw new Error(
-        `${badLoot} is not a valid piece of dungeon loot`
-      );
+      throw new Error(`${badLoot} is not a valid piece of dungeon loot`);
     }
     const pageText = visitUrl("clan_basement.php");
     if (!pageText.match(player.name)) {
       throw new Error(
-        `${
-          player.name
-        } cannot be distributed loot from ${getClanName()}`
+        `${player.name} cannot be distributed loot from ${getClanName()}`
       );
     }
     const itemNames = xpath(pageText, "//tr/td[2]/b/text()");

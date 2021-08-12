@@ -9,6 +9,8 @@ import {
   fullnessLimit,
   getCampground,
   getCounters,
+  getPlayerId,
+  getPlayerName,
   getRelated,
   haveEffect,
   haveFamiliar,
@@ -492,4 +494,21 @@ export function getAverageAdventures(item: Item): number {
  */
 export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
+}
+
+export type Player = {
+  name: string;
+  id: number;
+};
+
+/**
+ * Get both the name and id of a player from either their name or id
+ *
+ * @param idOrName Id or name of player
+ * @returns Object containing id and name of player
+ */
+export function getPlayerFromIdOrName(idOrName: number | string): Player {
+  return typeof idOrName === "string"
+    ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
+    : { name: getPlayerName(idOrName), id: idOrName };
 }

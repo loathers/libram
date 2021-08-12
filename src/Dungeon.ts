@@ -1,12 +1,11 @@
 import {
   getClanName,
-  getPlayerId,
-  getPlayerName,
   myId,
   toItem,
   visitUrl,
   xpath,
 } from "kolmafia";
+import { getPlayerFromIdOrName } from "./lib";
 import { $items } from "./template-string";
 
 export default class Dungeon {
@@ -140,14 +139,3 @@ export const Dreadsylvania = new Dungeon(
   "dvmap.gif",
   "foldmap.gif"
 );
-
-type Player = {
-  name: string;
-  id: number;
-};
-
-function getPlayerFromIdOrName(idOrName: number | string): Player {
-  return typeof idOrName === "string"
-    ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
-    : { name: getPlayerName(idOrName), id: idOrName };
-}

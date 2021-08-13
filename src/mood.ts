@@ -133,6 +133,7 @@ class SkillMoodElement extends MoodElement {
     // Deal with song slots.
     if (mood.options.songSlots.length > 0 && isSong(this.skill)) {
       for (const song of getActiveSongs()) {
+        if (song === effect) break;
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
         if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
       }

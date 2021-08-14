@@ -215,18 +215,6 @@ export function haveCounter(
 }
 
 /**
- * Returns the player's total number of Artistic Goth Kid and/or Mini-Hipster
- * wanderers encountered today
- *
- * @category Wanderers
- */
-export function getTotalFamiliarWanderers(): number {
-  const hipsterFights = get("_hipsterAdv");
-  const gothFights = get("_gothKidFights");
-  return hipsterFights + gothFights;
-}
-
-/**
  * Return whether the player has the queried wandering counter
  *
  * @category Wanderers
@@ -277,7 +265,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
     return isVoteWandererNow();
   }
   if (wanderer === Wanderer.Familiar) {
-    return getTotalFamiliarWanderers() < 7;
+    return get("_hipsterAdv") < 7;
   }
   const begin = wanderer + " window begin";
   const end = wanderer + " window end";
@@ -315,7 +303,7 @@ export function getKramcoWandererChance(): number {
  * @category Wanderers
  */
 export function getFamiliarWandererChance(): number {
-  const totalFights = getTotalFamiliarWanderers();
+  const totalFights = get("_hipsterAdv");
   const probability = [0.5, 0.4, 0.3, 0.2];
   if (totalFights < 4) {
     return probability[totalFights];

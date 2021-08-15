@@ -85,7 +85,7 @@ export function flowersAvailableFor(
 }
 
 export function isFull(location = myLocation()): boolean {
-  return flowersIn(myLocation()).length == 2;
+  return flowersIn(location).length == 2;
 }
 
 export const all: () => Flower[] = () => [

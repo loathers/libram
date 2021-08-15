@@ -54,13 +54,13 @@ class Flower {
 
   plant(): boolean {
     if (this.isPlantedHere()) return true;
-    if (flowersIn(myLocation()).length == 2) return false;
+    if (isFull()) return false;
     visitUrl(`choice.php?whichchoice=720&whichoption=1&pwd&plant=${this.id}`);
     return this.isPlantedHere();
   }
 }
 
-export function have() {
+export function have(): boolean {
   return floristAvailable();
 }
 
@@ -82,6 +82,10 @@ export function flowersAvailableFor(
   location: Location = myLocation()
 ): Flower[] {
   return all().filter((flower) => flower.available(location));
+}
+
+export function isFull(location = myLocation()): boolean {
+  return flowersIn(myLocation()).length == 2;
 }
 
 export const all: () => Flower[] = () => [

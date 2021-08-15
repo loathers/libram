@@ -386,11 +386,11 @@ export class Macro {
    * @returns {Macro} This object itself.
    */
   item(...items: (ItemOrName | [ItemOrName, ItemOrName])[]): this {
-    return this.step(
-      ...items.map((itemOrItems) => {
-        return `use ${itemOrItemsBallsMacroName(itemOrItems)}`;
-      })
-    );
+    const macro = new Macro();
+    for (const itemOrItems in items) {
+      macro.step(`use ${itemOrItemsBallsMacroName(itemOrItems)}`);
+    }
+    return this.step(macro);
   }
 
   /**

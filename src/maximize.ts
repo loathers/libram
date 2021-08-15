@@ -353,7 +353,10 @@ export class Requirement {
   }
 
   static merge(allRequirements: Requirement[]): Requirement {
-    return allRequirements.reduce((x, y) => x.merge(y));
+    return allRequirements.reduce(
+      (x, y) => x.merge(y),
+      new Requirement([], {})
+    );
   }
 }
 

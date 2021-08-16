@@ -65,7 +65,7 @@ function itemOrItemsBallsMacroPredicate(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
 ): string {
   if (Array.isArray(itemOrItems)) {
-    return itemOrItems.map(itemOrItemsBallsMacroName).join(" && ");
+    return itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ");
   } else {
     return `hascombatitem ${itemOrItems}`;
   }

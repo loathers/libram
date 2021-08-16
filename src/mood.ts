@@ -131,8 +131,13 @@ class SkillMoodElement extends MoodElement {
     if (initialTurns >= ensureTurns) return true;
 
     // Deal with song slots.
-    if (mood.options.songSlots.length > 0 && isSong(this.skill)) {
-      for (const song of getActiveSongs()) {
+    if (
+      mood.options.songSlots.length > 0 &&
+      isSong(this.skill) &&
+      !have(effect)
+    ) {
+      const activeSongs = getActiveSongs();
+      for (const song of activeSongs) {
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
         if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
       }

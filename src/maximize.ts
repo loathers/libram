@@ -307,6 +307,7 @@ export function maximizeCached(
       .map((slot) => `-${slot}`)
       .sort(),
     ...Array.from(bonusEquip.entries())
+      .filter(([, bonus]) => bonus !== 0)
       .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
       .sort(),
   ].join(", ");

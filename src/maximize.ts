@@ -349,7 +349,7 @@ export class Requirement {
   }
 
   merge(other: Requirement): Requirement {
-    return _.merge(this, other);
+    return merge(this, other);
   }
 
   static merge(allRequirements: Requirement[]): Requirement {

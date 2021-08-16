@@ -340,11 +340,11 @@ export class Requirement {
     this.#maximizeOptions = maximizeOptions;
   }
 
-  maximizeParameters(): string[] {
+  get maximizeParameters(): string[] {
     return this.#maximizeParameters;
   }
 
-  maximizeOptions(): MaximizeOptions {
+  get maximizeOptions(): MaximizeOptions {
     return this.#maximizeOptions;
   }
 
@@ -363,7 +363,7 @@ export class Requirement {
 export function maximizeRequirementsCached(requirements: Requirement[]): void {
   const compiledRequirements = Requirement.merge(requirements);
   maximizeCached(
-    compiledRequirements.maximizeParameters(),
-    compiledRequirements.maximizeOptions()
+    compiledRequirements.maximizeParameters,
+    compiledRequirements.maximizeOptions
   );
 }

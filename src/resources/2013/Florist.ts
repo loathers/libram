@@ -4,21 +4,20 @@ import {
   myLocation,
   visitUrl,
 } from "kolmafia";
+import { EnvironmentType } from "../../lib";
 import { get } from "../../property";
-
-type environment = "outdoor" | "indoor" | "underground" | "underwater";
 
 class Flower {
   name: string;
   id: number;
-  environment: environment;
+  environment: EnvironmentType;
   modifier: string;
   territorial: boolean;
 
   constructor(
     name: string,
     id: number,
-    environment: environment,
+    environment: EnvironmentType,
     modifier: string,
     territorial = false
   ) {
@@ -29,13 +28,24 @@ class Flower {
     this.territorial = territorial;
   }
 
+  plantNamesInZone(location = myLocation()): string[] | undefined {
+    return getFloristPlants()[location.toString()];
+  }
+
+  plantsInZone(location = myLocation()): Flower[] | undefined {
+    return this.plantNamesInZone(location)
+      ?.map((flowerName) => toFlower(flowerName))
+      .filter((flower) => flower !== undefined) as Flower[] | undefined;
+  }
+
   isPlantedHere(location = myLocation()): boolean {
-    return getFloristPlants()[location.toString()].includes(this.name);
+    const plantedHere = this.plantNamesInZone(location)?.includes(this.name);
+    return plantedHere !== undefined && plantedHere;
   }
 
   available(location = myLocation()): boolean {
     return (
-      this.environment === (location.environment as environment) &&
+      this.environment === (location.environment as EnvironmentType) &&
       !get("_floristPlantsUsed").includes(this.name) &&
       !this.isPlantedHere(location)
     );
@@ -43,8 +53,8 @@ class Flower {
 
   dig(): boolean {
     if (!this.isPlantedHere()) return false;
-    const flowers = getFloristPlants()[myLocation().toString()];
-    if (!flowers[2]) return false;
+    const flowers = this.plantNamesInZone();
+    if (!flowers || !flowers[2]) return false;
     const plantNumber = getFloristPlants()[myLocation().toString()].indexOf(
       this.name
     );
@@ -65,7 +75,7 @@ export function have(): boolean {
 }
 
 function toFlower(name: string): Flower | undefined {
-  return all().find((flower) => name === flower.name);
+  return all.find((flower) => name === flower.name);
 }
 
 function flowersIn(location: Location): Flower[] {
@@ -81,55 +91,13 @@ function flowersIn(location: Location): Flower[] {
 export function flowersAvailableFor(
   location: Location = myLocation()
 ): Flower[] {
-  return all().filter((flower) => flower.available(location));
+  return all.filter((flower) => flower.available(location));
 }
 
 export function isFull(location = myLocation()): boolean {
   return flowersIn(location).length == 2;
 }
 
-export const all: () => Flower[] = () => [
-  RabidDogwood,
-  Rutabeggar,
-  RadishRadish,
-  Artichoker,
-  SmokeRa,
-  SkunkCabbage,
-  DeadlyCinnamon,
-  CeleryStalker,
-  LettuceSpray,
-  SeltzerWatercress,
-  WarLily,
-  StealingMagnolia,
-  CannedSpinach,
-  Impatiens,
-  SpiderPlant,
-  RedFern,
-  BamBoo,
-  ArcticMoss,
-  AloeGuvnor,
-  PitcherPlant,
-  BlusteryPuffball,
-  HornOfPlenty,
-  WizardsWig,
-  ShuffleTruffle,
-  DisLichen,
-  LooseMorels,
-  FoulToadstool,
-  Chillterelle,
-  Portlybella,
-  MaxHeadshroom,
-  Spankton,
-  Kelptomaniac,
-  Crookweed,
-  ElectricEelgrass,
-  Duckweed,
-  OrcaOrchid,
-  Sargassum,
-  SubSeaRose,
-  Snori,
-  UpSeaDaisy,
-];
 export const RabidDogwood = new Flower(
   "Rabid Dogwood",
   1,
@@ -362,3 +330,46 @@ export const UpSeaDaisy = new Flower(
   "underwater",
   "+30 Experience"
 );
+
+export const all: Flower[] = [
+  RabidDogwood,
+  Rutabeggar,
+  RadishRadish,
+  Artichoker,
+  SmokeRa,
+  SkunkCabbage,
+  DeadlyCinnamon,
+  CeleryStalker,
+  LettuceSpray,
+  SeltzerWatercress,
+  WarLily,
+  StealingMagnolia,
+  CannedSpinach,
+  Impatiens,
+  SpiderPlant,
+  RedFern,
+  BamBoo,
+  ArcticMoss,
+  AloeGuvnor,
+  PitcherPlant,
+  BlusteryPuffball,
+  HornOfPlenty,
+  WizardsWig,
+  ShuffleTruffle,
+  DisLichen,
+  LooseMorels,
+  FoulToadstool,
+  Chillterelle,
+  Portlybella,
+  MaxHeadshroom,
+  Spankton,
+  Kelptomaniac,
+  Crookweed,
+  ElectricEelgrass,
+  Duckweed,
+  OrcaOrchid,
+  Sargassum,
+  SubSeaRose,
+  Snori,
+  UpSeaDaisy,
+];

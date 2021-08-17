@@ -331,7 +331,7 @@ export const UpSeaDaisy = new Flower(
   "+30 Experience"
 );
 
-export const all: Flower[] = [
+export const all: readonly Flower[] = Object.freeze([
   RabidDogwood,
   Rutabeggar,
   RadishRadish,
@@ -372,4 +372,4 @@ export const all: Flower[] = [
   SubSeaRose,
   Snori,
   UpSeaDaisy,
-];
+]);

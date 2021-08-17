@@ -14,6 +14,7 @@ import {
 } from "kolmafia";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
+import merge from "lodash/merge";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange?: boolean;
@@ -329,4 +330,41 @@ export function maximizeCached(
 
   maximize(objective, false);
   saveCached(objective, options);
+}
+
+export class Requirement {
+  #maximizeParameters: string[];
+  #maximizeOptions: MaximizeOptions;
+
+  constructor(maximizeParameters: string[], maximizeOptions: MaximizeOptions) {
+    this.#maximizeParameters = maximizeParameters;
+    this.#maximizeOptions = maximizeOptions;
+  }
+
+  get maximizeParameters(): string[] {
+    return this.#maximizeParameters;
+  }
+
+  get maximizeOptions(): MaximizeOptions {
+    return this.#maximizeOptions;
+  }
+
+  merge(other: Requirement): Requirement {
+    return merge(this, other);
+  }
+
+  static merge(allRequirements: Requirement[]): Requirement {
+    return allRequirements.reduce(
+      (x, y) => x.merge(y),
+      new Requirement([], {})
+    );
+  }
+}
+
+export function maximizeRequirementsCached(requirements: Requirement[]): void {
+  const compiledRequirements = Requirement.merge(requirements);
+  maximizeCached(
+    compiledRequirements.maximizeParameters,
+    compiledRequirements.maximizeOptions
+  );
 }

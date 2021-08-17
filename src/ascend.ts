@@ -3,7 +3,6 @@ import {
   eudoraItem,
   getCampground,
   getWorkshed,
-  print,
   toInt,
   use,
   visitUrl,

@@ -10,6 +10,19 @@ export class Path {
   liverSize: number; //Defined as the lowest inebriety that makes you unable to drink more, just to make it fifteens across the board
   spleenSize: number;
   classes: Class[];
+
+  /**
+   *
+   * @param name Name of path
+   * @param id Path ID
+   * @param hasAllPerms Does the player have immediate access to all permed skills>
+   * @param hasCampground Does the player have access to the campground?
+   * @param hasTerrarium Does the player have access to terrarium.php
+   * @param stomachSize Maximum fullness achievable at turn 0
+   * @param liverSize The lowest inebriety that makes you unable to drink more
+   * @param spleenSize Maximum spleen achievable at turn 0
+   * @param classes Classes available in this path
+   */
   constructor(
     name: string,
     id: number,

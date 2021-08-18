@@ -29,7 +29,12 @@ export default class Dungeon {
     this.openImage = openImage;
     this.closedImage = closedImage;
   }
-
+  /**
+   *
+   * @param idOrName The player you're trying to distribute to, either as a username or a player ID. Defaults to self.
+   * @param loot The loot you're looking to distribute, specific to this dungeon
+   * @param distributeAllOfAGivenItem For items that you can get multiple of in a dungeon. When true, this will give everything of that ilk to your chosen player.
+   */
   distribute(
     idOrName: number | string = myId(),
     loot: Item | Item[] = this.loot,
@@ -68,7 +73,10 @@ export default class Dungeon {
     const pageText = visitUrl("clan_basement.php");
     return pageText.includes(this.closedImage);
   }
-
+  /**
+   *
+   * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
+   */
   open(paymentPolicy: "None" | "All" | "Difference" = "Difference"): boolean {
     const pageText = visitUrl("clan_basement.php");
     if (pageText.includes(this.openImage)) return true;

@@ -33,6 +33,7 @@ import {
 import { $class, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
+import { property } from ".";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -423,7 +424,11 @@ export function canUse(item: Item): boolean {
   const path = myPath();
 
   if (path !== "Nuclear Autumn") {
-    if ($items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(item)) {
+    if (
+      $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
+        item
+      )
+    ) {
       return false;
     }
   }
@@ -468,7 +473,11 @@ export function noneToNull<T>(thing: T): T | null {
 export function getAverage(range: string): number {
   if (range.indexOf("-") < 0) return Number(range);
 
-  const [,lower,upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? ["0","0","0"];
+  const [, lower, upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? [
+    "0",
+    "0",
+    "0",
+  ];
 
   return (Number(lower) + Number(upper)) / 2;
 }
@@ -492,4 +501,22 @@ export function getAverageAdventures(item: Item): number {
  */
 export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
+}
+
+/**
+ * Return the step as a number for a given quest property.
+ *
+ * @param questName Name of quest property to check.
+ */
+export function questStep(questName: string): number {
+  const stringStep = property.getString(questName);
+  if (stringStep === "unstarted") return -1;
+  else if (stringStep === "started") return 0;
+  else if (stringStep === "finished" || stringStep === "") return 999;
+  else {
+    if (stringStep.substring(0, 4) !== "step") {
+      throw "Quest state parsing error.";
+    }
+    return parseInt(stringStep.substring(4), 10);
+  }
 }

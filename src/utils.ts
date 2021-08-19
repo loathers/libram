@@ -54,3 +54,11 @@ export function countedMapToArray<T>(map: Map<T, number>): T[] {
 export function countedMapToString<T>(map: Map<T, number>): string {
   return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
 }
+
+/**
+ * Sum an array of numbers.
+ * @param addends Addends to sum.
+ */
+export function sum(addends: number[]): number {
+  return addends.reduce((s, n) => s + n, 0);
+}

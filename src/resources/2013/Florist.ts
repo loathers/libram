@@ -95,7 +95,7 @@ export function flowersAvailableFor(
 }
 
 export function isFull(location = myLocation()): boolean {
-  return flowersIn(location).length == 2;
+  return flowersIn(location).length === 3;
 }
 
 export const RabidDogwood = new Flower(

@@ -58,7 +58,19 @@ export function countedMapToString<T>(map: Map<T, number>): string {
 /**
  * Sum an array of numbers.
  * @param addends Addends to sum.
+ * @param mappingFunction function to turn elements into numbers
  */
-export function sum(addends: number[]): number {
-  return addends.reduce((s, n) => s + n, 0);
+
+export function sum<T>(
+  addends: T[],
+  mappingFunction: (element: T) => number
+): number {
+  return addends.reduce(
+    (subtotal, element) => subtotal + mappingFunction(element),
+    0
+  );
+}
+
+export function sumNumbers(addends: number[]): number {
+  return sum(addends, (x: number) => x);
 }

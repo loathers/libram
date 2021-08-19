@@ -286,8 +286,8 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return sum(
-      this.options.mpSources.map((mpSource) => mpSource.availableMpMin())
+    return sum(this.options.mpSources, (mpSource: MpSource) =>
+      mpSource.availableMpMin()
     );
   }
 
@@ -351,8 +351,8 @@ export class Mood {
    */
   execute(ensureTurns = 1): boolean {
     const availableMp = this.availableMp();
-    const totalMpPerTurn = sum(
-      this.elements.map((element) => element.mpCostPerTurn())
+    const totalMpPerTurn = sum(this.elements, (element: MoodElement) =>
+      element.mpCostPerTurn()
     );
     const potentialTurns = Math.floor(availableMp / totalMpPerTurn);
     let completeSuccess = true;

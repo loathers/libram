@@ -33,6 +33,7 @@ import {
 import { $class, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
+import { property } from ".";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -505,4 +506,22 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
   return typeof idOrName === "string"
     ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
     : { name: getPlayerName(idOrName), id: idOrName };
+}
+
+/**
+ * Return the step as a number for a given quest property.
+ *
+ * @param questName Name of quest property to check.
+ */
+export function questStep(questName: string): number {
+  const stringStep = property.getString(questName);
+  if (stringStep === "unstarted") return -1;
+  else if (stringStep === "started") return 0;
+  else if (stringStep === "finished" || stringStep === "") return 999;
+  else {
+    if (stringStep.substring(0, 4) !== "step") {
+      throw "Quest state parsing error.";
+    }
+    return parseInt(stringStep.substring(4), 10);
+  }
 }

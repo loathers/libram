@@ -3,7 +3,6 @@ import {
   eudoraItem,
   getCampground,
   getWorkshed,
-  print,
   toInt,
   use,
   visitUrl,
@@ -84,10 +83,6 @@ export function ascend(
   pet: Item | undefined = undefined
 ): void {
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    print(
-      "It'd really be better if you were already through the gash. Oh well!",
-      "blue"
-    );
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))

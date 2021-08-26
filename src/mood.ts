@@ -364,7 +364,7 @@ export class Mood {
           element.turnIncrement();
         elementTurns = Math.min(ensureTurns, elementPotentialTurns);
       }
-      completeSuccess = element.execute(this, elementTurns) || completeSuccess;
+      completeSuccess = element.execute(this, elementTurns) && completeSuccess;
     }
     return completeSuccess;
   }

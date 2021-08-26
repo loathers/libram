@@ -12,6 +12,16 @@ export default class Dungeon {
   openImage: string;
   closedImage: string;
 
+  /**
+   *
+   * @param name Name of the dungeon in question
+   * @param loot Distributable loot dropped by bosses in dungeon
+   * @param openAction String action used in form submission to open dungeon
+   * @param closeAction String action used in form submission to close dungeon
+   * @param openCost Meat cost of opening dungeon
+   * @param openImage Image text to search clan_basement.php for to check if dungeon is open
+   * @param closedImage Image text to search clan_basement.php for to check if dungeon is closed
+   */
   constructor(
     name: string,
     loot: Item[],
@@ -29,6 +39,7 @@ export default class Dungeon {
     this.openImage = openImage;
     this.closedImage = closedImage;
   }
+
   /**
    *
    * @param idOrName The player you're trying to distribute to, either as a username or a player ID. Defaults to self.

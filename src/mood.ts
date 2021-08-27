@@ -94,6 +94,7 @@ export class MagicalSausages extends MpSource {
 type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
+  reserveMp: number;
 };
 
 abstract class MoodElement {
@@ -261,6 +262,7 @@ export class Mood {
   static defaultOptions: MoodOptions = {
     songSlots: [],
     mpSources: [MagicalSausages.instance, OscusSoda.instance],
+    reserveMp: 0,
   };
 
   /**
@@ -286,8 +288,10 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return sum(this.options.mpSources, (mpSource: MpSource) =>
-      mpSource.availableMpMin()
+    return (
+      sum(this.options.mpSources, (mpSource: MpSource) =>
+        mpSource.availableMpMin()
+      ) + Math.max(myMp() - this.options.reserveMp, 0)
     );
   }
 

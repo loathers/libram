@@ -337,7 +337,7 @@ export class Requirement {
   #maximizeOptions: MaximizeOptions;
 
   /**
-   *
+   * A convenient way of combining maximization parameters and options
    * @param maximizeParameters Parameters you're attempting to maximize
    * @param maximizeOptions Object potentially containing forceEquips, bonusEquips, preventEquips, and preventSlots
    */

@@ -146,7 +146,7 @@ const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
 const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
 
 /**
- *
+ * Sets up various iotms you may want to use in the coming ascension
  * @param ascensionItems An object potentially containing your workshed, garden, and eudora, all as items
  * @param chateauItems An object potentially containing your chateau desk, ceiling, and nightstand, all as items
  * @param throwOnFail If true, this will throw an error when it fails to switch something

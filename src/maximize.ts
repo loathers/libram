@@ -336,6 +336,11 @@ export class Requirement {
   #maximizeParameters: string[];
   #maximizeOptions: MaximizeOptions;
 
+  /**
+   * A convenient way of combining maximization parameters and options
+   * @param maximizeParameters Parameters you're attempting to maximize
+   * @param maximizeOptions Object potentially containing forceEquips, bonusEquips, preventEquips, and preventSlots
+   */
   constructor(maximizeParameters: string[], maximizeOptions: MaximizeOptions) {
     this.#maximizeParameters = maximizeParameters;
     this.#maximizeOptions = maximizeOptions;

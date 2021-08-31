@@ -16,7 +16,7 @@ import {
 const PROPS_FILE =
   "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
 
-const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts")
+const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
 async function main() {
   const response = await fetch(PROPS_FILE);
@@ -63,7 +63,9 @@ async function main() {
 
   Object.entries(propTypes).forEach(([type, values]) => {
     console.log(`Storing ${values.length} props of type ${type}`);
-    contents += `export type ${type} = ${values.map((v) => `"${v}"`).join(" | ")};\n`;
+    contents += `export type ${type} = ${values
+      .map((v) => `"${v}"`)
+      .join(" | ")};\n`;
   });
 
   await writeFile(TYPES_FILE, contents);

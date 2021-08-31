@@ -1,35 +1,72 @@
-import { BooleanProperty, FamiliarProperty, LocationProperty, MonsterProperty, NumericOrStringProperty, NumericProperty, StatProperty, StringProperty } from "./propertyTypes";
+import {
+  BooleanProperty,
+  FamiliarProperty,
+  LocationProperty,
+  MonsterProperty,
+  NumericOrStringProperty,
+  NumericProperty,
+  StatProperty,
+  StringProperty,
+} from "./propertyTypes";
 
-export function isNumericProperty(property: string, value: string): property is NumericProperty {
+export function isNumericProperty(
+  property: string,
+  value: string
+): property is NumericProperty {
   return !isNaN(Number(value)) && !isNaN(parseFloat(value));
 }
 
-const numericOrStringProperties = ["statusEngineering", "statusGalley", "statusMedbay", "statusMorgue", "statusNavigation", "statusScienceLab", "statusSonar", "statusSpecialOps", "statusWasteProcessing"];
+const numericOrStringProperties = [
+  "statusEngineering",
+  "statusGalley",
+  "statusMedbay",
+  "statusMorgue",
+  "statusNavigation",
+  "statusScienceLab",
+  "statusSonar",
+  "statusSpecialOps",
+  "statusWasteProcessing",
+];
 const choiceAdventurePattern = /^choiceAdventure\d+$/;
-export function isNumericOrStringProperty(property: string): property is NumericOrStringProperty {
+export function isNumericOrStringProperty(
+  property: string
+): property is NumericOrStringProperty {
   if (numericOrStringProperties.includes(property)) return true;
   return choiceAdventurePattern.test(property);
 }
 
 const fakeBooleans = ["trackVoteMonster", "_jickJarAvailable"];
-export function isBooleanProperty(property: string, value: string): property is BooleanProperty {
+export function isBooleanProperty(
+  property: string,
+  value: string
+): property is BooleanProperty {
   if (fakeBooleans.includes(property)) return false;
   return ["true", "false"].includes(value);
 }
 
-const otherLocations = ["nextSpookyravenElizabethRoom", "nextSpookyravenStephenRoom", "sourceOracleTarget"];
-export function isLocationProperty(property: string): property is LocationProperty {
+const otherLocations = [
+  "nextSpookyravenElizabethRoom",
+  "nextSpookyravenStephenRoom",
+  "sourceOracleTarget",
+];
+export function isLocationProperty(
+  property: string
+): property is LocationProperty {
   return otherLocations.includes(property) || property.endsWith("Location");
 }
 
 const otherMonsters = ["romanticTarget", "yearbookCameraTarget"];
 const fakeMonsters = ["trackVoteMonster"];
-export function isMonsterProperty(property: string): property is MonsterProperty {
+export function isMonsterProperty(
+  property: string
+): property is MonsterProperty {
   if (otherMonsters.includes(property)) return true;
   return property.endsWith("Monster") && !fakeMonsters.includes(property);
 }
 
-export function isFamiliarProperty(property: string): property is FamiliarProperty {
+export function isFamiliarProperty(
+  property: string
+): property is FamiliarProperty {
   return property.endsWith("Familiar");
 }
 
@@ -38,23 +75,34 @@ export function isStatProperty(property: string): property is StatProperty {
   return statProps.includes(property);
 }
 
-export type KnownProperty = NumericProperty | BooleanProperty | MonsterProperty | LocationProperty | FamiliarProperty | StatProperty | StringProperty | NumericOrStringProperty;
+export type KnownProperty =
+  | NumericProperty
+  | BooleanProperty
+  | MonsterProperty
+  | LocationProperty
+  | FamiliarProperty
+  | StatProperty
+  | StringProperty
+  | NumericOrStringProperty;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PropertyValue<Property, Default = any> = Property extends NumericProperty
+export type PropertyValue<
+  Property,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Default = any
+> = Property extends NumericProperty
   ? number
   : Property extends BooleanProperty
   ? boolean
   : Property extends MonsterProperty
-  ? (Monster | null)
+  ? Monster | null
   : Property extends LocationProperty
-  ? (Location | null)
+  ? Location | null
   : Property extends StringProperty
   ? string
   : Property extends FamiliarProperty
-  ? (Familiar | null)
+  ? Familiar | null
   : Property extends StatProperty
-  ? (Stat | null)
+  ? Stat | null
   : Property extends NumericOrStringProperty
   ? number | string
   : Default;

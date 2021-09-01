@@ -364,12 +364,12 @@ export class Requirement {
       new Requirement([], {})
     );
   }
-}
 
-export function maximizeRequirementsCached(requirements: Requirement[]): void {
-  const compiledRequirements = Requirement.merge(requirements);
-  maximizeCached(
-    compiledRequirements.maximizeParameters,
-    compiledRequirements.maximizeOptions
-  );
+  maximize(): void {
+    maximizeCached(this.maximizeParameters, this.maximizeOptions);
+  }
+
+  static maximize(...requirements: Requirement[]): void {
+    Requirement.merge(requirements).maximize();
+  }
 }

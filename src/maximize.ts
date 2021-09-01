@@ -2,33 +2,38 @@ import {
   availableAmount,
   bjornifyFamiliar,
   canEquip,
+  cliExecute,
   enthroneFamiliar,
   equip,
   equippedAmount,
   equippedItem,
+  isWearingOutfit,
   maximize,
   myBasestat,
   myBjornedFamiliar,
   myEnthronedFamiliar,
   myFamiliar,
+  outfit,
 } from "kolmafia";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
 import merge from "lodash/merge";
 
 export type MaximizeOptions = {
-  updateOnFamiliarChange?: boolean;
-  updateOnCanEquipChanged?: boolean;
-  forceEquip?: Item[];
-  preventEquip?: Item[];
-  bonusEquip?: Map<Item, number>;
-  onlySlot?: Slot[];
-  preventSlot?: Slot[];
+  updateOnFamiliarChange: boolean;
+  updateOnCanEquipChanged: boolean;
+  useOutfitCaching: boolean;
+  forceEquip: Item[];
+  preventEquip: Item[];
+  bonusEquip: Map<Item, number>;
+  onlySlot: Slot[];
+  preventSlot: Slot[];
 };
 
 const defaultMaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
+  useOutfitCaching: true,
   forceEquip: [],
   preventEquip: [],
   bonusEquip: new Map(),
@@ -45,7 +50,9 @@ const defaultMaximizeOptions = {
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
  */
-export function setDefaultMaximizeOptions(options: MaximizeOptions): void {
+export function setDefaultMaximizeOptions(
+  options: Partial<MaximizeOptions>
+): void {
   Object.assign(defaultMaximizeOptions, options);
 }
 
@@ -71,8 +78,72 @@ class CacheEntry {
   }
 }
 
+class OutfitLRUCache {
+  static OUTFIT_PREFIX = "Script Outfit";
+
+  // Current outfits allocated
+  #outfitSlots: CacheEntry[] = [];
+  // Array of indices into #outfitSlots in order of use.
+  #useHistory: number[] = [];
+  #maxSize: number;
+
+  constructor(maxSize: number) {
+    this.#maxSize = maxSize;
+  }
+
+  checkConsistent() {
+    if (
+      this.#useHistory.length !== this.#outfitSlots.length ||
+      !this.#useHistory.sort().every((value, index) => value === index)
+    ) {
+      throw new Error("Outfit cache consistency failed.");
+    }
+  }
+
+  promote(index: number) {
+    this.#useHistory = [index, ...this.#useHistory.filter((i) => i !== index)];
+    this.checkConsistent();
+  }
+
+  get(key: CacheEntry): string | undefined {
+    const index = this.#outfitSlots.indexOf(key);
+    if (index < 0) return undefined;
+    this.promote(index);
+    return `${OutfitLRUCache.OUTFIT_PREFIX} ${index}`;
+  }
+
+  insert(key: CacheEntry): string {
+    let lastUseIndex: number | undefined = undefined;
+    if (this.#outfitSlots.length >= this.#maxSize) {
+      lastUseIndex = this.#useHistory.pop();
+      if (lastUseIndex === undefined) {
+        throw new Error("Outfit cache consistency failed.");
+      }
+      this.#useHistory.splice(0, 0, lastUseIndex);
+      this.#outfitSlots[lastUseIndex] = key;
+      this.checkConsistent();
+      return `${OutfitLRUCache.OUTFIT_PREFIX} ${lastUseIndex}`;
+    } else {
+      const index = this.#outfitSlots.push(key) - 1;
+      this.#useHistory.splice(0, 0, index);
+      this.checkConsistent();
+      return `${OutfitLRUCache.OUTFIT_PREFIX} ${index}`;
+    }
+  }
+}
+
+/**
+ * Save current equipment as KoL-native outfit.
+ * @param name Name of new outfit.
+ */
+function saveOutfit(name: string): void {
+  cliExecute(`outfit save ${name}`);
+}
+
 // Objective cache entries.
 const cachedObjectives: { [string: string]: CacheEntry } = {};
+// Outfit cache entries. Keep 6 by default to avoid cluttering list.
+const outfitCache = new OutfitLRUCache(6);
 // Cache to prevent rescanning all items unnecessarily
 let cachedStats = [0, 0, 0];
 let cachedCanEquipItemCount = 0;
@@ -102,15 +173,14 @@ function canEquipItemCount(): number {
  */
 function checkCache(
   cacheKey: string,
-  updateOnFamiliarChange: boolean,
-  updateOnCanEquipChanged: boolean
+  options: MaximizeOptions
 ): CacheEntry | null {
   const entry = cachedObjectives[cacheKey];
   if (!entry) {
     return null;
   }
 
-  if (updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
+  if (options.updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
     logger.warning(
       "Equipment found in maximize cache but familiar is different."
     );
@@ -118,7 +188,7 @@ function checkCache(
   }
 
   if (
-    updateOnCanEquipChanged &&
+    options.updateOnCanEquipChanged &&
     entry.canEquipItemCount !== canEquipItemCount()
   ) {
     logger.warning(
@@ -134,10 +204,27 @@ function checkCache(
  * Applies equipment that was found in the cache.
  * @param entry The CacheEntry to apply
  */
-function applyCached(entry: CacheEntry): void {
-  for (const [slot, item] of entry.equipment) {
-    if (equippedItem(slot) !== item && availableAmount(item) > 0) {
-      equip(slot, item);
+function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
+  const outfitName = options.useOutfitCaching
+    ? outfitCache.get(entry)
+    : undefined;
+  if (outfitName) {
+    if (!isWearingOutfit(outfitName)) {
+      outfit(outfitName);
+    }
+    const familiarEquip = entry.equipment.get($slot`familiar`);
+    if (familiarEquip) equip(familiarEquip);
+    verifyCached(entry);
+  } else {
+    for (const [slot, item] of entry.equipment) {
+      if (equippedItem(slot) !== item && availableAmount(item) > 0) {
+        equip(slot, item);
+      }
+    }
+    if (verifyCached(entry) && options.useOutfitCaching) {
+      const outfitName = outfitCache.insert(entry);
+      logger.info(`Saving equipment to outfit ${outfitName}.`);
+      saveOutfit(outfitName);
     }
   }
 
@@ -254,12 +341,18 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     }
   }
 
-  cachedObjectives[cacheKey] = new CacheEntry(
+  const entry = new CacheEntry(
     equipment,
     rider,
     myFamiliar(),
     canEquipItemCount()
   );
+  cachedObjectives[cacheKey] = entry;
+  if (options.useOutfitCaching) {
+    const outfitName = outfitCache.insert(entry);
+    logger.info(`Saving equipment to outfit ${outfitName}.`);
+    saveOutfit(outfitName);
+  }
 }
 
 /**
@@ -274,11 +367,10 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
  */
 export function maximizeCached(
   objectives: string[],
-  options: MaximizeOptions = {}
+  options: Partial<MaximizeOptions> = {}
 ): void {
+  const fullOptions = { ...defaultMaximizeOptions, ...options };
   const {
-    updateOnFamiliarChange,
-    updateOnCanEquipChanged,
     forceEquip,
     preventEquip,
     bonusEquip,
@@ -292,7 +384,7 @@ export function maximizeCached(
     bonusEquip: Map<Item, number>;
     onlySlot: Slot[];
     preventSlot: Slot[];
-  } = { ...defaultMaximizeOptions, ...options };
+  } = fullOptions;
 
   // Sort each group in objective to ensure consistent ordering in string
   const objective = [
@@ -313,14 +405,10 @@ export function maximizeCached(
       .sort(),
   ].join(", ");
 
-  const cacheEntry = checkCache(
-    objective,
-    updateOnFamiliarChange,
-    updateOnCanEquipChanged
-  );
+  const cacheEntry = checkCache(objective, fullOptions);
   if (cacheEntry) {
     logger.info("Equipment found in maximize cache, equipping...");
-    applyCached(cacheEntry);
+    applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
       logger.info(`Equipped cached ${objective}`);
       return;
@@ -329,19 +417,22 @@ export function maximizeCached(
   }
 
   maximize(objective, false);
-  saveCached(objective, options);
+  saveCached(objective, fullOptions);
 }
 
 export class Requirement {
   #maximizeParameters: string[];
-  #maximizeOptions: MaximizeOptions;
+  #maximizeOptions: Partial<MaximizeOptions>;
 
   /**
    * A convenient way of combining maximization parameters and options
    * @param maximizeParameters Parameters you're attempting to maximize
    * @param maximizeOptions Object potentially containing forceEquips, bonusEquips, preventEquips, and preventSlots
    */
-  constructor(maximizeParameters: string[], maximizeOptions: MaximizeOptions) {
+  constructor(
+    maximizeParameters: string[],
+    maximizeOptions: Partial<MaximizeOptions>
+  ) {
     this.#maximizeParameters = maximizeParameters;
     this.#maximizeOptions = maximizeOptions;
   }
@@ -350,7 +441,7 @@ export class Requirement {
     return this.#maximizeParameters;
   }
 
-  get maximizeOptions(): MaximizeOptions {
+  get maximizeOptions(): Partial<MaximizeOptions> {
     return this.#maximizeOptions;
   }
 

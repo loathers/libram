@@ -212,6 +212,9 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     if (!isWearingOutfit(outfitName)) {
       outfit(outfitName);
     }
+    const familiarEquip = entry.equipment.get($slot`familiar`);
+    if (familiarEquip) equip(familiarEquip);
+    verifyCached(entry);
   } else {
     for (const [slot, item] of entry.equipment) {
       if (equippedItem(slot) !== item && availableAmount(item) > 0) {

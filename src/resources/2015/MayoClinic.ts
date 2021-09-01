@@ -11,8 +11,10 @@ export const Mayo = {
 
 export function mindMayo(mayo: Item, quantity: number): void {
   if (getWorkshed() !== $item`portable Mayo Clinic`) return;
+  if (!Object.values(Mayo).includes(mayo))
+    throw `That is not mayo, I'm afraid.`;
   if (get("mayoInMouth") && get("mayoInMouth") !== mayo.name)
-    throw `You used a bad mayo, my friend!`; //Is this what we want?
+    throw `Your mouth is already full and it is not what you want.`; //Is this what we want?
   retrieveItem(quantity, mayo);
   if (!have($item`Mayo Minder™`)) buy($item`Mayo Minder™`);
   if (get("mayoMinderSetting") !== mayo.name) {

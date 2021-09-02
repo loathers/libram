@@ -353,11 +353,19 @@ export class Requirement {
   get maximizeOptions(): MaximizeOptions {
     return this.#maximizeOptions;
   }
+  /**
+   * Merges two requirements, concanating relevant arrays. Typically used in static form.
+   * @param other Requirement to merge with.
+   */
 
   merge(other: Requirement): Requirement {
     return merge(this, other);
   }
 
+  /**
+   * Merges a set of requirements together, starting with an empty requirement.
+   * @param allRequirements Requirements to merge
+   */
   static merge(allRequirements: Requirement[]): Requirement {
     return allRequirements.reduce(
       (x, y) => x.merge(y),
@@ -365,10 +373,17 @@ export class Requirement {
     );
   }
 
+  /**
+   * Runs maximizeCached, using the maximizeParameters and maximizeOptions contained by this requirement.
+   */
   maximize(): void {
     maximizeCached(this.maximizeParameters, this.maximizeOptions);
   }
 
+  /**
+   * Merges requirements, and then runs maximizeCached on the combined requirement.
+   * @param requirements Requirements to maximize on
+   */
   static maximize(...requirements: Requirement[]): void {
     Requirement.merge(requirements).maximize();
   }

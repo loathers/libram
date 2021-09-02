@@ -23,3 +23,4 @@ export {
   withChoices,
   withChoice,
 } from "./property";
+export * from "./freerun";

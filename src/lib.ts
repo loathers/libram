@@ -26,30 +26,15 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
-  print,
-  restoreMp,
-  retrieveItem,
   spleenLimit,
   toItem,
   toSkill,
   totalTurnsPlayed,
-  useFamiliar,
-  visitUrl,
 } from "kolmafia";
 
-import {
-  $class,
-  $effect,
-  $familiar,
-  $item,
-  $items,
-  $skill,
-} from "./template-string";
+import { $class, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
-import { Requirement } from "./maximize";
-import { Macro } from "./combat";
-import { Bandersnatch } from "./resources";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -534,8 +519,6 @@ export function ensureEffect(ef: Effect, turns = 1): void {
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
       throw `Failed to get effect ${ef.name}.`;
     }
-  } else {
-    print(`Already have effect ${ef.name}.`);
   }
 }
 
@@ -547,7 +530,7 @@ const MALL_VALUE_MODIFIER = 0.9;
  * Returns the average value--based on mallprice and autosell--of a collection of items
  * @param items items whose value you care about
  */
-export function saleValue(...items: Item[]): number {
+export function getSaleValue(...items: Item[]): number {
   return (
     items
       .map((item) => {
@@ -568,228 +551,5 @@ export function saleValue(...items: Item[]): number {
         return valueMap.get(item) || 0;
       })
       .reduce((s, price) => s + price, 0) / items.length
-  );
-}
-
-export class FreeRun {
-  name: string;
-  available: () => boolean;
-  macro: Macro;
-  requirement?: Requirement;
-  prepare?: () => void;
-
-  constructor(
-    name: string,
-    available: () => boolean,
-    macro: Macro,
-    requirement?: Requirement,
-    prepare?: () => void
-  ) {
-    this.name = name;
-    this.available = available;
-    this.macro = macro;
-    this.requirement = requirement;
-    this.prepare = prepare;
-  }
-}
-
-const freeRuns: FreeRun[] = [
-  /*
-  new freeRun(
-     () => {
-      if (getWorkshed() !== $item`Asdon Martin keyfob`) return false;
-      const banishes = get("banishedMonsters").split(":");
-      const bumperIndex = banishes
-        .map((string) => string.toLowerCase())
-        .indexOf("spring-loaded front bumper");
-      if (bumperIndex === -1) return true;
-      return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
-    },
-    () => {
-      fillAsdonMartinTo(50);
-      retrieveItem(1, $item`louder than bomb`);
-    },
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item($item`Louder Than Bomb`)
-  ),
-  code removed because of boss monsters
-  */
-
-  new FreeRun(
-    "Bander",
-    () =>
-      have($familiar`Frumious Bandersnatch`) &&
-      (have($effect`Ode to Booze`) || getSongCount() < getSongLimit()) &&
-      Bandersnatch.getRemainingRunaways() > 0,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
-      "runaway"
-    ),
-    new Requirement(["Familiar Weight"], {}),
-    () => {
-      useFamiliar($familiar`Frumious Bandersnatch`);
-      ensureEffect($effect`Ode to Booze`);
-    }
-  ),
-
-  new FreeRun(
-    "Boots",
-    () =>
-      have($familiar`Pair of Stomping Boots`) &&
-      Bandersnatch.getRemainingRunaways() > 0,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
-      "runaway"
-    ),
-    new Requirement(["Familiar Weight"], {}),
-    () => useFamiliar($familiar`Pair of Stomping Boots`)
-  ),
-
-  new FreeRun(
-    "Snokebomb",
-    () => get("_snokebombUsed") < 3 && have($skill`Snokebomb`),
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`Snokebomb`
-    ),
-    undefined,
-    () => restoreMp(50)
-  ),
-
-  new FreeRun(
-    "Hatred",
-    () => get("_feelHatredUsed") < 3 && have($skill`Emotionally Chipped`),
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`Feel Hatred`
-    )
-  ),
-
-  new FreeRun(
-    "KGB",
-    () =>
-      have($item`Kremlin's Greatest Briefcase`) &&
-      get("_kgbTranquilizerDartUses") < 3,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`KGB tranquilizer dart`
-    ),
-    new Requirement([], { forceEquip: $items`Kremlin's Greatest Briefcase` })
-  ),
-
-  new FreeRun(
-    "Latte",
-    () => have($item`latte lovers member's mug`) && !get("_latteBanishUsed"),
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      "Throw Latte on Opponent"
-    ),
-    new Requirement([], { forceEquip: $items`latte lovers member's mug` })
-  ),
-
-  new FreeRun(
-    "Docbag",
-    () => have($item`Lil' Doctor™ bag`) && get("_reflexHammerUsed") < 3,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`Reflex Hammer`
-    ),
-    new Requirement([], { forceEquip: $items`Lil' Doctor™ bag` })
-  ),
-
-  new FreeRun(
-    "Middle Finger",
-    () =>
-      have($item`mafia middle finger ring`) &&
-      !get("_mafiaMiddleFingerRingUsed"),
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`Show them your ring`
-    ),
-    new Requirement([], { forceEquip: $items`mafia middle finger ring` })
-  ),
-
-  new FreeRun(
-    "VMask",
-    () => have($item`V for Vivala mask`) && !get("_vmaskBanisherUsed"),
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      $skill`Creepy Grin`
-    ),
-    new Requirement([], { forceEquip: $items`V for Vivala mask` }),
-    () => restoreMp(30)
-  ),
-
-  new FreeRun(
-    "Stinkeye",
-    () =>
-      getFoldGroup($item`stinky cheese diaper`).some((item) => have(item)) &&
-      !get("_stinkyCheeseBanisherUsed"),
-
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      "Give Your Opponent the Stinkeye"
-    ),
-    new Requirement([], { forceEquip: $items`stinky cheese eye` }),
-    () => {
-      if (!have($item`stinky cheese eye`)) cliExecute(`fold stinky cheese eye`);
-    }
-  ),
-
-  new FreeRun(
-    "Navel Ring",
-    () => have($item`navel ring of navel gazing`) && get("_navelRunaways") < 3,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
-      "runaway"
-    ),
-    new Requirement([], { forceEquip: $items`navel ring of navel gazing` })
-  ),
-
-  new FreeRun(
-    "GAP",
-    () => have($item`Greatest American Pants`) && get("_navelRunaways") < 3,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
-      "runaway"
-    ),
-    new Requirement([], { forceEquip: $items`Greatest American Pants` })
-  ),
-
-  new FreeRun(
-    "Scrapbook",
-    () => {
-      visitUrl("desc_item.php?whichitem=463063785");
-      return have($item`familiar scrapbook`) && get("scrapbookCharges") >= 100;
-    },
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
-      "Show Your Boring Familiar Pictures"
-    ),
-    new Requirement([], { forceEquip: $items`familiar scrapbook` })
-  ),
-
-  new FreeRun(
-    "Parasol",
-    () =>
-      have($item`peppermint parasol`) &&
-      get("parasolUsed") < 9 &&
-      get("_navelRunaways") < 3,
-    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
-      $item`peppermint parasol`
-    )
-  ),
-];
-
-const cheapestRunSource = $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
-  (a, b) => mallPrice(a) - mallPrice(b)
-)[0];
-
-const cheapestItemRun = new FreeRun(
-  "Cheap Combat Item",
-  () => retrieveItem(cheapestRunSource),
-  Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
-    cheapestRunSource
-  ),
-  undefined,
-  () => retrieveItem(cheapestRunSource)
-);
-
-export function findRun(
-  useFamiliar = true,
-  buyStuff = true
-): FreeRun | undefined {
-  return (
-    freeRuns.find(
-      (run) =>
-        run.available() &&
-        (useFamiliar || !["Bander", "Boots"].includes(run.name))
-    ) ?? (buyStuff ? cheapestItemRun : undefined)
   );
 }

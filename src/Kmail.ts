@@ -18,12 +18,12 @@ type RawKmail = {
 };
 
 export default class Kmail {
-  id: number;
-  date: Date;
-  type: "normal";
-  senderId: number;
-  senderName: string;
-  rawMessage: string;
+  readonly id: number;
+  readonly date: Date;
+  readonly type: "normal";
+  readonly senderId: number;
+  readonly senderName: string;
+  readonly rawMessage: string;
 
   /**
    * Parses a kmail from KoL's native format

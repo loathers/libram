@@ -23,7 +23,7 @@ export default class Kmail {
   type: "normal";
   senderId: number;
   senderName: string;
-  message: string;
+  rawMessage: string;
 
   /**
    * Parses a kmail from KoL's native format
@@ -42,7 +42,7 @@ export default class Kmail {
    */
   static inbox(): Kmail[] {
     return (JSON.parse(
-      visitUrl("api.php?what=kmail&for=ASSistant")
+      visitUrl("api.php?what=kmail&for=libram")
     ) as RawKmail[]).map(Kmail.parse);
   }
 
@@ -188,7 +188,7 @@ export default class Kmail {
     this.type = rawKmail.type as Kmail["type"];
     this.senderId = Number(rawKmail.fromid);
     this.senderName = rawKmail.fromname;
-    this.message = rawKmail.message;
+    this.rawMessage = rawKmail.message;
   }
 
   /**
@@ -198,6 +198,14 @@ export default class Kmail {
    */
   delete(): boolean {
     return Kmail.delete([this]) === 1;
+  }
+
+  /**
+   * Message contents without any HTML from items or meat
+   */
+  get message(): string {
+    const match = this.rawMessage.match(/^(.*?)</);
+    return match ? match[1] : this.rawMessage;
   }
 
   /**

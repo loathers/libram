@@ -1,5 +1,6 @@
 import { buy, getWorkshed, retrieveItem, toInt, use } from "kolmafia";
 import { $item, get, have } from "../..";
+import logger from "../../logger";
 import { withChoice } from "../../property";
 
 export const Mayo = {
@@ -9,15 +10,26 @@ export const Mayo = {
   flex: $item`Mayoflex`,
 };
 
-export function mindMayo(mayo: Item, quantity: number): void {
-  if (getWorkshed() !== $item`portable Mayo Clinic`) return;
-  if (!Object.values(Mayo).includes(mayo))
-    throw `That is not mayo, I'm afraid.`;
-  if (get("mayoInMouth") && get("mayoInMouth") !== mayo.name)
-    throw `Your mouth is already full and it is not what you want.`; //Is this what we want?
+/**
+ * Sets mayo minder to a particular mayo, and ensures you have enough of it.
+ * @param mayo Mayo to use
+ * @param quantity Quantity to ensure
+ */
+
+export function setMayoMinder(mayo: Item, quantity = 1): boolean {
+  if (getWorkshed() !== $item`portable Mayo Clinic`) return false;
+  if (!Object.values(Mayo).includes(mayo)) {
+    logger.error("Invalid mayo selected");
+    return false;
+  }
+  if (get("mayoInMouth") && get("mayoInMouth") !== mayo.name) {
+    logger.error("Currently have incorrect mayo in mouth");
+    return false;
+  }
   retrieveItem(quantity, mayo);
   if (!have($item`Mayo Minder™`)) buy($item`Mayo Minder™`);
   if (get("mayoMinderSetting") !== mayo.name) {
     withChoice(1076, toInt(mayo) - 8260, () => use($item`Mayo Minder™`));
   }
+  return get("mayoMinderSetting") === mayo.name;
 }

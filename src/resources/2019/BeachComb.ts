@@ -1,8 +1,8 @@
-import { ensureEffect } from "../..";
+import { ensureEffect, have } from "../../lib";
 import { getString } from "../../property";
 import { $effect } from "../../template-string";
 
-const heads = [
+export const headBuffs = [
   $effect`Hot-Headed`,
   $effect`Cold as Nice`,
   $effect`A Brush with Grossness`,
@@ -14,12 +14,13 @@ const heads = [
   $effect`Resting Beach Face`,
   $effect`Do I Know You From Somewhere?`,
   $effect`You Learned Something Maybe!`,
-];
+] as const;
 
-export function getHead(effect: Effect): void {
-  if (!heads.includes(effect)) return;
-  const headNumber = 1 + heads.indexOf(effect);
+export function tryHead(effect: Effect): boolean {
+  if (!headBuffs.includes(effect)) return false;
+  const headNumber = 1 + headBuffs.indexOf(effect);
   if (getString("_beachHeadsUsed").split(",").includes(headNumber.toString()))
-    return;
+    return false;
   ensureEffect(effect);
+  return have(effect);
 }

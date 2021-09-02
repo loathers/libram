@@ -1,6 +1,7 @@
 /** @module GeneralLibrary */
 import {
   appearanceRates,
+  autosellPrice,
   availableAmount,
   booleanModifier,
   cliExecute,
@@ -15,6 +16,7 @@ import {
   haveServant,
   haveSkill,
   inebrietyLimit,
+  mallPrice,
   myEffects,
   myFamiliar,
   myFullness,
@@ -505,4 +507,36 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
   return typeof idOrName === "string"
     ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
     : { name: getPlayerName(idOrName), id: idOrName };
+}
+
+const valueMap: Map<Item, number> = new Map();
+
+const MALL_VALUE_MODIFIER = 0.9;
+
+/**
+ * Returns the average value--based on mallprice and autosell--of a collection of items
+ * @param items items whose value you care about
+ */
+export function saleValue(...items: Item[]): number {
+  return (
+    items
+      .map((item) => {
+        if (valueMap.has(item)) return valueMap.get(item) || 0;
+        if (item.discardable) {
+          valueMap.set(
+            item,
+            mallPrice(item) > Math.max(2 * autosellPrice(item), 100)
+              ? MALL_VALUE_MODIFIER * mallPrice(item)
+              : autosellPrice(item)
+          );
+        } else {
+          valueMap.set(
+            item,
+            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0
+          );
+        }
+        return valueMap.get(item) || 0;
+      })
+      .reduce((s, price) => s + price, 0) / items.length
+  );
 }

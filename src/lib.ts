@@ -515,10 +515,8 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
-    if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
+    if (!cliExecute(ef.default) || !have(ef)) {
       throw `Failed to get effect ${ef.name}.`;
     }
-  } else {
-    print(`Already have effect ${ef.name}.`);
   }
 }

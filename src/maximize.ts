@@ -82,7 +82,7 @@ class OutfitLRUCache {
 
   // Current outfits allocated
   #outfitSlots: CacheEntry[] = [];
-  // Array of indices into #outfitSlots in order of use.
+  // Array of indices into #outfitSlots in order of use. Most recent at the front.
   #useHistory: number[] = [];
   #maxSize: number;
 
@@ -93,7 +93,7 @@ class OutfitLRUCache {
   checkConsistent() {
     if (
       this.#useHistory.length !== this.#outfitSlots.length ||
-      !this.#useHistory.sort().every((value, index) => value === index)
+      ![...this.#useHistory].sort().every((value, index) => value === index)
     ) {
       throw new Error("Outfit cache consistency failed.");
     }

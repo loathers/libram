@@ -9,5 +9,5 @@ export * as TunnelOfLove from "./2017/TunnelOfLove";
 export * as WinterGarden from "./2014/WinterGarden";
 export * as Witchess from "./2016/Witchess";
 export * as Guzzlr from "./2020/Guzzlr";
-
+export * as MayoClinic from "./2015/MayoClinic";
 export * from "./putty-likes";

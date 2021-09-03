@@ -1,4 +1,5 @@
-import { ensureEffect, have } from "../../lib";
+import { cliExecute } from "kolmafia";
+import { have } from "../../lib";
 import { getString } from "../../property";
 import { $effect } from "../../template-string";
 
@@ -21,6 +22,6 @@ export function tryHead(effect: Effect): boolean {
   const headNumber = 1 + headBuffs.indexOf(effect);
   if (getString("_beachHeadsUsed").split(",").includes(headNumber.toString()))
     return false;
-  ensureEffect(effect);
+  cliExecute(effect.default);
   return have(effect);
 }

@@ -24,7 +24,6 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
-  print,
   spleenLimit,
   toItem,
   toSkill,
@@ -506,17 +505,4 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
   return typeof idOrName === "string"
     ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
     : { name: getPlayerName(idOrName), id: idOrName };
-}
-
-/**
- * Tries to get an effect using the default method
- * @param ef effect to try to get
- * @param turns turns to aim for; default of 1
- */
-export function ensureEffect(ef: Effect, turns = 1): void {
-  if (haveEffect(ef) < turns) {
-    if (!cliExecute(ef.default) || !have(ef)) {
-      throw `Failed to get effect ${ef.name}.`;
-    }
-  }
 }

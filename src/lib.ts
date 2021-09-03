@@ -509,6 +509,13 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
     : { name: getPlayerName(idOrName), id: idOrName };
 }
 
+export class EnsureError extends Error {
+  constructor(cause: Item | Familiar | Effect) {
+    super(`Failed to ensure ${cause.name}!`);
+    this.name = "Ensure Error";
+  }
+}
+
 /**
  * Tries to get an effect using the default method
  * @param ef effect to try to get
@@ -517,7 +524,7 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
-      throw `Failed to get effect ${ef.name}.`;
+      throw EnsureError;
     }
   }
 }

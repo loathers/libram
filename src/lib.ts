@@ -524,7 +524,7 @@ export class EnsureError extends Error {
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
-      throw EnsureError;
+      throw new EnsureError(ef);
     }
   }
 }

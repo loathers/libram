@@ -13,6 +13,7 @@ export * from "./Path";
 export { default as logger, LogLevel } from "./logger";
 export * as console from "./console";
 export * as property from "./property";
+export * from "./utils";
 export {
   get,
   PropertiesManager,

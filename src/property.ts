@@ -6,9 +6,10 @@ import {
   isMonsterProperty,
   isNumericProperty,
   KnownProperty,
-  NumericOrStringProperty,
   PropertyValue,
 } from "./propertyTyping";
+
+import { NumericOrStringProperty } from "./propertyTypes";
 
 const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T

@@ -12,6 +12,16 @@ export default class Dungeon {
   openImage: string;
   closedImage: string;
 
+  /**
+   * Creates dungeon object for managing clan dungeons
+   * @param name Name of the dungeon in question
+   * @param loot Distributable loot dropped by bosses in dungeon
+   * @param openAction String action used in form submission to open dungeon
+   * @param closeAction String action used in form submission to close dungeon
+   * @param openCost Meat cost of opening dungeon
+   * @param openImage Image text to search clan_basement.php for to check if dungeon is open
+   * @param closedImage Image text to search clan_basement.php for to check if dungeon is closed
+   */
   constructor(
     name: string,
     loot: Item[],
@@ -30,6 +40,12 @@ export default class Dungeon {
     this.closedImage = closedImage;
   }
 
+  /**
+   * Distributes loot from given dungeon
+   * @param idOrName The player you're trying to distribute to, either as a username or a player ID. Defaults to self.
+   * @param loot The loot you're looking to distribute, specific to this dungeon
+   * @param distributeAllOfAGivenItem For items that you can get multiple of in a dungeon. When true, this will give everything of that ilk to your chosen player.
+   */
   distribute(
     idOrName: number | string = myId(),
     loot: Item | Item[] = this.loot,
@@ -68,7 +84,10 @@ export default class Dungeon {
     const pageText = visitUrl("clan_basement.php");
     return pageText.includes(this.closedImage);
   }
-
+  /**
+   * Opens clan dungeon and, if relevant, pays meat to do so
+   * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
+   */
   open(paymentPolicy: "None" | "All" | "Difference" = "Difference"): boolean {
     const pageText = visitUrl("clan_basement.php");
     if (pageText.includes(this.openImage)) return true;

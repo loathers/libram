@@ -24,7 +24,7 @@ import {
 import { getActiveSongs, have, isSong } from "./lib";
 import { get } from "./property";
 import { $item, $skill } from "./template-string";
-import { clamp } from "./utils";
+import { clamp, sum } from "./utils";
 
 export abstract class MpSource {
   usesRemaining(): number | null {
@@ -94,6 +94,7 @@ export class MagicalSausages extends MpSource {
 type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
+  reserveMp: number;
 };
 
 abstract class MoodElement {
@@ -261,6 +262,7 @@ export class Mood {
   static defaultOptions: MoodOptions = {
     songSlots: [],
     mpSources: [MagicalSausages.instance, OscusSoda.instance],
+    reserveMp: 0,
   };
 
   /**
@@ -286,9 +288,11 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return this.options.mpSources
-      .map((mpSource) => mpSource.availableMpMin())
-      .reduce((x, y) => x + y, 0);
+    return (
+      sum(this.options.mpSources, (mpSource: MpSource) =>
+        mpSource.availableMpMin()
+      ) + Math.max(myMp() - this.options.reserveMp, 0)
+    );
   }
 
   moreMp(minimumTarget: number): void {
@@ -351,9 +355,9 @@ export class Mood {
    */
   execute(ensureTurns = 1): boolean {
     const availableMp = this.availableMp();
-    const totalMpPerTurn = this.elements
-      .map((element) => element.mpCostPerTurn())
-      .reduce((x, y) => x + y, 0);
+    const totalMpPerTurn = sum(this.elements, (element: MoodElement) =>
+      element.mpCostPerTurn()
+    );
     const potentialTurns = Math.floor(availableMp / totalMpPerTurn);
     let completeSuccess = true;
     for (const element of this.elements) {
@@ -364,7 +368,7 @@ export class Mood {
           element.turnIncrement();
         elementTurns = Math.min(ensureTurns, elementPotentialTurns);
       }
-      completeSuccess = element.execute(this, elementTurns) || completeSuccess;
+      completeSuccess = element.execute(this, elementTurns) && completeSuccess;
     }
     return completeSuccess;
   }

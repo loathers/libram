@@ -3,7 +3,6 @@ import {
   eudoraItem,
   getCampground,
   getWorkshed,
-  print,
   toInt,
   use,
   visitUrl,
@@ -75,6 +74,16 @@ function toMoonId(moon: string | number, playerClass: Class): number {
   }
 }
 
+/**
+ * Hops the gash, perming no skills
+ * @param path path of choice, as a Path object--these exist as properties of Paths
+ * @param playerClass Your class of choice for this ascension
+ * @param lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
+ * @param moon Your moon sign as a string, or the zone you're looking for as a string
+ * @param consumable From the astral deli. Pick the container item, not the product.
+ * @param pet From the astral pet store.
+ */
+
 export function ascend(
   path: Path,
   playerClass: Class,
@@ -84,10 +93,6 @@ export function ascend(
   pet: Item | undefined = undefined
 ): void {
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    print(
-      "It'd really be better if you were already through the gash. Oh well!",
-      "blue"
-    );
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
@@ -135,6 +140,12 @@ const desks = $items`fancy stationery set, Swiss piggy bank, continental juice b
 const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
 const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
 
+/**
+ * Sets up various iotms you may want to use in the coming ascension
+ * @param ascensionItems An object potentially containing your workshed, garden, and eudora, all as items
+ * @param chateauItems An object potentially containing your chateau desk, ceiling, and nightstand, all as items
+ * @param throwOnFail If true, this will throw an error when it fails to switch something
+ */
 export function prepareAscension(
   ascensionItems?: {
     workshed?: Item;

@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.2.7",
+  "version": "0.3.2",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -37,7 +37,7 @@
     "babel-loader": "^8.2.2",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-libram": "^0.1.6",
+    "eslint-plugin-libram": "^0.1.9",
     "husky": "^4.3.6",
     "lint-staged": ">=10",
     "node-fetch": "^2.6.1",
@@ -51,7 +51,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.14.9",
     "core-js": "3.15.2",
-    "kolmafia": "^1.1.2",
+    "kolmafia": "^1.2.0",
     "lodash": "^4.17.21"
   },
   "husky": {

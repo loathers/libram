@@ -560,3 +560,12 @@ export function getSaleValue(...items: Item[]): number {
       .reduce((s, price) => s + price, 0) / items.length
   );
 }
+
+export const Environment = {
+  Outdoor: "outdoor",
+  Indoor: "indoor",
+  Underground: "underground",
+  Underwater: "underwater",
+} as const;
+
+export type EnvironmentType = typeof Environment[keyof typeof Environment];

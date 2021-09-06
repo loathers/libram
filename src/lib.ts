@@ -506,3 +506,12 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
     ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
     : { name: getPlayerName(idOrName), id: idOrName };
 }
+
+export const Environment = {
+  Outdoor: "outdoor",
+  Indoor: "indoor",
+  Underground: "underground",
+  Underwater: "underwater",
+} as const;
+
+export type EnvironmentType = typeof Environment[keyof typeof Environment];

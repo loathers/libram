@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "dist",
-    "stripInternal": true
+    "stripInternal": true,
+    "resolveJsonModule": true
   },
   "include": ["src/"],
   "typedocOptions": {

@@ -1,6 +1,29 @@
-import { booleanModifier, classModifier, effectModifier, numericModifier, skillModifier, statModifier, stringModifier } from "kolmafia";
+import {
+  booleanModifier,
+  classModifier,
+  effectModifier,
+  numericModifier,
+  skillModifier,
+  statModifier,
+  stringModifier,
+} from "kolmafia";
 
-import { BooleanModifier, booleanModifiers, ClassModifier, classModifiers, EffectModifier, effectModifiers, NumericModifier, numericModifiers, SkillModifier, skillModifiers, StatModifier, statModifiers, StringModifier, stringModifiers } from "./modifierTypes";
+import {
+  BooleanModifier,
+  booleanModifiers,
+  ClassModifier,
+  classModifiers,
+  EffectModifier,
+  effectModifiers,
+  NumericModifier,
+  numericModifiers,
+  SkillModifier,
+  skillModifiers,
+  StatModifier,
+  statModifiers,
+  StringModifier,
+  stringModifiers,
+} from "./modifierTypes";
 
 function isBooleanModifier(name: string): name is BooleanModifier {
   return booleanModifiers.includes(name as BooleanModifier);
@@ -30,16 +53,34 @@ function isStatModifier(name: string): name is StatModifier {
   return statModifiers.includes(name as StatModifier);
 }
 
-export function get(name: BooleanModifier, subject?: string | Item | Effect): boolean
-export function get(name: ClassModifier, subject: string | Item): Class
-export function get(name: EffectModifier, subject: string | Item): Effect
-export function get(name: NumericModifier, subject?: string | Item | Effect | Skill | Familiar): number
-export function get(name: SkillModifier, subject: string | Item): Skill
-export function get(name: StringModifier, subject?: string | Item): string
-export function get(name: StatModifier, subject: Effect): Stat
-export function get(name: BooleanModifier | ClassModifier | EffectModifier | NumericModifier | SkillModifier | StringModifier | StatModifier, subject?: string | Item | Effect | Skill | Familiar): unknown {
+export function get(
+  name: BooleanModifier,
+  subject?: string | Item | Effect
+): boolean;
+export function get(name: ClassModifier, subject: string | Item): Class;
+export function get(name: EffectModifier, subject: string | Item): Effect;
+export function get(
+  name: NumericModifier,
+  subject?: string | Item | Effect | Skill | Familiar
+): number;
+export function get(name: SkillModifier, subject: string | Item): Skill;
+export function get(name: StringModifier, subject?: string | Item): string;
+export function get(name: StatModifier, subject: Effect): Stat;
+export function get(
+  name:
+    | BooleanModifier
+    | ClassModifier
+    | EffectModifier
+    | NumericModifier
+    | SkillModifier
+    | StringModifier
+    | StatModifier,
+  subject?: string | Item | Effect | Skill | Familiar
+): unknown {
   if (isBooleanModifier(name)) {
-    return (subject === undefined) ? booleanModifier(name) : booleanModifier(subject as string, name);
+    return subject === undefined
+      ? booleanModifier(name)
+      : booleanModifier(subject as string, name);
   }
 
   if (isClassModifier(name)) {
@@ -51,7 +92,9 @@ export function get(name: BooleanModifier | ClassModifier | EffectModifier | Num
   }
 
   if (isNumericModifier(name)) {
-    return (subject === undefined) ? numericModifier(name) : numericModifier(subject as string, name);
+    return subject === undefined
+      ? numericModifier(name)
+      : numericModifier(subject as string, name);
   }
 
   if (isSkillModifier(name)) {
@@ -59,7 +102,9 @@ export function get(name: BooleanModifier | ClassModifier | EffectModifier | Num
   }
 
   if (isStringModifier(name)) {
-    return (subject === undefined) ? stringModifier(name) : stringModifier(subject as string, name);
+    return subject === undefined
+      ? stringModifier(name)
+      : stringModifier(subject as string, name);
   }
 
   if (isStatModifier(name)) {

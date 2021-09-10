@@ -195,19 +195,21 @@ const freeRuns: FreeRun[] = [
   ),
 ];
 
-const cheapestRunSource = $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
-  (a, b) => mallPrice(a) - mallPrice(b)
-)[0];
+const cheapestRunSource = () =>
+  $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
+    (a, b) => mallPrice(a) - mallPrice(b)
+  )[0];
 
-const cheapestItemRun = new FreeRun(
-  "Cheap Combat Item",
-  () => retrieveItem(cheapestRunSource),
-  Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
-    cheapestRunSource
-  ),
-  undefined,
-  () => retrieveItem(cheapestRunSource)
-);
+const cheapestItemRun = () =>
+  new FreeRun(
+    "Cheap Combat Item",
+    () => retrieveItem(cheapestRunSource()),
+    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
+      cheapestRunSource()
+    ),
+    undefined,
+    () => retrieveItem(cheapestRunSource())
+  );
 
 export default function findFreeRun(
   useFamiliar = true,
@@ -218,6 +220,6 @@ export default function findFreeRun(
       (run) =>
         run.available() &&
         (useFamiliar || !["Bander", "Boots"].includes(run.name))
-    ) ?? (buyStuff ? cheapestItemRun : undefined)
+    ) ?? (buyStuff ? cheapestItemRun() : undefined)
   );
 }

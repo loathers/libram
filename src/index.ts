@@ -24,4 +24,5 @@ export {
   withChoices,
   withChoice,
 } from "./property";
+export { get as getModifier } from "./modifier";
 export * from "./freerun";

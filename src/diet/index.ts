@@ -4,9 +4,8 @@ import {
   itemType,
   mallPrice,
   mallPrices,
-  myFullness,
-  myInebriety,
   mySpleenUse,
+  print,
   spleenLimit,
 } from "kolmafia";
 import { have } from "../lib";
@@ -123,6 +122,7 @@ class DietPlanner {
     organ: "food" | "booze" | "spleen",
     capacity: number
   ): [number, [Item[], number][]] {
+    print(`Plan ${organ} < ${capacity}`);
     const submenu = this.menu.filter((item) => itemType(item.item) === organ);
     const knapsackValues = submenu.map(
       (item) =>
@@ -161,6 +161,12 @@ class DietPlanner {
     const itemList = menuItemList.map((menuItems) =>
       menuItems.map((menuItem) => menuItem.item)
     );
+    print(
+      `Items: ${itemList.length} ${([] as Item[])
+        .concat(...itemList)
+        .map((item) => item.name)
+        .join(", ")}`
+    );
     return [
       value,
       aggregate(itemList, (x: Item[], y: Item[]) =>
@@ -185,11 +191,9 @@ class DietPlanner {
 export function planDiet(mpa: number, menu: MenuItem[]): [Item[], number][] {
   const dietPlanner = new DietPlanner(mpa, menu);
   const availableFullness =
-    fullnessLimit() - myFullness() + (have($item`distention pill`) ? 1 : 0);
+    fullnessLimit() + (have($item`distention pill`) ? 1 : 0);
   const availableInebriety =
-    inebrietyLimit() -
-    myInebriety() +
-    (have($item`synthetic dog hair pill`) ? 1 : 0);
+    inebrietyLimit() + (have($item`synthetic dog hair pill`) ? 1 : 0);
   const availableSpleen =
     spleenLimit() - mySpleenUse() + clamp(3 - get("currentMojoFilters"), 0, 3);
 
@@ -205,6 +209,7 @@ export function planDiet(mpa: number, menu: MenuItem[]): [Item[], number][] {
     valueNoMelange > valueMelange - mallPrice($item`spice melange`)
       ? planNoMelange
       : [...planMelange, [[$item`spice melange`], 1] as [Item[], number]];
+  print(`planfood: ${planFoodBooze.length}`);
 
   const additionalSpleen = sum(planFoodBooze, ([items, number]) =>
     items.includes($item`jar of fermented pickle juice`) ||

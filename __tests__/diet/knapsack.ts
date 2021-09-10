@@ -28,6 +28,19 @@ describe("knapsack", () => {
     expect(items.sort()).toEqual(["B", "C", "C"]);
   });
 
+  it("doesn't overfill", () => {
+    const [value, items] = knapsack(
+      [
+        ["A", 2, 2],
+        ["B", 2, 4],
+      ],
+      5
+    );
+
+    expect(value).toEqual(4);
+    expect(items.sort()).toEqual(["A", "A"]);
+  });
+
   it("respects maximum quantity", () => {
     const [value, items] = knapsack(
       [

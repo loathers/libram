@@ -21,18 +21,20 @@ const aggregateTypeMapping = {
   "Plumber Stat": "stat",
   "Rollover Effect": "effect",
   Skill: "skill",
+  Avatar: "monster",
 } as const;
 
 // Use "BaseJavaCstVisitor" if you need to implement all the visitor methods yourself.
 class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
   modifiers = {
-    double: [] as string[],
     boolean: [] as string[],
-    string: [] as string[],
     class: [] as string[],
-    skill: [] as string[],
+    double: [] as string[],
     effect: [] as string[],
+    monster: [] as string[],
+    skill: [] as string[],
     stat: [] as string[],
+    string: [] as string[],
   };
 
   constructor() {

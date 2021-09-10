@@ -2,6 +2,7 @@ import {
   booleanModifier,
   classModifier,
   effectModifier,
+  monsterModifier,
   numericModifier,
   skillModifier,
   statModifier,
@@ -17,6 +18,8 @@ import {
   classModifiers,
   EffectModifier,
   effectModifiers,
+  MonsterModifier,
+  monsterModifiers,
   NumericModifier,
   numericModifiers,
   SkillModifier,
@@ -33,18 +36,20 @@ export function get(
 ): boolean;
 export function get(name: ClassModifier, subject: string | Item): Class;
 export function get(name: EffectModifier, subject: string | Item): Effect;
+export function get(name: MonsterModifier, subject: Effect): Monster;
 export function get(
   name: NumericModifier,
   subject?: string | Item | Effect | Skill | Familiar
 ): number;
 export function get(name: SkillModifier, subject: string | Item): Skill;
-export function get(name: StringModifier, subject?: string | Item): string;
+export function get(name: StringModifier, subject?: string | Effect | Item): string;
 export function get(name: StatModifier, subject: Effect): Stat;
 export function get(
   name:
     | BooleanModifier
     | ClassModifier
     | EffectModifier
+    | MonsterModifier
     | NumericModifier
     | SkillModifier
     | StringModifier
@@ -63,6 +68,10 @@ export function get(
 
   if (arrayContains(name, effectModifiers)) {
     return effectModifier(subject as string, name);
+  }
+
+  if (arrayContains(name, monsterModifiers)) {
+    return monsterModifier(subject as Effect, name);
   }
 
   if (arrayContains(name, numericModifiers)) {

@@ -74,3 +74,16 @@ export function sum<T>(
 export function sumNumbers(addends: number[]): number {
   return sum(addends, (x: number) => x);
 }
+
+/**
+ * Checks if a given item is in a readonly array, acting as a typeguard.
+ * @param item Needle
+ * @param array Readonly array haystack
+ * @returns Whether the item is in the array, and narrows the type of the item.
+ */
+export function arrayContains<T, A extends T>(
+  item: T,
+  array: ReadonlyArray<A>
+): item is A {
+  return array.includes(item as A);
+}

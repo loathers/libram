@@ -8,6 +8,8 @@ import {
   stringModifier,
 } from "kolmafia";
 
+import { arrayContains } from "./utils";
+
 import {
   BooleanModifier,
   booleanModifiers,
@@ -24,34 +26,6 @@ import {
   StringModifier,
   stringModifiers,
 } from "./modifierTypes";
-
-function isBooleanModifier(name: string): name is BooleanModifier {
-  return booleanModifiers.includes(name as BooleanModifier);
-}
-
-function isClassModifier(name: string): name is ClassModifier {
-  return classModifiers.includes(name as ClassModifier);
-}
-
-function isEffectModifier(name: string): name is EffectModifier {
-  return effectModifiers.includes(name as EffectModifier);
-}
-
-function isNumericModifier(name: string): name is NumericModifier {
-  return numericModifiers.includes(name as NumericModifier);
-}
-
-function isSkillModifier(name: string): name is SkillModifier {
-  return skillModifiers.includes(name as SkillModifier);
-}
-
-function isStringModifier(name: string): name is StringModifier {
-  return stringModifiers.includes(name as StringModifier);
-}
-
-function isStatModifier(name: string): name is StatModifier {
-  return statModifiers.includes(name as StatModifier);
-}
 
 export function get(
   name: BooleanModifier,
@@ -77,37 +51,37 @@ export function get(
     | StatModifier,
   subject?: string | Item | Effect | Skill | Familiar
 ): unknown {
-  if (isBooleanModifier(name)) {
+  if (arrayContains(name, booleanModifiers)) {
     return subject === undefined
       ? booleanModifier(name)
       : booleanModifier(subject as string, name);
   }
 
-  if (isClassModifier(name)) {
+  if (arrayContains(name, classModifiers)) {
     return classModifier(subject as string, name);
   }
 
-  if (isEffectModifier(name)) {
+  if (arrayContains(name, effectModifiers)) {
     return effectModifier(subject as string, name);
   }
 
-  if (isNumericModifier(name)) {
+  if (arrayContains(name, numericModifiers)) {
     return subject === undefined
       ? numericModifier(name)
       : numericModifier(subject as string, name);
   }
 
-  if (isSkillModifier(name)) {
+  if (arrayContains(name, skillModifiers)) {
     return skillModifier(subject as string, name);
   }
 
-  if (isStringModifier(name)) {
+  if (arrayContains(name, stringModifiers)) {
     return subject === undefined
       ? stringModifier(name)
       : stringModifier(subject as string, name);
   }
 
-  if (isStatModifier(name)) {
+  if (arrayContains(name, statModifiers)) {
     return statModifier(subject as Effect, name);
   }
 }

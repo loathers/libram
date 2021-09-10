@@ -42,7 +42,10 @@ export function get(
   subject?: string | Item | Effect | Skill | Familiar
 ): number;
 export function get(name: SkillModifier, subject: string | Item): Skill;
-export function get(name: StringModifier, subject?: string | Effect | Item): string;
+export function get(
+  name: StringModifier,
+  subject?: string | Effect | Item
+): string;
 export function get(name: StatModifier, subject: Effect): Stat;
 export function get(
   name:

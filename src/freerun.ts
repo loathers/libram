@@ -1,15 +1,4 @@
 import {
-  ensureEffect,
-  getFoldGroup,
-  getSongCount,
-  getSongLimit,
-  have,
-} from "./lib";
-import { Requirement } from "./maximize";
-import { Bandersnatch } from "./resources";
-import { $effect, $familiar, $item, $items, $skill } from "./template-string";
-import { Macro } from "./combat";
-import {
   cliExecute,
   mallPrice,
   restoreMp,
@@ -17,7 +6,19 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
+
+import { Macro } from "./combat";
+import {
+  ensureEffect,
+  getFoldGroup,
+  getSongCount,
+  getSongLimit,
+  have,
+} from "./lib";
+import { Requirement } from "./maximize";
 import { get } from "./property";
+import { Bandersnatch } from "./resources";
+import { $effect, $familiar, $item, $items, $skill } from "./template-string";
 
 export class FreeRun {
   name: string;
@@ -195,19 +196,24 @@ const freeRuns: FreeRun[] = [
   ),
 ];
 
-const cheapestRunSource = $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
-  (a, b) => mallPrice(a) - mallPrice(b)
-)[0];
+function cheapestRunSource() {
+  return $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
+    (a, b) => mallPrice(a) - mallPrice(b)
+  )[0];
+}
 
-const cheapestItemRun = new FreeRun(
-  "Cheap Combat Item",
-  () => retrieveItem(cheapestRunSource),
-  Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
-    cheapestRunSource
-  ),
-  undefined,
-  () => retrieveItem(cheapestRunSource)
-);
+function cheapestItemRun() {
+  const cheapestRun = cheapestRunSource();
+  return new FreeRun(
+    "Cheap Combat Item",
+    () => retrieveItem(cheapestRun),
+    Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
+      cheapestRunSource()
+    ),
+    undefined,
+    () => retrieveItem(cheapestRun)
+  );
+}
 
 export default function findFreeRun(
   useFamiliar = true,
@@ -218,6 +224,6 @@ export default function findFreeRun(
       (run) =>
         run.available() &&
         (useFamiliar || !["Bander", "Boots"].includes(run.name))
-    ) ?? (buyStuff ? cheapestItemRun : undefined)
+    ) ?? (buyStuff ? cheapestItemRun() : undefined)
   );
 }

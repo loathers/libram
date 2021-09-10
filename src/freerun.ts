@@ -195,21 +195,24 @@ const freeRuns: FreeRun[] = [
   ),
 ];
 
-const cheapestRunSource = () =>
-  $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
+function cheapestRunSource() {
+  return $items`Louder Than Bomb, divine champagne popper, tennis ball`.sort(
     (a, b) => mallPrice(a) - mallPrice(b)
   )[0];
+}
 
-const cheapestItemRun = () =>
-  new FreeRun(
+function cheapestItemRun() {
+  const cheapestRun = cheapestRunSource();
+  return new FreeRun(
     "Cheap Combat Item",
-    () => retrieveItem(cheapestRunSource()),
+    () => retrieveItem(cheapestRun),
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
       cheapestRunSource()
     ),
     undefined,
-    () => retrieveItem(cheapestRunSource())
+    () => retrieveItem(cheapestRun)
   );
+}
 
 export default function findFreeRun(
   useFamiliar = true,

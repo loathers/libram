@@ -1,15 +1,4 @@
 import {
-  ensureEffect,
-  getFoldGroup,
-  getSongCount,
-  getSongLimit,
-  have,
-} from "./lib";
-import { Requirement } from "./maximize";
-import { Bandersnatch } from "./resources";
-import { $effect, $familiar, $item, $items, $skill } from "./template-string";
-import { Macro } from "./combat";
-import {
   cliExecute,
   mallPrice,
   restoreMp,
@@ -17,7 +6,19 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
+
+import { Macro } from "./combat";
+import {
+  ensureEffect,
+  getFoldGroup,
+  getSongCount,
+  getSongLimit,
+  have,
+} from "./lib";
+import { Requirement } from "./maximize";
 import { get } from "./property";
+import { Bandersnatch } from "./resources";
+import { $effect, $familiar, $item, $items, $skill } from "./template-string";
 
 export class FreeRun {
   name: string;

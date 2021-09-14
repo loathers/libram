@@ -424,10 +424,10 @@ export function maximizeCached(
 
   const cacheEntry = checkCache(objective, fullOptions);
   if (cacheEntry) {
-    // logger.info("Equipment found in maximize cache, equipping...");
+    logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
-      // logger.info(`Equipped cached ${objective}`);
+      logger.info(`Equipped cached ${objective}`);
       return;
     }
     logger.warning("Maximize cache application failed, maximizing...");

@@ -3,6 +3,7 @@ import {
   choiceFollowsFight,
   getAutoAttack,
   inMultiFight,
+  print,
   removeProperty,
   runCombat,
   setAutoAttack,
@@ -207,7 +208,8 @@ export class Macro {
    * Add an "abort" step to this macro.
    * @returns {Macro} This object itself.
    */
-  abort(): this {
+  abort(message?: string): this {
+    if (message) print(message);
     return this.step("abort");
   }
 
@@ -215,7 +217,8 @@ export class Macro {
    * Create a new macro with an "abort" step.
    * @returns {Macro} This object itself.
    */
-  static abort<T extends Macro>(this: Constructor<T>): T {
+  static abort<T extends Macro>(this: Constructor<T>, message?: string): T {
+    if (message) print(message);
     return new this().abort();
   }
 

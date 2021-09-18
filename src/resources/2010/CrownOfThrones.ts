@@ -1,19 +1,19 @@
-import { myFamiliar } from "kolmafia";
 import { getSaleValue } from "../../lib";
 import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
 
-export type BjornModifier = {
-  modifier: NumericModifier;
-  value: number;
-};
+type ModifierValues = Partial<
+  {
+    [modifier in NumericModifier]: number;
+  }
+>;
 
 export type BjornedFamiliar = {
   familiar: Familiar;
   meatVal: () => number;
   probability: number;
-  modifier?: BjornModifier;
+  modifier: ModifierValues;
   dropPredicate?: () => boolean;
 };
 
@@ -22,18 +22,31 @@ export const bjornFams: BjornedFamiliar[] = [
     familiar: $familiar`Puck Man`,
     meatVal: () => getSaleValue($item`yellow pixel`),
     probability: 0.25,
+    modifier: {
+      ["Muscle"]: 10,
+      ["Mysticality"]: 10,
+      ["Moxie"]: 10,
+    },
     dropPredicate: () => get("_yellowPixelDropsCrown") < 25,
   },
   {
     familiar: $familiar`Ms. Puck Man`,
     meatVal: () => getSaleValue($item`yellow pixel`),
     probability: 0.25,
+    modifier: {
+      ["Muscle"]: 10,
+      ["Mysticality"]: 10,
+      ["Moxie"]: 10,
+    },
     dropPredicate: () => get("_yellowPixelDropsCrown") < 25,
   },
   {
     familiar: $familiar`Grimstone Golem`,
     meatVal: () => getSaleValue($item`grimstone mask`),
     probability: 0.5,
+    modifier: {
+      ["Combat Rate"]: -5,
+    },
     dropPredicate: () => get("_grimstoneMaskDropsCrown") < 1,
   },
   {
@@ -41,8 +54,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 25,
+      ["Meat Drop"]: 25,
     },
   },
   {
@@ -50,14 +62,16 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 25,
+      ["Meat Drop"]: 25,
     },
   },
   {
     familiar: $familiar`Garbage Fire`,
     meatVal: () => getSaleValue($item`burning newspaper`),
     probability: 0.5,
+    modifier: {
+      ["Hot Spell Damage"]: 25,
+    },
     dropPredicate: () => get("_garbageFireDropsCrown") < 3,
   },
   {
@@ -67,37 +81,52 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`abstraction: sensation, abstraction: thought, abstraction: action, abstraction: category, abstraction: perception, abstraction: purpose`
       ),
     probability: 0.2,
+    modifier: {
+      ["Muscle"]: 7,
+      ["Mysticality"]: 7,
+      ["Moxie"]: 7,
+    },
     dropPredicate: () => get("_abstractionDropsCrown") < 25,
   },
   {
     familiar: $familiar`Trick-or-Treating Tot`,
     meatVal: () => getSaleValue($item`hoarded candy wad`),
     probability: 0.5,
+    modifier: {
+      ["Muscle"]: 10,
+      ["Mysticality"]: 10,
+      ["Moxie"]: 10,
+    },
     dropPredicate: () => get("_hoardedCandyDropsCrown") < 3,
   },
   {
     familiar: $familiar`Warbear Drone`,
     meatVal: () => getSaleValue($item`warbear whosit`),
     probability: 1 / 4.5,
+    modifier: {
+      ["Maximum HP"]: 15,
+      ["Maximum MP"]: 15,
+    },
   },
   {
     familiar: $familiar`Li'l Xenomorph`,
     meatVal: () => getSaleValue($item`lunar isotope`),
     probability: 0.05,
     modifier: {
-      modifier: "Item Drop",
-      value: 15,
+      ["Item Drop"]: 15,
     },
   },
   {
     familiar: $familiar`Pottery Barn Owl`,
     meatVal: () => getSaleValue($item`volcanic ash`),
     probability: 0.1,
+    modifier: { ["Hot Damage"]: 10 },
   },
   {
     familiar: $familiar`Grim Brother`,
     meatVal: () => getSaleValue($item`grim fairy tale`),
     probability: 1,
+    modifier: { ["Combat Rate"]: 5 },
     dropPredicate: () => get("_grimFairyTaleDropsCrown") < 2,
   },
   {
@@ -106,8 +135,7 @@ export const bjornFams: BjornedFamiliar[] = [
     probability: 1,
     dropPredicate: () => get("_optimisticCandleDropsCrown") < 3,
     modifier: {
-      modifier: "Item Drop",
-      value: 15,
+      ["Item Drop"]: 15,
     },
   },
   {
@@ -119,14 +147,20 @@ export const bjornFams: BjornedFamiliar[] = [
     probability: 1,
     dropPredicate: () => get("_oreDropsCrown") < 6,
     modifier: {
-      modifier: "Item Drop",
-      value: 15,
+      ["Item Drop"]: 15,
     },
   },
   {
     familiar: $familiar`Twitching Space Critter`,
     meatVal: () => getSaleValue($item`space beast fur`),
     probability: 1,
+    modifier: {
+      ["Hot Resistance"]: 2,
+      ["Cold Resistance"]: 2,
+      ["Spooky Resistance"]: 2,
+      ["Sleaze Resistance"]: 2,
+      ["Stench Resistance"]: 2,
+    },
     dropPredicate: () => get("_spaceFurDropsCrown") < 1,
   },
   {
@@ -149,11 +183,15 @@ export const bjornFams: BjornedFamiliar[] = [
       ),
       */
     probability: 0.05,
+    modifier: {
+      ["Booze Drop"]: 25,
+    },
   },
   {
     familiar: $familiar`Yule Hound`,
     meatVal: () => getSaleValue($item`candy cane`),
     probability: 1,
+    modifier: { ["Candy Drop"]: 20 },
   },
   {
     familiar: $familiar`Gluttonous Green Ghost`,
@@ -162,14 +200,14 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`bean burrito, enchanted bean burrito, jumping bean burrito`
       ),
     probability: 1,
+    modifier: { ["Food Drop"]: 15 },
   },
   {
     familiar: $familiar`Reassembled Blackbird`,
     meatVal: () => getSaleValue($item`blackberry`),
     probability: 1,
     modifier: {
-      modifier: "Item Drop",
-      value: 10,
+      ["Item Drop"]: 10,
     },
   },
   {
@@ -177,8 +215,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => getSaleValue($item`blackberry`),
     probability: 1,
     modifier: {
-      modifier: "Item Drop",
-      value: 10,
+      ["Item Drop"]: 10,
     },
   },
   {
@@ -187,11 +224,13 @@ export const bjornFams: BjornedFamiliar[] = [
       0.02 * getSaleValue($item`disembodied brain`) +
       0.98 * getSaleValue($item`skeleton bone`),
     probability: 1,
+    modifier: { ["Muscle Experience"]: 2 },
   },
   {
     familiar: $familiar`Reanimated Reanimator`,
     meatVal: () => getSaleValue(...$items`hot wing, broken skull`),
     probability: 1,
+    modifier: { ["Mysticality Experience"]: 2 },
   },
   {
     familiar: $familiar`Attention-Deficit Demon`,
@@ -201,8 +240,7 @@ export const bjornFams: BjornedFamiliar[] = [
       ),
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -213,8 +251,7 @@ export const bjornFams: BjornedFamiliar[] = [
       ),
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -222,8 +259,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => getSaleValue($item`gold nuggets`),
     probability: 0.5,
     modifier: {
-      modifier: "Meat Drop",
-      value: 25,
+      ["Meat Drop"]: 25,
     },
   },
   {
@@ -233,6 +269,11 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
       ),
     probability: 0.3,
+    modifier: {
+      ["Muscle"]: 10,
+      ["Mysticality"]: 10,
+      ["Moxie"]: 10,
+    },
   },
   {
     familiar: $familiar`Stocking Mimic`,
@@ -241,22 +282,34 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`Angry Farmer candy, Cold Hots candy, Rock Pops, Tasty Fun Good rice candy, Wint-O-Fresh mint`
       ),
     probability: 0.3,
+    modifier: {
+      ["Muscle"]: 10,
+      ["Mysticality"]: 10,
+      ["Moxie"]: 10,
+    },
   },
   {
     familiar: $familiar`BRICKO chick`,
     meatVal: () => getSaleValue($item`BRICKO brick`),
     probability: 1,
+    modifier: {
+      ["Muscle Percent"]: 10,
+      ["Mysticality Percent"]: 10,
+      ["Moxie Percent"]: 10,
+    },
   },
   {
     familiar: $familiar`Cotton Candy Carnie`,
     meatVal: () => getSaleValue($item`cotton candy pinch`),
     probability: 1,
+    modifier: { ["Initiative"]: 20 },
   },
   {
     familiar: $familiar`Untamed Turtle`,
     meatVal: () =>
       getSaleValue(...$items`snailmail bits, turtlemail bits, turtle wax`),
     probability: 0.35,
+    modifier: { ["Initiative"]: 20 },
   },
   {
     familiar: $familiar`Astral Badger`,
@@ -264,16 +317,19 @@ export const bjornFams: BjornedFamiliar[] = [
       2 *
       getSaleValue(...$items`spooky mushroom, Knob mushroom, Knoll mushroom`),
     probability: 1,
+    modifier: { ["Maximum HP"]: 10, ["Maximum MP"]: 10 },
   },
   {
     familiar: $familiar`Green Pixie`,
     meatVal: () => getSaleValue($item`bottle of tequila`),
     probability: 0.2,
+    modifier: { ["Maximum HP"]: 10, ["Maximum MP"]: 10 },
   },
   {
     familiar: $familiar`Angry Goat`,
     meatVal: () => getSaleValue($item`goat cheese pizza`),
     probability: 1,
+    modifier: { ["Muscle Percent"]: 15 },
   },
   {
     familiar: $familiar`Adorable Seal Larva`,
@@ -282,6 +338,12 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`stench nuggets, spooky nuggets, hot nuggets, cold nuggets, sleaze nuggets`
       ),
     probability: 0.35,
+    modifier: {
+      ["HP Regen Min"]: 2,
+      ["MP Regen Min"]: 2,
+      ["HP Regen Max"]: 8,
+      ["MP Regen Max"]: 8,
+    },
   },
   {
     familiar: $familiar`Ancient Yuletide Troll`,
@@ -290,6 +352,12 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
       ),
     probability: 0.3,
+    modifier: {
+      ["HP Regen Min"]: 2,
+      ["MP Regen Min"]: 2,
+      ["HP Regen Max"]: 8,
+      ["MP Regen Max"]: 8,
+    },
   },
   {
     familiar: $familiar`Sweet Nutcracker`,
@@ -298,14 +366,19 @@ export const bjornFams: BjornedFamiliar[] = [
         ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
       ),
     probability: 0.3,
+    modifier: {
+      ["HP Regen Min"]: 2,
+      ["MP Regen Min"]: 2,
+      ["HP Regen Max"]: 8,
+      ["MP Regen Max"]: 8,
+    },
   },
   {
     familiar: $familiar`Casagnova Gnome`,
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -313,8 +386,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -322,8 +394,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -331,8 +402,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -340,8 +410,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -349,8 +418,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -358,8 +426,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -367,8 +434,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -376,8 +442,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -385,8 +450,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -394,8 +458,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 20,
+      ["Meat Drop"]: 20,
     },
   },
   {
@@ -403,8 +466,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Meat Drop",
-      value: 25,
+      ["Meat Drop"]: 25,
     },
   },
   {
@@ -412,8 +474,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Meat Drop",
-      value: 25,
+      ["Meat Drop"]: 25,
     },
   },
   {
@@ -421,8 +482,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 60,
     probability: 1,
     modifier: {
-      modifier: "Item Drop",
-      value: 15,
+      ["Item Drop"]: 15,
     },
   },
   {
@@ -430,8 +490,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Item Drop",
-      value: 15,
+      ["Item Drop"]: 15,
     },
   },
   {
@@ -439,8 +498,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Item Drop",
-      value: 10,
+      ["Item Drop"]: 10,
     },
   },
   {
@@ -448,8 +506,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Item Drop",
-      value: 10,
+      ["Item Drop"]: 10,
     },
   },
   {
@@ -457,8 +514,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 30,
     probability: 1,
     modifier: {
-      modifier: "Familiar Weight",
-      value: 5,
+      ["Familiar Weight"]: 5,
     },
   },
   {
@@ -466,8 +522,7 @@ export const bjornFams: BjornedFamiliar[] = [
     meatVal: () => 0,
     probability: 0,
     modifier: {
-      modifier: "Familiar Weight",
-      value: 5,
+      ["Familiar Weight"]: 5,
     },
   },
   {
@@ -479,6 +534,7 @@ export const bjornFams: BjornedFamiliar[] = [
         getSaleValue($item`cold nuggets`)
       ),
     probability: 1,
+    modifier: { ["Cold Damage"]: 20 },
   },
   {
     familiar: $familiar`Stinky Gravy Fairy`,
@@ -489,6 +545,7 @@ export const bjornFams: BjornedFamiliar[] = [
         getSaleValue($item`stench nuggets`)
       ),
     probability: 1,
+    modifier: { ["Stench Damage"]: 20 },
   },
   {
     familiar: $familiar`Sleazy Gravy Fairy`,
@@ -499,6 +556,7 @@ export const bjornFams: BjornedFamiliar[] = [
         getSaleValue($item`sleaze nuggets`)
       ),
     probability: 1,
+    modifier: { ["Sleaze Damage"]: 20 },
   },
   {
     familiar: $familiar`Spooky Gravy Fairy`,
@@ -509,6 +567,7 @@ export const bjornFams: BjornedFamiliar[] = [
         getSaleValue($item`spooky nuggets`)
       ),
     probability: 1,
+    modifier: { ["Spooky Damage"]: 20 },
   },
   {
     familiar: $familiar`Flaming Gravy Fairy`,
@@ -519,5 +578,6 @@ export const bjornFams: BjornedFamiliar[] = [
         getSaleValue($item`hot nuggets`)
       ),
     probability: 1,
+    modifier: { ["Hot Damage"]: 20 },
   },
 ];

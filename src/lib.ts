@@ -569,12 +569,3 @@ export const Environment = {
 } as const;
 
 export type EnvironmentType = typeof Environment[keyof typeof Environment];
-
-export function setEqual<T>(a: T[], b: T[]): boolean {
-  const sortedA = [...a].sort();
-  const sortedB = [...b].sort();
-  return (
-    a.length === b.length &&
-    sortedA.every((item, index) => item === sortedB[index])
-  );
-}

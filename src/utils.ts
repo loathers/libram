@@ -87,3 +87,18 @@ export function arrayContains<T, A extends T>(
 ): item is A {
   return array.includes(item as A);
 }
+
+/**
+ * Checks if two arrays contain the same elements in the same quantity.
+ * @param a First array for comparison
+ * @param b Second array for comparison
+ * @returns Whether the two arrays are equal, irrespective of order.
+ */
+export function setEqual<T>(a: T[], b: T[]): boolean {
+  const sortedA = [...a].sort();
+  const sortedB = [...b].sort();
+  return (
+    a.length === b.length &&
+    sortedA.every((item, index) => item === sortedB[index])
+  );
+}

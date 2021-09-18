@@ -271,10 +271,17 @@ export class Macro {
    * Conditionally add a step to a macro based on a condition evaluated at the time of building the macro.
    * @param condition The JS condition.
    * @param ifTrue Continuation to add if the condition is true.
+   * @param ifFalse Optional input to turn this into an if...else statement.
    * @returns {Macro} This object itself.
    */
-  externalIf(condition: boolean, ifTrue: string | Macro): this {
-    return condition ? this.step(ifTrue) : this;
+  externalIf(
+    condition: boolean,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro
+  ): this {
+    if (condition) return this.step(ifTrue);
+    if (ifFalse) return this.step(ifFalse);
+    return this;
   }
 
   /**

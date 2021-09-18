@@ -17,6 +17,7 @@ import {
 } from "kolmafia";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
+import { setEqual } from ".";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;
@@ -213,7 +214,6 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     }
     const familiarEquip = entry.equipment.get($slot`familiar`);
     if (familiarEquip) equip(familiarEquip);
-    verifyCached(entry);
   } else {
     for (const [slot, item] of entry.equipment) {
       if (equippedItem(slot) !== item && availableAmount(item) > 0) {
@@ -244,6 +244,16 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
   }
 }
 
+const slotStructure = [
+  $slots`hat`,
+  $slots`back`,
+  $slots`shirt`,
+  $slots`weapon, off-hand`,
+  $slots`pants`,
+  $slots`acc1, acc2, acc3`,
+  $slots`familiar`,
+] as const;
+
 /**
  * Verifies that a CacheEntry was applied successfully.
  * @param entry The CacheEntry to verify
@@ -251,9 +261,17 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
  */
 function verifyCached(entry: CacheEntry): boolean {
   let success = true;
-  for (const [slot, item] of entry.equipment) {
-    if (equippedItem(slot) !== item) {
-      logger.warning(`Failed to apply cached ${item} in ${slot}.`);
+  for (const slotGroup of slotStructure) {
+    const desiredSet = slotGroup.map(
+      (slot) => entry.equipment.get(slot) ?? $item`none`
+    );
+    const equippedSet = slotGroup.map((slot) => equippedItem(slot));
+    if (!setEqual(desiredSet, equippedSet)) {
+      logger.warning(
+        `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
+          ", "
+        )}.`
+      );
       success = false;
     }
   }

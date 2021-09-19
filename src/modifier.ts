@@ -98,50 +98,34 @@ export function get(
   }
 }
 
-export type BooleanModifierValues = Partial<
-  {
-    [modifier in BooleanModifier]: boolean;
-  }
->;
+export type ModifierValue<T> = T extends BooleanModifier
+  ? boolean
+  : T extends ClassModifier
+  ? Class
+  : T extends EffectModifier
+  ? Effect
+  : T extends MonsterModifier
+  ? Monster
+  : T extends NumericModifier
+  ? number
+  : T extends SkillModifier
+  ? Skill
+  : T extends StatModifier
+  ? Stat
+  : T extends StringModifier
+  ? string
+  : string;
 
-export type ClassModifierValues = Partial<
+export type Modifiers = Partial<
   {
-    [modifier in ClassModifier]: Class;
-  }
->;
-
-export type EffectModifierValues = Partial<
-  {
-    [modifier in EffectModifier]: Effect;
-  }
->;
-
-export type MonsterModifierValues = Partial<
-  {
-    [modifier in MonsterModifier]: Monster;
-  }
->;
-
-export type NumericModifierValues = Partial<
-  {
-    [modifier in NumericModifier]: number;
-  }
->;
-
-export type SkillModifierValues = Partial<
-  {
-    [modifier in SkillModifier]: Skill;
-  }
->;
-
-export type StatModifierValues = Partial<
-  {
-    [modifier in StatModifier]: Stat;
-  }
->;
-
-export type StringModifierValues = Partial<
-  {
-    [modifier in StringModifier]: string;
+    [T in
+      | BooleanModifier
+      | ClassModifier
+      | EffectModifier
+      | MonsterModifier
+      | NumericModifier
+      | SkillModifier
+      | StatModifier
+      | StringModifier]: ModifierValue<T>;
   }
 >;

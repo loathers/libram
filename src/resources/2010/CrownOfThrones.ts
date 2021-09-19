@@ -1,5 +1,5 @@
 import { getSaleValue } from "../../lib";
-import { NumericModifierValues } from "../../modifier";
+import { Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
 
@@ -7,7 +7,7 @@ export type FamiliarRider = {
   familiar: Familiar;
   meatVal: () => number;
   probability: number;
-  modifier: NumericModifierValues;
+  modifier: Modifiers;
   dropPredicate?: () => boolean;
 };
 

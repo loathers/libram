@@ -280,8 +280,8 @@ export class Macro {
     ifFalse?: string | Macro
   ): this {
     if (condition) return this.step(ifTrue);
-    if (ifFalse) return this.step(ifFalse);
-    return this;
+    else if (ifFalse) return this.step(ifFalse);
+    else return this;
   }
 
   /**

@@ -3,7 +3,7 @@ import { NumericModifierValues } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
 
-export type BjornedFamiliar = {
+export type FamiliarRider = {
   familiar: Familiar;
   meatVal: () => number;
   probability: number;
@@ -11,7 +11,7 @@ export type BjornedFamiliar = {
   dropPredicate?: () => boolean;
 };
 
-export const bjornFams: BjornedFamiliar[] = [
+export const ridingFamiliars: FamiliarRider[] = [
   {
     familiar: $familiar`Puck Man`,
     meatVal: () => getSaleValue($item`yellow pixel`),

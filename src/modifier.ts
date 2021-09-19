@@ -97,3 +97,51 @@ export function get(
     return statModifier(subject as Effect, name);
   }
 }
+
+export type BooleanModifierValues = Partial<
+  {
+    [modifier in BooleanModifier]: boolean;
+  }
+>;
+
+export type ClassModifierValues = Partial<
+  {
+    [modifier in ClassModifier]: Class;
+  }
+>;
+
+export type EffectModifierValues = Partial<
+  {
+    [modifier in EffectModifier]: Effect;
+  }
+>;
+
+export type MonsterModifierValues = Partial<
+  {
+    [modifier in MonsterModifier]: Monster;
+  }
+>;
+
+export type NumericModifierValues = Partial<
+  {
+    [modifier in NumericModifier]: number;
+  }
+>;
+
+export type SkillModifierValues = Partial<
+  {
+    [modifier in SkillModifier]: Skill;
+  }
+>;
+
+export type StatModifierValues = Partial<
+  {
+    [modifier in StatModifier]: Stat;
+  }
+>;
+
+export type StringModifierValues = Partial<
+  {
+    [modifier in StringModifier]: string;
+  }
+>;

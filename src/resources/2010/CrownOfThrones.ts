@@ -1,19 +1,13 @@
 import { getSaleValue } from "../../lib";
-import { NumericModifier } from "../../modifierTypes";
+import { NumericModifierValues } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
-
-type ModifierValues = Partial<
-  {
-    [modifier in NumericModifier]: number;
-  }
->;
 
 export type BjornedFamiliar = {
   familiar: Familiar;
   meatVal: () => number;
   probability: number;
-  modifier: ModifierValues;
+  modifier: NumericModifierValues;
   dropPredicate?: () => boolean;
 };
 

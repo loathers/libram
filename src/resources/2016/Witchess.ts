@@ -1,4 +1,4 @@
-import { myHash, runChoice, runCombat, toInt, visitUrl } from "kolmafia";
+import { choiceFollowsFight, myHash, runChoice, runCombat, toInt, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -22,7 +22,7 @@ export const pieces = Monster.get([
   "Witchess Witch",
   "Witchess Ox",
 ]);
-export function fightPiece(piece: Monster): string {
+export function fightPiece(piece: Monster): void {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
@@ -44,5 +44,6 @@ export function fightPiece(piece: Monster): string {
   ) {
     throw new Error("Failed to start fight.");
   }
-  return runCombat();
+  runCombat();
+  if (choiceFollowsFight()) visitUrl("choice.php");
 }

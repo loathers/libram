@@ -1,4 +1,4 @@
-import { buy, getChateau, runCombat, visitUrl } from "kolmafia";
+import { buy, choiceFollowsFight, getChateau, runCombat, visitUrl } from "kolmafia";
 import { $item, $items } from "../../template-string";
 import { get } from "../../property";
 
@@ -14,9 +14,10 @@ export function paintingFought(): boolean {
   return get("_chateauMonsterFought");
 }
 
-export function fightPainting(): string {
+export function fightPainting(): void {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  return runCombat();
+  runCombat();
+  if (choiceFollowsFight()) visitUrl("choice.php");
 }
 
 const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;

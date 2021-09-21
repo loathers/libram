@@ -17,7 +17,7 @@ import {
 } from "kolmafia";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
-import { setEqual } from ".";
+import { setEqual } from "./utils";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;

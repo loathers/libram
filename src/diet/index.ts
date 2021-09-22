@@ -354,14 +354,11 @@ export function planDiet(
         organ,
         size ??
           (organ === "food"
-            ? 11 + // FIXME
-              fullnessLimit() -
+            ? fullnessLimit() -
               myFullness() +
               (have($item`distention pill`) ? 1 : 0)
             : organ === "booze"
-            ? 17 + // FIXME
-              inebrietyLimit() +
-              (have($item`synthetic dog hair pill`) ? 1 : 0)
+            ? inebrietyLimit() + (have($item`synthetic dog hair pill`) ? 1 : 0)
             : organ === "spleen item"
             ? spleenLimit() - mySpleenUse()
             : 0),

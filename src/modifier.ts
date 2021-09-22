@@ -97,3 +97,35 @@ export function get(
     return statModifier(subject as Effect, name);
   }
 }
+
+export type ModifierValue<T> = T extends BooleanModifier
+  ? boolean
+  : T extends ClassModifier
+  ? Class
+  : T extends EffectModifier
+  ? Effect
+  : T extends MonsterModifier
+  ? Monster
+  : T extends NumericModifier
+  ? number
+  : T extends SkillModifier
+  ? Skill
+  : T extends StatModifier
+  ? Stat
+  : T extends StringModifier
+  ? string
+  : string;
+
+export type Modifiers = Partial<
+  {
+    [T in
+      | BooleanModifier
+      | ClassModifier
+      | EffectModifier
+      | MonsterModifier
+      | NumericModifier
+      | SkillModifier
+      | StatModifier
+      | StringModifier]: ModifierValue<T>;
+  }
+>;

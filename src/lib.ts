@@ -35,7 +35,6 @@ import {
 import { $class, $familiar, $item, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
-import * as property from "./property";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -516,7 +515,7 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
  * @param questName Name of quest property to check.
  */
 export function questStep(questName: string): number {
-  const stringStep = property.getString(questName);
+  const stringStep = get<string>(questName);
   if (stringStep === "unstarted") return -1;
   else if (stringStep === "started") return 0;
   else if (stringStep === "finished" || stringStep === "") return 999;

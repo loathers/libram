@@ -34,6 +34,11 @@ import {
   summonSkill as taffySkill,
 } from "./2013/PulledTaffy";
 
+/**
+ *
+ * @param summonSkill The libram summoning skill
+ * @returns map containing the chance of an item to be summoned
+ */
 export function expectedLibramSummon(summonSkill: Skill): Map<Item, number> {
   switch (summonSkill) {
     case candyHeartsSkill:
@@ -54,6 +59,10 @@ export function expectedLibramSummon(summonSkill: Skill): Map<Item, number> {
   return new Map<Item, number>();
 }
 
+/**
+ *
+ * @returns map containing the chance of items to be summoned for each libram summoning skill available
+ */
 export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
   const results = new Map<Skill, Map<Item, number>>();
   if (candyHeartsHave()) {

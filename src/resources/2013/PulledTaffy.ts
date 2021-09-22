@@ -8,41 +8,33 @@ const rareItems = $items`pulled indigo taffy, pulled green taffy`;
 const yellowItem = $item`pulled yellow taffy`;
 
 /**
- * Returns true if the player can summon taffy
+ * @returns true if the player can Summon Taffy
  */
 export function have(): boolean {
   return _have(summonSkill);
 }
 
 /**
- * Returns A map containing the chance of an item to be summoned
+ * @returns map containing the chance of an item to be summoned
  */
 export function expected(): Map<Item, number> {
-  const results = new Map<Item, number>();
   const rareSummons = get("_taffyRareSummons");
-  const rareChance = rareSummons < 4 ? 1.0 / 2 ** (rareSummons + 1) : 0.0;
-  const yellowRemaining = get("_taffyYellowSummons") === 0;
-  // Four possible rare summons, one and only one will be pulled yellow taffy
-  if (rareChance > 0.0) {
-    if (yellowRemaining) {
-      if (rareSummons === 3) {
-        results.set(yellowItem, rareChance);
-        rareItems.forEach((item) => results.set(item, 0.0));
-      } else {
-        results.set(yellowItem, rareChance / rareItems.length + 1);
-        rareItems.forEach((item) =>
-          results.set(item, rareChance / rareItems.length + 1)
-        );
-      }
-    } else {
-      results.set(yellowItem, 0.0);
-      rareItems.forEach((item) =>
-        results.set(item, rareChance / rareItems.length)
-      );
-    }
-  }
+  const yellowSummons = get("_taffyYellowSummons");
+  const onlyYellow = yellowSummons === 0 && rareSummons === 3;
+  const totalRareChance = rareSummons < 4 ? 1.0 / 2 ** (rareSummons + 1) : 0.0;
+  const rareItemChance = onlyYellow
+    ? 0.0
+    : totalRareChance / (rareItems.length + 1 - get("_taffyYellowSummons"));
+  const yellowChance =
+    yellowSummons === 1 ? 0.0 : onlyYellow ? totalRareChance : rareItemChance;
+
+  const results = new Map<Item, number>();
   commonItems.forEach((item) =>
-    results.set(item, (1.0 - rareChance) / commonItems.length)
+    results.set(item, (1.0 - totalRareChance) / commonItems.length)
   );
+  rareItems.forEach((item) =>
+    results.set(item, rareItemChance / rareItems.length)
+  );
+  results.set(yellowItem, yellowChance);
   return results;
 }

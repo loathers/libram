@@ -520,7 +520,7 @@ export function questStep(questName: string): number {
   else if (stringStep === "finished" || stringStep === "") return 999;
   else {
     if (stringStep.substring(0, 4) !== "step") {
-      throw "Quest state parsing error.";
+      throw new Error("Quest state parsing error.");
     }
     return parseInt(stringStep.substring(4), 10);
   }

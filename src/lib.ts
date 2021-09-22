@@ -33,7 +33,7 @@ import {
 import { $class, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
-import { property } from ".";
+import * as property from "./property";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head

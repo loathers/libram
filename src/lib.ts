@@ -1,6 +1,7 @@
 /** @module GeneralLibrary */
 import {
   appearanceRates,
+  autosellPrice,
   availableAmount,
   booleanModifier,
   cliExecute,
@@ -15,6 +16,7 @@ import {
   haveServant,
   haveSkill,
   inebrietyLimit,
+  mallPrice,
   myEffects,
   myFamiliar,
   myFullness,
@@ -525,3 +527,64 @@ export function questStep(questName: string): number {
     return parseInt(stringStep.substring(4), 10);
   }
 }
+
+export class EnsureError extends Error {
+  constructor(cause: Item | Familiar | Effect) {
+    super(`Failed to ensure ${cause.name}!`);
+    this.name = "Ensure Error";
+  }
+}
+
+/**
+ * Tries to get an effect using the default method
+ * @param ef effect to try to get
+ * @param turns turns to aim for; default of 1
+ */
+export function ensureEffect(ef: Effect, turns = 1): void {
+  if (haveEffect(ef) < turns) {
+    if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
+      throw new EnsureError(ef);
+    }
+  }
+}
+
+const valueMap: Map<Item, number> = new Map();
+
+const MALL_VALUE_MODIFIER = 0.9;
+
+/**
+ * Returns the average value--based on mallprice and autosell--of a collection of items
+ * @param items items whose value you care about
+ */
+export function getSaleValue(...items: Item[]): number {
+  return (
+    items
+      .map((item) => {
+        if (valueMap.has(item)) return valueMap.get(item) || 0;
+        if (item.discardable) {
+          valueMap.set(
+            item,
+            mallPrice(item) > Math.max(2 * autosellPrice(item), 100)
+              ? MALL_VALUE_MODIFIER * mallPrice(item)
+              : autosellPrice(item)
+          );
+        } else {
+          valueMap.set(
+            item,
+            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0
+          );
+        }
+        return valueMap.get(item) || 0;
+      })
+      .reduce((s, price) => s + price, 0) / items.length
+  );
+}
+
+export const Environment = {
+  Outdoor: "outdoor",
+  Indoor: "indoor",
+  Underground: "underground",
+  Underwater: "underwater",
+} as const;
+
+export type EnvironmentType = typeof Environment[keyof typeof Environment];

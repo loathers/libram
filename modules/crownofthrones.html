@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MayoClinic | libram</title>
+	<title>CrownOfThrones | libram</title>
 	<meta name="description" content="Documentation for libram">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">libram</a>
 				</li>
 				<li>
-					<a href="mayoclinic.html">MayoClinic</a>
+					<a href="crownofthrones.html">CrownOfThrones</a>
 				</li>
 			</ul>
-			<h1>Namespace MayoClinic</h1>
+			<h1>Namespace CrownOfThrones</h1>
 		</div>
 	</div>
 </header>
@@ -70,88 +70,88 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Variables</h3>
+							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-namespace"><a href="mayoclinic.html#mayo" class="tsd-kind-icon">Mayo</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="crownofthrones.html#familiarrider" class="tsd-kind-icon">Familiar<wbr>Rider</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Functions</h3>
+							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="mayoclinic.html#setmayominder" class="tsd-kind-icon">set<wbr>Mayo<wbr>Minder</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-namespace"><a href="crownofthrones.html#ridingfamiliars" class="tsd-kind-icon">riding<wbr>Familiars</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-namespace">
-					<a name="mayo" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Mayo</h3>
-					<div class="tsd-signature tsd-kind-icon">Mayo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>diol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">; </span>flex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">; </span>nex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">; </span>zapine<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace">
+					<a name="familiarrider" class="tsd-anchor"></a>
+					<h3>Familiar<wbr>Rider</h3>
+					<div class="tsd-signature tsd-kind-icon">Familiar<wbr>Rider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>dropPredicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>familiar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Familiar</span><span class="tsd-signature-symbol">; </span>meatVal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>modifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Modifiers</span><span class="tsd-signature-symbol">; </span>probability<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/81bcdb9/src/resources/2015/MayoClinic.ts#L6">src/resources/2015/MayoClinic.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/81bcdb9/src/resources/2010/CrownOfThrones.ts#L6">src/resources/2010/CrownOfThrones.ts:6</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter">
-								<h5>diol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> drop<wbr>Predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li class="tsd-parameter">
-								<h5>flex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span></h5>
+								<h5>familiar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Familiar</span></h5>
 							</li>
 							<li class="tsd-parameter">
-								<h5>nex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span></h5>
+								<h5>meat<wbr>Val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li class="tsd-parameter">
-								<h5>zapine<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span></h5>
+								<h5>modifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Modifiers</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>probability<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
 							</li>
 						</ul>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="setmayominder" class="tsd-anchor"></a>
-					<h3>set<wbr>Mayo<wbr>Minder</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Mayo<wbr>Minder<span class="tsd-signature-symbol">(</span>mayo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Item</span>, quantity<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/81bcdb9/src/resources/2015/MayoClinic.ts#L19">src/resources/2015/MayoClinic.ts:19</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Sets mayo minder to a particular mayo, and ensures you have enough of it.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>mayo: <span class="tsd-signature-type">Item</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Mayo to use</p>
-									</div>
-								</li>
-								<li>
-									<h5>quantity: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Quantity to ensure</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-namespace">
+					<a name="ridingfamiliars" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> riding<wbr>Familiars</h3>
+					<div class="tsd-signature tsd-kind-icon">riding<wbr>Familiars<span class="tsd-signature-symbol">:</span> <a href="crownofthrones.html#familiarrider" class="tsd-signature-type" data-tsd-kind="Type alias">FamiliarRider</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/81bcdb9/src/resources/2010/CrownOfThrones.ts#L14">src/resources/2010/CrownOfThrones.ts:14</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -170,7 +170,7 @@
 					<li class=" tsd-kind-namespace">
 						<a href="chateaumantegna.html">Chateau<wbr>Mantegna</a>
 					</li>
-					<li class=" tsd-kind-namespace">
+					<li class="current tsd-kind-namespace">
 						<a href="crownofthrones.html">Crown<wbr>OfThrones</a>
 					</li>
 					<li class=" tsd-kind-namespace">
@@ -179,7 +179,7 @@
 					<li class=" tsd-kind-namespace">
 						<a href="guzzlr.html">Guzzlr</a>
 					</li>
-					<li class="current tsd-kind-namespace">
+					<li class=" tsd-kind-namespace">
 						<a href="mayoclinic.html">Mayo<wbr>Clinic</a>
 					</li>
 					<li class=" tsd-kind-namespace">
@@ -216,11 +216,11 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-namespace">
-						<a href="mayoclinic.html#mayo" class="tsd-kind-icon">Mayo</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
+						<a href="crownofthrones.html#familiarrider" class="tsd-kind-icon">Familiar<wbr>Rider</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="mayoclinic.html#setmayominder" class="tsd-kind-icon">set<wbr>Mayo<wbr>Minder</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-namespace">
+						<a href="crownofthrones.html#ridingfamiliars" class="tsd-kind-icon">riding<wbr>Familiars</a>
 					</li>
 				</ul>
 			</nav>

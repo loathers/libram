@@ -32,7 +32,7 @@ import {
   totalTurnsPlayed,
 } from "kolmafia";
 
-import { $class, $items } from "./template-string";
+import { $class, $familiar, $item, $items } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
 import * as property from "./property";
@@ -588,3 +588,36 @@ export const Environment = {
 } as const;
 
 export type EnvironmentType = typeof Environment[keyof typeof Environment];
+
+/**
+ * Returns the weight-coefficient of any leprechaunning that this familiar may find itself doing
+ * Assumes the familiar is nude and thus fails for hatrack & pantsrack
+ * For the Mutant Cactus Bud, returns the efficacy-multiplier instead
+ * @param familiar The familiar whose leprechaun multiplier you're interested in
+ */
+export function findLeprechaunMultiplier(familiar: Familiar): number {
+  if (familiar === $familiar`Mutant Cactus Bud`)
+    return numericModifier(
+      familiar,
+      "Leprechaun Effectiveness",
+      1,
+      $item`none`
+    );
+  const meatBonus = numericModifier(familiar, "Meat Drop", 1, $item`none`);
+  if (meatBonus === 0) return 0;
+  return Math.pow(Math.sqrt(meatBonus / 2 + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+}
+
+/**
+ * Returns the weight-coefficient of any baby gravy fairying that this familiar may find itself doing
+ * Assumes the familiar is nude and thus fails for hatrack & pantsrack
+ * For the Mutant Fire Ant, returns the efficacy-multiplier instead
+ * @param familiar The familiar whose fairy multiplier you're interested in
+ */
+export function findFairyMultiplier(familiar: Familiar): number {
+  if (familiar === $familiar`Mutant Fire Ant`)
+    return numericModifier(familiar, "Fairy Effectiveness", 1, $item`none`);
+  const itemBonus = numericModifier(familiar, "Item Drop", 1, $item`none`);
+  if (itemBonus === 0) return 0;
+  return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+}

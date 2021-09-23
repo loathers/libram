@@ -589,9 +589,13 @@ export function pickRider(
         .filter((rider) => have(rider.familiar))
         .sort(
           (a, b) =>
-            (b.dropPredicate ?? true ? b.probability * b.meatVal() : 0) +
+            (!b.dropPredicate || b.dropPredicate()
+              ? b.probability * b.meatVal()
+              : 0) +
             additionalValueFunction(b.modifier) -
-            ((a.dropPredicate ?? true ? a.probability * a.meatVal() : 0) +
+            ((!a.dropPredicate || a.dropPredicate()
+              ? a.probability * a.meatVal()
+              : 0) +
               additionalValueFunction(a.modifier))
         )
     );

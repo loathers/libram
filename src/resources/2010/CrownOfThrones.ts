@@ -577,33 +577,67 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
 ];
 
-const riderLists = new Map<(modifiers: Modifiers) => number, FamiliarRider[]>();
+function valueRider(
+  rider: FamiliarRider,
+  modifierValueFunction: (modifiers: Modifiers) => number,
+  useLimitedDrops = true
+) {
+  const dropValue =
+    !rider.dropPredicate || (rider.dropPredicate() && !useLimitedDrops)
+      ? rider.probability * rider.meatVal()
+      : 0;
+  const modifierValue = modifierValueFunction(rider.modifier);
+  return dropValue + modifierValue;
+}
 
-export function pickRider(
-  additionalValueFunction: (modifiers: Modifiers) => number = () => 0
-): FamiliarRider {
-  if (!riderLists.has(additionalValueFunction)) {
+type RiderMode = {
+  modifierValueFunction: (modifiers: Modifiers) => number;
+  useLimitedDrops: boolean;
+  excludeCurrentFamiliar: boolean;
+};
+
+const riderModes = new Map<string, RiderMode>();
+
+export function createRiderMode(
+  name: string,
+  modifierValueFunction: (modifiers: Modifiers) => number,
+  useLimitedDrops = true,
+  excludeCurrentFamiliar = true
+) {
+  riderModes.set(name, {
+    modifierValueFunction: modifierValueFunction,
+    useLimitedDrops: useLimitedDrops,
+    excludeCurrentFamiliar: excludeCurrentFamiliar,
+  });
+}
+
+const riderLists = new Map<string, FamiliarRider[]>();
+
+export function pickRider(mode: string): FamiliarRider {
+  const modeData = riderModes.get(mode);
+  if (!modeData) throw new Error("Unrecognized rider mode!");
+  const {
+    modifierValueFunction,
+    useLimitedDrops,
+    excludeCurrentFamiliar,
+  } = modeData;
+  if (!riderLists.has(mode)) {
     riderLists.set(
-      additionalValueFunction,
+      mode,
       ridingFamiliars
         .filter((rider) => have(rider.familiar))
         .sort(
           (a, b) =>
-            (!b.dropPredicate || b.dropPredicate()
-              ? b.probability * b.meatVal()
-              : 0) +
-            additionalValueFunction(b.modifier) -
-            ((!a.dropPredicate || a.dropPredicate()
-              ? a.probability * a.meatVal()
-              : 0) +
-              additionalValueFunction(a.modifier))
+            valueRider(b, modifierValueFunction, useLimitedDrops) -
+            valueRider(a, modifierValueFunction, useLimitedDrops)
         )
     );
   }
-  const list = riderLists.get(additionalValueFunction);
+  const list = riderLists.get(mode);
   if (list) {
     while (list[0].dropPredicate && !list[0].dropPredicate()) list.shift();
-    if (list[0].familiar !== myFamiliar()) return list[0];
+    if (!excludeCurrentFamiliar || list[0].familiar !== myFamiliar())
+      return list[0];
     while (list[1].dropPredicate && !list[1].dropPredicate()) list.splice(1, 1);
     return list[1];
   }

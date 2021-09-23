@@ -1,4 +1,5 @@
-import { getSaleValue } from "../../lib";
+import { myFamiliar } from "kolmafia";
+import { getSaleValue, have } from "../../lib";
 import { Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
@@ -575,3 +576,32 @@ export const ridingFamiliars: FamiliarRider[] = [
     modifier: { ["Hot Damage"]: 20 },
   },
 ];
+
+const riderLists = new Map<(modifiers: Modifiers) => number, FamiliarRider[]>();
+
+export function pickRider(
+  additionalValueFunction: (modifiers: Modifiers) => number = () => 0
+): FamiliarRider {
+  if (!riderLists.has(additionalValueFunction)) {
+    riderLists.set(
+      additionalValueFunction,
+      ridingFamiliars
+        .filter((rider) => have(rider.familiar))
+        .sort(
+          (a, b) =>
+            (b.dropPredicate ?? true ? b.probability * b.meatVal() : 0) +
+            additionalValueFunction(b.modifier) -
+            ((a.dropPredicate ?? true ? a.probability * a.meatVal() : 0) +
+              additionalValueFunction(a.modifier))
+        )
+    );
+  }
+  const list = riderLists.get(additionalValueFunction);
+  if (list) {
+    while (list[0].dropPredicate && !list[0].dropPredicate()) list.shift();
+    if (list[0].familiar !== myFamiliar()) return list[0];
+    while (list[1].dropPredicate && !list[1].dropPredicate()) list.splice(1, 1);
+    return list[1];
+  }
+  throw new Error("Could not find appropriate rider for throne or bjorn!");
+}

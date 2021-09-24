@@ -1,14 +1,20 @@
-import { $items, $skill } from "../../template-string";
+import { $item, $skill } from "../../template-string";
 import { have as _have } from "../../lib";
 
 export const summonSkill = $skill`Summon Resolutions`;
-const commonItems = $items`resolution: be feistier, resolution: be happier, resolution: be sexier, resolution: be smarter, resolution: be stronger, resolution: be wealthier`;
-const rareItems = $items`resolution: be kinder, resolution: be luckier, resolution: be more adventurous`;
-const libramExpected = new Map<Item, number>();
-commonItems.forEach((item) =>
-  libramExpected.set(item, 0.98 / commonItems.length)
-);
-rareItems.forEach((item) => libramExpected.set(item, 0.02 / rareItems.length));
+const commonChance = 0.98 / 6;
+const rareChance = 0.02 / 3;
+const libramExpected = new Map<Item, number>([
+  [$item`resolution: be feistier`, commonChance],
+  [$item`resolution: be happier`, commonChance],
+  [$item`resolution: be sexier`, commonChance],
+  [$item`resolution: be smarter`, commonChance],
+  [$item`resolution: be stronger`, commonChance],
+  [$item`resolution: be wealthier`, commonChance],
+  [$item`resolution: be kinder`, rareChance],
+  [$item`resolution: be luckier`, rareChance],
+  [$item`resolution: be more adventurous`, rareChance],
+]);
 
 /**
  * @returns true if the player can Summon Resolutions

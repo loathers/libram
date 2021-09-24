@@ -1,11 +1,16 @@
-import { $items, $skill } from "../../template-string";
+import { $item, $skill } from "../../template-string";
 import { have as _have } from "../../lib";
 
 export const summonSkill = $skill`Summon Candy Heart`;
-const libramItems = $items`green candy heart, lavender candy heart, orange candy heart, pink candy heart, white candy heart, yellow candy heart`;
-const libramExpected = new Map<Item, number>(
-  libramItems.map((item) => [item, 1.0 / libramItems.length])
-);
+const libramChance = 1.0 / 6;
+const libramExpected = new Map<Item, number>([
+  [$item`green candy heart`, libramChance],
+  [$item`lavender candy heart`, libramChance],
+  [$item`orange candy heart`, libramChance],
+  [$item`pink candy heart`, libramChance],
+  [$item`white candy heart`, libramChance],
+  [$item`yellow candy heart`, libramChance],
+]);
 
 /**
  * @returns true if the player can Summon Candy Heart

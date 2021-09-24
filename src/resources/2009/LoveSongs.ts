@@ -1,11 +1,16 @@
-import { $items, $skill } from "../../template-string";
+import { $item, $skill } from "../../template-string";
 import { have as _have } from "../../lib";
 
 export const summonSkill = $skill`Summon Love Song`;
-const libramItems = $items`love song of disturbing obsession, love song of icy revenge, love song of naughty innuendo, love song of smoldering passion, love song of sugary cuteness, love song of vague ambiguity`;
-const libramExpected = new Map<Item, number>(
-  libramItems.map((item) => [item, 1.0 / libramItems.length])
-);
+const libramChance = 1.0 / 6;
+const libramExpected = new Map<Item, number>([
+  [$item`love song of disturbing obsession`, libramChance],
+  [$item`love song of icy revenge`, libramChance],
+  [$item`love song of naughty innuendo`, libramChance],
+  [$item`love song of smoldering passion`, libramChance],
+  [$item`love song of sugary cuteness`, libramChance],
+  [$item`love song of vague ambiguity`, libramChance],
+]);
 
 /**
  * @returns true if the player can Summon Love Song

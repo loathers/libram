@@ -1,11 +1,8 @@
 import { get } from "../../property";
-import { $item, $items, $skill } from "../../template-string";
+import { $item, $skill } from "../../template-string";
 import { have as _have } from "../../lib";
 
 export const summonSkill = $skill`Summon Taffy`;
-const commonItems = $items`pulled blue taffy, pulled orange taffy, pulled violet taffy, pulled red taffy`;
-const rareItems = $items`pulled indigo taffy, pulled green taffy`;
-const yellowItem = $item`pulled yellow taffy`;
 
 /**
  * @returns true if the player can Summon Taffy
@@ -22,19 +19,20 @@ export function expected(): Map<Item, number> {
   const yellowSummons = get("_taffyYellowSummons");
   const onlyYellow = yellowSummons === 0 && rareSummons === 3;
   const totalRareChance = rareSummons < 4 ? 1.0 / 2 ** (rareSummons + 1) : 0.0;
-  const rareItemChance = onlyYellow
+  const commonChance = (1.0 - totalRareChance) / 4;
+  const rareChance = onlyYellow
     ? 0.0
-    : totalRareChance / (rareItems.length + 1 - get("_taffyYellowSummons"));
+    : totalRareChance / (3 - get("_taffyYellowSummons"));
   const yellowChance =
-    yellowSummons === 1 ? 0.0 : onlyYellow ? totalRareChance : rareItemChance;
+    yellowSummons === 1 ? 0.0 : onlyYellow ? totalRareChance : rareChance;
 
-  const results = new Map<Item, number>();
-  commonItems.forEach((item) =>
-    results.set(item, (1.0 - totalRareChance) / commonItems.length)
-  );
-  rareItems.forEach((item) =>
-    results.set(item, rareItemChance / rareItems.length)
-  );
-  results.set(yellowItem, yellowChance);
-  return results;
+  return new Map<Item, number>([
+    [$item`pulled blue taffy`, commonChance],
+    [$item`pulled orange taffy`, commonChance],
+    [$item`pulled violet taffy`, commonChance],
+    [$item`pulled red taffy`, commonChance],
+    [$item`pulled indigo taffy`, rareChance],
+    [$item`pulled green taffy`, rareChance],
+    [$item`pulled yellow taffy`, yellowChance],
+  ]);
 }

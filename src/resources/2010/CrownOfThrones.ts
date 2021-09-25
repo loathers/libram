@@ -613,7 +613,7 @@ export function createRiderMode(
 
 const riderLists = new Map<string, FamiliarRider[]>();
 
-export function pickRider(mode: string): FamiliarRider {
+export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) throw new Error("Unrecognized rider mode!");
   const {
@@ -635,11 +635,12 @@ export function pickRider(mode: string): FamiliarRider {
   }
   const list = riderLists.get(mode);
   if (list) {
-    while (list[0].dropPredicate && !list[0].dropPredicate()) list.shift();
-    if (!excludeCurrentFamiliar || list[0].familiar !== myFamiliar())
-      return list[0];
-    while (list[1].dropPredicate && !list[1].dropPredicate()) list.splice(1, 1);
-    return list[1];
+    const riderToReturn = list.find(
+      (rider) =>
+        (!rider.dropPredicate || rider.dropPredicate()) &&
+        (!excludeCurrentFamiliar || myFamiliar() !== rider.familiar)
+    );
+    return riderToReturn ?? null;
   }
-  throw new Error("Could not find appropriate rider for throne or bjorn!");
+  return null;
 }

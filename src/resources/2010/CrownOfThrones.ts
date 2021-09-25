@@ -615,7 +615,7 @@ const riderLists = new Map<string, FamiliarRider[]>();
 
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
-  if (!modeData) throw new Error("Unrecognized rider mode!");
+  if (!modeData) return null;
   const {
     modifierValueFunction,
     useLimitedDrops,

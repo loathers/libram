@@ -577,7 +577,7 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
 ];
 
-function valueRider(
+export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (modifiers: Modifiers) => number,
   useLimitedDrops = true

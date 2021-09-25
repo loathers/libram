@@ -14,10 +14,11 @@ export function paintingFought(): boolean {
   return get("_chateauMonsterFought");
 }
 
-export function fightPainting(): void {
+export function fightPainting(): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  runCombat();
+  const result = runCombat();
   if (choiceFollowsFight()) visitUrl("choice.php");
+  return result;
 }
 
 const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;

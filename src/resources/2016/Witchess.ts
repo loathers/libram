@@ -22,7 +22,7 @@ export const pieces = Monster.get([
   "Witchess Witch",
   "Witchess Ox",
 ]);
-export function fightPiece(piece: Monster): void {
+export function fightPiece(piece: Monster): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
@@ -44,6 +44,7 @@ export function fightPiece(piece: Monster): void {
   ) {
     throw new Error("Failed to start fight.");
   }
-  runCombat();
+  const result = runCombat();
   if (choiceFollowsFight()) visitUrl("choice.php");
+  return result;
 }

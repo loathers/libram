@@ -1,4 +1,6 @@
 /** @module GeneralLibrary */
+import "core-js/modules/es.object.entries";
+
 import {
   appearanceRates,
   autosellPrice,

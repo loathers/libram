@@ -1,3 +1,6 @@
+import "core-js/modules/es.object.entries";
+import "core-js/modules/es.object.from-entries";
+
 import { getProperty, MafiaClass, setProperty } from "kolmafia";
 
 import {

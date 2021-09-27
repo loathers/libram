@@ -9,7 +9,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn run tsc && yarn run babel --extensions .ts src -d dist",
+    "build": "yarn run tsc",
     "clean": "rm -rf dist",
     "docs": "yarn run typedoc",
     "format": "yarn run prettier --write .",

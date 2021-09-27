@@ -1,3 +1,5 @@
+import "core-js/modules/es.object.values";
+
 import { buy, getWorkshed, retrieveItem, toInt, use } from "kolmafia";
 import { have } from "../../lib";
 import logger from "../../logger";

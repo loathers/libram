@@ -1,7 +1,7 @@
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
-export * from "./Dungeon";
+export * from "./dungeons/Dungeon";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";
@@ -26,3 +26,6 @@ export {
 } from "./property";
 export { get as getModifier } from "./modifier";
 export * from "./freerun";
+export * from "./dungeons/Dreadsylvania";
+export * from "./dungeons/Hobopolis";
+export * from "./dungeons/SlimeTube";

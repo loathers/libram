@@ -3,7 +3,7 @@ import { Clan } from "../Clan";
 import { $items } from "../template-string";
 import Dungeon from "./Dungeon";
 
-export default class Hobopolis extends Dungeon {
+export class Hobopolis extends Dungeon {
   clan: number;
 
   constructor(clanNameOrId: string | number = getClanId()) {

@@ -3,7 +3,7 @@ import { Clan } from "../Clan";
 import { $items } from "../template-string";
 import Dungeon from "./Dungeon";
 
-export default class Dreadsylvania extends Dungeon {
+export class Dreadsylvania extends Dungeon {
   clan: number;
 
   constructor(clanNameOrId: string | number = getClanId()) {

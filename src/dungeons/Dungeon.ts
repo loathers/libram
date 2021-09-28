@@ -1,7 +1,6 @@
 import { getClanName, myId, toItem, visitUrl, xpath } from "kolmafia";
 import { Clan } from "../Clan";
 import { getPlayerFromIdOrName } from "../lib";
-import { $items } from "../template-string";
 
 export default class Dungeon {
   name: string;

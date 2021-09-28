@@ -4,8 +4,6 @@ import { $items } from "../template-string";
 import Dungeon from "./Dungeon";
 
 export class SlimeTube extends Dungeon {
-  clan: number;
-
   constructor(clanNameOrId: string | number = getClanId()) {
     super(
       "The Slime Tube",
@@ -14,19 +12,8 @@ export class SlimeTube extends Dungeon {
       "sealtube",
       250000,
       "slimehole.gif",
-      "greasespot.gif"
+      "greasespot.gif",
+      clanNameOrId
     );
-    if (typeof clanNameOrId === "number") {
-      this.clan = clanNameOrId;
-    } else {
-      const clanId = Clan.getWhitelisted().find(
-        (clan) => clan.name.toLowerCase() === clanNameOrId.toLowerCase()
-      )?.id;
-      if (!clanId)
-        throw new Error(
-          "Unable to find a clan by that name in your whitelist!"
-        );
-      this.clan = clanId;
-    }
   }
 }

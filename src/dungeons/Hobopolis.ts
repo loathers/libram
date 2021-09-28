@@ -4,8 +4,6 @@ import { $items } from "../template-string";
 import Dungeon from "./Dungeon";
 
 export class Hobopolis extends Dungeon {
-  clan: number;
-
   constructor(clanNameOrId: string | number = getClanId()) {
     super(
       "Hobopolis",
@@ -14,19 +12,8 @@ export class Hobopolis extends Dungeon {
       "floodsewer",
       1000000,
       "opengrate.gif",
-      "sewergrate.gif"
+      "sewergrate.gif",
+      clanNameOrId
     );
-    if (typeof clanNameOrId === "number") {
-      this.clan = clanNameOrId;
-    } else {
-      const clanId = Clan.getWhitelisted().find(
-        (clan) => clan.name.toLowerCase() === clanNameOrId.toLowerCase()
-      )?.id;
-      if (!clanId)
-        throw new Error(
-          "Unable to find a clan by that name in your whitelist!"
-        );
-      this.clan = clanId;
-    }
   }
 }

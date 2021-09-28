@@ -10,6 +10,7 @@ export default class Dungeon {
   openCost: number;
   openImage: string;
   closedImage: string;
+  clan: number;
 
   /**
    * Creates dungeon object for managing clan dungeons
@@ -28,7 +29,8 @@ export default class Dungeon {
     closeAction: string,
     openCost: number,
     openImage: string,
-    closedImage: string
+    closedImage: string,
+    clanNameOrId: number | string
   ) {
     this.name = name;
     this.loot = loot;
@@ -37,6 +39,18 @@ export default class Dungeon {
     this.openCost = openCost;
     this.openImage = openImage;
     this.closedImage = closedImage;
+    if (typeof clanNameOrId === "number") {
+      this.clan = clanNameOrId;
+    } else {
+      const clanId = Clan.getWhitelisted().find(
+        (clan) => clan.name.toLowerCase() === clanNameOrId.toLowerCase()
+      )?.id;
+      if (!clanId)
+        throw new Error(
+          "Unable to find a clan by that name in your whitelist!"
+        );
+      this.clan = clanId;
+    }
   }
 
   /**
@@ -50,60 +64,71 @@ export default class Dungeon {
     loot: Item | Item[] = this.loot,
     distributeAllOfAGivenItem = true
   ): void {
-    const player = getPlayerFromIdOrName(idOrName);
-    const lootList = Array.isArray(loot) ? loot : [loot];
-    const badLoot = lootList.find((lootItem) => !this.loot.includes(lootItem));
-    if (badLoot) {
-      throw new Error(`${badLoot} is not a valid piece of dungeon loot`);
-    }
-    const pageText = visitUrl("clan_basement.php");
-    if (!pageText.match(player.name)) {
-      throw new Error(
-        `${player.name} cannot be distributed loot from ${getClanName()}`
+    Clan.with(this.clan, () => {
+      const player = getPlayerFromIdOrName(idOrName);
+      const lootList = Array.isArray(loot) ? loot : [loot];
+      const badLoot = lootList.find(
+        (lootItem) => !this.loot.includes(lootItem)
       );
-    }
-    const itemNames = xpath(pageText, "//tr/td[2]/b/text()");
-    const whichLoots = xpath(
-      pageText,
-      '//form[@action="clan_basement.php"]//input[@type="hidden"][@name="whichloot"]/@value'
-    );
-    itemNames.forEach((itemName, index) => {
-      if (lootList.includes(toItem(itemName))) {
-        visitUrl(
-          `clan_basement.php?whichloot=${whichLoots[index]}&recipient=${player.id}`
-        );
-        if (!distributeAllOfAGivenItem)
-          lootList.slice(lootList.indexOf(toItem(itemName)));
+      if (badLoot) {
+        throw new Error(`${badLoot} is not a valid piece of dungeon loot`);
       }
+      const pageText = visitUrl("clan_basement.php");
+      if (!pageText.match(player.name)) {
+        throw new Error(
+          `${player.name} cannot be distributed loot from ${getClanName()}`
+        );
+      }
+      const itemNames = xpath(pageText, "//tr/td[2]/b/text()");
+      const whichLoots = xpath(
+        pageText,
+        '//form[@action="clan_basement.php"]//input[@type="hidden"][@name="whichloot"]/@value'
+      );
+      itemNames.forEach((itemName, index) => {
+        if (lootList.includes(toItem(itemName))) {
+          visitUrl(
+            `clan_basement.php?whichloot=${whichLoots[index]}&recipient=${player.id}`
+          );
+          if (!distributeAllOfAGivenItem)
+            lootList.slice(lootList.indexOf(toItem(itemName)));
+        }
+      });
     });
   }
 
   close(): boolean {
-    visitUrl(`clan_basement.php?action=${this.closeAction}&confirm=true`, true);
-    const pageText = visitUrl("clan_basement.php");
-    return pageText.includes(this.closedImage);
+    return Clan.with(this.clan, () => {
+      visitUrl(
+        `clan_basement.php?action=${this.closeAction}&confirm=true`,
+        true
+      );
+      const pageText = visitUrl("clan_basement.php");
+      return pageText.includes(this.closedImage);
+    });
   }
   /**
    * Opens clan dungeon and, if relevant, pays meat to do so
    * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
    */
   open(paymentPolicy: "None" | "All" | "Difference" = "Difference"): boolean {
-    const pageText = visitUrl("clan_basement.php");
-    if (pageText.includes(this.openImage)) return true;
+    return Clan.with(this.clan, () => {
+      const pageText = visitUrl("clan_basement.php");
+      if (pageText.includes(this.openImage)) return true;
 
-    const clan = Clan.get();
+      const clan = Clan.get();
 
-    if (paymentPolicy === "All") {
-      clan.putMeatInCoffer(this.openCost);
-    } else {
-      const stashMeat = clan.getMeatInCoffer();
-      const payDifference = this.openCost - stashMeat;
-      if (payDifference > 0) {
-        if (paymentPolicy === "None") return false;
-        clan.putMeatInCoffer(payDifference);
+      if (paymentPolicy === "All") {
+        clan.putMeatInCoffer(this.openCost);
+      } else {
+        const stashMeat = clan.getMeatInCoffer();
+        const payDifference = this.openCost - stashMeat;
+        if (payDifference > 0) {
+          if (paymentPolicy === "None") return false;
+          clan.putMeatInCoffer(payDifference);
+        }
       }
-    }
-    visitUrl(`clan_basement.php?action=${this.openAction}`, true);
-    return visitUrl("clan_basement.php").includes(this.openImage);
+      visitUrl(`clan_basement.php?action=${this.openAction}`, true);
+      return visitUrl("clan_basement.php").includes(this.openImage);
+    });
   }
 }

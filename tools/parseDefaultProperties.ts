@@ -1,9 +1,10 @@
-import fetch from "node-fetch";
-import { writeFile } from "fs/promises";
-import path from "path";
-import * as _importForGlobals from "kolmafia";
+/* eslint-disable @typescript-eslint/no-var-requires */
+/// <reference types="kolmafia" />
+const nodeFetch = require("node-fetch");
+const { writeFile } = require("fs/promises");
+const path = require("path");
 
-import {
+const {
   isBooleanProperty,
   isFamiliarProperty,
   isLocationProperty,
@@ -11,15 +12,15 @@ import {
   isNumericOrStringProperty,
   isNumericProperty,
   isStatProperty,
-} from "../src/propertyTyping";
+} = require("../dist/propertyTyping");
 
 const PROPS_FILE =
-  "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/data/defaults.txt?format=raw";
+  "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
 async function main() {
-  const response = await fetch(PROPS_FILE);
+  const response = await nodeFetch(PROPS_FILE);
   const text = await response.text();
   const props = text.split("\n");
 

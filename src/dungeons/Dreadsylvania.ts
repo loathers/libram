@@ -2,24 +2,24 @@ import { myId } from "kolmafia";
 import {
   close as closeDungeon,
   distribute as distributeDungeon,
+  Dreadsylvania,
   open as openDungeon,
-  SlimeTube,
 } from "./Dungeon";
 
 export function close() {
-  closeDungeon(SlimeTube);
+  closeDungeon(Dreadsylvania);
 }
 
 export function open(
   paymentPolicy: "None" | "All" | "Difference" = "Difference"
 ) {
-  openDungeon(SlimeTube, paymentPolicy);
+  openDungeon(Dreadsylvania, paymentPolicy);
 }
 
 export function distribute(
   idOrName: number | string = myId(),
-  loot: Item | Item[] = SlimeTube.loot,
+  loot: Item | Item[] = Dreadsylvania.loot,
   distributeAllOfAGivenItem = true
 ) {
-  distributeDungeon(SlimeTube, idOrName, loot, distributeAllOfAGivenItem);
+  distributeDungeon(Dreadsylvania, idOrName, loot, distributeAllOfAGivenItem);
 }

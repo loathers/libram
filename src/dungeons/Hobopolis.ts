@@ -2,8 +2,8 @@ import { myId } from "kolmafia";
 import {
   close as closeDungeon,
   distribute as distributeDungeon,
-  open as openDungeon,
   Hobopolis,
+  open as openDungeon,
 } from "./Dungeon";
 
 export function close() {

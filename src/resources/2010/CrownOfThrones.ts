@@ -1,4 +1,5 @@
-import { getSaleValue } from "../../lib";
+import { myFamiliar } from "kolmafia";
+import { getSaleValue, have } from "../../lib";
 import { Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
@@ -575,3 +576,71 @@ export const ridingFamiliars: FamiliarRider[] = [
     modifier: { ["Hot Damage"]: 20 },
   },
 ];
+
+export function valueRider(
+  rider: FamiliarRider,
+  modifierValueFunction: (modifiers: Modifiers) => number,
+  useLimitedDrops = true
+) {
+  const dropValue =
+    !rider.dropPredicate || (rider.dropPredicate() && !useLimitedDrops)
+      ? rider.probability * rider.meatVal()
+      : 0;
+  const modifierValue = modifierValueFunction(rider.modifier);
+  return dropValue + modifierValue;
+}
+
+type RiderMode = {
+  modifierValueFunction: (modifiers: Modifiers) => number;
+  useLimitedDrops: boolean;
+  excludeCurrentFamiliar: boolean;
+};
+
+const riderModes = new Map<string, RiderMode>();
+
+export function createRiderMode(
+  name: string,
+  modifierValueFunction: (modifiers: Modifiers) => number,
+  useLimitedDrops = true,
+  excludeCurrentFamiliar = true
+) {
+  riderModes.set(name, {
+    modifierValueFunction: modifierValueFunction,
+    useLimitedDrops: useLimitedDrops,
+    excludeCurrentFamiliar: excludeCurrentFamiliar,
+  });
+}
+
+const riderLists = new Map<string, FamiliarRider[]>();
+
+export function pickRider(mode: string): FamiliarRider | null {
+  const modeData = riderModes.get(mode);
+  if (!modeData) return null;
+  const {
+    modifierValueFunction,
+    useLimitedDrops,
+    excludeCurrentFamiliar,
+  } = modeData;
+  if (!riderLists.has(mode)) {
+    riderLists.set(
+      mode,
+      ridingFamiliars
+        .filter((rider) => have(rider.familiar))
+        .sort(
+          (a, b) =>
+            valueRider(b, modifierValueFunction, useLimitedDrops) -
+            valueRider(a, modifierValueFunction, useLimitedDrops)
+        )
+    );
+  }
+  const list = riderLists.get(mode);
+  if (list) {
+    const riderToReturn = list.find(
+      (rider) =>
+        (!rider.dropPredicate || rider.dropPredicate()) &&
+        (!excludeCurrentFamiliar || myFamiliar() !== rider.familiar)
+    );
+    return riderToReturn ?? null;
+  }
+  return null;
+}

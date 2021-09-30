@@ -25,6 +25,6 @@ export {
 } from "./property";
 export { get as getModifier } from "./modifier";
 export * from "./freerun";
-export * from "./dungeons/Dreadsylvania";
-export * from "./dungeons/Hobopolis";
-export * from "./dungeons/SlimeTube";
+export * as Dreadsylvania from "./dungeons/Dreadsylvania";
+export * as Hobopolis from "./dungeons/Hobopolis";
+export * as SlimeTube from "./dungeons/SlimeTube";

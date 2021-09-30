@@ -1,19 +1,25 @@
-import { getClanId } from "kolmafia";
-import { Clan } from "../Clan";
-import { $items } from "../template-string";
-import Dungeon from "./Dungeon";
+import { myId } from "kolmafia";
+import {
+  close as closeDungeon,
+  distribute as distributeDungeon,
+  open as openDungeon,
+  SlimeTube,
+} from "./Dungeon";
 
-export class SlimeTube extends Dungeon {
-  constructor(clanNameOrId: string | number = getClanId()) {
-    super(
-      "The Slime Tube",
-      $items`slime-soaked brain, slime-soaked hypophysis, slime-soaked sweat gland, squirming Slime larva, caustic slime nodule, caustic slime nodule, hardened slime belt, hardened slime hat, hardened slime pants`,
-      "cleanspot",
-      "sealtube",
-      250000,
-      "slimehole.gif",
-      "greasespot.gif",
-      clanNameOrId
-    );
-  }
+export function close() {
+  closeDungeon(SlimeTube);
+}
+
+export function open(
+  paymentPolicy: "None" | "All" | "Difference" = "Difference"
+) {
+  openDungeon(SlimeTube, paymentPolicy);
+}
+
+export function distribute(
+  idOrName: number | string = myId(),
+  loot: Item | Item[] = SlimeTube.loot,
+  distributeAllOfAGivenItem = true
+) {
+  distributeDungeon(SlimeTube, idOrName, loot, distributeAllOfAGivenItem);
 }

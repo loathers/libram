@@ -1,15 +1,20 @@
-import fetch from "node-fetch";
-import { writeFile } from "fs/promises";
-import path from "path";
-import {
-  BaseJavaCstVisitorWithDefaults,
-  parse,
+/* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+const nodeFetch = require("node-fetch");
+const { writeFile } = require("fs/promises");
+const path = require("path");
+const { BaseJavaCstVisitorWithDefaults, parse } = require("java-parser");
+
+/**
+ *
+import type {
   VariableDeclaratorListCtx,
-  VariableInitializerListCstNode,
+  VariableInitializerListCstNode
 } from "java-parser";
+ */
 
 const MODIFIERS_SOURCE_FILE =
-  "https://sourceforge.net/p/kolmafia/code/HEAD/tree/src/net/sourceforge/kolmafia/Modifiers.java?format=raw";
+  "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/net/sourceforge/kolmafia/Modifiers.java";
 
 const MODIFIERS_FILE = path.join(__dirname, "../src/modifierTypes.ts");
 
@@ -44,7 +49,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 
   processModifier(
     modifierType: keyof ModifiersVisitor["modifiers"],
-    list: VariableInitializerListCstNode
+    list: any
   ) {
     const modifierDefinition = list.children.variableInitializer;
     const name = modifierDefinition[0].children.expression?.[0].children;
@@ -71,9 +76,9 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 
   processModifiers(
     modifierType: keyof ModifiersVisitor["modifiers"],
-    list: VariableInitializerListCstNode
+    list: any
   ) {
-    list.children.variableInitializer.forEach((v) => {
+    list.children.variableInitializer.forEach((v: any) => {
       const list =
         v.children.arrayInitializer?.[0].children.variableInitializerList?.[0];
       if (list) {
@@ -82,7 +87,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
     });
   }
 
-  variableDeclaratorList(ctx: VariableDeclaratorListCtx) {
+  variableDeclaratorList(ctx: any) {
     const name =
       ctx.variableDeclarator[0].children.variableDeclaratorId[0].children
         .Identifier[0].image;
@@ -103,7 +108,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 }
 
 async function main() {
-  const response = await fetch(MODIFIERS_SOURCE_FILE);
+  const response = await nodeFetch(MODIFIERS_SOURCE_FILE);
   const text = await response.text();
   const cst = parse(text);
 

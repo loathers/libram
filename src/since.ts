@@ -60,7 +60,8 @@ export function sinceKolmafiaRevision(revision: number): void {
   }
 
   // Based on net.sourceforge.kolmafia.textui.Parser.sinceException()
-  if (getRevision() < revision) {
+  const currentRevision = getRevision();
+  if (currentRevision > 0 && currentRevision < revision) {
     throw new KolmafiaVersionError(
       `${getScriptName()} requires revision r${revision} of kolmafia or higher (current: ${getRevision()}). Up-to-date builds can be found at https://ci.kolmafia.us/.`
     );
@@ -75,6 +76,7 @@ export function sinceKolmafiaRevision(revision: number): void {
  * This behaves like the `since X.Y;` statement in ASH.
  * @param majorVersion Major version number
  * @param minorVersion Minor version number
+ * @deprecated Point versions are no longer released by KoLmafia
  * @throws {KolmafiaVersionError}
  *    If KoLmafia's major version is less than `majorVersion`, or if the major
  *    versions are equal but the minor version is less than `minorVersion`
@@ -91,6 +93,10 @@ export function sinceKolmafiaVersion(
   majorVersion: number,
   minorVersion: number
 ): void {
+  if (getRevision() >= 25720) {
+    return;
+  }
+
   if (!Number.isInteger(majorVersion)) {
     throw new TypeError(
       `Invalid major version number ${majorVersion} (must be an integer)`
@@ -99,6 +105,12 @@ export function sinceKolmafiaVersion(
   if (!Number.isInteger(minorVersion)) {
     throw new TypeError(
       `Invalid minor version number ${minorVersion} (must be an integer)`
+    );
+  }
+
+  if (majorVersion > 21 || (majorVersion === 20 && minorVersion > 9)) {
+    throw new Error(
+      `There were no versions released after 21.09. This command will always fail`
     );
   }
 

@@ -9,6 +9,9 @@ import { get } from "../../property";
 
 const familiar = Familiar.get("Red-Nosed Snapper");
 
+/**
+ * Map of phylum to item that phylum drops.
+ */
 export const phylumItem = new Map<Phylum, Item>([
   [Phylum.get("Beast"), Item.get("patch of extra-warm fur")],
   [Phylum.get("Bug"), Item.get("a bug's lymph")],
@@ -34,6 +37,9 @@ export const phylumItem = new Map<Phylum, Item>([
   [Phylum.get("Weird"), Item.get("non-Euclidean angle]")],
 ]);
 
+/**
+ * Map of drop item to phylum it drops from.
+ */
 export const itemPhylum = new Map(
   [...phylumItem].map(([phylum, item]) => [item, phylum])
 );

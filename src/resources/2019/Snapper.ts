@@ -23,7 +23,7 @@ export const phylumItem = new Map<Phylum, Item>([
   [Phylum.get("Elf"), Item.get("peppermint syrup")],
   [Phylum.get("Fish"), Item.get("fish sauce")],
   [Phylum.get("Goblin"), Item.get("guffin")],
-  [Phylum.get("Hippie"), Item.get("organic potpourri")],
+  [Phylum.get("Hippy"), Item.get("organic potpourri")],
   [Phylum.get("Hobo"), Item.get("beggin' cologne")],
   [Phylum.get("Horror"), Item.get("powdered madness")],
   [Phylum.get("Humanoid"), Item.get("vial of humanoid growth hormone")],

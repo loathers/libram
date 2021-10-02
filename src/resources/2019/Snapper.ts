@@ -1,13 +1,20 @@
-import { cliExecute, haveFamiliar, myFamiliar, toPhylum } from "kolmafia";
-import { $phylum, get } from "../..";
-import { $familiar } from "../../template-string";
+import {
+  cliExecute,
+  haveFamiliar,
+  myFamiliar,
+  toPhylum,
+  useFamiliar,
+} from "kolmafia";
+import { get } from "../../property";
+
+const familiar = Familiar.get("Red-Nosed Snapper");
 
 /**
  * Return whether you have a Red-Nosed Snapper.
  * @returns True if you have a Red-Nosed Snapper, false otherwise.
  */
 export function have(): boolean {
-  return haveFamiliar($familiar`Red-Nosed Snapper`);
+  return haveFamiliar(familiar);
 }
 
 /**
@@ -16,18 +23,21 @@ export function have(): boolean {
  */
 export function getTrackedPhylum(): Phylum | null {
   const phylum = toPhylum(get("redSnapperPhylum"));
-  return phylum === $phylum`none` ? null : phylum;
+  return phylum === Phylum.get("none") ? null : phylum;
 }
 
 /**
- * Set snapper tracking to a certain phylum. Assumes snapper is currently your familiar.
+ * Set snapper tracking to a certain phylum.
  * @param phylum Phylum to track.
  */
 export function trackPhylum(phylum: Phylum): void {
-  if (myFamiliar() !== $familiar`Red-Nosed Snapper`) {
-    throw new Error("Need Red-Nosed Snapper out to set phylum!");
+  const currentFamiliar = myFamiliar();
+  try {
+    useFamiliar(familiar);
+    cliExecute(`snapper ${phylum}`);
+  } finally {
+    useFamiliar(currentFamiliar);
   }
-  cliExecute(`snapper ${phylum}`);
 }
 
 /**

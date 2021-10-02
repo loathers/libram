@@ -455,6 +455,24 @@ export class Macro {
   static attack<T extends Macro>(this: Constructor<T>): T {
     return new this().attack();
   }
+
+  /**
+   * Create an if_ statement that triggers only against a particular monster
+   * @param monster The monster in question
+   * @param macro The macro to trigger when the monster is found
+   */
+  ifMonster(monster: Monster, macro: Macro): Macro {
+    return this.if_(`monsterid ${monster.id}`, macro);
+  }
+
+  /**
+   * Create a new macro with an if_ statement that triggers only against a particular monster
+   * @param monster The monster in question
+   * @param macro The macro to trigger when the monster is found
+   */
+  static ifMonster(monster: Monster, macro: Macro): Macro {
+    return new Macro().ifMonster(monster, macro);
+  }
 }
 
 /**

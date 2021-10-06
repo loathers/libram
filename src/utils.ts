@@ -102,3 +102,17 @@ export function setEqual<T>(a: T[], b: T[]): boolean {
     sortedA.every((item, index) => item === sortedB[index])
   );
 }
+
+export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
+  const returnValue = new Map<T2, T1>();
+  for (const [key, value] of map) {
+    returnValue.set(value, key);
+  }
+  return returnValue;
+}
+
+export function argmax<T>(values: [T, number][]): T {
+  return values.reduce(([minValue, minScore], [value, score]) =>
+    score > minScore ? [value, score] : [minValue, minScore]
+  )[0];
+}

@@ -186,13 +186,14 @@ export function haveBooze(): boolean {
 }
 
 const ingredientToPlatinumCocktail = new Map<Item, Item>([
-  [$item`miniature boiler`, $item`steamboat`],
-  [$item`cold wad`, $item`ghiaccio colada`],
-  [$item`robin's egg`, $item`nog-on-the-cob`],
-  [$item`mangled finger`, $item`sourfinger`],
-  [$item`dish of clarified butter`, $item`buttery boy`],
+  [$item`miniature boiler`, $item`Steamboat`],
+  [$item`cold wad`, $item`Ghiaccio Colada`],
+  [$item`robin's egg`, $item`Nog-on-the-Cob`],
+  [$item`mangled finger`, $item`Sourfinger`],
+  [$item`Dish of Clarified Butter`, $item`Buttery Boy`],
 ]);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const platinumCocktailToIngredient = invertMap(ingredientToPlatinumCocktail);
 
 export function getCheapestPlatinumCocktail(): Item {

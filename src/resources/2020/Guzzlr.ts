@@ -1,7 +1,8 @@
-import { runChoice, use, visitUrl } from "kolmafia";
+import { mallPrice, runChoice, use, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
+import { argmax, invertMap } from "../../utils";
 
 export const item = $item`Guzzlr tablet`;
 export function have(): boolean {
@@ -182,4 +183,23 @@ export function haveBooze(): boolean {
     default:
       return haveItem(booze);
   }
+}
+
+const ingredientToPlatinumCocktail = new Map<Item, Item>([
+  [$item`miniature boiler`, $item`steamboat`],
+  [$item`cold wad`, $item`ghiaccio colada`],
+  [$item`robin's egg`, $item`nog-on-the-cob`],
+  [$item`mangled finger`, $item`sourfinger`],
+  [$item`dish of clarified butter`, $item`buttery boy`],
+]);
+
+const platinumCocktailToIngredient = invertMap(ingredientToPlatinumCocktail);
+
+export function getCheapestPlatinumCocktail(): Item {
+  return argmax(
+    Array.from(ingredientToPlatinumCocktail).map(
+      ([ingredient, cocktail]) =>
+        [cocktail, mallPrice(ingredient)] as [Item, number]
+    )
+  );
 }

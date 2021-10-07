@@ -504,9 +504,12 @@ export type Player = {
  * @returns Object containing id and name of player
  */
 export function getPlayerFromIdOrName(idOrName: number | string): Player {
-  return typeof idOrName === "string"
-    ? { name: idOrName, id: parseInt(getPlayerId(idOrName)) }
-    : { name: getPlayerName(idOrName), id: idOrName };
+  const id =
+    typeof idOrName === "number" ? idOrName : parseInt(getPlayerId(idOrName));
+  return {
+    name: getPlayerName(id),
+    id: id,
+  };
 }
 
 /**

@@ -151,3 +151,12 @@ export const SlimeTube = createDungeon(
   "slimehole.gif",
   "greasespot.gif"
 );
+
+export function findLoot(dungeon: dungeon): Map<Item, number> {
+  const returnValue = new Map<Item, number>();
+  const pageText = visitUrl("clan_basement.php");
+  for (const lootItem of dungeon.loot) {
+    returnValue.set(lootItem, pageText.match(lootItem.name)?.length ?? 0);
+  }
+  return returnValue;
+}

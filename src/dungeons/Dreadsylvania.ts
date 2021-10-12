@@ -3,23 +3,28 @@ import {
   close as closeDungeon,
   distribute as distributeDungeon,
   Dreadsylvania,
+  findLoot as findLootDungeon,
   open as openDungeon,
 } from "./Dungeon";
 
-export function close() {
-  closeDungeon(Dreadsylvania);
+export function close(): boolean {
+  return closeDungeon(Dreadsylvania);
 }
 
 export function open(
   paymentPolicy: "None" | "All" | "Difference" = "Difference"
-) {
-  openDungeon(Dreadsylvania, paymentPolicy);
+): boolean {
+  return openDungeon(Dreadsylvania, paymentPolicy);
 }
 
 export function distribute(
   idOrName: number | string = myId(),
   loot: Item | Item[] = Dreadsylvania.loot,
   distributeAllOfAGivenItem = true
-) {
+): void {
   distributeDungeon(Dreadsylvania, idOrName, loot, distributeAllOfAGivenItem);
+}
+
+export function findLoot(): Map<Item, number> {
+  return findLootDungeon(Dreadsylvania);
 }

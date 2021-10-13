@@ -19,7 +19,7 @@ export function open(
 
 export function distribute(
   idOrName: number | string = myId(),
-  loot: Item | Item[] = SlimeTube.loot,
+  loot: Item | Item[] | Map<Item, number> = SlimeTube.loot,
   distributeAllOfAGivenItem = true
 ): void {
   distributeDungeon(SlimeTube, idOrName, loot, distributeAllOfAGivenItem);

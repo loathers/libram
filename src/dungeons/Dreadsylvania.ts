@@ -19,7 +19,7 @@ export function open(
 
 export function distribute(
   idOrName: number | string = myId(),
-  loot: Item | Item[] = Dreadsylvania.loot,
+  loot: Item | Item[] | Map<Item, number> = Dreadsylvania.loot,
   distributeAllOfAGivenItem = true
 ): void {
   distributeDungeon(Dreadsylvania, idOrName, loot, distributeAllOfAGivenItem);

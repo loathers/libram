@@ -19,7 +19,7 @@ export function open(
 
 export function distribute(
   idOrName: number | string = myId(),
-  loot: Item | Item[] = Hobopolis.loot,
+  loot: Item | Item[] | Map<Item, number> = Hobopolis.loot,
   distributeAllOfAGivenItem = true
 ): void {
   distributeDungeon(Hobopolis, idOrName, loot, distributeAllOfAGivenItem);

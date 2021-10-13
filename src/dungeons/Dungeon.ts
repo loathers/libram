@@ -2,6 +2,7 @@ import { getClanName, myId, toItem, visitUrl, xpath } from "kolmafia";
 import { $items } from "../template-string";
 import { Clan } from "../Clan";
 import { getPlayerFromIdOrName } from "../lib";
+import { countedMapToArray } from "../utils";
 
 export type dungeon = {
   name: string;
@@ -24,11 +25,16 @@ export type dungeon = {
 export function distribute(
   dungeon: dungeon,
   idOrName: number | string = myId(),
-  loot: Item | Item[] = dungeon.loot,
+  loot: Item | Item[] | Map<Item, number> = dungeon.loot,
   distributeAllOfAGivenItem = true
 ): void {
   const player = getPlayerFromIdOrName(idOrName);
-  const lootList = Array.isArray(loot) ? loot : [loot];
+  const lootList =
+    loot instanceof Map
+      ? countedMapToArray(loot)
+      : Array.isArray(loot)
+      ? loot
+      : [loot];
   const badLoot = lootList.find((lootItem) => !dungeon.loot.includes(lootItem));
   if (badLoot) {
     throw new Error(`${badLoot} is not a valid piece of dungeon loot`);

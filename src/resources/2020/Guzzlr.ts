@@ -200,7 +200,7 @@ export function getCheapestPlatinumCocktail(): Item {
   return argmax(
     Array.from(ingredientToPlatinumCocktail).map(
       ([ingredient, cocktail]) =>
-        [cocktail, mallPrice(ingredient)] as [Item, number]
+        [cocktail, -1 * mallPrice(ingredient)] as [Item, number]
     )
   );
 }

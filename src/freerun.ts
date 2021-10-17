@@ -20,6 +20,15 @@ import { get } from "./property";
 import { Bandersnatch } from "./resources";
 import { $effect, $familiar, $item, $items, $skill } from "./template-string";
 
+export type AdventureOptions = {
+  equipmentRequirements?: () => Requirement;
+  preparation?: () => boolean;
+  location?: () => Location;
+  macro?: () => Macro;
+  familiar?: () => Familiar;
+  available?: () => boolean;
+};
+
 export class FreeRun {
   name: string;
   available: () => boolean;

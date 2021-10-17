@@ -215,7 +215,7 @@ function cheapestItemRun() {
   );
 }
 
-export default function findFreeRun(
+export function findFreeRun(
   useFamiliar = true,
   buyStuff = true
 ): FreeRun | undefined {

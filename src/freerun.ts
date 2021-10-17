@@ -3,7 +3,6 @@ import {
   mallPrice,
   restoreMp,
   retrieveItem,
-  useFamiliar,
   visitUrl,
 } from "kolmafia";
 
@@ -29,25 +28,28 @@ export type AdventureOptions = {
   available?: () => boolean;
 };
 
+export type FreeRunOptions = {
+  equipmentRequirements?: () => Requirement;
+  preparation?: () => boolean;
+  familiar?: () => Familiar;
+};
+
 export class FreeRun {
   name: string;
   available: () => boolean;
   macro: Macro;
-  requirement?: Requirement;
-  prepare?: () => void;
+  options?: FreeRunOptions;
 
   constructor(
     name: string,
     available: () => boolean,
     macro: Macro,
-    requirement?: Requirement,
-    prepare?: () => void
+    options?: FreeRunOptions
   ) {
     this.name = name;
     this.available = available;
     this.macro = macro;
-    this.requirement = requirement;
-    this.prepare = prepare;
+    this.options = options;
   }
 }
 
@@ -61,10 +63,13 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
       "runaway"
     ),
-    new Requirement(["Familiar Weight"], {}),
-    () => {
-      useFamiliar($familiar`Frumious Bandersnatch`);
-      ensureEffect($effect`Ode to Booze`);
+    {
+      equipmentRequirements: () => new Requirement(["Familiar Weight"], {}),
+      preparation: () => {
+        ensureEffect($effect`Ode to Booze`);
+        return true;
+      },
+      familiar: () => $familiar`Frumious Bandersnatch`,
     }
   ),
 
@@ -76,8 +81,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
       "runaway"
     ),
-    new Requirement(["Familiar Weight"], {}),
-    () => useFamiliar($familiar`Pair of Stomping Boots`)
+    {
+      equipmentRequirements: () => new Requirement(["Familiar Weight"], {}),
+      familiar: () => $familiar`Pair of Stomping Boots`,
+    }
   ),
 
   new FreeRun(
@@ -86,8 +93,9 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       $skill`Snokebomb`
     ),
-    undefined,
-    () => restoreMp(50)
+    {
+      preparation: () => restoreMp(50),
+    }
   ),
 
   new FreeRun(
@@ -106,7 +114,12 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       $skill`KGB tranquilizer dart`
     ),
-    new Requirement([], { forceEquip: $items`Kremlin's Greatest Briefcase` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], {
+          forceEquip: $items`Kremlin's Greatest Briefcase`,
+        }),
+    }
   ),
 
   new FreeRun(
@@ -115,7 +128,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       "Throw Latte on Opponent"
     ),
-    new Requirement([], { forceEquip: $items`latte lovers member's mug` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`latte lovers member's mug` }),
+    }
   ),
 
   new FreeRun(
@@ -124,7 +140,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       $skill`Reflex Hammer`
     ),
-    new Requirement([], { forceEquip: $items`Lil' Doctor™ bag` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`Lil' Doctor™ bag` }),
+    }
   ),
 
   new FreeRun(
@@ -135,7 +154,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       $skill`Show them your ring`
     ),
-    new Requirement([], { forceEquip: $items`mafia middle finger ring` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`mafia middle finger ring` }),
+    }
   ),
 
   new FreeRun(
@@ -144,8 +166,11 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       $skill`Creepy Grin`
     ),
-    new Requirement([], { forceEquip: $items`V for Vivala mask` }),
-    () => restoreMp(30)
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`V for Vivala mask` }),
+      preparation: () => restoreMp(30),
+    }
   ),
 
   new FreeRun(
@@ -157,9 +182,14 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       "Give Your Opponent the Stinkeye"
     ),
-    new Requirement([], { forceEquip: $items`stinky cheese eye` }),
-    () => {
-      if (!have($item`stinky cheese eye`)) cliExecute(`fold stinky cheese eye`);
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`stinky cheese eye` }),
+      preparation: () => {
+        if (!have($item`stinky cheese eye`))
+          cliExecute(`fold stinky cheese eye`);
+        return have($item`stinky cheese eye`);
+      },
     }
   ),
 
@@ -169,7 +199,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
       "runaway"
     ),
-    new Requirement([], { forceEquip: $items`navel ring of navel gazing` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`navel ring of navel gazing` }),
+    }
   ),
 
   new FreeRun(
@@ -178,7 +211,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).step(
       "runaway"
     ),
-    new Requirement([], { forceEquip: $items`Greatest American Pants` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`Greatest American Pants` }),
+    }
   ),
 
   new FreeRun(
@@ -190,7 +226,10 @@ const freeRuns: FreeRun[] = [
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).skill(
       "Show Your Boring Familiar Pictures"
     ),
-    new Requirement([], { forceEquip: $items`familiar scrapbook` })
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`familiar scrapbook` }),
+    }
   ),
 
   new FreeRun(
@@ -219,8 +258,9 @@ function cheapestItemRun() {
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
       cheapestRunSource()
     ),
-    undefined,
-    () => retrieveItem(cheapestRun)
+    {
+      preparation: () => retrieveItem(cheapestRun),
+    }
   );
 }
 
@@ -230,9 +270,7 @@ export function findFreeRun(
 ): FreeRun | undefined {
   return (
     freeRuns.find(
-      (run) =>
-        run.available() &&
-        (useFamiliar || !["Bander", "Boots"].includes(run.name))
+      (run) => run.available() && (useFamiliar || run?.options?.familiar)
     ) ?? (buyStuff ? cheapestItemRun() : undefined)
   );
 }

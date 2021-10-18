@@ -78,7 +78,7 @@ function toFlower(name: string): Flower | undefined {
   return all.find((flower) => name === flower.name);
 }
 
-function flowersIn(location: Location): Flower[] {
+export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
   getFloristPlants()
     [location.toString()].map(toFlower)

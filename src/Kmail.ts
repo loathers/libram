@@ -40,11 +40,12 @@ export default class Kmail {
   /**
    * Returns all of the player's kmails
    *
+   * @param count Number of kmails to fetch
    * @returns Parsed kmails
    */
-  static inbox(): Kmail[] {
+  static inbox(count = 100): Kmail[] {
     return (JSON.parse(
-      visitUrl("api.php?what=kmail&for=libram")
+      visitUrl(`api.php?what=kmail&for=libram&count=${count}`)
     ) as RawKmail[]).map(Kmail.parse);
   }
 

@@ -7,6 +7,7 @@ import * as Guzzlr from "./2020/Guzzlr";
 import * as MayoClinic from "./2015/MayoClinic";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as RainDoh from "./2012/RainDoh";
+import * as Snapper from "./2019/Snapper";
 import * as SongBoom from "./2018/SongBoom";
 import * as SourceTerminal from "./2016/SourceTerminal";
 import * as SpookyPutty from "./2009/SpookyPutty";
@@ -26,6 +27,7 @@ export {
   RainDoh,
   SongBoom,
   SourceTerminal,
+  Snapper,
   SpookyPutty,
   TunnelOfLove,
   WinterGarden,

@@ -4,7 +4,7 @@ import { Clan } from "../Clan";
 import { getPlayerFromIdOrName } from "../lib";
 import { countedMapToArray } from "../utils";
 
-export type dungeon = {
+export type Dungeon = {
   name: string;
   loot: Item[];
   openAction: string;
@@ -23,7 +23,7 @@ export type dungeon = {
  */
 
 export function distribute(
-  dungeon: dungeon,
+  dungeon: Dungeon,
   idOrName: number | string = myId(),
   loot: Item | Item[] | Map<Item, number> = dungeon.loot,
   distributeAllOfAGivenItem = true
@@ -61,7 +61,7 @@ export function distribute(
   });
 }
 
-export function close(dungeon: dungeon): boolean {
+export function close(dungeon: Dungeon): boolean {
   visitUrl(
     `clan_basement.php?action=${dungeon.closeAction}&confirm=true`,
     true
@@ -72,7 +72,7 @@ export function close(dungeon: dungeon): boolean {
 
 /**
  * Opens clan dungeon and, if relevant, pays meat to do so
- * @param dungeon The dungeon to open
+ * @param dungeon The Dungeon to open
  * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
  */
 export function open(
@@ -116,7 +116,7 @@ function createDungeon(
   openCost: number,
   openImage: string,
   closedImage: string
-): dungeon {
+): Dungeon {
   return {
     name: name,
     loot: loot,
@@ -158,7 +158,7 @@ export const SlimeTube = createDungeon(
   "greasespot.gif"
 );
 
-export function findLoot(dungeon: dungeon): Map<Item, number> {
+export function findLoot(dungeon: Dungeon): Map<Item, number> {
   const returnValue = new Map<Item, number>();
   const pageText = visitUrl("clan_basement.php");
   for (const lootItem of dungeon.loot) {

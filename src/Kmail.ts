@@ -218,7 +218,7 @@ export default class Kmail {
    */
   items(): Map<Item, number> {
     return new Map(
-      Object.entries(extractItems(this.message)).map(
+      Object.entries(extractItems(this.rawMessage)).map(
         ([itemName, quantity]) => [Item.get(itemName), quantity] as const
       )
     );
@@ -230,7 +230,7 @@ export default class Kmail {
    * @returns Meat attached to the kmail
    */
   meat(): number {
-    return extractMeat(this.message);
+    return extractMeat(this.rawMessage);
   }
 
   /**

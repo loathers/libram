@@ -103,6 +103,10 @@ export function setEqual<T>(a: T[], b: T[]): boolean {
   );
 }
 
+/**
+ * Reverses keys and values for a given map
+ * @param map Map to invert
+ */
 export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
   const returnValue = new Map<T2, T1>();
   for (const [key, value] of map) {
@@ -111,6 +115,10 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
   return returnValue;
 }
 
+/**
+ * Returns the highest-"scoring" object from an array of tuples consisting of objects and their scores
+ * @param values Array of 2-tuples consisting of the object in question and its "score"
+ */
 export function argmax<T>(values: [T, number][]): T {
   return values.reduce(([minValue, minScore], [value, score]) =>
     score > minScore ? [value, score] : [minValue, minScore]

@@ -186,8 +186,13 @@ export default class Kmail {
   }
 
   private constructor(rawKmail: RawKmail) {
+    const date = new Date(rawKmail.localtime);
+    // Date come from KoL formatted with YY and so will be parsed 19YY, which is wrong.
+    // We can safely add 100 because if 19YY was a leap year, 20YY will be too!
+    date.setFullYear(date.getFullYear() + 100);
+
     this.id = Number(rawKmail.id);
-    this.date = new Date(rawKmail.localtime);
+    this.date = date;
     this.type = rawKmail.type as Kmail["type"];
     this.senderId = Number(rawKmail.fromid);
     this.senderName = rawKmail.fromname;

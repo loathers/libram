@@ -40,11 +40,12 @@ export default class Kmail {
   /**
    * Returns all of the player's kmails
    *
+   * @param count Number of kmails to fetch
    * @returns Parsed kmails
    */
-  static inbox(): Kmail[] {
+  static inbox(count = 100): Kmail[] {
     return (JSON.parse(
-      visitUrl("api.php?what=kmail&for=libram")
+      visitUrl(`api.php?what=kmail&for=libram&count=${count}`)
     ) as RawKmail[]).map(Kmail.parse);
   }
 
@@ -206,7 +207,7 @@ export default class Kmail {
    * Message contents without any HTML from items or meat
    */
   get message(): string {
-    const match = this.rawMessage.match(/^(.*?)</);
+    const match = this.rawMessage.match(/^(.*?)</s);
     return match ? match[1] : this.rawMessage;
   }
 
@@ -217,7 +218,7 @@ export default class Kmail {
    */
   items(): Map<Item, number> {
     return new Map(
-      Object.entries(extractItems(this.message)).map(
+      Object.entries(extractItems(this.rawMessage)).map(
         ([itemName, quantity]) => [Item.get(itemName), quantity] as const
       )
     );
@@ -229,7 +230,7 @@ export default class Kmail {
    * @returns Meat attached to the kmail
    */
   meat(): number {
-    return extractMeat(this.message);
+    return extractMeat(this.rawMessage);
   }
 
   /**

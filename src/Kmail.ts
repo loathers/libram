@@ -207,7 +207,7 @@ export default class Kmail {
    * Message contents without any HTML from items or meat
    */
   get message(): string {
-    const match = this.rawMessage.match(/^(.*?)</);
+    const match = this.rawMessage.match(/^(.*?)</s);
     return match ? match[1] : this.rawMessage;
   }
 

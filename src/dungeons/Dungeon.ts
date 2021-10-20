@@ -40,7 +40,7 @@ export function distribute(
     throw new Error(`${badLoot} is not a valid piece of dungeon loot`);
   }
   const pageText = visitUrl("clan_basement.php");
-  if (!pageText.match(player.name)) {
+  if (!pageText.match(new RegExp(player.name, "i"))) {
     throw new Error(
       `${player.name} cannot be distributed loot from ${getClanName()}`
     );

@@ -76,7 +76,7 @@ export function close(dungeon: Dungeon): boolean {
  * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
  */
 export function open(
-  dungeon: dungeon,
+  dungeon: Dungeon,
   paymentPolicy: "None" | "All" | "Difference" = "Difference"
 ): boolean {
   const pageText = visitUrl("clan_basement.php");

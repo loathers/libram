@@ -89,8 +89,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#available" class="tsd-kind-icon">available</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#macro" class="tsd-kind-icon">macro</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#prepare" class="tsd-kind-icon">prepare</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#requirement" class="tsd-kind-icon">requirement</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="freerun.html#options" class="tsd-kind-icon">options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -102,13 +101,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Free<wbr>Run<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, available<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span>, macro<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a>, requirement<span class="tsd-signature-symbol">?: </span><a href="requirement.html" class="tsd-signature-type" data-tsd-kind="Class">Requirement</a>, prepare<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="freerun.html" class="tsd-signature-type" data-tsd-kind="Class">FreeRun</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Free<wbr>Run<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, available<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span>, macro<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a>, options<span class="tsd-signature-symbol">?: </span><a href="../modules.html#freerunoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FreeRunOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="freerun.html" class="tsd-signature-type" data-tsd-kind="Class">FreeRun</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L28">src/freerun.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/767a9bd/src/freerun.ts#L41">src/freerun.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -135,22 +134,7 @@
 									<h5>macro: <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> requirement: <a href="requirement.html" class="tsd-signature-type" data-tsd-kind="Class">Requirement</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> prepare: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-signature">
-											<ul class="tsd-signatures tsd-kind-type-literal">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../modules.html#freerunoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FreeRunOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="freerun.html" class="tsd-signature-type" data-tsd-kind="Class">FreeRun</a></h4>
@@ -166,7 +150,7 @@
 					<div class="tsd-signature tsd-kind-icon">available<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L25">src/freerun.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/767a9bd/src/freerun.ts#L39">src/freerun.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -191,7 +175,7 @@
 					<div class="tsd-signature tsd-kind-icon">macro<span class="tsd-signature-symbol">:</span> <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L26">src/freerun.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/767a9bd/src/freerun.ts#L40">src/freerun.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -201,27 +185,17 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L24">src/freerun.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/767a9bd/src/freerun.ts#L38">src/freerun.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="prepare" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> prepare</h3>
-					<div class="tsd-signature tsd-kind-icon">prepare<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<a name="options" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> options</h3>
+					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#freerunoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FreeRunOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L28">src/freerun.ts:28</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="requirement" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> requirement</h3>
-					<div class="tsd-signature tsd-kind-icon">requirement<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="requirement.html" class="tsd-signature-type" data-tsd-kind="Class">Requirement</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/0ad9d21/src/freerun.ts#L27">src/freerun.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/767a9bd/src/freerun.ts#L41">src/freerun.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -255,10 +229,7 @@
 								<a href="freerun.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="freerun.html#prepare" class="tsd-kind-icon">prepare</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="freerun.html#requirement" class="tsd-kind-icon">requirement</a>
+								<a href="freerun.html#options" class="tsd-kind-icon">options</a>
 							</li>
 						</ul>
 					</li>

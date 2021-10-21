@@ -56,7 +56,7 @@ export function distribute(
         `clan_basement.php?whichloot=${whichLoots[index]}&recipient=${player.id}`
       );
       if (!distributeAllOfAGivenItem)
-        lootList.slice(lootList.indexOf(toItem(itemName)));
+        lootList.splice(lootList.indexOf(toItem(itemName)));
     }
   });
 }
@@ -162,7 +162,10 @@ export function findLoot(dungeon: Dungeon): Map<Item, number> {
   const returnValue = new Map<Item, number>();
   const pageText = visitUrl("clan_basement.php");
   for (const lootItem of dungeon.loot) {
-    returnValue.set(lootItem, pageText.match(lootItem.name)?.length ?? 0);
+    returnValue.set(
+      lootItem,
+      pageText.match(new RegExp(lootItem.name, "g"))?.length ?? 0
+    );
   }
   return returnValue;
 }

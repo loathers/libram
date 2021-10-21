@@ -2,7 +2,7 @@ import { mallPrice, runChoice, use, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
-import { argmax, invertMap } from "../../utils";
+import { findArgumentOfMaxOutput, invertMap } from "../../utils";
 
 export const item = $item`Guzzlr tablet`;
 export function have(): boolean {
@@ -197,10 +197,8 @@ const ingredientToPlatinumCocktail = new Map<Item, Item>([
 const platinumCocktailToIngredient = invertMap(ingredientToPlatinumCocktail);
 
 export function getCheapestPlatinumCocktail(): Item {
-  return argmax(
-    Array.from(ingredientToPlatinumCocktail).map(
-      ([ingredient, cocktail]) =>
-        [cocktail, -1 * mallPrice(ingredient)] as [Item, number]
-    )
-  );
+  return findArgumentOfMaxOutput(
+    Array.from(ingredientToPlatinumCocktail),
+    (ingredientAndCocktail: [Item, Item]) => mallPrice(ingredientAndCocktail[0])
+  )[1];
 }

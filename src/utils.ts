@@ -116,11 +116,13 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
 }
 
 /**
- * Returns the highest-"scoring" object from an array of tuples consisting of objects and their scores
- * @param values Array of 2-tuples consisting of the object in question and its "score"
+ * Returns the highest-"scoring" object from an array, using a given function to determine score.
+ * @param entries Array of elements to compare
+ * @param value Function that assigns numerical value to elements of the array
  */
-export function argmax<T>(values: [T, number][]): T {
-  return values.reduce(([minValue, minScore], [value, score]) =>
-    score > minScore ? [value, score] : [minValue, minScore]
-  )[0];
+export function findArgumentOfMaxOutput<T>(
+  entries: T[],
+  value: (input: T) => number
+): T {
+  return entries.reduce((a, b) => (value(a) > value(b) ? a : b));
 }

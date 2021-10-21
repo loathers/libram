@@ -194,8 +194,9 @@ export const ingredientToPlatinumCocktail = new Map<Item, Item>([
   [$item`Dish of Clarified Butter`, $item`Buttery Boy`],
 ]);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const platinumCocktailToIngredient = invertMap(ingredientToPlatinumCocktail);
+export const platinumCocktailToIngredient = invertMap(
+  ingredientToPlatinumCocktail
+);
 
 export function getCheapestPlatinumCocktail(): Item {
   return (maxBy(

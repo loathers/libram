@@ -522,3 +522,117 @@ export function adventureMacroAuto(
     Macro.clearSaved();
   }
 }
+
+export class StrictMacro extends Macro {
+  /**
+   * Add one or more skill cast steps to the macro.
+   * @param skills Skills to cast.
+   * @returns {StrictMacro} This object itself.
+   */
+  skill(...skills: Skill[]): this {
+    return super.skill(...skills);
+  }
+
+  /**
+   * Create a new macro with one or more skill cast steps.
+   * @param skills Skills to cast.
+   * @returns {StrictMacro} This object itself.
+   */
+  static skill<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().skill(...skills);
+  }
+
+  /**
+   * Add one or more item steps to the macro.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  item(...items: (Item | [Item, Item])[]): this {
+    return super.item(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  static item<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: (Item | [Item, Item])[]
+  ): T {
+    return new this().item(...items);
+  }
+
+  /**
+   * Add one or more skill cast steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  trySkill(...skills: Skill[]): this {
+    return super.trySkill(...skills);
+  }
+
+  /**
+   * Create a new macro with one or more skill cast steps, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  static trySkill<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().trySkill(...skills);
+  }
+
+  /**
+   * Add one or more item steps to the macro, where each step checks to see if you have the item first.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  tryItem(...items: (Item | [Item, Item])[]): this {
+    return super.tryItem(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  static tryItem<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: (Item | [Item, Item])[]
+  ): T {
+    return new this().tryItem(...items);
+  }
+
+  /**
+   * Add one or more skill-cast-and-repeat steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  trySkillRepeat(...skills: Skill[]): this {
+    return this.step(
+      ...skills.map((skill) => {
+        return StrictMacro.if_(
+          `hasskill ${skillBallsMacroName(skill)}`,
+          StrictMacro.skill(skill).repeat()
+        );
+      })
+    );
+  }
+
+  /**
+   * Create a new macro with one or more skill-cast-and-repeat steps, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  static trySkillRepeat<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().trySkillRepeat(...skills);
+  }
+}

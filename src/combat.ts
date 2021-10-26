@@ -220,6 +220,22 @@ export class Macro {
   }
 
   /**
+   * Add a "runaway" step to this macro.
+   * @returns {Macro} This object itself.
+   */
+  runaway(): this {
+    return this.step("runaway");
+  }
+
+  /**
+   * Create a new macro with an "runaway" step.
+   * @returns {Macro} This object itself.
+   */
+  static runaway<T extends Macro>(this: Constructor<T>): T {
+    return new this().runaway();
+  }
+
+  /**
    * Add an "if" statement to this macro.
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.

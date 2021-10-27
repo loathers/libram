@@ -1,3 +1,4 @@
+import maxBy from "lodash-es/maxBy";
 import { getSaleValue } from "../lib";
 import { countedMapToArray } from "../utils";
 import {
@@ -91,11 +92,12 @@ export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
   return results;
 }
 
-export function bestLibramToCast(): Skill | null {
-  return Array.from(possibleLibramSummons().entries())
-    .map(
+export function bestLibramToCast(): Skill | undefined {
+  return (maxBy(
+    Array.from(possibleLibramSummons().entries()).map(
       ([skill, itemMap]) =>
         [skill, getSaleValue(...countedMapToArray(itemMap))] as [Skill, number]
-    )
-    .sort((a, b) => b[1] - a[1])[0][0];
+    ),
+    ([, value]) => value
+  ) ?? [])[0];
 }

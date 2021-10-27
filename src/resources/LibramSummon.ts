@@ -1,3 +1,5 @@
+import { getSaleValue } from "../lib";
+import { countedMapToArray } from "../utils";
 import {
   expected as candyHeartsExpected,
   have as candyHeartsHave,
@@ -87,4 +89,13 @@ export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
     results.set(taffySkill, taffyExpected());
   }
   return results;
+}
+
+export function bestLibramToCast(): Skill | null {
+  return Array.from(possibleLibramSummons().entries())
+    .map(
+      ([skill, itemMap]) =>
+        [skill, getSaleValue(...countedMapToArray(itemMap))] as [Skill, number]
+    )
+    .sort((a, b) => b[1] - a[1])[0][0];
 }

@@ -581,7 +581,7 @@ export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (modifiers: Modifiers) => number,
   useLimitedDrops = true
-) {
+): number {
   const dropValue =
     !rider.dropPredicate || (rider.dropPredicate() && !useLimitedDrops)
       ? rider.probability * rider.meatVal()
@@ -603,8 +603,8 @@ export function createRiderMode(
   modifierValueFunction: (modifiers: Modifiers) => number,
   useLimitedDrops = true,
   excludeCurrentFamiliar = true
-) {
-  riderModes.set(name, {
+): Map<string, RiderMode> {
+  return riderModes.set(name, {
     modifierValueFunction: modifierValueFunction,
     useLimitedDrops: useLimitedDrops,
     excludeCurrentFamiliar: excludeCurrentFamiliar,

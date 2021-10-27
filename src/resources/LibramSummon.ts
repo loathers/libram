@@ -1,4 +1,4 @@
-import maxBy from "lodash-es/maxBy";
+import maxBy from "lodash/maxBy";
 import { getSaleValue } from "../lib";
 import { countedMapToArray } from "../utils";
 import {

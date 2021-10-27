@@ -93,11 +93,7 @@ export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
 }
 
 export function bestLibramToCast(): Skill | undefined {
-  return (maxBy(
-    Array.from(possibleLibramSummons().entries()).map(
-      ([skill, itemMap]) =>
-        [skill, getSaleValue(...countedMapToArray(itemMap))] as [Skill, number]
-    ),
-    ([, value]) => value
+  return (maxBy(Array.from(possibleLibramSummons().entries()), ([, itemMap]) =>
+    getSaleValue(...countedMapToArray(itemMap))
   ) ?? [])[0];
 }

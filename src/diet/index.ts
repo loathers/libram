@@ -14,20 +14,45 @@ import {
 
 import { knapsack } from "./knapsack";
 import { have } from "../lib";
-import { $item, $items } from "../template-string";
+import { $effect, $item, $items } from "../template-string";
 import { sum } from "../utils";
 
-// TODO: Include other consumption modifiers.
-function expectedAdventures(item: Item, forkMug = false): number {
+// TODO: Include other consumption modifiers - Salty Mouth?
+function expectedAdventures(
+  item: Item,
+  modifiers: {
+    forkMug: boolean;
+    seasoning: boolean;
+    mayoflex: boolean;
+    refinedPalate: boolean;
+    pinkyRing: boolean;
+  }
+): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
     .split(/[-–—]/)
     .map((s) => parseInt(s));
   const max = recordedMax ?? min;
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
+  const forkMugMultiplier =
+    (itemType(item) === "food" && item.notes.includes("SALAD")) ||
+    (itemType(item) === "booze" && item.notes.includes("BEER"))
+      ? 1.5
+      : 1.3;
+  const refinedPalate = modifiers.refinedPalate && item.notes.includes("WINE");
+  const pinkyRing = modifiers.pinkyRing && item.notes.includes("WINE");
   return (
-    sum(interpolated, (n) => Math.floor(n * (forkMug ? 1.3 : 1))) /
-    interpolated.length
+    sum(interpolated, (baseAdventures) => {
+      let adventures = baseAdventures;
+      if (modifiers.forkMug) {
+        adventures = Math.floor(adventures * forkMugMultiplier);
+      }
+      if (refinedPalate) adventures = Math.floor(adventures * 1.25);
+      if (pinkyRing) adventures = Math.round(adventures * 1.125);
+      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
+      if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
+      return adventures;
+    }) / interpolated.length
   );
 }
 
@@ -56,34 +81,62 @@ function aggregate<T>(
 
 export class MenuItem {
   item: Item;
+  size: number;
+  organ?: Organ;
   maximum?: number;
   additionalValue?: number;
-  size: number;
+  wishEffect?: Effect;
 
-  static seasoning = new MenuItem($item`Special Seasoning`);
-  static mayoflex = new MenuItem($item`Mayoflex`);
-  static fork = new MenuItem($item`Ol' Scratch's salad fork`);
-  static mug = new MenuItem($item`Frosty's frosty mug`);
+  static defaultProperties = new Map([
+    [$item`Mr. Burnsger`, { maximum: 1 }],
+    [$item`distention pill`, { organ: "food", maximum: 1, size: -1 }],
+    [$item`synthetic dog hair pill`, { organ: "booze", maximum: 1, size: -1 }],
+    [$item`cuppa Voraci tea`, { organ: "food", maximum: 1, size: -1 }],
+    [$item`cuppa Sobrie tea`, { organ: "booze", maximum: 1, size: -1 }],
+    [$item`mojo filter`, { organ: "spleen item", maximum: 3, size: -1 }],
+  ] as [
+    Item,
+    {
+      size?: number;
+      organ?: Organ;
+      maximum?: number;
+      additionalValue?: number;
+      wishEffect?: Effect;
+    }
+  ][]);
 
   constructor(
     item: Item,
-    maximum?: number,
-    additionalValue?: number,
-    size?: number
+    options?: {
+      size?: number;
+      organ?: Organ;
+      maximum?: number;
+      additionalValue?: number;
+      wishEffect?: Effect;
+    }
   ) {
+    const { size, organ, maximum, additionalValue, wishEffect } = options ?? {};
+    const defaultProperties = MenuItem.defaultProperties.get(item);
     this.item = item;
-    this.maximum = maximum;
-    this.additionalValue = additionalValue;
+    this.maximum = maximum ?? defaultProperties?.maximum;
+    this.additionalValue =
+      additionalValue ?? defaultProperties?.additionalValue;
+    this.wishEffect = wishEffect ?? defaultProperties?.wishEffect;
 
     const typ = itemType(this.item);
+    this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
     this.size =
-      size ?? typ === "food"
+      size ?? defaultProperties?.size ?? this.organ === "food"
         ? this.item.fullness
-        : typ === "booze"
+        : this.organ === "booze"
         ? this.item.inebriety
-        : typ === "spleen item"
+        : this.organ === "spleen item"
         ? this.item.spleen
         : 0;
+  }
+
+  equals(other: MenuItem) {
+    return this.item === other.item && this.wishEffect === other.wishEffect;
   }
 
   toString(): string {
@@ -95,31 +148,45 @@ export class MenuItem {
   }
 }
 
-type Organ = "food" | "booze" | "spleen item";
+const organs = ["food", "booze", "spleen item"] as const;
+type Organ = typeof organs[number];
 type OrganSize = [Organ, number];
+
+function isOrgan(x: string): x is Organ {
+  return (organs as readonly string[]).includes(x);
+}
 
 class DietPlanner {
   mpa: number;
   menu: MenuItem[];
-  checkFork: boolean;
-  checkMug: boolean;
-  useSeasoning: boolean;
-  useMayoflex: boolean;
+  fork?: MenuItem;
+  mug?: MenuItem;
+  seasoning?: MenuItem;
+  mayoflex?: MenuItem;
+  refinedPalate?: MenuItem;
+  pinkyRing: boolean;
   spleenValue = 0;
 
   constructor(mpa: number, menu: MenuItem[]) {
     this.mpa = mpa;
-    this.checkFork = menu.some((item) => item.item === MenuItem.fork.item);
-    this.checkMug = menu.some((item) => item.item === MenuItem.mug.item);
-    this.useSeasoning = menu.some(
+    this.fork = menu.find(
+      (item) => item.item === $item`Ol' Scratch's salad fork`
+    );
+    this.mug = menu.find((item) => item.item === $item`Frosty's frosty mug`);
+    this.seasoning = menu.find(
       (item) => item.item === $item`Special Seasoning`
     );
-    this.useMayoflex =
-      getWorkshed() === $item`portable Mayo Clinic` &&
-      menu.some((item) => item.item === $item`Mayoflex`);
-    this.menu = menu.filter((item) =>
-      ["food", "booze", "spleen item"].includes(itemType(item.item))
+    this.mayoflex =
+      getWorkshed() === $item`portable Mayo Clinic`
+        ? menu.find((item) => item.item === $item`Mayoflex`)
+        : undefined;
+    this.refinedPalate = menu.find(
+      (item) =>
+        item.item === $item`pocket wish` &&
+        item.wishEffect === $effect`Refined Palate`
     );
+    this.pinkyRing = have($item`mafia pinky ring`);
+    this.menu = menu.filter((item) => isOrgan(itemType(item.item)));
 
     if (menu.length > 100) {
       mallPrices("food");
@@ -147,42 +214,50 @@ class DietPlanner {
   }
 
   consumptionHelpersAndValue(menuItem: MenuItem): [MenuItem[], number] {
-    let additionalAdventures = 0;
     const helpers = [];
     if (
-      this.useMayoflex &&
-      itemType(menuItem.item) === "food" &&
-      this.mpa > npcPrice($item`Mayoflex`)
-    ) {
-      helpers.push(MenuItem.mayoflex);
-      additionalAdventures++;
-    }
-    if (
-      this.useSeasoning &&
+      this.seasoning &&
       itemType(menuItem.item) === "food" &&
       this.mpa > mallPrice($item`Special Seasoning`)
     ) {
-      helpers.push(MenuItem.seasoning);
-      additionalAdventures++;
+      helpers.push(this.seasoning);
     }
+    if (
+      this.mayoflex &&
+      itemType(menuItem.item) === "food" &&
+      this.mpa > npcPrice($item`Mayoflex`)
+    ) {
+      helpers.push(this.mayoflex);
+    }
+
+    const defaultModifiers = {
+      forkMug: false,
+      seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
+      mayoflex: this.mayoflex ? helpers.includes(this.mayoflex) : false,
+      refinedPalate: !!this.refinedPalate,
+      pinkyRing: !!this.pinkyRing,
+    };
 
     const forkMug =
       itemType(menuItem.item) === "food"
-        ? MenuItem.fork
+        ? this.fork
         : itemType(menuItem.item) === "booze"
-        ? MenuItem.mug
+        ? this.mug
         : null;
     const forkMugPrice = forkMug ? forkMug.price() : Infinity;
 
+    const baseCost = menuItem.price() + sum(helpers, (item) => item.price());
     const valueRaw =
-      (expectedAdventures(menuItem.item, false) + additionalAdventures) *
-        this.mpa -
-      mallPrice(menuItem.item) +
+      expectedAdventures(menuItem.item, defaultModifiers) * this.mpa -
+      baseCost +
       (menuItem.additionalValue ?? 0);
     const valueForkMug =
-      (expectedAdventures(menuItem.item, true) + additionalAdventures) *
+      expectedAdventures(menuItem.item, {
+        ...defaultModifiers,
+        forkMug: true,
+      }) *
         this.mpa -
-      mallPrice(menuItem.item) -
+      baseCost -
       forkMugPrice +
       (menuItem.additionalValue ?? 0);
 
@@ -193,14 +268,11 @@ class DietPlanner {
       : 0;
 
     return forkMug && valueForkMug > valueRaw
-      ? [
-          [...helpers, forkMug as MenuItem, menuItem],
-          valueForkMug + valueSpleen,
-        ]
+      ? [[...helpers, forkMug, menuItem], valueForkMug + valueSpleen]
       : [[...helpers, menuItem], valueRaw + valueSpleen];
   }
 
-  planOrgan(organ: Organ, capacity: number): [number, [Item[], number][]] {
+  planOrgan(organ: Organ, capacity: number): [number, [MenuItem[], number][]] {
     // print(`Plan ${organ} < ${capacity}`);
     const submenu = this.menu.filter((item) => itemType(item.item) === organ);
     const knapsackValues = submenu.map(
@@ -212,9 +284,11 @@ class DietPlanner {
         ] as [MenuItem[], number, number, number?]
     );
     const [value, menuItemList] = knapsack(knapsackValues, capacity);
-    const itemList = menuItemList.map((menuItems) =>
-      menuItems.map((menuItem) => menuItem.item)
-    );
+
+    const valueWithRefinedPalate =
+      value - (this.refinedPalate ? this.refinedPalate.price() : 0);
+    if (this.refinedPalate) menuItemList.splice(0, 0, [this.refinedPalate]);
+
     // print(
     //   `Items: ${itemList.length} ${([] as Item[])
     //     .concat(...itemList)
@@ -222,27 +296,29 @@ class DietPlanner {
     //     .join(", ")}`
     // );
     return [
-      value,
-      aggregate(itemList, (x: Item[], y: Item[]) =>
-        x.every((elem, index) => elem === y[index])
+      valueWithRefinedPalate,
+      aggregate(menuItemList, (x: MenuItem[], y: MenuItem[]) =>
+        x.every((elem, index) => elem.equals(y[index]))
       ),
     ];
   }
 
-  planOrgans(organCapacities: OrganSize[]): [number, [Item[], number][]] {
+  planOrgans(organCapacities: OrganSize[]): [number, [MenuItem[], number][]] {
     const valuePlans = organCapacities.map(([organ, capacity]) =>
       this.planOrgan(organ, capacity)
     );
     return [
       sum(valuePlans, ([value]) => value),
-      ([] as [Item[], number][]).concat(...valuePlans.map(([, plan]) => plan)),
+      ([] as [MenuItem[], number][]).concat(
+        ...valuePlans.map(([, plan]) => plan)
+      ),
     ];
   }
 
   planOrgansWithTrials(
     organCapacities: OrganSize[],
     trialItems: [MenuItem, OrganSize[]][]
-  ): [number, [Item[], number][]] {
+  ): [number, [MenuItem[], number][]] {
     if (trialItems.length === 0) {
       return this.planOrgans(organCapacities);
     }
@@ -278,14 +354,15 @@ class DietPlanner {
     );
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
-      : [
-          valueWith,
-          [...planWith, [helpers.map((menuItem) => menuItem.item), 1]],
-        ];
+      : [valueWith, [...planWith, [helpers, 1]]];
   }
 }
 
-// [item, fullness, inebriety]
+/**
+ * Because the knapsack solver is one-dimensional only, any items that touch
+ * multiple organs have to be treated specially. What we do is run the knapsack
+ * solver multiple times, trying with + without each interacting item.
+ */
 const interactingItems: [Item, OrganSize[]][] = [
   [
     $item`spice melange`,
@@ -339,7 +416,7 @@ export function planDiet(
     ["booze", null],
     ["spleen item", null],
   ]
-): [Item[], number][] {
+): [MenuItem[], number][] {
   const dietPlanner = new DietPlanner(mpa, menu);
 
   print("MENU:");
@@ -378,6 +455,17 @@ export function planDiet(
   //     .join(", ")}`
   // );
 
+  // TODO: support toasted brie.
+  // Refined Palate must also be treated as an interacting item, as it's a one-time cost.
+  const palateWish = menu.find(
+    (menuItem) =>
+      menuItem.item === $item`pocket wish` &&
+      menuItem.wishEffect === $effect`Refined Palate`
+  );
+  if (palateWish) {
+    includedInteractingItems.push([palateWish, []]);
+  }
+
   const [, planFoodBooze] = dietPlanner.planOrgansWithTrials(
     resolvedOrganCapacities.filter(([organ]) =>
       ["food", "booze"].includes(organ)
@@ -385,9 +473,13 @@ export function planDiet(
     includedInteractingItems
   );
 
+  // Count sliders and pickle juice, figure out how much extra spleen we got.
   const additionalSpleen = sum(planFoodBooze, ([items, number]) =>
-    items.includes($item`jar of fermented pickle juice`) ||
-    items.includes($item`extra-greasy slider`)
+    items.some((menuItem) =>
+      $items`jar of fermented pickle juice, extra-greasy slider`.includes(
+        menuItem.item
+      )
+    )
       ? 5 * number
       : 0
   );

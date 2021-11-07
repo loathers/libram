@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Macro | libram</title>
+	<title>StrictMacro | libram</title>
 	<meta name="description" content="Documentation for libram">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,35 +55,24 @@
 					<a href="../modules.html">libram</a>
 				</li>
 				<li>
-					<a href="macro.html">Macro</a>
+					<a href="strictmacro.html">StrictMacro</a>
 				</li>
 			</ul>
-			<h1>Class Macro</h1>
+			<h1>Class StrictMacro</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>BALLS macro builder for direct submission to KoL.
-							Create a new macro with <code>new Macro()</code> and add steps using the instance methods.
-							Uses a fluent interface, so each step returns the object for easy chaining of steps.
-							Each method is also defined as a static method that creates a new Macro with only that step.
-						For example, you can do <code>Macro.skill(&#39;Saucestorm&#39;).attack()</code>.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Macro</span>
+						<a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a>
+								<span class="target">StrictMacro</span>
 							</li>
 						</ul>
 					</li>
@@ -96,54 +85,54 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="macro.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="macro.html#components" class="tsd-kind-icon">components</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="macro.html#saved_macro_property" class="tsd-kind-icon">SAVED_<wbr>MACRO_<wbr>PROPERTY</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="macro.html#cachedautoattack" class="tsd-kind-icon">cached<wbr>Auto<wbr>Attack</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="macro.html#cachedmacroid" class="tsd-kind-icon">cached<wbr>Macro<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#components" class="tsd-kind-icon">components</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="strictmacro.html#saved_macro_property" class="tsd-kind-icon">SAVED_<wbr>MACRO_<wbr>PROPERTY</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="strictmacro.html#cachedautoattack" class="tsd-kind-icon">cached<wbr>Auto<wbr>Attack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="strictmacro.html#cachedmacroid" class="tsd-kind-icon">cached<wbr>Macro<wbr>Id</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#abort" class="tsd-kind-icon">abort</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#attack" class="tsd-kind-icon">attack</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#externalif" class="tsd-kind-icon">external<wbr>If</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#ifmonster" class="tsd-kind-icon">if<wbr>Monster</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#if_" class="tsd-kind-icon">if_</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#item" class="tsd-kind-icon">item</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#repeat" class="tsd-kind-icon">repeat</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#runaway" class="tsd-kind-icon">runaway</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#save" class="tsd-kind-icon">save</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#setautoattack" class="tsd-kind-icon">set<wbr>Auto<wbr>Attack</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#skill" class="tsd-kind-icon">skill</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#step" class="tsd-kind-icon">step</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#submit" class="tsd-kind-icon">submit</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#tryitem" class="tsd-kind-icon">try<wbr>Item</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#tryskill" class="tsd-kind-icon">try<wbr>Skill</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#tryskillrepeat" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="macro.html#while_" class="tsd-kind-icon">while_</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#abort-1" class="tsd-kind-icon">abort</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#attack-1" class="tsd-kind-icon">attack</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="macro.html#clearsaved" class="tsd-kind-icon">clear<wbr>Saved</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#externalif-1" class="tsd-kind-icon">external<wbr>If</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="macro.html#ifmonster-1" class="tsd-kind-icon">if<wbr>Monster</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#if_-1" class="tsd-kind-icon">if_</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#item-1" class="tsd-kind-icon">item</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#load" class="tsd-kind-icon">load</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#runaway-1" class="tsd-kind-icon">runaway</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#skill-1" class="tsd-kind-icon">skill</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#step-1" class="tsd-kind-icon">step</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#tryitem-1" class="tsd-kind-icon">try<wbr>Item</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#tryskill-1" class="tsd-kind-icon">try<wbr>Skill</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#tryskillrepeat-1" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="macro.html#while_-1" class="tsd-kind-icon">while_</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#abort" class="tsd-kind-icon">abort</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#attack" class="tsd-kind-icon">attack</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#externalif" class="tsd-kind-icon">external<wbr>If</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#ifmonster" class="tsd-kind-icon">if<wbr>Monster</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#if_" class="tsd-kind-icon">if_</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="strictmacro.html#item" class="tsd-kind-icon">item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#repeat" class="tsd-kind-icon">repeat</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#runaway" class="tsd-kind-icon">runaway</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#save" class="tsd-kind-icon">save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#setautoattack" class="tsd-kind-icon">set<wbr>Auto<wbr>Attack</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="strictmacro.html#skill" class="tsd-kind-icon">skill</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#step" class="tsd-kind-icon">step</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#submit" class="tsd-kind-icon">submit</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="strictmacro.html#tryitem" class="tsd-kind-icon">try<wbr>Item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="strictmacro.html#tryskill" class="tsd-kind-icon">try<wbr>Skill</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="strictmacro.html#tryskillrepeat" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="strictmacro.html#while_" class="tsd-kind-icon">while_</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#abort-1" class="tsd-kind-icon">abort</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#attack-1" class="tsd-kind-icon">attack</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="strictmacro.html#clearsaved" class="tsd-kind-icon">clear<wbr>Saved</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#externalif-1" class="tsd-kind-icon">external<wbr>If</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="strictmacro.html#ifmonster-1" class="tsd-kind-icon">if<wbr>Monster</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#if_-1" class="tsd-kind-icon">if_</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static"><a href="strictmacro.html#item-1" class="tsd-kind-icon">item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#load" class="tsd-kind-icon">load</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#runaway-1" class="tsd-kind-icon">runaway</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static"><a href="strictmacro.html#skill-1" class="tsd-kind-icon">skill</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#step-1" class="tsd-kind-icon">step</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static"><a href="strictmacro.html#tryitem-1" class="tsd-kind-icon">try<wbr>Item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static"><a href="strictmacro.html#tryskill-1" class="tsd-kind-icon">try<wbr>Skill</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static"><a href="strictmacro.html#tryskillrepeat-1" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="strictmacro.html#while_-1" class="tsd-kind-icon">while_</a></li>
 							</ul>
 						</section>
 					</div>
@@ -151,58 +140,63 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Macro<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Strict<wbr>Macro<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#constructor">constructor</a></p>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="components" class="tsd-anchor"></a>
 					<h3>components</h3>
 					<div class="tsd-signature tsd-kind-icon">components<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#components">components</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L106">src/combat.ts:106</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="saved_macro_property" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> SAVED_<wbr>MACRO_<wbr>PROPERTY</h3>
 					<div class="tsd-signature tsd-kind-icon">SAVED_<wbr>MACRO_<wbr>PROPERTY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;libram_savedMacro&quot;</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#saved_macro_property">SAVED_MACRO_PROPERTY</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L101">src/combat.ts:101</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="cachedautoattack" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> cached<wbr>Auto<wbr>Attack</h3>
 					<div class="tsd-signature tsd-kind-icon">cached<wbr>Auto<wbr>Attack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = null</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#cachedautoattack">cachedAutoAttack</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L104">src/combat.ts:104</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="cachedmacroid" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> cached<wbr>Macro<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">cached<wbr>Macro<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = null</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#cachedmacroid">cachedMacroId</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L103">src/combat.ts:103</a></li>
 						</ul>
@@ -211,15 +205,16 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="abort" class="tsd-anchor"></a>
 					<h3>abort</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">abort<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">abort<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#abort">abort</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L210">src/combat.ts:210</a></li>
 								</ul>
@@ -229,20 +224,21 @@
 									<p>Add an &quot;abort&quot; step to this macro.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="attack" class="tsd-anchor"></a>
 					<h3>attack</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">attack<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">attack<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#attack">attack</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L463">src/combat.ts:463</a></li>
 								</ul>
@@ -252,20 +248,21 @@
 									<p>Add an attack step to the macro.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="externalif" class="tsd-anchor"></a>
 					<h3>external<wbr>If</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">external<wbr>If<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a>, ifFalse<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">external<wbr>If<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a>, ifFalse<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#externalif">externalIf</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L293">src/combat.ts:293</a></li>
 								</ul>
@@ -296,20 +293,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="ifmonster" class="tsd-anchor"></a>
 					<h3>if<wbr>Monster</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">if<wbr>Monster<span class="tsd-signature-symbol">(</span>monster<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Monster</span>, macro<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#ifmonster">ifMonster</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L480">src/combat.ts:480</a></li>
 								</ul>
@@ -338,15 +336,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="if_" class="tsd-anchor"></a>
 					<h3>if_</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">if_<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">if_<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#if_">if_</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L244">src/combat.ts:244</a></li>
 								</ul>
@@ -371,22 +370,23 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="item" class="tsd-anchor"></a>
 					<h3>item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">item<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">item<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#item">item</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L411">src/combat.ts:411</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L569">src/combat.ts:569</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,26 +397,27 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Items to use. Pass a tuple [item1, item2] to funksling.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="repeat" class="tsd-anchor"></a>
 					<h3>repeat</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">repeat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">repeat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#repeat">repeat</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L321">src/combat.ts:321</a></li>
 								</ul>
@@ -426,20 +427,21 @@
 									<p>Add a repeat step to the macro.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="runaway" class="tsd-anchor"></a>
 					<h3>runaway</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">runaway<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">runaway<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#runaway">runaway</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L226">src/combat.ts:226</a></li>
 								</ul>
@@ -449,20 +451,21 @@
 									<p>Add a &quot;runaway&quot; step to this macro.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="save" class="tsd-anchor"></a>
 					<h3>save</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#save">save</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L118">src/combat.ts:118</a></li>
 								</ul>
@@ -476,15 +479,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="setautoattack" class="tsd-anchor"></a>
 					<h3>set<wbr>Auto<wbr>Attack</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">set<wbr>Auto<wbr>Attack<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#setautoattack">setAutoAttack</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L181">src/combat.ts:181</a></li>
 								</ul>
@@ -498,17 +502,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="skill" class="tsd-anchor"></a>
 					<h3>skill</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">skill<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">skill<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#skill">skill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L330">src/combat.ts:330</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L548">src/combat.ts:548</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -519,26 +524,27 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to cast.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="step" class="tsd-anchor"></a>
 					<h3>step</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">step<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nextSteps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">step<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nextSteps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#step">step</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L143">src/combat.ts:143</a></li>
 								</ul>
@@ -557,20 +563,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="submit" class="tsd-anchor"></a>
 					<h3>submit</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">submit<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#submit">submit</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L169">src/combat.ts:169</a></li>
 								</ul>
@@ -584,15 +591,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="tostring" class="tsd-anchor"></a>
 					<h3>to<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#tostring">toString</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L111">src/combat.ts:111</a></li>
 								</ul>
@@ -606,17 +614,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="tryitem" class="tsd-anchor"></a>
 					<h3>try<wbr>Item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Item<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Item<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryitem">tryItem</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L436">src/combat.ts:436</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L611">src/combat.ts:611</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -627,28 +636,29 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Items to try using. Pass a tuple [item1, item2] to funksling.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="tryskill" class="tsd-anchor"></a>
 					<h3>try<wbr>Skill</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryskill">trySkill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L355">src/combat.ts:355</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L590">src/combat.ts:590</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -659,28 +669,29 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to try casting.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="tryskillrepeat" class="tsd-anchor"></a>
 					<h3>try<wbr>Skill<wbr>Repeat</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<wbr>Repeat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<wbr>Repeat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryskillrepeat">trySkillRepeat</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L383">src/combat.ts:383</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L632">src/combat.ts:632</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -691,26 +702,27 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to try repeatedly casting.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="while_" class="tsd-anchor"></a>
 					<h3>while_</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">while_<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">while_<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#while_">while_</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L268">src/combat.ts:268</a></li>
 								</ul>
@@ -735,20 +747,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a></h4>
 							<p>This object itself.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="abort-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> abort</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">abort&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#abort-1">abort</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L218">src/combat.ts:218</a></li>
 								</ul>
@@ -769,15 +782,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="attack-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> attack</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">attack&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#attack-1">attack</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L471">src/combat.ts:471</a></li>
 								</ul>
@@ -798,15 +812,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="clearsaved" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> clear<wbr>Saved</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">clear<wbr>Saved<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#clearsaved">clearSaved</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L134">src/combat.ts:134</a></li>
 								</ul>
@@ -820,15 +835,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="externalif-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> external<wbr>If</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">external<wbr>If&lt;T&gt;<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#externalif-1">externalIf</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L309">src/combat.ts:309</a></li>
 								</ul>
@@ -864,15 +880,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="ifmonster-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> if<wbr>Monster</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">if<wbr>Monster<span class="tsd-signature-symbol">(</span>monster<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Monster</span>, macro<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#ifmonster-1">ifMonster</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L489">src/combat.ts:489</a></li>
 								</ul>
@@ -901,15 +918,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="if_-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> if_</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">if_&lt;T&gt;<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ifTrue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#if_-1">if_</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L254">src/combat.ts:254</a></li>
 								</ul>
@@ -945,17 +963,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
 					<a name="item-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">item&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">item&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#item-1">item</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L424">src/combat.ts:424</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L578">src/combat.ts:578</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -966,13 +985,13 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Items to use. Pass a tuple [item1, item2] to funksling.</p>
 									</div>
@@ -983,15 +1002,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="load" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> load</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">load&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#load">load</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L125">src/combat.ts:125</a></li>
 								</ul>
@@ -1011,15 +1031,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="runaway-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> runaway</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">runaway&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#runaway-1">runaway</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L234">src/combat.ts:234</a></li>
 								</ul>
@@ -1040,17 +1061,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
 					<a name="skill-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> skill</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">skill&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">skill&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#skill-1">skill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L343">src/combat.ts:343</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L557">src/combat.ts:557</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1061,13 +1083,13 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to cast.</p>
 									</div>
@@ -1078,15 +1100,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="step-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> step</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">step&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nextSteps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#step-1">step</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L159">src/combat.ts:159</a></li>
 								</ul>
@@ -1116,17 +1139,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
 					<a name="tryitem-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> try<wbr>Item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Item&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Item&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryitem-1">tryItem</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L452">src/combat.ts:452</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L620">src/combat.ts:620</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1137,13 +1161,13 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ItemOrName</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Item</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Items to try using. Pass a tuple [item1, item2] to funksling.</p>
 									</div>
@@ -1154,17 +1178,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
 					<a name="tryskill-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> try<wbr>Skill</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryskill-1">trySkill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L371">src/combat.ts:371</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L599">src/combat.ts:599</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1175,13 +1200,13 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to try casting.</p>
 									</div>
@@ -1192,17 +1217,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
 					<a name="tryskillrepeat-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> try<wbr>Skill<wbr>Repeat</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<wbr>Repeat&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">try<wbr>Skill<wbr>Repeat&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>skills<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="macro.html">Macro</a>.<a href="macro.html#tryskillrepeat-1">trySkillRepeat</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L399">src/combat.ts:399</a></li>
+									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L648">src/combat.ts:648</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1213,13 +1239,13 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="strictmacro.html" class="tsd-signature-type" data-tsd-kind="Class">StrictMacro</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">SkillOrName</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>skills: <span class="tsd-signature-type">Skill</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Skills to try repeatedly casting.</p>
 									</div>
@@ -1230,15 +1256,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 					<a name="while_-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> while_</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">while_&lt;T&gt;<span class="tsd-signature-symbol">(</span>condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="macro.html" class="tsd-signature-type" data-tsd-kind="Class">Macro</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="macro.html">Macro</a>.<a href="macro.html#while_-1">while_</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/Loathing-Associates-Scripting-Society/libram/blob/9c1102c/src/combat.ts#L278">src/combat.ts:278</a></li>
 								</ul>
@@ -1289,121 +1316,121 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="macro.html" class="tsd-kind-icon">Macro</a>
+						<a href="strictmacro.html" class="tsd-kind-icon">Strict<wbr>Macro</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="macro.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="macro.html#components" class="tsd-kind-icon">components</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#components" class="tsd-kind-icon">components</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="macro.html#saved_macro_property" class="tsd-kind-icon">SAVED_<wbr>MACRO_<wbr>PROPERTY</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#saved_macro_property" class="tsd-kind-icon">SAVED_<wbr>MACRO_<wbr>PROPERTY</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="macro.html#cachedautoattack" class="tsd-kind-icon">cached<wbr>Auto<wbr>Attack</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#cachedautoattack" class="tsd-kind-icon">cached<wbr>Auto<wbr>Attack</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="macro.html#cachedmacroid" class="tsd-kind-icon">cached<wbr>Macro<wbr>Id</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#cachedmacroid" class="tsd-kind-icon">cached<wbr>Macro<wbr>Id</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#abort" class="tsd-kind-icon">abort</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#abort" class="tsd-kind-icon">abort</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#attack" class="tsd-kind-icon">attack</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#attack" class="tsd-kind-icon">attack</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#externalif" class="tsd-kind-icon">external<wbr>If</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#externalif" class="tsd-kind-icon">external<wbr>If</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#ifmonster" class="tsd-kind-icon">if<wbr>Monster</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#ifmonster" class="tsd-kind-icon">if<wbr>Monster</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#if_" class="tsd-kind-icon">if_</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#if_" class="tsd-kind-icon">if_</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#item" class="tsd-kind-icon">item</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="strictmacro.html#item" class="tsd-kind-icon">item</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#repeat" class="tsd-kind-icon">repeat</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#repeat" class="tsd-kind-icon">repeat</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#runaway" class="tsd-kind-icon">runaway</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#runaway" class="tsd-kind-icon">runaway</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#save" class="tsd-kind-icon">save</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#save" class="tsd-kind-icon">save</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#setautoattack" class="tsd-kind-icon">set<wbr>Auto<wbr>Attack</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#setautoattack" class="tsd-kind-icon">set<wbr>Auto<wbr>Attack</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#skill" class="tsd-kind-icon">skill</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="strictmacro.html#skill" class="tsd-kind-icon">skill</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#step" class="tsd-kind-icon">step</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#step" class="tsd-kind-icon">step</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#submit" class="tsd-kind-icon">submit</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#submit" class="tsd-kind-icon">submit</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#tryitem" class="tsd-kind-icon">try<wbr>Item</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="strictmacro.html#tryitem" class="tsd-kind-icon">try<wbr>Item</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#tryskill" class="tsd-kind-icon">try<wbr>Skill</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="strictmacro.html#tryskill" class="tsd-kind-icon">try<wbr>Skill</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#tryskillrepeat" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="strictmacro.html#tryskillrepeat" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="macro.html#while_" class="tsd-kind-icon">while_</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="strictmacro.html#while_" class="tsd-kind-icon">while_</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#abort-1" class="tsd-kind-icon">abort</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#abort-1" class="tsd-kind-icon">abort</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#attack-1" class="tsd-kind-icon">attack</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#attack-1" class="tsd-kind-icon">attack</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="macro.html#clearsaved" class="tsd-kind-icon">clear<wbr>Saved</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#clearsaved" class="tsd-kind-icon">clear<wbr>Saved</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#externalif-1" class="tsd-kind-icon">external<wbr>If</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#externalif-1" class="tsd-kind-icon">external<wbr>If</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="macro.html#ifmonster-1" class="tsd-kind-icon">if<wbr>Monster</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#ifmonster-1" class="tsd-kind-icon">if<wbr>Monster</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#if_-1" class="tsd-kind-icon">if_</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#if_-1" class="tsd-kind-icon">if_</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#item-1" class="tsd-kind-icon">item</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+								<a href="strictmacro.html#item-1" class="tsd-kind-icon">item</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#load" class="tsd-kind-icon">load</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#load" class="tsd-kind-icon">load</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#runaway-1" class="tsd-kind-icon">runaway</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#runaway-1" class="tsd-kind-icon">runaway</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#skill-1" class="tsd-kind-icon">skill</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+								<a href="strictmacro.html#skill-1" class="tsd-kind-icon">skill</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#step-1" class="tsd-kind-icon">step</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#step-1" class="tsd-kind-icon">step</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#tryitem-1" class="tsd-kind-icon">try<wbr>Item</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+								<a href="strictmacro.html#tryitem-1" class="tsd-kind-icon">try<wbr>Item</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#tryskill-1" class="tsd-kind-icon">try<wbr>Skill</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+								<a href="strictmacro.html#tryskill-1" class="tsd-kind-icon">try<wbr>Skill</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#tryskillrepeat-1" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-static">
+								<a href="strictmacro.html#tryskillrepeat-1" class="tsd-kind-icon">try<wbr>Skill<wbr>Repeat</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-								<a href="macro.html#while_-1" class="tsd-kind-icon">while_</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
+								<a href="strictmacro.html#while_-1" class="tsd-kind-icon">while_</a>
 							</li>
 						</ul>
 					</li>

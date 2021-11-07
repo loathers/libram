@@ -477,7 +477,7 @@ export class Macro {
    * @param monster The monster in question
    * @param macro The macro to trigger when the monster is found
    */
-  ifMonster(monster: Monster, macro: Macro): Macro {
+  ifMonster(monster: Monster, macro: Macro): this {
     return this.if_(`monsterid ${monster.id}`, macro);
   }
 
@@ -486,8 +486,12 @@ export class Macro {
    * @param monster The monster in question
    * @param macro The macro to trigger when the monster is found
    */
-  static ifMonster(monster: Monster, macro: Macro): Macro {
-    return new Macro().ifMonster(monster, macro);
+  static ifMonster<T extends Macro>(
+    this: Constructor<T>,
+    monster: Monster,
+    macro: Macro
+  ): T {
+    return new this().ifMonster(monster, macro);
   }
 }
 

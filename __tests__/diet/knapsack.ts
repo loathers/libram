@@ -1,8 +1,12 @@
 import { knapsack } from "../../src/diet/knapsack";
 
+function sortValues<T>(items: [T, number][]) {
+  return items.sort(([x], [y]) => (x < y ? -1 : x === y ? 0 : 1));
+}
+
 describe("knapsack", () => {
   it("selects better items", () => {
-    const results = knapsack(
+    const [value, items] = knapsack(
       [
         ["A", 1, 1],
         ["B", 3, 2],
@@ -10,7 +14,8 @@ describe("knapsack", () => {
       4
     );
 
-    expect(results).toEqual([6, ["B", "B"]]);
+    expect(sortValues(items)).toEqual([["B", 2]]);
+    expect(value).toEqual(6);
   });
 
   it("beats greedy", () => {
@@ -24,8 +29,11 @@ describe("knapsack", () => {
       7
     );
 
+    expect(sortValues(items)).toEqual([
+      ["B", 1],
+      ["C", 2],
+    ]);
     expect(value).toEqual(26);
-    expect(items.sort()).toEqual(["B", "C", "C"]);
   });
 
   it("doesn't overfill", () => {
@@ -37,8 +45,8 @@ describe("knapsack", () => {
       5
     );
 
+    expect(sortValues(items)).toEqual([["A", 2]]);
     expect(value).toEqual(4);
-    expect(items.sort()).toEqual(["A", "A"]);
   });
 
   it("respects maximum quantity", () => {
@@ -50,7 +58,42 @@ describe("knapsack", () => {
       5
     );
 
+    expect(sortValues(items)).toEqual([
+      ["A", 1],
+      ["B", 2],
+    ]);
     expect(value).toEqual(12);
-    expect(items.sort()).toEqual(["A", "B", "B"]);
+  });
+
+  it("uses negative items", () => {
+    const [value, items] = knapsack(
+      [
+        ["A", 1, 1],
+        ["B", 0, -1, 1],
+      ],
+      2
+    );
+
+    expect(sortValues(items)).toEqual([
+      ["A", 3],
+      ["B", 1],
+    ]);
+    expect(value).toEqual(3);
+  });
+
+  it("uses negative items with cost", () => {
+    const [value, items] = knapsack(
+      [
+        ["A", 2, 1],
+        ["B", -1, -1, 1],
+      ],
+      2
+    );
+
+    expect(sortValues(items)).toEqual([
+      ["A", 3],
+      ["B", 1],
+    ]);
+    expect(value).toEqual(5);
   });
 });

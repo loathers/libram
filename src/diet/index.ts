@@ -6,6 +6,7 @@ import {
   mallPrice,
   mallPrices,
   myFullness,
+  myPrimestat,
   mySpleenUse,
   npcPrice,
   print,
@@ -14,19 +15,23 @@ import {
 
 import { knapsack } from "./knapsack";
 import { have } from "../lib";
-import { $effect, $item, $items } from "../template-string";
+import { $effect, $item, $items, $skill, $stat } from "../template-string";
 import { sum } from "../utils";
 
+type ConsumptionModifiers = {
+  forkMug: boolean;
+  seasoning: boolean;
+  mayoflex: boolean;
+  refinedPalate: boolean;
+  pinkyRing: boolean;
+  tuxedoShirt: boolean;
+};
+
 // TODO: Include other consumption modifiers - Salty Mouth?
+// TODO: Include Gar-ish etc.
 function expectedAdventures(
   item: Item,
-  modifiers: {
-    forkMug: boolean;
-    seasoning: boolean;
-    mayoflex: boolean;
-    refinedPalate: boolean;
-    pinkyRing: boolean;
-  }
+  modifiers: ConsumptionModifiers
 ): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
@@ -35,12 +40,12 @@ function expectedAdventures(
   const max = recordedMax ?? min;
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
   const forkMugMultiplier =
-    (itemType(item) === "food" && item.notes.includes("SALAD")) ||
-    (itemType(item) === "booze" && item.notes.includes("BEER"))
+    (itemType(item) === "food" && item.notes?.includes("SALAD")) ||
+    (itemType(item) === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
-  const refinedPalate = modifiers.refinedPalate && item.notes.includes("WINE");
-  const pinkyRing = modifiers.pinkyRing && item.notes.includes("WINE");
+  const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");
+  const pinkyRing = modifiers.pinkyRing && item.notes?.includes("WINE");
   return (
     sum(interpolated, (baseAdventures) => {
       let adventures = baseAdventures;
@@ -49,6 +54,12 @@ function expectedAdventures(
       }
       if (refinedPalate) adventures = Math.floor(adventures * 1.25);
       if (pinkyRing) adventures = Math.round(adventures * 1.125);
+      if (item.notes?.includes("MARTINI") && modifiers.tuxedoShirt) {
+        adventures += 2;
+      }
+      if (have($skill`Saucemaven`) && item.notes?.includes("SAUCY")) {
+        adventures += myPrimestat() === $stat`Mysticality` ? 5 : 3;
+      }
       if (itemType(item) === "food" && modifiers.seasoning) adventures++;
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
       return adventures;
@@ -56,83 +67,62 @@ function expectedAdventures(
   );
 }
 
-// Assuming list is already sorted, count adjacent items.
-// Effectively run-length encoding.
-function aggregate<T>(
-  list: T[],
-  isEqual: (x: T, y: T) => boolean
-): [T, number][] {
-  const aggregatedList = [];
-  for (const item of list) {
-    if (aggregatedList.length === 0) {
-      aggregatedList.push([item, 1] as [T, number]);
-    } else {
-      const last = aggregatedList[aggregatedList.length - 1];
-      const [lastItem] = last;
-      if (isEqual(item, lastItem)) {
-        last[1]++;
-      } else {
-        aggregatedList.push([item, 1] as [T, number]);
-      }
-    }
-  }
-  return aggregatedList;
-}
+type MenuItemOptions = {
+  organ?: Organ;
+  size?: number;
+  maximum?: number | "auto";
+  additionalValue?: number;
+  wishEffect?: Effect;
+};
 
 export class MenuItem {
   item: Item;
-  size: number;
   organ?: Organ;
+  size: number;
   maximum?: number;
   additionalValue?: number;
   wishEffect?: Effect;
 
-  static defaultProperties = new Map([
-    [$item`Mr. Burnsger`, { maximum: 1 }],
-    [$item`distention pill`, { organ: "food", maximum: 1, size: -1 }],
-    [$item`synthetic dog hair pill`, { organ: "booze", maximum: 1, size: -1 }],
-    [$item`cuppa Voraci tea`, { organ: "food", maximum: 1, size: -1 }],
-    [$item`cuppa Sobrie tea`, { organ: "booze", maximum: 1, size: -1 }],
-    [$item`mojo filter`, { organ: "spleen item", maximum: 3, size: -1 }],
-  ] as [
-    Item,
-    {
-      size?: number;
-      organ?: Organ;
-      maximum?: number;
-      additionalValue?: number;
-      wishEffect?: Effect;
-    }
-  ][]);
+  static defaultOptions = new Map([
+    [$item`Mr. Burnsger`, { maximum: "auto" }],
+    [
+      $item`distention pill`,
+      {
+        organ: "food",
+        maximum: "auto",
+        size: -1,
+      },
+    ],
+    [
+      $item`synthetic dog hair pill`,
+      { organ: "booze", maximum: "auto", size: -1 },
+    ],
+    [$item`cuppa Voraci tea`, { organ: "food", maximum: "auto", size: -1 }],
+    [$item`cuppa Sobrie tea`, { organ: "booze", maximum: "auto", size: -1 }],
+    [$item`mojo filter`, { organ: "spleen item", maximum: "auto", size: -1 }],
+  ] as [Item, MenuItemOptions][]);
 
-  constructor(
-    item: Item,
-    options?: {
-      size?: number;
-      organ?: Organ;
-      maximum?: number;
-      additionalValue?: number;
-      wishEffect?: Effect;
-    }
-  ) {
-    const { size, organ, maximum, additionalValue, wishEffect } = options ?? {};
-    const defaultProperties = MenuItem.defaultProperties.get(item);
+  constructor(item: Item, options: MenuItemOptions = {}) {
+    const { size, organ, maximum, additionalValue, wishEffect } = {
+      ...options,
+      ...(MenuItem.defaultOptions.get(item) ?? {}),
+    };
     this.item = item;
-    this.maximum = maximum ?? defaultProperties?.maximum;
-    this.additionalValue =
-      additionalValue ?? defaultProperties?.additionalValue;
-    this.wishEffect = wishEffect ?? defaultProperties?.wishEffect;
+    this.maximum = maximum === "auto" ? item.dailyusesleft : maximum;
+    this.additionalValue = additionalValue;
+    this.wishEffect = wishEffect;
 
     const typ = itemType(this.item);
     this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
     this.size =
-      size ?? defaultProperties?.size ?? this.organ === "food"
+      size ??
+      (this.organ === "food"
         ? this.item.fullness
         : this.organ === "booze"
         ? this.item.inebriety
         : this.organ === "spleen item"
         ? this.item.spleen
-        : 0;
+        : 0);
   }
 
   equals(other: MenuItem) {
@@ -163,8 +153,8 @@ class DietPlanner {
   mug?: MenuItem;
   seasoning?: MenuItem;
   mayoflex?: MenuItem;
-  refinedPalate?: MenuItem;
   pinkyRing: boolean;
+  tuxedoShirt: boolean;
   spleenValue = 0;
 
   constructor(mpa: number, menu: MenuItem[]) {
@@ -180,13 +170,9 @@ class DietPlanner {
       getWorkshed() === $item`portable Mayo Clinic`
         ? menu.find((item) => item.item === $item`Mayoflex`)
         : undefined;
-    this.refinedPalate = menu.find(
-      (item) =>
-        item.item === $item`pocket wish` &&
-        item.wishEffect === $effect`Refined Palate`
-    );
     this.pinkyRing = have($item`mafia pinky ring`);
-    this.menu = menu.filter((item) => isOrgan(itemType(item.item)));
+    this.tuxedoShirt = have($item`tuxedo shirt`);
+    this.menu = menu.filter((item) => item.organ);
 
     if (menu.length > 100) {
       mallPrices("food");
@@ -210,10 +196,13 @@ class DietPlanner {
   }
 
   consumptionValue(menuItem: MenuItem): number {
-    return this.consumptionHelpersAndValue(menuItem)[1];
+    return this.consumptionHelpersAndValue(menuItem, {})[1];
   }
 
-  consumptionHelpersAndValue(menuItem: MenuItem): [MenuItem[], number] {
+  consumptionHelpersAndValue(
+    menuItem: MenuItem,
+    overrideModifiers: Partial<ConsumptionModifiers>
+  ): [MenuItem[], number] {
     const helpers = [];
     if (
       this.seasoning &&
@@ -234,8 +223,10 @@ class DietPlanner {
       forkMug: false,
       seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
       mayoflex: this.mayoflex ? helpers.includes(this.mayoflex) : false,
-      refinedPalate: !!this.refinedPalate,
-      pinkyRing: !!this.pinkyRing,
+      refinedPalate: false,
+      pinkyRing: this.pinkyRing,
+      tuxedoShirt: this.tuxedoShirt,
+      ...overrideModifiers,
     };
 
     const forkMug =
@@ -272,22 +263,22 @@ class DietPlanner {
       : [[...helpers, menuItem], valueRaw + valueSpleen];
   }
 
-  planOrgan(organ: Organ, capacity: number): [number, [MenuItem[], number][]] {
+  planOrgan(
+    organ: Organ,
+    capacity: number,
+    overrideModifiers: Partial<ConsumptionModifiers> = {}
+  ): [number, [MenuItem[], number][]] {
     // print(`Plan ${organ} < ${capacity}`);
-    const submenu = this.menu.filter((item) => itemType(item.item) === organ);
+    const submenu = this.menu.filter((item) => item.organ === organ);
     const knapsackValues = submenu.map(
       (menuItem) =>
         [
-          ...this.consumptionHelpersAndValue(menuItem),
+          ...this.consumptionHelpersAndValue(menuItem, overrideModifiers),
           menuItem.size,
           menuItem.maximum,
         ] as [MenuItem[], number, number, number?]
     );
-    const [value, menuItemList] = knapsack(knapsackValues, capacity);
-
-    const valueWithRefinedPalate =
-      value - (this.refinedPalate ? this.refinedPalate.price() : 0);
-    if (this.refinedPalate) menuItemList.splice(0, 0, [this.refinedPalate]);
+    return knapsack(knapsackValues, capacity);
 
     // print(
     //   `Items: ${itemList.length} ${([] as Item[])
@@ -295,17 +286,14 @@ class DietPlanner {
     //     .map((item) => item.name)
     //     .join(", ")}`
     // );
-    return [
-      valueWithRefinedPalate,
-      aggregate(menuItemList, (x: MenuItem[], y: MenuItem[]) =>
-        x.every((elem, index) => elem.equals(y[index]))
-      ),
-    ];
   }
 
-  planOrgans(organCapacities: OrganSize[]): [number, [MenuItem[], number][]] {
+  planOrgans(
+    organCapacities: OrganSize[],
+    overrideModifiers: Partial<ConsumptionModifiers> = {}
+  ): [number, [MenuItem[], number][]] {
     const valuePlans = organCapacities.map(([organ, capacity]) =>
-      this.planOrgan(organ, capacity)
+      this.planOrgan(organ, capacity, overrideModifiers)
     );
     return [
       sum(valuePlans, ([value]) => value),
@@ -317,10 +305,11 @@ class DietPlanner {
 
   planOrgansWithTrials(
     organCapacities: OrganSize[],
-    trialItems: [MenuItem, OrganSize[]][]
+    trialItems: [MenuItem, OrganSize[]][],
+    overrideModifiers: Partial<ConsumptionModifiers> = {}
   ): [number, [MenuItem[], number][]] {
     if (trialItems.length === 0) {
-      return this.planOrgans(organCapacities);
+      return this.planOrgans(organCapacities, overrideModifiers);
     }
 
     const organCapacitiesWithMap = new Map(organCapacities);
@@ -334,27 +323,38 @@ class DietPlanner {
     }
     const organCapacitiesWith = [...organCapacitiesWithMap];
 
+    const isRefinedPalate =
+      trialItem.item === $item`pocket wish` &&
+      trialItem.wishEffect === $effect`Refined Palate`;
+
     const [valueWithout, planWithout] = this.planOrgansWithTrials(
       organCapacities,
-      trialItems.slice(1)
+      trialItems.slice(1),
+      overrideModifiers
     );
     const [valueWith, planWith] = this.planOrgansWithTrials(
       organCapacitiesWith,
-      trialItems.slice(1)
+      trialItems.slice(1),
+      isRefinedPalate
+        ? { ...overrideModifiers, refinedPalate: true }
+        : overrideModifiers
     );
 
-    const [helpers, value] = this.consumptionHelpersAndValue(trialItem);
-
-    print(
-      `${new Array(5 - trialItems.length).join(">")} ${
-        valueWithout > valueWith + value ? "WITHOUT" : "WITH"
-      } ${trialItem.item} ${value.toFixed(0)}: ${valueWithout.toFixed(
-        0
-      )} vs. ${(valueWith + value).toFixed(0)}`
+    const [helpersAndItem, value] = this.consumptionHelpersAndValue(
+      trialItem,
+      {}
     );
+
+    // print(
+    //   `${new Array(trialItems.length).join(">")} ${
+    //     valueWithout > valueWith + value ? "WITHOUT" : "WITH"
+    //   } ${trialItem.item} ${trialItem.wishEffect ?? ""} ${value.toFixed(
+    //     0
+    //   )}: ${valueWithout.toFixed(0)} vs. ${(valueWith + value).toFixed(0)}`
+    // );
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
-      : [valueWith, [...planWith, [helpers, 1]]];
+      : [valueWith, [...planWith, [helpersAndItem, 1]]];
   }
 }
 
@@ -408,6 +408,13 @@ const interactingItems: [Item, OrganSize[]][] = [
   ],
 ];
 
+/**
+ * Plan out an optimal diet using a knapsack algorithm.
+ * @param mpa Meat per adventure value.
+ * @param menu Array of MenuItems to consider for diet purposes.
+ * @param organCapacities Optional override of each organ's capacity.
+ * @returns Array of [menu item and helpers, count].
+ */
 export function planDiet(
   mpa: number,
   menu: MenuItem[],
@@ -419,10 +426,13 @@ export function planDiet(
 ): [MenuItem[], number][] {
   const dietPlanner = new DietPlanner(mpa, menu);
 
-  print("MENU:");
+  // print("MENU:");
   for (const menuItem of menu) {
-    const [helpers, value] = dietPlanner.consumptionHelpersAndValue(menuItem);
-    print(`${menuItem.item.name}: ${helpers.join(", ")} ${value}`);
+    const [helpers, value] = dietPlanner.consumptionHelpersAndValue(
+      menuItem,
+      {}
+    );
+    // print(`${menuItem.item.name}: ${helpers.join(", ")} ${value}`);
   }
 
   const resolvedOrganCapacities = organCapacities.map(

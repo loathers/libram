@@ -1,3 +1,35 @@
+import { sum } from "../utils";
+
+class Not<T> {
+  thing: T;
+  constructor(thing: T) {
+    this.thing = thing;
+  }
+}
+
+// Assuming list is already sorted, count adjacent items.
+// Effectively run-length encoding.
+function aggregate<T>(
+  list: T[],
+  isEqual?: (x: T, y: T) => boolean
+): [T, number][] {
+  const aggregatedList = [];
+  for (const item of list) {
+    if (aggregatedList.length === 0) {
+      aggregatedList.push([item, 1] as [T, number]);
+    } else {
+      const last = aggregatedList[aggregatedList.length - 1];
+      const [lastItem] = last;
+      if (isEqual ? isEqual(item, lastItem) : item === lastItem) {
+        last[1]++;
+      } else {
+        aggregatedList.push([item, 1] as [T, number]);
+      }
+    }
+  }
+  return aggregatedList;
+}
+
 /**
  * Solve the knapsack problem.
  * @param values Array of {[item, value, weight, maximum]} tuples for knapsack parameter.
@@ -7,14 +39,31 @@
 export function knapsack<T>(
   values: [T, number, number, number?][],
   capacity: number
-): [number, T[]] {
+): [number, [T, number][]] {
+  // Invert negative values into a fake value for not using it.
+  const valuesInverted = values.map(
+    ([thing, value, weight, maximum]) =>
+      (weight < 0 && maximum
+        ? [new Not(thing), -value, -weight, maximum]
+        : [thing, value, weight, maximum]) as [
+        T | Not<T>,
+        number,
+        number,
+        number?
+      ]
+  );
+  const capacityAdjustment = sum(values, ([, , weight, maximum]) =>
+    weight < 0 && maximum ? -weight * maximum : 0
+  );
+  const adjustedCapacity = capacity + capacityAdjustment;
+
   // Sort values by weight.
-  const valuesSorted = [...values].sort((x, y) => x[2] - y[2]);
+  const valuesSorted = [...valuesInverted].sort((x, y) => x[2] - y[2]);
   // Convert the problem into 0/1 knapsack - just include as many copies as possible of each item.
-  const values01 = ([] as [T, number, number][]).concat(
+  const values01 = ([] as [T | Not<T>, number, number][]).concat(
     ...valuesSorted.map(([thing, value, weight, maximum]) => {
-      const maxQuantity = maximum ?? Math.floor(capacity / weight);
-      return new Array<[T, number, number]>(maxQuantity).fill([
+      const maxQuantity = maximum ?? Math.floor(adjustedCapacity / weight);
+      return new Array<[T | Not<T>, number, number]>(maxQuantity).fill([
         thing,
         value,
         weight,
@@ -22,18 +71,47 @@ export function knapsack<T>(
     })
   );
 
-  const memoizationTable: ([number, T[]] | null)[][] = new Array(
+  const memoizationTable: ([number, (T | Not<T>)[]] | null)[][] = new Array(
     values01.length
   );
   for (let i = 0; i < values01.length; i++) {
-    memoizationTable[i] = new Array(capacity).fill(null);
+    memoizationTable[i] = new Array(adjustedCapacity).fill(null);
   }
-  return bestSolution(
+
+  const [value, invertedSolution] = bestSolution(
     memoizationTable,
     values01,
     values01.length - 1,
-    capacity
+    adjustedCapacity
   );
+
+  // Still need to replace Not<T>s with right quantity of T's.
+  const aggregatedSolution = aggregate(invertedSolution);
+  const countMap = new Map(aggregatedSolution);
+
+  let valueAdjustment = 0;
+  const solution: [T, number][] = aggregatedSolution.filter(
+    ([thingOrNot]) => !(thingOrNot instanceof Not)
+  ) as [T, number][];
+  for (const [thingOrNot, value, , maximum] of valuesSorted) {
+    if (thingOrNot instanceof Not) {
+      const notCount = countMap.get(thingOrNot) ?? 0;
+      if (maximum === undefined) {
+        throw new Error(`Cannot find maximum for item ${thingOrNot.thing}.`);
+      }
+      if (notCount > maximum) {
+        throw new Error(
+          `Somehow picked ${notCount} more than the maximum ${notCount} for item ${thingOrNot.thing}.`
+        );
+      }
+      if (notCount < maximum) {
+        solution.push([thingOrNot.thing, maximum - notCount]);
+      }
+      valueAdjustment -= maximum * value;
+    }
+  }
+
+  return [value + valueAdjustment, solution];
 }
 
 /**

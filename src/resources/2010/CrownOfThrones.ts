@@ -580,10 +580,10 @@ export const ridingFamiliars: FamiliarRider[] = [
 export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (modifiers: Modifiers) => number,
-  useLimitedDrops = true
+  ignoreLimitedDrops = false
 ): number {
   const dropValue =
-    !rider.dropPredicate || (rider.dropPredicate() && !useLimitedDrops)
+    !rider.dropPredicate || (rider.dropPredicate() && !ignoreLimitedDrops)
       ? rider.probability * rider.meatVal()
       : 0;
   const modifierValue = modifierValueFunction(rider.modifier);
@@ -592,7 +592,7 @@ export function valueRider(
 
 type RiderMode = {
   modifierValueFunction: (modifiers: Modifiers) => number;
-  useLimitedDrops: boolean;
+  ignoreLimitedDrops: boolean;
   excludeCurrentFamiliar: boolean;
 };
 
@@ -601,12 +601,12 @@ const riderModes = new Map<string, RiderMode>();
 export function createRiderMode(
   name: string,
   modifierValueFunction: (modifiers: Modifiers) => number,
-  useLimitedDrops = true,
+  ignoreLimitedDrops = false,
   excludeCurrentFamiliar = true
 ): Map<string, RiderMode> {
   return riderModes.set(name, {
     modifierValueFunction: modifierValueFunction,
-    useLimitedDrops: useLimitedDrops,
+    ignoreLimitedDrops: ignoreLimitedDrops,
     excludeCurrentFamiliar: excludeCurrentFamiliar,
   });
 }
@@ -618,7 +618,7 @@ export function pickRider(mode: string): FamiliarRider | null {
   if (!modeData) return null;
   const {
     modifierValueFunction,
-    useLimitedDrops,
+    ignoreLimitedDrops,
     excludeCurrentFamiliar,
   } = modeData;
   if (!riderLists.has(mode)) {
@@ -628,8 +628,8 @@ export function pickRider(mode: string): FamiliarRider | null {
         .filter((rider) => have(rider.familiar))
         .sort(
           (a, b) =>
-            valueRider(b, modifierValueFunction, useLimitedDrops) -
-            valueRider(a, modifierValueFunction, useLimitedDrops)
+            valueRider(b, modifierValueFunction, ignoreLimitedDrops) -
+            valueRider(a, modifierValueFunction, ignoreLimitedDrops)
         )
     );
   }

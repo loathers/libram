@@ -313,7 +313,6 @@ class DietPlanner {
 
     const organCapacitiesWithMap = new Map(organCapacities);
     const [trialItem, organSizes] = trialItems[0];
-    // print(`TRYING ${trialItem.item.name}`);
     for (const [organ, size] of organSizes) {
       const current = organCapacitiesWithMap.get(organ);
       if (current !== undefined) {
@@ -344,13 +343,6 @@ class DietPlanner {
       {}
     );
 
-    // print(
-    //   `${new Array(trialItems.length).join(">")} ${
-    //     valueWithout > valueWith + value ? "WITHOUT" : "WITH"
-    //   } ${trialItem.item} ${trialItem.wishEffect ?? ""} ${value.toFixed(
-    //     0
-    //   )}: ${valueWithout.toFixed(0)} vs. ${(valueWith + value).toFixed(0)}`
-    // );
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
       : [valueWith, [...planWith, [helpersAndItem, 1]]];

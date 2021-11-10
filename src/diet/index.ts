@@ -132,7 +132,7 @@ export class MenuItem {
         : 0);
   }
 
-  equals(other: MenuItem) {
+  equals(other: MenuItem): boolean {
     return this.item === other.item && this.wishEffect === other.wishEffect;
   }
 

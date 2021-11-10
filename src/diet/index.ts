@@ -9,12 +9,12 @@ import {
   myPrimestat,
   mySpleenUse,
   npcPrice,
-  print,
   spleenLimit,
 } from "kolmafia";
 
 import { knapsack } from "./knapsack";
 import { have } from "../lib";
+import { get } from "../property";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
 import { sum } from "../utils";
 
@@ -99,7 +99,14 @@ export class MenuItem {
     ],
     [$item`cuppa Voraci tea`, { organ: "food", maximum: "auto", size: -1 }],
     [$item`cuppa Sobrie tea`, { organ: "booze", maximum: "auto", size: -1 }],
-    [$item`mojo filter`, { organ: "spleen item", maximum: "auto", size: -1 }],
+    [
+      $item`mojo filter`,
+      {
+        organ: "spleen item",
+        maximum: 3 - get("currentMojoFilters"),
+        size: -1,
+      },
+    ],
   ] as [Item, MenuItemOptions][]);
 
   constructor(item: Item, options: MenuItemOptions = {}) {
@@ -268,7 +275,6 @@ class DietPlanner {
     capacity: number,
     overrideModifiers: Partial<ConsumptionModifiers> = {}
   ): [number, [MenuItem[], number][]] {
-    // print(`Plan ${organ} < ${capacity}`);
     const submenu = this.menu.filter((item) => item.organ === organ);
     const knapsackValues = submenu.map(
       (menuItem) =>
@@ -279,13 +285,6 @@ class DietPlanner {
         ] as [MenuItem[], number, number, number?]
     );
     return knapsack(knapsackValues, capacity);
-
-    // print(
-    //   `Items: ${itemList.length} ${([] as Item[])
-    //     .concat(...itemList)
-    //     .map((item) => item.name)
-    //     .join(", ")}`
-    // );
   }
 
   planOrgans(
@@ -426,15 +425,6 @@ export function planDiet(
 ): [MenuItem[], number][] {
   const dietPlanner = new DietPlanner(mpa, menu);
 
-  // print("MENU:");
-  for (const menuItem of menu) {
-    const [helpers, value] = dietPlanner.consumptionHelpersAndValue(
-      menuItem,
-      {}
-    );
-    // print(`${menuItem.item.name}: ${helpers.join(", ")} ${value}`);
-  }
-
   const resolvedOrganCapacities = organCapacities.map(
     ([organ, size]) =>
       [
@@ -459,11 +449,6 @@ export function planDiet(
         [allItems.get(item), sizes] as [MenuItem | undefined, OrganSize[]]
     )
     .filter(([menuItem]) => menuItem) as [MenuItem, OrganSize[]][];
-  // print(
-  //   `included interacting: ${includedInteractingItems
-  //     .map(([menuItem]) => menuItem.item.name)
-  //     .join(", ")}`
-  // );
 
   // TODO: support toasted brie.
   // Refined Palate must also be treated as an interacting item, as it's a one-time cost.

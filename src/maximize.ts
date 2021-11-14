@@ -30,7 +30,7 @@ export type MaximizeOptions = {
   preventSlot: Slot[];
 };
 
-const defaultMaximizeOptions = {
+const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
   useOutfitCaching: true,

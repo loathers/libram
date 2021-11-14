@@ -17,6 +17,7 @@ import {
   haveFamiliar,
   haveServant,
   haveSkill,
+  holiday,
   inebrietyLimit,
   mallPrice,
   myEffects,
@@ -34,7 +35,7 @@ import {
   totalTurnsPlayed,
 } from "kolmafia";
 
-import { $class, $familiar, $item, $items } from "./template-string";
+import { $class, $familiar, $item, $items, $monsters } from "./template-string";
 import { get } from "./property";
 import { chunk } from "./utils";
 
@@ -624,4 +625,23 @@ export function findFairyMultiplier(familiar: Familiar): number {
   const itemBonus = numericModifier(familiar, "Item Drop", 1, $item`none`);
   if (itemBonus === 0) return 0;
   return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+}
+
+export const holidayWanderers = new Map<string, Monster[]>([
+  [
+    "El Dia De Los Muertos Borrachos",
+    $monsters`Novia Cadáver, Novio Cadáver, Padre Cadáver, Persona Inocente Cadáver`,
+  ],
+  [
+    "Feast of Boris",
+    $monsters`Candied Yam Golem, Malevolent Tofurkey, Possessed Can of Cranberry Sauce, Stuffing Golem`,
+  ],
+  [
+    "Talk Like a Pirate Day",
+    $monsters`ambulatory pirate, migratory pirate, peripatetic pirate`,
+  ],
+]);
+
+export function getTodaysHolidayWanderers(): Monster[] {
+  return holidayWanderers.get(holiday()) ?? [];
 }

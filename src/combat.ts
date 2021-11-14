@@ -13,6 +13,7 @@ import {
 } from "kolmafia";
 import { $items, $skills } from "./template-string";
 import { get, set } from "./property";
+import { getTodaysHolidayWanderers } from "./lib";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -488,6 +489,52 @@ export class Macro {
    */
   static ifMonster(monster: Monster, macro: Macro): Macro {
     return new Macro().ifMonster(monster, macro);
+  }
+
+  /**
+   * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, unmutated.
+   * @param macro The macro to place in the if_ statement
+   */
+  ifHolidayWanderer(macro: Macro): this {
+    const todaysWanderers = getTodaysHolidayWanderers();
+    if (todaysWanderers.length === 0) return this;
+    return this.if_(
+      todaysWanderers.map((monster) => `monsterid ${monster.id}`).join(" || "),
+      macro
+    );
+  }
+  /**
+   * Create a new macro starting with an ifHolidayWanderer step.
+   * @param macro The macro to place inside the if_ statement
+   */
+  static ifHolidayWanderer<T extends Macro>(
+    this: Constructor<T>,
+    macro: Macro
+  ): T {
+    return new this().ifHolidayWanderer(macro);
+  }
+
+  /**
+   * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, with the input macro appended.
+   * @param macro The macro to place in the if_ statement.
+   */
+  ifNotHolidayWanderer(macro: Macro): this {
+    const todaysWanderers = getTodaysHolidayWanderers();
+    if (todaysWanderers.length === 0) return this.step(macro);
+    return this.if_(
+      todaysWanderers.map((monster) => `!monsterid ${monster.id}`).join(" && "),
+      macro
+    );
+  }
+  /**
+   * Create a new macro starting with an ifNotHolidayWanderer step.
+   * @param macro The macro to place inside the if_ statement
+   */
+  static ifNotHolidayWanderer<T extends Macro>(
+    this: Constructor<T>,
+    macro: Macro
+  ): T {
+    return new this().ifNotHolidayWanderer(macro);
   }
 }
 

@@ -18,6 +18,7 @@ import {
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
 import { setEqual } from "./utils";
+import merge from "lodash/merge";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;
@@ -386,7 +387,7 @@ export function maximizeCached(
   objectives: string[],
   options: Partial<MaximizeOptions> = {}
 ): void {
-  const fullOptions = { ...defaultMaximizeOptions, ...options };
+  const fullOptions = merge(options, defaultMaximizeOptions);
   const {
     forceEquip,
     preventEquip,

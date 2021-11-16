@@ -1,7 +1,9 @@
-import { runChoice, use, visitUrl } from "kolmafia";
+import { mallPrice, runChoice, use, visitUrl } from "kolmafia";
+import { maxBy } from "lodash";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
+import { invertMap } from "../../utils";
 
 export const item = $item`Guzzlr tablet`;
 export function have(): boolean {
@@ -182,4 +184,23 @@ export function haveBooze(): boolean {
     default:
       return haveItem(booze);
   }
+}
+
+export const ingredientToPlatinumCocktail = new Map<Item, Item>([
+  [$item`miniature boiler`, $item`Steamboat`],
+  [$item`cold wad`, $item`Ghiaccio Colada`],
+  [$item`robin's egg`, $item`Nog-on-the-Cob`],
+  [$item`mangled finger`, $item`Sourfinger`],
+  [$item`Dish of Clarified Butter`, $item`Buttery Boy`],
+]);
+
+export const platinumCocktailToIngredient = invertMap(
+  ingredientToPlatinumCocktail
+);
+
+export function getCheapestPlatinumCocktail(): Item {
+  return (maxBy(
+    Array.from(ingredientToPlatinumCocktail),
+    (ingredientAndCocktail: [Item, Item]) => mallPrice(ingredientAndCocktail[0])
+  ) ?? [$item`Dish of Clarified Butter`, $item`Buttery Boy`])[1];
 }

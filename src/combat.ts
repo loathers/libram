@@ -90,6 +90,8 @@ function skillBallsMacroName(skillOrName: SkillOrName) {
 
 type Constructor<T> = { new (): T };
 
+export class InvalidMacroError extends Error {}
+
 /**
  * BALLS macro builder for direct submission to KoL.
  * Create a new macro with `new Macro()` and add steps using the instance methods.
@@ -241,8 +243,57 @@ export class Macro {
    * @param ifTrue Continuation if the condition is true.
    * @returns {Macro} This object itself.
    */
-  if_(condition: string, ifTrue: string | Macro): this {
-    return this.step(`if ${condition}`).step(ifTrue).step("endif");
+  if_(
+    condition:
+      | string
+      | Monster
+      | Effect
+      | Skill
+      | Item
+      | Location
+      | Class
+      | Stat,
+    ifTrue: string | Macro
+  ): this {
+    let ballsCondition = "";
+    if (condition instanceof Monster) {
+      ballsCondition = `monsterid ${condition.id}`;
+    } else if (condition instanceof Effect) {
+      ballsCondition = `haseffect ${toInt(condition)}`;
+    } else if (condition instanceof Skill) {
+      ballsCondition = `hasskill ${skillBallsMacroName(condition)}`;
+    } else if (condition instanceof Item) {
+      if (!condition.combat) {
+        throw new InvalidMacroError(
+          `Item ${condition} cannot be made a valid BALLS predicate (it is not combat-usable)`
+        );
+      }
+
+      ballsCondition = `hascombatitem ${itemOrItemsBallsMacroName(condition)}`;
+    } else if (condition instanceof Location) {
+      const snarfblat = condition.id;
+
+      if (snarfblat < 1) {
+        throw new InvalidMacroError(
+          `Location ${condition} cannot be made a valid BALLS predicate (it has no location id)`
+        );
+      }
+
+      ballsCondition = `snarfblat ${snarfblat}`;
+    } else if (condition instanceof Class) {
+      if (toInt(condition) > 6) {
+        throw new InvalidMacroError(
+          `Class ${condition} cannot be made a valid BALLS predicate (it is not a standard class)`
+        );
+      }
+
+      ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
+    } else if (condition instanceof Stat) {
+      ballsCondition = `${condition.toString().toLowerCase()}class`;
+    } else {
+      ballsCondition = condition;
+    }
+    return this.step(`if ${ballsCondition}`).step(ifTrue).step("endif");
   }
 
   /**
@@ -253,7 +304,7 @@ export class Macro {
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
-    condition: string,
+    condition: Parameters<T["if_"]>[0],
     ifTrue: string | Macro
   ): T {
     return new this().if_(condition, ifTrue);
@@ -471,24 +522,6 @@ export class Macro {
   static attack<T extends Macro>(this: Constructor<T>): T {
     return new this().attack();
   }
-
-  /**
-   * Create an if_ statement that triggers only against a particular monster
-   * @param monster The monster in question
-   * @param macro The macro to trigger when the monster is found
-   */
-  ifMonster(monster: Monster, macro: Macro): Macro {
-    return this.if_(`monsterid ${monster.id}`, macro);
-  }
-
-  /**
-   * Create a new macro with an if_ statement that triggers only against a particular monster
-   * @param monster The monster in question
-   * @param macro The macro to trigger when the monster is found
-   */
-  static ifMonster(monster: Monster, macro: Macro): Macro {
-    return new Macro().ifMonster(monster, macro);
-  }
 }
 
 /**
@@ -536,5 +569,119 @@ export function adventureMacroAuto(
     if (choiceFollowsFight()) visitUrl("choice.php");
   } finally {
     Macro.clearSaved();
+  }
+}
+
+export class StrictMacro extends Macro {
+  /**
+   * Add one or more skill cast steps to the macro.
+   * @param skills Skills to cast.
+   * @returns {StrictMacro} This object itself.
+   */
+  skill(...skills: Skill[]): this {
+    return super.skill(...skills);
+  }
+
+  /**
+   * Create a new macro with one or more skill cast steps.
+   * @param skills Skills to cast.
+   * @returns {StrictMacro} This object itself.
+   */
+  static skill<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().skill(...skills);
+  }
+
+  /**
+   * Add one or more item steps to the macro.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  item(...items: (Item | [Item, Item])[]): this {
+    return super.item(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps.
+   * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  static item<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: (Item | [Item, Item])[]
+  ): T {
+    return new this().item(...items);
+  }
+
+  /**
+   * Add one or more skill cast steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  trySkill(...skills: Skill[]): this {
+    return super.trySkill(...skills);
+  }
+
+  /**
+   * Create a new macro with one or more skill cast steps, where each step checks if you have the skill first.
+   * @param skills Skills to try casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  static trySkill<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().trySkill(...skills);
+  }
+
+  /**
+   * Add one or more item steps to the macro, where each step checks to see if you have the item first.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  tryItem(...items: (Item | [Item, Item])[]): this {
+    return super.tryItem(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
+   * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+   * @returns {StrictMacro} This object itself.
+   */
+  static tryItem<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: (Item | [Item, Item])[]
+  ): T {
+    return new this().tryItem(...items);
+  }
+
+  /**
+   * Add one or more skill-cast-and-repeat steps to the macro, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  trySkillRepeat(...skills: Skill[]): this {
+    return this.step(
+      ...skills.map((skill) => {
+        return StrictMacro.if_(
+          `hasskill ${skillBallsMacroName(skill)}`,
+          StrictMacro.skill(skill).repeat()
+        );
+      })
+    );
+  }
+
+  /**
+   * Create a new macro with one or more skill-cast-and-repeat steps, where each step checks if you have the skill first.
+   * @param skills Skills to try repeatedly casting.
+   * @returns {StrictMacro} This object itself.
+   */
+  static trySkillRepeat<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...skills: Skill[]
+  ): T {
+    return new this().trySkillRepeat(...skills);
   }
 }

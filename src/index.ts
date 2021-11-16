@@ -1,6 +1,7 @@
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
+export * from "./diet";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";
@@ -24,6 +25,7 @@ export {
   withChoice,
 } from "./property";
 export { get as getModifier } from "./modifier";
+export { Modifiers } from "./modifier";
 export * from "./freerun";
 export * as Dreadsylvania from "./dungeons/Dreadsylvania";
 export * as Hobopolis from "./dungeons/Hobopolis";

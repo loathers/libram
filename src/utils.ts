@@ -102,3 +102,15 @@ export function setEqual<T>(a: T[], b: T[]): boolean {
     sortedA.every((item, index) => item === sortedB[index])
   );
 }
+
+/**
+ * Reverses keys and values for a given map
+ * @param map Map to invert
+ */
+export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
+  const returnValue = new Map<T2, T1>();
+  for (const [key, value] of map) {
+    returnValue.set(value, key);
+  }
+  return returnValue;
+}

@@ -1,6 +1,7 @@
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
+export * from "./diet";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";

@@ -48,7 +48,9 @@ export function arrayToCountedMap<T>(
 }
 
 export function countedMapToArray<T>(map: Map<T, number>): T[] {
-  return [...map].flatMap(([item, quantity]) => Array(quantity).fill(item));
+  return ([] as T[]).concat(
+    ...[...map].map(([item, quantity]) => Array(quantity).fill(item))
+  );
 }
 
 export function countedMapToString<T>(map: Map<T, number>): string {

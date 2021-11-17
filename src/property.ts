@@ -8,6 +8,7 @@ import {
   isLocationProperty,
   isMonsterProperty,
   isNumericProperty,
+  isPhylumProperty,
   KnownProperty,
   PropertyValue,
 } from "./propertyTyping";
@@ -128,6 +129,10 @@ export function get<_D, P extends string>(
 
   if (isNumericProperty(property, value)) {
     return getNumber(property, _default);
+  }
+
+  if (isPhylumProperty(property)) {
+    return getPhylum(property);
   }
 
   return value;

@@ -57,8 +57,7 @@ export function have(): boolean {
  * @returns Tracked phylum, or null if no phylum tracked.
  */
 export function getTrackedPhylum(): Phylum | null {
-  const phylum = toPhylum(get("redSnapperPhylum"));
-  return phylum === Phylum.get("none") ? null : phylum;
+  return get("redSnapperPhylum");
 }
 
 /**

@@ -1,12 +1,17 @@
-import { getWorkshed, haveEffect } from "kolmafia";
+import { cliExecute, getWorkshed, haveEffect, itemAmount } from "kolmafia";
 import { $effect, $item, $phylum } from "../../template-string";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
+import { getModifier } from "../..";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
 export function have(): boolean {
   return haveItem(lab) || getWorkshed() === lab;
+}
+
+export function installed(): boolean {
+  return getWorkshed() === lab;
 }
 
 const phylaEffects = new Map<Phylum, Effect>([
@@ -65,5 +70,46 @@ export function isHybridized(tonic: Effect): boolean {
 
 export function getTonic(phylum: Phylum): Item {
   return phylaTonics.get(phylum) ?? $item`none`;
-  //return $item`none` just to stop typescript from thinking this can be undefined
+  //return $item`none` rather than null because it should never happen
+}
+
+export function getEffect(phylum: Phylum): Effect {
+  return phylaEffects.get(phylum) ?? $effect`none`;
+  //return $effect`none` rather than null because it should never happen
+}
+
+export function phylumFor(dnatype: Effect | Item): Phylum | null {
+  if (dnatype instanceof Effect) {
+    const phylumPair = Array.from(phylaEffects.entries()).find(
+      ([, effect]) => effect === dnatype
+    );
+    return phylumPair ? phylumPair[0] : null;
+  } else {
+    const phylumPair = Array.from(phylaTonics.entries()).find(
+      ([, tonic]) => tonic === dnatype
+    );
+    return phylumPair ? phylumPair[0] : null;
+  }
+}
+
+export function hybridize(): boolean {
+  if (!installed()) return false;
+  const currentSyringe = get("dnaSyringe");
+  if (!currentSyringe) return false;
+  const tonicPotion = phylaTonics.get(currentSyringe);
+  if (!tonicPotion) return false; //this line should never trigger
+  const expectedEffect = getModifier("Effect", tonicPotion);
+  cliExecute("camp dnainject");
+  return isHybridized(expectedEffect);
+}
+
+export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
+  if (!installed()) return false;
+  const currentSyringe = get("dnaSyringe");
+  if (!currentSyringe) return false;
+  const tonicPotion = phylaTonics.get(currentSyringe);
+  if (!tonicPotion) return false; //this line should never trigger
+  const startingAmount = itemAmount(tonicPotion);
+  cliExecute(`camp dnapotion ${amount}`);
+  return itemAmount(tonicPotion) - startingAmount === amount;
 }

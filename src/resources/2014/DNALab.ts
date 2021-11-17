@@ -7,10 +7,16 @@ import { clamp } from "../../utils";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
+/**
+ * Checks if you have DNA lab in inventory or installed
+ */
 export function have(): boolean {
   return haveItem(lab) || getWorkshed() === lab;
 }
 
+/**
+ * Checks if you have DNA lab installed
+ */
 export function installed(): boolean {
   return getWorkshed() === lab;
 }
@@ -78,16 +84,31 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
   );
 }
 
+/**
+ * returns the gene tonic for a specified phylum
+ * @param {Phylum} phylum The phylum for which to get the associated tonic
+ * @returns The gene tonic associated with the phylum
+ */
 export function getTonic(phylum: Phylum): Item {
   return phylaTonics.get(phylum) ?? $item`none`;
   //return $item`none` rather than null because it should never happen
 }
 
+/**
+ * Returns the hybrid effect for a specified phylum
+ * @param {Phylum} phylum the phylum to check
+ * @returns The effect given by that phylum's DNA
+ */
 export function getEffect(phylum: Phylum): Effect {
   return phylaEffects.get(phylum) ?? $effect`none`;
   //return $effect`none` rather than null because it should never happen
 }
 
+/**
+ * Returns the appropriate phylum for a specified effect or gene tonic
+ * @param dnatype the effect or gene tonic to check
+ * @returns The phylum for the specified effect or gene tonic
+ */
 export function phylumFor(dnatype: Effect | Item): Phylum | null {
   if (dnatype instanceof Effect) {
     const phylumPair = Array.from(phylaEffects.entries()).find(
@@ -102,6 +123,9 @@ export function phylumFor(dnatype: Effect | Item): Phylum | null {
   }
 }
 
+/**
+ * Hybridizes with whatever phylum is currently in your DNA Syringe
+ */
 export function hybridize(): boolean {
   if (get("_dnaHybrid")) return false;
   if (!installed()) return false;
@@ -114,6 +138,10 @@ export function hybridize(): boolean {
   return isHybridized(expectedEffect);
 }
 
+/**
+ * Makes tonics with whatever phylum is currently in your syringe
+ * @param {number} [amount=1] the number of tonics to make
+ */
 export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   if (!installed()) return false;
   const currentSyringe = get("dnaSyringe");

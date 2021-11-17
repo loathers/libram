@@ -103,6 +103,11 @@ export function getEffect(phylum: Phylum): Effect {
   //return $effect`none` rather than null because it should never happen
 }
 
+/**
+ * Returns the appropriate phylum for a specified effect or gene tonic
+ * @param dnatype the effect or gene tonic to check
+ * @returns The phylum for the specified effect or gene tonic
+ */
 export function phylumFor(dnatype: Effect | Item): Phylum | null {
   if (dnatype instanceof Effect) {
     const phylumPair = Array.from(phylaEffects.entries()).find(

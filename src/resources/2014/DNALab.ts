@@ -71,20 +71,16 @@ const phylaTonics = new Map<Phylum, Item>([
 
 const tonicEffects = Array.from(phylaEffects.values());
 
-/**
- * Checks to see if you're hybridized, optionally with a specific phylum
- * @param {Phylum} [phylum] the phylum you're checking
- */
-export function isHybridized(phylum?: Phylum): boolean {
-  if (!installed()) return false;
-  else if (phylum) {
-    return (
-      tonicEffects.includes(phylaEffects.get(phylum) ?? $effect`none`) &&
-      haveEffect(phylaEffects.get(phylum) ?? $effect`none`) === 2147483547
-    );
-  } else {
-    return get("_dnaHybrid");
-  }
+export function isHybridized(tonic: Effect | Phylum | Item): boolean {
+  const tonicEffect =
+    tonic instanceof Effect
+      ? tonic
+      : tonic instanceof Phylum
+      ? getEffect(tonic)
+      : getModifier("Effect", tonic);
+  return (
+    tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483547
+  );
 }
 
 /**

@@ -6,6 +6,7 @@ import {
   mallPrice,
   mallPrices,
   myFullness,
+  myInebriety,
   myPrimestat,
   mySpleenUse,
   npcPrice,
@@ -107,6 +108,8 @@ export class MenuItem {
         size: -1,
       },
     ],
+    [$item`spice melange`, { maximum: "auto" }],
+    [$item`Ultra Mega Sour Ball`, { maximum: "auto" }],
   ] as [Item, MenuItemOptions][]);
 
   constructor(item: Item, options: MenuItemOptions = {}) {
@@ -423,11 +426,9 @@ export function planDiet(
         organ,
         size ??
           (organ === "food"
-            ? fullnessLimit() -
-              myFullness() +
-              (have($item`distention pill`) ? 1 : 0)
+            ? fullnessLimit() - myFullness()
             : organ === "booze"
-            ? inebrietyLimit() + (have($item`synthetic dog hair pill`) ? 1 : 0)
+            ? inebrietyLimit() - myInebriety()
             : organ === "spleen item"
             ? spleenLimit() - mySpleenUse()
             : 0),
@@ -440,7 +441,10 @@ export function planDiet(
       ([item, sizes]) =>
         [allItems.get(item), sizes] as [MenuItem | undefined, OrganSize[]]
     )
-    .filter(([menuItem]) => menuItem) as [MenuItem, OrganSize[]][];
+    .filter(
+      ([menuItem]) =>
+        menuItem && (menuItem.maximum === undefined || menuItem.maximum > 0)
+    ) as [MenuItem, OrganSize[]][];
 
   // TODO: support toasted brie.
   // Refined Palate must also be treated as an interacting item, as it's a one-time cost.
@@ -454,30 +458,34 @@ export function planDiet(
   }
 
   const [, planFoodBooze] = dietPlanner.planOrgansWithTrials(
-    resolvedOrganCapacities.filter(([organ]) =>
-      ["food", "booze"].includes(organ)
+    resolvedOrganCapacities.filter(
+      ([organ, capacity]) => ["food", "booze"].includes(organ) && capacity >= 0
     ),
     includedInteractingItems
   );
 
-  // Count sliders and pickle juice, figure out how much extra spleen we got.
-  const additionalSpleen = sum(planFoodBooze, ([items, number]) =>
-    items.some((menuItem) =>
-      $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-        menuItem.item
-      )
-    )
-      ? 5 * number
-      : 0
-  );
-  const [, availableSpleen] = resolvedOrganCapacities.find(
+  const spleenCapacity = resolvedOrganCapacities.find(
     ([organ]) => organ === "spleen item"
-  ) ?? ["spleen item", 0];
-
-  const [, planSpleen] = dietPlanner.planOrgan(
-    "spleen item",
-    availableSpleen + additionalSpleen
   );
+  if (spleenCapacity) {
+    // Count sliders and pickle juice, figure out how much extra spleen we got.
+    const additionalSpleen = sum(planFoodBooze, ([items, number]) =>
+      items.some((menuItem) =>
+        $items`jar of fermented pickle juice, extra-greasy slider`.includes(
+          menuItem.item
+        )
+      )
+        ? 5 * number
+        : 0
+    );
+    const [, availableSpleen] = spleenCapacity;
+    const [, planSpleen] = dietPlanner.planOrgan(
+      "spleen item",
+      availableSpleen + additionalSpleen
+    );
 
-  return [...planFoodBooze, ...planSpleen];
+    return [...planFoodBooze, ...planSpleen];
+  } else {
+    return planFoodBooze;
+  }
 }

@@ -7,10 +7,16 @@ import { clamp } from "../../utils";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
+/**
+ * Checks if you have DNA lab in inventory or installed
+ */
 export function have(): boolean {
   return haveItem(lab) || getWorkshed() === lab;
 }
 
+/**
+ * Checks if you have DNA lab installed
+ */
 export function installed(): boolean {
   return getWorkshed() === lab;
 }
@@ -65,15 +71,37 @@ const phylaTonics = new Map<Phylum, Item>([
 
 const tonicEffects = Array.from(phylaEffects.values());
 
-export function isHybridized(tonic: Effect): boolean {
-  return tonicEffects.includes(tonic) && haveEffect(tonic) === 2147483547;
+/**
+ * Checks to see if you're hybridized, optionally with a specific phylum
+ * @param {Phylum} [phylum] the phylum you're checking
+ */
+export function isHybridized(phylum?: Phylum): boolean {
+  if (!installed()) return false;
+  else if (phylum) {
+    return (
+      tonicEffects.includes(phylaEffects.get(phylum) ?? $effect`none`) &&
+      haveEffect(phylaEffects.get(phylum) ?? $effect`none`) === 2147483547
+    );
+  } else {
+    return get("_dnaHybrid");
+  }
 }
 
+/**
+ * returns the gene tonic for a specified phylum
+ * @param {Phylum} phylum The phylum for which to get the associated tonic
+ * @returns The gene tonic associated with the phylum
+ */
 export function getTonic(phylum: Phylum): Item {
   return phylaTonics.get(phylum) ?? $item`none`;
   //return $item`none` rather than null because it should never happen
 }
 
+/**
+ * Returns the hybrid effect for a specified phylum
+ * @param {Phylum} phylum the phylum to check
+ * @returns The effect given by that phylum's DNA
+ */
 export function getEffect(phylum: Phylum): Effect {
   return phylaEffects.get(phylum) ?? $effect`none`;
   //return $effect`none` rather than null because it should never happen

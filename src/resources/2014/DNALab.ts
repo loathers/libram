@@ -3,6 +3,7 @@ import { $effect, $item, $phylum } from "../../template-string";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { get as getModifier } from "../../modifier";
+import { clamp } from "../../utils";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
@@ -93,6 +94,7 @@ export function phylumFor(dnatype: Effect | Item): Phylum | null {
 }
 
 export function hybridize(): boolean {
+  if (get("_dnaHybrid")) return false;
   if (!installed()) return false;
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
@@ -108,8 +110,9 @@ export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
   const tonicPotion = phylaTonics.get(currentSyringe);
+  const amountToMake = clamp(amount, 0, 3 - get("_dnaPotionsMade"));
   if (!tonicPotion) return false; //this line should never trigger
   const startingAmount = itemAmount(tonicPotion);
-  cliExecute(`camp dnapotion ${amount}`);
-  return itemAmount(tonicPotion) - startingAmount === amount;
+  cliExecute(`camp dnapotion ${amountToMake}`);
+  return itemAmount(tonicPotion) - startingAmount === amountToMake;
 }

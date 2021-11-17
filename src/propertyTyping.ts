@@ -87,6 +87,7 @@ export type KnownProperty =
   | MonsterProperty
   | LocationProperty
   | FamiliarProperty
+  | PhylumProperty
   | StatProperty
   | StringProperty
   | NumericOrStringProperty;
@@ -109,6 +110,8 @@ export type PropertyValue<
   ? Familiar | null
   : Property extends StatProperty
   ? Stat | null
+  : Property extends PhylumProperty
+  ? Phylum | null
   : Property extends NumericOrStringProperty
   ? number | string
   : Default;

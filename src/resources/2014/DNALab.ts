@@ -123,6 +123,9 @@ export function phylumFor(dnatype: Effect | Item): Phylum | null {
   }
 }
 
+/**
+ * Hybridizes with whatever phylum is currently in your DNA Syringe
+ */
 export function hybridize(): boolean {
   if (get("_dnaHybrid")) return false;
   if (!installed()) return false;
@@ -135,6 +138,10 @@ export function hybridize(): boolean {
   return isHybridized(expectedEffect);
 }
 
+/**
+ * Makes tonics with whatever phylum is currently in your syringe
+ * @param {number} [amount=1] the number of tonics to make
+ */
 export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   if (!installed()) return false;
   const currentSyringe = get("dnaSyringe");

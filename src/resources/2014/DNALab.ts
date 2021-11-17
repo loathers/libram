@@ -66,7 +66,7 @@ const phylaTonics = new Map<Phylum, Item>([
 const tonicEffects = Array.from(phylaEffects.values());
 
 export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
-  if (!tonic) installed() && get("_dnaHybrid");
+  if (!tonic) return installed() && get("_dnaHybrid");
   const tonicEffect =
     tonic instanceof Effect
       ? tonic

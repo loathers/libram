@@ -2,7 +2,7 @@ import { cliExecute, getWorkshed, haveEffect, itemAmount } from "kolmafia";
 import { $effect, $item, $phylum } from "../../template-string";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
-import { getModifier } from "../..";
+import { get as getModifier } from "../../modifier";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 

@@ -119,9 +119,13 @@ export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
   const tonicPotion = phylaTonics.get(currentSyringe);
-  const amountToMake = clamp(amount, 0, 3 - get("_dnaPotionsMade"));
+  const amountToMake = clamp(amount, 0, tonicsLeft());
   if (!tonicPotion) return false; //this line should never trigger
   const startingAmount = itemAmount(tonicPotion);
   cliExecute(`camp dnapotion ${amountToMake}`);
   return itemAmount(tonicPotion) - startingAmount === amountToMake;
+}
+
+export function tonicsLeft(): number {
+  return clamp(3 - get("_dnaPotionsMade"), 0, 3);
 }

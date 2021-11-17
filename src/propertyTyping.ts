@@ -5,6 +5,7 @@ import {
   MonsterProperty,
   NumericOrStringProperty,
   NumericProperty,
+  PhylumProperty,
   StatProperty,
   StringProperty,
 } from "./propertyTypes";
@@ -73,6 +74,11 @@ export function isFamiliarProperty(
 const statProps = ["nsChallenge1", "shrugTopper", "snojoSetting"];
 export function isStatProperty(property: string): property is StatProperty {
   return statProps.includes(property);
+}
+
+const phylumProps = ["dnaSyringe"];
+export function isPhylumProperty(property: string): property is PhylumProperty {
+  return phylumProps.includes(property) || property.endsWith("Phylum");
 }
 
 export type KnownProperty =

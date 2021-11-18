@@ -71,6 +71,10 @@ const phylaTonics = new Map<Phylum, Item>([
 
 const tonicEffects = Array.from(phylaEffects.values());
 
+/**
+ * Tells you whether you are currently hybridized. When passed with an input of any sort, tells you whether you are currently hybridized with that effect.
+ * @param tonic Optional input. When passed, the function returns whether that specific effect is hybridized.
+ */
 export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
   if (!tonic) return installed() && get("_dnaHybrid");
   const tonicEffect =
@@ -85,19 +89,19 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
 }
 
 /**
- * returns the gene tonic for a specified phylum
- * @param {Phylum} phylum The phylum for which to get the associated tonic
- * @returns The gene tonic associated with the phylum
+ * Returns the tonic item associated with a particular phylum.
+ * @param phylum The phylum in question.
+ * @returns The tonic item associated with that phylum; returns $item`none` for $phylum`none`.
  */
 export function getTonic(phylum: Phylum): Item {
   return phylaTonics.get(phylum) ?? $item`none`;
-  //return $item`none` rather than null because it should never happen
+  //return $item`none` rather than null because it should never happen.
 }
 
 /**
- * Returns the hybrid effect for a specified phylum
- * @param {Phylum} phylum the phylum to check
- * @returns The effect given by that phylum's DNA
+ * Returns the tonic effect associated with a particular phylum.
+ * @param phylum The phylum in question.
+ * @returns The tonic effect associated with that phylum; returns $effect`none` for $phylum`none`.
  */
 export function getEffect(phylum: Phylum): Effect {
   return phylaEffects.get(phylum) ?? $effect`none`;
@@ -105,9 +109,9 @@ export function getEffect(phylum: Phylum): Effect {
 }
 
 /**
- * Returns the appropriate phylum for a specified effect or gene tonic
- * @param dnatype the effect or gene tonic to check
- * @returns The phylum for the specified effect or gene tonic
+ * Tells you which phylum to hunt down for a given effect or item.
+ * @param dnatype The tonic effect or item in question
+ * @returns The Phylum associated with that effect or item; null if an invalid choice
  */
 export function phylumFor(dnatype: Effect | Item): Phylum | null {
   if (dnatype instanceof Effect) {
@@ -124,7 +128,8 @@ export function phylumFor(dnatype: Effect | Item): Phylum | null {
 }
 
 /**
- * Hybridizes with whatever phylum is currently in your DNA Syringe
+ * Hybridize yourself with the current contents of your syringe, if possible.
+ * @returns Whether or not we succeeded
  */
 export function hybridize(): boolean {
   if (get("_dnaHybrid")) return false;
@@ -154,6 +159,10 @@ export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   return itemAmount(tonicPotion) - startingAmount === amountToMake;
 }
 
+/**
+ * Tells you how many tonics you can make the rest of the day.
+ * @returns The remaining tonics you can make
+ */
 export function tonicsLeft(): number {
   return clamp(3 - get("_dnaPotionsMade"), 0, 3);
 }

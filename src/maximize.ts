@@ -1,3 +1,4 @@
+import merge from "lodash/merge";
 import {
   availableAmount,
   bjornifyFamiliar,
@@ -18,7 +19,6 @@ import {
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
 import { setEqual } from "./utils";
-import merge from "lodash/merge";
 
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;

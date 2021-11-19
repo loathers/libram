@@ -84,7 +84,7 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
       ? getEffect(tonic)
       : getModifier("Effect", tonic);
   return (
-    tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483547
+    tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483647
   );
 }
 

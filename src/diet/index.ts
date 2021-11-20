@@ -29,8 +29,7 @@ type ConsumptionModifiers = {
   tuxedoShirt: boolean;
 };
 
-// TODO: Include other consumption modifiers - Salty Mouth?
-// TODO: Include Gar-ish etc.
+// TODO: Include Gar-ish and Salty Mouth.
 function expectedAdventures(
   item: Item,
   modifiers: ConsumptionModifiers
@@ -206,10 +205,21 @@ class DietPlanner {
     }
   }
 
+  /**
+   * Determine the value of consuming a menu item with any profitable helpers.
+   * @param menuItem Menu item to check.
+   * @returns Value for consuming that menu item.
+   */
   consumptionValue(menuItem: MenuItem): number {
     return this.consumptionHelpersAndValue(menuItem, {})[1];
   }
 
+  /**
+   * Determine which helpers will be used with a menu item and its resulting value.
+   * @param menuItem Menu item to check.
+   * @param overrideModifiers Overrides for consumption modifiers, if any.
+   * @returns Pair [array of helpers and base menu item, value].
+   */
   consumptionHelpersAndValue(
     menuItem: MenuItem,
     overrideModifiers: Partial<ConsumptionModifiers>
@@ -274,6 +284,12 @@ class DietPlanner {
       : [[...helpers, menuItem], valueRaw + valueSpleen];
   }
 
+  /**
+   * Plan an individual organ.
+   * @param capacity Organ capacity.
+   * @param overrideModifiers Overrides for consumption modifiers, if any.
+   * @returns Pair of [value, menu items and quantities].
+   */
   planOrgan(
     organ: Organ,
     capacity: number,
@@ -294,6 +310,12 @@ class DietPlanner {
     return knapsack(knapsackValues, capacity);
   }
 
+  /**
+   * Plan organs.
+   * @param organCapacities Organ capacities.
+   * @param overrideModifiers Overrides for consumption modifiers, if any.
+   * @returns Pair of [value, menu items and quantities].
+   */
   planOrgans(
     organCapacities: OrganSize[],
     overrideModifiers: Partial<ConsumptionModifiers> = {}
@@ -309,6 +331,14 @@ class DietPlanner {
     ];
   }
 
+  /**
+   * Plan organs, retrying with and without each trial item. Runtime is
+   * proportional to 2 ^ trialItems.length.
+   * @param organCapacities Organ capacities.
+   * @param trialItems Items to rerun solver with and without.
+   * @param overrideModifiers Overrides for consumption modifiers, if any.
+   * @returns Pair of [value, menu items and quantities].
+   */
   planOrgansWithTrials(
     organCapacities: OrganSize[],
     trialItems: [MenuItem, OrganSize[]][],
@@ -362,7 +392,7 @@ class DietPlanner {
  * multiple organs have to be treated specially. What we do is run the knapsack
  * solver multiple times, trying with + without each interacting item.
  */
-const interactingItems: [Item, OrganSize[]][] = [
+const interactingItems: [Item | Effect, OrganSize[]][] = [
   [
     $item`spice melange`,
     [
@@ -405,6 +435,7 @@ const interactingItems: [Item, OrganSize[]][] = [
       ["booze", -2],
     ],
   ],
+  [$effect`Refined Palate`, []],
   [$item`toasted brie`, [["food", 2]]],
 ];
 
@@ -424,7 +455,7 @@ export function planDiet(
     ["spleen item", null],
   ]
 ): [MenuItem[], number][] {
-  // FIXME: Figure out a better way to handle overfull organs (e.g. coming out of Ed)
+  // FIXME: Figure out a better way to handle overfull organs (e.g. coming out of Ed).
   const resolvedOrganCapacities = organCapacities.map(
     ([organ, size]) =>
       [
@@ -440,26 +471,27 @@ export function planDiet(
       ] as [Organ, number]
   );
 
-  const allItems = new Map(menu.map((menuItem) => [menuItem.item, menuItem]));
-  const includedInteractingItems = interactingItems
-    .map(
-      ([item, sizes]) =>
-        [allItems.get(item), sizes] as [MenuItem | undefined, OrganSize[]]
-    )
-    .filter(
-      ([menuItem]) =>
-        menuItem && (menuItem.maximum === undefined || menuItem.maximum > 0)
-    ) as [MenuItem, OrganSize[]][];
-
-  // Refined Palate must also be treated as an interacting item, as it's a one-time cost.
-  const palateWish = menu.find(
-    (menuItem) =>
-      menuItem.item === $item`pocket wish` &&
-      menuItem.wishEffect === $effect`Refined Palate`
-  );
-  if (palateWish) {
-    includedInteractingItems.push([palateWish, []]);
-  }
+  /**
+   * Per above description, separate out items with cross-organ interaction
+   * ("interacting items") for special treatment. These will be checked by
+   * running the solver several times.
+   */
+  const includedInteractingItems = menu
+    .map((menuItem) => {
+      const interacting = interactingItems.find(
+        ([itemOrEffect]) =>
+          menuItem.item === itemOrEffect ||
+          (menuItem.item === $item`pocket wish` &&
+            menuItem.wishEffect === itemOrEffect)
+      );
+      if (interacting) {
+        const [, organSizes] = interacting;
+        return [menuItem, organSizes];
+      } else {
+        return null;
+      }
+    })
+    .filter((value) => value !== null) as [MenuItem, OrganSize[]][];
 
   // Filter out interacting items from natural consideration.
   const dietPlanner = new DietPlanner(
@@ -472,6 +504,13 @@ export function planDiet(
     )
   );
 
+  /**
+   * Because our knapsack solver is one-dimensional, we have to consider
+   * each organ separately. Since there are no spleen items that affect
+   * stomach/liver, we consider those two first, with an approximation of the
+   * value of spleen-cleaning. Afterwards, we see how much spleen we have and
+   * plan that.
+   */
   const [, planFoodBooze] = dietPlanner.planOrgansWithTrials(
     resolvedOrganCapacities.filter(
       ([organ, capacity]) => ["food", "booze"].includes(organ) && capacity >= 0

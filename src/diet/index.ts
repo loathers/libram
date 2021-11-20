@@ -7,6 +7,7 @@ import {
   mallPrices,
   myFullness,
   myInebriety,
+  myLevel,
   myPrimestat,
   mySpleenUse,
   npcPrice,
@@ -278,7 +279,10 @@ class DietPlanner {
     capacity: number,
     overrideModifiers: Partial<ConsumptionModifiers> = {}
   ): [number, [MenuItem[], number][]] {
-    const submenu = this.menu.filter((item) => item.organ === organ);
+    const submenu = this.menu.filter(
+      (menuItem) =>
+        menuItem.organ === organ && myLevel() >= menuItem.item.levelreq
+    );
     const knapsackValues = submenu.map(
       (menuItem) =>
         [
@@ -325,8 +329,9 @@ class DietPlanner {
     const organCapacitiesWith = [...organCapacitiesWithMap];
 
     const isRefinedPalate =
-      trialItem.item === $item`pocket wish` &&
-      trialItem.wishEffect === $effect`Refined Palate`;
+      (trialItem.item === $item`pocket wish` &&
+        trialItem.wishEffect === $effect`Refined Palate`) ||
+      trialItem.item === $item`toasted brie`;
 
     const [valueWithout, planWithout] = this.planOrgansWithTrials(
       organCapacities,
@@ -400,6 +405,7 @@ const interactingItems: [Item, OrganSize[]][] = [
       ["booze", -2],
     ],
   ],
+  [$item`toasted brie`, [["food", 2]]],
 ];
 
 /**
@@ -418,8 +424,7 @@ export function planDiet(
     ["spleen item", null],
   ]
 ): [MenuItem[], number][] {
-  const dietPlanner = new DietPlanner(mpa, menu);
-
+  // FIXME: Figure out a better way to handle overfull organs (e.g. coming out of Ed)
   const resolvedOrganCapacities = organCapacities.map(
     ([organ, size]) =>
       [
@@ -446,7 +451,6 @@ export function planDiet(
         menuItem && (menuItem.maximum === undefined || menuItem.maximum > 0)
     ) as [MenuItem, OrganSize[]][];
 
-  // TODO: support toasted brie.
   // Refined Palate must also be treated as an interacting item, as it's a one-time cost.
   const palateWish = menu.find(
     (menuItem) =>
@@ -456,6 +460,17 @@ export function planDiet(
   if (palateWish) {
     includedInteractingItems.push([palateWish, []]);
   }
+
+  // Filter out interacting items from natural consideration.
+  const dietPlanner = new DietPlanner(
+    mpa,
+    menu.filter(
+      (menuItem) =>
+        !includedInteractingItems.some(
+          ([interacting]) => interacting === menuItem
+        )
+    )
+  );
 
   const [, planFoodBooze] = dietPlanner.planOrgansWithTrials(
     resolvedOrganCapacities.filter(

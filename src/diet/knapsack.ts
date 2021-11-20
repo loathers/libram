@@ -40,10 +40,14 @@ export function knapsack<T>(
   values: [T, number, number, number?][],
   capacity: number
 ): [number, [T, number][]] {
+  if (!Number.isFinite(capacity)) {
+    throw new Error("Invalid capacity.");
+  }
+
   // Invert negative values into a fake value for not using it.
   const valuesInverted = values.map(
     ([thing, value, weight, maximum]) =>
-      (weight < 0 && maximum
+      (weight < 0 && maximum !== undefined
         ? [new Not(thing), -value, -weight, maximum]
         : [thing, value, weight, maximum]) as [
         T | Not<T>,
@@ -53,15 +57,27 @@ export function knapsack<T>(
       ]
   );
   const capacityAdjustment = sum(values, ([, , weight, maximum]) =>
-    weight < 0 && maximum ? -weight * maximum : 0
+    weight < 0 && maximum !== undefined ? -weight * maximum : 0
   );
   const adjustedCapacity = capacity + capacityAdjustment;
+
+  if (adjustedCapacity < 0) {
+    // We don't have enough cleaners to create any space, so can't fit anything.
+    return [-Infinity, []];
+  }
 
   // Sort values by weight.
   const valuesSorted = [...valuesInverted].sort((x, y) => x[2] - y[2]);
   // Convert the problem into 0/1 knapsack - just include as many copies as possible of each item.
   const values01 = ([] as [T | Not<T>, number, number][]).concat(
     ...valuesSorted.map(([thing, value, weight, maximum]) => {
+      if (!Number.isFinite(weight) || weight < 0) {
+        throw new Error(
+          `Invalid weight ${weight} for ${
+            thing instanceof Not ? `not ${thing.thing}` : thing
+          }`
+        );
+      }
       const maxQuantity = maximum ?? Math.floor(adjustedCapacity / weight);
       return new Array<[T | Not<T>, number, number]>(maxQuantity).fill([
         thing,

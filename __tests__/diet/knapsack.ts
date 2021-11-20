@@ -65,6 +65,19 @@ describe("knapsack", () => {
     expect(value).toEqual(12);
   });
 
+  it("respects zero maximum quantity", () => {
+    const [value, items] = knapsack(
+      [
+        ["A", 10, 1, 0],
+        ["B", 1, 2],
+      ],
+      4
+    );
+
+    expect(sortValues(items)).toEqual([["B", 2]]);
+    expect(value).toEqual(2);
+  });
+
   it("uses negative items", () => {
     const [value, items] = knapsack(
       [

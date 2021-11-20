@@ -351,14 +351,22 @@ class DietPlanner {
   planOrgansWithTrials(
     organCapacities: OrganSize[],
     trialItems: [MenuItem, OrganSize[]][],
-    overrideModifiers: Partial<ConsumptionModifiers> = {}
+    overrideModifiers: Partial<ConsumptionModifiers>
   ): [number, [MenuItem[], number][]] {
     if (trialItems.length === 0) {
       return this.planOrgans(organCapacities, overrideModifiers);
     }
 
-    const organCapacitiesWithMap = new Map(organCapacities);
     const [trialItem, organSizes] = trialItems[0];
+    if (trialItem.maximum !== undefined && trialItem.maximum <= 0) {
+      return this.planOrgansWithTrials(
+        organCapacities,
+        trialItems.slice(1),
+        overrideModifiers
+      );
+    }
+
+    const organCapacitiesWithMap = new Map(organCapacities);
     for (const [organ, size] of organSizes) {
       const current = organCapacitiesWithMap.get(organ);
       if (current !== undefined) {
@@ -533,7 +541,8 @@ export function planDiet(
     resolvedOrganCapacities.filter(
       ([organ, capacity]) => ["food", "booze"].includes(organ) && capacity >= 0
     ),
-    includedInteractingItems
+    includedInteractingItems,
+    {}
   );
 
   const spleenCapacity = resolvedOrganCapacities.find(

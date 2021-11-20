@@ -15,46 +15,46 @@ export function havePants(): boolean {
 
 type PantogramAlignment = "Muscle" | "Moxie" | "Mysticality";
 type PantogramElement =
-  | "Hot Resistance"
-  | "Cold Resistance"
-  | "Spooky Resistance"
-  | "Sleaze Resistance"
-  | "Stench Resistance";
+  | "Hot Resistance: 2"
+  | "Cold Resistance: 2"
+  | "Spooky Resistance: 2"
+  | "Sleaze Resistance: 2"
+  | "Stench Resistance: 2";
 type PantogramSacrificeL =
-  | "Maximum HP"
-  | "Maximum MP"
-  | ["HP Regen Max", 10]
-  | ["HP Regen Max", 15]
-  | ["HP Regen Max", 20]
-  | ["MP Regen Max", 10]
-  | ["MP Regen Max", 15]
-  | ["MP Regen Max", 20]
-  | "Mana Cost";
+  | "Maximum HP: 40"
+  | "Maximum MP: 20"
+  | "HP Regen Max: 10"
+  | "HP Regen Max: 15"
+  | "HP Regen Max: 20"
+  | "MP Regen Max: 10"
+  | "MP Regen Max: 15"
+  | "MP Regen Max: 20"
+  | "Mana Cost: -3";
 type PantogramSacrificeM =
-  | ["Combat Rate", -5]
-  | ["Combat Rate", 5]
-  | "Initiative"
-  | "Critical Hit Percent"
-  | "Familiar Weight"
-  | "Candy Drop"
-  | "Item Drop Penalty"
-  | "Fishing Skill"
-  | "Pool Skill"
-  | "Drops Items"
-  | "Avatar";
+  | "Combat Rate: -5"
+  | "Combat Rate: 5"
+  | "Initiative: 50"
+  | "Critical Hit Percent: 10"
+  | "Familiar Weight: 10"
+  | "Candy Drop: 100"
+  | "Item Drop Penalty: -10"
+  | "Fishing Skill: 5"
+  | "Pool Skill: 5"
+  | "Drops Items: true"
+  | "Avatar: Purple";
 type PantogramSacrificeR =
-  | "Weapon Damage"
-  | "Spell Damage Percent"
-  | ["Meat Drop", 30]
-  | ["Meat Drop", 60]
-  | ["Item Drop", 15]
-  | ["Item Drop", 30]
-  | "Muscle Experience"
-  | "Mysticality Experience"
-  | "Moxie Experience"
-  | "Muscle Experience Percent"
-  | "Mysticality Experience Percent"
-  | "Moxie Experience Percent";
+  | "Weapon Damage: 20"
+  | "Spell Damage Percent: 20"
+  | "Meat Drop: 30"
+  | "Meat Drop: 60"
+  | "Item Drop: 15"
+  | "Item Drop: 30"
+  | "Muscle Experience: 3"
+  | "Mysticality Experience: 3"
+  | "Moxie Experience: 3"
+  | "Muscle Experience Percent: 25"
+  | "Mysticality Experience Percent: 25"
+  | "Moxie Experience Percent: 25";
 type Pants = {
   alignment: PantogramAlignment;
   element: PantogramElement;
@@ -70,88 +70,65 @@ const Alignment: Record<PantogramAlignment, number> = {
 };
 
 const Element: Record<PantogramElement, number> = {
-  ["Hot Resistance"]: 1,
-  ["Cold Resistance"]: 2,
-  ["Spooky Resistance"]: 3,
-  ["Sleaze Resistance"]: 4,
-  ["Stench Resistance"]: 5,
+  ["Hot Resistance: 2"]: 1,
+  ["Cold Resistance: 2"]: 2,
+  ["Spooky Resistance: 2"]: 3,
+  ["Sleaze Resistance: 2"]: 4,
+  ["Stench Resistance: 2"]: 5,
 };
 
-const LeftSacrifice = new Map<PantogramSacrificeL, [Item | number, number]>([
-  ["Maximum HP", [-1, 0]],
-  ["Maximum MP", [-2, 0]],
-  [
-    ["HP Regen Max", 10],
-    [$item`red pixel potion`, 1],
-  ],
-  [
-    ["HP Regen Max", 15],
-    [$item`royal jelly`, 1],
-  ],
-  [
-    ["HP Regen Max", 20],
-    [$item`scented massage oil`, 1],
-  ],
-  [
-    ["MP Regen Max", 10],
-    [$item`Cherry Cloaca Cola`, 1],
-  ],
-  [
-    ["MP Regen Max", 15],
-    [$item`bubblin' crude`, 1],
-  ],
-  [
-    ["MP Regen Max", 20],
-    [$item`glowing New Age crystal`, 1],
-  ],
-  ["Mana Cost", [$item`baconstone`, 1]],
-]);
+const LeftSacrifice: Record<PantogramSacrificeL, [Item | number, number]> = {
+  ["Maximum HP: 40"]: [-1, 0],
+  ["Maximum MP: 20"]: [-2, 0],
 
-const MiddleSacrifice = new Map<PantogramSacrificeM, [Item | number, number]>([
-  [
-    ["Combat Rate", -5],
-    [-1, 0],
-  ],
-  [
-    ["Combat Rate", -5],
-    [-2, 0],
-  ],
-  ["Initiative", [$item`bar skin`, 1]],
-  ["Familiar Weight", [$item`lead necklace`, 11]],
-  ["Candy Drop", [$item`huge bowl of candy`, 1]],
-  ["Item Drop Penalty", [$item`sea salt crystal`, 11]],
-  ["Fishing Skill", [$item`wriggling worm`, 1]],
-  ["Pool Skill", [$item`8-ball`, 15]],
-  ["Avatar", [$item`moxie weed`, 99]],
-  ["Drops Items", [$item`ten-leaf clover`, 1]],
-]);
+  ["HP Regen Max: 10"]: [$item`red pixel potion`, 1],
 
-const RightSacrifice = new Map<PantogramSacrificeR, [Item | number, number]>([
-  ["Weapon Damage", [-1, 0]],
-  ["Spell Damage Percent", [-2, 0]],
-  [
-    ["Meat Drop", 30],
-    [$item`taco shell`, 1],
-  ],
-  [
-    ["Meat Drop", 60],
-    [$item`porquoise`, 1],
-  ],
-  [
-    ["Item Drop", 15],
-    [$item`fairy gravy boat`, 1],
-  ],
-  [
-    ["Item Drop", 30],
-    [$item`tiny dancer`, 1],
-  ],
-  ["Muscle Experience", [$item`Knob Goblin firecracker`, 3]],
-  ["Mysticality Experience", [$item`razor-sharp can lid`, 3]],
-  ["Moxie Experience", [$item`spider web`, 3]],
-  ["Muscle Experience Percent", [$item`synthetic marrow`, 5]],
-  ["Mysticality Experience Percent", [$item`haunted battery`, 5]],
-  ["Moxie Experience Percent", [$item`the funk`, 5]],
-]);
+  ["HP Regen Max: 15"]: [$item`royal jelly`, 1],
+
+  ["HP Regen Max: 20"]: [$item`scented massage oil`, 1],
+
+  ["MP Regen Max: 10"]: [$item`Cherry Cloaca Cola`, 1],
+
+  ["MP Regen Max: 15"]: [$item`bubblin' crude`, 1],
+
+  ["MP Regen Max: 20"]: [$item`glowing New Age crystal`, 1],
+
+  ["Mana Cost: -3"]: [$item`baconstone`, 1],
+};
+
+const MiddleSacrifice: Record<PantogramSacrificeM, [Item | number, number]> = {
+  ["Combat Rate: -5"]: [-1, 0],
+
+  ["Combat Rate: 5"]: [-2, 0],
+  ["Critical Hit Percent: 10"]: [$item`hamethyst`, 1],
+  ["Initiative: 50"]: [$item`bar skin`, 1],
+  ["Familiar Weight: 10"]: [$item`lead necklace`, 11],
+  ["Candy Drop: 100"]: [$item`huge bowl of candy`, 1],
+  ["Item Drop Penalty: -10"]: [$item`sea salt crystal`, 11],
+  ["Fishing Skill: 5"]: [$item`wriggling worm`, 1],
+  ["Pool Skill: 5"]: [$item`8-ball`, 15],
+  ["Avatar: Purple"]: [$item`moxie weed`, 99],
+  ["Drops Items: true"]: [$item`ten-leaf clover`, 1],
+};
+
+const RightSacrifice: Record<PantogramSacrificeR, [Item | number, number]> = {
+  ["Weapon Damage: 20"]: [-1, 0],
+  ["Spell Damage Percent: 20"]: [-2, 0],
+  ["Meat Drop: 30"]: [$item`taco shell`, 1],
+
+  ["Meat Drop: 60"]: [$item`porquoise`, 1],
+
+  ["Item Drop: 15"]: [$item`fairy gravy boat`, 1],
+
+  ["Item Drop: 30"]: [$item`tiny dancer`, 1],
+
+  ["Muscle Experience: 3"]: [$item`Knob Goblin firecracker`, 3],
+  ["Mysticality Experience: 3"]: [$item`razor-sharp can lid`, 3],
+  ["Moxie Experience: 3"]: [$item`spider web`, 3],
+  ["Muscle Experience Percent: 25"]: [$item`synthetic marrow`, 5],
+  ["Mysticality Experience Percent: 25"]: [$item`haunted battery`, 5],
+  ["Moxie Experience Percent: 25"]: [$item`the funk`, 5],
+};
 
 /**
  * Finds the item requirements for a particular pair of pants.
@@ -164,32 +141,23 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
   const returnValue = new Map<Item, number>();
 
   if (leftSac) {
-    const pair = LeftSacrifice.get(leftSac);
-    if (pair) {
-      const [sacrifice, quantity] = pair;
-      if (sacrifice instanceof Item) {
-        returnValue.set(sacrifice, quantity);
-      }
+    const [sacrifice, quantity] = LeftSacrifice[leftSac];
+    if (sacrifice instanceof Item) {
+      returnValue.set(sacrifice, quantity);
     }
   }
 
   if (rightSac) {
-    const pair = RightSacrifice.get(rightSac);
-    if (pair) {
-      const [sacrifice, quantity] = pair;
-      if (sacrifice instanceof Item) {
-        returnValue.set(sacrifice, quantity);
-      }
+    const [sacrifice, quantity] = RightSacrifice[rightSac];
+    if (sacrifice instanceof Item) {
+      returnValue.set(sacrifice, quantity);
     }
   }
 
   if (middleSac) {
-    const pair = MiddleSacrifice.get(middleSac);
-    if (pair) {
-      const [sacrifice, quantity] = pair;
-      if (sacrifice instanceof Item) {
-        returnValue.set(sacrifice, quantity);
-      }
+    const [sacrifice, quantity] = MiddleSacrifice[middleSac];
+    if (sacrifice instanceof Item) {
+      returnValue.set(sacrifice, quantity);
     }
   }
 
@@ -236,9 +204,9 @@ export function makePants(
   ) {
     return false;
   }
-  const s1 = LeftSacrifice.get(leftSac);
-  const s2 = RightSacrifice.get(rightSac);
-  const s3 = MiddleSacrifice.get(middleSac);
+  const s1 = LeftSacrifice[leftSac];
+  const s2 = RightSacrifice[rightSac];
+  const s3 = MiddleSacrifice[middleSac];
   if (!s1 || !s2 || !s3) return false;
 
   const url = `choice.php?whichchoice=1270&pwd&option=1&m=${

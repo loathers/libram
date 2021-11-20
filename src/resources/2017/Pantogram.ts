@@ -14,12 +14,14 @@ export function havePants(): boolean {
 }
 
 type PantogramAlignment = "Muscle" | "Moxie" | "Mysticality";
+
 type PantogramElement =
   | "Hot Resistance: 2"
   | "Cold Resistance: 2"
   | "Spooky Resistance: 2"
   | "Sleaze Resistance: 2"
   | "Stench Resistance: 2";
+
 type PantogramSacrificeL =
   | "Maximum HP: 40"
   | "Maximum MP: 20"
@@ -30,6 +32,7 @@ type PantogramSacrificeL =
   | "MP Regen Max: 15"
   | "MP Regen Max: 20"
   | "Mana Cost: -3";
+
 type PantogramSacrificeM =
   | "Combat Rate: -5"
   | "Combat Rate: 5"
@@ -42,6 +45,7 @@ type PantogramSacrificeM =
   | "Pool Skill: 5"
   | "Drops Items: true"
   | "Avatar: Purple";
+
 type PantogramSacrificeR =
   | "Weapon Damage: 20"
   | "Spell Damage Percent: 20"
@@ -55,6 +59,7 @@ type PantogramSacrificeR =
   | "Muscle Experience Percent: 25"
   | "Mysticality Experience Percent: 25"
   | "Moxie Experience Percent: 25";
+
 type Pants = {
   alignment: PantogramAlignment;
   element: PantogramElement;
@@ -80,25 +85,17 @@ const Element: Record<PantogramElement, number> = {
 const LeftSacrifice: Record<PantogramSacrificeL, [Item | number, number]> = {
   ["Maximum HP: 40"]: [-1, 0],
   ["Maximum MP: 20"]: [-2, 0],
-
   ["HP Regen Max: 10"]: [$item`red pixel potion`, 1],
-
   ["HP Regen Max: 15"]: [$item`royal jelly`, 1],
-
   ["HP Regen Max: 20"]: [$item`scented massage oil`, 1],
-
   ["MP Regen Max: 10"]: [$item`Cherry Cloaca Cola`, 1],
-
   ["MP Regen Max: 15"]: [$item`bubblin' crude`, 1],
-
   ["MP Regen Max: 20"]: [$item`glowing New Age crystal`, 1],
-
   ["Mana Cost: -3"]: [$item`baconstone`, 1],
 };
 
 const MiddleSacrifice: Record<PantogramSacrificeM, [Item | number, number]> = {
   ["Combat Rate: -5"]: [-1, 0],
-
   ["Combat Rate: 5"]: [-2, 0],
   ["Critical Hit Percent: 10"]: [$item`hamethyst`, 1],
   ["Initiative: 50"]: [$item`bar skin`, 1],
@@ -115,13 +112,9 @@ const RightSacrifice: Record<PantogramSacrificeR, [Item | number, number]> = {
   ["Weapon Damage: 20"]: [-1, 0],
   ["Spell Damage Percent: 20"]: [-2, 0],
   ["Meat Drop: 30"]: [$item`taco shell`, 1],
-
   ["Meat Drop: 60"]: [$item`porquoise`, 1],
-
   ["Item Drop: 15"]: [$item`fairy gravy boat`, 1],
-
   ["Item Drop: 30"]: [$item`tiny dancer`, 1],
-
   ["Muscle Experience: 3"]: [$item`Knob Goblin firecracker`, 3],
   ["Mysticality Experience: 3"]: [$item`razor-sharp can lid`, 3],
   ["Moxie Experience: 3"]: [$item`spider web`, 3],

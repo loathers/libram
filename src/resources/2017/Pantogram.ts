@@ -153,6 +153,11 @@ const RightSacrifice = new Map<PantogramSacrificeR, [Item | number, number]>([
   ["Moxie Experience Percent", [$item`the funk`, 5]],
 ]);
 
+/**
+ * Finds the item requirements for a particular pair of pants.
+ * @param modifiers An object consisting of the modifiers you want on your pants. For modifiers repeated across a particular sacrifice, use a tuple of that modifier and its value.
+ * @returns A map of the items you need to make these pants and the quantities needed.
+ */
 export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
   const { leftSac, rightSac, middleSac } = modifiers;
 
@@ -198,6 +203,15 @@ function sacrificePairToURL(pair: [number | Item, number]): string {
   return `${sacrifice},${quantity}`;
 }
 
+/**
+ * Makes a pair of pants with the given modifiers
+ * @param alignment The stat you'd like your pants to improve. Moxie, Mysticality, or Muscle
+ * @param element The element you'd like your pants to provide resistance for
+ * @param leftSac The modifier (or modifier-tuple) you'd like to get from your leftmost sacrifice in Pantagramming.
+ * @param middleSac The modifier (or modifier-tuple) you'd like to get from your middle sacrifice in Pantagramming.
+ * @param rightSac The modifier (or modifier-tuple) you'd like to get from your rightmost sacrifice in Pantagramming.
+ * @returns Whether or not you successfully created a pair of pants. False if you don't own the pantogram or if you already have pantogram pants.
+ */
 export function makePants(
   alignment: PantogramAlignment,
   element: PantogramElement,
@@ -238,6 +252,11 @@ export function makePants(
   return haveItem(pants);
 }
 
+/**
+ * Creates a pair of pants from a Pants object.
+ * @param pants An object consisting of the modifiers you'd like the pants to give you, using tuples for repeated modifiers.
+ * @returns Whether or not you successfully created a pair of pants. False if you don't own the pantogram or if you already have pantogram pants.
+ */
 export function makePantsFromObject(pants: Pants): boolean {
   return makePants(
     pants["alignment"],

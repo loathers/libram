@@ -16,6 +16,7 @@ import {
 
 import { knapsack } from "./knapsack";
 import { have } from "../lib";
+import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
 import { sum } from "../utils";
@@ -25,11 +26,18 @@ type ConsumptionModifiers = {
   seasoning: boolean;
   mayoflex: boolean;
   refinedPalate: boolean;
+  garish: boolean;
+  saucemaven: boolean;
   pinkyRing: boolean;
   tuxedoShirt: boolean;
 };
 
-// TODO: Include Gar-ish and Salty Mouth.
+function isMonday() {
+  // Checking Tuesday's ruby is a hack to see if it's Monday in Arizona.
+  return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
+}
+
+// TODO: Include Salty Mouth and potentially other modifiers.
 function expectedAdventures(
   item: Item,
   modifiers: ConsumptionModifiers
@@ -45,6 +53,8 @@ function expectedAdventures(
     (itemType(item) === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
+  const garish =
+    modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
   const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");
   const pinkyRing = modifiers.pinkyRing && item.notes?.includes("WINE");
   return (
@@ -53,16 +63,17 @@ function expectedAdventures(
       if (modifiers.forkMug) {
         adventures = Math.floor(adventures * forkMugMultiplier);
       }
+      if (item.notes?.includes("SAUCY") && modifiers.saucemaven) {
+        adventures += myPrimestat() === $stat`Mysticality` ? 5 : 3;
+      }
+      if (garish) adventures += 5;
       if (refinedPalate) adventures = Math.floor(adventures * 1.25);
       if (pinkyRing) adventures = Math.round(adventures * 1.125);
       if (item.notes?.includes("MARTINI") && modifiers.tuxedoShirt) {
         adventures += 2;
       }
-      if (have($skill`Saucemaven`) && item.notes?.includes("SAUCY")) {
-        adventures += myPrimestat() === $stat`Mysticality` ? 5 : 3;
-      }
-      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
+      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
       return adventures;
     }) / interpolated.length
   );
@@ -163,8 +174,6 @@ class DietPlanner {
   mug?: MenuItem;
   seasoning?: MenuItem;
   mayoflex?: MenuItem;
-  pinkyRing: boolean;
-  tuxedoShirt: boolean;
   spleenValue = 0;
 
   constructor(mpa: number, menu: MenuItem[]) {
@@ -180,8 +189,6 @@ class DietPlanner {
       getWorkshed() === $item`portable Mayo Clinic`
         ? menu.find((item) => item.item === $item`Mayoflex`)
         : undefined;
-    this.pinkyRing = have($item`mafia pinky ring`);
-    this.tuxedoShirt = have($item`tuxedo shirt`);
     this.menu = menu.filter((item) => item.organ);
 
     if (menu.length > 100) {
@@ -244,9 +251,11 @@ class DietPlanner {
       forkMug: false,
       seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
       mayoflex: this.mayoflex ? helpers.includes(this.mayoflex) : false,
-      refinedPalate: false,
-      pinkyRing: this.pinkyRing,
-      tuxedoShirt: this.tuxedoShirt,
+      refinedPalate: have($effect`Refined Palate`),
+      garish: have($effect`Gar-ish`),
+      saucemaven: have($skill`Saucemaven`),
+      pinkyRing: have($item`mafia pinky ring`),
+      tuxedoShirt: have($item`tuxedo shirt`),
       ...overrideModifiers,
     };
 
@@ -363,6 +372,11 @@ class DietPlanner {
         trialItem.wishEffect === $effect`Refined Palate`) ||
       trialItem.item === $item`toasted brie`;
 
+    const isGarish =
+      (trialItem.item === $item`pocket wish` &&
+        trialItem.wishEffect === $effect`Gar-ish`) ||
+      trialItem.item === $item`potion of the field gar`;
+
     const [valueWithout, planWithout] = this.planOrgansWithTrials(
       organCapacities,
       trialItems.slice(1),
@@ -371,9 +385,11 @@ class DietPlanner {
     const [valueWith, planWith] = this.planOrgansWithTrials(
       organCapacitiesWith,
       trialItems.slice(1),
-      isRefinedPalate
-        ? { ...overrideModifiers, refinedPalate: true }
-        : overrideModifiers
+      {
+        ...overrideModifiers,
+        ...(isRefinedPalate ? { refinedPalate: true } : {}),
+        ...(isGarish ? { garish: true } : {}),
+      }
     );
 
     const [helpersAndItem, value] = this.consumptionHelpersAndValue(
@@ -437,6 +453,8 @@ const interactingItems: [Item | Effect, OrganSize[]][] = [
   ],
   [$effect`Refined Palate`, []],
   [$item`toasted brie`, [["food", 2]]],
+  [$effect`Gar-ish`, []],
+  [$item`potion of the field gar`, []],
 ];
 
 /**

@@ -175,9 +175,9 @@ function sacrificePairToURL(pair: [number | Item, number]): string {
  * Makes a pair of pants with the given modifiers
  * @param alignment The stat you'd like your pants to improve. Moxie, Mysticality, or Muscle
  * @param element The element you'd like your pants to provide resistance for
- * @param leftSac The modifier (or modifier-tuple) you'd like to get from your leftmost sacrifice in Pantagramming.
- * @param middleSac The modifier (or modifier-tuple) you'd like to get from your middle sacrifice in Pantagramming.
- * @param rightSac The modifier (or modifier-tuple) you'd like to get from your rightmost sacrifice in Pantagramming.
+ * @param leftSac The modifier you'd like to get from your leftmost sacrifice in Pantagramming.
+ * @param middleSac The modifier you'd like to get from your middle sacrifice in Pantagramming.
+ * @param rightSac The modifier you'd like to get from your rightmost sacrifice in Pantagramming.
  * @returns Whether or not you successfully created a pair of pants. False if you don't own the pantogram or if you already have pantogram pants.
  */
 export function makePants(
@@ -222,7 +222,7 @@ export function makePants(
 
 /**
  * Creates a pair of pants from a Pants object.
- * @param pants An object consisting of the modifiers you'd like the pants to give you, using tuples for repeated modifiers.
+ * @param pants An object consisting of the modifiers you'd like the pants to give you.
  * @returns Whether or not you successfully created a pair of pants. False if you don't own the pantogram or if you already have pantogram pants.
  */
 export function makePantsFromObject(pants: Pants): boolean {

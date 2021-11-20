@@ -204,16 +204,11 @@ export function makePants(
   ) {
     return false;
   }
-  const s1 = LeftSacrifice[leftSac];
-  const s2 = RightSacrifice[rightSac];
-  const s3 = MiddleSacrifice[middleSac];
-  if (!s1 || !s2 || !s3) return false;
+  const s1 = sacrificePairToURL(LeftSacrifice[leftSac]);
+  const s2 = sacrificePairToURL(RightSacrifice[rightSac]);
+  const s3 = sacrificePairToURL(MiddleSacrifice[middleSac]);
 
-  const url = `choice.php?whichchoice=1270&pwd&option=1&m=${
-    Alignment[alignment]
-  }&e=${Element[element]}&s1=${sacrificePairToURL(s1)}&s2=${sacrificePairToURL(
-    s2
-  )}&s3=${sacrificePairToURL(s3)}`;
+  const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
 
   visitUrl("inv_use.php?pwd&whichitem=9573");
   visitUrl(url);

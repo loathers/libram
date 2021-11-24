@@ -5,20 +5,22 @@ import {
   visitUrl,
 } from "kolmafia";
 import { EnvironmentType } from "../../lib";
+import { Modifiers } from "../../modifier";
 import { get } from "../../property";
+type SpecialFlowerAbility = "Delevels Enemy" | "Blocks Attacks" | "Poison";
 
 class Flower {
   name: string;
   id: number;
   environment: EnvironmentType;
-  modifier: string;
+  modifier: Modifiers | SpecialFlowerAbility;
   territorial: boolean;
 
   constructor(
     name: string,
     id: number,
     environment: EnvironmentType,
-    modifier: string,
+    modifier: Modifiers | SpecialFlowerAbility,
     territorial = false
   ) {
     this.name = name;
@@ -102,234 +104,191 @@ export const RabidDogwood = new Flower(
   "Rabid Dogwood",
   1,
   "outdoor",
-  "+30 Monster Level",
+  {
+    "Monster Level": 30,
+  },
   true
 );
 export const Rutabeggar = new Flower(
   "Rutabeggar",
   2,
   "outdoor",
-  "+25 Item Drop",
+  {
+    "Item Drop": 25,
+  },
   true
 );
 export const RadishRadish = new Flower(
   "Rad-ish Radish",
   3,
   "outdoor",
-  "+5 Moxie Experience",
+  { "Moxie Experience": 5 },
   true
 );
 export const Artichoker = new Flower(
   "Artichoker",
   4,
   "outdoor",
-  "Delevels enemies"
+  "Delevels Enemy"
 );
-export const SmokeRa = new Flower("Smoke-ra", 5, "outdoor", "Blocks attacks");
-export const SkunkCabbage = new Flower(
-  "Skunk Cabbage",
-  6,
-  "outdoor",
-  "Stench damage"
-);
-export const DeadlyCinnamon = new Flower(
-  "Deadly Cinnamon",
-  7,
-  "outdoor",
-  "Hot damage"
-);
-export const CeleryStalker = new Flower(
-  "Celery Stalker",
-  8,
-  "outdoor",
-  "Spooky damage"
-);
-export const LettuceSpray = new Flower(
-  "Lettus Spray",
-  9,
-  "outdoor",
-  "Restores HP"
-);
+export const SmokeRa = new Flower("Smoke-ra", 5, "outdoor", "Blocks Attacks");
+export const SkunkCabbage = new Flower("Skunk Cabbage", 6, "outdoor", {
+  "Stench Damage": 12.5,
+});
+export const DeadlyCinnamon = new Flower("Deadly Cinnamon", 7, "outdoor", {
+  "Hot Damage": 12.5,
+});
+export const CeleryStalker = new Flower("Celery Stalker", 8, "outdoor", {
+  "Spooky Damage": 12.5,
+});
+export const LettuceSpray = new Flower("Lettus Spray", 9, "outdoor", {
+  "HP Regen Min": 10,
+  "HP Regen Max": 29,
+});
 export const SeltzerWatercress = new Flower(
   "Seltzer Watercress",
   10,
   "outdoor",
-  "Restores MP"
+  { "MP Regen Min": 5, "MP Regen Max": 15 }
 );
 export const WarLily = new Flower(
   "War Lily",
   11,
   "indoor",
-  "+30 Monster Level",
+  { "Monster Level": 30 },
   true
 );
 export const StealingMagnolia = new Flower(
   "Stealing Magnolia",
   12,
   "indoor",
-  "+25 Item Drop",
+  { "Item Drop": 25 },
   true
 );
 export const CannedSpinach = new Flower(
   "Canned Spinach",
   13,
   "indoor",
-  "+5 Muscle Experience",
+  { "Muscle Experience": 5 },
   true
 );
-export const Impatiens = new Flower(
-  "Impatiens",
-  14,
-  "indoor",
-  "+25 Initiative"
-);
+export const Impatiens = new Flower("Impatiens", 14, "indoor", {
+  Initiative: 25,
+});
 export const SpiderPlant = new Flower("Spider Plant", 15, "indoor", "Poison");
-export const RedFern = new Flower("Red Fern", 16, "indoor", "Delevels enemies");
-export const BamBoo = new Flower("Bam BOO!", 17, "indoor", "Spooky damage");
-export const ArcticMoss = new Flower(
-  "Arctic Moss",
-  18,
-  "indoor",
-  "Cold damage"
-);
-export const AloeGuvnor = new Flower(
-  "Aloe Guv'nor",
-  19,
-  "indoor",
-  "Restores HP"
-);
-export const PitcherPlant = new Flower(
-  "Pitcher Plant",
-  20,
-  "indoor",
-  "Restores MP"
-);
+export const RedFern = new Flower("Red Fern", 16, "indoor", "Delevels Enemy");
+export const BamBoo = new Flower("Bam BOO!", 17, "indoor", {
+  "Spooky Damage": 12.5,
+});
+export const ArcticMoss = new Flower("Arctic Moss", 18, "indoor", {
+  "Cold Damage": 12.5,
+});
+export const AloeGuvnor = new Flower("Aloe Guv'nor", 19, "indoor", {
+  "HP Regen Min": 10,
+  "HP Regen Max": 30,
+});
+export const PitcherPlant = new Flower("Pitcher Plant", 20, "indoor", {
+  "MP Regen Min": 5,
+  "MP Regen Max": 15,
+});
 export const BlusteryPuffball = new Flower(
   "Blustery Puffball",
   21,
   "underground",
-  "+30 Monster Level",
+  { "Monster Level": 30 },
   true
 );
 export const HornOfPlenty = new Flower(
   "Horn of Plenty",
   22,
   "underground",
-  "+25 Item Drop",
+  { "Item Drop": 25 },
   true
 );
 export const WizardsWig = new Flower(
   "Wizard's Wig",
   23,
   "underground",
-  "+5 Mysticality Experience",
+  { "Mysticality Experience": 5 },
   true
 );
-export const ShuffleTruffle = new Flower(
-  "Shuffle Truffle",
-  24,
-  "underground",
-  "+25 Initiative"
-);
+export const ShuffleTruffle = new Flower("Shuffle Truffle", 24, "underground", {
+  Initiative: 25,
+});
 export const DisLichen = new Flower(
   "Dis Lichen",
   25,
   "underground",
-  "Delevels enemies"
+  "Delevels Enemy"
 );
-export const LooseMorels = new Flower(
-  "Loose Morels",
-  26,
-  "underground",
-  "Sleaze damage"
-);
-export const FoulToadstool = new Flower(
-  "Foul Toadstool",
-  27,
-  "underground",
-  "Stench damage"
-);
-export const Chillterelle = new Flower(
-  "Chillterelle",
-  28,
-  "underground",
-  "Cold damage"
-);
-export const Portlybella = new Flower(
-  "Portlybella",
-  29,
-  "underground",
-  "Retores HP"
-);
-export const MaxHeadshroom = new Flower(
-  "Max Headshroom",
-  30,
-  "underground",
-  "Restores MP"
-);
+export const LooseMorels = new Flower("Loose Morels", 26, "underground", {
+  "Sleaze Damage": 12.5,
+});
+export const FoulToadstool = new Flower("Foul Toadstool", 27, "underground", {
+  "Stench Damage": 12.5,
+});
+export const Chillterelle = new Flower("Chillterelle", 28, "underground", {
+  "Cold Damage": 12.5,
+});
+export const Portlybella = new Flower("Portlybella", 29, "underground", {
+  "HP Regen Min": 10,
+  "HP Regen Max": 30,
+});
+export const MaxHeadshroom = new Flower("Max Headshroom", 30, "underground", {
+  "MP Regen Min": 5,
+  "MP Regen Max": 15,
+});
 export const Spankton = new Flower(
   "Spankton",
   31,
   "underwater",
-  "Delevels enemies",
+  "Delevels Enemy",
   true
 );
 export const Kelptomaniac = new Flower(
   "Kelptomaniac",
   32,
   "underwater",
-  "+40 Item Drop",
+  { "Item Drop": 40 },
   true
 );
 export const Crookweed = new Flower(
   "Crookweed",
   33,
   "underwater",
-  "+60 Meat Drop",
+  { "Meat Drop": 60 },
   true
 );
 export const ElectricEelgrass = new Flower(
   "Electric Eelgrass",
   34,
   "underwater",
-  "Blocks attacks"
+  "Blocks Attacks"
 );
 export const Duckweed = new Flower(
   "Duckweed",
   35,
   "underwater",
-  "Protects once"
+  "Blocks Attacks"
 );
-export const OrcaOrchid = new Flower(
-  "Orca Orchid",
-  36,
-  "underwater",
-  "Physical damage"
-);
-export const Sargassum = new Flower(
-  "Sargassum",
-  37,
-  "underwater",
-  "Stench damage"
-);
-export const SubSeaRose = new Flower(
-  "Sub-Sea Rose",
-  38,
-  "underwater",
-  "Cold damage"
-);
-export const Snori = new Flower(
-  "Snori",
-  39,
-  "underwater",
-  "Restores HP, Restores MP"
-);
-export const UpSeaDaisy = new Flower(
-  "Up Sea Daisy",
-  40,
-  "underwater",
-  "+30 Experience"
-);
+export const OrcaOrchid = new Flower("Orca Orchid", 36, "underwater", {
+  "Weapon Damage": 12.5,
+});
+export const Sargassum = new Flower("Sargassum", 37, "underwater", {
+  "Stench Damage": 12.5,
+});
+export const SubSeaRose = new Flower("Sub-Sea Rose", 38, "underwater", {
+  "Cold Damage": 12.5,
+});
+export const Snori = new Flower("Snori", 39, "underwater", {
+  "HP Regen Min": 20,
+  "HP Regen Max": 30,
+  "MP Regen Min": 10,
+  "MP Regen Max": 20,
+});
+export const UpSeaDaisy = new Flower("Up Sea Daisy", 40, "underwater", {
+  Experience: 30,
+});
 
 export const all: readonly Flower[] = Object.freeze([
   RabidDogwood,

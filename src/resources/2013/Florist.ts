@@ -30,18 +30,31 @@ class Flower {
     this.territorial = territorial;
   }
 
-  plantNamesInZone(location = myLocation()): string[] | null {
+  static plantNamesInZone(location = myLocation()): string[] | null {
     return getFloristPlants()[location.toString()] ?? null;
   }
 
-  plantsInZone(location = myLocation()): Flower[] | null {
+  static plantsInZone(location = myLocation()): Flower[] | null {
     return (this.plantNamesInZone(location)
       ?.map((flowerName) => toFlower(flowerName))
       .filter((flower) => flower !== undefined) ?? null) as Flower[] | null;
   }
 
+  static modifiersInZone(location = myLocation()): Modifiers {
+    let returnValue: Modifiers = {};
+    const plants = this.plantsInZone(location);
+    if (!plants) return returnValue;
+    const modifiers = plants
+      .map((plant) => plant.modifier)
+      .map((modifier) => (typeof modifier === "string" ? {} : modifier));
+    for (const modifier of modifiers) {
+      returnValue = { ...returnValue, ...modifier };
+    }
+    return returnValue;
+  }
+
   isPlantedHere(location = myLocation()): boolean {
-    const plantedHere = this.plantNamesInZone(location)?.includes(this.name);
+    const plantedHere = Flower.plantNamesInZone(location)?.includes(this.name);
     return plantedHere !== undefined && plantedHere;
   }
 
@@ -55,7 +68,7 @@ class Flower {
 
   dig(): boolean {
     if (!this.isPlantedHere()) return false;
-    const flowers = this.plantNamesInZone();
+    const flowers = Flower.plantNamesInZone();
     if (!flowers || !flowers[2]) return false;
     const plantNumber = getFloristPlants()[myLocation().toString()].indexOf(
       this.name

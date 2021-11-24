@@ -30,14 +30,14 @@ class Flower {
     this.territorial = territorial;
   }
 
-  plantNamesInZone(location = myLocation()): string[] | undefined {
-    return getFloristPlants()[location.toString()];
+  plantNamesInZone(location = myLocation()): string[] | null {
+    return getFloristPlants()[location.toString()] ?? null;
   }
 
-  plantsInZone(location = myLocation()): Flower[] | undefined {
-    return this.plantNamesInZone(location)
+  plantsInZone(location = myLocation()): Flower[] | null {
+    return (this.plantNamesInZone(location)
       ?.map((flowerName) => toFlower(flowerName))
-      .filter((flower) => flower !== undefined) as Flower[] | undefined;
+      .filter((flower) => flower !== undefined) ?? null) as Flower[] | null;
   }
 
   isPlantedHere(location = myLocation()): boolean {

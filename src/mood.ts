@@ -366,7 +366,7 @@ export class Mood {
    * Add an Asdon Martin driving style to the mood.
    * @param effect Driving style to add to the mood.
    */
-  asdon(effect: Effect): Mood {
+  drive(effect: Effect): Mood {
     if (Object.values(AsdonMartin.Driving).includes(effect)) {
       this.elements.push(new AsdonMoodElement(effect));
     }

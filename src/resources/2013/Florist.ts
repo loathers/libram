@@ -5,7 +5,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { EnvironmentType } from "../../lib";
-import { Modifiers } from "../../modifier";
+import { mergeModifiers, Modifiers } from "../../modifier";
 import { get } from "../../property";
 type SpecialFlowerAbility = "Delevels Enemy" | "Blocks Attacks" | "Poison";
 
@@ -41,16 +41,12 @@ class Flower {
   }
 
   static modifiersInZone(location = myLocation()): Modifiers {
-    let returnValue: Modifiers = {};
     const plants = this.plantsInZone(location);
-    if (!plants) return returnValue;
+    if (!plants) return {};
     const modifiers = plants
       .map((plant) => plant.modifier)
       .map((modifier) => (typeof modifier === "string" ? {} : modifier));
-    for (const modifier of modifiers) {
-      returnValue = { ...returnValue, ...modifier };
-    }
-    return returnValue;
+    return mergeModifiers(...modifiers);
   }
 
   isPlantedHere(location = myLocation()): boolean {

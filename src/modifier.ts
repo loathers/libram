@@ -129,3 +129,25 @@ export type Modifiers = Partial<
       | StringModifier]: ModifierValue<T>;
   }
 >;
+
+function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
+  const returnValue = { ...modifiers1, ...modifiers2 };
+  for (const modifier in modifiers1) {
+    if (Array.from(Object.values(modifiers2)).includes(modifier)) {
+      if (arrayContains(modifier, numericModifiers)) {
+        returnValue[modifier] =
+          (modifiers1[modifier] ?? 0) + (modifiers2[modifier] ?? 0);
+      }
+      if (arrayContains(modifier, booleanModifiers)) {
+        returnValue[modifier] =
+          (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
+      }
+    }
+  }
+
+  return returnValue;
+}
+
+export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
+  return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
+}

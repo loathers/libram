@@ -136,8 +136,7 @@ export function hybridize(): boolean {
   if (!installed()) return false;
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
-  const tonicPotion = phylaTonics.get(currentSyringe);
-  if (!tonicPotion) return false; //this line should never trigger
+  const tonicPotion = getTonic(currentSyringe);
   const expectedEffect = getModifier("Effect", tonicPotion);
   cliExecute("camp dnainject");
   return isHybridized(expectedEffect);
@@ -146,14 +145,14 @@ export function hybridize(): boolean {
 /**
  * Makes tonics with whatever phylum is currently in your syringe
  * @param {number} [amount=1] the number of tonics to make
+ * @returns Whether we successfully made tonics; returns true if we made as many as we could, regardless of whether that was the number requested
  */
 export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
   if (!installed()) return false;
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
-  const tonicPotion = phylaTonics.get(currentSyringe);
+  const tonicPotion = getTonic(currentSyringe);
   const amountToMake = clamp(amount, 0, tonicsLeft());
-  if (!tonicPotion) return false; //this line should never trigger
   const startingAmount = itemAmount(tonicPotion);
   cliExecute(`camp dnapotion ${amountToMake}`);
   return itemAmount(tonicPotion) - startingAmount === amountToMake;

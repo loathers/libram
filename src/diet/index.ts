@@ -1,4 +1,5 @@
 import {
+  canEquip,
   fullnessLimit,
   getWorkshed,
   inebrietyLimit,
@@ -254,8 +255,9 @@ class DietPlanner {
       refinedPalate: have($effect`Refined Palate`),
       garish: have($effect`Gar-ish`),
       saucemaven: have($skill`Saucemaven`),
-      pinkyRing: have($item`mafia pinky ring`),
-      tuxedoShirt: have($item`tuxedo shirt`),
+      pinkyRing:
+        have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`),
+      tuxedoShirt: have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
       ...overrideModifiers,
     };
 

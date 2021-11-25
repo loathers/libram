@@ -55,6 +55,10 @@ function insertFuel(it: Item, quantity = 1): boolean {
   return result.includes("The display updates with a");
 }
 
+/**
+ * Fill your Asdon Martin to the given fuel level in the cheapest way possible
+ * @param targetUnits Fuel level to attempt to reach.
+ */
 export function fillTo(targetUnits: number): boolean {
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
@@ -71,6 +75,9 @@ export function fillTo(targetUnits: number): boolean {
   return getFuel() >= targetUnits;
 }
 
+/**
+ * Object consisting of the various Asdon driving styles
+ */
 export const Driving = {
   Obnoxiously: $effect`Driving Obnoxiously`,
   Stealthily: $effect`Driving Stealthily`,
@@ -83,6 +90,11 @@ export const Driving = {
   Waterproofly: $effect`Driving Waterproofly`,
 };
 
+/**
+ * Attempt to drive with a particular style for a particular number of turns
+ * @param style The driving style to use
+ * @param turns The number of turns to attempt to get
+ */
 export function drive(style: Effect, turns = 1): boolean {
   if (!Object.values(Driving).includes(style)) return false;
 

@@ -58,6 +58,7 @@ function insertFuel(it: Item, quantity = 1): boolean {
 /**
  * Fill your Asdon Martin to the given fuel level in the cheapest way possible
  * @param targetUnits Fuel level to attempt to reach.
+ * @returns Whether we succeeded at filling to the target fuel level.
  */
 export function fillTo(targetUnits: number): boolean {
   while (getFuel() < targetUnits) {
@@ -94,6 +95,7 @@ export const Driving = {
  * Attempt to drive with a particular style for a particular number of turns
  * @param style The driving style to use
  * @param turns The number of turns to attempt to get
+ * @returns Whether we have at least as many turns as requested of said driving style.
  */
 export function drive(style: Effect, turns = 1): boolean {
   if (!Object.values(Driving).includes(style)) return false;

@@ -42,21 +42,27 @@ function mergeMaximizeOptions(
   return {
     updateOnFamiliarChange:
       addendums.updateOnFamiliarChange ?? defaultOptions.updateOnFamiliarChange,
+
     updateOnCanEquipChanged:
       addendums.updateOnCanEquipChanged ??
       defaultOptions.updateOnCanEquipChanged,
+
     useOutfitCaching:
       addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
     forceEquip: [...defaultOptions.forceEquip, ...(addendums.forceEquip ?? [])],
+
     preventEquip: [
       ...defaultOptions.preventEquip,
       ...(addendums.preventEquip ?? []),
     ],
+
     bonusEquip: new Map<Item, number>([
       ...defaultOptions.bonusEquip,
       ...(addendums.bonusEquip ?? []),
     ]),
+
     onlySlot: addendums.onlySlot ?? defaultOptions.onlySlot,
+
     preventSlot: [
       ...defaultOptions.preventSlot,
       ...(addendums.preventSlot ?? []),

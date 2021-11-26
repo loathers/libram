@@ -5,6 +5,7 @@ import {
   MonsterProperty,
   NumericOrStringProperty,
   NumericProperty,
+  PhylumProperty,
   StatProperty,
   StringProperty,
 } from "./propertyTypes";
@@ -75,12 +76,18 @@ export function isStatProperty(property: string): property is StatProperty {
   return statProps.includes(property);
 }
 
+const phylumProps = ["dnaSyringe"];
+export function isPhylumProperty(property: string): property is PhylumProperty {
+  return phylumProps.includes(property) || property.endsWith("Phylum");
+}
+
 export type KnownProperty =
   | NumericProperty
   | BooleanProperty
   | MonsterProperty
   | LocationProperty
   | FamiliarProperty
+  | PhylumProperty
   | StatProperty
   | StringProperty
   | NumericOrStringProperty;
@@ -103,6 +110,8 @@ export type PropertyValue<
   ? Familiar | null
   : Property extends StatProperty
   ? Stat | null
+  : Property extends PhylumProperty
+  ? Phylum | null
   : Property extends NumericOrStringProperty
   ? number | string
   : Default;

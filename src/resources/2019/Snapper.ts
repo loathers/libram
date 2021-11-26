@@ -1,10 +1,4 @@
-import {
-  cliExecute,
-  haveFamiliar,
-  myFamiliar,
-  toPhylum,
-  useFamiliar,
-} from "kolmafia";
+import { cliExecute, haveFamiliar, myFamiliar, useFamiliar } from "kolmafia";
 import { get } from "../../property";
 
 const familiar = Familiar.get("Red-Nosed Snapper");
@@ -57,8 +51,7 @@ export function have(): boolean {
  * @returns Tracked phylum, or null if no phylum tracked.
  */
 export function getTrackedPhylum(): Phylum | null {
-  const phylum = toPhylum(get("redSnapperPhylum"));
-  return phylum === Phylum.get("none") ? null : phylum;
+  return get("redSnapperPhylum");
 }
 
 /**

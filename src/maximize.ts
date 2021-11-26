@@ -49,6 +49,7 @@ function mergeMaximizeOptions(
 
     useOutfitCaching:
       addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
+
     forceEquip: [...defaultOptions.forceEquip, ...(addendums.forceEquip ?? [])],
 
     preventEquip: [

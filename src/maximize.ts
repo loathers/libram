@@ -1,4 +1,3 @@
-import merge from "lodash/merge";
 import {
   availableAmount,
   bjornifyFamiliar,
@@ -30,6 +29,35 @@ export type MaximizeOptions = {
   onlySlot: Slot[];
   preventSlot: Slot[];
 };
+
+function mergeMaximizeOptions(
+  defaultOptions: MaximizeOptions,
+  addendums: Partial<MaximizeOptions>
+): MaximizeOptions {
+  return {
+    updateOnFamiliarChange:
+      addendums.updateOnFamiliarChange ?? defaultOptions.updateOnFamiliarChange,
+    updateOnCanEquipChanged:
+      addendums.updateOnCanEquipChanged ??
+      defaultOptions.updateOnCanEquipChanged,
+    useOutfitCaching:
+      addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
+    forceEquip: [...defaultOptions.forceEquip, ...(addendums.forceEquip ?? [])],
+    preventEquip: [
+      ...defaultOptions.preventEquip,
+      ...(addendums.preventEquip ?? []),
+    ],
+    bonusEquip: new Map<Item, number>([
+      ...defaultOptions.bonusEquip,
+      ...(addendums.bonusEquip ?? []),
+    ]),
+    onlySlot: addendums.onlySlot ?? defaultOptions.onlySlot,
+    preventSlot: [
+      ...defaultOptions.preventSlot,
+      ...(addendums.preventSlot ?? []),
+    ],
+  };
+}
 
 const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
@@ -387,7 +415,7 @@ export function maximizeCached(
   objectives: string[],
   options: Partial<MaximizeOptions> = {}
 ): void {
-  const fullOptions = merge(options, defaultMaximizeOptions);
+  const fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options);
   const {
     forceEquip,
     preventEquip,

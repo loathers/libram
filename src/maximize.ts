@@ -30,6 +30,11 @@ export type MaximizeOptions = {
   preventSlot: Slot[];
 };
 
+/**
+ * Merges a Partial<MaximizeOptions> onto a MaximizeOptions. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
+ * @param defaultOptions MaximizeOptions to use as a "base."
+ * @param addendums Options to attempt to merge onto defaultOptions.
+ */
 function mergeMaximizeOptions(
   defaultOptions: MaximizeOptions,
   addendums: Partial<MaximizeOptions>

@@ -106,12 +106,24 @@ export class Macro {
   static cachedAutoAttack: string | null = null;
 
   components: string[] = [];
+  name: string = MACRO_NAME;
 
   /**
    * Convert macro to string.
    */
   toString(): string {
     return this.components.join(";");
+  }
+
+  /**
+   * Gives your macro a new name to be used when saving an autoattack.
+   * @param name The name to be used when saving as an autoattack.
+   * @returns The previous name assigned to this macro.
+   */
+  rename(name: string): string {
+    const returnValue = this.name;
+    this.name = name;
+    return returnValue;
   }
 
   /**

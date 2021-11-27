@@ -219,6 +219,24 @@ export class Macro {
   }
 
   /**
+   * Renames the macro, then sets it as an autoattack.
+   * @param name The name to save the macro under as an autoattack.
+   */
+  setAutoAttackAs(name: string): void {
+    this.name = name;
+    this.setAutoAttack();
+  }
+
+  static clearAutoAttackMacros(): void {
+    for (const name of Macro.cachedAutoAttacks.keys()) {
+      const id = Macro.cachedMacroIds.get(name) ?? getMacroId(name);
+      visitUrl(
+        `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`
+      );
+    }
+  }
+
+  /**
    * Add an "abort" step to this macro.
    * @returns {Macro} This object itself.
    */

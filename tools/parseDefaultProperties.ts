@@ -12,6 +12,7 @@ const {
   isNumericOrStringProperty,
   isNumericProperty,
   isStatProperty,
+  isPhylumProperty,
 } = require("../dist/propertyTyping");
 
 const PROPS_FILE =
@@ -33,6 +34,7 @@ async function main() {
     NumericOrStringProperty: [],
     FamiliarProperty: [],
     StatProperty: [],
+    PhylumProperty: [],
   };
 
   for (const prop of props) {
@@ -55,6 +57,8 @@ async function main() {
       propTypes.BooleanProperty.push(property);
     } else if (isNumericProperty(property, defaultValue)) {
       propTypes.NumericProperty.push(property);
+    } else if (isPhylumProperty(property)) {
+      propTypes.PhylumProperty.push(property);
     } else {
       propTypes.StringProperty.push(property);
     }

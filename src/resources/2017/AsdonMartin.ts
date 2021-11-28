@@ -102,7 +102,7 @@ export function drive(style: Effect, turns = 1): boolean {
 
   if (haveEffect(style) >= turns) return true;
 
-  const fuelNeeded = (37 * (turns - haveEffect(style))) / 30;
+  const fuelNeeded = 37 * Math.ceil((turns - haveEffect(style)) / 30);
   fillTo(fuelNeeded);
   while (getFuel() >= 37 && haveEffect(style) < turns) {
     cliExecute(`asdonmartin drive ${style.name.replace("Driving ", "")}`);

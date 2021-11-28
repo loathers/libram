@@ -1,5 +1,4 @@
 import {
-  abort,
   cliExecute,
   getFuel,
   haveEffect,

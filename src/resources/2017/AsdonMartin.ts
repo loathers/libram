@@ -70,7 +70,7 @@ export function fillTo(targetUnits: number): boolean {
     retrieveItem(count, fuel);
 
     if (!insertFuel(fuel, count)) {
-      abort("Fuelling failed");
+      throw new Error("Failed to fuel Asdon Martin.");
     }
   }
   return getFuel() >= targetUnits;

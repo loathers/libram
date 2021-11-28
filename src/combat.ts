@@ -227,6 +227,9 @@ export class Macro {
     this.setAutoAttack();
   }
 
+  /**
+   * Clear all cached autoattacks, and delete all stored macros server-side.
+   */
   static clearAutoAttackMacros(): void {
     for (const name of Macro.cachedAutoAttacks.keys()) {
       const id = Macro.cachedMacroIds.get(name) ?? getMacroId(name);

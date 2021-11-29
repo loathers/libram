@@ -355,14 +355,16 @@ export class Macro {
    * Create a new macro with a condition evaluated at the time of building the macro.
    * @param condition The JS condition.
    * @param ifTrue Continuation to add if the condition is true.
+   * @param ifFalse Optional input to turn this into an if...else statement.
    * @returns {Macro} This object itself.
    */
   static externalIf<T extends Macro>(
     this: Constructor<T>,
     condition: boolean,
-    ifTrue: string | Macro
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro
   ): T {
-    return new this().externalIf(condition, ifTrue);
+    return new this().externalIf(condition, ifTrue, ifFalse);
   }
 
   /**

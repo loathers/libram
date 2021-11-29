@@ -645,5 +645,6 @@ export const holidayWanderers = new Map<string, Monster[]>([
 export function getTodaysHolidayWanderers(): Monster[] {
   return holiday()
     .split("/")
-    .flatMap((holiday) => holidayWanderers.get(holiday) ?? []);
+    .map((holiday) => holidayWanderers.get(holiday) ?? [])
+    .flat();
 }

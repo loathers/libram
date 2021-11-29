@@ -23,6 +23,7 @@ import {
 } from "kolmafia";
 import { getActiveSongs, have, isSong } from "./lib";
 import { get } from "./property";
+import { AsdonMartin } from "./resources";
 import { $item, $skill } from "./template-string";
 import { clamp, sum } from "./utils";
 
@@ -255,6 +256,19 @@ class CustomMoodElement extends MoodElement {
   }
 }
 
+class AsdonMoodElement extends MoodElement {
+  effect: Effect;
+
+  constructor(effect: Effect) {
+    super();
+    this.effect = effect;
+  }
+
+  execute(mood: Mood, ensureTurns: number): boolean {
+    return AsdonMartin.drive(this.effect, ensureTurns);
+  }
+}
+
 /**
  * Class representing a mood object. Add mood elements using the instance methods, which can be chained.
  */
@@ -345,6 +359,17 @@ export class Mood {
    */
   genie(effect: Effect): Mood {
     this.elements.push(new GenieMoodElement(effect));
+    return this;
+  }
+
+  /**
+   * Add an Asdon Martin driving style to the mood.
+   * @param effect Driving style to add to the mood.
+   */
+  drive(effect: Effect): Mood {
+    if (Object.values(AsdonMartin.Driving).includes(effect)) {
+      this.elements.push(new AsdonMoodElement(effect));
+    }
     return this;
   }
 

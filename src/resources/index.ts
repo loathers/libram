@@ -1,3 +1,4 @@
+import * as AsdonMartin from "./2017/AsdonMartin";
 import * as Bandersnatch from "./2009/Bandersnatch";
 import * as BeachComb from "./2019/BeachComb";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
@@ -17,6 +18,7 @@ import * as WinterGarden from "./2014/WinterGarden";
 import * as Witchess from "./2016/Witchess";
 
 export {
+  AsdonMartin,
   Bandersnatch,
   BeachComb,
   ChateauMantegna,

@@ -97,21 +97,30 @@ export class MenuItem {
   wishEffect?: Effect;
 
   static defaultOptions = new Map([
-    [$item`Mr. Burnsger`, { maximum: "auto" }],
     [
       $item`distention pill`,
       {
         organ: "food",
-        maximum: "auto",
+        maximum: get("_distentionPillUsed") ? 0 : 1,
         size: -1,
       },
     ],
     [
       $item`synthetic dog hair pill`,
-      { organ: "booze", maximum: "auto", size: -1 },
+      {
+        organ: "booze",
+        maximum: get("_syntheticDogHairPillUsed") ? 0 : 1,
+        size: -1,
+      },
     ],
-    [$item`cuppa Voraci tea`, { organ: "food", maximum: "auto", size: -1 }],
-    [$item`cuppa Sobrie tea`, { organ: "booze", maximum: "auto", size: -1 }],
+    [
+      $item`cuppa Voraci tea`,
+      { organ: "food", maximum: get("_voraciTeaUsed") ? 0 : 1, size: -1 },
+    ],
+    [
+      $item`cuppa Sobrie tea`,
+      { organ: "booze", maximum: get("_sobrieTeaUsed") ? 0 : 1, size: -1 },
+    ],
     [
       $item`mojo filter`,
       {
@@ -120,10 +129,32 @@ export class MenuItem {
         size: -1,
       },
     ],
-    [$item`spice melange`, { maximum: "auto" }],
-    [$item`Ultra Mega Sour Ball`, { maximum: "auto" }],
+    [$item`spice melange`, { maximum: get("spiceMelangeUsed") ? 0 : 1 }],
+    [
+      $item`Ultra Mega Sour Ball`,
+      { maximum: get("_ultraMegaSourBallUsed") ? 0 : 1 },
+    ],
+    [
+      $item`The Plumber's mushroom stew`,
+      { maximum: get("_plumbersMushroomStewEaten") ? 0 : 1 },
+    ],
+    [$item`The Mad Liquor`, { maximum: get("_madLiquorDrunk") ? 0 : 1 }],
+    [
+      $item`Doc Clock's thyme cocktail`,
+      { maximum: get("_docClocksThymeCocktailDrunk") ? 0 : 1 },
+    ],
+    [$item`Mr. Burnsger`, { maximum: get("_mrBurnsgerEaten") ? 0 : 1 }],
   ] as [Item, MenuItemOptions][]);
 
+  /**
+   * Construct a new menu item, possibly with extra properties. Items in MenuItem.defaultOptions have intelligent defaults.
+   * @param item Item to add to menu.
+   * @param options.organ Designate item as belonging to a specific organ.
+   * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
+   * @param options.maximum Maximum uses remaining today, or "auto" to check dailyusesleft Mafia property.
+   * @param options.additionalValue Additional value (positive) or cost (negative) to consider with item, e.g. from buffs.
+   * @param options.wishEffect If item is a pocket wish, effect to wish for.
+   */
   constructor(item: Item, options: MenuItemOptions = {}) {
     const { size, organ, maximum, additionalValue, wishEffect } = {
       ...options,

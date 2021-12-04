@@ -1,6 +1,6 @@
 import { toItem, toSkill } from "kolmafia";
 
-function overlappingSkills(): Skill[] {
+export function overlappingSkills(): Skill[] {
   const combatSkillNames = Skill.all()
     .filter((skill) => skill.combat)
     .map((skill) => skill.name.toLowerCase());
@@ -11,7 +11,7 @@ function overlappingSkills(): Skill[] {
     .map(toSkill);
 }
 
-function overlappingItems(): Item[] {
+export function overlappingItems(): Item[] {
   const combatItemNames = Item.all()
     .filter((item) => item.combat)
     .map((item) => item.name.toLowerCase());

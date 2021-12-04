@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-const nodeFetch = require("node-fetch");
-const { writeFile } = require("fs/promises");
-const path = require("path");
-const { BaseJavaCstVisitorWithDefaults, parse } = require("java-parser");
+import nodeFetch from "node-fetch";
+import { writeFile } from "fs/promises";
+import path from "path";
+import { BaseJavaCstVisitorWithDefaults, parse } from "java-parser";
 
 /**
  *
@@ -49,6 +47,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 
   processModifier(
     modifierType: keyof ModifiersVisitor["modifiers"],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     list: any
   ) {
     const modifierDefinition = list.children.variableInitializer;
@@ -76,8 +75,10 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 
   processModifiers(
     modifierType: keyof ModifiersVisitor["modifiers"],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     list: any
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     list.children.variableInitializer.forEach((v: any) => {
       const list =
         v.children.arrayInitializer?.[0].children.variableInitializerList?.[0];
@@ -87,6 +88,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   variableDeclaratorList(ctx: any) {
     const name =
       ctx.variableDeclarator[0].children.variableDeclaratorId[0].children

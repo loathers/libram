@@ -1,19 +1,18 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 /// <reference types="kolmafia" />
-const nodeFetch = require("node-fetch");
-const { writeFile } = require("fs/promises");
-const path = require("path");
+import nodeFetch from "node-fetch";
+import { writeFile } from "fs/promises";
+import path from "path";
 
-const {
+import {
   isBooleanProperty,
   isFamiliarProperty,
   isLocationProperty,
   isMonsterProperty,
   isNumericOrStringProperty,
   isNumericProperty,
-  isStatProperty,
   isPhylumProperty,
-} = require("../dist/propertyTyping");
+  isStatProperty,
+} from "../src/propertyTyping";
 
 const PROPS_FILE =
   "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";

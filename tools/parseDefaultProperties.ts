@@ -48,6 +48,8 @@ async function main() {
       propTypes.StatProperty.push(property);
     } else if (isFamiliarProperty(property)) {
       propTypes.FamiliarProperty.push(property);
+    } else if (isPhylumProperty(property)) {
+      propTypes.PhylumProperty.push(property);
     } else if (isNumericOrStringProperty(property)) {
       propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {
@@ -56,8 +58,6 @@ async function main() {
       propTypes.BooleanProperty.push(property);
     } else if (isNumericProperty(property, defaultValue)) {
       propTypes.NumericProperty.push(property);
-    } else if (isPhylumProperty(property)) {
-      propTypes.PhylumProperty.push(property);
     } else {
       propTypes.StringProperty.push(property);
     }

@@ -101,7 +101,8 @@ export class MenuItem {
       $item`distention pill`,
       {
         organ: "food",
-        maximum: get("_distentionPillUsed") ? 0 : 1,
+        maximum:
+          !have($item`distention pill`) || get("_distentionPillUsed") ? 0 : 1,
         size: -1,
       },
     ],
@@ -109,7 +110,11 @@ export class MenuItem {
       $item`synthetic dog hair pill`,
       {
         organ: "booze",
-        maximum: get("_syntheticDogHairPillUsed") ? 0 : 1,
+        maximum:
+          !have($item`synthetic dog hair pill`) ||
+          get("_syntheticDogHairPillUsed")
+            ? 0
+            : 1,
         size: -1,
       },
     ],

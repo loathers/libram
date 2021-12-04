@@ -148,6 +148,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
   return returnValue;
 }
 
+/**
+ * Merge two Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
+ * @param modifierss Modifiers objects to be merged together.
+ * @returns A single Modifiers object obtained by merging.
+ */
 export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
   return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
 }

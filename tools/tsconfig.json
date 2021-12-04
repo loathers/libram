@@ -1,0 +1,4 @@
+{
+  "include": ["./"],
+  "extends": "../node_modules/@tsconfig/node16/tsconfig.json"
+}

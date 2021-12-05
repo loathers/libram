@@ -13,10 +13,16 @@ import {
 import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
 
+/**
+ * Returns whether or not we have the Asdon installed in the workshed at present.
+ */
 export function installed(): boolean {
   return getWorkshed() === $item`Asdon Martin keyfob`;
 }
 
+/**
+ * Returns true if we have the Asdon or if it's installed.
+ */
 export function have(): boolean {
   return installed() || haveItem($item`Asdon Martin keyfob`);
 }

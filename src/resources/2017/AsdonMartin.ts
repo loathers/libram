@@ -2,9 +2,11 @@ import {
   cliExecute,
   getFuel,
   haveEffect,
+  historicalAge,
   historicalPrice,
   isNpcItem,
   mallPrice,
+  mallPrices,
   retrieveItem,
   toInt,
   visitUrl,
@@ -14,13 +16,24 @@ import { $effect, $items } from "../../template-string";
 
 const fuelSkiplist = $items`cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"`;
 
-function price(item: Item) {
-  return historicalPrice(item) === 0 ? mallPrice(item) : historicalPrice(item);
+function priceTooOld(item: Item) {
+  return historicalPrice(item) === 0 || historicalAge(item) >= 7;
 }
 
-function calculateFuelEfficiency(it: Item, targetUnits: number): number {
+function price(item: Item) {
+  return priceTooOld(item) ? mallPrice(item) : historicalPrice(item);
+}
+
+// Efficiency in meat per fuel.
+function calculateFuelEfficiency(
+  it: Item,
+  targetUnits: number,
+  usePrecisePrice = false
+): number {
   const units = getAverageAdventures(it);
-  return price(it) / Math.min(targetUnits, units);
+  return (
+    (usePrecisePrice ? price(it) : mallPrice(it)) / Math.min(targetUnits, units)
+  );
 }
 
 function isFuelItem(it: Item) {
@@ -37,12 +50,29 @@ function isFuelItem(it: Item) {
 const potentialFuel = $items``.filter(isFuelItem);
 
 function getBestFuel(targetUnits: number): Item {
+  if (potentialFuel.filter(priceTooOld).length > 100) {
+    mallPrices("food");
+    mallPrices("booze");
+  }
+
   const key1 = (item: Item) => -getAverageAdventures(item);
   const key2 = (item: Item) => calculateFuelEfficiency(item, targetUnits);
   potentialFuel.sort((x: Item, y: Item) => key1(x) - key1(y));
   potentialFuel.sort((x: Item, y: Item) => key2(x) - key2(y));
 
-  return potentialFuel[0];
+  // Get precise price for the top candidates.
+  const candidates = potentialFuel.slice(0, 10);
+  const key3 = (item: Item) => calculateFuelEfficiency(item, targetUnits, true);
+  candidates.sort((x: Item, y: Item) => key3(x) - key3(y));
+
+  if (calculateFuelEfficiency(candidates[0], targetUnits, true) > 100) {
+    throw new Error(
+      "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
+        "This means something went wrong."
+    );
+  }
+
+  return candidates[0];
 }
 
 function insertFuel(it: Item, quantity = 1): boolean {

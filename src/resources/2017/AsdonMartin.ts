@@ -1,6 +1,7 @@
 import {
   cliExecute,
   getFuel,
+  getWorkshed,
   haveEffect,
   historicalAge,
   historicalPrice,
@@ -11,8 +12,22 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { getAverageAdventures } from "../../lib";
-import { $effect, $items } from "../../template-string";
+import { getAverageAdventures, have as haveItem } from "../../lib";
+import { $effect, $item, $items } from "../../template-string";
+
+/**
+ * Returns whether or not we have the Asdon installed in the workshed at present.
+ */
+export function installed(): boolean {
+  return getWorkshed() === $item`Asdon Martin keyfob`;
+}
+
+/**
+ * Returns true if we have the Asdon or if it's installed.
+ */
+export function have(): boolean {
+  return installed() || haveItem($item`Asdon Martin keyfob`);
+}
 
 const fuelSkiplist = $items`cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"`;
 
@@ -90,6 +105,7 @@ function insertFuel(it: Item, quantity = 1): boolean {
  * @returns Whether we succeeded at filling to the target fuel level.
  */
 export function fillTo(targetUnits: number): boolean {
+  if (!installed()) return false;
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
@@ -128,7 +144,7 @@ export const Driving = {
  */
 export function drive(style: Effect, turns = 1): boolean {
   if (!Object.values(Driving).includes(style)) return false;
-
+  if (!installed()) return false;
   if (haveEffect(style) >= turns) return true;
 
   const fuelNeeded = 37 * Math.ceil((turns - haveEffect(style)) / 30);

@@ -367,7 +367,10 @@ export class Mood {
    * @param effect Driving style to add to the mood.
    */
   drive(effect: Effect): Mood {
-    if (Object.values(AsdonMartin.Driving).includes(effect)) {
+    if (
+      Object.values(AsdonMartin.Driving).includes(effect) &&
+      AsdonMartin.installed()
+    ) {
       this.elements.push(new AsdonMoodElement(effect));
     }
     return this;

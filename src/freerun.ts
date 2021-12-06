@@ -256,7 +256,7 @@ function cheapestItemRun() {
     "Cheap Combat Item",
     () => retrieveItem(cheapestRun),
     Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`).item(
-      cheapestRunSource()
+      cheapestRun
     ),
     {
       preparation: () => retrieveItem(cheapestRun),
@@ -264,13 +264,14 @@ function cheapestItemRun() {
   );
 }
 
-export function findFreeRun(
-  useFamiliar = true,
-  buyStuff = true
-): FreeRun | undefined {
+export function tryFindFreeRun(useFamiliar = true): FreeRun | null {
   return (
     freeRuns.find(
       (run) => run.available() && (useFamiliar || run?.options?.familiar)
-    ) ?? (buyStuff ? cheapestItemRun() : undefined)
+    ) ?? null
   );
+}
+
+export function ensureFreeRun(useFamiliar = true): FreeRun {
+  return tryFindFreeRun(useFamiliar) ?? cheapestItemRun();
 }

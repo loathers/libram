@@ -198,9 +198,26 @@ export const platinumCocktailToIngredient = invertMap(
   ingredientToPlatinumCocktail
 );
 
-export function getCheapestPlatinumCocktail(): Item {
-  return (maxBy(
-    Array.from(ingredientToPlatinumCocktail),
-    (ingredientAndCocktail: [Item, Item]) => mallPrice(ingredientAndCocktail[0])
-  ) ?? [$item`Dish of Clarified Butter`, $item`Buttery Boy`])[1];
+export function getCheapestPlatinumCocktail(freeCraft: boolean = true): Item {
+  const defaultCocktail = [$item`Dish of Clarified Butter`, $item`Buttery Boy`];
+  if (freeCraft) {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        mallPrice(ingredientAndCocktail[0])
+    ) ?? defaultCocktail)[1];
+  } else {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        mallPrice(ingredientAndCocktail[1])
+    ) ?? defaultCocktail)[1];
+  }
+}
+
+export function turnsLeftOnQuest(useShoes: boolean = false) {
+  const progressPerTurn = useShoes
+    ? Math.floor((10 - get("_guzzlrDeliveries")) * 1.5)
+    : 10 - get("_guzzlrDeliveries");
+  return Math.ceil((100 - get("guzzlrDeliveryProgress")) / progressPerTurn);
 }

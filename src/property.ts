@@ -218,6 +218,10 @@ export function withChoice(
 export class PropertiesManager {
   private properties: Properties = {};
 
+  get storedValues(): Properties {
+    return this.properties;
+  }
+
   /**
    * Sets a collection of properties to the given values, storing the old values.
    * @param propertiesToSet A Properties object, keyed by property name.

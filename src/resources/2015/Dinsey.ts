@@ -5,9 +5,9 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
-import { getRemainingLiver, have } from "../..";
-import { get, getString, getNumber } from "../../property";
-import { $location, $item } from "../../template-string";
+import { getRemainingLiver, have } from "../../lib";
+import { get, getNumber, getString } from "../../property";
+import { $item, $location } from "../../template-string";
 
 const kioskUrl = "place.php?whichplace=airport_stench&action=airport3_kiosk";
 const maintUrl = "place.php?whichplace=airport_stench&action=airport3_tunnels";
@@ -43,8 +43,8 @@ export const questPreferenceLocation = new Map<string, Location>([
 interface questRequirement {
   item: Item;
   quantity: number;
-  trackingPref: string;
-  completeValue: number;
+  trackingPref?: string;
+  completeValue?: number;
 }
 
 export const questRequirements = new Map<string, questRequirement>([
@@ -89,8 +89,6 @@ export const questRequirements = new Map<string, questRequirement>([
     {
       item: $item`lube-shoes`,
       quantity: 1,
-      trackingPref: "",
-      completeValue: 0,
     },
   ],
   [
@@ -98,8 +96,6 @@ export const questRequirements = new Map<string, questRequirement>([
     {
       item: $item`toxic globule`,
       quantity: 20,
-      trackingPref: "",
-      completeValue: 0,
     },
   ],
   [
@@ -173,9 +169,11 @@ export function startQuest(questPref: string) {
 export function finishQuest() {
   const currentQuest = acceptedQuest();
   if (currentQuest) {
-    const currentQuestRequirement = questRequirements.get(currentQuest)!;
+    const currentQuestRequirement = questRequirements.get(
+      currentQuest
+    ) as questRequirement;
     if (
-      currentQuestRequirement.trackingPref === "" ||
+      !currentQuestRequirement.trackingPref ||
       getNumber(currentQuestRequirement.trackingPref) ===
         currentQuestRequirement.completeValue
     ) {
@@ -191,10 +189,14 @@ export function coasterNextTurn() {
   return get("dinseyRollercoasterNext");
 }
 
-export function canFightDinsey() {
+export function foughtWartDinseyThisLife() {
+  return get("lastWartDinseyDefeated") === myAscensions();
+}
+
+export function canFightWartDinsey() {
   return (
     Array.from(keyCardsLocations.keys()).every((keycard) => have(keycard)) &&
-    get("lastWartDinseyDefeated") !== myAscensions() &&
+    !foughtWartDinseyThisLife() &&
     getRemainingLiver() >= 0 &&
     myAdventures() > 0
   );
@@ -207,8 +209,8 @@ export function disposeGarbage() {
   }
 }
 
-export function fightDinsey() {
-  if (canFightDinsey()) {
+export function fightWartDinsey() {
+  if (canFightWartDinsey()) {
     visitUrl(maintUrl);
     runChoice(5);
   }

@@ -16,6 +16,7 @@ import * as SpookyPutty from "./2009/SpookyPutty";
 import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as WinterGarden from "./2014/WinterGarden";
 import * as Witchess from "./2016/Witchess";
+import * as Dinsey from "./2015/Dinsey";
 
 export {
   AsdonMartin,
@@ -36,6 +37,7 @@ export {
   TunnelOfLove,
   WinterGarden,
   Witchess,
+  Dinsey,
 };
 
 export * from "./putty-likes";

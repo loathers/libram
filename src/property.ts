@@ -218,6 +218,10 @@ export function withChoice(
 export class PropertiesManager {
   properties: Properties = {};
 
+  /**
+   * Sets a collection of properties to the given values, storing the old values.
+   * @param propertiesToSet A Properties object, keyed by property name.
+   */
   set(propertiesToSet: Properties): void {
     for (const [propertyName, propertyValue] of Object.entries(
       propertiesToSet
@@ -229,6 +233,10 @@ export class PropertiesManager {
     }
   }
 
+  /**
+   * Sets a collection of choice adventure properties to the given values, storing the old values.
+   * @param choicesToSet An object keyed by choice adventure number.
+   */
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
     this.set(
       Object.fromEntries(
@@ -240,12 +248,21 @@ export class PropertiesManager {
     );
   }
 
+  /**
+   * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
+   */
   resetAll(): void {
     Object.entries(this.properties).forEach(([propertyName, propertyValue]) =>
       set(propertyName, propertyValue)
     );
   }
 
+  /**
+   * Increases a numeric property to the given value if necessary.
+   * @param property The numeric property we want to potentially raise.
+   * @param value The minimum value we want that property to have.
+   * @returns Whether we needed to change the property.
+   */
   minimumValue(property: NumericProperty, value: number): boolean {
     if (get(property) < value) {
       this.set({ [property]: value });
@@ -254,6 +271,12 @@ export class PropertiesManager {
     return false;
   }
 
+  /**
+   * Decrease a numeric property to the given value if necessary.
+   * @param property The numeric property we want to potentially lower.
+   * @param value The maximum value we want that property to have.
+   * @returns Whether we needed to change the property.
+   */
   maximumValue(property: NumericProperty, value: number): boolean {
     if (get(property) > value) {
       this.set({ [property]: value });

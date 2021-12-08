@@ -249,11 +249,19 @@ export class PropertiesManager {
     );
   }
 
-  minimumValue(property: NumericProperty, value: number): void {
-    if (get(property) < value) this.set({ [property]: value });
+  minimumValue(property: NumericProperty, value: number): boolean {
+    if (get(property) < value) {
+      this.set({ [property]: value });
+      return true;
+    }
+    return false;
   }
 
-  maximumValue(property: NumericProperty, value: number): void {
-    if (get(property) > value) this.set({ [property]: value });
+  maximumValue(property: NumericProperty, value: number): boolean {
+    if (get(property) > value) {
+      this.set({ [property]: value });
+      return true;
+    }
+    return false;
   }
 }

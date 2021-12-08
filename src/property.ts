@@ -295,7 +295,7 @@ export class PropertiesManager {
    * @param value The minimum value we want that property to have.
    * @returns Whether we needed to change the property.
    */
-  atLeast(property: NumericProperty, value: number): boolean {
+  setMinimumValue(property: NumericProperty, value: number): boolean {
     if (get(property) < value) {
       this.set({ [property]: value });
       return true;
@@ -309,7 +309,7 @@ export class PropertiesManager {
    * @param value The maximum value we want that property to have.
    * @returns Whether we needed to change the property.
    */
-  atMost(property: NumericProperty, value: number): boolean {
+  setMaximumValue(property: NumericProperty, value: number): boolean {
     if (get(property) > value) {
       this.set({ [property]: value });
       return true;

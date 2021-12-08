@@ -13,7 +13,7 @@ import {
   PropertyValue,
 } from "./propertyTyping";
 
-import { NumericOrStringProperty } from "./propertyTypes";
+import { NumericOrStringProperty, NumericProperty } from "./propertyTypes";
 
 const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T
@@ -247,5 +247,13 @@ export class PropertiesManager {
     Object.entries(this.properties).forEach(([propertyName, propertyValue]) =>
       set(propertyName, propertyValue)
     );
+  }
+
+  minimumValue(property: NumericProperty, value: number): void {
+    if (get(property) < value) this.set({ [property]: value });
+  }
+
+  maximumValue(property: NumericProperty, value: number): void {
+    if (get(property) > value) this.set({ [property]: value });
   }
 }

@@ -216,10 +216,7 @@ export function withChoice(
 }
 
 export class PropertiesManager {
-  properties: Properties;
-  constructor() {
-    this.properties = {};
-  }
+  properties: Properties = {};
 
   set(propertiesToSet: Properties): void {
     for (const [propertyName, propertyValue] of Object.entries(

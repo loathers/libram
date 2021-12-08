@@ -216,7 +216,7 @@ export function withChoice(
 }
 
 export class PropertiesManager {
-  properties: Properties = {};
+  private properties: Properties = {};
 
   /**
    * Sets a collection of properties to the given values, storing the old values.
@@ -249,6 +249,19 @@ export class PropertiesManager {
   }
 
   /**
+   * Resets the given properties to their original stored value. Does not delete entries from the manager.
+   * @param properties Collection of properties to reset.
+   */
+  reset(...properties: KnownProperty[]): void {
+    for (const property of properties) {
+      const value = this.properties[property];
+      if (value) {
+        set(property, value);
+      }
+    }
+  }
+
+  /**
    * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
    */
   resetAll(): void {
@@ -258,12 +271,31 @@ export class PropertiesManager {
   }
 
   /**
+   * Stops storing the original values of inputted properties.
+   * @param properties Properties for the manager to forget.
+   */
+  clear(...properties: KnownProperty[]): void {
+    for (const property of properties) {
+      if (this.properties[property]) {
+        delete this.properties[property];
+      }
+    }
+  }
+
+  /**
+   * Clears all properties.
+   */
+  clearAll(): void {
+    this.properties = {};
+  }
+
+  /**
    * Increases a numeric property to the given value if necessary.
    * @param property The numeric property we want to potentially raise.
    * @param value The minimum value we want that property to have.
    * @returns Whether we needed to change the property.
    */
-  minimumValue(property: NumericProperty, value: number): boolean {
+  atLeast(property: NumericProperty, value: number): boolean {
     if (get(property) < value) {
       this.set({ [property]: value });
       return true;
@@ -277,7 +309,7 @@ export class PropertiesManager {
    * @param value The maximum value we want that property to have.
    * @returns Whether we needed to change the property.
    */
-  maximumValue(property: NumericProperty, value: number): boolean {
+  atMost(property: NumericProperty, value: number): boolean {
     if (get(property) > value) {
       this.set({ [property]: value });
       return true;

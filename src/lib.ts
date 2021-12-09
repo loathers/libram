@@ -1,5 +1,6 @@
 /** @module GeneralLibrary */
 import "core-js/modules/es.object.entries";
+import "core-js/features/array/flat";
 
 import {
   appearanceRates,

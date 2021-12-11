@@ -202,16 +202,20 @@ export function canFightWartDinsey() {
   );
 }
 
-export function disposeGarbage() {
-  if (have($item`bag of park garbage`) && !get("_dinseyGarbageDisposed")) {
-    visitUrl(maintUrl);
-    runChoice(6);
-  }
-}
-
 export function fightWartDinsey() {
   if (canFightWartDinsey()) {
     visitUrl(maintUrl);
     runChoice(5);
+  }
+}
+
+export function hasDisposedGarbage() {
+  return get("_dinseyGarbageDisposed");
+}
+
+export function disposeGarbage() {
+  if (have($item`bag of park garbage`) && !hasDisposedGarbage()) {
+    visitUrl(maintUrl);
+    runChoice(6);
   }
 }

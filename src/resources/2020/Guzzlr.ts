@@ -198,9 +198,42 @@ export const platinumCocktailToIngredient = invertMap(
   ingredientToPlatinumCocktail
 );
 
-export function getCheapestPlatinumCocktail(): Item {
-  return (maxBy(
-    Array.from(ingredientToPlatinumCocktail),
-    (ingredientAndCocktail: [Item, Item]) => mallPrice(ingredientAndCocktail[0])
-  ) ?? [$item`Dish of Clarified Butter`, $item`Buttery Boy`])[1];
+export function getCheapestPlatinumCocktail(freeCraft = true): Item {
+  const defaultCocktail = [$item`Dish of Clarified Butter`, $item`Buttery Boy`];
+  if (freeCraft) {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        Math.min(...ingredientAndCocktail.map((item) => mallPrice(item)))
+    ) ?? defaultCocktail)[1];
+  } else {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        mallPrice(ingredientAndCocktail[1])
+    ) ?? defaultCocktail)[1];
+  }
+}
+
+export function turnsLeftOnQuest(useShoes = false) {
+  const progressPerTurn = useShoes
+    ? Math.floor((10 - get("_guzzlrDeliveries")) * 1.5)
+    : 10 - get("_guzzlrDeliveries");
+  return Math.ceil((100 - get("guzzlrDeliveryProgress")) / progressPerTurn);
+}
+
+export function expectedReward(usePants = false) {
+  switch (getTier()) {
+    case "platinum":
+      // 20-25
+      return 22.5 + (usePants ? 5 : 0);
+    case "gold":
+      // 5-7
+      return 6 + (usePants ? 3 : 0);
+    case "bronze":
+      // 2-4
+      return 3 + (usePants ? 3 : 0);
+    default:
+      return 0;
+  }
 }

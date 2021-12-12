@@ -13,7 +13,7 @@ import {
   PropertyValue,
 } from "./propertyTyping";
 
-import { NumericOrStringProperty } from "./propertyTypes";
+import { NumericOrStringProperty, NumericProperty } from "./propertyTypes";
 
 const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T
@@ -216,11 +216,16 @@ export function withChoice(
 }
 
 export class PropertiesManager {
-  properties: Properties;
-  constructor() {
-    this.properties = {};
+  private properties: Properties = {};
+
+  get storedValues(): Properties {
+    return this.properties;
   }
 
+  /**
+   * Sets a collection of properties to the given values, storing the old values.
+   * @param propertiesToSet A Properties object, keyed by property name.
+   */
   set(propertiesToSet: Properties): void {
     for (const [propertyName, propertyValue] of Object.entries(
       propertiesToSet
@@ -232,6 +237,10 @@ export class PropertiesManager {
     }
   }
 
+  /**
+   * Sets a collection of choice adventure properties to the given values, storing the old values.
+   * @param choicesToSet An object keyed by choice adventure number.
+   */
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
     this.set(
       Object.fromEntries(
@@ -243,9 +252,72 @@ export class PropertiesManager {
     );
   }
 
+  /**
+   * Resets the given properties to their original stored value. Does not delete entries from the manager.
+   * @param properties Collection of properties to reset.
+   */
+  reset(...properties: KnownProperty[]): void {
+    for (const property of properties) {
+      const value = this.properties[property];
+      if (value) {
+        set(property, value);
+      }
+    }
+  }
+
+  /**
+   * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
+   */
   resetAll(): void {
     Object.entries(this.properties).forEach(([propertyName, propertyValue]) =>
       set(propertyName, propertyValue)
     );
+  }
+
+  /**
+   * Stops storing the original values of inputted properties.
+   * @param properties Properties for the manager to forget.
+   */
+  clear(...properties: KnownProperty[]): void {
+    for (const property of properties) {
+      if (this.properties[property]) {
+        delete this.properties[property];
+      }
+    }
+  }
+
+  /**
+   * Clears all properties.
+   */
+  clearAll(): void {
+    this.properties = {};
+  }
+
+  /**
+   * Increases a numeric property to the given value if necessary.
+   * @param property The numeric property we want to potentially raise.
+   * @param value The minimum value we want that property to have.
+   * @returns Whether we needed to change the property.
+   */
+  setMinimumValue(property: NumericProperty, value: number): boolean {
+    if (get(property) < value) {
+      this.set({ [property]: value });
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Decrease a numeric property to the given value if necessary.
+   * @param property The numeric property we want to potentially lower.
+   * @param value The maximum value we want that property to have.
+   * @returns Whether we needed to change the property.
+   */
+  setMaximumValue(property: NumericProperty, value: number): boolean {
+    if (get(property) > value) {
+      this.set({ [property]: value });
+      return true;
+    }
+    return false;
   }
 }

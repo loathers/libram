@@ -43,7 +43,7 @@ const defaultMaximizeOptions = {
 
 /**
  *
- * @param options Default options for each maximizer run.
+ * @param options Default options for each maximizer run. These are overwritten by any passed maximizer options.
  * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
  * @param options.updateOnCanEquipChanged Re-run the maximizer if stats have changed what can be equipped. Default true.
  * @param options.forceEquip Equipment to force-equip ("equip X").
@@ -58,6 +58,10 @@ export function setDefaultMaximizeOptions(
 
 export const globalMaximizeSettings: Partial<MaximizeOptions> = {};
 
+/**
+ * Create global settings for the maximizeCached function, that will be merged into any maximizer settings passed.
+ * @param options Options applied to every maximizer run. These are merged with any existing maximizer options.
+ */
 export function setGlobalMaximizeSettings(
   options: Partial<MaximizeOptions>
 ): void {

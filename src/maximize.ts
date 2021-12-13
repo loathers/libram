@@ -56,6 +56,14 @@ export function setDefaultMaximizeOptions(
   Object.assign(defaultMaximizeOptions, options);
 }
 
+export const globalMaximizeSettings: Partial<MaximizeOptions> = {};
+
+export function setGlobalMaximizeSettings(
+  options: Partial<MaximizeOptions>
+): void {
+  Object.assign(globalMaximizeSettings, options);
+}
+
 // Subset of slots that are valid for caching.
 const cachedSlots = $slots`hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar`;
 
@@ -402,6 +410,16 @@ export function maximizeCached(
     onlySlot: Slot[];
     preventSlot: Slot[];
   } = fullOptions;
+
+  forceEquip.concat(...(globalMaximizeSettings.forceEquip ?? []));
+  preventEquip.concat(...(globalMaximizeSettings.preventEquip ?? []));
+  if (globalMaximizeSettings.bonusEquip) {
+    for (const [key, value] of globalMaximizeSettings.bonusEquip) {
+      bonusEquip.set(key, value);
+    }
+  }
+  onlySlot.concat(...(globalMaximizeSettings.onlySlot ?? []));
+  preventSlot.concat(...(globalMaximizeSettings.preventSlot ?? []));
 
   // Sort each group in objective to ensure consistent ordering in string
   const objective = [

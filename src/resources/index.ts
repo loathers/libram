@@ -6,6 +6,7 @@ import * as CrownOfThrones from "./2010/CrownOfThrones";
 import * as DNALab from "./2014/DNALab";
 import * as FloristFriar from "./2013/Florist";
 import * as Guzzlr from "./2020/Guzzlr";
+import * as Latte from "./2018/LatteLoversMembersMug";
 import * as MayoClinic from "./2015/MayoClinic";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as RainDoh from "./2012/RainDoh";
@@ -26,6 +27,7 @@ export {
   DNALab,
   FloristFriar,
   Guzzlr,
+  Latte,
   MayoClinic,
   ObtuseAngel,
   RainDoh,

@@ -129,7 +129,12 @@ export type Modifiers = Partial<
       | StringModifier]: ModifierValue<T>;
   }
 >;
-
+/**
+ * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
+ * @param modifiers1 Modifiers objects to be merged onto.
+ * @param modifiers2 Modifiers object to merge.
+ * @returns A single Modifiers object obtained by merging.
+ */
 function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
   const returnValue = { ...modifiers1, ...modifiers2 };
   for (const modifier in modifiers1) {
@@ -149,7 +154,7 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
 }
 
 /**
- * Merge two Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
+ * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
  * @param modifierss Modifiers objects to be merged together.
  * @returns A single Modifiers object obtained by merging.
  */

@@ -86,6 +86,7 @@ type MenuItemOptions = {
   maximum?: number | "auto";
   additionalValue?: number;
   wishEffect?: Effect;
+  priceOverride?: number;
 };
 
 export class MenuItem {
@@ -95,6 +96,7 @@ export class MenuItem {
   maximum?: number;
   additionalValue?: number;
   wishEffect?: Effect;
+  priceOverride?: number;
 
   static defaultOptions = new Map([
     [
@@ -161,7 +163,14 @@ export class MenuItem {
    * @param options.wishEffect If item is a pocket wish, effect to wish for.
    */
   constructor(item: Item, options: MenuItemOptions = {}) {
-    const { size, organ, maximum, additionalValue, wishEffect } = {
+    const {
+      size,
+      organ,
+      maximum,
+      additionalValue,
+      wishEffect,
+      priceOverride,
+    } = {
       ...options,
       ...(MenuItem.defaultOptions.get(item) ?? {}),
     };
@@ -169,6 +178,7 @@ export class MenuItem {
     this.maximum = maximum === "auto" ? item.dailyusesleft : maximum;
     this.additionalValue = additionalValue;
     this.wishEffect = wishEffect;
+    this.priceOverride = priceOverride;
 
     const typ = itemType(this.item);
     this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
@@ -188,11 +198,17 @@ export class MenuItem {
   }
 
   toString(): string {
+    if (this.wishEffect) {
+      return `${this.item}:${this.wishEffect}`;
+    }
     return this.item.toString();
   }
 
   price(): number {
-    return npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item);
+    return (
+      this.priceOverride ??
+      (npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item))
+    );
   }
 }
 

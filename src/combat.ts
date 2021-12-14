@@ -22,15 +22,15 @@ const MACRO_NAME = "Script Autoattack Macro";
  * @category Combat
  * @returns {number} The macro ID.
  */
-export function getMacroId(): number {
+export function getMacroId(name = MACRO_NAME): number {
   const macroMatches = xpath(
     visitUrl("account_combatmacros.php"),
-    `//select[@name="macroid"]/option[text()="${MACRO_NAME}"]/@value`
+    `//select[@name="macroid"]/option[text()="${name}"]/@value`
   );
   if (macroMatches.length === 0) {
     visitUrl("account_combatmacros.php?action=new");
     const newMacroText = visitUrl(
-      `account_combatmacros.php?macroid=0&name=${MACRO_NAME}&macrotext=abort&action=save`
+      `account_combatmacros.php?macroid=0&name=${name}&macrotext=abort&action=save`
     );
     return parseInt(
       xpath(newMacroText, "//input[@name=macroid]/@value")[0],
@@ -103,16 +103,28 @@ export class InvalidMacroError extends Error {}
 export class Macro {
   static SAVED_MACRO_PROPERTY = "libram_savedMacro";
 
-  static cachedMacroId: number | null = null;
-  static cachedAutoAttack: string | null = null;
+  static cachedMacroIds = new Map<string, number>();
+  static cachedAutoAttacks = new Map<string, string>();
 
   components: string[] = [];
+  name: string = MACRO_NAME;
 
   /**
    * Convert macro to string.
    */
   toString(): string {
     return this.components.join(";");
+  }
+
+  /**
+   * Gives your macro a new name to be used when saving an autoattack.
+   * @param name The name to be used when saving as an autoattack.
+   * @returns The previous name assigned to this macro.
+   */
+  rename(name: string): string {
+    const returnValue = this.name;
+    this.name = name;
+    return returnValue;
   }
 
   /**
@@ -182,28 +194,51 @@ export class Macro {
    * Set this macro as a KoL native autoattack.
    */
   setAutoAttack(): void {
-    if (Macro.cachedMacroId === null) Macro.cachedMacroId = getMacroId();
+    let id = Macro.cachedMacroIds.get(this.name);
+    if (id === undefined)
+      Macro.cachedMacroIds.set(this.name, getMacroId(this.name));
+    id = getMacroId(this.name);
     if (
-      getAutoAttack() === 99000000 + Macro.cachedMacroId &&
-      this.toString() === Macro.cachedAutoAttack
+      getAutoAttack() === 99000000 + id &&
+      this.toString() === Macro.cachedAutoAttacks.get(this.name)
     ) {
       // This macro is already set. Don"t make the server request.
       return;
     }
 
     visitUrl(
-      `account_combatmacros.php?macroid=${Macro.cachedMacroId}&name=${urlEncode(
-        MACRO_NAME
+      `account_combatmacros.php?macroid=${id}&name=${urlEncode(
+        this.name
       )}&macrotext=${urlEncode(this.toString())}&action=save`,
       true,
       true
     );
     visitUrl(
-      `account.php?am=1&action=autoattack&value=${
-        99000000 + Macro.cachedMacroId
-      }&ajax=1`
+      `account.php?am=1&action=autoattack&value=${99000000 + id}&ajax=1`
     );
-    Macro.cachedAutoAttack = this.toString();
+    Macro.cachedAutoAttacks.set(this.name, this.toString());
+  }
+
+  /**
+   * Renames the macro, then sets it as an autoattack.
+   * @param name The name to save the macro under as an autoattack.
+   */
+  setAutoAttackAs(name: string): void {
+    this.name = name;
+    this.setAutoAttack();
+  }
+
+  /**
+   * Clear all cached autoattacks, and delete all stored macros server-side.
+   */
+  static clearAutoAttackMacros(): void {
+    for (const name of Macro.cachedAutoAttacks.keys()) {
+      const id = Macro.cachedMacroIds.get(name) ?? getMacroId(name);
+      visitUrl(
+        `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`
+      );
+      Macro.cachedAutoAttacks.delete(name);
+    }
   }
 
   /**

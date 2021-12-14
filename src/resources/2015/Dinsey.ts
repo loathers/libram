@@ -40,18 +40,18 @@ export const questPreferenceLocation = new Map<string, Location>([
   ["questEStWorkWithFood", $location`Barf Mountain`],
 ]);
 
-interface questRequirement {
-  item: Item;
+interface QuestRequirement {
+  item: Item | null;
   quantity: number;
   trackingPref?: string;
   completeValue?: number;
 }
 
-export const questRequirements = new Map<string, questRequirement>([
+export const questRequirements = new Map<string, QuestRequirement>([
   [
     "questEStSocialJusticeII",
     {
-      item: $item`none`,
+      item: null,
       quantity: 0,
       trackingPref: "dinseySocialJusticeIIProgress",
       completeValue: 15,
@@ -60,7 +60,7 @@ export const questRequirements = new Map<string, questRequirement>([
   [
     "questEStSocialJusticeI",
     {
-      item: $item`none`,
+      item: null,
       quantity: 0,
       trackingPref: "dinseySocialJusticeIProgress",
       completeValue: 15,
@@ -101,7 +101,7 @@ export const questRequirements = new Map<string, questRequirement>([
   [
     "questEStNastyBears",
     {
-      item: $item`none`,
+      item: null,
       quantity: 0,
       trackingPref: "dinseyNastyBearsDefeated",
       completeValue: 8,
@@ -171,7 +171,7 @@ export function finishQuest() {
   if (currentQuest) {
     const currentQuestRequirement = questRequirements.get(
       currentQuest
-    ) as questRequirement;
+    ) as QuestRequirement;
     if (
       !currentQuestRequirement.trackingPref ||
       getNumber(currentQuestRequirement.trackingPref) ===

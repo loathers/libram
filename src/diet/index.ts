@@ -1,7 +1,6 @@
 import {
   canEquip,
   fullnessLimit,
-  getWorkshed,
   inebrietyLimit,
   itemType,
   mallPrice,
@@ -21,6 +20,7 @@ import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
 import { sum } from "../utils";
+import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 
 type ConsumptionModifiers = {
   forkMug: boolean;
@@ -87,6 +87,7 @@ type MenuItemOptions = {
   additionalValue?: number;
   wishEffect?: Effect;
   priceOverride?: number;
+  mayo?: Item;
 };
 
 export class MenuItem {
@@ -97,6 +98,7 @@ export class MenuItem {
   additionalValue?: number;
   wishEffect?: Effect;
   priceOverride?: number;
+  mayo?: Item;
 
   static defaultOptions = new Map([
     [
@@ -170,6 +172,7 @@ export class MenuItem {
       additionalValue,
       wishEffect,
       priceOverride,
+      mayo,
     } = {
       ...options,
       ...(MenuItem.defaultOptions.get(item) ?? {}),
@@ -179,6 +182,7 @@ export class MenuItem {
     this.additionalValue = additionalValue;
     this.wishEffect = wishEffect;
     this.priceOverride = priceOverride;
+    this.mayo = mayo;
 
     const typ = itemType(this.item);
     this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
@@ -223,10 +227,10 @@ function isOrgan(x: string): x is Organ {
 class DietPlanner {
   mpa: number;
   menu: MenuItem[];
+  mayoLookup: Map<Item, MenuItem>;
   fork?: MenuItem;
   mug?: MenuItem;
   seasoning?: MenuItem;
-  mayoflex?: MenuItem;
   spleenValue = 0;
 
   constructor(mpa: number, menu: MenuItem[]) {
@@ -238,10 +242,14 @@ class DietPlanner {
     this.seasoning = menu.find(
       (item) => item.item === $item`Special Seasoning`
     );
-    this.mayoflex =
-      getWorkshed() === $item`portable Mayo Clinic`
-        ? menu.find((item) => item.item === $item`Mayoflex`)
-        : undefined;
+    this.mayoLookup = new Map<Item, MenuItem>();
+    if (mayoInstalled()) {
+      [Mayo.flex, Mayo.zapine].forEach((mayo) => {
+        const menuItem = menu.find((item) => item.item === mayo);
+        if (menuItem) this.mayoLookup.set(mayo, menuItem);
+      });
+    }
+
     this.menu = menu.filter((item) => item.organ);
 
     if (menu.length > 100) {
@@ -292,18 +300,19 @@ class DietPlanner {
     ) {
       helpers.push(this.seasoning);
     }
-    if (
-      this.mayoflex &&
-      itemType(menuItem.item) === "food" &&
-      this.mpa > npcPrice($item`Mayoflex`)
-    ) {
-      helpers.push(this.mayoflex);
+    if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
+      const mayo = menuItem.mayo
+        ? this.mayoLookup.get(menuItem.mayo)
+        : this.mayoLookup.get(Mayo.flex);
+      if (mayo) helpers.push(mayo);
     }
 
     const defaultModifiers = {
       forkMug: false,
       seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
-      mayoflex: this.mayoflex ? helpers.includes(this.mayoflex) : false,
+      mayoflex: this.mayoLookup.size
+        ? helpers.some((item) => item.item === Mayo.flex)
+        : false,
       refinedPalate: have($effect`Refined Palate`),
       garish: have($effect`Gar-ish`),
       saucemaven: have($skill`Saucemaven`),
@@ -623,4 +632,53 @@ export function planDiet(
   } else {
     return planFoodBooze;
   }
+}
+
+export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
+  const refinedPalate = diet.some((itemCount) =>
+    itemCount[0].some(
+      (trialItem) =>
+        (trialItem.item === $item`pocket wish` &&
+          trialItem.wishEffect === $effect`Gar-ish`) ||
+        trialItem.item === $item`potion of the field gar`
+    )
+  );
+  const garish = diet.some((itemCount) =>
+    itemCount[0].some(
+      (trialItem) =>
+        (trialItem.item === $item`pocket wish` &&
+          trialItem.wishEffect === $effect`Gar-ish`) ||
+        trialItem.item === $item`potion of the field gar`
+    )
+  );
+
+  return diet.reduce((sum, itemCount) => {
+    const [menuItems, count] = itemCount;
+    if (menuItems.length === 0 || count === 0) {
+      return sum;
+    } else {
+      const items = menuItems.map((m) => m.item);
+
+      return (
+        sum +
+        count *
+          expectedAdventures(menuItems[menuItems.length - 1].item, {
+            forkMug:
+              items.includes($item`Frosty's frosty mug`) ||
+              items.includes($item`Frosty's frosty mug`),
+
+            seasoning: items.includes($item`Special Seasoning`),
+            mayoflex: items.includes(Mayo.flex),
+            refinedPalate: refinedPalate,
+            garish: garish,
+            saucemaven: have($skill`Saucemaven`),
+            pinkyRing:
+              have($item`mafia pinky ring`) &&
+              canEquip($item`mafia pinky ring`),
+            tuxedoShirt:
+              have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
+          })
+      );
+    }
+  }, 0);
 }

@@ -1,7 +1,7 @@
 import { myTurncount, toLocation, toMonster } from "kolmafia";
 import { get } from "../../property";
 
-const parsedProp = () =>
+export const parsedProp = () =>
   get("crystalBallPredictions")
     .split("|")
     .map((element) => element.split(":") as [string, string, string])

@@ -14,11 +14,11 @@ const parsedProp = () =>
         ]
     );
 
-export function currentPredictions(): Map<Location, Monster> {
+export function currentPredictions(withFree = true): Map<Location, Monster> {
   const predictions = parsedProp();
   return new Map(
     predictions
-      .filter(([turncount]) => 1 + turncount >= myTurncount())
+      .filter(([turncount]) => (withFree ? 1 : 0) + turncount >= myTurncount())
       .map(([, location, monster]) => [location, monster])
   );
 }

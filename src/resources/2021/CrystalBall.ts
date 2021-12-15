@@ -18,7 +18,7 @@ export function currentPredictions(): Map<Location, Monster> {
   const predictions = parsedProp();
   return new Map(
     predictions
-      .filter(([turncount]) => turncount === myTurncount())
+      .filter(([turncount]) => 1 + turncount >= myTurncount())
       .map(([, location, monster]) => [location, monster])
   );
 }

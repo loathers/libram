@@ -16,9 +16,17 @@ const parsedProp = () =>
 
 export function currentPredictions(withFree = true): Map<Location, Monster> {
   const predictions = parsedProp();
+  const freeCondition = (predictedTurns: number, turns: number) =>
+    predictedTurns === turns;
+  const nonFreeCondition = (predictedTurns: number, turns: number) =>
+    predictedTurns + 1 === turns;
   return new Map(
     predictions
-      .filter(([turncount]) => (withFree ? 1 : 0) + turncount >= myTurncount())
+      .filter(
+        ([turncount]) =>
+          nonFreeCondition(turncount, myTurncount()) ||
+          (withFree && freeCondition(turncount, myTurncount()))
+      )
       .map(([, location, monster]) => [location, monster])
   );
 }

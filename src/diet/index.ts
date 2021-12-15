@@ -639,8 +639,8 @@ export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
     itemCount[0].some(
       (trialItem) =>
         (trialItem.item === $item`pocket wish` &&
-          trialItem.wishEffect === $effect`Gar-ish`) ||
-        trialItem.item === $item`potion of the field gar`
+          trialItem.wishEffect === $effect`refined palate`) ||
+        trialItem.item === $item`toasted brie`
     )
   );
   const garish = diet.some((itemCount) =>
@@ -651,6 +651,11 @@ export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
         trialItem.item === $item`potion of the field gar`
     )
   );
+  const saucemaven = have($skill`Saucemaven`);
+  const pinkyRing =
+    have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`);
+  const tuxedoShirt =
+    have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`);
 
   return diet.reduce((sum, itemCount) => {
     const [menuItems, count] = itemCount;
@@ -658,25 +663,24 @@ export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
       return sum;
     } else {
       const items = menuItems.map((m) => m.item);
+      const targetItem = menuItems[menuItems.length - 1].item;
 
       return (
         sum +
         count *
           expectedAdventures(menuItems[menuItems.length - 1].item, {
             forkMug:
-              items.includes($item`Frosty's frosty mug`) ||
-              items.includes($item`Frosty's frosty mug`),
-
+              (itemType(targetItem) === "booze" &&
+                items.includes($item`Frosty's frosty mug`)) ||
+              (itemType(targetItem) === "food" &&
+                items.includes($item`Ol' Scratch's salad fork`)),
             seasoning: items.includes($item`Special Seasoning`),
             mayoflex: items.includes(Mayo.flex),
-            refinedPalate: refinedPalate,
-            garish: garish,
-            saucemaven: have($skill`Saucemaven`),
-            pinkyRing:
-              have($item`mafia pinky ring`) &&
-              canEquip($item`mafia pinky ring`),
-            tuxedoShirt:
-              have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
+            refinedPalate,
+            garish,
+            saucemaven,
+            pinkyRing,
+            tuxedoShirt,
           })
       );
     }

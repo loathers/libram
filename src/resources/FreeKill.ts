@@ -157,12 +157,10 @@ export function ensureFreeKill(
   options?: FindActionSourceOptions
 ): ActionSource {
   // Try to respect the options first, then fallback to no options
-  const source =
-    findActionSource(freeKillSources, options) ??
-    findActionSource(freeKillSources);
+  const source = tryFindFreeKill(options) ?? tryFindFreeKill();
 
   if (!source) {
-    throw new Error("Failed to ensure Free Run source");
+    throw new Error("Failed to ensure Free Kill source");
   }
 
   return source;

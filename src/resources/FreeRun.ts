@@ -169,7 +169,7 @@ const freeRunSources: ActionSource[] = [
   ),
 
   new ActionSource(
-    $item`stinky cheese diaper`,
+    $item`stinky cheese eye`,
     () =>
       getFoldGroup($item`stinky cheese diaper`).some((item) => have(item)) &&
       !get("_stinkyCheeseBanisherUsed")

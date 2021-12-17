@@ -91,7 +91,10 @@ export class ActionSource {
       () =>
         actions
           .map((action) => action.potential())
-          .reduce((previous, current) => previous + current),
+          .reduce((previous, current) => {
+            if (previous < 0 || current < 0) return -1;
+            return previous + current;
+          }),
       Macro.step(...actions.map((action) => action.macro)),
       mergeOptions(...actions.map((action) => action.options ?? {}))
     );
@@ -133,6 +136,6 @@ export function actionSourcesAvailable(
 ): number {
   return actions
     .filter((action) => filterAction(action, options))
-    .map((action) => action.potential())
+    .map((action) => Math.abs(action.potential()))
     .reduce((previous, current) => previous + current);
 }

@@ -6,7 +6,6 @@ import {
   retrieveItem,
   visitUrl,
 } from "kolmafia";
-import { AsdonMartin } from "..";
 
 import { Macro } from "../combat";
 import {
@@ -18,13 +17,14 @@ import {
 } from "../lib";
 import { Requirement } from "../maximize";
 import { get } from "../property";
-import { Bandersnatch } from "../resources";
 import { $effect, $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceOptions,
 } from "./action";
+import * as Bandersnatch from "./2009/Bandersnatch";
+import * as AsdonMartin from "./2017/AsdonMartin";
 
 export type AdventureOptions = {
   equipmentRequirements?: () => Requirement;

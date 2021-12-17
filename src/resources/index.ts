@@ -42,5 +42,8 @@ export {
   Witchess,
 };
 
+export * from "./FreeRun";
+export * from "./FreeKill";
+
 export * from "./putty-likes";
 export * from "./LibramSummon";

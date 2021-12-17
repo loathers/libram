@@ -85,9 +85,10 @@ type MenuItemOptions = {
   size?: number;
   maximum?: number | "auto";
   additionalValue?: number;
-  wishEffect?: Effect;
+  effect?: Effect;
   priceOverride?: number;
   mayo?: Item;
+  note?: string;
 };
 
 export class MenuItem {
@@ -96,9 +97,10 @@ export class MenuItem {
   size: number;
   maximum?: number;
   additionalValue?: number;
-  wishEffect?: Effect;
+  effect?: Effect;
   priceOverride?: number;
   mayo?: Item;
+  note?: string;
 
   static defaultOptions = new Map([
     [
@@ -162,7 +164,9 @@ export class MenuItem {
    * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
    * @param options.maximum Maximum uses remaining today, or "auto" to check dailyusesleft Mafia property.
    * @param options.additionalValue Additional value (positive) or cost (negative) to consider with item, e.g. from buffs.
-   * @param options.wishEffect If item is a pocket wish, effect to wish for.
+   * @param options.effect Effect associated with this menu item (pocket wish effect, sweet synthesis effect, pill keeper potion extension)
+   * @param options.mayo Which mayo to use before item (ignored if mayo clinic is not installed or item is not a food)
+   * @param options.note Any note to track information about item, to be used later
    */
   constructor(item: Item, options: MenuItemOptions = {}) {
     const {
@@ -170,9 +174,10 @@ export class MenuItem {
       organ,
       maximum,
       additionalValue,
-      wishEffect,
+      effect,
       priceOverride,
       mayo,
+      note,
     } = {
       ...options,
       ...(MenuItem.defaultOptions.get(item) ?? {}),
@@ -180,9 +185,10 @@ export class MenuItem {
     this.item = item;
     this.maximum = maximum === "auto" ? item.dailyusesleft : maximum;
     this.additionalValue = additionalValue;
-    this.wishEffect = wishEffect;
+    this.effect = effect;
     this.priceOverride = priceOverride;
     this.mayo = mayo;
+    this.note = note;
 
     const typ = itemType(this.item);
     this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
@@ -198,12 +204,12 @@ export class MenuItem {
   }
 
   equals(other: MenuItem): boolean {
-    return this.item === other.item && this.wishEffect === other.wishEffect;
+    return this.item === other.item && this.effect === other.effect;
   }
 
   toString(): string {
-    if (this.wishEffect) {
-      return `${this.item}:${this.wishEffect}`;
+    if (this.effect) {
+      return `${this.item}:${this.effect}`;
     }
     return this.item.toString();
   }
@@ -440,12 +446,12 @@ class DietPlanner {
 
     const isRefinedPalate =
       (trialItem.item === $item`pocket wish` &&
-        trialItem.wishEffect === $effect`Refined Palate`) ||
+        trialItem.effect === $effect`Refined Palate`) ||
       trialItem.item === $item`toasted brie`;
 
     const isGarish =
       (trialItem.item === $item`pocket wish` &&
-        trialItem.wishEffect === $effect`Gar-ish`) ||
+        trialItem.effect === $effect`Gar-ish`) ||
       trialItem.item === $item`potion of the field gar`;
 
     const [valueWithout, planWithout] = this.planOrgansWithTrials(
@@ -571,7 +577,7 @@ export function planDiet(
         ([itemOrEffect]) =>
           menuItem.item === itemOrEffect ||
           (menuItem.item === $item`pocket wish` &&
-            menuItem.wishEffect === itemOrEffect)
+            menuItem.effect === itemOrEffect)
       );
       if (interacting) {
         const [, organSizes] = interacting;
@@ -634,20 +640,27 @@ export function planDiet(
   }
 }
 
-export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
+/**
+ * Parse the passed in diet to calculate the expected number of adventures
+ * @param diet The diet to consider
+ * @returns expected number of adventures from consuming the diet (can be fractional)
+ */
+export function dietExpectedAdventures(diet: [MenuItem[], number][]): number {
+  // if any item in the diet provides refined palate, assume it is present for the entire diet
   const refinedPalate = diet.some((itemCount) =>
     itemCount[0].some(
       (trialItem) =>
         (trialItem.item === $item`pocket wish` &&
-          trialItem.wishEffect === $effect`refined palate`) ||
+          trialItem.effect === $effect`Refined Palate`) ||
         trialItem.item === $item`toasted brie`
     )
   );
+  // if any item in the diet provides garish, assume it is present for the entire diet
   const garish = diet.some((itemCount) =>
     itemCount[0].some(
       (trialItem) =>
         (trialItem.item === $item`pocket wish` &&
-          trialItem.wishEffect === $effect`Gar-ish`) ||
+          trialItem.effect === $effect`Gar-ish`) ||
         trialItem.item === $item`potion of the field gar`
     )
   );
@@ -685,4 +698,34 @@ export function dietEstimatedTurns(diet: [MenuItem[], number][]) {
       );
     }
   }, 0);
+}
+
+/**
+ * Using the provided additional value for each menu item, compute the expected value of the diet
+ * @param mpa The expected value of each adventure
+ * @param diet The diet to consider
+ * @param method Whether the value expected value should be gross (do not include the cost) or net (include the cost)
+ * @returns the expected value of the diet
+ */
+export function dietExpectedValue(
+  mpa: number,
+  diet: [MenuItem[], number][],
+  method: "gross" | "net" = "gross"
+) {
+  const adventures = dietExpectedAdventures(diet);
+  return (
+    adventures * mpa +
+    diet.reduce((dietTotal, itemCount) => {
+      const [menuItems, count] = itemCount;
+      const values = menuItems.map((menuItem) =>
+        method === "gross"
+          ? menuItem.additionalValue ?? 0
+          : (menuItem.additionalValue ?? 0) - menuItem.price()
+      );
+      return (
+        dietTotal +
+        count * values.reduce((totalValue, value) => totalValue + value)
+      );
+    }, 0)
+  );
 }

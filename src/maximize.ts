@@ -55,7 +55,11 @@ function mergeMaximizeOptions(
     preventEquip: [
       ...defaultOptions.preventEquip,
       ...(addendums.preventEquip ?? []),
-    ],
+    ].filter(
+      (item) =>
+        !defaultOptions.forceEquip.includes(item) &&
+        !addendums.forceEquip?.includes(item)
+    ),
 
     bonusEquip: new Map<Item, number>([
       ...defaultOptions.bonusEquip,

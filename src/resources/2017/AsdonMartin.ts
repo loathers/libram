@@ -15,6 +15,12 @@ import {
 import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
 
+enum PriceAge {
+  HISTORICAL, // If Mafia has a historical price stored, use it.
+  RECENT, // Use historical price if less than a week old.
+  TODAY, // Only use a price from this session.
+}
+
 /**
  * Returns whether or not we have the Asdon installed in the workshed at present.
  */
@@ -35,20 +41,27 @@ function priceTooOld(item: Item) {
   return historicalPrice(item) === 0 || historicalAge(item) >= 7;
 }
 
-function price(item: Item) {
-  return priceTooOld(item) ? mallPrice(item) : historicalPrice(item);
+function price(item: Item, priceAge: PriceAge) {
+  switch (priceAge) {
+    case PriceAge.HISTORICAL: {
+      const historical = historicalPrice(item);
+      return historical === 0 ? mallPrice(item) : historical;
+    }
+    case PriceAge.RECENT:
+      return priceTooOld(item) ? mallPrice(item) : historicalPrice(item);
+    case PriceAge.TODAY:
+      return mallPrice(item);
+  }
 }
 
 // Efficiency in meat per fuel.
-function calculateFuelEfficiency(
+function calculateFuelUnitCost(
   it: Item,
   targetUnits: number,
-  usePrecisePrice = false
+  priceAge = PriceAge.RECENT
 ): number {
   const units = getAverageAdventures(it);
-  return (
-    (usePrecisePrice ? price(it) : mallPrice(it)) / Math.min(targetUnits, units)
-  );
+  return price(it, priceAge) / Math.min(targetUnits, units);
 }
 
 function isFuelItem(it: Item) {
@@ -62,25 +75,44 @@ function isFuelItem(it: Item) {
   );
 }
 
-const potentialFuel = $items``.filter(isFuelItem);
-
 function getBestFuel(targetUnits: number): Item {
-  if (potentialFuel.filter(priceTooOld).length > 100) {
+  // Three stages.
+  // 1. Filter to reasonable items using historical cost (within 5x of historical best).
+  const allFuel = $items``.filter(isFuelItem);
+  if (allFuel.filter((item) => historicalPrice(item) === 0).length > 100) {
+    mallPrices("food");
+    mallPrices("booze");
+  }
+
+  const keyHistorical = (item: Item) =>
+    calculateFuelUnitCost(item, targetUnits, PriceAge.HISTORICAL);
+  allFuel.sort((x, y) => keyHistorical(x) - keyHistorical(y));
+  const bestUnitCost = keyHistorical(allFuel[0]);
+  const firstBadIndex = allFuel.findIndex(
+    (item) => keyHistorical(item) > 5 * bestUnitCost
+  );
+  const potentialFuel =
+    firstBadIndex > 0 ? allFuel.slice(0, firstBadIndex) : allFuel;
+
+  // 2. Filter to top 10 candidates using prices at most a week old.
+  if (potentialFuel.filter((item) => priceTooOld(item)).length > 100) {
     mallPrices("food");
     mallPrices("booze");
   }
 
   const key1 = (item: Item) => -getAverageAdventures(item);
-  const key2 = (item: Item) => calculateFuelEfficiency(item, targetUnits);
+  const key2 = (item: Item) =>
+    calculateFuelUnitCost(item, targetUnits, PriceAge.RECENT);
   potentialFuel.sort((x: Item, y: Item) => key1(x) - key1(y));
   potentialFuel.sort((x: Item, y: Item) => key2(x) - key2(y));
 
-  // Get precise price for the top candidates.
+  // 3. Find result using precise price for those top candidates.
   const candidates = potentialFuel.slice(0, 10);
-  const key3 = (item: Item) => calculateFuelEfficiency(item, targetUnits, true);
+  const key3 = (item: Item) =>
+    calculateFuelUnitCost(item, targetUnits, PriceAge.TODAY);
   candidates.sort((x: Item, y: Item) => key3(x) - key3(y));
 
-  if (calculateFuelEfficiency(candidates[0], targetUnits, true) > 100) {
+  if (calculateFuelUnitCost(candidates[0], targetUnits, PriceAge.TODAY) > 100) {
     throw new Error(
       "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
         "This means something went wrong."

@@ -19,11 +19,11 @@ import { have } from "../lib";
 import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { sum } from "../utils";
+import { sum, sumNumbers } from "../utils";
 import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 
-export type DietItem<T> = [MenuItem<T>[], number];
-export type Diet<T> = DietItem<T>[];
+type RawDietEntry<T> = [MenuItem<T>[], number];
+type RawDiet<T> = RawDietEntry<T>[];
 
 type ConsumptionModifiers = {
   forkMug: boolean;
@@ -302,7 +302,7 @@ class DietPlanner<T> {
   consumptionHelpersAndValue(
     menuItem: MenuItem<T>,
     overrideModifiers: Partial<ConsumptionModifiers>
-  ): DietItem<T> {
+  ): RawDietEntry<T> {
     const helpers = [];
     if (
       this.seasoning &&
@@ -377,7 +377,7 @@ class DietPlanner<T> {
     organ: Organ,
     capacity: number,
     overrideModifiers: Partial<ConsumptionModifiers> = {}
-  ): [number, Diet<T>] {
+  ): [number, RawDiet<T>] {
     const submenu = this.menu.filter(
       (menuItem) =>
         menuItem.organ === organ && myLevel() >= menuItem.item.levelreq
@@ -402,13 +402,13 @@ class DietPlanner<T> {
   planOrgans(
     organCapacities: OrganSize[],
     overrideModifiers: Partial<ConsumptionModifiers> = {}
-  ): [number, Diet<T>] {
+  ): [number, RawDiet<T>] {
     const valuePlans = organCapacities.map(([organ, capacity]) =>
       this.planOrgan(organ, capacity, overrideModifiers)
     );
     return [
       sum(valuePlans, ([value]) => value),
-      ([] as Diet<T>).concat(...valuePlans.map(([, plan]) => plan)),
+      ([] as RawDiet<T>).concat(...valuePlans.map(([, plan]) => plan)),
     ];
   }
 
@@ -424,7 +424,7 @@ class DietPlanner<T> {
     organCapacities: OrganSize[],
     trialItems: [MenuItem<T>, OrganSize[]][],
     overrideModifiers: Partial<ConsumptionModifiers>
-  ): [number, Diet<T>] {
+  ): [number, RawDiet<T>] {
     if (trialItems.length === 0) {
       return this.planOrgans(organCapacities, overrideModifiers);
     }
@@ -544,7 +544,7 @@ const interactingItems: [Item | Effect, OrganSize[]][] = [
  * @param organCapacities Optional override of each organ's capacity.
  * @returns Array of [menu item and helpers, count].
  */
-export function planDiet<T>(
+function planDiet<T>(
   mpa: number,
   menu: MenuItem<T>[],
   organCapacities: [Organ, number | null][] = [
@@ -552,7 +552,7 @@ export function planDiet<T>(
     ["booze", null],
     ["spleen item", null],
   ]
-): Diet<T> {
+): RawDiet<T> {
   // FIXME: Figure out a better way to handle overfull organs (e.g. coming out of Ed).
   const resolvedOrganCapacities = organCapacities.map(
     ([organ, size]) =>
@@ -643,92 +643,143 @@ export function planDiet<T>(
   }
 }
 
-/**
- * Parse the passed in diet to calculate the expected number of adventures
- * @param diet The diet to consider
- * @returns expected number of adventures from consuming the diet (can be fractional)
- */
-export function dietExpectedAdventures<T>(diet: Diet<T>): number {
-  // if any item in the diet provides refined palate, assume it is present for the entire diet
-  const refinedPalate = diet.some((itemCount) =>
-    itemCount[0].some(
-      (trialItem) =>
-        (trialItem.item === $item`pocket wish` &&
-          trialItem.effect === $effect`Refined Palate`) ||
-        trialItem.item === $item`toasted brie`
-    )
-  );
-  // if any item in the diet provides garish, assume it is present for the entire diet
-  const garish = diet.some((itemCount) =>
-    itemCount[0].some(
-      (trialItem) =>
-        (trialItem.item === $item`pocket wish` &&
-          trialItem.effect === $effect`Gar-ish`) ||
-        trialItem.item === $item`potion of the field gar`
-    )
-  );
-  const saucemaven = have($skill`Saucemaven`);
-  const pinkyRing =
-    have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`);
-  const tuxedoShirt =
-    have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`);
-
-  return diet.reduce((sum, itemCount) => {
-    const [menuItems, count] = itemCount;
-    if (menuItems.length === 0 || count === 0) {
-      return sum;
-    } else {
-      const items = menuItems.map((m) => m.item);
-      const targetItem = menuItems[menuItems.length - 1].item;
-
-      return (
-        sum +
-        count *
-          expectedAdventures(menuItems[menuItems.length - 1].item, {
-            forkMug:
-              (itemType(targetItem) === "booze" &&
-                items.includes($item`Frosty's frosty mug`)) ||
-              (itemType(targetItem) === "food" &&
-                items.includes($item`Ol' Scratch's salad fork`)),
-            seasoning: items.includes($item`Special Seasoning`),
-            mayoflex: items.includes(Mayo.flex),
-            refinedPalate,
-            garish,
-            saucemaven,
-            pinkyRing,
-            tuxedoShirt,
-          })
-      );
-    }
-  }, 0);
+interface DietEntry<T> {
+  menuItems: MenuItem<T>[];
+  quantity: number;
 }
-
+interface OrganCapacity {
+  food?: number | "auto";
+  booze?: number | "auto";
+  spleen?: number | "auto";
+}
 /**
- * Using the provided additional value for each menu item, compute the expected value of the diet
- * @param mpa The expected value of each adventure
- * @param diet The diet to consider
- * @param method Whether the value expected value should be gross (do not include the cost) or net (include the cost)
- * @returns the expected value of the diet
+ * A representation of a potential diet
  */
-export function dietExpectedValue<T>(
-  mpa: number,
-  diet: Diet<T>,
-  method: "gross" | "net" = "gross"
-) {
-  const adventures = dietExpectedAdventures(diet);
-  return (
-    adventures * mpa +
-    diet.reduce((dietTotal, itemCount) => {
-      const [menuItems, count] = itemCount;
-      const values = menuItems.map((menuItem) =>
-        method === "gross"
-          ? menuItem.additionalValue ?? 0
-          : (menuItem.additionalValue ?? 0) - menuItem.price()
-      );
-      return (
-        dietTotal +
-        count * values.reduce((totalValue, value) => totalValue + value)
-      );
-    }, 0)
-  );
+export class Diet<T> {
+  entries: DietEntry<T>[];
+
+  constructor(entries: DietEntry<T>[] = []) {
+    this.entries = entries;
+  }
+
+  get refinedPalate(): boolean {
+    return this.entries.some((dietEntry) =>
+      dietEntry.menuItems.some(
+        (trialItem) =>
+          (trialItem.item === $item`pocket wish` &&
+            trialItem.effect === $effect`Refined Palate`) ||
+          trialItem.item === $item`toasted brie`
+      )
+    );
+  }
+
+  get garish(): boolean {
+    return this.entries.some((dietEntry) =>
+      dietEntry.menuItems.some(
+        (trialItem) =>
+          (trialItem.item === $item`pocket wish` &&
+            trialItem.effect === $effect`Gar-ish`) ||
+          trialItem.item === $item`potion of the field gar`
+      )
+    );
+  }
+
+  get saucemaven(): boolean {
+    return have($skill`Saucemaven`);
+  }
+
+  get tuxedoShirt(): boolean {
+    return have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`);
+  }
+
+  get pinkyRing(): boolean {
+    return have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`);
+  }
+
+  expectedAdventures(): number {
+    return sumNumbers(
+      this.entries.map((dietEntry) => {
+        const { menuItems, quantity } = dietEntry;
+        if (menuItems.length === 0 || quantity === 0) {
+          return 0;
+        } else {
+          const items = menuItems.map((m) => m.item);
+          const targetItem = menuItems[menuItems.length - 1].item;
+
+          return (
+            quantity *
+            expectedAdventures(menuItems[menuItems.length - 1].item, {
+              forkMug:
+                (itemType(targetItem) === "booze" &&
+                  items.includes($item`Frosty's frosty mug`)) ||
+                (itemType(targetItem) === "food" &&
+                  items.includes($item`Ol' Scratch's salad fork`)),
+              seasoning: items.includes($item`Special Seasoning`),
+              mayoflex: items.includes(Mayo.flex),
+              refinedPalate: this.refinedPalate,
+              garish: this.garish,
+              saucemaven: this.saucemaven,
+              pinkyRing: this.pinkyRing,
+              tuxedoShirt: this.tuxedoShirt,
+            })
+          );
+        }
+      })
+    );
+  }
+
+  expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
+    const adventures = this.expectedAdventures();
+    return (
+      adventures * mpa +
+      this.entries.reduce((dietTotal, dietEntry) => {
+        const { menuItems, quantity } = dietEntry;
+        const values = menuItems.map((menuItem) =>
+          method === "gross"
+            ? menuItem.additionalValue ?? 0
+            : (menuItem.additionalValue ?? 0) - menuItem.price()
+        );
+        return (
+          dietTotal +
+          quantity * values.reduce((totalValue, value) => totalValue + value)
+        );
+      }, 0)
+    );
+  }
+
+  copy(): Diet<T> {
+    return new Diet([...this.entries]);
+  }
+
+  static from<T>(rawDiet: RawDiet<T>): Diet<T> {
+    const diet = rawDiet.map((item) => {
+      const [menuItems, quantity] = item;
+      return { menuItems, quantity };
+    });
+    return new Diet<T>(diet);
+  }
+
+  static plan<T>(
+    mpa: number,
+    menu: MenuItem<T>[],
+    organCapacities: OrganCapacity = {
+      food: "auto",
+      booze: "auto",
+      spleen: "auto",
+    }
+  ): Diet<T> {
+    const { food, booze, spleen } = organCapacities;
+    const plannerCapacity: [Organ, number | null][] = [];
+    if (food) {
+      plannerCapacity.push(["food", food === "auto" ? null : food]);
+    }
+    if (booze) {
+      plannerCapacity.push(["booze", booze === "auto" ? null : booze]);
+    }
+    if (spleen) {
+      plannerCapacity.push(["spleen item", spleen === "auto" ? null : spleen]);
+    }
+
+    return Diet.from(planDiet(mpa, menu, plannerCapacity));
+  }
 }

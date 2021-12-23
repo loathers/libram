@@ -255,10 +255,10 @@ class DietPlanner<T> {
     );
     this.mayoLookup = new Map<Item, MenuItem<T>>();
     if (mayoInstalled()) {
-      [Mayo.flex, Mayo.zapine].forEach((mayo) => {
+      for (const mayo of [Mayo.flex, Mayo.zapine]) {
         const menuItem = menu.find((item) => item.item === mayo);
         if (menuItem) this.mayoLookup.set(mayo, menuItem);
-      });
+      }
     }
 
     this.menu = menu.filter((item) => item.organ);
@@ -643,9 +643,79 @@ function planDiet<T>(
   }
 }
 
-interface DietEntry<T> {
-  menuItems: MenuItem<T>[];
+class DietEntry<T> {
   quantity: number;
+  constructor(readonly menuItems: MenuItem<T>[], quantity: number) {
+    this.quantity = quantity;
+  }
+
+  target(): MenuItem<T> {
+    return this.menuItems[this.menuItems.length - 1];
+  }
+
+  helpers(): MenuItem<T>[] {
+    if (this.menuItems.length > 1) {
+      return this.menuItems.slice(0, -1);
+    }
+    return [];
+  }
+
+  expectedAdventures(diet: Diet<T>) {
+    {
+      if (this.menuItems.length === 0 || this.quantity === 0) {
+        return 0;
+      } else {
+        const items = this.menuItems.map((m) => m.item);
+        const targetItem = this.menuItems[this.menuItems.length - 1].item;
+        const fork =
+          itemType(targetItem) === "food" &&
+          items.includes($item`Ol' Scratch's salad fork`);
+        const mug =
+          itemType(targetItem) === "booze" &&
+          items.includes($item`Frosty's frosty mug`);
+
+        return (
+          this.quantity *
+          expectedAdventures(this.menuItems[this.menuItems.length - 1].item, {
+            forkMug: fork || mug,
+            seasoning: items.includes($item`Special Seasoning`),
+            mayoflex: items.includes(Mayo.flex),
+            refinedPalate: diet.refinedPalate,
+            garish: diet.garish,
+            saucemaven: diet.saucemaven,
+            pinkyRing: diet.pinkyRing,
+            tuxedoShirt: diet.tuxedoShirt,
+          })
+        );
+      }
+    }
+  }
+
+  expectedValue(
+    mpa: number,
+    diet: Diet<T>,
+    method: "gross" | "net" = "gross"
+  ): number {
+    const adventures = this.expectedAdventures(diet);
+    const gross =
+      this.quantity *
+      (mpa * adventures +
+        sumNumbers(
+          this.menuItems.map((menuItem) => menuItem.additionalValue ?? 0)
+        ));
+    if (method === "gross") {
+      return gross;
+    } else {
+      return gross - this.expectedPrice();
+    }
+  }
+
+  expectedPrice(): number {
+    return (
+      this.quantity *
+      sumNumbers(this.menuItems.map((menuItem) => menuItem.price()))
+    );
+  }
 }
 interface OrganCapacity {
   food?: number | "auto";
@@ -698,52 +768,21 @@ export class Diet<T> {
 
   expectedAdventures(): number {
     return sumNumbers(
-      this.entries.map((dietEntry) => {
-        const { menuItems, quantity } = dietEntry;
-        if (menuItems.length === 0 || quantity === 0) {
-          return 0;
-        } else {
-          const items = menuItems.map((m) => m.item);
-          const targetItem = menuItems[menuItems.length - 1].item;
-
-          return (
-            quantity *
-            expectedAdventures(menuItems[menuItems.length - 1].item, {
-              forkMug:
-                (itemType(targetItem) === "booze" &&
-                  items.includes($item`Frosty's frosty mug`)) ||
-                (itemType(targetItem) === "food" &&
-                  items.includes($item`Ol' Scratch's salad fork`)),
-              seasoning: items.includes($item`Special Seasoning`),
-              mayoflex: items.includes(Mayo.flex),
-              refinedPalate: this.refinedPalate,
-              garish: this.garish,
-              saucemaven: this.saucemaven,
-              pinkyRing: this.pinkyRing,
-              tuxedoShirt: this.tuxedoShirt,
-            })
-          );
-        }
-      })
+      this.entries.map((dietEntry) => dietEntry.expectedAdventures(this))
     );
   }
 
   expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
-    const adventures = this.expectedAdventures();
-    return (
-      adventures * mpa +
-      this.entries.reduce((dietTotal, dietEntry) => {
-        const { menuItems, quantity } = dietEntry;
-        const values = menuItems.map((menuItem) =>
-          method === "gross"
-            ? menuItem.additionalValue ?? 0
-            : (menuItem.additionalValue ?? 0) - menuItem.price()
-        );
-        return (
-          dietTotal +
-          quantity * values.reduce((totalValue, value) => totalValue + value)
-        );
-      }, 0)
+    return sumNumbers(
+      this.entries.map((dietEntry) =>
+        dietEntry.expectedValue(mpa, this, method)
+      )
+    );
+  }
+
+  expectedPrice(): number {
+    return sumNumbers(
+      this.entries.map((dietEntry) => dietEntry.expectedPrice())
     );
   }
 
@@ -754,7 +793,7 @@ export class Diet<T> {
   static from<T>(rawDiet: RawDiet<T>): Diet<T> {
     const diet = rawDiet.map((item) => {
       const [menuItems, quantity] = item;
-      return { menuItems, quantity };
+      return new DietEntry(menuItems, quantity);
     });
     return new Diet<T>(diet);
   }

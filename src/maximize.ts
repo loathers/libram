@@ -30,7 +30,52 @@ export type MaximizeOptions = {
   preventSlot: Slot[];
 };
 
-const defaultMaximizeOptions = {
+/**
+ * Merges a Partial<MaximizeOptions> onto a MaximizeOptions. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
+ * @param defaultOptions MaximizeOptions to use as a "base."
+ * @param addendums Options to attempt to merge onto defaultOptions.
+ */
+function mergeMaximizeOptions(
+  defaultOptions: MaximizeOptions,
+  addendums: Partial<MaximizeOptions>
+): MaximizeOptions {
+  return {
+    updateOnFamiliarChange:
+      addendums.updateOnFamiliarChange ?? defaultOptions.updateOnFamiliarChange,
+
+    updateOnCanEquipChanged:
+      addendums.updateOnCanEquipChanged ??
+      defaultOptions.updateOnCanEquipChanged,
+
+    useOutfitCaching:
+      addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
+
+    forceEquip: [...defaultOptions.forceEquip, ...(addendums.forceEquip ?? [])],
+
+    preventEquip: [
+      ...defaultOptions.preventEquip,
+      ...(addendums.preventEquip ?? []),
+    ].filter(
+      (item) =>
+        !defaultOptions.forceEquip.includes(item) &&
+        !addendums.forceEquip?.includes(item)
+    ),
+
+    bonusEquip: new Map<Item, number>([
+      ...defaultOptions.bonusEquip,
+      ...(addendums.bonusEquip ?? []),
+    ]),
+
+    onlySlot: addendums.onlySlot ?? defaultOptions.onlySlot,
+
+    preventSlot: [
+      ...defaultOptions.preventSlot,
+      ...(addendums.preventSlot ?? []),
+    ],
+  };
+}
+
+const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
   useOutfitCaching: true,
@@ -386,7 +431,7 @@ export function maximizeCached(
   objectives: string[],
   options: Partial<MaximizeOptions> = {}
 ): void {
-  const fullOptions = { ...defaultMaximizeOptions, ...options };
+  const fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options);
   const {
     forceEquip,
     preventEquip,

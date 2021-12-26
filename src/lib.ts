@@ -60,10 +60,17 @@ export function getSongLimit(): number {
  * @param skillOrEffect The Skill or Effect
  */
 export function isSong(skillOrEffect: Skill | Effect): boolean {
-  const skill =
-    skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
+  if (
+    skillOrEffect instanceof Effect &&
+    skillOrEffect.attributes.includes("song")
+  ) {
+    return true;
+  } else {
+    const skill =
+      skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
 
-  return skill.class === $class`Accordion Thief` && skill.buff;
+    return skill.class === $class`Accordion Thief` && skill.buff;
+  }
 }
 
 /**

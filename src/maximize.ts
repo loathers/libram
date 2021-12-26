@@ -258,7 +258,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
       outfit(outfitName);
     }
     const familiarEquip = entry.equipment.get($slot`familiar`);
-    if (familiarEquip) equip(familiarEquip);
+    if (familiarEquip) equip($slot`familiar`, familiarEquip);
   } else {
     for (const [slot, item] of entry.equipment) {
       if (equippedItem(slot) !== item && availableAmount(item) > 0) {
@@ -307,10 +307,11 @@ const slotStructure = [
 function verifyCached(entry: CacheEntry): boolean {
   let success = true;
   for (const slotGroup of slotStructure) {
-    const desiredSet = slotGroup.map(
-      (slot) => entry.equipment.get(slot) ?? $item`none`
-    );
-    const equippedSet = slotGroup.map((slot) => equippedItem(slot));
+    const desiredSlots = slotGroup
+      .map((slot) => [slot, entry.equipment.get(slot) ?? null])
+      .filter(([, item]) => item !== null) as [Slot, Item][];
+    const desiredSet = desiredSlots.map(([, item]) => item);
+    const equippedSet = desiredSlots.map(([slot]) => equippedItem(slot));
     if (!setEqual(desiredSet, equippedSet)) {
       logger.warning(
         `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(

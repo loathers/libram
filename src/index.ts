@@ -19,6 +19,7 @@ export {
   PropertiesManager,
   set,
   setProperties,
+  validate,
   withProperties,
   withProperty,
   withChoices,

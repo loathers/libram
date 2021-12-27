@@ -13,7 +13,15 @@ import {
   PropertyValue,
 } from "./propertyTyping";
 
-import { NumericOrStringProperty, NumericProperty } from "./propertyTypes";
+import {
+  FamiliarProperty,
+  LocationProperty,
+  MonsterProperty,
+  NumericOrStringProperty,
+  NumericProperty,
+  PhylumProperty,
+  StatProperty,
+} from "./propertyTypes";
 
 const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T
@@ -43,13 +51,24 @@ type MafiaClasses =
   | Stat
   | Thrall;
 
+type MafiaClassProperty =
+  | FamiliarProperty
+  | LocationProperty
+  | MonsterProperty
+  | PhylumProperty
+  | StatProperty;
+
 const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T)
 ): ((property: string, default_?: T | null) => T | null) =>
   createPropertyGetter((value) => {
     if (value === "") return null;
-    const v = Type.get<T>(value);
-    return v === Type.get<T>("none") ? null : v;
+    try {
+      const v = Type.get<T>(value);
+      return v === Type.get<T>("none") ? null : v;
+    } catch {
+      return null;
+    }
   });
 
 export const getString = createPropertyGetter((value) => value);
@@ -136,6 +155,15 @@ export function get<_D, P extends string>(
   }
 
   return value;
+}
+
+/**
+ * Validate that the given property string value matches its Proxy object value
+ * @param property Name of the property
+ * @returns true if the string representation of the object matches the property value representation
+ */
+export function validate(property: MafiaClassProperty): boolean {
+  return `${get(property)}` === getString(property);
 }
 
 /**

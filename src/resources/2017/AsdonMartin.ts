@@ -41,16 +41,30 @@ function priceTooOld(item: Item) {
   return historicalPrice(item) === 0 || historicalAge(item) >= 7;
 }
 
+// Return mall max if historicalPrice returns -1.
+function historicalPriceOrMax(item: Item): number {
+  const historical = historicalPrice(item);
+  return historical < 0 ? 999999999 : historical;
+}
+
+// Return mall max if mallPrice returns -1.
+function mallPriceOrMax(item: Item): number {
+  const mall = mallPrice(item);
+  return mall < 0 ? 999999999 : mall;
+}
+
 function price(item: Item, priceAge: PriceAge) {
   switch (priceAge) {
     case PriceAge.HISTORICAL: {
-      const historical = historicalPrice(item);
-      return historical === 0 ? mallPrice(item) : historical;
+      const historical = historicalPriceOrMax(item);
+      return historical === 0 ? mallPriceOrMax(item) : historical;
     }
     case PriceAge.RECENT:
-      return priceTooOld(item) ? mallPrice(item) : historicalPrice(item);
+      return priceTooOld(item)
+        ? mallPriceOrMax(item)
+        : historicalPriceOrMax(item);
     case PriceAge.TODAY:
-      return mallPrice(item);
+      return mallPriceOrMax(item);
   }
 }
 

@@ -427,11 +427,12 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
  * @param options.forceEquip Equipment to force-equip ("equip X").
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
+ * @returns Whether the maximize call succeeded.
  */
 export function maximizeCached(
   objectives: string[],
   options: Partial<MaximizeOptions> = {}
-): void {
+): boolean {
   const fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options);
   const {
     forceEquip,
@@ -468,13 +469,14 @@ export function maximizeCached(
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
       logger.info(`Equipped cached ${objective}`);
-      return;
+      return true;
     }
     logger.warning("Maximize cache application failed, maximizing...");
   }
 
-  maximize(objective, false);
+  const result = maximize(objective, false);
   saveCached(objective, fullOptions);
+  return result;
 }
 
 export class Requirement {
@@ -552,9 +554,10 @@ export class Requirement {
 
   /**
    * Runs maximizeCached, using the maximizeParameters and maximizeOptions contained by this requirement.
+   * @returns Whether the maximize call succeeded.
    */
-  maximize(): void {
-    maximizeCached(this.maximizeParameters, this.maximizeOptions);
+  maximize(): boolean {
+    return maximizeCached(this.maximizeParameters, this.maximizeOptions);
   }
 
   /**

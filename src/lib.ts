@@ -10,6 +10,7 @@ import {
   cliExecute,
   fullnessLimit,
   getCampground,
+  getCounter,
   getCounters,
   getPlayerId,
   getPlayerName,
@@ -655,4 +656,12 @@ export function getTodaysHolidayWanderers(): Monster[] {
     .split("/")
     .map((holiday) => holidayWanderers.get(holiday) ?? [])
     .flat();
+}
+
+export function getCounterValue(counter: string): number | null {
+  const value = getCounter(counter);
+  if (value === -1) {
+    return getCounters(counter, -1, -1).trim() === "" ? null : -1;
+  }
+  return value;
 }

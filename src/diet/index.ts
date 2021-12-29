@@ -1,6 +1,8 @@
 import {
   canEquip,
   fullnessLimit,
+  historicalAge,
+  historicalPrice,
   inebrietyLimit,
   itemType,
   mallPrice,
@@ -263,7 +265,12 @@ class DietPlanner<T> {
 
     this.menu = menu.filter((item) => item.organ);
 
-    if (menu.length > 100) {
+    if (
+      menu.filter(
+        (item) =>
+          historicalPrice(item.item) === 0 || historicalAge(item.item) >= 1
+      ).length > 100
+    ) {
       mallPrices("food");
       mallPrices("booze");
     }
@@ -696,13 +703,12 @@ class DietEntry<T> {
     diet: Diet<T>,
     method: "gross" | "net" = "gross"
   ): number {
-    const adventures = this.expectedAdventures(diet);
     const gross =
+      mpa * this.expectedAdventures(diet) +
       this.quantity *
-      (mpa * adventures +
         sumNumbers(
           this.menuItems.map((menuItem) => menuItem.additionalValue ?? 0)
-        ));
+        );
     if (method === "gross") {
       return gross;
     } else {

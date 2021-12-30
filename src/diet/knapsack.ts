@@ -78,7 +78,7 @@ export function knapsack<T>(
           }`
         );
       }
-      const maxQuantity = maximum ?? Math.floor(adjustedCapacity / weight);
+      const maxQuantity = Math.floor(maximum ?? adjustedCapacity / weight);
       if (maxQuantity < 0) {
         throw new Error(
           `Invalid max quantity ${maxQuantity} for ${

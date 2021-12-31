@@ -286,8 +286,16 @@ class DietPlanner<T> {
         )
     );
     if (spleenItems.length > 0) {
-      this.spleenValue =
-        this.consumptionValue(spleenItems[0]) / spleenItems[0].item.spleen;
+      const bestMarginalSpleenItem = spleenItems.find(
+        (spleenItem) =>
+          spleenItem.maximum === undefined ||
+          spleenItem.maximum * spleenItem.size <= spleenLimit() - mySpleenUse()
+      );
+      if (bestMarginalSpleenItem) {
+        this.spleenValue =
+          this.consumptionValue(bestMarginalSpleenItem) /
+          bestMarginalSpleenItem.size;
+      }
     }
   }
 

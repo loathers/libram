@@ -286,15 +286,19 @@ class DietPlanner<T> {
         )
     );
     if (spleenItems.length > 0) {
+      // Marginal value for sliders and jars depends on our best unlimited spleen item.
+      // TODO: spleenLimit() - mySpleenUse() is a poor estimate.
       const bestMarginalSpleenItem = spleenItems.find(
         (spleenItem) =>
           spleenItem.maximum === undefined ||
-          spleenItem.maximum * spleenItem.size <= spleenLimit() - mySpleenUse()
+          spleenItem.maximum * spleenItem.size >= spleenLimit() - mySpleenUse()
       );
       if (bestMarginalSpleenItem) {
-        this.spleenValue =
+        this.spleenValue = Math.max(
+          0,
           this.consumptionValue(bestMarginalSpleenItem) /
-          bestMarginalSpleenItem.size;
+            bestMarginalSpleenItem.size
+        );
       }
     }
   }

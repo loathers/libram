@@ -97,10 +97,32 @@ const freeKillSources: ActionSource[] = [
     }
   ),
 
+  new ActionSource(
+    $familiar`Puck Man`,
+    () => (have($familiar`Puck Man`) ? 20 - get("_powerPillUses") : 0),
+    Macro.item($item`power pill`),
+    {
+      familiar: () => $familiar`Puck Man`,
+      preparation: () => retrieveItem($item`power pill`),
+      cost: () => mallPrice($item`power pill`),
+    }
+  ),
+
+  new ActionSource(
+    $familiar`Ms. Puck Man`,
+    () => (have($familiar`Ms. Puck Man`) ? 20 - get("_powerPillUses") : 0),
+    Macro.item($item`power pill`),
+    {
+      familiar: () => $familiar`Ms. Puck Man`,
+      preparation: () => retrieveItem($item`power pill`),
+      cost: () => mallPrice($item`power pill`),
+    }
+  ),
+
   // Expensive unlimited sources
   new ActionSource(
     $skill`Shocking Lick`,
-    () => -1,
+    () => Infinity,
     Macro.skill($skill`Shocking Lick`),
     {
       preparation: () => {
@@ -116,31 +138,9 @@ const freeKillSources: ActionSource[] = [
     }
   ),
 
-  new ActionSource(
-    $familiar`Puck Man`,
-    () => (have($familiar`Puck Man`) ? -1 : 0),
-    Macro.item($item`power pill`),
-    {
-      familiar: () => $familiar`Puck Man`,
-      preparation: () => retrieveItem($item`power pill`),
-      cost: () => mallPrice($item`power pill`),
-    }
-  ),
-
-  new ActionSource(
-    $familiar`Ms. Puck Man`,
-    () => (have($familiar`Ms. Puck Man`) ? -1 : 0),
-    Macro.item($item`power pill`),
-    {
-      familiar: () => $familiar`Ms. Puck Man`,
-      preparation: () => retrieveItem($item`power pill`),
-      cost: () => mallPrice($item`power pill`),
-    }
-  ),
-
   ...$items`Daily Affirmation: Think Win-Lose, superduperheated metal`.map(
     (item) =>
-      new ActionSource(item, () => -1, Macro.item(item), {
+      new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => mallPrice(item),
       })

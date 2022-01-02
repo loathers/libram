@@ -30,7 +30,52 @@ export type MaximizeOptions = {
   preventSlot: Slot[];
 };
 
-const defaultMaximizeOptions = {
+/**
+ * Merges a Partial<MaximizeOptions> onto a MaximizeOptions. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
+ * @param defaultOptions MaximizeOptions to use as a "base."
+ * @param addendums Options to attempt to merge onto defaultOptions.
+ */
+function mergeMaximizeOptions(
+  defaultOptions: MaximizeOptions,
+  addendums: Partial<MaximizeOptions>
+): MaximizeOptions {
+  return {
+    updateOnFamiliarChange:
+      addendums.updateOnFamiliarChange ?? defaultOptions.updateOnFamiliarChange,
+
+    updateOnCanEquipChanged:
+      addendums.updateOnCanEquipChanged ??
+      defaultOptions.updateOnCanEquipChanged,
+
+    useOutfitCaching:
+      addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
+
+    forceEquip: [...defaultOptions.forceEquip, ...(addendums.forceEquip ?? [])],
+
+    preventEquip: [
+      ...defaultOptions.preventEquip,
+      ...(addendums.preventEquip ?? []),
+    ].filter(
+      (item) =>
+        !defaultOptions.forceEquip.includes(item) &&
+        !addendums.forceEquip?.includes(item)
+    ),
+
+    bonusEquip: new Map<Item, number>([
+      ...defaultOptions.bonusEquip,
+      ...(addendums.bonusEquip ?? []),
+    ]),
+
+    onlySlot: addendums.onlySlot ?? defaultOptions.onlySlot,
+
+    preventSlot: [
+      ...defaultOptions.preventSlot,
+      ...(addendums.preventSlot ?? []),
+    ],
+  };
+}
+
+const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
   useOutfitCaching: true,
@@ -213,7 +258,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
       outfit(outfitName);
     }
     const familiarEquip = entry.equipment.get($slot`familiar`);
-    if (familiarEquip) equip(familiarEquip);
+    if (familiarEquip) equip($slot`familiar`, familiarEquip);
   } else {
     for (const [slot, item] of entry.equipment) {
       if (equippedItem(slot) !== item && availableAmount(item) > 0) {
@@ -262,10 +307,11 @@ const slotStructure = [
 function verifyCached(entry: CacheEntry): boolean {
   let success = true;
   for (const slotGroup of slotStructure) {
-    const desiredSet = slotGroup.map(
-      (slot) => entry.equipment.get(slot) ?? $item`none`
-    );
-    const equippedSet = slotGroup.map((slot) => equippedItem(slot));
+    const desiredSlots = slotGroup
+      .map((slot) => [slot, entry.equipment.get(slot) ?? null])
+      .filter(([, item]) => item !== null) as [Slot, Item][];
+    const desiredSet = desiredSlots.map(([, item]) => item);
+    const equippedSet = desiredSlots.map(([slot]) => equippedItem(slot));
     if (!setEqual(desiredSet, equippedSet)) {
       logger.warning(
         `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
@@ -381,12 +427,13 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
  * @param options.forceEquip Equipment to force-equip ("equip X").
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
+ * @returns Whether the maximize call succeeded.
  */
 export function maximizeCached(
   objectives: string[],
   options: Partial<MaximizeOptions> = {}
-): void {
-  const fullOptions = { ...defaultMaximizeOptions, ...options };
+): boolean {
+  const fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options);
   const {
     forceEquip,
     preventEquip,
@@ -422,13 +469,14 @@ export function maximizeCached(
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
       logger.info(`Equipped cached ${objective}`);
-      return;
+      return true;
     }
     logger.warning("Maximize cache application failed, maximizing...");
   }
 
-  maximize(objective, false);
+  const result = maximize(objective, false);
   saveCached(objective, fullOptions);
+  return result;
 }
 
 export class Requirement {
@@ -506,9 +554,10 @@ export class Requirement {
 
   /**
    * Runs maximizeCached, using the maximizeParameters and maximizeOptions contained by this requirement.
+   * @returns Whether the maximize call succeeded.
    */
-  maximize(): void {
-    maximizeCached(this.maximizeParameters, this.maximizeOptions);
+  maximize(): boolean {
+    return maximizeCached(this.maximizeParameters, this.maximizeOptions);
   }
 
   /**

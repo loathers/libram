@@ -1,6 +1,7 @@
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
+export * as Counter from "./counter";
 export * from "./diet";
 export * from "./lib";
 export * from "./maximize";

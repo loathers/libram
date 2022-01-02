@@ -88,7 +88,7 @@ function mergeConstraints(
 }
 
 /**
- * A basic of an action resource in the game (e.g. a free run or free kill).
+ * A combat-based action resource in the game (e.g. a free run or free kill).
  */
 export class ActionSource {
   source: Item | Skill | Familiar;
@@ -97,7 +97,6 @@ export class ActionSource {
   constraints: ActionConstraints;
 
   /**
-   *
    * @param source Source of the action (e.g. item or skill needed).
    * @param potential Function returning how many times this action can be used.
    * @param macro Macro to execute this action in combat.

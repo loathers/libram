@@ -21,26 +21,20 @@ import { $effect, $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
-  FindActionSourceOptions,
-} from "./action";
-import * as Bandersnatch from "./2009/Bandersnatch";
-import * as AsdonMartin from "./2017/AsdonMartin";
+  FindActionSourceConstraints,
+} from "./ActionSource";
+import * as Bandersnatch from "../resources/2009/Bandersnatch";
+import * as AsdonMartin from "../resources/2017/AsdonMartin";
 
-export type AdventureOptions = {
-  equipmentRequirements?: () => Requirement;
-  preparation?: () => boolean;
-  location?: () => Location;
-  macro?: () => Macro;
-  familiar?: () => Familiar;
-  available?: () => boolean;
-};
+// Value of _lastCombatStarted the last time we updated scrapbook charges.
+let scrapbookChargesLastUpdated = get("_lastCombatStarted");
 
-// Free unlimited source every 30 turns
-// Does not work on special monsters so needs a backup, see tryFindFreeRun
+// Free unlimited source every 30 turns.
+// Does not work on special monsters so needs a backup, see tryFindFreeRun.
 const asdonMartinSource: ActionSource = new ActionSource(
   $skill`Asdon Martin: Spring-Loaded Front Bumper`,
   () => {
-    if (!AsdonMartin.have()) return 0;
+    if (!AsdonMartin.installed()) return 0;
     const banishes = get("banishedMonsters").split(":");
     const bumperIndex = banishes
       .map((string) => string.toLowerCase())
@@ -171,7 +165,7 @@ const freeRunSources: ActionSource[] = [
   new ActionSource(
     $item`stinky cheese eye`,
     () =>
-      getFoldGroup($item`stinky cheese diaper`).some((item) => have(item)) &&
+      getFoldGroup($item`stinky cheese eye`).some((item) => have(item)) &&
       !get("_stinkyCheeseBanisherUsed")
         ? 1
         : 0,
@@ -181,8 +175,9 @@ const freeRunSources: ActionSource[] = [
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`stinky cheese eye` }),
       preparation: () => {
-        if (!have($item`stinky cheese eye`))
+        if (!have($item`stinky cheese eye`)) {
           cliExecute(`fold stinky cheese eye`);
+        }
         return have($item`stinky cheese eye`);
       },
     }
@@ -191,7 +186,9 @@ const freeRunSources: ActionSource[] = [
   new ActionSource(
     $item`navel ring of navel gazing`,
     () =>
-      have($item`navel ring of navel gazing`) ? 3 - get("_navelRunaways") : 0,
+      have($item`navel ring of navel gazing`)
+        ? Math.max(0, 3 - get("_navelRunaways"))
+        : 0,
     Macro.step("runaway"),
     {
       equipmentRequirements: () =>
@@ -202,7 +199,9 @@ const freeRunSources: ActionSource[] = [
   new ActionSource(
     $item`Greatest American Pants`,
     () =>
-      have($item`Greatest American Pants`) ? 3 - get("_navelRunaways") : 0,
+      have($item`Greatest American Pants`)
+        ? Math.max(0, 3 - get("_navelRunaways"))
+        : 0,
     Macro.step("runaway"),
     {
       equipmentRequirements: () =>
@@ -214,7 +213,10 @@ const freeRunSources: ActionSource[] = [
     $skill`Show your boring familiar pictures`,
     () => {
       if (have($item`familiar scrapbook`)) {
-        visitUrl("desc_item.php?whichitem=463063785");
+        if (scrapbookChargesLastUpdated !== get("_lastCombatStarted")) {
+          visitUrl("desc_item.php?whichitem=463063785");
+          scrapbookChargesLastUpdated = get("_lastCombatStarted");
+        }
         return Math.floor(get("scrapbookCharges") / 100);
       }
       return 0;
@@ -228,31 +230,50 @@ const freeRunSources: ActionSource[] = [
 
   new ActionSource(
     $item`peppermint parasol`,
-    () => 3 - get("_navelRunaways"),
+    () => Math.max(0, 3 - get("_navelRunaways")),
     Macro.item($item`peppermint parasol`),
     {
       preparation: () => retrieveItem($item`peppermint parasol`),
-      cost: () => (mallPrice($item`peppermint sprout`) * 5) / 10, // Breaks after 10 uses
+      cost: () =>
+        Math.min(
+          mallPrice($item`peppermint sprout`) * 5,
+          mallPrice($item`peppermint parasol`)
+        ) / 10, // Breaks after 10 successful runaways.
+    }
+  ),
+
+  new ActionSource(
+    $item`human musk`,
+    () => Math.max(0, 3 - get("_humanMuskUses")),
+    Macro.item($item`human musk`),
+    {
+      preparation: () => retrieveItem($item`human musk`),
+      cost: () => mallPrice($item`human musk`),
     }
   ),
 
   // Expensive unlimited sources
   ...$items`Louder Than Bomb, divine champagne popper, tennis ball`.map(
     (item) =>
-      new ActionSource(item, () => -1, Macro.item(item), {
+      new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => mallPrice(item),
       })
   ),
 ];
 
+/**
+ * Find an available free run source subject to constraints.
+ * @param constraints Preexisting constraints that restrict possible sources.
+ * @returns Free run source satisfying constraints, or null.
+ */
 export function tryFindFreeRun(
-  options?: FindActionSourceOptions
+  constraints?: FindActionSourceConstraints
 ): ActionSource | null {
-  let source = findActionSource(freeRunSources, options);
+  let source = findActionSource(freeRunSources, constraints);
 
-  // Always try to use Asdon Martin: Spring-Loaded Front Bumper first
-  // but only if another source has been found
+  // Always try to use Asdon Martin: Spring-Loaded Front Bumper first,
+  // but only if another source has been found.
   if (source && asdonMartinSource.available()) {
     source = asdonMartinSource.merge(source);
   }
@@ -260,9 +281,16 @@ export function tryFindFreeRun(
   return source;
 }
 
-export function ensureFreeRun(options?: FindActionSourceOptions): ActionSource {
-  // Try to respect the options first, then fallback to no options
-  const source = tryFindFreeRun(options) ?? tryFindFreeRun();
+/**
+ * Ensure an available free run source subject to constraints.
+ * Throws an error if no source can be found.
+ * @param constraints Preexisting constraints that restrict possible sources.
+ * @returns Free run source satisfying constraints.
+ */
+export function ensureFreeRun(
+  constraints?: FindActionSourceConstraints
+): ActionSource {
+  const source = tryFindFreeRun(constraints);
 
   if (!source) {
     throw new Error("Failed to ensure Free Run source");

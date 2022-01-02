@@ -8,9 +8,9 @@ import { $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
-  FindActionSourceOptions,
-} from "./action";
-import * as AsdonMartin from "./2017/AsdonMartin";
+  FindActionSourceConstraints,
+} from "./ActionSource";
+import * as AsdonMartin from "../resources/2017/AsdonMartin";
 
 const freeKillSources: ActionSource[] = [
   // Free limited sources
@@ -72,7 +72,7 @@ const freeKillSources: ActionSource[] = [
 
   new ActionSource(
     $skill`Asdon Martin: Missile Launcher`,
-    () => (!get("_missileLauncherUsed") && AsdonMartin.have() ? 1 : 0),
+    () => (!get("_missileLauncherUsed") && AsdonMartin.installed() ? 1 : 0),
     Macro.skill($skill`Asdon Martin: Missile Launcher`),
     {
       preparation: () => AsdonMartin.fillTo(100),
@@ -147,17 +147,27 @@ const freeKillSources: ActionSource[] = [
   ),
 ];
 
+/**
+ * Find an available free kill source subject to constraints.
+ * @param constraints Preexisting constraints that restrict possible sources.
+ * @returns Free kill source satisfying constraints, or null.
+ */
 export function tryFindFreeKill(
-  options?: FindActionSourceOptions
+  constraints?: FindActionSourceConstraints
 ): ActionSource | null {
-  return findActionSource(freeKillSources, options);
+  return findActionSource(freeKillSources, constraints);
 }
 
+/**
+ * Ensure an available free kill source subject to constraints.
+ * Throws an error if no source can be found.
+ * @param constraints Preexisting constraints that restrict possible sources.
+ * @returns Free kill source satisfying constraints.
+ */
 export function ensureFreeKill(
-  options?: FindActionSourceOptions
+  constraints?: FindActionSourceConstraints
 ): ActionSource {
-  // Try to respect the options first, then fallback to no options
-  const source = tryFindFreeKill(options) ?? tryFindFreeKill();
+  const source = tryFindFreeKill(constraints);
 
   if (!source) {
     throw new Error("Failed to ensure Free Kill source");

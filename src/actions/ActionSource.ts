@@ -22,7 +22,6 @@ export type FindActionSourceConstraints = {
   /**
    * Function returning whether to disallow actions requiring equipment change.
    */
-
   noRequirements?: () => boolean;
 
   /**

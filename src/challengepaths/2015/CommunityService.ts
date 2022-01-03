@@ -43,25 +43,38 @@ export const log: {
 } = {};
 
 class Test {
-  private id: number;
-  private name: string;
+  private choice: number;
+  private property: string;
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
 
   constructor(
     id: number,
-    name: string,
+    property: string,
     predictor: () => number,
     maximizeRequirements: Requirement | null = null
   ) {
-    this.id = id;
-    this.name = name;
+    this.choice = id;
+    this.property = property;
     this.predictor = predictor;
     this.maximizeRequirements = maximizeRequirements;
   }
 
+  get id(): number {
+    return this.choice;
+  }
+  get name(): string {
+    return this.property;
+  }
+  get prediction(): number {
+    return this.predictor();
+  }
+  get requirement(): Requirement | null {
+    return this.maximizeRequirements;
+  }
+
   isDone(): boolean {
-    return get("csServicesPerformed").includes(this.name);
+    return get("csServicesPerformed").includes(this.property);
   }
 
   maximize(): void {
@@ -70,7 +83,7 @@ class Test {
 
   do(): boolean {
     visitUrl("council.php");
-    runChoice(this.id);
+    runChoice(this.choice);
     return this.isDone();
   }
 
@@ -101,17 +114,17 @@ class Test {
 
       if (this.isDone()) {
         print(
-          `Finished test ${this.name}. ` +
+          `Finished test ${this.property}. ` +
             `Took ${loggedTest.seconds.toFixed(1)} seconds and ${
               loggedTest.turnCost
             } turns.`,
           "blue"
         );
 
-        log[this.name] = loggedTest;
+        log[this.property] = loggedTest;
       } else {
         print(
-          `Failed to complete test ${this.name} for unknown reasons`,
+          `Failed to complete test ${this.property} for unknown reasons`,
           "red"
         );
       }

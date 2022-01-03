@@ -1,3 +1,4 @@
+export * from "./actions";
 export * from "./ascend";
 export * from "./Clan";
 export * from "./combat";
@@ -27,7 +28,7 @@ export {
 } from "./property";
 export { get as getModifier } from "./modifier";
 export { Modifiers } from "./modifier";
-export * from "./freerun";
+
 export * as Dreadsylvania from "./dungeons/Dreadsylvania";
 export * as Hobopolis from "./dungeons/Hobopolis";
 export * as SlimeTube from "./dungeons/SlimeTube";

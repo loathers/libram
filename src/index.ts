@@ -1,5 +1,6 @@
 export * from "./ascend";
 export * from "./Clan";
+export * from "./challengepaths";
 export * from "./combat";
 export * as Counter from "./counter";
 export * from "./diet";

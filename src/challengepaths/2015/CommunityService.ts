@@ -270,7 +270,7 @@ export const BoozeDrop = new Test(
   })
 );
 
-export const SteamTunnels = new Test(
+export const HotRes = new Test(
   10,
   "Clean Steam Tunnels",
   () => getModifier("Hot Resistance"),

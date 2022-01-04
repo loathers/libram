@@ -35,6 +35,9 @@ import { have } from "../../lib";
 import { SongBoom } from "../../resources";
 import { sum } from "../../utils";
 
+/**
+ * A log of the predicted turns, actual turns, and duration of each CS test performed.
+ */
 export const log: {
   [index: string]: {
     predictedTurns: number;
@@ -49,6 +52,13 @@ class Test {
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
 
+  /**
+   * Class to store properties of various CS tests.
+   * @param id The id the game HTML uses to identify the test; this is used primarily in runChoice.
+   * @param property The name of the test as a string, often used as part of the string property "csServicesPerformed".
+   * @param predictor A function that returns an estimate for the number of turns that the test will take given your character's current state.
+   * @param maximizeRequirements A Requirement object, if applicable, that aligns with the things needed to maximize for this particular test.
+   */
   constructor(
     id: number,
     property: string,
@@ -61,33 +71,61 @@ class Test {
     this.maximizeRequirements = maximizeRequirements;
   }
 
+  /**
+   * @returns The id number of the test, used primarily in runChoice.
+   */
   get id(): number {
     return this.choice;
   }
+  /**
+   * @returns The name of the test, used primarily as part of the string property "csServicesPerformed"
+   */
   get name(): string {
     return this.property;
   }
+  /**
+   *  @returns The predicted number of turns this test will take given your character's current state.
+   */
   get prediction(): number {
     return this.predictor();
   }
+  /**
+   * @returns A Requirement object, if applicable, that aligns with the things needed to maximize for this particular test.
+   */
   get requirement(): Requirement | null {
     return this.maximizeRequirements;
   }
 
+  /**
+   * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
+   * @returns Whether mafia currently believes this test is complete.
+   */
   isDone(): boolean {
     return get("csServicesPerformed").includes(this.property);
   }
 
+  /**
+   * Maximizes based on the Requirement associated with this particular test.
+   */
   maximize(): void {
     if (this.maximizeRequirements) this.maximizeRequirements.maximize();
   }
 
+  /**
+   * Attempts to turn in the test to the Council of Loathing.
+   * @returns Whether mafia believes the test is complete at the end of this function.
+   */
   do(): boolean {
     visitUrl("council.php");
     runChoice(this.choice);
     return this.isDone();
   }
 
+  /**
+   * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
+   * @param prepare
+   * @returns The output of the prepare function given, or null if the test is already complete.
+   */
   run<T>(prepare: () => T): T | null {
     if (this.isDone()) return null;
 
@@ -293,6 +331,10 @@ export const HotRes = new Test(
 
 export const CoilWire = new Test(11, "Coil Wire", () => 60, null);
 
+/**
+ * Prints turncount and time details of the test in question.
+ * @param colour The colour (or color) you'd like the log to be printed in.
+ */
 export function printLog(colour = "blue"): void {
   const logEntries = Object.entries(log);
   for (const [testName, testEntry] of logEntries) {

@@ -123,11 +123,13 @@ class Test {
 
   /**
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
-   * @param prepare
+   * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit.
+   * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
-  run<T>(prepare: () => T): T | null {
-    if (this.isDone()) return null;
+  run<T>(prepare: () => T, beCertain = false): T | null {
+    const finishedFunction = beCertain ? this.verifyIsDone : this.isDone;
+    if (finishedFunction()) return null;
 
     print();
     print("=======================================");
@@ -151,7 +153,7 @@ class Test {
         seconds: (Date.now() - startTime) / 1000,
       };
 
-      if (this.isDone()) {
+      if (finishedFunction()) {
         print(
           `Finished test ${this.property}. ` +
             `Took ${loggedTest.seconds.toFixed(1)} seconds and ${

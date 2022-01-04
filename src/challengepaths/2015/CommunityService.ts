@@ -293,24 +293,24 @@ export const HotRes = new Test(
 
 export const CoilWire = new Test(11, "Coil Wire", () => 60, null);
 
-export function printLog(): void {
+export function printLog(colour = "blue"): void {
   const logEntries = Object.entries(log);
   for (const [testName, testEntry] of logEntries) {
     const { predictedTurns, turnCost, seconds } = testEntry;
 
     print(
-      `We predicted the ${testName} test would take ${predictedTurns} turns ${
+      `We predicted the ${testName} test would take ${predictedTurns} turns, ${
         predictedTurns === turnCost ? "and" : "but"
       } it took ${turnCost} turns`,
-      "blue"
+      colour
     );
-    print(`${testName} took ${seconds} seconds`);
+    print(`${testName} took ${seconds} seconds`, colour);
   }
   print(
     `All together, you have spent ${sum(
       logEntries,
       ([, testEntry]) => testEntry.seconds
     )} seconds during this Community Service run`,
-    "blue"
+    colour
   );
 }

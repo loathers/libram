@@ -33,6 +33,7 @@ import {
 import { get as getModifier } from "../../modifier";
 import { have } from "../../lib";
 import { SongBoom } from "../../resources";
+import { sum } from "../../utils";
 
 export const log: {
   [index: string]: {
@@ -291,3 +292,25 @@ export const HotRes = new Test(
 );
 
 export const CoilWire = new Test(11, "Coil Wire", () => 60, null);
+
+export function printLog(): void {
+  const logEntries = Object.entries(log);
+  for (const [testName, testEntry] of logEntries) {
+    const { predictedTurns, turnCost, seconds } = testEntry;
+
+    print(
+      `We predicted the ${testName} test would take ${predictedTurns} turns ${
+        predictedTurns === turnCost ? "and" : "but"
+      } it took ${turnCost} turns`,
+      "blue"
+    );
+    print(`${testName} took ${seconds} seconds`);
+  }
+  print(
+    `All together, you have spent ${sum(
+      logEntries,
+      ([, testEntry]) => testEntry.seconds
+    )} seconds during this Community Service run`,
+    "blue"
+  );
+}

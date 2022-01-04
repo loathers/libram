@@ -169,6 +169,16 @@ class Test {
       }
     }
   }
+
+  /**
+   * Checks council.php to verify that a test is complete; more reliable than isDone, but requires an additional pagehit.
+   * @returns Whether council.php suggests that the test is complete.
+   */
+  verifyIsDone(): boolean {
+    return !visitUrl("council.php").includes(
+      `<input type=hidden name=option value=${this.choice}>`
+    );
+  }
 }
 
 const thralls = new Map<Stat, Thrall>([

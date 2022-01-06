@@ -1,3 +1,5 @@
+import "core-js/modules/es.object.values";
+
 import {
   booleanModifier,
   classModifier,

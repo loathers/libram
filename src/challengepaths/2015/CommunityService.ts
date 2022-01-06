@@ -269,7 +269,9 @@ export const SpellDamage = new Test(
   7,
   "Make Sausage",
   () => {
-    const spicyDamage = have($skill`Intrinsic Spiciness`) ? 11 : 0;
+    const spicyDamage = have($skill`Intrinsic Spiciness`)
+      ? Math.min(10, myLevel())
+      : 0;
     const dragonfishDamage =
       myFamiliar() === $familiar`Magic Dragonfish`
         ? numericModifier(

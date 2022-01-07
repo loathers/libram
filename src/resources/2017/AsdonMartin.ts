@@ -116,6 +116,7 @@ export function fillTo(targetUnits: number): boolean {
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
+    // if in Hardcore/ronin, skip the price calculation and just use soda bread
     let fuel;
     if (canInteract()) fuel = getBestFuel(remaining);
     else fuel = $item`loaf of soda bread`;

@@ -314,22 +314,21 @@ export const BoozeDrop = new Test(
       familiarWeight(myFamiliar()) + weightAdjustment(),
       equippedItem($slot`familiar`)
     );
-    if (
+
+    //Champagne doubling does NOT count for CS, so we undouble
+    const denominator =
       haveEquipped($item`broken champagne bottle`) &&
       get("garbageChampagneCharge") > 0
-    ) {
-      return (
-        60 -
-        Math.floor((getModifier("Item Drop") - familiarItemDrop) / 60 + 0.001) -
-        Math.floor(getModifier("Booze Drop") / 15 + 0.001)
-      );
-    } else {
-      return (
-        60 -
-        Math.floor((getModifier("Item Drop") - familiarItemDrop) / 30 + 0.001) -
-        Math.floor(getModifier("Booze Drop") / 15 + 0.001)
-      );
-    }
+        ? 60
+        : 30;
+
+    return (
+      60 -
+      Math.floor(
+        (getModifier("Item Drop") - familiarItemDrop) / denominator + 0.001
+      ) -
+      Math.floor(getModifier("Booze Drop") / 15 + 0.001)
+    );
   },
   new Requirement(["Item Drop", "2 Booze Drop"], {
     preventEquip: $items`broken champagne bottle`,

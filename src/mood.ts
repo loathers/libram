@@ -194,13 +194,33 @@ class PotionMoodElement extends MoodElement {
     if (mallPrice(this.potion) > this.maxPricePerTurn * turnsPerUse) {
       return false;
     }
+    //integer part
     if (effectTurns < ensureTurns) {
-      const uses = (ensureTurns - effectTurns) / turnsPerUse;
+      const uses = Math.floor((ensureTurns - effectTurns) / turnsPerUse);
       const quantityToBuy = clamp(uses - availableAmount(this.potion), 0, 100);
-      buy(quantityToBuy, this.potion, this.maxPricePerTurn * turnsPerUse);
+      buy(
+        quantityToBuy,
+        this.potion,
+        Math.floor(this.maxPricePerTurn * turnsPerUse)
+      );
       const quantityToUse = clamp(uses, 0, availableAmount(this.potion));
       use(quantityToUse, this.potion);
     }
+
+    //fractional part
+    const remainingDifference = ensureTurns - haveEffect(effect);
+    if (remainingDifference < 0) {
+      const price = this.maxPricePerTurn * remainingDifference;
+      if (price <= mallPrice(this.potion)) {
+        if (
+          availableAmount(this.potion) ||
+          buy(1, this.potion, Math.floor(price))
+        ) {
+          use(1, this.potion);
+        }
+      }
+    }
+
     return haveEffect(effect) >= ensureTurns;
   }
 }

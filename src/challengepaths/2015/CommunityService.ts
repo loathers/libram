@@ -283,9 +283,9 @@ export const SpellDamage = new Test(
         : 0;
     return (
       60 -
-      Math.floor((getModifier("Spell Damage") - spicyDamage) / 25 + 0.001) -
+      Math.floor((getModifier("Spell Damage") - spicyDamage) / 50 + 0.001) -
       Math.floor(
-        (getModifier("Spell Damage Percent") - dragonfishDamage) / 25 + 0.001
+        (getModifier("Spell Damage Percent") - dragonfishDamage) / 50 + 0.001
       )
     );
   },
@@ -339,7 +339,7 @@ export const BoozeDrop = new Test(
 export const HotRes = new Test(
   10,
   "Clean Steam Tunnels",
-  () => getModifier("Hot Resistance"),
+  () => 60 - getModifier("Hot Resistance"),
   new Requirement(["Hot Resistance"], {})
 );
 

@@ -22,6 +22,7 @@ import { get } from "../../property";
 import { Requirement } from "../../maximize";
 import {
   $class,
+  $effect,
   $familiar,
   $item,
   $items,
@@ -250,16 +251,19 @@ export const WeaponDamage = new Test(
         : 0;
     const songDamage =
       SongBoom.song() === "These Fists Were Made for Punchin'" ? myLevel() : 0;
+
+    // mafia does not currently count swagger
+    const denominator = have($effect`Bow-Legged Swagger`) ? 25 : 50;
     return (
       60 -
       Math.floor(
         (getModifier("Weapon Damage") -
           0.15 * (weaponPower + offhandPower + familiarPower) -
           songDamage) /
-          25 +
+          denominator +
           0.001
       ) -
-      Math.floor(getModifier("Weapon Damage Percent") / 25 + 0.001)
+      Math.floor(getModifier("Weapon Damage Percent") / denominator + 0.001)
     );
   },
   new Requirement(["Weapon Damage", "Weapon Damage Percent"], {})

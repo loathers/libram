@@ -1,4 +1,5 @@
 import {
+  canInteract,
   cliExecute,
   getFuel,
   getWorkshed,
@@ -90,7 +91,13 @@ function getBestFuel(targetUnits: number): Item {
   return candidates[0];
 }
 
-function insertFuel(it: Item, quantity = 1): boolean {
+/**
+ * Fuel your Asdon Martin with a given quantity of a given item
+ * @param it Item to fuel with.
+ * @param quantity Number of items to fuel with.
+ * @returns Whether we succeeded at fueling with the given items.
+ */
+export function insertFuel(it: Item, quantity = 1): boolean {
   const result = visitUrl(
     `campground.php?action=fuelconvertor&pwd&qty=${quantity}&iid=${toInt(
       it
@@ -109,7 +116,11 @@ export function fillTo(targetUnits: number): boolean {
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
-    const fuel = getBestFuel(remaining);
+    // if in Hardcore/ronin, skip the price calculation and just use soda bread
+    let fuel;
+    if (canInteract()) fuel = getBestFuel(remaining);
+    else fuel = $item`loaf of soda bread`;
+
     const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
 
     retrieveItem(count, fuel);

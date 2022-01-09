@@ -18,7 +18,7 @@ export const familiar = $familiar`Frumious Bandersnatch`;
 
 /**
  * Returns true if the player has the Frumious Bandersnatch in their
- * terrariukm
+ * terrarium
  */
 export function have(): boolean {
   return _have(familiar);
@@ -77,7 +77,7 @@ export function canRunaway(): boolean {
 /**
  * Prepare a Bandersnatch runaway.
  *
- * This will cast Ode to Booze and equip take your Bandersnatch with you.
+ * This will cast Ode to Booze and take your Bandersnatch with you.
  * If any of those steps fail, it will return false.
  *
  * @param songsToRemove Ordered list of songs that could be shrugged to make room for Ode to Booze

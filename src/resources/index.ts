@@ -15,6 +15,7 @@ import * as Snapper from "./2019/Snapper";
 import * as SongBoom from "./2018/SongBoom";
 import * as SourceTerminal from "./2016/SourceTerminal";
 import * as SpookyPutty from "./2009/SpookyPutty";
+import * as StompingBoots from "./2011/StompingBoots";
 import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as WinterGarden from "./2014/WinterGarden";
 import * as Witchess from "./2016/Witchess";
@@ -33,10 +34,11 @@ export {
   MayoClinic,
   ObtuseAngel,
   RainDoh,
+  Snapper,
   SongBoom,
   SourceTerminal,
-  Snapper,
   SpookyPutty,
+  StompingBoots,
   TunnelOfLove,
   WinterGarden,
   Witchess,

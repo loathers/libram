@@ -61,7 +61,9 @@ export type ActionConstraints = {
 function mergeConstraints(
   ...allConstraints: ActionConstraints[]
 ): ActionConstraints | null {
-  const familiars = allConstraints.map((constraints) => constraints.familiar);
+  const familiars = allConstraints
+    .map((constraints) => constraints.familiar)
+    .filter((familiar) => familiar);
   if (familiars.length > 1) {
     // Inconsistent requirements.
     return null;
@@ -82,7 +84,7 @@ function mergeConstraints(
       }
       return success;
     },
-    familiar: familiars[0],
+    familiar: familiars.find((familiar) => familiar),
     cost: () => sum(allConstraints, (constraints) => constraints.cost?.() ?? 0),
   };
 }
@@ -232,7 +234,8 @@ export function findActionSource(
   return (
     actions
       .filter((actions) => filterAction(actions, constraints))
-      .sort((a, b) => a.cost() - b.cost())[0] ?? null
+      .sort((a, b) => a.cost() - b.cost())
+      .find((action) => action) ?? null
   );
 }
 

@@ -24,6 +24,7 @@ import {
   FindActionSourceConstraints,
 } from "./ActionSource";
 import * as Bandersnatch from "../resources/2009/Bandersnatch";
+import * as StompingBoots from "../resources/2011/StompingBoots";
 import * as AsdonMartin from "../resources/2017/AsdonMartin";
 
 // Value of _lastCombatStarted the last time we updated scrapbook charges.
@@ -31,6 +32,7 @@ let scrapbookChargesLastUpdated = get("_lastCombatStarted");
 
 // Free unlimited source every 30 turns.
 // Does not work on special monsters so needs a backup, see tryFindFreeRun.
+// banishedMonsters isn't updated if the free run succeeds on an unbanishable monster
 const asdonMartinSource: ActionSource = new ActionSource(
   $skill`Asdon Martin: Spring-Loaded Front Bumper`,
   () => {
@@ -42,7 +44,7 @@ const asdonMartinSource: ActionSource = new ActionSource(
     if (bumperIndex === -1) return 1;
     return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30 ? 1 : 0;
   },
-  Macro.skill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
+  Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
   {
     preparation: () => AsdonMartin.fillTo(50),
   }
@@ -51,12 +53,11 @@ const asdonMartinSource: ActionSource = new ActionSource(
 const freeRunSources: ActionSource[] = [
   // Free limited sources
   new ActionSource(
-    $familiar`Frumious Bandersnatch`,
+    Bandersnatch.familiar,
     () =>
-      have($familiar`Frumious Bandersnatch`) &&
       (have($effect`Ode to Booze`) || getSongCount() < getSongLimit()) &&
-      Bandersnatch.getRemainingRunaways() > 0
-        ? 0
+      Bandersnatch.couldRunaway()
+        ? Bandersnatch.getRemainingRunaways()
         : 0,
     Macro.step("runaway"),
     {
@@ -65,21 +66,18 @@ const freeRunSources: ActionSource[] = [
         ensureEffect($effect`Ode to Booze`);
         return have($effect`Ode to Booze`);
       },
-      familiar: () => $familiar`Frumious Bandersnatch`,
+      familiar: () => Bandersnatch.familiar,
     }
   ),
 
   new ActionSource(
-    $familiar`Pair of Stomping Boots`,
+    StompingBoots.familiar,
     () =>
-      have($familiar`Pair of Stomping Boots`) &&
-      Bandersnatch.getRemainingRunaways() > 0
-        ? 0
-        : 0,
+      StompingBoots.couldRunaway() ? StompingBoots.getRemainingRunaways() : 0,
     Macro.step("runaway"),
     {
       equipmentRequirements: () => new Requirement(["Familiar Weight"], {}),
-      familiar: () => $familiar`Pair of Stomping Boots`,
+      familiar: () => StompingBoots.familiar,
     }
   ),
 

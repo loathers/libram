@@ -204,13 +204,13 @@ export function getCheapestPlatinumCocktail(freeCraft = true): Item {
     return (maxBy(
       Array.from(ingredientToPlatinumCocktail),
       (ingredientAndCocktail: [Item, Item]) =>
-        Math.min(...ingredientAndCocktail.map((item) => mallPrice(item)))
+        Math.max(...ingredientAndCocktail.map((item) => -mallPrice(item)))
     ) ?? defaultCocktail)[1];
   } else {
     return (maxBy(
       Array.from(ingredientToPlatinumCocktail),
       (ingredientAndCocktail: [Item, Item]) =>
-        mallPrice(ingredientAndCocktail[1])
+        -mallPrice(ingredientAndCocktail[1])
     ) ?? defaultCocktail)[1];
   }
 }

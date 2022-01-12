@@ -21,7 +21,29 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
-function toMoonId(moon: string | number, playerClass: Class): number {
+type MoonSign =
+  | number
+  | "mongoose"
+  | "wallaby"
+  | "vole"
+  | "platypus"
+  | "opossum"
+  | "marmot"
+  | "wombat"
+  | "blender"
+  | "packrat"
+  | "degrassi"
+  | "degrassi knoll"
+  | "friendly degrassi knoll"
+  | "knoll"
+  | "canada"
+  | "canadia"
+  | "little canadia"
+  | "gnomads"
+  | "gnomish"
+  | "gnomish gnomads camp";
+
+function toMoonId(moon: MoonSign, playerClass: Class): number {
   if (typeof moon === "number") return moon;
 
   const offset = (): number => {
@@ -33,11 +55,11 @@ function toMoonId(moon: string | number, playerClass: Class): number {
       case $stat`Moxie`:
         return 2;
       default:
-        throw `unknown prime stat for ${playerClass}`;
+        throw new Error(`unknown prime stat for ${playerClass}`);
     }
   };
 
-  switch ((moon as string).toLowerCase()) {
+  switch (moon.toLowerCase()) {
     case "mongoose":
       return 1;
     case "wallaby":
@@ -88,39 +110,46 @@ export function ascend(
   path: Path,
   playerClass: Class,
   lifestyle: Lifestyle,
-  moon: string | number,
+  moon: MoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined
 ): void {
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
-    throw "Failed to ascend.";
-  if (!path.classes.includes(playerClass))
-    throw `Invalid class ${playerClass} for this path`;
-  if (path.id < 0) throw `Invalid path ID ${path.id}`;
+  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+    throw new Error("Failed to ascend.");
+  }
+  if (!path.classes.includes(playerClass)) {
+    throw new Error(`Invalid class ${playerClass} for this path`);
+  }
+  if (path.id < 0) throw new Error(`Invalid path ID ${path.id}`);
+
   const moonId = toMoonId(moon, playerClass);
-  if (moonId < 1 || moonId > 9) throw `Invalid moon ${moon}`;
+  if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
   if (
     consumable &&
-    !$items`astral six-pack, astral hot dog dinner, carton of astral energy drinks`.includes(
+    !$items`astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
       consumable
     )
-  )
-    throw `Invalid consumable ${consumable}`;
+  ) {
+    throw new Error(`Invalid consumable ${consumable}`);
+  }
+
   if (
     pet &&
     !$items`astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
       pet
     )
-  )
-    throw `Invalid astral item ${pet}`;
+  ) {
+    throw new Error(`Invalid astral item ${pet}`);
+  }
 
   visitUrl("afterlife.php?action=pearlygates");
 
-  if (consumable)
+  if (consumable) {
     visitUrl(`afterlife.php?action=buydeli&whichitem=${toInt(consumable)}`);
+  }
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
   visitUrl(
@@ -128,7 +157,7 @@ export function ascend(
       playerClass
     )}&whichpath=${
       path.id
-    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&pwd`,
+    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
     true
   );
 }
@@ -163,15 +192,25 @@ export function prepareAscension(
 ): void {
   if (ascensionItems) {
     if (ascensionItems.workshed && getWorkshed() !== ascensionItems.workshed) {
-      if (!worksheds.includes(ascensionItems.workshed) && throwOnFail)
-        throw `Invalid workshed: ${ascensionItems.workshed}!`;
-      else if (!have(ascensionItems.workshed) && throwOnFail)
-        throw `I'm sorry buddy, but you don't seem to own a ${ascensionItems.workshed}. Which makes it REALLY hard for us to plop one into your workshed.`;
-      else if (get("_workshedItemUsed") && throwOnFail)
-        throw `Seems like you've already swapped your workshed, buddy.`;
-      else use(ascensionItems.workshed);
-      if (getWorkshed() !== ascensionItems.workshed && throwOnFail)
-        throw `We really thought we changed your workshed to a ${ascensionItems.workshed}, but Mafia is saying otherwise.`;
+      if (!worksheds.includes(ascensionItems.workshed) && throwOnFail) {
+        throw new Error(`Invalid workshed: ${ascensionItems.workshed}!`);
+      } else if (!have(ascensionItems.workshed) && throwOnFail) {
+        throw new Error(
+          `I'm sorry buddy, but you don't seem to own a ${ascensionItems.workshed}. Which makes it REALLY hard for us to plop one into your workshed.`
+        );
+      } else if (get("_workshedItemUsed") && throwOnFail) {
+        throw new Error(
+          `Seems like you've already swapped your workshed, buddy.`
+        );
+      } else {
+        use(ascensionItems.workshed);
+      }
+
+      if (getWorkshed() !== ascensionItems.workshed && throwOnFail) {
+        throw new Error(
+          `We really thought we changed your workshed to a ${ascensionItems.workshed}, but Mafia is saying otherwise.`
+        );
+      }
     }
 
     if (
@@ -180,23 +219,28 @@ export function prepareAscension(
         ascensionItems.garden.name
       )
     ) {
-      if (!gardens.includes(ascensionItems.garden) && throwOnFail)
-        throw `Invalid garden: ${ascensionItems.garden}!`;
-      else if (!have(ascensionItems.garden) && throwOnFail)
-        throw `I'm sorry buddy, but you don't seem to own a ${ascensionItems.garden}. Which makes it REALLY hard for us to plant one into your garden.`;
-      else use(ascensionItems.garden);
+      if (!gardens.includes(ascensionItems.garden) && throwOnFail) {
+        throw new Error(`Invalid garden: ${ascensionItems.garden}!`);
+      } else if (!have(ascensionItems.garden) && throwOnFail) {
+        throw new Error(
+          `I'm sorry buddy, but you don't seem to own a ${ascensionItems.garden}. Which makes it REALLY hard for us to plant one into your garden.`
+        );
+      } else use(ascensionItems.garden);
       if (
         !Object.getOwnPropertyNames(getCampground()).includes(
           ascensionItems.garden.name
         ) &&
         throwOnFail
       )
-        throw `We really thought we changed your garden to a ${ascensionItems.garden}, but Mafia is saying otherwise.`;
+        throw new Error(
+          `We really thought we changed your garden to a ${ascensionItems.garden}, but Mafia is saying otherwise.`
+        );
     }
 
     if (ascensionItems.eudora && eudoraItem() !== ascensionItems.eudora) {
-      if (!eudorae.includes(ascensionItems.eudora) && throwOnFail)
-        throw `Invalid eudora: ${ascensionItems.eudora}!`;
+      if (!eudorae.includes(ascensionItems.eudora) && throwOnFail) {
+        throw new Error(`Invalid eudora: ${ascensionItems.eudora}!`);
+      }
       const eudoraNumber = 1 + eudorae.indexOf(ascensionItems.eudora);
       if (
         !xpath(
@@ -204,15 +248,21 @@ export function prepareAscension(
           `//select[@name="whichpenpal"]/option/@value`
         ).includes(eudoraNumber.toString()) &&
         throwOnFail
-      )
-        throw `I'm sorry buddy, but you don't seem to be subscribed to ${ascensionItems.eudora}. Which makes it REALLY hard to correspond with them.`;
-      else
+      ) {
+        throw new Error(
+          `I'm sorry buddy, but you don't seem to be subscribed to ${ascensionItems.eudora}. Which makes it REALLY hard to correspond with them.`
+        );
+      } else {
         visitUrl(
           `account.php?actions[]=whichpenpal&whichpenpal=${eudoraNumber}&action=Update`,
           true
         );
-      if (eudoraItem() !== ascensionItems.eudora && throwOnFail)
-        throw `We really thought we chaned your eudora to a ${ascensionItems.eudora}, but Mafia is saying otherwise.`;
+      }
+      if (eudoraItem() !== ascensionItems.eudora && throwOnFail) {
+        throw new Error(
+          `We really thought we chaned your eudora to a ${ascensionItems.eudora}, but Mafia is saying otherwise.`
+        );
+      }
     }
   }
   if (chateauItems && ChateauMantegna.have()) {
@@ -220,33 +270,47 @@ export function prepareAscension(
       chateauItems.ceiling &&
       ChateauMantegna.getCeiling() !== chateauItems.ceiling
     ) {
-      if (!ceilings.includes(chateauItems.ceiling) && throwOnFail)
-        throw `Invalid chateau ceiling: ${chateauItems.ceiling}!`;
-      else if (
+      if (!ceilings.includes(chateauItems.ceiling) && throwOnFail) {
+        throw new Error(`Invalid chateau ceiling: ${chateauItems.ceiling}!`);
+      } else if (
         !ChateauMantegna.changeCeiling(chateauItems.ceiling) &&
         throwOnFail
-      )
-        throw `We tried, but were unable to change your chateau ceiling to ${chateauItems.ceiling}. Probably.`;
+      ) {
+        throw new Error(
+          `We tried, but were unable to change your chateau ceiling to ${chateauItems.ceiling}. Probably.`
+        );
+      }
     }
 
     if (chateauItems.desk && ChateauMantegna.getDesk() !== chateauItems.desk) {
-      if (!desks.includes(chateauItems.desk) && throwOnFail)
-        throw `Invalid chateau desk: ${chateauItems.desk}!`;
-      else if (!ChateauMantegna.changeDesk(chateauItems.desk) && throwOnFail)
-        throw `We tried, but were unable to change your chateau desk to ${chateauItems.desk}. Probably.`;
+      if (!desks.includes(chateauItems.desk) && throwOnFail) {
+        throw new Error(`Invalid chateau desk: ${chateauItems.desk}!`);
+      } else if (
+        !ChateauMantegna.changeDesk(chateauItems.desk) &&
+        throwOnFail
+      ) {
+        throw new Error(
+          `We tried, but were unable to change your chateau desk to ${chateauItems.desk}. Probably.`
+        );
+      }
     }
 
     if (
       chateauItems.nightstand &&
       ChateauMantegna.getNightstand() !== chateauItems.nightstand
     ) {
-      if (!nightstands.includes(chateauItems.nightstand) && throwOnFail)
-        throw `Invalid chateau nightstand: ${chateauItems.nightstand}!`;
-      else if (
+      if (!nightstands.includes(chateauItems.nightstand) && throwOnFail) {
+        throw new Error(
+          `Invalid chateau nightstand: ${chateauItems.nightstand}!`
+        );
+      } else if (
         !ChateauMantegna.changeNightstand(chateauItems.nightstand) &&
         throwOnFail
-      )
-        throw `We tried, but were unable to change your chateau nightstand to ${chateauItems.nightstand}. Probably.`;
+      ) {
+        throw new Error(
+          `We tried, but were unable to change your chateau nightstand to ${chateauItems.nightstand}. Probably.`
+        );
+      }
     }
   }
 }

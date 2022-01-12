@@ -15,6 +15,9 @@ export function have(): boolean {
 
 export const buffs = $effects`Spectacle Moustache, Toiletbrush Moustache, Barbell Moustache, Grizzly Beard, Surrealist's Moustache, Musician's Musician's Moustache, Gull-Wing Moustache, Space Warlord's Beard, Pointy Wizard Beard, Cowboy Stache, Friendly Chops`;
 
+export function hasBuff(): boolean {
+  return buffs.some((buff) => haveItem(buff));
+}
 /**
  * Calculates and returns the cycle of buffs that the hat should cycle through.
  * @param playerclass The class to generate a cycle for

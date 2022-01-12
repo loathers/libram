@@ -104,7 +104,7 @@ export function ascend(
   if (moonId < 1 || moonId > 9) throw `Invalid moon ${moon}`;
   if (
     consumable &&
-    !$items`astral six-pack, astral hot dog dinner, carton of astral energy drinks`.includes(
+    !$items`astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
       consumable
     )
   )

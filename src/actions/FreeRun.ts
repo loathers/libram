@@ -17,7 +17,7 @@ import {
 } from "../lib";
 import { Requirement } from "../maximize";
 import { get } from "../property";
-import { $effect, $familiar, $item, $items, $skill } from "../template-string";
+import { $effect, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,

@@ -36,7 +36,7 @@ export function buffCycle(playerclass = myClass()): Effect[] {
  * @returns The next buff we expect to get from the shaving hat.
  */
 export function nextBuff(): Effect {
-  const currentBuff = toEffect(get("lastBeardBuff"));
+  const currentBuff = toEffect(get("lastBeardBuff").toFixed(0));
 
   const cycle = buffCycle();
 

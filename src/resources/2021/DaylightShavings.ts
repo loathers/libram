@@ -32,3 +32,13 @@ export function nextBuff(): Effect {
   const newIndex = (1 + index) % 11;
   return cycle[newIndex];
 }
+
+export function buffsUntil(buff: Effect): number | null {
+  if (!buffs.includes(buff)) return null;
+
+  const currentIndex = buffs.indexOf(nextBuff()) - 1;
+  const newIndex = buffs.indexOf(buff);
+
+  const diff = (newIndex - currentIndex) % 11;
+  return diff === 0 ? 11 : diff;
+}

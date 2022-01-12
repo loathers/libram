@@ -4,6 +4,7 @@ import * as BeachComb from "./2019/BeachComb";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
 import * as CrownOfThrones from "./2010/CrownOfThrones";
 import * as CrystalBall from "./2021/CrystalBall";
+import * as DaylightShavings from "./2021/DaylightShavings";
 import * as DNALab from "./2014/DNALab";
 import * as FloristFriar from "./2013/Florist";
 import * as Guzzlr from "./2020/Guzzlr";
@@ -27,6 +28,7 @@ export {
   ChateauMantegna,
   CrownOfThrones,
   CrystalBall,
+  DaylightShavings,
   DNALab,
   FloristFriar,
   Guzzlr,

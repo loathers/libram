@@ -53,7 +53,7 @@ export function nextBuff(): Effect {
 /**
  * Returns the number of buffs we expect it'll take to get to a given buff. Returns 1 for the next buff, 2 for the one after that, and so on. Returns 11 for the most recent buff.
  * @param buff The shaving buff in question
- * @returns The number of turns we expect it'll take to get to the inputted buff; null if said buff is not granted by the shaving hat.
+ * @returns The number of buffs we expect it'll take to get to the inputted buff; null if said buff is not granted by the shaving hat.
  */
 export function buffsUntil(buff: Effect): number | null {
   if (!buffs.includes(buff)) return null;

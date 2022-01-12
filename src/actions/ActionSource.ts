@@ -1,5 +1,4 @@
 import { useFamiliar } from "kolmafia";
-import { CountQueuingStrategy } from "stream/web";
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
 import { sum } from "../utils";

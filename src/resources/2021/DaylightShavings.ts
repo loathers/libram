@@ -5,13 +5,22 @@ import { $effects, $item } from "../../template-string";
 
 export const helmet = $item`Daylight Shavings Helmet`;
 
+/**
+ * Returns whether the player owns an unpackaged Daylight Shavings Helmet, and it's available in either the inventory or other zones as determined by autoSatisfy settings.
+ * @returns whether we have the Daylight Shavings Helmet.
+ */
 export function have(): boolean {
   return haveItem(helmet);
 }
 
 export const buffs = $effects`Spectacle Moustache, Toiletbrush Moustache, Barbell Moustache, Grizzly Beard, Surrealist's Moustache, Musician's Musician's Moustache, Gull-Wing Moustache, Space Warlord's Beard, Pointy Wizard Beard, Cowboy Stache, Friendly Chops`;
 
-export function buffCycle(playerclass: Class): Effect[] {
+/**
+ * Calculates and returns the cycle of buffs that the hat should cycle through.
+ * @param playerclass The class to generate a cycle for
+ * @returns An ordered array consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
+ */
+export function buffCycle(playerclass = myClass()): Effect[] {
   const returnValue: Effect[] = [];
   const id = toInt(playerclass);
   const seed = id > 6 ? (id % 6) + 1 : id;
@@ -22,10 +31,14 @@ export function buffCycle(playerclass: Class): Effect[] {
   return returnValue;
 }
 
+/**
+ * Returns the next buff we expect to get from the shaving hat.
+ * @returns The next buff we expect to get from the shaving hat.
+ */
 export function nextBuff(): Effect {
   const currentBuff = toEffect(get<number>("lastBeardBuff"));
 
-  const cycle = buffCycle(myClass());
+  const cycle = buffCycle();
 
   const index = cycle.indexOf(currentBuff);
 
@@ -33,6 +46,11 @@ export function nextBuff(): Effect {
   return cycle[newIndex];
 }
 
+/**
+ * Returns the number of buffs we expect it'll take to get to a given buff. Returns 1 for the next buff, 2 for the one after that, and so on. Returns 11 for the most recent buff.
+ * @param buff The shaving buff in question
+ * @returns The number of turns we expect it'll take to get to the inputted buff; null if said buff is not granted by the shaving hat.
+ */
 export function buffsUntil(buff: Effect): number | null {
   if (!buffs.includes(buff)) return null;
 

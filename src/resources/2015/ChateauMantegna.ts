@@ -1,5 +1,4 @@
 import { buy, getChateau, runCombat, visitUrl } from "kolmafia";
-import { $item, $items } from "../../template-string";
 import { get } from "../../property";
 
 export function have(): boolean {
@@ -19,50 +18,62 @@ export function fightPainting(): string {
   return runCombat();
 }
 
-const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;
-const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
-const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
+const desks = [
+  "fancy stationery set",
+  "Swiss piggy bank",
+  "continental juice bar",
+] as const;
+const ceilings = [
+  "antler chandelier",
+  "ceiling fan",
+  "artificial skylight",
+] as const;
+const nightstands = [
+  "foreign language tapes",
+  "bowl of potpourri",
+  "electric muscle stimulator",
+] as const;
 
-export function getDesk(): Item {
+export type Desk = typeof desks[number];
+export type Ceiling = typeof ceilings[number];
+export type Nightstand = typeof nightstands[number];
+
+export function getDesk(): Desk | null {
+  return desks.find((desk) => Object.keys(getChateau()).includes(desk)) ?? null;
+}
+
+export function getCeiling(): Ceiling | null {
   return (
-    desks.find((desk) => Object.keys(getChateau()).includes(desk.name)) ||
-    $item`none`
+    ceilings.find((ceiling) => Object.keys(getChateau()).includes(ceiling)) ??
+    null
   );
 }
 
-export function getCeiling(): Item {
-  return (
-    ceilings.find((ceiling) =>
-      Object.keys(getChateau()).includes(ceiling.name)
-    ) || $item`none`
-  );
-}
-
-export function getNightstand(): Item {
+export function getNightstand(): Nightstand | null {
   return (
     nightstands.find((nightstand) =>
-      Object.keys(getChateau()).includes(nightstand.name)
-    ) || $item`none`
+      Object.keys(getChateau()).includes(nightstand)
+    ) ?? null
   );
 }
 
-export function changeDesk(desk: Item): boolean {
+export function changeDesk(desk: Desk): boolean {
   if (getDesk() === desk) return true;
   if (!desks.includes(desk)) return false;
-  buy(desk);
+  buy(Item.get(desk));
   return getDesk() === desk;
 }
 
-export function changeCeiling(ceiling: Item): boolean {
+export function changeCeiling(ceiling: Ceiling): boolean {
   if (getCeiling() === ceiling) return true;
   if (!ceilings.includes(ceiling)) return false;
-  buy(ceiling);
+  buy(Item.get(ceiling));
   return getCeiling() === ceiling;
 }
 
-export function changeNightstand(nightstand: Item): boolean {
+export function changeNightstand(nightstand: Nightstand): boolean {
   if (getNightstand() === nightstand) return true;
   if (!nightstands.includes(nightstand)) return false;
-  buy(nightstand);
+  buy(Item.get(nightstand));
   return getNightstand() === nightstand;
 }

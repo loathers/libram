@@ -21,6 +21,7 @@ export const buffs = $effects`Spectacle Moustache, Toiletbrush Moustache, Barbel
  * @returns An ordered array consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
  */
 export function buffCycle(playerclass = myClass()): Effect[] {
+  if (toInt(playerclass) <= 0) return [];
   const returnValue: Effect[] = [];
   const id = toInt(playerclass);
   const seed = id > 6 ? (id % 6) + 1 : id;

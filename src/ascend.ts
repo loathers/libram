@@ -9,10 +9,9 @@ import {
   xpath,
 } from "kolmafia";
 import { $item, $items, $stat } from "./template-string";
-import { get } from "./property";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
-import { have } from "./lib";
+import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
 
 export enum Lifestyle {
   casual = 1,
@@ -162,153 +161,127 @@ export function ascend(
   );
 }
 
-const worksheds = $items`warbear LP-ROM burner, warbear jackhammer drill press, warbear induction oven, warbear high-efficiency still, warbear chemistry lab, warbear auto-anvil, spinning wheel, snow machine, Little Geneticist DNA-Splicing Lab, portable Mayo Clinic, Asdon Martin keyfob, diabolic pizza cube`;
-const gardens = $items`packet of pumpkin seeds, Peppermint Pip Packet, packet of dragon's teeth, packet of beer seeds, packet of winter seeds, packet of thanksgarden seeds, packet of tall grass seeds, packet of mushroom spores`;
-// eslint-disable-next-line libram/verify-constants
-const eudorae = $items`My Own Pen Pal kit, GameInformPowerDailyPro subscription card, Xi Receiver Unit, New-You Club Membership Form, Our Daily Candles™ order form`;
+const worksheds = [
+  "warbear LP-ROM burner",
+  "warbear jackhammer drill press",
+  "warbear induction oven",
+  "warbear high-efficiency still",
+  "warbear chemistry lab",
+  "warbear auto-anvil",
+  "spinning wheel",
+  "snow machine",
+  "Little Geneticist DNA-Splicing Lab",
+  "portable Mayo Clinic",
+  "Asdon Martin keyfob",
+  "diabolic pizza cube",
+  "cold medicine cabinet",
+] as const;
+type Workshed = typeof worksheds[number];
 
-const desks = $items`fancy stationery set, Swiss piggy bank, continental juice bar`;
-const ceilings = $items`antler chandelier, ceiling fan, artificial skylight`;
-const nightstands = $items`foreign language tapes, bowl of potpourri, electric muscle stimulator`;
+const gardens = [
+  "packet of pumpkin seeds",
+  "Peppermint Pip Packet",
+  "packet of dragon's teeth",
+  "packet of beer seeds",
+  "packet of winter seeds",
+  "packet of thanksgarden seeds",
+  "packet of tall grass seeds",
+  "packet of mushroom spores",
+] as const;
+type Garden = typeof gardens[number];
+
+const eudorae = [
+  "My Own Pen Pal kit",
+  "GameInformPowerDailyPro subscription card",
+  "Xi Receiver Unit",
+  "New-You Club Membership Form",
+  "Our Daily Candles™ order form",
+] as const;
+type Eudora = typeof eudorae[number];
 
 /**
  * Sets up various iotms you may want to use in the coming ascension
+ * @param ascensionItems.workshed Workshed to switch to.
+ * @param ascensionItems.garden Garden to switch to.
  * @param ascensionItems An object potentially containing your workshed, garden, and eudora, all as items
- * @param chateauItems An object potentially containing your chateau desk, ceiling, and nightstand, all as items
  * @param throwOnFail If true, this will throw an error when it fails to switch something
  */
-export function prepareAscension(
-  ascensionItems?: {
-    workshed?: Item;
-    garden?: Item;
-    eudora?: Item;
-  },
-  chateauItems?: {
-    desk?: Item;
-    ceiling?: Item;
-    nightstand?: Item;
-  },
-  throwOnFail = true
-): void {
-  if (ascensionItems) {
-    if (ascensionItems.workshed && getWorkshed() !== ascensionItems.workshed) {
-      if (!worksheds.includes(ascensionItems.workshed) && throwOnFail) {
-        throw new Error(`Invalid workshed: ${ascensionItems.workshed}!`);
-      } else if (!have(ascensionItems.workshed) && throwOnFail) {
-        throw new Error(
-          `I'm sorry buddy, but you don't seem to own a ${ascensionItems.workshed}. Which makes it REALLY hard for us to plop one into your workshed.`
-        );
-      } else if (get("_workshedItemUsed") && throwOnFail) {
-        throw new Error(
-          `Seems like you've already swapped your workshed, buddy.`
-        );
-      } else {
-        use(ascensionItems.workshed);
-      }
+export function prepareAscension({
+  workshed,
+  garden,
+  eudora,
+  chateau,
+}: {
+  workshed?: Workshed;
+  garden?: Garden;
+  eudora?: Eudora;
+  chateau?: {
+    desk?: Desk;
+    ceiling?: Ceiling;
+    nightstand?: Nightstand;
+  };
+} = {}): void {
+  if (workshed && workshed !== getWorkshed().name) {
+    use(Item.get(workshed));
+  }
 
-      if (getWorkshed() !== ascensionItems.workshed && throwOnFail) {
-        throw new Error(
-          `We really thought we changed your workshed to a ${ascensionItems.workshed}, but Mafia is saying otherwise.`
-        );
-      }
-    }
+  if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
+    use(Item.get(garden));
 
-    if (
-      ascensionItems.garden &&
-      !Object.getOwnPropertyNames(getCampground()).includes(
-        ascensionItems.garden.name
-      )
-    ) {
-      if (!gardens.includes(ascensionItems.garden) && throwOnFail) {
-        throw new Error(`Invalid garden: ${ascensionItems.garden}!`);
-      } else if (!have(ascensionItems.garden) && throwOnFail) {
-        throw new Error(
-          `I'm sorry buddy, but you don't seem to own a ${ascensionItems.garden}. Which makes it REALLY hard for us to plant one into your garden.`
-        );
-      } else use(ascensionItems.garden);
-      if (
-        !Object.getOwnPropertyNames(getCampground()).includes(
-          ascensionItems.garden.name
-        ) &&
-        throwOnFail
-      )
-        throw new Error(
-          `We really thought we changed your garden to a ${ascensionItems.garden}, but Mafia is saying otherwise.`
-        );
-    }
-
-    if (ascensionItems.eudora && eudoraItem() !== ascensionItems.eudora) {
-      if (!eudorae.includes(ascensionItems.eudora) && throwOnFail) {
-        throw new Error(`Invalid eudora: ${ascensionItems.eudora}!`);
-      }
-      const eudoraNumber = 1 + eudorae.indexOf(ascensionItems.eudora);
-      if (
-        !xpath(
-          visitUrl("account.php?tab=correspondence"),
-          `//select[@name="whichpenpal"]/option/@value`
-        ).includes(eudoraNumber.toString()) &&
-        throwOnFail
-      ) {
-        throw new Error(
-          `I'm sorry buddy, but you don't seem to be subscribed to ${ascensionItems.eudora}. Which makes it REALLY hard to correspond with them.`
-        );
-      } else {
-        visitUrl(
-          `account.php?actions[]=whichpenpal&whichpenpal=${eudoraNumber}&action=Update`,
-          true
-        );
-      }
-      if (eudoraItem() !== ascensionItems.eudora && throwOnFail) {
-        throw new Error(
-          `We really thought we chaned your eudora to a ${ascensionItems.eudora}, but Mafia is saying otherwise.`
-        );
-      }
+    if (!Object.getOwnPropertyNames(getCampground()).includes(garden)) {
+      throw new Error(
+        `We really thought we changed your garden to a ${garden}, but Mafia is saying otherwise.`
+      );
     }
   }
-  if (chateauItems && ChateauMantegna.have()) {
+
+  if (eudora && eudoraItem().name !== eudora) {
+    const eudoraNumber = 1 + eudorae.indexOf(eudora);
     if (
-      chateauItems.ceiling &&
-      ChateauMantegna.getCeiling() !== chateauItems.ceiling
+      !xpath(
+        visitUrl("account.php?tab=correspondence"),
+        `//select[@name="whichpenpal"]/option/@value`
+      ).includes(eudoraNumber.toString())
     ) {
-      if (!ceilings.includes(chateauItems.ceiling) && throwOnFail) {
-        throw new Error(`Invalid chateau ceiling: ${chateauItems.ceiling}!`);
-      } else if (
-        !ChateauMantegna.changeCeiling(chateauItems.ceiling) &&
-        throwOnFail
-      ) {
+      throw new Error(
+        `I'm sorry buddy, but you don't seem to be subscribed to ${eudora}. Which makes it REALLY hard to correspond with them.`
+      );
+    } else {
+      visitUrl(
+        `account.php?actions[]=whichpenpal&whichpenpal=${eudoraNumber}&action=Update`,
+        true
+      );
+    }
+
+    if (eudoraItem().name !== eudora) {
+      throw new Error(
+        `We really thought we chaned your eudora to a ${eudora}, but Mafia is saying otherwise.`
+      );
+    }
+  }
+
+  if (chateau && ChateauMantegna.have()) {
+    const { desk, ceiling, nightstand } = chateau;
+    if (ceiling && ChateauMantegna.getCeiling() !== ceiling) {
+      if (!ChateauMantegna.changeCeiling(ceiling)) {
         throw new Error(
-          `We tried, but were unable to change your chateau ceiling to ${chateauItems.ceiling}. Probably.`
+          `We tried, but were unable to change your chateau ceiling to ${ceiling}. Probably.`
         );
       }
     }
 
-    if (chateauItems.desk && ChateauMantegna.getDesk() !== chateauItems.desk) {
-      if (!desks.includes(chateauItems.desk) && throwOnFail) {
-        throw new Error(`Invalid chateau desk: ${chateauItems.desk}!`);
-      } else if (
-        !ChateauMantegna.changeDesk(chateauItems.desk) &&
-        throwOnFail
-      ) {
+    if (desk && ChateauMantegna.getDesk() !== desk) {
+      if (!ChateauMantegna.changeDesk(desk)) {
         throw new Error(
-          `We tried, but were unable to change your chateau desk to ${chateauItems.desk}. Probably.`
+          `We tried, but were unable to change your chateau desk to ${desk}. Probably.`
         );
       }
     }
 
-    if (
-      chateauItems.nightstand &&
-      ChateauMantegna.getNightstand() !== chateauItems.nightstand
-    ) {
-      if (!nightstands.includes(chateauItems.nightstand) && throwOnFail) {
+    if (nightstand && ChateauMantegna.getNightstand() !== nightstand) {
+      if (!ChateauMantegna.changeNightstand(nightstand)) {
         throw new Error(
-          `Invalid chateau nightstand: ${chateauItems.nightstand}!`
-        );
-      } else if (
-        !ChateauMantegna.changeNightstand(chateauItems.nightstand) &&
-        throwOnFail
-      ) {
-        throw new Error(
-          `We tried, but were unable to change your chateau nightstand to ${chateauItems.nightstand}. Probably.`
+          `We tried, but were unable to change your chateau nightstand to ${nightstand}. Probably.`
         );
       }
     }

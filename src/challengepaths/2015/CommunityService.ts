@@ -132,19 +132,13 @@ class Test {
     const finishedFunction = beCertain ? this.verifyIsDone : this.isDone;
     if (finishedFunction()) return null;
 
-    print();
-    print("=======================================");
-    print(`Beginning test ${this.constructor.name}.`, "blue");
-
     const startTime = Date.now();
     const startTurns = myTurncount();
+
     try {
       return prepare();
     } finally {
       const prediction = this.predictor();
-      print(
-        `Executing test ${this.constructor.name}, predicting ${prediction} turns.`
-      );
 
       this.do();
 
@@ -155,20 +149,7 @@ class Test {
       };
 
       if (finishedFunction()) {
-        print(
-          `Finished test ${this.property}. ` +
-            `Took ${loggedTest.seconds.toFixed(1)} seconds and ${
-              loggedTest.turnCost
-            } turns.`,
-          "blue"
-        );
-
         log[this.property] = loggedTest;
-      } else {
-        print(
-          `Failed to complete test ${this.property} for unknown reasons`,
-          "red"
-        );
       }
     }
   }

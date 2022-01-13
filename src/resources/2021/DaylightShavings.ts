@@ -15,8 +15,20 @@ export function have(): boolean {
 
 export const buffs = $effects`Spectacle Moustache, Toiletbrush Moustache, Barbell Moustache, Grizzly Beard, Surrealist's Moustache, Musician's Musician's Moustache, Gull-Wing Moustache, Space Warlord's Beard, Pointy Wizard Beard, Cowboy Stache, Friendly Chops`;
 
+/**
+ * Tells you whether you currently have a beardbuff active. Warning: because of spaghetti, this does not determine buff eligibility.
+ * @returns Whether you currently have a beardbuff active
+ */
 export function hasBuff(): boolean {
   return buffs.some((buff) => haveItem(buff));
+}
+
+/**
+ * Checks to see if there are any beardbuffs you have more than 1 turn of, determining whether you are eligible to receive a buff post-combat.
+ * @returns Whether you current are able to get a buff from the Daylight Shaving Helmet.
+ */
+export function buffAvailable(): boolean {
+  return !buffs.some((buff) => haveItem(buff, 2));
 }
 /**
  * Calculates and returns the cycle of buffs that the hat should cycle through.

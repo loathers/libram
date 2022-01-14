@@ -1,12 +1,26 @@
 import { autosellPrice, getWorkshed, toInt, visitUrl } from "kolmafia";
 import { getModifier } from "../../index";
-import { have } from "../../lib";
+import { have as haveItem } from "../../lib";
 import { $item, $monster } from "../../template-string";
 import { clamp } from "../../utils";
 
 /**
+ * @returns true if the Diabolic pizza cube is installed in workshed
+ */
+export function installed(): boolean {
+  return getWorkshed() === $item`diabolic pizza cube`;
+}
+
+/**
+ * @returns true if the Diabolic pizza cube is installed in workshed or in inventory
+ */
+export function have(): boolean {
+  return installed() || haveItem($item`diabolic pizza cube`);
+}
+
+/**
  * @param item The item to be checked for validity
- * @returns true if an item is a valid pizza ingredient, else false
+ * @returns true if an item is a valid pizza ingredient
  */
 export function validIngredient(item: Item): boolean {
   return item.tradeable && item.discardable && !item.gift;
@@ -17,7 +31,7 @@ export function validIngredient(item: Item): boolean {
  * @returns A list of possible ingredients from the provided list of items
  */
 export function validIngredients(items: Item[]): Item[] {
-  return items.filter((item)=>validIngredient(item));
+  return items.filter((item) => validIngredient(item));
 }
 
 /**
@@ -70,16 +84,16 @@ export function simulate(
  * @returns true if pizza generation was a success else false if you cannot make a pizza or pizza generation failed.
  */
 export function cook(a: Item, b: Item, c: Item, d: Item): boolean {
-  if (getWorkshed() !== $item`diabolic pizza cube`) return false;
-  if (have($item`diabolic pizza`)) return false;
+  if (!installed()) return false;
+  if (haveItem($item`diabolic pizza`)) return false;
   const abcd = [a, b, c, d] as const;
   if (abcd.some((item) => !validIngredient(item))) return false;
   const need = new Map<Item, number>();
   for (const item of abcd) need.set(item, 1 + (need.get(item) ?? 0));
-  for (const [item, count] of need) if (!have(item, count)) return false;
+  for (const [item, count] of need) if (!haveItem(item, count)) return false;
   visitUrl(
     `campground.php?action=makepizza&pizza=${abcd.map(toInt).join(",")}`
   );
-  if (have($item`diabolic pizza`)) return true;
+  if (haveItem($item`diabolic pizza`)) return true;
   return false;
 }

@@ -17,6 +17,7 @@ import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as SongBoom from "./2018/SongBoom";
 import * as BeachComb from "./2019/BeachComb";
+import * as DiabolicPizza from "./2019/DiabolicPizza";
 import * as Snapper from "./2019/Snapper";
 import * as Guzzlr from "./2020/Guzzlr";
 import * as CrystalBall from "./2021/CrystalBall";
@@ -30,6 +31,7 @@ export {
   CrownOfThrones,
   CrystalBall,
   DaylightShavings,
+  DiabolicPizza,
   DNALab,
   FloristFriar,
   Guzzlr,

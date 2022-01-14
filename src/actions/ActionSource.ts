@@ -34,6 +34,15 @@ export type FindActionSourceConstraints = {
    * only actions that cost nothing.
    */
   maximumCost?: () => number;
+
+  /**
+   * Function allowing for custom logic if an action should be allowed.
+   * If undefined, allow all actions to be considered by other constraints.
+   *
+   * @param action The action that is being considered.
+   * @returns True if the action should be allowed.
+   */
+  allowedAction?: (action: ActionSource) => boolean;
 };
 
 export type ActionConstraints = {
@@ -210,6 +219,8 @@ function filterAction(
 ): boolean {
   return (
     action.available() &&
+    (constraints.allowedAction === undefined ||
+      constraints.allowedAction(action)) &&
     !(constraints.requireFamiliar?.() && !action.constraints.familiar) &&
     !(constraints.requireUnlimited?.() && !action.isUnlimited()) &&
     !(constraints.noFamiliar?.() && action.constraints.familiar) &&

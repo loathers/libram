@@ -255,7 +255,7 @@ export function prepareAscension({
 
     if (eudoraItem().name !== eudora) {
       throw new Error(
-        `We really thought we chaned your eudora to a ${eudora}, but Mafia is saying otherwise.`
+        `We really thought we changed your eudora to a ${eudora}, but Mafia is saying otherwise.`
       );
     }
   }

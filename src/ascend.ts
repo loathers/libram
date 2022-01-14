@@ -4,6 +4,7 @@ import {
   getCampground,
   getWorkshed,
   toInt,
+  toItem,
   use,
   visitUrl,
   xpath,
@@ -221,7 +222,7 @@ export function prepareAscension({
     nightstand?: Nightstand;
   };
 } = {}): void {
-  if (workshed && workshed !== getWorkshed().name) {
+  if (workshed && getWorkshed() !== toItem(workshed)) {
     use(Item.get(workshed));
   }
 
@@ -253,9 +254,9 @@ export function prepareAscension({
       );
     }
 
-    if (eudoraItem().name !== eudora) {
+    if (eudoraItem() !== toItem(eudora)) {
       throw new Error(
-        `We really thought we chaned your eudora to a ${eudora}, but Mafia is saying otherwise.`
+        `We really thought we changed your eudora to a ${eudora}, but Mafia is saying otherwise.`
       );
     }
   }

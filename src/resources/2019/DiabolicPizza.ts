@@ -1,5 +1,5 @@
 import { autosellPrice, getWorkshed, toInt, visitUrl } from "kolmafia";
-import { getModifier } from "../../index";
+import { get as getModifier } from "../../modifier";
 import { have as haveItem } from "../../lib";
 import { $item, $monster } from "../../template-string";
 import { clamp } from "../../utils";

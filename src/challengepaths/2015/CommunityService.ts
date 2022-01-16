@@ -26,7 +26,6 @@ import {
   $familiar,
   $item,
   $items,
-  $skill,
   $slot,
   $stat,
   $thrall,
@@ -254,9 +253,6 @@ export const SpellDamage = new Test(
   7,
   "Make Sausage",
   () => {
-    const spicyDamage = have($skill`Intrinsic Spiciness`)
-      ? Math.min(10, myLevel())
-      : 0;
     const dragonfishDamage =
       myFamiliar() === $familiar`Magic Dragonfish`
         ? numericModifier(
@@ -268,7 +264,7 @@ export const SpellDamage = new Test(
         : 0;
     return (
       60 -
-      Math.floor((getModifier("Spell Damage") - spicyDamage) / 50 + 0.001) -
+      Math.floor(getModifier("Spell Damage") / 50 + 0.001) -
       Math.floor(
         (getModifier("Spell Damage Percent") - dragonfishDamage) / 50 + 0.001
       )

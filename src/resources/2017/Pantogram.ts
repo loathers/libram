@@ -193,10 +193,10 @@ export function makePants(
  */
 export function makePantsFromObject(pants: Pants): boolean {
   return makePants(
-    pants["alignment"],
-    pants["element"],
-    pants["leftSac"],
-    pants["middleSac"],
-    pants["rightSac"]
+    pants.alignment,
+    pants.element,
+    pants.leftSac,
+    pants.middleSac,
+    pants.rightSac
   );
 }

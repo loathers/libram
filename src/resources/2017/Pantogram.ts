@@ -15,50 +15,13 @@ export function havePants(): boolean {
 
 type PantogramAlignment = "Muscle" | "Moxie" | "Mysticality";
 
-type PantogramElement =
-  | "Hot Resistance: 2"
-  | "Cold Resistance: 2"
-  | "Spooky Resistance: 2"
-  | "Sleaze Resistance: 2"
-  | "Stench Resistance: 2";
+type PantogramElement = keyof typeof Element;
 
-type PantogramSacrificeL =
-  | "Maximum HP: 40"
-  | "Maximum MP: 20"
-  | "HP Regen Max: 10"
-  | "HP Regen Max: 15"
-  | "HP Regen Max: 20"
-  | "MP Regen Max: 10"
-  | "MP Regen Max: 15"
-  | "MP Regen Max: 20"
-  | "Mana Cost: -3";
+type PantogramSacrificeL = keyof typeof LeftSacrifice;
 
-type PantogramSacrificeM =
-  | "Combat Rate: -5"
-  | "Combat Rate: 5"
-  | "Initiative: 50"
-  | "Critical Hit Percent: 10"
-  | "Familiar Weight: 10"
-  | "Candy Drop: 100"
-  | "Item Drop Penalty: -10"
-  | "Fishing Skill: 5"
-  | "Pool Skill: 5"
-  | "Drops Items: true"
-  | "Avatar: Purple";
+type PantogramSacrificeM = keyof typeof MiddleSacrifice;
 
-type PantogramSacrificeR =
-  | "Weapon Damage: 20"
-  | "Spell Damage Percent: 20"
-  | "Meat Drop: 30"
-  | "Meat Drop: 60"
-  | "Item Drop: 15"
-  | "Item Drop: 30"
-  | "Muscle Experience: 3"
-  | "Mysticality Experience: 3"
-  | "Moxie Experience: 3"
-  | "Muscle Experience Percent: 25"
-  | "Mysticality Experience Percent: 25"
-  | "Moxie Experience Percent: 25";
+type PantogramSacrificeR = keyof typeof RightSacrifice;
 
 type Pants = {
   alignment: PantogramAlignment;
@@ -68,13 +31,13 @@ type Pants = {
   middleSac: PantogramSacrificeM;
 };
 
-const Alignment: Record<PantogramAlignment, number> = {
+const Alignment = {
   ["Muscle"]: 1,
   ["Mysticality"]: 2,
   ["Moxie"]: 3,
 };
 
-const Element: Record<PantogramElement, number> = {
+const Element = {
   ["Hot Resistance: 2"]: 1,
   ["Cold Resistance: 2"]: 2,
   ["Spooky Resistance: 2"]: 3,
@@ -82,7 +45,7 @@ const Element: Record<PantogramElement, number> = {
   ["Stench Resistance: 2"]: 5,
 };
 
-const LeftSacrifice: Record<PantogramSacrificeL, [Item | number, number]> = {
+const LeftSacrifice = {
   ["Maximum HP: 40"]: [-1, 0],
   ["Maximum MP: 20"]: [-2, 0],
   ["HP Regen Max: 10"]: [$item`red pixel potion`, 1],
@@ -94,7 +57,7 @@ const LeftSacrifice: Record<PantogramSacrificeL, [Item | number, number]> = {
   ["Mana Cost: -3"]: [$item`baconstone`, 1],
 };
 
-const MiddleSacrifice: Record<PantogramSacrificeM, [Item | number, number]> = {
+const MiddleSacrifice = {
   ["Combat Rate: -5"]: [-1, 0],
   ["Combat Rate: 5"]: [-2, 0],
   ["Critical Hit Percent: 10"]: [$item`hamethyst`, 1],
@@ -108,7 +71,7 @@ const MiddleSacrifice: Record<PantogramSacrificeM, [Item | number, number]> = {
   ["Drops Items: true"]: [$item`ten-leaf clover`, 1],
 };
 
-const RightSacrifice: Record<PantogramSacrificeR, [Item | number, number]> = {
+const RightSacrifice = {
   ["Weapon Damage: 20"]: [-1, 0],
   ["Spell Damage Percent: 20"]: [-2, 0],
   ["Meat Drop: 30"]: [$item`taco shell`, 1],
@@ -134,21 +97,30 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
   const returnValue = new Map<Item, number>();
 
   if (leftSac) {
-    const [sacrifice, quantity] = LeftSacrifice[leftSac];
+    const [sacrifice, quantity] = LeftSacrifice[leftSac] as [
+      Item | number,
+      number
+    ];
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
   }
 
   if (rightSac) {
-    const [sacrifice, quantity] = RightSacrifice[rightSac];
+    const [sacrifice, quantity] = RightSacrifice[rightSac] as [
+      Item | number,
+      number
+    ];
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
   }
 
   if (middleSac) {
-    const [sacrifice, quantity] = MiddleSacrifice[middleSac];
+    const [sacrifice, quantity] = MiddleSacrifice[middleSac] as [
+      Item | number,
+      number
+    ];
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
@@ -197,9 +169,15 @@ export function makePants(
   ) {
     return false;
   }
-  const s1 = sacrificePairToURL(LeftSacrifice[leftSac]);
-  const s2 = sacrificePairToURL(RightSacrifice[rightSac]);
-  const s3 = sacrificePairToURL(MiddleSacrifice[middleSac]);
+  const s1 = sacrificePairToURL(
+    LeftSacrifice[leftSac] as [Item | number, number]
+  );
+  const s2 = sacrificePairToURL(
+    RightSacrifice[rightSac] as [Item | number, number]
+  );
+  const s3 = sacrificePairToURL(
+    MiddleSacrifice[middleSac] as [Item | number, number]
+  );
 
   const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
 

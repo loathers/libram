@@ -529,7 +529,7 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
  * @param questName Name of quest property to check.
  */
 export function questStep(questName: string): number {
-  const stringStep = get<string>(questName);
+  const stringStep = get(questName);
   if (stringStep === "unstarted") return -1;
   else if (stringStep === "started") return 0;
   else if (stringStep === "finished" || stringStep === "") return 999;

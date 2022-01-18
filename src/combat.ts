@@ -138,9 +138,7 @@ export class Macro {
    * Load a saved macro from the Mafia property.
    */
   static load<T extends Macro>(this: Constructor<T>): T {
-    return new this().step(
-      ...get<string>(Macro.SAVED_MACRO_PROPERTY).split(";")
-    );
+    return new this().step(...get(Macro.SAVED_MACRO_PROPERTY).split(";"));
   }
 
   /**

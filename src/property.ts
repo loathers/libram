@@ -133,16 +133,16 @@ export const getThrall = createMafiaClassPropertyGetter(Thrall, toThrall);
  * @param property Name of the property
  * @param _default Default value for the property to take if not set
  */
-export function get(property: BooleanProperty): boolean | null;
+export function get(property: BooleanProperty): boolean;
 export function get(property: BooleanProperty, _default: boolean): boolean;
-export function get(property: NumericProperty): number | null;
+export function get(property: NumericProperty): number;
 export function get(property: NumericProperty, _default: number): number;
-export function get(property: NumericOrStringProperty): number | string | null;
+export function get(property: NumericOrStringProperty): number | string;
 export function get(
   property: NumericOrStringProperty,
   _default: number | string
 ): number | string;
-export function get(property: StringProperty): string | null;
+export function get(property: StringProperty): string;
 export function get(property: StringProperty, _default: string): string;
 export function get(property: LocationProperty): Location | null;
 export function get(property: LocationProperty, _default: Location): Location;
@@ -164,9 +164,9 @@ export function get(property: string, _default?: unknown): unknown {
 
   // Handle known properties.
   if (isBooleanProperty(property)) {
-    return getBoolean(property, _default as boolean | undefined);
+    return getBoolean(property, _default as boolean | undefined) ?? false;
   } else if (isNumericProperty(property)) {
-    return getNumber(property, _default as number | undefined);
+    return getNumber(property, _default as number | undefined) ?? 0;
   } else if (isNumericOrStringProperty(property)) {
     return value.match(/^\d+$/) ? parseInt(value) : value;
   } else if (isLocationProperty(property)) {

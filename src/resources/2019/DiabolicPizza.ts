@@ -5,30 +5,30 @@ import { $item, $monster } from "../../template-string";
 import { clamp } from "../../utils";
 
 /**
- * @returns true if the Diabolic pizza cube is installed in workshed
+ * @returns true if the Diabolic pizza cube is installed in workshed.
  */
 export function installed(): boolean {
   return getWorkshed() === $item`diabolic pizza cube`;
 }
 
 /**
- * @returns true if the Diabolic pizza cube is installed in workshed or in inventory
+ * @returns true if the Diabolic pizza cube is installed in workshed or in inventory.
  */
 export function have(): boolean {
   return installed() || haveItem($item`diabolic pizza cube`);
 }
 
 /**
- * @param item The item to be checked for validity
- * @returns true if an item is a valid pizza ingredient
+ * @param item The item to be checked for validity.
+ * @returns true if an item is a valid pizza ingredient.
  */
 export function validIngredient(item: Item): boolean {
   return item.tradeable && item.discardable && !item.gift;
 }
 
 /**
- * @param items A list of items to be filtered
- * @returns A list of possible ingredients from the provided list of items
+ * @param items A list of items to be filtered.
+ * @returns A list of possible ingredients from the provided list of items.
  */
 export function validIngredients(items: Item[]): Item[] {
   return items.filter((item) => validIngredient(item));
@@ -42,9 +42,10 @@ export function validIngredients(items: Item[]): Item[] {
  * @param c Third pizza ingredient
  * @param d Fourth pizza ingredient
  * @returns Returns an object with properties:
- *   adventures: the number of adventures this pizza would generate, before modifiers (3-15 advs)
- *   duration: the duration of the effect of the pizza (5-100 advs)
- *   effects: an array of possible effects that this pizza can yield
+ *   adventures: the number of adventures this pizza would generate, before modifiers (3-15 advs).
+ *   duration: the duration of the effect of the pizza (5-100 advs).
+ *   effects: an array of possible effects that this pizza can yield.
+ * @returns -1 and an empty array if the ingredients are not valid.
  */
 export function simulate(
   a: Item,

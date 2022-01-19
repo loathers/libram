@@ -13,29 +13,13 @@ export function havePants(): boolean {
   return haveItem(pants);
 }
 
-type PantogramAlignment = "Muscle" | "Moxie" | "Mysticality";
-
-type PantogramElement = keyof typeof Element;
-
-type PantogramSacrificeL = keyof typeof LeftSacrifice;
-
-type PantogramSacrificeM = keyof typeof MiddleSacrifice;
-
-type PantogramSacrificeR = keyof typeof RightSacrifice;
-
-type Pants = {
-  alignment: PantogramAlignment;
-  element: PantogramElement;
-  leftSac: PantogramSacrificeL;
-  rightSac: PantogramSacrificeR;
-  middleSac: PantogramSacrificeM;
-};
-
 const Alignment = {
   ["Muscle"]: 1,
   ["Mysticality"]: 2,
   ["Moxie"]: 3,
 };
+
+type PantogramAlignment = "Muscle" | "Moxie" | "Mysticality";
 
 const Element = {
   ["Hot Resistance: 2"]: 1,
@@ -44,6 +28,8 @@ const Element = {
   ["Sleaze Resistance: 2"]: 4,
   ["Stench Resistance: 2"]: 5,
 };
+
+type PantogramElement = keyof typeof Element;
 
 const LeftSacrifice = {
   ["Maximum HP: 40"]: [-1, 0],
@@ -56,6 +42,12 @@ const LeftSacrifice = {
   ["MP Regen Max: 20"]: [$item`glowing New Age crystal`, 1],
   ["Mana Cost: -3"]: [$item`baconstone`, 1],
 };
+
+type PantogramSacrificeL = keyof typeof LeftSacrifice;
+
+function getLeftSacPair(mod: PantogramSacrificeL): [Item | number, number] {
+  return LeftSacrifice[mod] as [Item | number, number];
+}
 
 const MiddleSacrifice = {
   ["Combat Rate: -5"]: [-1, 0],
@@ -71,6 +63,11 @@ const MiddleSacrifice = {
   ["Drops Items: true"]: [$item`ten-leaf clover`, 1],
 };
 
+type PantogramSacrificeM = keyof typeof MiddleSacrifice;
+
+function getMiddleSacPair(mod: PantogramSacrificeM): [Item | number, number] {
+  return MiddleSacrifice[mod] as [Item | number, number];
+}
 const RightSacrifice = {
   ["Weapon Damage: 20"]: [-1, 0],
   ["Spell Damage Percent: 20"]: [-2, 0],
@@ -86,6 +83,20 @@ const RightSacrifice = {
   ["Moxie Experience Percent: 25"]: [$item`the funk`, 5],
 };
 
+type PantogramSacrificeR = keyof typeof RightSacrifice;
+
+function getRightSacPair(mod: PantogramSacrificeR): [Item | number, number] {
+  return RightSacrifice[mod] as [Item | number, number];
+}
+
+type Pants = {
+  alignment: PantogramAlignment;
+  element: PantogramElement;
+  leftSac: PantogramSacrificeL;
+  rightSac: PantogramSacrificeR;
+  middleSac: PantogramSacrificeM;
+};
+
 /**
  * Finds the item requirements for a particular pair of pants.
  * @param modifiers An object consisting of the modifiers you want on your pants. For modifiers repeated across a particular sacrifice, use a tuple of that modifier and its value.
@@ -97,30 +108,21 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
   const returnValue = new Map<Item, number>();
 
   if (leftSac) {
-    const [sacrifice, quantity] = LeftSacrifice[leftSac] as [
-      Item | number,
-      number
-    ];
+    const [sacrifice, quantity] = getLeftSacPair(leftSac);
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
   }
 
   if (rightSac) {
-    const [sacrifice, quantity] = RightSacrifice[rightSac] as [
-      Item | number,
-      number
-    ];
+    const [sacrifice, quantity] = getRightSacPair(rightSac);
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
   }
 
   if (middleSac) {
-    const [sacrifice, quantity] = MiddleSacrifice[middleSac] as [
-      Item | number,
-      number
-    ];
+    const [sacrifice, quantity] = getMiddleSacPair(middleSac);
     if (sacrifice instanceof Item) {
       returnValue.set(sacrifice, quantity);
     }
@@ -169,15 +171,9 @@ export function makePants(
   ) {
     return false;
   }
-  const s1 = sacrificePairToURL(
-    LeftSacrifice[leftSac] as [Item | number, number]
-  );
-  const s2 = sacrificePairToURL(
-    RightSacrifice[rightSac] as [Item | number, number]
-  );
-  const s3 = sacrificePairToURL(
-    MiddleSacrifice[middleSac] as [Item | number, number]
-  );
+  const s1 = sacrificePairToURL(getLeftSacPair(leftSac));
+  const s2 = sacrificePairToURL(getRightSacPair(rightSac));
+  const s3 = sacrificePairToURL(getMiddleSacPair(middleSac));
 
   const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
 

@@ -19,7 +19,7 @@ export function have(): boolean {
 }
 
 /**
- * @param items A list of one or more items to be checked.
+ * @param items One or more items to be checked.
  * @returns true if all items are a valid pizza ingredients.
  */
 export function validIngredients(...items: Item[]): boolean {

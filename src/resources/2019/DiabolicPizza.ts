@@ -19,19 +19,12 @@ export function have(): boolean {
 }
 
 /**
- * @param item The item to be checked for validity.
- * @returns true if an item is a valid pizza ingredient.
+ * @param items A list of one or more items to be checked.
+ * @returns true if all items are a valid pizza ingredients.
  */
-export function validIngredient(item: Item): boolean {
-  return item.tradeable && item.discardable && !item.gift;
-}
-
-/**
- * @param items A list of items to be filtered.
- * @returns A list of possible ingredients from the provided list of items.
- */
-export function validIngredients(items: Item[]): Item[] {
-  return items.filter((item) => validIngredient(item));
+export function validIngredients(...items: Item[]): boolean {
+  const valid = (i: Item): boolean => i.tradeable && i.discardable && !i.gift;
+  return items.every((item) => valid(item));
 }
 
 /**
@@ -55,7 +48,7 @@ export function simulate(
 ): { adventures: number; effects: Effect[]; duration: number } {
   const abcd = [a, b, c, d] as const;
   const error = { adventures: -1, effects: [], duration: -1 };
-  if (abcd.some((item) => !validIngredient(item))) return error;
+  if (!validIngredients(...abcd)) return error;
   const totalLetters = abcd.reduce((sum, item) => sum + item.nameLength, 0);
   const advs = clamp(Math.floor(totalLetters / 10), 3, 15);
   const totalPrice = abcd.reduce((sum, item) => sum + autosellPrice(item), 0);
@@ -88,13 +81,12 @@ export function cook(a: Item, b: Item, c: Item, d: Item): boolean {
   if (!installed()) return false;
   if (haveItem($item`diabolic pizza`)) return false;
   const abcd = [a, b, c, d] as const;
-  if (abcd.some((item) => !validIngredient(item))) return false;
+  if (!validIngredients(...abcd)) return false;
   const need = new Map<Item, number>();
   for (const item of abcd) need.set(item, 1 + (need.get(item) ?? 0));
   for (const [item, count] of need) if (!haveItem(item, count)) return false;
-  visitUrl(
-    `campground.php?action=makepizza&pizza=${abcd.map(toInt).join(",")}`
-  );
+  const params = abcd.map((item) => toInt(item)).join(",");
+  visitUrl(`campground.php?action=makepizza&pizza=${params}`);
   if (haveItem($item`diabolic pizza`)) return true;
   return false;
 }

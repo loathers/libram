@@ -190,7 +190,7 @@ export const HP = new Test(
 export const Muscle = new Test(
   2,
   "Feed The Children",
-  statTestPredictor($stat`muscle`),
+  statTestPredictor($stat`Muscle`),
   new Requirement(["Muscle"], {})
 );
 

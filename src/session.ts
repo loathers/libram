@@ -35,17 +35,13 @@ function mySessionItemsWrapper(): Map<Item, number> {
     ...foldableMapping($item`mushroom cap`),
     [$item`empty Rain-Doh can`, $item`can of Rain-Doh`],
   ]);
+  //[...foldables.entries()].forEach((val) => print(`${val[0]}:${val[1]}`));
 
   const inventory = new Map<Item, number>();
   for (const [itemStr, quantity] of Object.entries(mySessionItems())) {
     const item = toItem(itemStr);
-    const foldableItem = foldables.get(item) ?? item;
-    const alreadyInventory = inventory.get(item);
-    if (alreadyInventory !== undefined) {
-      inventory.set(foldableItem, quantity + alreadyInventory);
-    } else {
-      inventory.set(foldableItem, quantity);
-    }
+    const mappedItem = foldables.get(item) ?? item;
+    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
   }
   return inventory;
 }
@@ -54,15 +50,15 @@ function mySessionItemsWrapper(): Map<Item, number> {
  * Performa a binary element-wise operation on two inventories
  * @param a The LHS inventory to perform the operation on
  * @param b The RHS inventory to perform the operation on
- * @param op a function to compute between the sets
- * @param transitive if true use the value of b for any items not in a. if false, ignore values not in a
+ * @param op an operator to compute between the sets
+ * @param commutative if true use the value of b for any items not in a. if false, ignore values not in a
  * @returns a new map representing the combined inventories
  */
 function inventoryOperation(
   a: Map<Item, number>,
   b: Map<Item, number>,
   op: (aPart: number, bPart: number) => number,
-  transitive: boolean
+  commutative: boolean
 ): Map<Item, number> {
   // return every entry that is in a and not in b
   const difference = new Map<Item, number>();
@@ -71,7 +67,7 @@ function inventoryOperation(
     const combinedQuantity = op(quantity, b.get(item) ?? 0);
     difference.set(item, combinedQuantity);
   }
-  if (transitive) {
+  if (commutative) {
     for (const [item, quantity] of b.entries()) {
       if (!a.has(item)) {
         difference.set(item, quantity);
@@ -127,6 +123,19 @@ export class Snapshot {
   private constructor(meat: number, items: Map<Item, number>) {
     this.meat = meat;
     this.items = items;
+  }
+
+  /**
+   * Register session results that do not get tracked natively
+   * @param target either the Item or a string saying "meat" of what quantity to modify
+   * @param quantity How much to modify the tracked amount by
+   */
+  register(target: Item | "meat", quantity: number) {
+    if (target === "meat") {
+      this.meat += quantity;
+    } else {
+      this.items.set(target, (this.items.get(target) ?? 0) + quantity);
+    }
   }
 
   /**

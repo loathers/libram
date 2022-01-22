@@ -28,7 +28,7 @@ export {
 } from "./property";
 export { get as getModifier } from "./modifier";
 export { Modifiers } from "./modifier";
-export { Snapshot } from "./snapshot";
+export { Session } from "./session";
 
 export * as Dreadsylvania from "./dungeons/Dreadsylvania";
 export * as Hobopolis from "./dungeons/Hobopolis";

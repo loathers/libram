@@ -197,7 +197,7 @@ export const Muscle = new Test(
 export const Mysticality = new Test(
   3,
   "Build Playground Mazes",
-  statTestPredictor($stat`mysticality`),
+  statTestPredictor($stat`Mysticality`),
   new Requirement(["Mysticality"], {})
 );
 

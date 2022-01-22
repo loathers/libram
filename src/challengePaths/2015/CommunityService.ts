@@ -165,7 +165,7 @@ class Test {
 }
 
 const thralls = new Map<Stat, Thrall>([
-  [$stat`muscle`, $thrall`Undead Elbow Macaroni`],
+  [$stat`muscle`, $thrall`Elbow Macaroni`],
   [$stat`moxie`, $thrall`Penne Dreadful`],
 ]);
 

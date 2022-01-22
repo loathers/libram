@@ -300,17 +300,16 @@ export const BoozeDrop = new Test(
     );
 
     //Champagne doubling does NOT count for CS, so we undouble
-    const denominator =
+    const multiplier =
       haveEquipped($item`broken champagne bottle`) &&
       get("garbageChampagneCharge") > 0
-        ? 60
-        : 30;
+        ? 0.5
+        : 1;
 
     return (
       60 -
-      Math.floor(
-        (getModifier("Item Drop") - familiarItemDrop) / denominator + 0.001
-      ) -
+      multiplier *
+        Math.floor((getModifier("Item Drop") - familiarItemDrop) / 30 + 0.001) -
       Math.floor(getModifier("Booze Drop") / 15 + 0.001)
     );
   },

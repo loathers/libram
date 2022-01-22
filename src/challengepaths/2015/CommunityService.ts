@@ -204,7 +204,7 @@ export const Mysticality = new Test(
 export const Moxie = new Test(
   4,
   "Feed Conspirators",
-  statTestPredictor($stat`moxie`),
+  statTestPredictor($stat`Moxie`),
   new Requirement(["Moxie"], {})
 );
 

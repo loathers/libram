@@ -233,17 +233,20 @@ export const WeaponDamage = new Test(
       SongBoom.song() === "These Fists Were Made for Punchin'" ? myLevel() : 0;
 
     // mafia does not currently count swagger
-    const denominator = have($effect`Bow-Legged Swagger`) ? 25 : 50;
+    const multiplier = have($effect`Bow-Legged Swagger`) ? 2 : 1;
     return (
       60 -
       Math.floor(
-        (getModifier("Weapon Damage") -
-          0.15 * (weaponPower + offhandPower + familiarPower) -
-          songDamage) /
-          denominator +
+        (multiplier *
+          (getModifier("Weapon Damage") -
+            0.15 * (weaponPower + offhandPower + familiarPower) -
+            songDamage)) /
+          50 +
           0.001
       ) -
-      Math.floor(getModifier("Weapon Damage Percent") / denominator + 0.001)
+      Math.floor(
+        (multiplier * getModifier("Weapon Damage Percent")) / 50 + 0.001
+      )
     );
   },
   new Requirement(["Weapon Damage", "Weapon Damage Percent"], {})

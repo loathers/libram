@@ -166,7 +166,7 @@ class Test {
 
 const thralls = new Map<Stat, Thrall>([
   [$stat`muscle`, $thrall`Elbow Macaroni`],
-  [$stat`moxie`, $thrall`Bind Penne Dreadful`],
+  [$stat`moxie`, $thrall`Penne Dreadful`],
 ]);
 
 const statTestPredictor = (stat: Stat) => {

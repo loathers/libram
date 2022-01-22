@@ -1,4 +1,10 @@
-import { autosellPrice, getWorkshed, toInt, visitUrl } from "kolmafia";
+import {
+  autosellPrice,
+  getWorkshed,
+  npcPrice,
+  toInt,
+  visitUrl,
+} from "kolmafia";
 import { get as getModifier } from "../../modifier";
 import { have as haveItem } from "../../lib";
 import { $item, $monster } from "../../template-string";
@@ -23,17 +29,17 @@ export function have(): boolean {
  * @returns true if all items are a valid pizza ingredients.
  */
 export function validIngredients(...items: Item[]): boolean {
-  const valid = (i: Item): boolean => i.tradeable && i.discardable && !i.gift;
-  return items.every((item) => valid(item));
+  return items.every((item) => {
+    return (
+      item.tradeable && item.discardable && !item.gift && npcPrice(item) === 0
+    );
+  });
 }
 
 /**
  * Simulates a pizza given a set of four ingredients. Ingredient order determines the possible effects.
  * Possible effects depend on the KoLMafia nohookah flag and avatar potion data.
- * @param a First pizza ingredient
- * @param b Second pizza ingredient
- * @param c Third pizza ingredient
- * @param d Fourth pizza ingredient
+ * @param items The four selected ingredient items to be used
  * @returns Returns an object with properties:
  *   adventures: the number of adventures this pizza would generate, before modifiers (3-15 advs).
  *   duration: the duration of the effect of the pizza (5-100 advs).
@@ -41,51 +47,45 @@ export function validIngredients(...items: Item[]): boolean {
  * @returns -1 and an empty array if the ingredients are not valid.
  */
 export function simulate(
-  a: Item,
-  b: Item,
-  c: Item,
-  d: Item
+  ...items: [Item, Item, Item, Item]
 ): { adventures: number; effects: Effect[]; duration: number } {
-  const abcd = [a, b, c, d] as const;
   const error = { adventures: -1, effects: [], duration: -1 };
-  if (!validIngredients(...abcd)) return error;
-  const totalLetters = abcd.reduce((sum, item) => sum + item.nameLength, 0);
-  const advs = clamp(Math.floor(totalLetters / 10), 3, 15);
-  const totalPrice = abcd.reduce((sum, item) => sum + autosellPrice(item), 0);
-  const dur = clamp(Math.floor(Math.sqrt(totalPrice)), 5, 100);
+  if (!validIngredients(...items)) return error;
+  const totalLetters = items.reduce((sum, item) => sum + item.nameLength, 0);
+  const adventures = clamp(Math.floor(totalLetters / 10), 3, 15);
+  const totalPrice = items.reduce((sum, item) => sum + autosellPrice(item), 0);
+  const duration = clamp(Math.floor(Math.sqrt(totalPrice)), 5, 100);
   const wishable = Effect.all().filter(
     (effect) =>
       !effect.attributes.includes("nohookah") &&
       getModifier("Avatar", effect) === $monster`none`
   );
   let possible: Effect[] = wishable;
-  for (const item of abcd) {
-    const filtered = possible.filter((effect) =>
-      effect.name.startsWith(item.name.charAt(0))
-    );
-    if (filtered.length === 0) break;
-    possible = filtered;
+  for (let i = 0; i < items.length; i++) {
+    const itemLetter = items[i].name.toLowerCase().charAt(0);
+    const matchingEffects = possible.filter((effect) => {
+      const effectLetter = effect.name.toLowerCase().charAt(i);
+      return effectLetter === itemLetter;
+    });
+    if (matchingEffects.length === 0) break;
+    possible = matchingEffects;
   }
-  return { adventures: advs, duration: dur, effects: possible };
+  return { adventures: adventures, duration: duration, effects: possible };
 }
 
 /**
  * Generates a pizza using the four items passed in. Items a, b, c, and d will be consumed by this function.
- * @param a First pizza ingredient
- * @param b Second pizza ingredient
- * @param c Third pizza ingredient
- * @param d Fourth pizza ingredient
+ * @param items The four selected ingredient items to be used
  * @returns true if pizza generation was a success else false if you cannot make a pizza or pizza generation failed.
  */
-export function cook(a: Item, b: Item, c: Item, d: Item): boolean {
+export function cook(...items: [Item, Item, Item, Item]): boolean {
   if (!installed()) return false;
   if (haveItem($item`diabolic pizza`)) return false;
-  const abcd = [a, b, c, d] as const;
-  if (!validIngredients(...abcd)) return false;
+  if (!validIngredients(...items)) return false;
   const need = new Map<Item, number>();
-  for (const item of abcd) need.set(item, 1 + (need.get(item) ?? 0));
+  for (const item of items) need.set(item, 1 + (need.get(item) ?? 0));
   for (const [item, count] of need) if (!haveItem(item, count)) return false;
-  const params = abcd.map((item) => toInt(item)).join(",");
+  const params = items.map((item) => toInt(item)).join(",");
   visitUrl(`campground.php?action=makepizza&pizza=${params}`);
   if (haveItem($item`diabolic pizza`)) return true;
   return false;

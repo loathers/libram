@@ -11,6 +11,7 @@ import * as Guzzlr from "./2020/Guzzlr";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as MayoClinic from "./2015/MayoClinic";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
+import * as Pantogram from "./2017/Pantogram";
 import * as RainDoh from "./2012/RainDoh";
 import * as Snapper from "./2019/Snapper";
 import * as SongBoom from "./2018/SongBoom";
@@ -35,6 +36,7 @@ export {
   Latte,
   MayoClinic,
   ObtuseAngel,
+  Pantogram,
   RainDoh,
   Snapper,
   SongBoom,

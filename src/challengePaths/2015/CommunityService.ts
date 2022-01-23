@@ -352,3 +352,8 @@ export function printLog(colour = "blue"): void {
     colour
   );
 }
+
+export const donate = () => {
+  visitUrl("council.php");
+  runChoice(30);
+};

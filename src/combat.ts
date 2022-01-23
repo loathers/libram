@@ -17,7 +17,7 @@ import { getTodaysHolidayWanderers } from "./lib";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
- * Get the KoL native ID of the macro with name Script Autoattack Macro.
+ * Get the KoL native ID of the macro with name name.
  *
  * @category Combat
  * @returns {number} The macro ID.
@@ -195,9 +195,10 @@ export class Macro {
    */
   setAutoAttack(): void {
     let id = Macro.cachedMacroIds.get(this.name);
-    if (id === undefined)
-      Macro.cachedMacroIds.set(this.name, getMacroId(this.name));
-    id = getMacroId(this.name);
+    if (id === undefined) {
+      id = getMacroId(this.name);
+      Macro.cachedMacroIds.set(this.name, id);
+    }
     if (
       getAutoAttack() === 99000000 + id &&
       this.toString() === Macro.cachedAutoAttacks.get(this.name)

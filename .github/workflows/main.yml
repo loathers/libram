@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install modules
-        run: yarn
+        run: yarn install --frozen-lockfile
       - name: Run ESLint & Prettier
         run: yarn run lint
 
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install modules
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Build
         run: yarn run build
 

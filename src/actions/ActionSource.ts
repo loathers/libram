@@ -102,19 +102,19 @@ function mergeConstraints(
  * A combat-based action resource in the game (e.g. a free run or free kill).
  */
 export class ActionSource {
-  source: Item | Skill | Familiar;
+  source: Item | Skill | Familiar | Array<Item | Skill | Familiar>;
   potential: () => number; // Infinity: unlimited
   macro: Macro;
   constraints: ActionConstraints;
 
   /**
-   * @param source Source of the action (e.g. item or skill needed).
+   * @param source Source(s) of the action (e.g. item, skill, or familiar needed).
    * @param potential Function returning how many times this action can be used.
    * @param macro Macro to execute this action in combat.
    * @param constraints Constraints required for this action to be available.
    */
   constructor(
-    source: Item | Skill | Familiar,
+    source: Item | Skill | Familiar | Array<Item | Skill | Familiar>,
     potential: () => number,
     macro: Macro,
     constraints: ActionConstraints = {}
@@ -175,7 +175,7 @@ export class ActionSource {
       return null;
     }
     return new ActionSource(
-      this.source,
+      [...actions.map((action) => action.source).flat()],
       () => sum(actions, (action) => action.potential()),
       Macro.step(...actions.map((action) => action.macro)),
       constraints

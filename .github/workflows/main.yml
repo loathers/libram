@@ -17,6 +17,9 @@ jobs:
   testBuild:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
       - name: Build
         run: yarn run build
 
@@ -27,19 +30,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.node-version }}
       - run: |
           git config user.name "O.A.F."
           git config user.email "<>"
-      - run: yarn install --frozen-lockfile
-      - run: yarn run build
-      - run: |
+      - name: Install modules
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn run build
+      - name: Switch to release branch
+        run: |
           git fetch --all
           if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
-      - run: |
+      - name: Commit built Mafia files
+        run: |
           git add KoLmafia/
           {
             git commit -m "Build Mafia files for commit $GITHUB_SHA"

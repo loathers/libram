@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,5 +13,35 @@ jobs:
         run: yarn
       - name: Run ESLint & Prettier
         run: yarn run lint
+
+  testBuild:
+    runs-on: ubuntu-latest
+    steps:
       - name: Build
         run: yarn run build
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, testBuild]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node-version }}
+      - run: |
+          git config user.name "O.A.F."
+          git config user.email "<>"
+      - run: yarn install --frozen-lockfile
+      - run: yarn run build
+      - run: |
+          git fetch --all
+          if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
+      - run: |
+          git add KoLmafia/
+          {
+            git commit -m "Build Mafia files for commit $GITHUB_SHA"
+            git push origin release
+          } || exit 0

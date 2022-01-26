@@ -13,7 +13,7 @@ export * from "./since";
 export * from "./template-string";
 export { default as Kmail } from "./Kmail";
 export * from "./Path";
-export { default as logger, LogLevel } from "./logger";
+export { default as logger } from "./logger";
 export * as console from "./console";
 export * as property from "./property";
 export * from "./utils";
@@ -28,9 +28,15 @@ export {
   withChoice,
 } from "./property";
 export { get as getModifier } from "./modifier";
-export { Modifiers } from "./modifier";
 export { Session } from "./session";
 
 export * as Dreadsylvania from "./dungeons/Dreadsylvania";
 export * as Hobopolis from "./dungeons/Hobopolis";
 export * as SlimeTube from "./dungeons/SlimeTube";
+
+// Necessary to avoid webpack error when reexporting type-only symbols.
+// See https://github.com/microsoft/TypeScript/issues/28481
+import { Modifiers as ModifiersInternal } from "./modifier";
+export type Modifiers = ModifiersInternal;
+import { LogLevel as LogLevelInternal } from "./logger";
+export type LogLevel = LogLevelInternal;

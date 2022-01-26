@@ -154,11 +154,12 @@ export function get(property: StatProperty): Stat | null;
 export function get(property: StatProperty, _default: Stat): Stat;
 export function get(property: PhylumProperty): Phylum | null;
 export function get(property: PhylumProperty, _default: Phylum): Phylum;
-export function get<D extends string | number | boolean>(
-  property: string,
-  _default: D
-): D;
-export function get(property: string): string;
+export function get(property: string, _default: Location): Location | undefined;
+export function get(property: string, _default: Monster): Monster | undefined;
+export function get(property: string, _default: Familiar): Familiar | undefined;
+export function get(property: string, _default: boolean): boolean;
+export function get(property: string, _default: number): number;
+export function get(property: string, _default?: string): string;
 export function get(property: string, _default?: unknown): unknown {
   const value = getString(property);
 
@@ -194,6 +195,10 @@ export function get(property: string, _default?: unknown): unknown {
     return getStat(property, _default as Stat | undefined);
   } else if (_default instanceof Phylum) {
     return getPhylum(property, _default as Phylum | undefined);
+  } else if (typeof _default === "boolean") {
+    return value === "true" ? true : value === "false" ? false : _default;
+  } else if (typeof _default === "number") {
+    return value === "" ? _default : parseInt(value);
   } else if (value === "") {
     return _default === undefined ? "" : _default;
   } else {

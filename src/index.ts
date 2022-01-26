@@ -8,6 +8,7 @@ export * from "./diet";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";
+export * from "./propertyTyping";
 export * from "./resources";
 export * from "./since";
 export * from "./template-string";
@@ -16,6 +17,7 @@ export * from "./Path";
 export { default as logger, LogLevel } from "./logger";
 export * as console from "./console";
 export * as property from "./property";
+export * as propertyTypes from "./propertyTypes";
 export * from "./utils";
 export {
   get,

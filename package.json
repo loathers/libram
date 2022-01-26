@@ -11,7 +11,7 @@
   "scripts": {
     "build": "yarn run build:tsc && yarn run build:bundled",
     "build:tsc": "tsc",
-    "build:bundled": "wepback",
+    "build:bundled": "webpack",
     "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
     "docs": "yarn run typedoc",

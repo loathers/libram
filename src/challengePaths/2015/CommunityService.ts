@@ -128,7 +128,8 @@ class Test {
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
   run<T>(prepare: () => T, beCertain = false): T | null {
-    const finishedFunction = beCertain ? this.verifyIsDone : this.isDone;
+    const finishedFunction = () =>
+      beCertain ? this.verifyIsDone() : this.isDone();
     if (finishedFunction()) return null;
 
     const startTime = Date.now();

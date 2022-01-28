@@ -1,4 +1,4 @@
-import { useFamiliar } from "kolmafia";
+import { Familiar, Item, Skill, useFamiliar } from "kolmafia";
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
 import { sum } from "../utils";

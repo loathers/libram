@@ -1,19 +1,26 @@
 import {
   adv1,
   choiceFollowsFight,
+  Class,
+  Effect,
   getAutoAttack,
   inMultiFight,
+  Item,
+  Location,
+  Monster,
   removeProperty,
   runCombat,
   setAutoAttack,
+  Skill,
+  Stat,
   toInt,
   urlEncode,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $items, $skills } from "./template-string";
-import { get, set } from "./property";
 import { getTodaysHolidayWanderers } from "./lib";
+import { get, set } from "./property";
+import { $items, $skills } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**

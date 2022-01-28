@@ -1,6 +1,6 @@
 import "core-js/modules/es.object.values";
 
-import { cliExecute } from "kolmafia";
+import { cliExecute, Effect, Item, Monster, Skill } from "kolmafia";
 import isEqual from "lodash/isEqual";
 
 import { Copier } from "../../Copier";

@@ -1,8 +1,16 @@
-import { cliExecute, getWorkshed, haveEffect, itemAmount } from "kolmafia";
-import { $effect, $item, $phylum } from "../../template-string";
+import {
+  cliExecute,
+  Effect,
+  getWorkshed,
+  haveEffect,
+  Item,
+  itemAmount,
+  Phylum,
+} from "kolmafia";
 import { have as haveItem } from "../../lib";
-import { get } from "../../property";
 import { get as getModifier } from "../../modifier";
+import { get } from "../../property";
+import { $effect, $item, $phylum } from "../../template-string";
 import { clamp } from "../../utils";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;

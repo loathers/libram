@@ -1,6 +1,7 @@
 import {
   bufferToFile,
   fileToBuffer,
+  Item,
   mySessionItems,
   mySessionMeat,
   toItem,

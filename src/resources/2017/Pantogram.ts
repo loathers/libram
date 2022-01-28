@@ -1,4 +1,4 @@
-import { toInt, visitUrl } from "kolmafia";
+import { Item, toInt, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { $item } from "../../template-string";
 

@@ -1,3 +1,4 @@
+import { Class } from "kolmafia";
 import { $classes } from "./template-string";
 
 export class Path {

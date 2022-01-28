@@ -8,6 +8,8 @@ import {
   availableAmount,
   booleanModifier,
   cliExecute,
+  Effect,
+  Familiar,
   fullnessLimit,
   getCampground,
   getCounters,
@@ -20,7 +22,10 @@ import {
   haveSkill,
   holiday,
   inebrietyLimit,
+  Item,
+  Location,
   mallPrice,
+  Monster,
   myEffects,
   myFamiliar,
   myFullness,
@@ -30,14 +35,17 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
+  Servant,
+  Skill,
   spleenLimit,
+  Thrall,
   toItem,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
 
-import { $class, $familiar, $item, $items, $monsters } from "./template-string";
 import { get } from "./property";
+import { $class, $familiar, $item, $items, $monsters } from "./template-string";
 import { chunk } from "./utils";
 
 /**

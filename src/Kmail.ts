@@ -4,6 +4,7 @@ import {
   extractItems,
   extractMeat,
   isGiftable,
+  Item,
   toInt,
   visitUrl,
 } from "kolmafia";

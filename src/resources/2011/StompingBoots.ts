@@ -1,7 +1,7 @@
 import { familiarWeight, useFamiliar, weightAdjustment } from "kolmafia";
+import { have as _have, isCurrentFamiliar } from "../../lib";
 import { get } from "../../property";
 import { $familiar } from "../../template-string";
-import { have as _have, isCurrentFamiliar } from "../../lib";
 
 export const familiar = $familiar`Pair of Stomping Boots`;
 

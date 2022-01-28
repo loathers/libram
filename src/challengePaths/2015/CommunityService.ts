@@ -14,12 +14,17 @@ import {
   numericModifier,
   print,
   runChoice,
+  Stat,
+  Thrall,
   toSlot,
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { get } from "../../property";
+import { have } from "../../lib";
 import { Requirement } from "../../maximize";
+import { get as getModifier } from "../../modifier";
+import { get } from "../../property";
+import { MummingTrunk, SongBoom } from "../../resources";
 import {
   $class,
   $effect,
@@ -30,9 +35,6 @@ import {
   $stat,
   $thrall,
 } from "../../template-string";
-import { get as getModifier } from "../../modifier";
-import { have } from "../../lib";
-import { MummingTrunk, SongBoom } from "../../resources";
 import { sum } from "../../utils";
 
 /**

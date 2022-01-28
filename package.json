@@ -60,7 +60,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.14.9",
     "core-js": "3.15.2",
-    "kolmafia": "^1.4.0",
+    "kolmafia": "^2.0.0",
     "lodash": "^4.17.21"
   },
   "husky": {

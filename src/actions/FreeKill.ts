@@ -4,13 +4,13 @@ import { Macro } from "../combat";
 import { have } from "../lib";
 import { Requirement } from "../maximize";
 import { get } from "../property";
+import * as AsdonMartin from "../resources/2017/AsdonMartin";
 import { $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceConstraints,
 } from "./ActionSource";
-import * as AsdonMartin from "../resources/2017/AsdonMartin";
 
 const freeKillSources: ActionSource[] = [
   // Free limited sources

@@ -1,7 +1,7 @@
-import nodeFetch from "node-fetch";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { BaseJavaCstVisitorWithDefaults, parse } from "java-parser";
+import nodeFetch from "node-fetch";
 
 /**
  *

@@ -2,9 +2,24 @@ import "core-js/modules/es.object.entries";
 import "core-js/modules/es.object.from-entries";
 
 import {
+  Bounty,
+  Class,
+  Coinmaster,
+  Effect,
+  Element,
+  Familiar,
   getProperty,
+  Item,
+  Location,
   MafiaClass,
+  Monster,
+  Phylum,
+  Servant,
   setProperty,
+  Skill,
+  Slot,
+  Stat,
+  Thrall,
   toBounty,
   toClass,
   toCoinmaster,
@@ -23,6 +38,17 @@ import {
 } from "kolmafia";
 
 import {
+  BooleanProperty,
+  FamiliarProperty,
+  LocationProperty,
+  MonsterProperty,
+  NumericOrStringProperty,
+  NumericProperty,
+  PhylumProperty,
+  StatProperty,
+  StringProperty,
+} from "./propertyTypes";
+import {
   isBooleanProperty,
   isFamiliarProperty,
   isLocationProperty,
@@ -34,18 +60,6 @@ import {
   isStringProperty,
   KnownProperty,
 } from "./propertyTyping";
-
-import {
-  BooleanProperty,
-  FamiliarProperty,
-  LocationProperty,
-  MonsterProperty,
-  NumericOrStringProperty,
-  NumericProperty,
-  PhylumProperty,
-  StatProperty,
-  StringProperty,
-} from "./propertyTypes";
 
 const createPropertyGetter = <T>(
   transform: (value: string, property: string) => T

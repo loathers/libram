@@ -1,4 +1,4 @@
-import { myFamiliar } from "kolmafia";
+import { Familiar, myFamiliar } from "kolmafia";
 import { getSaleValue, have } from "../../lib";
 import { Modifiers } from "../../modifier";
 import { get } from "../../property";

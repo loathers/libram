@@ -1,18 +1,20 @@
 import {
+  Class,
   containsText,
   eudoraItem,
   getCampground,
   getWorkshed,
+  Item,
   toInt,
   toItem,
   use,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $item, $items, $stat } from "./template-string";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
 import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
+import { $item, $items, $stat } from "./template-string";
 
 export enum Lifestyle {
   casual = 1,

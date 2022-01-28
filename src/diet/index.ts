@@ -1,9 +1,11 @@
 import {
   canEquip,
+  Effect,
   fullnessLimit,
   historicalAge,
   historicalPrice,
   inebrietyLimit,
+  Item,
   itemType,
   mallPrice,
   mallPrices,
@@ -16,13 +18,13 @@ import {
   spleenLimit,
 } from "kolmafia";
 
-import { knapsack } from "./knapsack";
 import { have } from "../lib";
 import { get as getModifier } from "../modifier";
 import { get } from "../property";
+import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
 import { sum, sumNumbers } from "../utils";
-import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
+import { knapsack } from "./knapsack";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
 type RawDiet<T> = RawDietEntry<T>[];

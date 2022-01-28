@@ -17,15 +17,15 @@ import {
 } from "../lib";
 import { Requirement } from "../maximize";
 import { get } from "../property";
+import * as Bandersnatch from "../resources/2009/Bandersnatch";
+import * as StompingBoots from "../resources/2011/StompingBoots";
+import * as AsdonMartin from "../resources/2017/AsdonMartin";
 import { $effect, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceConstraints,
 } from "./ActionSource";
-import * as Bandersnatch from "../resources/2009/Bandersnatch";
-import * as StompingBoots from "../resources/2011/StompingBoots";
-import * as AsdonMartin from "../resources/2017/AsdonMartin";
 
 // Value of _lastCombatStarted the last time we updated scrapbook charges.
 let scrapbookChargesLastUpdated = get("_lastCombatStarted");

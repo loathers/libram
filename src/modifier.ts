@@ -2,16 +2,21 @@ import "core-js/modules/es.object.values";
 
 import {
   booleanModifier,
+  Class,
   classModifier,
+  Effect,
   effectModifier,
+  Familiar,
+  Item,
+  Monster,
   monsterModifier,
   numericModifier,
+  Skill,
   skillModifier,
+  Stat,
   statModifier,
   stringModifier,
 } from "kolmafia";
-
-import { arrayContains } from "./utils";
 
 import {
   BooleanModifier,
@@ -31,6 +36,7 @@ import {
   StringModifier,
   stringModifiers,
 } from "./modifierTypes";
+import { arrayContains } from "./utils";
 
 export function get(
   name: BooleanModifier,

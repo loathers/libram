@@ -1,26 +1,27 @@
 import {
   bufferToFile,
   fileToBuffer,
+  getCampground,
   mySessionItems,
   mySessionMeat,
   toItem,
 } from "kolmafia";
+import { getItem } from "./property";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
 import { sumNumbers } from "./utils";
 
 /**
- * Return a mapping of the session items, mapping foldable items to a single of their forms
- * @returns the item session results, with foldables mapped to a single of their folding forms
+ * A map of item -> how it should be represented in the session log
+ * @returns A map of item to its representation
  */
-function mySessionItemsWrapper(): Map<Item, number> {
+function getItemMappings() {
   const manyToOne = (primary: Item, mapped: Item[]): [Item, Item][] =>
     mapped.map((target: Item) => [target, primary]);
-
   const foldable = (item: Item): [Item, Item][] =>
     manyToOne(item, getFoldGroup(item));
 
-  const itemMappings = new Map<Item, Item>([
+  return new Map<Item, Item>([
     ...foldable($item`liar's pants`),
     ...foldable($item`ice pick`),
     ...manyToOne($item`Spooky Putty sheet`, [
@@ -61,6 +62,14 @@ function mySessionItemsWrapper(): Map<Item, number> {
       $items`blueberry muffin, bran muffin, chocolate chip muffin`
     ),
   ]);
+}
+
+/**
+ * Return a mapping of the session items, mapping foldable items to a single of their forms
+ * @returns the item session results, with foldables mapped to a single of their folding forms
+ */
+function mySessionItemsWrapper(): Map<Item, number> {
+  const itemMappings = getItemMappings();
 
   const inventory = new Map<Item, number>();
   for (const [itemStr, quantity] of Object.entries(mySessionItems())) {
@@ -69,6 +78,20 @@ function mySessionItemsWrapper(): Map<Item, number> {
     inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
   }
   return inventory;
+}
+
+function getCampgroundWrapper(): {
+  workshed?: Item;
+  garden?: Item;
+  muffin?: Item;
+} {
+  const worksheds = $items`cold medicine cabinet, diabolic pizza cube, Asdon Martin keyfob, portable Mayo Clinic, Little Geneticist DNA-Splicing Lab, snow machine, snow machine, spinning wheel, warbear auto-anvil, warbear chemistry lab, warbear high-efficiency still, warbear induction oven, warbear jackhammer drill press, warbear LP-ROM burner`;
+  const gardens = $items`packet of pumpkin seeds, Peppermint Pip Packet, packet of dragon's teeth, packet of beer seeds, packet of winter seeds, packet of thanksgarden seeds, packet of tall grass seeds, packet of mushroom spores`;
+
+  const workshed = worksheds.find((item) => getCampground()[`${item}`]);
+  const garden = gardens.find((item) => getCampground()[`${item}`]);
+  const muffin = getItem("muffinOnOrder") ?? undefined; // coerce null into undefined
+  return { workshed, garden, muffin };
 }
 
 /**
@@ -140,14 +163,43 @@ interface ItemResult {
 export class Session {
   meat: number;
   items: Map<Item, number>;
+  campground: { workshed?: Item; garden?: Item; muffin?: Item };
   /**
    * Construct a new session
    * @param meat the amount of meat associated with this session
    * @param items the items associated with this session
    */
-  private constructor(meat: number, items: Map<Item, number>) {
+  private constructor(
+    meat: number,
+    items: Map<Item, number>,
+    campground: { workshed?: Item; garden?: Item }
+  ) {
     this.meat = meat;
     this.items = items;
+    this.campground = campground;
+  }
+
+  itemsWithCampground(): Map<Item, number> {
+    const thisItems = new Map(this.items);
+    if (this.campground.garden) {
+      thisItems.set(
+        this.campground.garden,
+        this.items.get(this.campground.garden) ?? 0 + 1
+      );
+    }
+    if (this.campground.workshed) {
+      thisItems.set(
+        this.campground.workshed,
+        this.items.get(this.campground.workshed) ?? 0 + 1
+      );
+    }
+    if (this.campground.muffin) {
+      thisItems.set(
+        $item`earthenware muffin tin`,
+        this.items.get($item`earthenware muffin tin`) ?? 0 + 1
+      );
+    }
+    return thisItems;
   }
 
   /**
@@ -184,7 +236,7 @@ export class Session {
 
   /**
    * Subtract the contents of another session from this one, removing any items that have a resulting quantity of 0
-   *  (this will ignore elements in b but not in a)
+   *  (this will ignore elements in b but not in a). Also considers items you have as worksheds, gardens, or at the breakfast counter
    * @param other the session from which to pull values to remove from this session
    * @returns a new session representing the difference between this session and the other session
    */
@@ -192,16 +244,17 @@ export class Session {
     return new Session(
       this.meat - other.meat,
       inventoryOperation(
-        this.items,
-        other.items,
+        this.itemsWithCampground(),
+        other.itemsWithCampground(),
         (a: number, b: number) => a - b,
         false
-      )
+      ),
+      {}
     );
   }
   /**
    * Subtract the contents of snasphot b from session a, removing any items that have a resulting quantity of 0
-   *  (this will ignore elements in b but not in a)
+   *  (this will ignore elements in b but not in a) Also considers items you have as worksheds, gardens, or at the breakfast counter
    * @param a the session from which to subtract elements
    * @param b the session from which to add elements
    * @returns a new session representing the difference between a and b
@@ -211,7 +264,8 @@ export class Session {
   }
 
   /**
-   * Generate a new session combining multiple sessions together
+   * Generate a new session combining multiple sessions together.
+   * Also considers items you have as worksheds, gardens, or at the breakfast counter
    * @param other the session from which to add elements to this set
    * @returns a new session representing the addition of other to this
    */
@@ -219,16 +273,18 @@ export class Session {
     return new Session(
       this.meat + other.meat,
       inventoryOperation(
-        this.items,
-        other.items,
+        this.itemsWithCampground(),
+        other.itemsWithCampground(),
         (a: number, b: number) => a + b,
         true
-      )
+      ),
+      {}
     );
   }
 
   /**
    * Combine the contents of sessions
+   * Also considers items you have as worksheds, gardens, or at the breakfast counter
    * @param sessions the set of sessions to combine together
    * @returns a new session representing the difference between a and b
    */
@@ -246,6 +302,7 @@ export class Session {
     const val = {
       meat: this.meat,
       items: Object.fromEntries(this.items),
+      campground: this.campground,
     };
     bufferToFile(JSON.stringify(val), filename);
   }
@@ -262,19 +319,28 @@ export class Session {
       const val: {
         meat: number;
         items: { [item: string]: number };
+        campground: { workshed?: Item; garden?: Item };
       } = JSON.parse(fileValue);
 
       const parsedItems: [Item, number][] = Object.entries(
         val.items
       ).map(([itemStr, quantity]) => [toItem(itemStr), quantity]);
-      return new Session(val.meat, new Map<Item, number>(parsedItems));
+      return new Session(
+        val.meat,
+        new Map<Item, number>(parsedItems),
+        val.campground
+      );
     } else {
       // if the file does not exist, return an empty session
-      return new Session(0, new Map<Item, number>());
+      return new Session(0, new Map<Item, number>(), {});
     }
   }
 
   static current(): Session {
-    return new Session(mySessionMeat(), mySessionItemsWrapper());
+    return new Session(
+      mySessionMeat(),
+      mySessionItemsWrapper(),
+      getCampgroundWrapper()
+    );
   }
 }

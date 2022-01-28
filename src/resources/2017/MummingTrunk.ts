@@ -1,4 +1,4 @@
-import { toFamiliar } from "kolmafia";
+import { Familiar, toFamiliar } from "kolmafia";
 import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 

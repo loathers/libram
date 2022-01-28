@@ -10,6 +10,7 @@ import * as FloristFriar from "./2013/Florist";
 import * as Guzzlr from "./2020/Guzzlr";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as MayoClinic from "./2015/MayoClinic";
+import * as MummingTrunk from "./2017/MummingTrunk";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as Pantogram from "./2017/Pantogram";
 import * as RainDoh from "./2012/RainDoh";
@@ -35,6 +36,7 @@ export {
   Guzzlr,
   Latte,
   MayoClinic,
+  MummingTrunk,
   ObtuseAngel,
   Pantogram,
   RainDoh,

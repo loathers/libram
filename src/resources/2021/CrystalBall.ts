@@ -1,4 +1,10 @@
-import { myTurncount, toLocation, toMonster } from "kolmafia";
+import {
+  Location,
+  Monster,
+  myTurncount,
+  toLocation,
+  toMonster,
+} from "kolmafia";
 import { get } from "../../property";
 
 const parsedProp = () =>

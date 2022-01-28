@@ -1,4 +1,4 @@
-import { buy, getChateau, runCombat, visitUrl } from "kolmafia";
+import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
 import { get } from "../../property";
 
 export function have(): boolean {

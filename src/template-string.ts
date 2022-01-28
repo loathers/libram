@@ -1,4 +1,21 @@
-import { MafiaClass } from "kolmafia";
+import {
+  Bounty,
+  Class,
+  Coinmaster,
+  Effect,
+  Element,
+  Familiar,
+  Item,
+  Location,
+  MafiaClass,
+  Monster,
+  Phylum,
+  Servant,
+  Skill,
+  Slot,
+  Stat,
+  Thrall,
+} from "kolmafia";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,

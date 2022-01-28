@@ -1,7 +1,7 @@
-import { getClanName, myId, toItem, visitUrl, xpath } from "kolmafia";
-import { $items } from "../template-string";
+import { getClanName, Item, myId, toItem, visitUrl, xpath } from "kolmafia";
 import { Clan } from "../Clan";
 import { getPlayerFromIdOrName } from "../lib";
+import { $items } from "../template-string";
 import { countedMapToArray } from "../utils";
 
 export type Dungeon = {

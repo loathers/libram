@@ -1,4 +1,12 @@
-import { cliExecute, haveFamiliar, myFamiliar, useFamiliar } from "kolmafia";
+import {
+  cliExecute,
+  Familiar,
+  haveFamiliar,
+  Item,
+  myFamiliar,
+  Phylum,
+  useFamiliar,
+} from "kolmafia";
 import { get } from "../../property";
 
 const familiar = Familiar.get("Red-Nosed Snapper");

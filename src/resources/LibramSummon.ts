@@ -1,3 +1,4 @@
+import { Skill, Item } from "kolmafia";
 import maxBy from "lodash/maxBy";
 import { getSaleValue } from "../lib";
 import { sumNumbers } from "../utils";

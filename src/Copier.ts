@@ -1,3 +1,5 @@
+import { Monster } from "kolmafia";
+
 export class Copier {
   private couldCopy: () => boolean;
   private prepare: (() => boolean) | null;

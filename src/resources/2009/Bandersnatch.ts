@@ -1,11 +1,10 @@
 import {
+  Effect,
   familiarWeight,
   useFamiliar,
   useSkill,
   weightAdjustment,
 } from "kolmafia";
-import { get } from "../../property";
-import { $effect, $familiar, $skill } from "../../template-string";
 import {
   have as _have,
   canRememberSong,
@@ -13,6 +12,8 @@ import {
   isCurrentFamiliar,
   uneffect,
 } from "../../lib";
+import { get } from "../../property";
+import { $effect, $familiar, $skill } from "../../template-string";
 
 export const familiar = $familiar`Frumious Bandersnatch`;
 

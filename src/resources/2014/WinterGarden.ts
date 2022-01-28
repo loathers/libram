@@ -1,6 +1,7 @@
+import { Monster } from "kolmafia";
 import { Copier } from "../../Copier";
-import { get } from "../../property";
 import { haveInCampground, have as haveItem } from "../../lib";
+import { get } from "../../property";
 import { $item } from "../../template-string";
 
 export function have(): boolean {

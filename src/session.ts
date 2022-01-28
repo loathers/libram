@@ -2,6 +2,7 @@ import {
   bufferToFile,
   fileToBuffer,
   getCampground,
+  Item,
   mySessionItems,
   mySessionMeat,
   toItem,

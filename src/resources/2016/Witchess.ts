@@ -1,4 +1,11 @@
-import { myHash, runChoice, runCombat, toInt, visitUrl } from "kolmafia";
+import {
+  Monster,
+  myHash,
+  runChoice,
+  runCombat,
+  toInt,
+  visitUrl,
+} from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";

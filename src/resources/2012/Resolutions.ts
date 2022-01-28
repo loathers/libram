@@ -1,5 +1,6 @@
-import { $item, $skill } from "../../template-string";
+import { Item } from "kolmafia";
 import { have as _have } from "../../lib";
+import { $item, $skill } from "../../template-string";
 
 export const summonSkill = $skill`Summon Resolutions`;
 const commonChance = 0.98 / 6;

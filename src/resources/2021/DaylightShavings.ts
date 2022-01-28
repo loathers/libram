@@ -1,4 +1,4 @@
-import { myClass, toEffect, toInt } from "kolmafia";
+import { Effect, myClass, toEffect, toInt } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $effects, $item } from "../../template-string";

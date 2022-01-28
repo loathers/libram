@@ -1,6 +1,7 @@
 import {
   floristAvailable,
   getFloristPlants,
+  Location,
   myLocation,
   visitUrl,
 } from "kolmafia";

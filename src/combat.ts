@@ -1,23 +1,30 @@
 import {
   adv1,
   choiceFollowsFight,
+  Class,
+  Effect,
   getAutoAttack,
   inMultiFight,
+  Item,
+  Location,
+  Monster,
   removeProperty,
   runCombat,
   setAutoAttack,
+  Skill,
+  Stat,
   toInt,
   urlEncode,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { $items, $skills } from "./template-string";
-import { get, set } from "./property";
 import { getTodaysHolidayWanderers } from "./lib";
+import { get, set } from "./property";
+import { $items, $skills } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
- * Get the KoL native ID of the macro with name Script Autoattack Macro.
+ * Get the KoL native ID of the macro with name name.
  *
  * @category Combat
  * @returns {number} The macro ID.
@@ -138,9 +145,7 @@ export class Macro {
    * Load a saved macro from the Mafia property.
    */
   static load<T extends Macro>(this: Constructor<T>): T {
-    return new this().step(
-      ...get<string>(Macro.SAVED_MACRO_PROPERTY).split(";")
-    );
+    return new this().step(...get(Macro.SAVED_MACRO_PROPERTY).split(";"));
   }
 
   /**
@@ -195,9 +200,10 @@ export class Macro {
    */
   setAutoAttack(): void {
     let id = Macro.cachedMacroIds.get(this.name);
-    if (id === undefined)
-      Macro.cachedMacroIds.set(this.name, getMacroId(this.name));
-    id = getMacroId(this.name);
+    if (id === undefined) {
+      id = getMacroId(this.name);
+      Macro.cachedMacroIds.set(this.name, id);
+    }
     if (
       getAutoAttack() === 99000000 + id &&
       this.toString() === Macro.cachedAutoAttacks.get(this.name)

@@ -1,7 +1,7 @@
+import { canEquip, cliExecute, haveEffect, toInt, toSlot } from "kolmafia";
+import { ensureEffect, have } from "../../lib";
 import { get } from "../../property";
 import { $effect, $slot } from "../../template-string";
-import { ensureEffect, have } from "../../lib";
-import { canEquip, cliExecute, haveEffect, toInt, toSlot } from "kolmafia";
 
 const firstTeaPartyEffect = $effect`Assaulted with Pepper`;
 const lastTeaPartyEffect = $effect`Oleaginous Soles`;

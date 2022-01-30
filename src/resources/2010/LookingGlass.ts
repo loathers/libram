@@ -34,7 +34,7 @@ export function findTeaPartyHatLength(effect: Effect): number {
     effectId < toInt(firstTeaPartyEffect) ||
     effectId > toInt(lastTeaPartyEffect)
   ) {
-    throw `Invalid Mad Tea Party effect ${effect}`;
+    throw new Error(`Invalid Mad Tea Party effect ${effect}`);
   }
   return Math.floor(effectId - toInt(firstTeaPartyEffect) + 5);
 }
@@ -47,7 +47,7 @@ export function findTeaPartyHatLength(effect: Effect): number {
 export function findTeaPartyHats(effect: Effect): Item[] {
   const characters = findTeaPartyHatLength(effect);
   if (!characters) {
-    throw `Invalid Mad Tea Party effect ${effect}`;
+    throw new Error(`Invalid Mad Tea Party effect ${effect}`);
   }
   return Item.all().filter((item) => validTeaPartyHat(item, characters));
 }
@@ -60,7 +60,7 @@ export function findTeaPartyHats(effect: Effect): Item[] {
 export function haveTeaPartyHat(effect: Effect): boolean {
   const characters = findTeaPartyHatLength(effect);
   if (!characters) {
-    throw `Invalid Mad Tea Party effect ${effect}`;
+    throw new Error(`Invalid Mad Tea Party effect ${effect}`);
   }
   return (
     Item.all().find(
@@ -81,7 +81,7 @@ export function tryTeaPartyBuff(effect: Effect): boolean {
 
   const characters = findTeaPartyHatLength(effect);
   if (!characters) {
-    throw `Invalid Mad Tea Party effect ${effect}`;
+    throw new Error(`Invalid Mad Tea Party effect ${effect}`);
   }
 
   if (!haveTeaPartyHat(effect)) {

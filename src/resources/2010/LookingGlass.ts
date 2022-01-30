@@ -1,4 +1,13 @@
-import { canEquip, cliExecute, haveEffect, toInt, toSlot } from "kolmafia";
+import {
+  canEquip,
+  cliExecute,
+  Effect,
+  haveEffect,
+  Item,
+  toInt,
+  toSlot,
+} from "kolmafia";
+
 import { ensureEffect, have } from "../../lib";
 import { get } from "../../property";
 import { $effect, $slot } from "../../template-string";

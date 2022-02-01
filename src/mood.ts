@@ -213,12 +213,9 @@ class PotionMoodElement extends MoodElement {
     // fractional part
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
-      const price = this.maxPricePerTurn * remainingDifference;
+      const price = Math.floor(this.maxPricePerTurn * remainingDifference);
       if (price >= mallPrice(this.potion)) {
-        if (
-          availableAmount(this.potion) ||
-          buy(1, this.potion, Math.floor(price))
-        ) {
+        if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }
       }

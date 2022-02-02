@@ -1,12 +1,14 @@
 import {
   autosellPrice,
+  Effect,
   getWorkshed,
+  Item,
   npcPrice,
   toInt,
   visitUrl,
 } from "kolmafia";
-import { get as getModifier } from "../../modifier";
 import { have as haveItem } from "../../lib";
+import { get as getModifier } from "../../modifier";
 import { $item, $monster } from "../../template-string";
 import { clamp } from "../../utils";
 

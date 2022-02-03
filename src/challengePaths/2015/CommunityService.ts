@@ -29,6 +29,7 @@ import {
   $class,
   $effect,
   $familiar,
+  $familiars,
   $item,
   $items,
   $slot,
@@ -295,12 +296,16 @@ export const BoozeDrop = new Test(
   9,
   "Make Margaritas",
   () => {
-    const familiarItemDrop = numericModifier(
-      myFamiliar(),
-      "Item Drop",
-      familiarWeight(myFamiliar()) + weightAdjustment(),
-      equippedItem($slot`familiar`)
-    );
+    const familiarItemDrop = $familiars`Disembodied Hand, Trick-or-Treating Tot, Left-Hand Man`.includes(
+      myFamiliar()
+    )
+      ? 0
+      : numericModifier(
+          myFamiliar(),
+          "Item Drop",
+          familiarWeight(myFamiliar()) + weightAdjustment(),
+          equippedItem($slot`familiar`)
+        );
 
     //Champagne doubling does NOT count for CS, so we undouble
     const multiplier =

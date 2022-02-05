@@ -137,12 +137,15 @@ class Test {
     const startTime = Date.now();
     const startTurns = myTurncount();
 
+    let submitTest = true;
     try {
       return prepare();
+    } catch {
+      submitTest = false;
     } finally {
       const prediction = this.predictor();
 
-      if (maxTurns && prediction < maxTurns) {
+      if (submitTest && maxTurns && prediction < maxTurns) {
         this.do();
       }
 
@@ -156,6 +159,7 @@ class Test {
         log[this.property] = loggedTest;
       }
     }
+    return null;
   }
 
   /**

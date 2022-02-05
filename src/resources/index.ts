@@ -21,12 +21,14 @@ import * as Snapper from "./2019/Snapper";
 import * as Guzzlr from "./2020/Guzzlr";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
+import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 
 export {
   AsdonMartin,
   Bandersnatch,
   BeachComb,
   ChateauMantegna,
+  CombatLoversLocket,
   CrownOfThrones,
   CrystalBall,
   DaylightShavings,

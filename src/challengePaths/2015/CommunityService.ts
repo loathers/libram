@@ -145,7 +145,7 @@ class Test {
     } finally {
       const prediction = this.predictor();
 
-      if (submitTest && maxTurns && prediction < maxTurns) {
+      if (submitTest && (!maxTurns || prediction < maxTurns)) {
         this.do();
       }
 

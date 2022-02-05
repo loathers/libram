@@ -129,7 +129,7 @@ class Test {
    * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
-  run<T>(prepare: () => T, beCertain = false): T | null {
+  run<T>(prepare: () => T, beCertain = false, maxTurns = 0): T | null {
     const finishedFunction = () =>
       beCertain ? this.verifyIsDone() : this.isDone();
     if (finishedFunction()) return null;
@@ -142,7 +142,9 @@ class Test {
     } finally {
       const prediction = this.predictor();
 
-      this.do();
+      if (maxTurns && prediction < maxTurns) {
+        this.do();
+      }
 
       const loggedTest = {
         predictedTurns: prediction,

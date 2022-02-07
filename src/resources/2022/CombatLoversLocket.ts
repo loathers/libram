@@ -1,12 +1,4 @@
-import {
-  cliExecute,
-  getLocketMonsters,
-  Monster,
-  runCombat,
-  setAutoAttack,
-  toMonster,
-} from "kolmafia";
-import { Macro } from "../..";
+import { cliExecute, getLocketMonsters, Monster, toMonster } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -57,15 +49,9 @@ export function monstersReminisced(): Monster[] {
 /**
  * Fight a Monster using the Combat Lover's Locket
  * @param monster The Monster to fight
- * @param macro A Macro or Macro-extending-class-instance used to dictate our actions during this combat
- * @param useAuto Whether we should use an autoattack to resolve this combat
  * @returns false if we are unable to reminisce about this monster. Else, returns whether, at the end of all things, we have reminisced about this monster.
  */
-export function reminisce<T extends Macro>(
-  monster: Monster,
-  macro: T,
-  useAuto = false
-): boolean {
+export function reminisce(monster: Monster): boolean {
   if (
     !have() ||
     reminiscesLeft() === 0 ||
@@ -74,17 +60,6 @@ export function reminisce<T extends Macro>(
     return false;
   }
 
-  setAutoAttack(0);
-  if (useAuto) macro.setAutoAttack();
-  macro.save();
-
-  try {
-    cliExecute(`reminisce ${monster}`);
-    runCombat();
-  } finally {
-    Macro.clearSaved();
-    if (useAuto) setAutoAttack(0);
-  }
-
+  cliExecute(`reminisce ${monster}`);
   return monstersReminisced().includes(monster);
 }

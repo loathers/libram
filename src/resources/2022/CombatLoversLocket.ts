@@ -40,6 +40,10 @@ export function reminiscesLeft(): number {
     : 0;
 }
 
+/**
+ * Determines which monsters were reminisced today by parsing the _locketMonstersFought property.
+ * @returns An array consisting of the Monsters reminisced today.
+ */
 export function monstersReminisced(): Monster[] {
   return get("_locketMonstersFought")
     .split(",")

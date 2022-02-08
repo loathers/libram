@@ -3,15 +3,16 @@ import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 
 function toModifier(input: string): NumericModifier {
-  const regExp = new RegExp(/(Experience)+ \(([^)]+)\)/);
+  const regExp = new RegExp(/Experience \((.*?)\)/);
 
   const matcher = input.match(regExp);
-  if (matcher) {
-    return `${matcher[2]} Experience` as NumericModifier;
-  }
-  return input as NumericModifier;
+  return (matcher ? `${matcher[2]} Experience` : input) as NumericModifier;
 }
 
+/**
+ * Parses the _mummeryMods preference into a Map for easier use.
+ * @returns A map, mapping Familiars to a Tuple consisting of the NumericModifier attached to the familiar, and the value thereof.
+ */
 export function currentCostumes(): Map<Familiar, [NumericModifier, number]> {
   const entries = get("_mummeryMods").split(",");
   const returnValue = new Map<Familiar, [NumericModifier, number]>();

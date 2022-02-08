@@ -30,21 +30,18 @@ export function unlockedLocketMonsters(): Monster[] {
   return Object.entries(getLocketMonsters()).map(([name]) => toMonster(name));
 }
 
+function parseLocketProperty() {
+  return get("_locketMonstersFought")
+    .split(",")
+    .filter((id) => id.trim().length > 0);
+}
+
 /**
  * Determines how many reminisces remain by parsing the _locketMonstersFought property.
  * @returns The number of reminisces a player has available; 0 if they lack the Locket.
  */
 export function reminiscesLeft(): number {
-  return have()
-    ? clamp(
-        3 -
-          get("_locketMonstersFought")
-            .split(",")
-            .filter((id) => id.trim().length > 0).length,
-        0,
-        3
-      )
-    : 0;
+  return have() ? clamp(3 - parseLocketProperty().length, 0, 3) : 0;
 }
 
 /**
@@ -52,10 +49,7 @@ export function reminiscesLeft(): number {
  * @returns An array consisting of the Monsters reminisced today.
  */
 export function monstersReminisced(): Monster[] {
-  return get("_locketMonstersFought")
-    .split(",")
-    .filter((id) => id.trim().length > 0)
-    .map((id) => toMonster(parseInt(id)));
+  return parseLocketProperty().map((id) => toMonster(parseInt(id)));
 }
 
 /**

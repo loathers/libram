@@ -149,14 +149,12 @@ class Test {
       this.do();
     }
 
-    const loggedTest = {
-      predictedTurns: prediction,
-      turnCost: myTurncount() - startTurns,
-      seconds: (Date.now() - startTime) / 1000,
-    };
-
     if (finishedFunction()) {
-      log[this.property] = loggedTest;
+      log[this.property] = {
+        predictedTurns: prediction,
+        turnCost: myTurncount() - startTurns,
+        seconds: (Date.now() - startTime) / 1000,
+      };
       return true;
     }
     return false;

@@ -129,41 +129,37 @@ class Test {
    * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
-  run<T>(
-    prepare: () => T,
-    beCertain = false,
-    maxTurns: number | null = null
-  ): T | null {
+  run(prepare: () => void, beCertain = false, maxTurns = Infinity): boolean {
     const finishedFunction = () =>
       beCertain ? this.verifyIsDone() : this.isDone();
-    if (finishedFunction()) return null;
+    if (finishedFunction()) return false;
 
     const startTime = Date.now();
     const startTurns = myTurncount();
 
-    let submitTest = true;
     try {
-      return prepare();
+      prepare();
     } catch {
-      submitTest = false;
-    } finally {
-      const prediction = this.predictor();
-
-      if (submitTest && (!maxTurns || prediction < maxTurns)) {
-        this.do();
-      }
-
-      const loggedTest = {
-        predictedTurns: prediction,
-        turnCost: myTurncount() - startTurns,
-        seconds: (Date.now() - startTime) / 1000,
-      };
-
-      if (finishedFunction()) {
-        log[this.property] = loggedTest;
-      }
+      return false;
     }
-    return null;
+
+    const prediction = this.predictor();
+
+    if (prediction < maxTurns) {
+      this.do();
+    }
+
+    const loggedTest = {
+      predictedTurns: prediction,
+      turnCost: myTurncount() - startTurns,
+      seconds: (Date.now() - startTime) / 1000,
+    };
+
+    if (finishedFunction()) {
+      log[this.property] = loggedTest;
+      return true;
+    }
+    return false;
   }
 
   /**

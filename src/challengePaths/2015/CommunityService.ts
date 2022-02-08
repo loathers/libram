@@ -237,6 +237,7 @@ export const WeaponDamage = new Test(
 
     // mafia does not currently count swagger
     const multiplier = have($effect`Bow-Legged Swagger`) ? 2 : 1;
+
     // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -

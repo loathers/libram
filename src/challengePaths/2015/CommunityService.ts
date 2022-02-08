@@ -5,7 +5,6 @@ import {
   haveEquipped,
   myBasestat,
   myBuffedstat,
-  myClass,
   myFamiliar,
   myLevel,
   myMaxhp,
@@ -26,7 +25,6 @@ import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
 import { SongBoom } from "../../resources";
 import {
-  $class,
   $effect,
   $familiar,
   $item,
@@ -173,14 +171,15 @@ const thralls = new Map<Stat, Thrall>([
 ]);
 
 const statTestPredictor = (stat: Stat) => {
-  let baseStat: Stat = stat;
-  if (myClass() === $class`Pastamancer`) {
-    const thrall = thralls.get(stat);
-    if (thrall && myThrall() === thrall) baseStat = $stat`mysticality`;
-  }
-
   return () =>
-    60 - Math.floor((1 / 30) * (myBuffedstat(stat) - myBasestat(baseStat)));
+    60 -
+    Math.floor(
+      (1 / 30) *
+        (myBuffedstat(stat) -
+          myBasestat(
+            thralls.get(myThrall()) === stat ? $stat`mysticality` : stat
+          ))
+    );
 };
 
 export const HP = new Test(

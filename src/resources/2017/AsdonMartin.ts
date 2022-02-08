@@ -219,7 +219,7 @@ function fillWithBestInventoryItem(targetUnits: number): boolean {
  * @param targetUnits Fuel level to attempt to reach.
  * @returns Whether we succeeded at filling to the target fuel level.
  */
-export function fillWithInventory(targetUnits: number): boolean {
+export function fillWithInventoryTo(targetUnits: number): boolean {
   if (!installed()) return false;
 
   let continueFuelingFromInventory = true;
@@ -261,11 +261,8 @@ export function drive(
   if (haveEffect(style) >= turns) return true;
 
   const fuelNeeded = 37 * Math.ceil((turns - haveEffect(style)) / 30);
-  if (preferInventory) {
-    fillWithInventory(fuelNeeded);
-  } else {
-    fillTo(fuelNeeded);
-  }
+  (preferInventory ? fillWithInventoryTo : fillTo)(fuelNeeded);
+
   while (getFuel() >= 37 && haveEffect(style) < turns) {
     cliExecute(`asdonmartin drive ${style.name.replace("Driving ", "")}`);
   }

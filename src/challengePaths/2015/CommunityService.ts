@@ -237,6 +237,7 @@ export const WeaponDamage = new Test(
 
     // mafia does not currently count swagger
     const multiplier = have($effect`Bow-Legged Swagger`) ? 2 : 1;
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       Math.floor(
@@ -268,6 +269,8 @@ export const SpellDamage = new Test(
             $item`none`
           )
         : 0;
+
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       Math.floor(getModifier("Spell Damage") / 50 + 0.001) -
@@ -295,21 +298,12 @@ export const BoozeDrop = new Test(
   9,
   "Make Margaritas",
   () => {
-    const familiarItemDrop =
-      numericModifier(
-        myFamiliar(),
-        "Item Drop",
-        familiarWeight(myFamiliar()) + weightAdjustment(),
-        equippedItem($slot`familiar`)
-      ) - numericModifier(equippedItem($slot`familiar`), "Item Drop");
-
-    const familiarBoozeDrop =
-      numericModifier(
-        myFamiliar(),
-        "Booze Drop",
-        familiarWeight(myFamiliar()) + weightAdjustment(),
-        equippedItem($slot`familiar`)
-      ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
+    const familiarItemDrop = numericModifier(
+      myFamiliar(),
+      "Item Drop",
+      familiarWeight(myFamiliar()) + weightAdjustment(),
+      equippedItem($slot`familiar`)
+    );
 
     //Champagne doubling does NOT count for CS, so we undouble
     const multiplier =
@@ -318,14 +312,11 @@ export const BoozeDrop = new Test(
         ? 0.5
         : 1;
 
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       multiplier *
-        Math.floor(
-          (getModifier("Item Drop") - familiarItemDrop - familiarBoozeDrop) /
-            30 +
-            0.001
-        ) -
+        Math.floor((getModifier("Item Drop") - familiarItemDrop) / 30 + 0.001) -
       Math.floor(getModifier("Booze Drop") / 15 + 0.001)
     );
   },

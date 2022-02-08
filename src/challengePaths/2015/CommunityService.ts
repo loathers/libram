@@ -127,6 +127,7 @@ class Test {
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
    * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit.
    * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
+   * @param maxTurns We will run the test iff the predicted turns is less than or equal to this parameter.
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
   run(prepare: () => void, beCertain = false, maxTurns = Infinity): boolean {
@@ -145,7 +146,7 @@ class Test {
 
     const prediction = this.predictor();
 
-    if (prediction < maxTurns) {
+    if (prediction <= maxTurns) {
       this.do();
     }
 

@@ -246,9 +246,10 @@ export const Driving = {
 };
 
 /**
- * Attempt to drive with a particular style for a particular number of turns
- * @param style The driving style to use
- * @param turns The number of turns to attempt to get
+ * Attempt to drive with a particular style for a particular number of turns.
+ * @param style The driving style to use.
+ * @param turns The number of turns to attempt to get.
+ * @param preferInventory Whether we should preferentially value items currently in our inventory.
  * @returns Whether we have at least as many turns as requested of said driving style.
  */
 export function drive(

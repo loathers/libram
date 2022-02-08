@@ -47,6 +47,7 @@ export function reminiscesLeft(): number {
 export function monstersReminisced(): Monster[] {
   return get("_locketMonstersFought")
     .split(",")
+    .filter((id) => id.trim().length > 0)
     .map((id) => toMonster(parseInt(id)));
 }
 
@@ -56,11 +57,7 @@ export function monstersReminisced(): Monster[] {
  * @returns false if we are unable to reminisce about this monster. Else, returns whether, at the end of all things, we have reminisced about this monster.
  */
 export function reminisce(monster: Monster): boolean {
-  if (
-    !have() ||
-    reminiscesLeft() === 0 ||
-    !availableLocketMonsters().includes(monster)
-  ) {
+  if (!have() || reminiscesLeft() === 0 || !getLocketMonsters()[monster.name]) {
     return false;
   }
 

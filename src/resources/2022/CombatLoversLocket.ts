@@ -36,7 +36,14 @@ export function unlockedLocketMonsters(): Monster[] {
  */
 export function reminiscesLeft(): number {
   return have()
-    ? clamp(3 - get("_locketMonstersFought").split(",").length, 0, 3)
+    ? clamp(
+        3 -
+          get("_locketMonstersFought")
+            .split(",")
+            .filter((id) => id.trim().length > 0).length,
+        0,
+        3
+      )
     : 0;
 }
 

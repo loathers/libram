@@ -65,3 +65,22 @@ export function reminisce(monster: Monster): boolean {
   cliExecute(`reminisce ${monster}`);
   return monstersReminisced().includes(monster);
 }
+
+/**
+ * Find a reminiscable monster that meets certain criteria and optionally maximizes a valuation function.
+ * @param criteria A function for delineating which monsters are "fair game" for the search.
+ * @param value A function for deciding which monsters are "better" than others.
+ * @returns A monster that fulfills the criteria function and maximizes the value function.
+ */
+export function findMonster(
+  criteria: (monster: Monster) => boolean,
+  value: (monster: Monster) => number = () => 1
+): Monster | null {
+  if (!have() || reminiscesLeft() === 0) return null;
+
+  return (
+    availableLocketMonsters()
+      .sort((a, b) => value(b) - value(a))
+      .find(criteria) ?? null
+  );
+}

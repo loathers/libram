@@ -241,6 +241,8 @@ export const WeaponDamage = new Test(
 
     // mafia does not currently count swagger
     const multiplier = have($effect`Bow-Legged Swagger`) ? 2 : 1;
+
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       Math.floor(
@@ -272,6 +274,8 @@ export const SpellDamage = new Test(
             $item`none`
           )
         : 0;
+
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       Math.floor(getModifier("Spell Damage") / 50 + 0.001) -
@@ -320,6 +324,7 @@ export const BoozeDrop = new Test(
         ? 0.5
         : 1;
 
+    // We add 0.001 because the floor function sometimes introduces weird rounding errors
     return (
       60 -
       multiplier *

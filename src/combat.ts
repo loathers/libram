@@ -753,14 +753,7 @@ export class StrictMacro extends Macro {
    * @returns {StrictMacro} This object itself.
    */
   trySkillRepeat(...skills: Skill[]): this {
-    return this.step(
-      ...skills.map((skill) => {
-        return StrictMacro.if_(
-          `hasskill ${skillBallsMacroName(skill)}`,
-          StrictMacro.skill(skill).repeat()
-        );
-      })
-    );
+    return super.trySkillRepeat(...skills);
   }
 
   /**

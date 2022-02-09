@@ -23,7 +23,7 @@ import { have } from "../../lib";
 import { Requirement } from "../../maximize";
 import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
-import { SongBoom } from "../../resources";
+import { MummingTrunk, SongBoom } from "../../resources";
 import {
   $effect,
   $familiar,
@@ -299,12 +299,19 @@ export const BoozeDrop = new Test(
   9,
   "Make Margaritas",
   () => {
-    const familiarItemDrop = numericModifier(
-      myFamiliar(),
-      "Item Drop",
-      familiarWeight(myFamiliar()) + weightAdjustment(),
-      equippedItem($slot`familiar`)
-    );
+    const mummingCostume = MummingTrunk.currentCostumes().get(myFamiliar());
+    const mummingBuff =
+      mummingCostume && mummingCostume[0] === "Item Drop"
+        ? mummingCostume[1]
+        : 0;
+
+    const familiarItemDrop =
+      numericModifier(
+        myFamiliar(),
+        "Item Drop",
+        familiarWeight(myFamiliar()) + weightAdjustment(),
+        equippedItem($slot`familiar`)
+      ) + mummingBuff;
 
     //Champagne doubling does NOT count for CS, so we undouble
     const multiplier =

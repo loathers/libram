@@ -280,14 +280,16 @@ class CustomMoodElement extends MoodElement {
 
 class AsdonMoodElement extends MoodElement {
   effect: Effect;
+  preferInventory: boolean;
 
-  constructor(effect: Effect) {
+  constructor(effect: Effect, preferInventory = false) {
     super();
     this.effect = effect;
+    this.preferInventory = preferInventory;
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
-    return AsdonMartin.drive(this.effect, ensureTurns);
+    return AsdonMartin.drive(this.effect, ensureTurns, this.preferInventory);
   }
 }
 

@@ -1,6 +1,7 @@
 import "core-js/modules/es.object.values";
 
 import {
+  autosellPrice,
   canInteract,
   cliExecute,
   Effect,
@@ -11,12 +12,14 @@ import {
   historicalPrice,
   isNpcItem,
   Item,
+  itemAmount,
   mallPrice,
   mallPrices,
   retrieveItem,
   toInt,
   visitUrl,
 } from "kolmafia";
+import { clamp } from "lodash";
 import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
 
@@ -71,6 +74,16 @@ function price(item: Item, priceAge: PriceAge) {
     case PriceAge.TODAY:
       return mallPriceOrMax(item);
   }
+}
+
+function inventoryItems(): Item[] {
+  return Item.all()
+    .filter(isFuelItem)
+    .filter(
+      (item) =>
+        haveItem(item) &&
+        [100, autosellPrice(item)].includes(price(item, PriceAge.RECENT))
+    );
 }
 
 // Efficiency in meat per fuel.
@@ -182,6 +195,41 @@ export function fillTo(targetUnits: number): boolean {
   return getFuel() >= targetUnits;
 }
 
+function fillWithBestInventoryItem(targetUnits: number): boolean {
+  const options = inventoryItems().sort(
+    (a, b) =>
+      getAverageAdventures(b) / autosellPrice(b) -
+      getAverageAdventures(a) / autosellPrice(a)
+  );
+  if (options.length === 0) return false;
+
+  const best = options[0];
+  if (autosellPrice(best) / getAverageAdventures(best) > 100) return false;
+
+  const amountToUse = clamp(
+    Math.ceil(targetUnits / getAverageAdventures(best)),
+    0,
+    itemAmount(best)
+  );
+  return insertFuel(best, amountToUse);
+}
+
+/**
+ * Fill your Asdon Martin by prioritizing mallmin items in your inventory. Default to the behavior of fillTo.
+ * @param targetUnits Fuel level to attempt to reach.
+ * @returns Whether we succeeded at filling to the target fuel level.
+ */
+export function fillWithInventoryTo(targetUnits: number): boolean {
+  if (!installed()) return false;
+
+  let continueFuelingFromInventory = true;
+  while (getFuel() < targetUnits && continueFuelingFromInventory) {
+    continueFuelingFromInventory &&= fillWithBestInventoryItem(targetUnits);
+  }
+
+  return fillTo(targetUnits);
+}
+
 /**
  * Object consisting of the various Asdon driving styles
  */
@@ -198,18 +246,24 @@ export const Driving = {
 };
 
 /**
- * Attempt to drive with a particular style for a particular number of turns
- * @param style The driving style to use
- * @param turns The number of turns to attempt to get
+ * Attempt to drive with a particular style for a particular number of turns.
+ * @param style The driving style to use.
+ * @param turns The number of turns to attempt to get.
+ * @param preferInventory Whether we should preferentially value items currently in our inventory.
  * @returns Whether we have at least as many turns as requested of said driving style.
  */
-export function drive(style: Effect, turns = 1): boolean {
+export function drive(
+  style: Effect,
+  turns = 1,
+  preferInventory = false
+): boolean {
   if (!Object.values(Driving).includes(style)) return false;
   if (!installed()) return false;
   if (haveEffect(style) >= turns) return true;
 
   const fuelNeeded = 37 * Math.ceil((turns - haveEffect(style)) / 30);
-  fillTo(fuelNeeded);
+  (preferInventory ? fillWithInventoryTo : fillTo)(fuelNeeded);
+
   while (getFuel() >= 37 && haveEffect(style) < turns) {
     cliExecute(`asdonmartin drive ${style.name.replace("Driving ", "")}`);
   }

@@ -1,7 +1,7 @@
 /// <reference types="kolmafia" />
-import nodeFetch from "node-fetch";
 import { writeFile } from "fs/promises";
 import path from "path";
+import nodeFetch from "node-fetch";
 
 const PROPS_FILE =
   "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";

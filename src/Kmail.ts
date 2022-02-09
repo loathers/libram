@@ -4,6 +4,7 @@ import {
   extractItems,
   extractMeat,
   isGiftable,
+  Item,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -44,9 +45,11 @@ export default class Kmail {
    * @returns Parsed kmails
    */
   static inbox(count = 100): Kmail[] {
-    return (JSON.parse(
-      visitUrl(`api.php?what=kmail&for=libram&count=${count}`)
-    ) as RawKmail[]).map(Kmail.parse);
+    return (
+      JSON.parse(
+        visitUrl(`api.php?what=kmail&for=libram&count=${count}`)
+      ) as RawKmail[]
+    ).map(Kmail.parse);
   }
 
   /**
@@ -80,9 +83,9 @@ export default class Kmail {
   ) {
     let m = meat;
 
-    const sendableItems = [
-      ...arrayToCountedMap(items).entries(),
-    ].filter(([item]) => isGiftable(item));
+    const sendableItems = [...arrayToCountedMap(items).entries()].filter(
+      ([item]) => isGiftable(item)
+    );
 
     let result = true;
 

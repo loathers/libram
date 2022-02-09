@@ -1,4 +1,4 @@
-import { getCounter } from "kolmafia";
+import { getCounter, Monster } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";

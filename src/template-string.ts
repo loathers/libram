@@ -1,4 +1,21 @@
-import { MafiaClass } from "kolmafia";
+import {
+  Bounty,
+  Class,
+  Coinmaster,
+  Effect,
+  Element,
+  Familiar,
+  Item,
+  Location,
+  MafiaClass,
+  Monster,
+  Phylum,
+  Servant,
+  Skill,
+  Slot,
+  Stat,
+  Thrall,
+} from "kolmafia";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,
@@ -9,27 +26,27 @@ const concatTemplateString = (
     ""
   );
 
-const createSingleConstant = <T extends MafiaClass>(
-  Type: typeof MafiaClass & (new () => T)
-) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
-  const input = concatTemplateString(literals, ...placeholders);
-  type I = InstanceType<typeof Type>;
-  return Type.get<I>(input);
-};
+const createSingleConstant =
+  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
+  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+    const input = concatTemplateString(literals, ...placeholders);
+    type I = InstanceType<typeof Type>;
+    return Type.get<I>(input);
+  };
 
-const createPluralConstant = <T extends MafiaClass>(
-  Type: typeof MafiaClass & (new () => T)
-) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
-  const input = concatTemplateString(literals, ...placeholders);
+const createPluralConstant =
+  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
+  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+    const input = concatTemplateString(literals, ...placeholders);
 
-  type I = InstanceType<typeof Type>;
+    type I = InstanceType<typeof Type>;
 
-  if (input === "") {
-    return Type.all<I>();
-  }
+    if (input === "") {
+      return Type.all<I>();
+    }
 
-  return Type.get<I>(input.split(/\s*,\s*/));
-};
+    return Type.get<I>(input.split(/\s*,\s*/));
+  };
 
 /**
  * A Bounty specified by name.

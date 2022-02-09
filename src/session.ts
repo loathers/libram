@@ -1,6 +1,7 @@
 import {
   bufferToFile,
   fileToBuffer,
+  Item,
   mySessionItems,
   mySessionMeat,
   toItem,
@@ -264,9 +265,9 @@ export class Session {
         items: { [item: string]: number };
       } = JSON.parse(fileValue);
 
-      const parsedItems: [Item, number][] = Object.entries(
-        val.items
-      ).map(([itemStr, quantity]) => [toItem(itemStr), quantity]);
+      const parsedItems: [Item, number][] = Object.entries(val.items).map(
+        ([itemStr, quantity]) => [toItem(itemStr), quantity]
+      );
       return new Session(val.meat, new Map<Item, number>(parsedItems));
     } else {
       // if the file does not exist, return an empty session

@@ -2,16 +2,21 @@ import "core-js/modules/es.object.values";
 
 import {
   booleanModifier,
+  Class,
   classModifier,
+  Effect,
   effectModifier,
+  Familiar,
+  Item,
+  Monster,
   monsterModifier,
   numericModifier,
+  Skill,
   skillModifier,
+  Stat,
   statModifier,
   stringModifier,
 } from "kolmafia";
-
-import { arrayContains } from "./utils";
 
 import {
   BooleanModifier,
@@ -31,6 +36,7 @@ import {
   StringModifier,
   stringModifiers,
 } from "./modifierTypes";
+import { arrayContains } from "./utils";
 
 export function get(
   name: BooleanModifier,
@@ -118,19 +124,17 @@ export type ModifierValue<T> = T extends BooleanModifier
   ? string
   : string;
 
-export type Modifiers = Partial<
-  {
-    [T in
-      | BooleanModifier
-      | ClassModifier
-      | EffectModifier
-      | MonsterModifier
-      | NumericModifier
-      | SkillModifier
-      | StatModifier
-      | StringModifier]: ModifierValue<T>;
-  }
->;
+export type Modifiers = Partial<{
+  [T in
+    | BooleanModifier
+    | ClassModifier
+    | EffectModifier
+    | MonsterModifier
+    | NumericModifier
+    | SkillModifier
+    | StatModifier
+    | StringModifier]: ModifierValue<T>;
+}>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
  * @param modifiers1 Modifiers objects to be merged onto.

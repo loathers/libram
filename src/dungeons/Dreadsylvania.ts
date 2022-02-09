@@ -1,4 +1,4 @@
-import { myId } from "kolmafia";
+import { Item, myId } from "kolmafia";
 import {
   close as closeDungeon,
   distribute as distributeDungeon,

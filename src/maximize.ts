@@ -7,16 +7,19 @@ import {
   equip,
   equippedAmount,
   equippedItem,
+  Familiar,
   isWearingOutfit,
+  Item,
   maximize,
   myBasestat,
   myBjornedFamiliar,
   myEnthronedFamiliar,
   myFamiliar,
   outfit,
+  Slot,
 } from "kolmafia";
-import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import logger from "./logger";
+import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import { setEqual } from "./utils";
 
 export type MaximizeOptions = {

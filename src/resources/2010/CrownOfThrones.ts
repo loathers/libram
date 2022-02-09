@@ -1,4 +1,4 @@
-import { myFamiliar } from "kolmafia";
+import { Familiar, myFamiliar } from "kolmafia";
 import { getSaleValue, have } from "../../lib";
 import { Modifiers } from "../../modifier";
 import { get } from "../../property";
@@ -616,11 +616,8 @@ const riderLists = new Map<string, FamiliarRider[]>();
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;
-  const {
-    modifierValueFunction,
-    ignoreLimitedDrops,
-    excludeCurrentFamiliar,
-  } = modeData;
+  const { modifierValueFunction, ignoreLimitedDrops, excludeCurrentFamiliar } =
+    modeData;
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,

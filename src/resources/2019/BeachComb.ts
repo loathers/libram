@@ -1,4 +1,4 @@
-import { cliExecute } from "kolmafia";
+import { cliExecute, Effect } from "kolmafia";
 import { have } from "../../lib";
 import { getString } from "../../property";
 import { $effect } from "../../template-string";

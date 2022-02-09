@@ -2,9 +2,24 @@ import "core-js/modules/es.object.entries";
 import "core-js/modules/es.object.from-entries";
 
 import {
+  Bounty,
+  Class,
+  Coinmaster,
+  Effect,
+  Element,
+  Familiar,
   getProperty,
+  Item,
+  Location,
   MafiaClass,
+  Monster,
+  Phylum,
+  Servant,
   setProperty,
+  Skill,
+  Slot,
+  Stat,
+  Thrall,
   toBounty,
   toClass,
   toCoinmaster,
@@ -23,6 +38,17 @@ import {
 } from "kolmafia";
 
 import {
+  BooleanProperty,
+  FamiliarProperty,
+  LocationProperty,
+  MonsterProperty,
+  NumericOrStringProperty,
+  NumericProperty,
+  PhylumProperty,
+  StatProperty,
+  StringProperty,
+} from "./propertyTypes";
+import {
   isBooleanProperty,
   isFamiliarProperty,
   isLocationProperty,
@@ -35,28 +61,16 @@ import {
   KnownProperty,
 } from "./propertyTyping";
 
-import {
-  BooleanProperty,
-  FamiliarProperty,
-  LocationProperty,
-  MonsterProperty,
-  NumericOrStringProperty,
-  NumericProperty,
-  PhylumProperty,
-  StatProperty,
-  StringProperty,
-} from "./propertyTypes";
+const createPropertyGetter =
+  <T>(transform: (value: string, property: string) => T) =>
+  (property: string, default_?: T): T => {
+    const value = getProperty(property);
+    if (default_ !== undefined && value === "") {
+      return default_;
+    }
 
-const createPropertyGetter = <T>(
-  transform: (value: string, property: string) => T
-) => (property: string, default_?: T): T => {
-  const value = getProperty(property);
-  if (default_ !== undefined && value === "") {
-    return default_;
-  }
-
-  return transform(value, property);
-};
+    return transform(value, property);
+  };
 
 type MafiaClasses =
   | Bounty
@@ -154,11 +168,12 @@ export function get(property: StatProperty): Stat | null;
 export function get(property: StatProperty, _default: Stat): Stat;
 export function get(property: PhylumProperty): Phylum | null;
 export function get(property: PhylumProperty, _default: Phylum): Phylum;
-export function get<D extends string | number | boolean>(
-  property: string,
-  _default: D
-): D;
-export function get(property: string): string;
+export function get(property: string, _default: Location): Location | null;
+export function get(property: string, _default: Monster): Monster | null;
+export function get(property: string, _default: Familiar): Familiar | null;
+export function get(property: string, _default: boolean): boolean;
+export function get(property: string, _default: number): number;
+export function get(property: string, _default?: string): string;
 export function get(property: string, _default?: unknown): unknown {
   const value = getString(property);
 
@@ -194,6 +209,10 @@ export function get(property: string, _default?: unknown): unknown {
     return getStat(property, _default as Stat | undefined);
   } else if (_default instanceof Phylum) {
     return getPhylum(property, _default as Phylum | undefined);
+  } else if (typeof _default === "boolean") {
+    return value === "true" ? true : value === "false" ? false : _default;
+  } else if (typeof _default === "number") {
+    return value === "" ? _default : parseInt(value);
   } else if (value === "") {
     return _default === undefined ? "" : _default;
   } else {
@@ -231,11 +250,9 @@ export function set<D extends { toString(): string }>(
   setProperty(property, stringValue);
 }
 
-type Properties = Partial<
-  {
-    [P in KnownProperty]: unknown;
-  }
->;
+type Properties = Partial<{
+  [P in KnownProperty]: unknown;
+}>;
 
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {

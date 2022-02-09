@@ -5,10 +5,12 @@ import {
   buy,
   cliExecute,
   eat,
+  Effect,
   effectModifier,
   haveEffect,
   haveSkill,
   hpCost,
+  Item,
   itemAmount,
   mallPrice,
   mpCost,
@@ -17,6 +19,7 @@ import {
   myMp,
   numericModifier,
   retrieveItem,
+  Skill,
   toEffect,
   toSkill,
   turnsPerCast,
@@ -194,7 +197,7 @@ class PotionMoodElement extends MoodElement {
     if (mallPrice(this.potion) > this.maxPricePerTurn * turnsPerUse) {
       return false;
     }
-    //integer part
+    // integer part
     if (effectTurns < ensureTurns) {
       const uses = Math.floor((ensureTurns - effectTurns) / turnsPerUse);
       const quantityToBuy = clamp(uses - availableAmount(this.potion), 0, 100);
@@ -207,15 +210,12 @@ class PotionMoodElement extends MoodElement {
       use(quantityToUse, this.potion);
     }
 
-    //fractional part
+    // fractional part
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
-      const price = this.maxPricePerTurn * remainingDifference;
-      if (price <= mallPrice(this.potion)) {
-        if (
-          availableAmount(this.potion) ||
-          buy(1, this.potion, Math.floor(price))
-        ) {
+      const price = Math.floor(this.maxPricePerTurn * remainingDifference);
+      if (price >= mallPrice(this.potion)) {
+        if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }
       }
@@ -280,14 +280,16 @@ class CustomMoodElement extends MoodElement {
 
 class AsdonMoodElement extends MoodElement {
   effect: Effect;
+  preferInventory: boolean;
 
-  constructor(effect: Effect) {
+  constructor(effect: Effect, preferInventory = false) {
     super();
     this.effect = effect;
+    this.preferInventory = preferInventory;
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
-    return AsdonMartin.drive(this.effect, ensureTurns);
+    return AsdonMartin.drive(this.effect, ensureTurns, this.preferInventory);
   }
 }
 

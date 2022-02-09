@@ -38,7 +38,7 @@ export * as SlimeTube from "./dungeons/SlimeTube";
 
 // Necessary to avoid webpack error when reexporting type-only symbols.
 // See https://github.com/microsoft/TypeScript/issues/28481
-import { Modifiers as ModifiersInternal } from "./modifier";
-export type Modifiers = ModifiersInternal;
 import { LogLevel as LogLevelInternal } from "./logger";
 export type LogLevel = LogLevelInternal;
+import { Modifiers as ModifiersInternal } from "./modifier";
+export type Modifiers = ModifiersInternal;

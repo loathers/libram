@@ -125,33 +125,38 @@ class Test {
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
    * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit.
    * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
+   * @param maxTurns We will run the test iff the predicted turns is less than or equal to this parameter.
    * @returns The output of the prepare function given, or null if the test is already complete.
    */
-  run<T>(prepare: () => T, beCertain = false): T | null {
+  run(prepare: () => void, beCertain = false, maxTurns = Infinity): boolean {
     const finishedFunction = () =>
       beCertain ? this.verifyIsDone() : this.isDone();
-    if (finishedFunction()) return null;
+    if (finishedFunction()) return false;
 
     const startTime = Date.now();
     const startTurns = myTurncount();
 
     try {
-      return prepare();
-    } finally {
-      const prediction = this.predictor();
+      prepare();
+    } catch {
+      return false;
+    }
 
+    const prediction = this.predictor();
+
+    if (prediction <= maxTurns) {
       this.do();
+    }
 
-      const loggedTest = {
+    if (finishedFunction()) {
+      log[this.property] = {
         predictedTurns: prediction,
         turnCost: myTurncount() - startTurns,
         seconds: (Date.now() - startTime) / 1000,
       };
-
-      if (finishedFunction()) {
-        log[this.property] = loggedTest;
-      }
+      return true;
     }
+    return false;
   }
 
   /**

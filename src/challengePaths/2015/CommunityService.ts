@@ -315,7 +315,17 @@ export const BoozeDrop = new Test(
         "Item Drop",
         familiarWeight(myFamiliar()) + weightAdjustment(),
         equippedItem($slot`familiar`)
-      ) + mummingBuff;
+      ) +
+      mummingBuff -
+      numericModifier(equippedItem($slot`familiar`), "Item Drop");
+
+    const familiarBoozeDrop =
+      numericModifier(
+        myFamiliar(),
+        "Booze Drop",
+        familiarWeight(myFamiliar()) + weightAdjustment(),
+        equippedItem($slot`familiar`)
+      ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 
     //Champagne doubling does NOT count for CS, so we undouble
     const multiplier =
@@ -329,7 +339,7 @@ export const BoozeDrop = new Test(
       60 -
       multiplier *
         Math.floor((getModifier("Item Drop") - familiarItemDrop) / 30 + 0.001) -
-      Math.floor(getModifier("Booze Drop") / 15 + 0.001)
+      Math.floor((getModifier("Booze Drop") - familiarBoozeDrop) / 15 + 0.001)
     );
   },
   new Requirement(["Item Drop", "2 Booze Drop"], {

@@ -1,4 +1,12 @@
-import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
+import {
+  buy,
+  getChateau,
+  Item,
+  Monster,
+  runCombat,
+  totalFreeRests,
+  visitUrl,
+} from "kolmafia";
 import { get } from "../../property";
 
 export function have(): boolean {
@@ -16,6 +24,17 @@ export function paintingFought(): boolean {
 export function fightPainting(): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
   return runCombat();
+}
+
+export function rest(): void {
+  visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
+}
+
+export function restIfFree(): boolean {
+  if (totalFreeRests() > get("timesRested")) {
+    visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
+    return true;
+  } else return false;
 }
 
 const desks = [

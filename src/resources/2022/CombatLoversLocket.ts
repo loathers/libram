@@ -1,4 +1,10 @@
-import { cliExecute, getLocketMonsters, Monster, toMonster } from "kolmafia";
+import {
+  cliExecute,
+  getLocketMonsters,
+  Monster,
+  runCombat,
+  toMonster,
+} from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -63,6 +69,7 @@ export function reminisce(monster: Monster): boolean {
   }
 
   cliExecute(`reminisce ${monster}`);
+  runCombat();
   return monstersReminisced().includes(monster);
 }
 

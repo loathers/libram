@@ -182,7 +182,7 @@ const statTestPredictor = (stat: Stat) => {
       (1 / 30) *
         (myBuffedstat(stat) -
           myBasestat(
-            thralls.get(myThrall()) === stat ? $stat`mysticality` : stat
+            thralls.get(stat) === myThrall() ? $stat`mysticality` : stat
           ))
     );
 };

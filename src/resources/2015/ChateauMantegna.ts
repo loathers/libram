@@ -32,7 +32,7 @@ export function rest(): void {
 
 export function restIfFree(): boolean {
   if (totalFreeRests() > get("timesRested")) {
-    visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
+    rest();
     return true;
   } else return false;
 }

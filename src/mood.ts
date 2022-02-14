@@ -1,12 +1,16 @@
+import "core-js/modules/es.object.values";
+
 import {
   availableAmount,
   buy,
   cliExecute,
   eat,
+  Effect,
   effectModifier,
   haveEffect,
   haveSkill,
   hpCost,
+  Item,
   itemAmount,
   mallPrice,
   mpCost,
@@ -15,6 +19,7 @@ import {
   myMp,
   numericModifier,
   retrieveItem,
+  Skill,
   toEffect,
   toSkill,
   turnsPerCast,
@@ -23,8 +28,9 @@ import {
 } from "kolmafia";
 import { getActiveSongs, have, isSong } from "./lib";
 import { get } from "./property";
+import { AsdonMartin } from "./resources";
 import { $item, $skill } from "./template-string";
-import { clamp } from "./utils";
+import { clamp, sum } from "./utils";
 
 export abstract class MpSource {
   usesRemaining(): number | null {
@@ -94,6 +100,7 @@ export class MagicalSausages extends MpSource {
 type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
+  reserveMp: number;
 };
 
 abstract class MoodElement {
@@ -132,14 +139,14 @@ class SkillMoodElement extends MoodElement {
 
     // Deal with song slots.
     if (
-      mood.options.songSlots.length > 0 && isSong(this.skill)
+      mood.options.songSlots.length > 0 &&
+      isSong(this.skill) &&
+      !have(effect)
     ) {
-      for (const song of getActiveSongs()) {
-        const slot = mood.options.songSlots.find((slot) =>
-          slot.includes(song)
-        );
-        if (!slot || slot.includes(effect))
-          cliExecute(`shrug ${song}`);
+      const activeSongs = getActiveSongs();
+      for (const song of activeSongs) {
+        const slot = mood.options.songSlots.find((slot) => slot.includes(song));
+        if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
       }
     }
 
@@ -190,13 +197,30 @@ class PotionMoodElement extends MoodElement {
     if (mallPrice(this.potion) > this.maxPricePerTurn * turnsPerUse) {
       return false;
     }
+    // integer part
     if (effectTurns < ensureTurns) {
-      const uses = (ensureTurns - effectTurns) / turnsPerUse;
+      const uses = Math.floor((ensureTurns - effectTurns) / turnsPerUse);
       const quantityToBuy = clamp(uses - availableAmount(this.potion), 0, 100);
-      buy(quantityToBuy, this.potion, this.maxPricePerTurn * turnsPerUse);
+      buy(
+        quantityToBuy,
+        this.potion,
+        Math.floor(this.maxPricePerTurn * turnsPerUse)
+      );
       const quantityToUse = clamp(uses, 0, availableAmount(this.potion));
       use(quantityToUse, this.potion);
     }
+
+    // fractional part
+    const remainingDifference = ensureTurns - haveEffect(effect);
+    if (remainingDifference > 0) {
+      const price = Math.floor(this.maxPricePerTurn * remainingDifference);
+      if (price >= mallPrice(this.potion)) {
+        if (availableAmount(this.potion) || buy(1, this.potion, price)) {
+          use(1, this.potion);
+        }
+      }
+    }
+
     return haveEffect(effect) >= ensureTurns;
   }
 }
@@ -254,6 +278,21 @@ class CustomMoodElement extends MoodElement {
   }
 }
 
+class AsdonMoodElement extends MoodElement {
+  effect: Effect;
+  preferInventory: boolean;
+
+  constructor(effect: Effect, preferInventory = false) {
+    super();
+    this.effect = effect;
+    this.preferInventory = preferInventory;
+  }
+
+  execute(mood: Mood, ensureTurns: number): boolean {
+    return AsdonMartin.drive(this.effect, ensureTurns, this.preferInventory);
+  }
+}
+
 /**
  * Class representing a mood object. Add mood elements using the instance methods, which can be chained.
  */
@@ -261,6 +300,7 @@ export class Mood {
   static defaultOptions: MoodOptions = {
     songSlots: [],
     mpSources: [MagicalSausages.instance, OscusSoda.instance],
+    reserveMp: 0,
   };
 
   /**
@@ -286,9 +326,11 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return this.options.mpSources
-      .map((mpSource) => mpSource.availableMpMin())
-      .reduce((x, y) => x + y, 0);
+    return (
+      sum(this.options.mpSources, (mpSource: MpSource) =>
+        mpSource.availableMpMin()
+      ) + Math.max(myMp() - this.options.reserveMp, 0)
+    );
   }
 
   moreMp(minimumTarget: number): void {
@@ -345,15 +387,29 @@ export class Mood {
   }
 
   /**
+   * Add an Asdon Martin driving style to the mood.
+   * @param effect Driving style to add to the mood.
+   */
+  drive(effect: Effect): Mood {
+    if (
+      Object.values(AsdonMartin.Driving).includes(effect) &&
+      AsdonMartin.installed()
+    ) {
+      this.elements.push(new AsdonMoodElement(effect));
+    }
+    return this;
+  }
+
+  /**
    * Execute the mood, trying to ensure {ensureTurns} of each effect.
    * @param ensureTurns Turns of each effect to try and achieve.
    * @returns Whether or not we successfully got this many turns of every effect in the mood.
    */
   execute(ensureTurns = 1): boolean {
     const availableMp = this.availableMp();
-    const totalMpPerTurn = this.elements
-      .map((element) => element.mpCostPerTurn())
-      .reduce((x, y) => x + y, 0);
+    const totalMpPerTurn = sum(this.elements, (element: MoodElement) =>
+      element.mpCostPerTurn()
+    );
     const potentialTurns = Math.floor(availableMp / totalMpPerTurn);
     let completeSuccess = true;
     for (const element of this.elements) {
@@ -364,7 +420,7 @@ export class Mood {
           element.turnIncrement();
         elementTurns = Math.min(ensureTurns, elementPotentialTurns);
       }
-      completeSuccess = element.execute(this, elementTurns) || completeSuccess;
+      completeSuccess = element.execute(this, elementTurns) && completeSuccess;
     }
     return completeSuccess;
   }

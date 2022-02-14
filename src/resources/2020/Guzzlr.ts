@@ -1,9 +1,11 @@
-import { runChoice, use, visitUrl } from "kolmafia";
+import { Item, Location, mallPrice, runChoice, use, visitUrl } from "kolmafia";
+import { maxBy } from "lodash";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
+import { invertMap } from "../../utils";
 
-export const item = $item`guzzlr tablet`;
+export const item = $item`Guzzlr tablet`;
 export function have(): boolean {
   return haveItem(item);
 }
@@ -101,7 +103,7 @@ export function getBronze(): number {
  * Accept bronze delivery
  */
 export function acceptBronze(): boolean {
-  if (!canGold()) return false;
+  if (isQuestActive()) return false;
   useTabletWithChoice(2);
   return true;
 }
@@ -110,7 +112,7 @@ export function acceptBronze(): boolean {
  * Have fully unlocked the platinum delivery bonuses (done >= 30)
  */
 export function haveFullBronzeBonus(): boolean {
-  return getGold() >= 196;
+  return getBronze() >= 196;
 }
 
 /**
@@ -158,7 +160,7 @@ export function getBooze(): Item | null {
 /**
  * List of the platinum cocktails
  */
-export const Cocktails = $items`buttery boy, steamboat, ghiaccio colada, nog-on-the-cob, sourfinger`;
+export const Cocktails = $items`Buttery Boy, Steamboat, Ghiaccio Colada, Nog-on-the-Cob, Sourfinger`;
 
 /**
  * Returns true if the user has a platinum cocktail in their inventory
@@ -181,5 +183,57 @@ export function haveBooze(): boolean {
       return havePlatinumBooze();
     default:
       return haveItem(booze);
+  }
+}
+
+export const ingredientToPlatinumCocktail = new Map<Item, Item>([
+  [$item`miniature boiler`, $item`Steamboat`],
+  [$item`cold wad`, $item`Ghiaccio Colada`],
+  [$item`robin's egg`, $item`Nog-on-the-Cob`],
+  [$item`mangled finger`, $item`Sourfinger`],
+  [$item`Dish of Clarified Butter`, $item`Buttery Boy`],
+]);
+
+export const platinumCocktailToIngredient = invertMap(
+  ingredientToPlatinumCocktail
+);
+
+export function getCheapestPlatinumCocktail(freeCraft = true): Item {
+  const defaultCocktail = [$item`Dish of Clarified Butter`, $item`Buttery Boy`];
+  if (freeCraft) {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        Math.max(...ingredientAndCocktail.map((item) => -mallPrice(item)))
+    ) ?? defaultCocktail)[1];
+  } else {
+    return (maxBy(
+      Array.from(ingredientToPlatinumCocktail),
+      (ingredientAndCocktail: [Item, Item]) =>
+        -mallPrice(ingredientAndCocktail[1])
+    ) ?? defaultCocktail)[1];
+  }
+}
+
+export function turnsLeftOnQuest(useShoes = false) {
+  const progressPerTurn = useShoes
+    ? Math.floor((10 - get("_guzzlrDeliveries")) * 1.5)
+    : 10 - get("_guzzlrDeliveries");
+  return Math.ceil((100 - get("guzzlrDeliveryProgress")) / progressPerTurn);
+}
+
+export function expectedReward(usePants = false) {
+  switch (getTier()) {
+    case "platinum":
+      // 20-25
+      return 22.5 + (usePants ? 5 : 0);
+    case "gold":
+      // 5-7
+      return 6 + (usePants ? 3 : 0);
+    case "bronze":
+      // 2-4
+      return 3 + (usePants ? 3 : 0);
+    default:
+      return 0;
   }
 }

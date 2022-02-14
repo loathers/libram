@@ -1,4 +1,4 @@
-import { use } from "kolmafia";
+import { Monster, use } from "kolmafia";
 
 import { getFoldGroup, have as haveItem } from "../../lib";
 import { get } from "../../property";

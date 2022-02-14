@@ -1,20 +1,31 @@
 /** @module GeneralLibrary */
-import "core-js/features/object/entries";
+import "core-js/modules/es.object.entries";
+import "core-js/features/array/flat";
 
 import {
   appearanceRates,
+  autosellPrice,
   availableAmount,
   booleanModifier,
   cliExecute,
+  Effect,
+  Familiar,
   fullnessLimit,
   getCampground,
   getCounters,
+  getPlayerId,
+  getPlayerName,
   getRelated,
   haveEffect,
   haveFamiliar,
   haveServant,
   haveSkill,
+  holiday,
   inebrietyLimit,
+  Item,
+  Location,
+  mallPrice,
+  Monster,
   myEffects,
   myFamiliar,
   myFullness,
@@ -24,14 +35,17 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
+  Servant,
+  Skill,
   spleenLimit,
+  Thrall,
   toItem,
   toSkill,
   totalTurnsPlayed,
 } from "kolmafia";
 
-import { $class, $items } from "./template-string";
 import { get } from "./property";
+import { $class, $familiar, $item, $items, $monsters } from "./template-string";
 import { chunk } from "./utils";
 
 /**
@@ -54,10 +68,17 @@ export function getSongLimit(): number {
  * @param skillOrEffect The Skill or Effect
  */
 export function isSong(skillOrEffect: Skill | Effect): boolean {
-  const skill =
-    skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
+  if (
+    skillOrEffect instanceof Effect &&
+    skillOrEffect.attributes.includes("song")
+  ) {
+    return true;
+  } else {
+    const skill =
+      skillOrEffect instanceof Effect ? toSkill(skillOrEffect) : skillOrEffect;
 
-  return skill.class === $class`Accordion Thief` && skill.buff;
+    return skill.class === $class`Accordion Thief` && skill.buff;
+  }
 }
 
 /**
@@ -215,18 +236,6 @@ export function haveCounter(
 }
 
 /**
- * Returns the player's total number of Artistic Goth Kid and/or Mini-Hipster
- * wanderers encountered today
- *
- * @category Wanderers
- */
-export function getTotalFamiliarWanderers(): number {
-  const hipsterFights = get("_hipsterAdv");
-  const gothFights = get("_gothKidFights");
-  return hipsterFights + gothFights;
-}
-
-/**
  * Return whether the player has the queried wandering counter
  *
  * @category Wanderers
@@ -277,7 +286,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
     return isVoteWandererNow();
   }
   if (wanderer === Wanderer.Familiar) {
-    return getTotalFamiliarWanderers() < 7;
+    return get("_hipsterAdv") < 7;
   }
   const begin = wanderer + " window begin";
   const end = wanderer + " window end";
@@ -315,7 +324,7 @@ export function getKramcoWandererChance(): number {
  * @category Wanderers
  */
 export function getFamiliarWandererChance(): number {
-  const totalFights = getTotalFamiliarWanderers();
+  const totalFights = get("_hipsterAdv");
   const probability = [0.5, 0.4, 0.3, 0.2];
   if (totalFights < 4) {
     return probability[totalFights];
@@ -423,7 +432,11 @@ export function canUse(item: Item): boolean {
   const path = myPath();
 
   if (path !== "Nuclear Autumn") {
-    if ($items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(item)) {
+    if (
+      $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
+        item
+      )
+    ) {
       return false;
     }
   }
@@ -468,7 +481,11 @@ export function noneToNull<T>(thing: T): T | null {
 export function getAverage(range: string): number {
   if (range.indexOf("-") < 0) return Number(range);
 
-  const [,lower,upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? ["0","0","0"];
+  const [, lower, upper] = range.match(/(-?[0-9]+)-(-?[0-9]+)/) ?? [
+    "0",
+    "0",
+    "0",
+  ];
 
   return (Number(lower) + Number(upper)) / 2;
 }
@@ -492,4 +509,158 @@ export function getAverageAdventures(item: Item): number {
  */
 export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
+}
+
+export type Player = {
+  name: string;
+  id: number;
+};
+
+/**
+ * Get both the name and id of a player from either their name or id
+ *
+ * @param idOrName Id or name of player
+ * @returns Object containing id and name of player
+ */
+export function getPlayerFromIdOrName(idOrName: number | string): Player {
+  const id =
+    typeof idOrName === "number" ? idOrName : parseInt(getPlayerId(idOrName));
+  return {
+    name: getPlayerName(id),
+    id: id,
+  };
+}
+
+/**
+ * Return the step as a number for a given quest property.
+ *
+ * @param questName Name of quest property to check.
+ */
+export function questStep(questName: string): number {
+  const stringStep = get(questName);
+  if (stringStep === "unstarted") return -1;
+  else if (stringStep === "started") return 0;
+  else if (stringStep === "finished" || stringStep === "") return 999;
+  else {
+    if (stringStep.substring(0, 4) !== "step") {
+      throw new Error("Quest state parsing error.");
+    }
+    return parseInt(stringStep.substring(4), 10);
+  }
+}
+
+export class EnsureError extends Error {
+  constructor(cause: Item | Familiar | Effect) {
+    super(`Failed to ensure ${cause.name}!`);
+    this.name = "Ensure Error";
+  }
+}
+
+/**
+ * Tries to get an effect using the default method
+ * @param ef effect to try to get
+ * @param turns turns to aim for; default of 1
+ */
+export function ensureEffect(ef: Effect, turns = 1): void {
+  if (haveEffect(ef) < turns) {
+    if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
+      throw new EnsureError(ef);
+    }
+  }
+}
+
+const valueMap: Map<Item, number> = new Map();
+
+const MALL_VALUE_MODIFIER = 0.9;
+
+/**
+ * Returns the average value--based on mallprice and autosell--of a collection of items
+ * @param items items whose value you care about
+ */
+export function getSaleValue(...items: Item[]): number {
+  return (
+    items
+      .map((item) => {
+        if (valueMap.has(item)) return valueMap.get(item) || 0;
+        if (item.discardable) {
+          valueMap.set(
+            item,
+            mallPrice(item) > Math.max(2 * autosellPrice(item), 100)
+              ? MALL_VALUE_MODIFIER * mallPrice(item)
+              : autosellPrice(item)
+          );
+        } else {
+          valueMap.set(
+            item,
+            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0
+          );
+        }
+        return valueMap.get(item) || 0;
+      })
+      .reduce((s, price) => s + price, 0) / items.length
+  );
+}
+
+export const Environment = {
+  Outdoor: "outdoor",
+  Indoor: "indoor",
+  Underground: "underground",
+  Underwater: "underwater",
+} as const;
+
+export type EnvironmentType = typeof Environment[keyof typeof Environment];
+
+/**
+ * Returns the weight-coefficient of any leprechaunning that this familiar may find itself doing
+ * Assumes the familiar is nude and thus fails for hatrack & pantsrack
+ * For the Mutant Cactus Bud, returns the efficacy-multiplier instead
+ * @param familiar The familiar whose leprechaun multiplier you're interested in
+ */
+export function findLeprechaunMultiplier(familiar: Familiar): number {
+  if (familiar === $familiar`Mutant Cactus Bud`)
+    return numericModifier(
+      familiar,
+      "Leprechaun Effectiveness",
+      1,
+      $item`none`
+    );
+  const meatBonus = numericModifier(familiar, "Meat Drop", 1, $item`none`);
+  if (meatBonus === 0) return 0;
+  return Math.pow(Math.sqrt(meatBonus / 2 + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+}
+
+/**
+ * Returns the weight-coefficient of any baby gravy fairying that this familiar may find itself doing
+ * Assumes the familiar is nude and thus fails for hatrack & pantsrack
+ * For the Mutant Fire Ant, returns the efficacy-multiplier instead
+ * @param familiar The familiar whose fairy multiplier you're interested in
+ */
+export function findFairyMultiplier(familiar: Familiar): number {
+  if (familiar === $familiar`Mutant Fire Ant`)
+    return numericModifier(familiar, "Fairy Effectiveness", 1, $item`none`);
+  const itemBonus = numericModifier(familiar, "Item Drop", 1, $item`none`);
+  if (itemBonus === 0) return 0;
+  return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+}
+
+export const holidayWanderers = new Map<string, Monster[]>([
+  [
+    "El Dia De Los Muertos Borrachos",
+    $monsters`Novia Cadáver, Novio Cadáver, Padre Cadáver, Persona Inocente Cadáver`,
+  ],
+  [
+    "Feast of Boris",
+    $monsters`Candied Yam Golem, Malevolent Tofurkey, Possessed Can of Cranberry Sauce, Stuffing Golem`,
+  ],
+  [
+    "Talk Like a Pirate Day",
+    $monsters`ambulatory pirate, migratory pirate, peripatetic pirate`,
+  ],
+]);
+
+export function getTodaysHolidayWanderers(): Monster[] {
+  return holiday()
+    .split("/")
+    .map((holiday) => holidayWanderers.get(holiday) ?? [])
+    .flat();
 }

@@ -1,0 +1,27 @@
+name: Update properties if necessary
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: 0 0 * * *
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build the code
+        run: yarn build
+
+      - name: Update properties from mafia source
+        run: yarn run updateProps
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Update property types automatically
+          title: Automated updates to property typings
+          body: This is an automatically generated PR with updates to the typings of properties from KoLmafia that libram maintains.
+          branch: automatic-property-type-updates

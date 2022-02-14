@@ -1,4 +1,4 @@
-import { useFamiliar } from "kolmafia";
+import { Monster, useFamiliar } from "kolmafia";
 import { Copier } from "../../Copier";
 import { have as _have, isCurrentFamiliar } from "../../lib";
 import { get } from "../../property";

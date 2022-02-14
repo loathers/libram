@@ -87,7 +87,7 @@ export function findMonster(
 
   return (
     availableLocketMonsters()
-      .sort((a, b) => value(b) - value(a))
-      .find(criteria) ?? null
+      .filter(criteria)
+      .sort((a, b) => value(b) - value(a))[0] ?? null
   );
 }

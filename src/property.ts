@@ -61,16 +61,16 @@ import {
   KnownProperty,
 } from "./propertyTyping";
 
-const createPropertyGetter = <T>(
-  transform: (value: string, property: string) => T
-) => (property: string, default_?: T): T => {
-  const value = getProperty(property);
-  if (default_ !== undefined && value === "") {
-    return default_;
-  }
+const createPropertyGetter =
+  <T>(transform: (value: string, property: string) => T) =>
+  (property: string, default_?: T): T => {
+    const value = getProperty(property);
+    if (default_ !== undefined && value === "") {
+      return default_;
+    }
 
-  return transform(value, property);
-};
+    return transform(value, property);
+  };
 
 type MafiaClasses =
   | Bounty
@@ -250,11 +250,9 @@ export function set<D extends { toString(): string }>(
   setProperty(property, stringValue);
 }
 
-type Properties = Partial<
-  {
-    [P in KnownProperty]: unknown;
-  }
->;
+type Properties = Partial<{
+  [P in KnownProperty]: unknown;
+}>;
 
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {

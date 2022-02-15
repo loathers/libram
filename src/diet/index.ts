@@ -377,11 +377,12 @@ class DietPlanner<T> {
       forkMugPrice +
       (menuItem.additionalValue ?? 0);
 
-    const valueSpleen = $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-      menuItem.item
-    )
-      ? 5 * this.spleenValue
-      : 0;
+    const valueSpleen =
+      $items`jar of fermented pickle juice, extra-greasy slider`.includes(
+        menuItem.item
+      )
+        ? 5 * this.spleenValue
+        : 0;
 
     return forkMug && valueForkMug > valueRaw
       ? [[...helpers, forkMug, menuItem], valueForkMug + valueSpleen]

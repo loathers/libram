@@ -36,7 +36,7 @@ export const phylumItem = new Map<Phylum, Item>([
   [Phylum.get("Plant"), Item.get("goodberry")],
   [Phylum.get("Slime"), Item.get("extra-strength goo")],
   [Phylum.get("Undead"), Item.get("unfinished pleasure")],
-  [Phylum.get("Weird"), Item.get("non-Euclidean angle]")],
+  [Phylum.get("Weird"), Item.get("non-Euclidean angle")],
 ]);
 
 /**

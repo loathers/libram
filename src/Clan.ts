@@ -31,46 +31,13 @@ export interface Rank {
   id: number;
 }
 
-export class ClanError extends Error {
-  reason?: Error;
-  constructor(message: string, reason?: Error) {
-    super(message);
-    this.reason = reason;
-    Object.setPrototypeOf(this, ClanError.prototype);
-  }
-}
-
-// It would be fantastic to have this function properly typed
-// But until someone can work out how to do it, it gets the
-// comment blocks of shame
-/* eslint-disable */
-function validate<T extends Function>(
-  target: any,
-  propertyName: string,
-  descriptor: TypedPropertyDescriptor<T>
-) {
-  if (!descriptor?.value) return;
-
-  const method = descriptor.value;
-
-  // @ts-ignore
-  descriptor.value = function (...args: any[]) {
-    // @ts-ignore
-    if (this.id !== getClanId()) {
-      throw new Error("You are no longer a member of this clan");
-    }
-
-    return method.apply(this, args);
-  };
-}
-/* eslint-enable */
-
 const clanIdCache: { [clanName: string]: number } = {};
 
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
-const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
+const LOG_FAX_PATTERN =
+  /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
 export class Clan {
@@ -243,6 +210,12 @@ export class Clan {
     this.name = name;
   }
 
+  private _check() {
+    if (this.id !== getClanId()) {
+      throw new Error("You are no longer a member of this clan");
+    }
+  }
+
   /**
    * Join clan
    */
@@ -257,8 +230,9 @@ export class Clan {
   /**
    * Return the monster that is currently in the current clan's fax machine if any
    */
-  @validate
   getCurrentFax(): Monster | null {
+    this._check();
+
     const logs = visitUrl("clan_log.php");
 
     const lastFax = logs.match(LOG_FAX_PATTERN);
@@ -275,8 +249,9 @@ export class Clan {
   /**
    * List available ranks (name, degree and id) from the current clan
    */
-  @validate
   getRanks(): Rank[] {
+    this._check();
+
     const page = visitUrl("clan_whitelist.php");
 
     return xpath(page, '//select[@name="level"]//option')
@@ -307,12 +282,13 @@ export class Clan {
    * @param rankName Rank to give the player. If not provided they will be given the lowest rank
    * @param title Title to give the player. If not provided, will be blank
    */
-  @validate
   addPlayerToWhitelist(
     player: string | number,
     rankName?: string,
     title = ""
   ): boolean {
+    this._check();
+
     const playerId = toPlayerId(player);
 
     const ranks = this.getRanks();
@@ -336,8 +312,9 @@ export class Clan {
    * Remove a player from the current clan's whitelist
    * @param player Player id or name
    */
-  @validate
   removePlayerFromWhitelist(player: string | number): boolean {
+    this._check();
+
     const playerId = toPlayerId(player);
 
     const result = visitUrl(
@@ -350,8 +327,9 @@ export class Clan {
   /**
    * Return the amount of meat in the current clan's coffer.
    */
-  @validate
   public getMeatInCoffer(): number {
+    this._check();
+
     const page = visitUrl("clan_stash.php");
     const [, meat] = page.match(
       /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./
@@ -363,8 +341,9 @@ export class Clan {
    * Add the given amount of meat to the current clan's coffer.
    * @param amount Amount of meat to put in coffer
    */
-  @validate
   putMeatInCoffer(amount: number): boolean {
+    this._check();
+
     const result = visitUrl(
       `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
     );
@@ -381,8 +360,9 @@ export class Clan {
    */
   take(items: Item[]): Item[];
   take(items: Map<Item, number>): Map<Item, number>;
-  @validate
   take(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    this._check();
+
     const map = arrayToCountedMap(items);
 
     map.forEach((quantity, item) => {
@@ -430,8 +410,9 @@ export class Clan {
    */
   put(items: Item[]): Item[];
   put(items: Map<Item, number>): Map<Item, number>;
-  @validate
   put(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    this._check();
+
     const map = arrayToCountedMap(items);
 
     if (!this.check())
@@ -459,11 +440,12 @@ export class Clan {
     items: Map<Item, number>,
     callback: (borrowedItems: Map<Item, number>) => T
   ): T;
-  @validate
   withStash<T>(
     items: Item[] | Map<Item, number>,
     callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any
   ): T {
+    this._check();
+
     const map = arrayToCountedMap(items);
     return Clan._withStash(
       () => this.take(map),

@@ -36,8 +36,7 @@ const clanIdCache: { [clanName: string]: number } = {};
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
-const LOG_FAX_PATTERN =
-  /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
+const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
 export class Clan {
@@ -197,10 +196,10 @@ export class Clan {
   static getWhitelisted(): Clan[] {
     const page = visitUrl("clan_signup.php");
 
-    return xpath(page, '//select[@name="whichclan"]//option').map((option) => {
-      const validHtml = `<select>${option}</select>`;
-      const id = Number.parseInt(xpath(validHtml, "//@value")[0]);
-      const name = xpath(validHtml, "//text()")[0];
+    const clanNames = xpath(page, '//select[@name="whichclan"]//option/text()');
+    const clanIds = xpath(page, '//select[@name="whichclan"]//option/@value');
+    return clanNames.map((name, index) => {
+      const id = Number.parseInt(clanIds[index]);
       return new Clan(id, name);
     });
   }

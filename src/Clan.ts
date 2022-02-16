@@ -36,7 +36,8 @@ const clanIdCache: { [clanName: string]: number } = {};
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
-const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
+const LOG_FAX_PATTERN =
+  /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
 export class Clan {

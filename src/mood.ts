@@ -70,13 +70,15 @@ export class OscusSoda extends MpSource {
 export class MagicalSausages extends MpSource {
   static instance = new MagicalSausages();
 
-  usesRemaining(): number | null {
-    return 23 - get("_sausagesEaten");
+  usesRemaining(): number {
+    return have($item`Kramco Sausage-o-Matic™`)
+      ? 23 - get("_sausagesEaten")
+      : 0;
   }
 
   availableMpMin(): number {
     const maxSausages = Math.min(
-      23 - get("_sausagesEaten"),
+      this.usesRemaining(),
       itemAmount($item`magical sausage`) +
         itemAmount($item`magical sausage casing`)
     );
@@ -87,7 +89,7 @@ export class MagicalSausages extends MpSource {
     const mpSpaceAvailable = myMaxmp() - myMp();
     if (mpSpaceAvailable < 700) return;
     const maxSausages = Math.min(
-      23 - get("_sausagesEaten"),
+      this.usesRemaining(),
       itemAmount($item`magical sausage`) +
         itemAmount($item`magical sausage casing`),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 999))

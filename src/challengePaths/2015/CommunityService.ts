@@ -367,10 +367,10 @@ export default class CommunityService {
       // We add 0.001 because the floor function sometimes introduces weird rounding errors
       return (
         60 -
-        multiplier *
-          Math.floor(
-            (getModifier("Item Drop") - familiarItemDrop) / 30 + 0.001
-          ) -
+        Math.floor(
+          (multiplier * (getModifier("Item Drop") - familiarItemDrop)) / 30 +
+            0.001
+        ) -
         Math.floor((getModifier("Booze Drop") - familiarBoozeDrop) / 15 + 0.001)
       );
     },

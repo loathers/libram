@@ -135,7 +135,7 @@ export default class CommunityService {
    * @returns "completed", "failed", or "already completed".
    */
   run(
-    prepare: () => void,
+    prepare: () => void | number,
     beCertain = false,
     maxTurns = Infinity
   ): "completed" | "failed" | "already completed" {
@@ -146,8 +146,9 @@ export default class CommunityService {
     const startTime = Date.now();
     const startTurns = myTurncount();
 
+    let additionalTurns: number;
     try {
-      prepare();
+      additionalTurns = prepare() ?? 0;
     } catch {
       return "failed";
     }
@@ -160,7 +161,7 @@ export default class CommunityService {
 
     if (finishedFunction()) {
       CommunityService.log[this.property] = {
-        predictedTurns: prediction,
+        predictedTurns: prediction + additionalTurns,
         turnCost: myTurncount() - startTurns,
         seconds: (Date.now() - startTime) / 1000,
       };

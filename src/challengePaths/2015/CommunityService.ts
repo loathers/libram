@@ -69,7 +69,7 @@ export default class CommunityService {
     id: number,
     property: string,
     predictor: () => number,
-    maximizeRequirements: Requirement | null = null
+    maximizeRequirements: Requirement
   ) {
     this.choice = id;
     this.property = property;
@@ -216,6 +216,9 @@ export default class CommunityService {
       colour
     );
   }
+
+  // Below, we have the tests themselves.
+
   static HP = new CommunityService(
     1,
     "Donate Blood",
@@ -358,7 +361,7 @@ export default class CommunityService {
           equippedItem($slot`familiar`)
         ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 
-      //Champagne doubling does NOT count for CS, so we undouble
+      // Champagne doubling does NOT count for CS, so we undouble
       const multiplier =
         haveEquipped($item`broken champagne bottle`) &&
         get("garbageChampagneCharge") > 0
@@ -387,7 +390,12 @@ export default class CommunityService {
     new Requirement(["Hot Resistance"], {})
   );
 
-  static CoilWire = new CommunityService(11, "Coil Wire", () => 60, null);
+  static CoilWire = new CommunityService(
+    11,
+    "Coil Wire",
+    () => 60,
+    new Requirement([], {})
+  );
 
   static donate = () => {
     visitUrl("council.php");

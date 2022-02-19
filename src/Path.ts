@@ -188,4 +188,15 @@ export const Paths = {
   YouRobot: new Path("You, Robot", 41, false, false, true, 0, 0, 0),
   QuantumTerrarium: new Path("Quantum Terrarium", 42, true, true, false),
   Wildfire: new Path("Wildfire", 43),
+  GreyYou: new Path(
+    "Grey You",
+    44,
+    false,
+    true,
+    true,
+    0,
+    0,
+    0, // eslint-disable-next-line libram/verify-constants
+    $classes`Grey Goo`
+  ),
 } as const;

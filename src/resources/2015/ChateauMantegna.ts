@@ -7,6 +7,7 @@ import {
   totalFreeRests,
   visitUrl,
 } from "kolmafia";
+import { restIfFree as generalRestIfFree } from "../../lib";
 import { get } from "../../property";
 
 export function have(): boolean {
@@ -31,10 +32,7 @@ export function rest(): void {
 }
 
 export function restIfFree(): boolean {
-  if (totalFreeRests() > get("timesRested")) {
-    rest();
-    return true;
-  } else return false;
+  return generalRestIfFree(rest);
 }
 
 const desks = [

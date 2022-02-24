@@ -41,6 +41,7 @@ import {
   Thrall,
   toItem,
   toSkill,
+  totalFreeRests,
   totalTurnsPlayed,
 } from "kolmafia";
 
@@ -663,4 +664,17 @@ export function getTodaysHolidayWanderers(): Monster[] {
     .split("/")
     .map((holiday) => holidayWanderers.get(holiday) ?? [])
     .flat();
+}
+
+/**
+ * Attempts to perform a rest, if said rest will be free.
+ * Returns true if the rest worked and false otherwise.
+ * @param restFunction function to use for resting
+ */
+export function restIfFree(restFunction: () => void): boolean {
+  if (totalFreeRests() > get("timesRested")) {
+    restFunction();
+    return true;
+  }
+  return false;
 }

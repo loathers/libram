@@ -9,6 +9,7 @@ export function have(): boolean {
 }
 
 export function harvest(): void {
+  if (!have()) return;
   const breakfastProperty = inHardcore()
     ? "breakfastHardcore"
     : "breakfastSoftcore";

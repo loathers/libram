@@ -20,6 +20,7 @@ import * as SongBoom from "./2018/SongBoom";
 import * as BeachComb from "./2019/BeachComb";
 import * as Snapper from "./2019/Snapper";
 import * as Guzzlr from "./2020/Guzzlr";
+import * as RetroCape from "./2020/RetroCape";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
@@ -42,6 +43,7 @@ export {
   ObtuseAngel,
   Pantogram,
   RainDoh,
+  RetroCape,
   Snapper,
   SongBoom,
   SourceTerminal,

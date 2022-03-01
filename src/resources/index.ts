@@ -22,6 +22,7 @@ import * as Snapper from "./2019/Snapper";
 import * as Guzzlr from "./2020/Guzzlr";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
+import * as PowerPlant from "./2021/PowerPlant";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 
 export {
@@ -41,6 +42,7 @@ export {
   MummingTrunk,
   ObtuseAngel,
   Pantogram,
+  PowerPlant,
   RainDoh,
   Snapper,
   SongBoom,

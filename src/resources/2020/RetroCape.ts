@@ -31,6 +31,9 @@ const Heroes = {
 type Hero = keyof typeof Heroes;
 type Mode = "hold" | "thrill" | "kiss" | "kill";
 
+export const currentHero = () => get("retroCapeSuperhero") as Hero;
+export const currentMode = () => get("retroCapeWashingInstructions") as Mode;
+
 const modeMap = new Map<[Hero, Mode], Modifiers>([
   [
     ["vampire", "hold"],
@@ -76,11 +79,9 @@ const modeMap = new Map<[Hero, Mode], Modifiers>([
  */
 export function set(hero: Hero, mode: Mode): boolean {
   if (!have()) return false;
+  if (currentHero() === hero && currentMode() === mode) return true;
   cliExecute(`retrocape ${hero} ${mode}`);
-  return (
-    get("retroCapeSuperhero") === hero &&
-    get("retroCapeWashingInstructions") === mode
-  );
+  return currentHero() === hero && currentMode() === mode;
 }
 
 /**
@@ -114,7 +115,7 @@ export function tuneToSkill(skill: Skill): boolean {
   const setting = skills.get(skill);
   if (!setting || !have()) return false;
   set(...setting);
-  return [get("retroCapeSuperhero"), get("retroCapeWashingInstructions")].every(
+  return [currentHero(), currentMode()].every(
     (element, index) => element === setting[index]
   );
 }

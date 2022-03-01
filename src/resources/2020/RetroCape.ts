@@ -90,7 +90,10 @@ export function set(hero: Hero, mode: Mode): boolean {
  * @param mode The washing instructions setting
  * @returns A Modifiers object describing the Retro Cape were it to be tuned to that setting.
  */
-export function getModifier(hero: Hero, mode: Mode): Modifiers {
+export function getModifier(
+  hero = currentHero(),
+  mode = currentMode()
+): Modifiers {
   return {
     ...Heroes[hero],
     ...(modeMap.get([hero, mode]) ?? {}),

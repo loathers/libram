@@ -6,7 +6,6 @@ import {
   getWorkshed,
   Item,
   toInt,
-  toItem,
   use,
   visitUrl,
   xpath,
@@ -214,6 +213,7 @@ export function prepareAscension({
   garden,
   eudora,
   chateau,
+  throwOnFail,
 }: {
   workshed?: Workshed;
   garden?: Garden;
@@ -223,15 +223,25 @@ export function prepareAscension({
     ceiling?: Ceiling;
     nightstand?: Nightstand;
   };
+  throwOnFail?: boolean;
 } = {}): void {
-  if (workshed && getWorkshed() !== toItem(workshed)) {
+  throwOnFail = throwOnFail ?? true;
+  if (workshed && getWorkshed() !== Item.get(workshed)) {
     use(Item.get(workshed));
+    if (getWorkshed().name !== workshed && throwOnFail) {
+      throw new Error(
+        `Failed to switch workshed to ${workshed}; it is currently still ${getWorkshed()}.`
+      );
+    }
   }
 
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
 
-    if (!Object.getOwnPropertyNames(getCampground()).includes(garden)) {
+    if (
+      !Object.getOwnPropertyNames(getCampground()).includes(garden) &&
+      throwOnFail
+    ) {
       throw new Error(
         `We really thought we changed your garden to a ${garden}, but Mafia is saying otherwise.`
       );
@@ -244,7 +254,8 @@ export function prepareAscension({
       !xpath(
         visitUrl("account.php?tab=correspondence"),
         `//select[@name="whichpenpal"]/option/@value`
-      ).includes(eudoraNumber.toString())
+      ).includes(eudoraNumber.toString()) &&
+      throwOnFail
     ) {
       throw new Error(
         `I'm sorry buddy, but you don't seem to be subscribed to ${eudora}. Which makes it REALLY hard to correspond with them.`
@@ -256,7 +267,7 @@ export function prepareAscension({
       );
     }
 
-    if (eudoraItem() !== toItem(eudora)) {
+    if (eudoraItem() !== Item.get(eudora) && throwOnFail) {
       throw new Error(
         `We really thought we changed your eudora to a ${eudora}, but Mafia is saying otherwise.`
       );
@@ -266,7 +277,7 @@ export function prepareAscension({
   if (chateau && ChateauMantegna.have()) {
     const { desk, ceiling, nightstand } = chateau;
     if (ceiling && ChateauMantegna.getCeiling() !== ceiling) {
-      if (!ChateauMantegna.changeCeiling(ceiling)) {
+      if (!ChateauMantegna.changeCeiling(ceiling) && throwOnFail) {
         throw new Error(
           `We tried, but were unable to change your chateau ceiling to ${ceiling}. Probably.`
         );
@@ -274,7 +285,7 @@ export function prepareAscension({
     }
 
     if (desk && ChateauMantegna.getDesk() !== desk) {
-      if (!ChateauMantegna.changeDesk(desk)) {
+      if (!ChateauMantegna.changeDesk(desk) && throwOnFail) {
         throw new Error(
           `We tried, but were unable to change your chateau desk to ${desk}. Probably.`
         );
@@ -282,7 +293,7 @@ export function prepareAscension({
     }
 
     if (nightstand && ChateauMantegna.getNightstand() !== nightstand) {
-      if (!ChateauMantegna.changeNightstand(nightstand)) {
+      if (!ChateauMantegna.changeNightstand(nightstand) && throwOnFail) {
         throw new Error(
           `We tried, but were unable to change your chateau nightstand to ${nightstand}. Probably.`
         );

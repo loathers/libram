@@ -10,53 +10,25 @@ export function have(): boolean {
 
 export function harvest(): void {
   if (!have()) return;
-  const breakfastProperty = inHardcore()
-    ? "breakfastHardcore"
-    : "breakfastSoftcore";
-  const tomesProperty = inHardcore()
-    ? "tomeSkillsHardcore"
-    : "tomeSkillsSoftcore";
-  const batteriesProperty = inHardcore()
-    ? "harvestBatteriesHardcore"
-    : "harvestBatteriesSoftcore";
-  const pocketWishProperty = inHardcore()
-    ? "makePocketWishesHardcore"
-    : "makePocketWishesSoftcore";
-  const onceADayItemsProperty = inHardcore()
-    ? "useCrimboToysHardcore"
-    : "useCrimboToysSoftcore";
-  const cloversProperty = inHardcore()
-    ? "grabCloversHardcore"
-    : "grabCloversSoftcore";
-  const vipProperty = inHardcore()
-    ? "visitLoungeHardcore"
-    : "visitLoungeSoftcore";
-  const boxingProperty = inHardcore()
-    ? "haveBoxingDaydreamHardcore"
-    : "haveBoxingDaydreamSoftcore";
-  const jackassProperty = inHardcore()
-    ? "checkJackassHardcore"
-    : "checkJackassSoftcore";
-  const plantProperty = inHardcore()
-    ? "autoPlantHardcore"
-    : "autoPlantSoftcore";
-  const bookProperty = inHardcore()
-    ? "readManualHardcore"
-    : "readManualSoftcore";
+  const core = inHardcore() ? "Hardcore" : "Softcore";
   withProperties(
     {
-      [tomesProperty]: "",
-      [breakfastProperty]: "",
-      [batteriesProperty]: true,
-      [pocketWishProperty]: false,
-      [onceADayItemsProperty]: false,
-      [cloversProperty]: false,
       breakfastCompleted: false,
-      [vipProperty]: false,
-      [boxingProperty]: false,
-      [jackassProperty]: false,
-      [plantProperty]: false,
-      [bookProperty]: false,
+      ["breakfast" + core]: "",
+      ["harvestBatteries" + core]: true,
+      ["makePocketWishes" + core]: false,
+      ["useCrimboToys" + core]: false,
+      ["grabClovers" + core]: false,
+      ["visitLounge" + core]: false,
+      ["haveBoxingDaydream" + core]: false,
+      ["checkJackass" + core]: false,
+      ["autoPlant" + core]: false,
+      ["readManual" + core]: false,
+      ["pathedSummons" + core]: false,
+      ["harvestGarden" + core]: "none",
+      ["grimoireSkills" + core]: "none",
+      ["libramSkills" + core]: "none",
+      ["tomeSkills" + core]: "none",
     },
     () => cliExecute("breakfast")
   );

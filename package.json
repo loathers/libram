@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",

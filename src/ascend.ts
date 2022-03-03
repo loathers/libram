@@ -205,7 +205,7 @@ type Eudora = typeof eudorae[number];
  * Sets up various iotms you may want to use in the coming ascension
  * @param ascensionItems.workshed Workshed to switch to.
  * @param ascensionItems.garden Garden to switch to.
- * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as items
+ * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
  * @param throwOnFail If true, this will throw an error when it fails to switch something
  */
 export function prepareAscension({

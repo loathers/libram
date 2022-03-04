@@ -81,7 +81,7 @@ function expectedAdventures(
         adventures += 2;
       }
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
-      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
+      if (itemType(item) === "food" && modifiers.seasoning) adventures += 0.5;
       return adventures;
     }) / interpolated.length
   );

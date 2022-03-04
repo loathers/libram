@@ -55,7 +55,7 @@ export function reminiscesLeft(): number {
  * @returns An array consisting of the Monsters reminisced today.
  */
 export function monstersReminisced(): Monster[] {
-  return parseLocketProperty().map((id) => toMonster(parseInt(id)));
+  return parseLocketProperty().map((id) => toMonster(id));
 }
 
 /**

@@ -122,6 +122,7 @@ export default class CommunityService {
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
+    if (get("csServicesPerformed").trim().length === 0) visitUrl("council.php");
     visitUrl("council.php");
     runChoice(this.choice);
     return this.isDone();

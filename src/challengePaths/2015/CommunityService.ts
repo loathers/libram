@@ -6,7 +6,6 @@ import {
   myBasestat,
   myBuffedstat,
   myFamiliar,
-  myLevel,
   myMaxhp,
   myThrall,
   myTurncount,
@@ -23,7 +22,7 @@ import { have } from "../../lib";
 import { Requirement } from "../../maximize";
 import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
-import { MummingTrunk, SongBoom } from "../../resources";
+import { MummingTrunk } from "../../resources";
 import {
   $effect,
   $familiar,
@@ -269,10 +268,6 @@ export default class CommunityService {
         toSlot(equippedItem($slot`familiar`)) === $slot`weapon`
           ? getPower(equippedItem($slot`familiar`))
           : 0;
-      const songDamage =
-        SongBoom.song() === "These Fists Were Made for Punchin'"
-          ? myLevel()
-          : 0;
 
       // mafia does not currently count swagger
       const multiplier = have($effect`Bow-Legged Swagger`) ? 2 : 1;
@@ -283,8 +278,7 @@ export default class CommunityService {
         Math.floor(
           (multiplier *
             (getModifier("Weapon Damage") -
-              0.15 * (weaponPower + offhandPower + familiarPower) -
-              songDamage)) /
+              0.15 * (weaponPower + offhandPower + familiarPower))) /
             50 +
             0.001
         ) -

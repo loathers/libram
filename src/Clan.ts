@@ -220,7 +220,7 @@ export class Clan {
    * Join clan
    */
   join(): Clan {
-    return Clan._join(this.id);
+    return Clan.join(this.id);
   }
 
   check(): boolean {

@@ -155,7 +155,7 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if (beCertain ? this.actualCost() : prediction <= maxTurns) {
+    if ((beCertain ? this.actualCost() : prediction) <= maxTurns) {
       this.do();
     }
 

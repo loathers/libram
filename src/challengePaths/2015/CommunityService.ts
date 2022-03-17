@@ -182,14 +182,14 @@ export default class CommunityService {
 
   /**
    * Checks council.php for the number of turns this test will take; more reliable than prediction, but requires an additional pagehit.
-   * @returns The number of turns to complete this test according to council.php. 
+   * @returns The number of turns to complete this test according to council.php.
    */
-   actualCost(): number {
+  actualCost(): number {
     const match = visitUrl("council.php").match(
       `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
     );
     return match ? parseInt(match[1]) : 0;
-   }
+  }
 
   /**
    * A log of the predicted turns, actual turns, and duration of each CS test performed.

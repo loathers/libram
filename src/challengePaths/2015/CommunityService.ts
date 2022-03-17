@@ -3,6 +3,7 @@ import {
   familiarWeight,
   getPower,
   haveEquipped,
+  myAdventures,
   myBasestat,
   myBuffedstat,
   myFamiliar,
@@ -125,11 +126,12 @@ export default class CommunityService {
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
-    if (get("csServicesPerformed").trim().length === 0)
+    if (get("csServicesPerformed").trim().length === 0) {
       CommunityService.council();
+    }
     CommunityService.council();
-    runChoice(this.choice);
-    return this.isDone();
+    const councilText = runChoice(this.choice);
+    return this._verifyIsDone(councilText);
   }
 
   /**
@@ -141,12 +143,9 @@ export default class CommunityService {
    */
   run(
     prepare: () => void | number,
-    beCertain = false,
     maxTurns = Infinity
   ): "completed" | "failed" | "already completed" {
-    const finishedFunction = () =>
-      beCertain ? this.verifyIsDone() : this.isDone();
-    if (finishedFunction()) return "already completed";
+    if (this.isDone()) return "already completed";
 
     const startTime = Date.now();
     const startTurns = myTurncount();
@@ -160,19 +159,22 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if ((beCertain ? this.actualCost() : prediction) <= maxTurns) {
-      this.do();
+    const council = CommunityService.council();
+    const turns = this._actualCost(council);
+    if (!turns) return "already completed";
+
+    if (turns > Math.max(maxTurns, myAdventures())) {
+      return "failed";
     }
 
-    if (finishedFunction()) {
-      CommunityService.log[this.property] = {
-        predictedTurns: prediction + additionalTurns,
-        turnCost: myTurncount() - startTurns,
-        seconds: (Date.now() - startTime) / 1000,
-      };
-      return "completed";
-    }
-    return "failed";
+    if (!this.do()) return "failed";
+
+    CommunityService.log[this.property] = {
+      predictedTurns: prediction + additionalTurns,
+      turnCost: myTurncount() - startTurns,
+      seconds: (Date.now() - startTime) / 1000,
+    };
+    return "completed";
   }
 
   private _verifyIsDone(councilText: string): boolean {

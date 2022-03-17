@@ -155,7 +155,7 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if (beCertain ? this.actual() : prediction <= maxTurns) {
+    if (beCertain ? this.actualCost() : prediction <= maxTurns) {
       this.do();
     }
 
@@ -184,7 +184,7 @@ export default class CommunityService {
    * Checks council.php for the number of turns this test will take; more reliable than prediction, but requires an additional pagehit.
    * @returns The number of turns to complete this test according to council.php. 
    */
-   actual(): number {
+   actualCost(): number {
     const match = visitUrl("council.php").match(
       `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
     );

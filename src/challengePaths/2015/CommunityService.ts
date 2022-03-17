@@ -52,6 +52,8 @@ const statCommunityServicePredictor = (stat: Stat) => {
     );
 };
 
+const visitCouncil = () => visitUrl("council.php");
+
 export default class CommunityService {
   private choice: number;
   private property: string;
@@ -102,10 +104,6 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
-  private static council(): string {
-    return visitUrl("council.php");
-  }
-
   /**
    * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
    * @returns Whether mafia currently believes this test is complete.
@@ -126,10 +124,9 @@ export default class CommunityService {
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
-    if (get("csServicesPerformed").trim().length === 0) {
-      CommunityService.council();
-    }
-    CommunityService.council();
+    if (get("csServicesPerformed").trim().length === 0) visitCouncil();
+
+    visitCouncil();
     const councilText = runChoice(this.choice);
     return this._verifyIsDone(councilText);
   }
@@ -159,7 +156,7 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    const council = CommunityService.council();
+    const council = visitCouncil();
     const turns = this._actualCost(council);
     if (!turns) return "already completed";
 
@@ -188,7 +185,7 @@ export default class CommunityService {
    * @returns Whether council.php suggests that the test is complete.
    */
   verifyIsDone(): boolean {
-    return this._verifyIsDone(CommunityService.council());
+    return this._verifyIsDone(visitCouncil());
   }
 
   private _actualCost(councilText: string): number {
@@ -203,7 +200,7 @@ export default class CommunityService {
    * @returns The number of turns to complete this test according to council.php.
    */
   actualCost(): number {
-    return this._actualCost(CommunityService.council());
+    return this._actualCost(visitCouncil());
   }
 
   /**

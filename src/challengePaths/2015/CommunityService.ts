@@ -130,8 +130,8 @@ export default class CommunityService {
   /**
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
    * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit. Optionally returns the number of turns you expect to spend preparing for the test.
-   * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
-   * @param maxTurns We will run the test iff the predicted turns is less than or equal to this parameter.
+   * @param beCertain Whether we should check council.php instead of mafia to determine the test cost and whether the test is complete.
+   * @param maxTurns We will run the test iff the predicted/actual turns is less than or equal to this parameter.
    * @returns "completed", "failed", or "already completed".
    */
   run(
@@ -155,7 +155,7 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if (prediction <= maxTurns) {
+    if ((beCertain ? this.actualCost() : prediction) <= maxTurns) {
       this.do();
     }
 
@@ -178,6 +178,17 @@ export default class CommunityService {
     return !visitUrl("council.php").includes(
       `<input type=hidden name=option value=${this.choice}>`
     );
+  }
+
+  /**
+   * Checks council.php for the number of turns this test will take; more reliable than prediction, but requires an additional pagehit.
+   * @returns The number of turns to complete this test according to council.php.
+   */
+  actualCost(): number {
+    const match = visitUrl("council.php").match(
+      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
+    );
+    return match ? parseInt(match[1]) : 0;
   }
 
   /**

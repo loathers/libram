@@ -101,6 +101,10 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
+  private static council(): string {
+    return visitUrl("council.php");
+  }
+
   /**
    * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
    * @returns Whether mafia currently believes this test is complete.
@@ -121,8 +125,9 @@ export default class CommunityService {
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
-    if (get("csServicesPerformed").trim().length === 0) visitUrl("council.php");
-    visitUrl("council.php");
+    if (get("csServicesPerformed").trim().length === 0)
+      CommunityService.council();
+    CommunityService.council();
     runChoice(this.choice);
     return this.isDone();
   }
@@ -170,14 +175,25 @@ export default class CommunityService {
     return "failed";
   }
 
+  private _verifyIsDone(councilText: string): boolean {
+    return !councilText.includes(
+      `<input type=hidden name=option value=${this.choice}>`
+    );
+  }
+
   /**
    * Checks council.php to verify that a test is complete; more reliable than isDone, but requires an additional pagehit.
    * @returns Whether council.php suggests that the test is complete.
    */
   verifyIsDone(): boolean {
-    return !visitUrl("council.php").includes(
-      `<input type=hidden name=option value=${this.choice}>`
+    return this._verifyIsDone(CommunityService.council());
+  }
+
+  private _actualCost(councilText: string): number {
+    const match = councilText.match(
+      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
     );
+    return match ? parseInt(match[1]) : 0;
   }
 
   /**
@@ -185,10 +201,7 @@ export default class CommunityService {
    * @returns The number of turns to complete this test according to council.php.
    */
   actualCost(): number {
-    const match = visitUrl("council.php").match(
-      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
-    );
-    return match ? parseInt(match[1]) : 0;
+    return this._actualCost(CommunityService.council());
   }
 
   /**

@@ -130,8 +130,8 @@ export default class CommunityService {
   /**
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
    * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit. Optionally returns the number of turns you expect to spend preparing for the test.
-   * @param beCertain Whether we should check council.php instead of mafia to determine whether the test is complete.
-   * @param maxTurns We will run the test iff the predicted turns is less than or equal to this parameter.
+   * @param beCertain Whether we should check council.php instead of mafia to determine the test cost and whether the test is complete.
+   * @param maxTurns We will run the test iff the predicted/actual turns is less than or equal to this parameter.
    * @returns "completed", "failed", or "already completed".
    */
   run(
@@ -155,7 +155,7 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if (prediction <= maxTurns) {
+    if (beCertain ? this.actual() : prediction <= maxTurns) {
       this.do();
     }
 

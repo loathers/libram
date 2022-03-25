@@ -5,12 +5,15 @@ import {
   getCampground,
   getWorkshed,
   Item,
+  myId,
+  nowToString,
   toInt,
   use,
   visitUrl,
   xpath,
 } from "kolmafia";
 import { Path } from "./Path";
+import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
 import { $item, $items, $stat } from "./template-string";
@@ -98,6 +101,30 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
 }
 
 /**
+ * Check if the player can ascend into a non-casual path today
+ */
+export function canAscendNonCasual(): boolean {
+  if (!get("kingLiberated")) return false;
+  const page = visitUrl(`ascensionhistory.php?back=self&who=${myId()}`);
+  const pattern = `${nowToString(
+    "MM/dd/yy"
+  )}(?:(?!<\\/tr>|title="Casual"><\\/td>).)+<\\/tr>`;
+  return !page.match(pattern);
+}
+
+/**
+ * Check if the player can ascend into a casual path today
+ */
+export function canAscendCasual(): boolean {
+  if (!get("kingLiberated")) return false;
+  const page = visitUrl(`ascensionhistory.php?back=self&who=${myId()}`);
+  const pattern = `${nowToString(
+    "MM/dd/yy"
+  )}(?:(?!<\\/tr>).)+title="Casual"><\\/td><\\/tr>`;
+  return !page.match(pattern);
+}
+
+/**
  * Hops the gash, perming no skills
  * @param path path of choice, as a Path object--these exist as properties of Paths
  * @param playerClass Your class of choice for this ascension
@@ -115,6 +142,12 @@ export function ascend(
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined
 ): void {
+  if (lifestyle === Lifestyle.casual && !canAscendCasual()) {
+    throw new Error("Cannot ascend into another casual run today.");
+  }
+  if (lifestyle !== Lifestyle.casual && !canAscendNonCasual()) {
+    throw new Error("Cannot ascend into another non-casual run today.");
+  }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }

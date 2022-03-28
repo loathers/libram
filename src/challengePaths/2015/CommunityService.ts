@@ -3,6 +3,7 @@ import {
   familiarWeight,
   getPower,
   haveEquipped,
+  myAdventures,
   myBasestat,
   myBuffedstat,
   myFamiliar,
@@ -50,6 +51,8 @@ const statCommunityServicePredictor = (stat: Stat) => {
           ))
     );
 };
+
+const visitCouncil = () => visitUrl("council.php");
 
 export default class CommunityService {
   private choice: number;
@@ -121,10 +124,11 @@ export default class CommunityService {
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
-    if (get("csServicesPerformed").trim().length === 0) visitUrl("council.php");
-    visitUrl("council.php");
-    runChoice(this.choice);
-    return this.isDone();
+    if (get("csServicesPerformed").trim().length === 0) visitCouncil();
+
+    visitCouncil();
+    const councilText = runChoice(this.choice);
+    return this._verifyIsDone(councilText);
   }
 
   /**
@@ -136,12 +140,9 @@ export default class CommunityService {
    */
   run(
     prepare: () => void | number,
-    beCertain = false,
     maxTurns = Infinity
   ): "completed" | "failed" | "already completed" {
-    const finishedFunction = () =>
-      beCertain ? this.verifyIsDone() : this.isDone();
-    if (finishedFunction()) return "already completed";
+    if (this.isDone()) return "already completed";
 
     const startTime = Date.now();
     const startTurns = myTurncount();
@@ -155,19 +156,28 @@ export default class CommunityService {
 
     const prediction = this.predictor();
 
-    if ((beCertain ? this.actualCost() : prediction) <= maxTurns) {
-      this.do();
+    const council = visitCouncil();
+    const turns = this._actualCost(council);
+    if (!turns) return "already completed";
+
+    if (turns > Math.max(maxTurns, myAdventures())) {
+      return "failed";
     }
 
-    if (finishedFunction()) {
-      CommunityService.log[this.property] = {
-        predictedTurns: prediction + additionalTurns,
-        turnCost: myTurncount() - startTurns,
-        seconds: (Date.now() - startTime) / 1000,
-      };
-      return "completed";
-    }
-    return "failed";
+    if (!this.do()) return "failed";
+
+    CommunityService.log[this.property] = {
+      predictedTurns: prediction + additionalTurns,
+      turnCost: myTurncount() - startTurns,
+      seconds: (Date.now() - startTime) / 1000,
+    };
+    return "completed";
+  }
+
+  private _verifyIsDone(councilText: string): boolean {
+    return !councilText.includes(
+      `<input type=hidden name=option value=${this.choice}>`
+    );
   }
 
   /**
@@ -175,9 +185,14 @@ export default class CommunityService {
    * @returns Whether council.php suggests that the test is complete.
    */
   verifyIsDone(): boolean {
-    return !visitUrl("council.php").includes(
-      `<input type=hidden name=option value=${this.choice}>`
+    return this._verifyIsDone(visitCouncil());
+  }
+
+  private _actualCost(councilText: string): number {
+    const match = councilText.match(
+      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
     );
+    return match ? parseInt(match[1]) : 0;
   }
 
   /**
@@ -185,10 +200,7 @@ export default class CommunityService {
    * @returns The number of turns to complete this test according to council.php.
    */
   actualCost(): number {
-    const match = visitUrl("council.php").match(
-      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
-    );
-    return match ? parseInt(match[1]) : 0;
+    return this._actualCost(visitCouncil());
   }
 
   /**

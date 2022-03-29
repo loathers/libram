@@ -56,6 +56,7 @@ const visitCouncil = () => visitUrl("council.php");
 
 export default class CommunityService {
   private choice: number;
+  private stat: string;
   private property: string;
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
@@ -63,17 +64,20 @@ export default class CommunityService {
   /**
    * Class to store properties of various CS tests.
    * @param id The id the game HTML uses to identify the test; this is used primarily in runChoice.
+   * @param stat The principle stat the test measures, often used as more easily memorable shorthand for the specific tests
    * @param property The name of the test as a string, often used as part of the string property "csServicesPerformed".
    * @param predictor A function that returns an estimate for the number of turns that the test will take given your character's current state.
    * @param maximizeRequirements A Requirement object, if applicable, that aligns with the things needed to maximize for this particular test.
    */
   private constructor(
     id: number,
+    stat: string,
     property: string,
     predictor: () => number,
     maximizeRequirements: Requirement
   ) {
     this.choice = id;
+    this.stat = stat;
     this.property = property;
     this.predictor = predictor;
     this.maximizeRequirements = maximizeRequirements;
@@ -84,6 +88,12 @@ export default class CommunityService {
    */
   get id(): number {
     return this.choice;
+  }
+  /**
+   * @returns The primary stat the test measures, used primarily as memorable shorthand in place of test names.
+   */
+  get statName(): string {
+    return this.stat;
   }
   /**
    * @returns The name of the test, used primarily as part of the string property "csServicesPerformed"
@@ -244,6 +254,7 @@ export default class CommunityService {
 
   static HP = new CommunityService(
     1,
+    "HP",
     "Donate Blood",
     () => 60 - Math.floor((myMaxhp() - myBuffedstat($stat`muscle`) - 3) / 30),
     new Requirement(["HP"], {})
@@ -251,6 +262,7 @@ export default class CommunityService {
 
   static Muscle = new CommunityService(
     2,
+    "Muscle",
     "Feed The Children",
     statCommunityServicePredictor($stat`Muscle`),
     new Requirement(["Muscle"], {})
@@ -258,6 +270,7 @@ export default class CommunityService {
 
   static Mysticality = new CommunityService(
     3,
+    "Mysticality",
     "Build Playground Mazes",
     statCommunityServicePredictor($stat`Mysticality`),
     new Requirement(["Mysticality"], {})
@@ -265,6 +278,7 @@ export default class CommunityService {
 
   static Moxie = new CommunityService(
     4,
+    "Moxie",
     "Feed Conspirators",
     statCommunityServicePredictor($stat`Moxie`),
     new Requirement(["Moxie"], {})
@@ -272,6 +286,7 @@ export default class CommunityService {
 
   static FamiliarWeight = new CommunityService(
     5,
+    "Familiar Weight",
     "Breed More Collies",
     () =>
       60 - Math.floor((familiarWeight(myFamiliar()) + weightAdjustment()) / 5),
@@ -280,6 +295,7 @@ export default class CommunityService {
 
   static WeaponDamage = new CommunityService(
     6,
+    "Weapon Damage",
     "Reduce Gazelle Population",
     () => {
       const weaponPower = getPower(equippedItem($slot`weapon`));
@@ -315,6 +331,7 @@ export default class CommunityService {
 
   static SpellDamage = new CommunityService(
     7,
+    "Spell Damage",
     "Make Sausage",
     () => {
       const dragonfishDamage =
@@ -341,6 +358,7 @@ export default class CommunityService {
 
   static Noncombat = new CommunityService(
     8,
+    "Non-Combat",
     "Be a Living Statue",
     () => {
       const noncombatRate = -1 * getModifier("Combat Rate");
@@ -353,6 +371,7 @@ export default class CommunityService {
 
   static BoozeDrop = new CommunityService(
     9,
+    "Item Drop",
     "Make Margaritas",
     () => {
       const mummingCostume = MummingTrunk.currentCostumes().get(myFamiliar());
@@ -403,6 +422,7 @@ export default class CommunityService {
 
   static HotRes = new CommunityService(
     10,
+    "Hot Resistance",
     "Clean Steam Tunnels",
     () => 60 - getModifier("Hot Resistance"),
     new Requirement(["Hot Resistance"], {})
@@ -410,6 +430,7 @@ export default class CommunityService {
 
   static CoilWire = new CommunityService(
     11,
+    "Coil Wire",
     "Coil Wire",
     () => 60,
     new Requirement([], {})

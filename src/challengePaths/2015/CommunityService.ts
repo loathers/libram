@@ -114,6 +114,18 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
+  static logTask(name: string, action: () => number | void) {
+    const startTime = Date.now();
+    const startTurns = myTurncount();
+    const estimatedTurns = action() ?? 0;
+    CommunityService.log[name] = {
+      type: "task",
+      turnCost: myTurncount() - startTurns,
+      predictedTurns: estimatedTurns,
+      seconds: (Date.now() - startTime) / 1000,
+    };
+  }
+
   /**
    * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
    * @returns Whether mafia currently believes this test is complete.
@@ -180,6 +192,7 @@ export default class CommunityService {
       predictedTurns: prediction + additionalTurns,
       turnCost: myTurncount() - startTurns,
       seconds: (Date.now() - startTime) / 1000,
+      type: "test",
     };
     return "completed";
   }
@@ -221,6 +234,7 @@ export default class CommunityService {
       predictedTurns: number;
       turnCost: number;
       seconds: number;
+      type: "test" | "task";
     };
   } = {};
 
@@ -231,15 +245,26 @@ export default class CommunityService {
   static printLog(colour = "blue"): void {
     const logEntries = Object.entries(CommunityService.log);
     for (const [testName, testEntry] of logEntries) {
-      const { predictedTurns, turnCost, seconds } = testEntry;
-
-      print(
-        `We predicted the ${testName} test would take ${predictedTurns} turns, ${
-          predictedTurns === turnCost ? "and" : "but"
-        } it took ${turnCost} turns`,
-        colour
-      );
-      print(`${testName} took ${seconds} seconds`, colour);
+      const { type, predictedTurns, turnCost, seconds } = testEntry;
+      if (type === "test") {
+        print(
+          `We predicted the ${testName} test would take ${predictedTurns} turns, ${
+            predictedTurns === turnCost ? "and" : "but"
+          } it took ${turnCost} turns.`,
+          colour
+        );
+        print(`${testName} took ${seconds} seconds.`, colour);
+      } else {
+        if (!(predictedTurns === 0 && turnCost === 0)) {
+          print(
+            `We predicted the task ${testName} would take ${predictedTurns} turns, ${
+              predictedTurns === turnCost ? "and" : "but"
+            } it took ${turnCost} turns.`,
+            colour
+          );
+          print(`The task ${testName} took ${seconds} seconds.`, colour);
+        }
+      }
     }
     print(
       `All together, you have spent ${sum(

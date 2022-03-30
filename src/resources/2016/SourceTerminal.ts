@@ -156,11 +156,20 @@ export function extrude(item: Item): boolean {
   return cliExecute(`terminal extrude ${fileName}`);
 }
 
+type Chip =
+  | "INGRAM"
+  | "DIAGRAM"
+  | "ASHRAM"
+  | "SCRAM"
+  | "TRIGRAM"
+  | "CRAM"
+  | "DRAM"
+  | "TRAM";
 /**
  * Return chips currently installed to player's Source Terminal
  */
-export function getChips(): string[] {
-  return get("sourceTerminalChips").split(",");
+export function getChips(): Chip[] {
+  return get("sourceTerminalChips").split(",") as Chip[];
 }
 
 /**
@@ -272,7 +281,7 @@ export function duplicateUsesRemaining(): number {
  */
 export function maximumEnhanceUses(): number {
   return (
-    1 + ["CRAM", "SCRAM"].filter((chip) => getChips().includes(chip)).length
+    1 + getChips().filter((chip) => ["CRAM", "SCRAM"].includes(chip)).length
   );
 }
 

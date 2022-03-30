@@ -1,7 +1,8 @@
 import "core-js/modules/es.object.values";
 
-import { cliExecute, Effect, Item, Monster, Skill } from "kolmafia";
+import { cliExecute, Effect, Item, Monster, myPathId, Skill } from "kolmafia";
 import isEqual from "lodash/isEqual";
+import { Paths } from "../..";
 
 import { Copier } from "../../Copier";
 import { haveInCampground } from "../../lib";
@@ -155,11 +156,20 @@ export function extrude(item: Item): boolean {
   return cliExecute(`terminal extrude ${fileName}`);
 }
 
+type Chip =
+  | "INGRAM"
+  | "DIAGRAM"
+  | "ASHRAM"
+  | "SCRAM"
+  | "TRIGRAM"
+  | "CRAM"
+  | "DRAM"
+  | "TRAM";
 /**
  * Return chips currently installed to player's Source Terminal
  */
-export function getChips(): string[] {
-  return get("sourceTerminalChips").split(",");
+export function getChips(): Chip[] {
+  return get("sourceTerminalChips").split(",") as Chip[];
 }
 
 /**
@@ -250,4 +260,56 @@ export function getEnhanceUses(): number {
  */
 export function getPortscanUses(): number {
   return get("_sourceTerminalPortscanUses");
+}
+
+/**
+ * Returns maximum number of times duplicate can be used
+ */
+export function maximumDuplicateUses(): number {
+  return myPathId() === Paths.TheSource.id ? 5 : 1;
+}
+
+/**
+ * Returns number of remaining times duplicate can be used today
+ */
+export function duplicateUsesRemaining(): number {
+  return maximumDuplicateUses() - getDuplicateUses();
+}
+
+/**
+ * Return number of times enhance can be used per day
+ */
+export function maximumEnhanceUses(): number {
+  return (
+    1 + getChips().filter((chip) => ["CRAM", "SCRAM"].includes(chip)).length
+  );
+}
+
+/**
+ * Returns number of remaining times enahce can be used today
+ */
+export function enhanceUsesRemaining(): number {
+  return maximumEnhanceUses() - getEnhanceUses();
+}
+
+/**
+ * Returns expected duration of an enhance buff
+ */
+export function enhanceBuffDuration(): number {
+  return (
+    25 +
+    get("sourceTerminalPram") * 5 +
+    (getChips().includes("INGRAM") ? 25 : 0)
+  );
+}
+
+/**
+ * Returns expected duration of an enquiry buff
+ */
+export function enquiryBuffDuration(): number {
+  return (
+    50 +
+    10 * get("sourceTerminalGram") +
+    (getChips().includes("DIAGRAM") ? 50 : 0)
+  );
 }

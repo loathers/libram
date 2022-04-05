@@ -7,10 +7,10 @@ import { cliExecute, getCounter, getCounters } from "kolmafia";
  */
 export function get(counter: string): number {
   const value = getCounter(counter);
-  //getCounter returns -1 for counters that don't exist, but it also returns -1 for counters whose value is -1
+  // getCounter returns -1 for counters that don't exist, but it also returns -1 for counters whose value is -1
   if (value === -1) {
-    //if we have a counter with value -1, we check to see if that counter exists via getCounters()
-    //We return null if it doesn't exist
+    // if we have a counter with value -1, we check to see if that counter exists via getCounters()
+    // We return null if it doesn't exist
     return getCounters(counter, -1, -1).trim() === "" ? Infinity : -1;
   }
   return value;

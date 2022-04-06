@@ -1,9 +1,9 @@
 import { cliExecute, getCounter, getCounters } from "kolmafia";
 
 /**
- * Returns null for counters that do not exist, and otherwise returns the duration of the counter
+ * Returns Infinity for counters that do not exist, and otherwise returns the duration of the counter
  * @param counter The name of the counter in question
- * @returns null if the counter does not exist; otherwise returns the duration of the counter
+ * @returns Infinity if the counter does not exist; otherwise returns the duration of the counter
  */
 export function get(counter: string): number {
   const value = getCounter(counter);
@@ -14,6 +14,17 @@ export function get(counter: string): number {
     return getCounters(counter, -1, -1).trim() === "" ? Infinity : -1;
   }
   return value;
+}
+
+/**
+ * The world is everything that is the case. This determines which counters are the case.
+ * @param counter The name of the counter in question
+ * @returns True for counters which currently exist; false for those which do not
+ */
+export function exists(counter: string): boolean {
+  return (
+    getCounter(counter) !== -1 || getCounters(counter, -1, -1).trim() !== ""
+  );
 }
 
 /**

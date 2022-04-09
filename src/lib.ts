@@ -413,8 +413,15 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     if (foe === undefined || banisher === undefined) break;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
     const banisherItem = toItem(banisher);
-    const banisherObject = [Item.get("none"), null].includes(banisherItem)
-      ? Skill.get(banisher)
+    const banisherObject = [
+      Item.get("none"),
+      Item.get(`training scroll:  Snokebomb`),
+      Item.get(`tomayohawk-style reflex hammer`),
+      null,
+    ].includes(banisherItem)
+      ? banisher.toLowerCase() === "saber force"
+        ? Skill.get(`7311`)
+        : Skill.get(banisher)
       : banisherItem;
     result.set(banisherObject, Monster.get(foe));
   }

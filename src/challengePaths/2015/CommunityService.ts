@@ -262,8 +262,8 @@ export default class CommunityService {
             } it took ${turnCost} turns.`,
             colour
           );
-          print(`The task ${testName} took ${seconds} seconds.`, colour);
         }
+        print(`The task ${testName} took ${seconds} seconds.`, colour);
       }
     }
     print(

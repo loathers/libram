@@ -421,7 +421,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
     const banisherItem = toItem(banisher);
     if (banisher.toLowerCase() === "saber force") {
-      result.set($skill`7311`, Monster.get(foe));
+      result.set($skill`Use the Force`, Monster.get(foe));
     } else if (
       [
         Item.get("none"),
@@ -430,7 +430,11 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
         null,
       ].includes(banisherItem)
     ) {
-      result.set(Skill.get(banisher), Monster.get(foe));
+      if (Skill.get(banisher) === $skill`none`) {
+        break;
+      } else {
+        result.set(Skill.get(banisher), Monster.get(foe));
+      }
     } else {
       result.set(banisherItem, Monster.get(foe));
     }

@@ -45,7 +45,14 @@ import {
 } from "kolmafia";
 
 import { get } from "./property";
-import { $class, $familiar, $item, $items, $monsters } from "./template-string";
+import {
+  $class,
+  $familiar,
+  $item,
+  $items,
+  $monsters,
+  $skill,
+} from "./template-string";
 import { chunk } from "./utils";
 
 /**
@@ -413,10 +420,24 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     if (foe === undefined || banisher === undefined) break;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
     const banisherItem = toItem(banisher);
-    const banisherObject = [Item.get("none"), null].includes(banisherItem)
-      ? Skill.get(banisher)
-      : banisherItem;
-    result.set(banisherObject, Monster.get(foe));
+    if (banisher.toLowerCase() === "saber force") {
+      result.set($skill`Use the Force`, Monster.get(foe));
+    } else if (
+      [
+        Item.get("none"),
+        Item.get(`training scroll:  Snokebomb`),
+        Item.get(`tomayohawk-style reflex hammer`),
+        null,
+      ].includes(banisherItem)
+    ) {
+      if (Skill.get(banisher) === $skill`none`) {
+        break;
+      } else {
+        result.set(Skill.get(banisher), Monster.get(foe));
+      }
+    } else {
+      result.set(banisherItem, Monster.get(foe));
+    }
   }
   return result;
 }

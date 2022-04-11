@@ -26,7 +26,13 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { getActiveSongs, have, isSong } from "./lib";
+import {
+  getActiveSongs,
+  getSongCount,
+  have,
+  isSong,
+  getSongLimit,
+} from "./lib";
 import { get } from "./property";
 import { AsdonMartin } from "./resources";
 import { $item, $skill } from "./template-string";
@@ -143,12 +149,47 @@ class SkillMoodElement extends MoodElement {
     if (
       mood.options.songSlots.length > 0 &&
       isSong(this.skill) &&
-      !have(effect)
+      !have(effect) &&
+      getSongCount() >= getSongLimit()
     ) {
-      const activeSongs = getActiveSongs();
-      for (const song of activeSongs) {
-        const slot = mood.options.songSlots.find((slot) => slot.includes(song));
-        if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
+      // First, if this song is assigned a slot, look for worse songs in this song's slot
+      // We only need to shrug one song, so we do that
+      const thisSlot = mood.options.songSlots.find((slot) =>
+        slot.includes(effect)
+      );
+      if (thisSlot) {
+        for (const illegalSong of thisSlot.slice(
+          thisSlot.indexOf(effect) + 1
+        )) {
+          if (have(illegalSong)) cliExecute(`shrug ${illegalSong}`);
+          break;
+        }
+      } else {
+        // Next, we look for a song that isn't in any of our song slots
+        for (const song of getActiveSongs()) {
+          const slotOf = mood.options.songSlots.find((slot) =>
+            slot.includes(song)
+          );
+          if (!slotOf) {
+            cliExecute(`shrug ${song}`);
+            break;
+          }
+        }
+        if (getSongCount() >= getSongLimit()) {
+          // Finally, we look for songs that are in a song slot, but whose slot is already filled by a "better" song
+          for (const song of getActiveSongs()) {
+            const slotOf =
+              mood.options.songSlots.find((slot) => slot.includes(song)) ?? [];
+            const indexOf = slotOf.indexOf(effect);
+            const betterSong = slotOf.find(
+              (competingSong, index) => have(competingSong) && index < indexOf
+            );
+            if (betterSong) {
+              cliExecute(`shrug ${song}`);
+              break;
+            }
+          }
+        }
       }
     }
 

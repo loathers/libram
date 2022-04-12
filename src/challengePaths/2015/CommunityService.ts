@@ -253,7 +253,7 @@ export default class CommunityService {
           } it took ${turnCost} turns.`,
           colour
         );
-        print(`${testName} took ${seconds} seconds.`, colour);
+        print(`${testName} took ${seconds.toFixed(1)} seconds.`, colour);
       } else {
         if (!(predictedTurns === 0 && turnCost === 0)) {
           print(
@@ -263,13 +263,16 @@ export default class CommunityService {
             colour
           );
         }
-        print(`The task ${testName} took ${seconds} seconds.`, colour);
+        print(
+          `The task ${testName} took ${seconds.toFixed(1)} seconds.`,
+          colour
+        );
       }
     }
+    const totalTime = sum(logEntries, ([, testEntry]) => testEntry.seconds);
     print(
-      `All together, you have spent ${sum(
-        logEntries,
-        ([, testEntry]) => testEntry.seconds
+      `All together, you have spent ${totalTime.toFixed(
+        1
       )} seconds during this Community Service run`,
       colour
     );

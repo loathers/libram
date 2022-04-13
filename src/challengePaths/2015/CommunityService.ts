@@ -181,7 +181,7 @@ export default class CommunityService {
     const turns = this._actualCost(council);
     if (!turns) return "already completed";
 
-    if (turns > Math.max(maxTurns, myAdventures())) {
+    if (turns > Math.min(maxTurns, myAdventures())) {
       return "failed";
     }
 

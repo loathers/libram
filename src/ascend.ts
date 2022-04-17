@@ -171,7 +171,7 @@ export function ascend(
     for (const [skill, permLevel] of permSkills.entries()) {
       if (permLevel !== Lifestyle.casual) {
         const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
-        visitUrl(`afterlife.php?action=${permText}&whichSkill=${toInt(skill)}`);
+        visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
       }
     }
   }

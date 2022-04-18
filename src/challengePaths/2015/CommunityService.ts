@@ -389,9 +389,7 @@ export default class CommunityService {
     "Be a Living Statue",
     () => {
       const noncombatRate = -1 * getModifier("Combat Rate");
-      const unsoftcappedRate =
-        noncombatRate > 25 ? 25 + (noncombatRate - 25) * 5 : noncombatRate;
-      return 60 - 3 * Math.floor(unsoftcappedRate / 5);
+      return 60 - 3 * Math.floor(noncombatRate / 5);
     },
     new Requirement(["-combat"], {})
   );

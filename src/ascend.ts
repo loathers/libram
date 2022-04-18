@@ -10,9 +10,9 @@ import {
   use,
   visitUrl,
   xpath,
+  haveSkill,
 } from "kolmafia";
 import { Path } from "./Path";
-import { have } from "./lib";
 import { ChateauMantegna } from "./resources";
 import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
 import { $item, $items, $stat } from "./template-string";
@@ -145,7 +145,7 @@ export function ascend(
 
   const illegalSkill = permSkills
     ? Array.from(permSkills.keys()).find(
-        (skill) => !skill.permable || !have(skill)
+        (skill) => !skill.permable || !haveSkill(skill)
       )
     : undefined;
   if (illegalSkill) {

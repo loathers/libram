@@ -305,6 +305,7 @@ export class Macro {
       ballsCondition = condition
         .map((mon) => `monsterid ${mon.id}`)
         .join(" || ");
+      ballsCondition = `(${ballsCondition})`;
     } else if (condition instanceof Effect) {
       ballsCondition = `haseffect ${toInt(condition)}`;
     } else if (condition instanceof Skill) {

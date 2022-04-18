@@ -1,4 +1,5 @@
 import {
+  Skill,
   Class,
   containsText,
   eudoraItem,
@@ -9,6 +10,7 @@ import {
   use,
   visitUrl,
   xpath,
+  haveSkill,
 } from "kolmafia";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
@@ -113,14 +115,9 @@ export function ascend(
   lifestyle: Lifestyle,
   moon: MoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
-  pet: Item | undefined = undefined
+  pet: Item | undefined = undefined,
+  permSkills: Map<Skill, Lifestyle> | undefined = undefined
 ): void {
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
-  }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    throw new Error("Failed to ascend.");
-  }
   if (!path.classes.includes(playerClass)) {
     throw new Error(`Invalid class ${playerClass} for this path`);
   }
@@ -134,7 +131,7 @@ export function ascend(
       consumable
     )
   ) {
-    throw new Error(`Invalid consumable ${consumable}`);
+    throw new Error(`Invalid consumable ${consumable}!`);
   }
 
   if (
@@ -143,7 +140,23 @@ export function ascend(
       pet
     )
   ) {
-    throw new Error(`Invalid astral item ${pet}`);
+    throw new Error(`Invalid astral item ${pet}!`);
+  }
+
+  const illegalSkill = permSkills
+    ? Array.from(permSkills.keys()).find(
+        (skill) => !skill.permable || !haveSkill(skill)
+      )
+    : undefined;
+  if (illegalSkill) {
+    throw new Error(`Invalid skill ${illegalSkill}!`);
+  }
+
+  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+    visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
+  }
+  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+    throw new Error("Failed to ascend.");
   }
 
   visitUrl("afterlife.php?action=pearlygates");
@@ -151,7 +164,17 @@ export function ascend(
   if (consumable) {
     visitUrl(`afterlife.php?action=buydeli&whichitem=${toInt(consumable)}`);
   }
+
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
+
+  if (permSkills) {
+    for (const [skill, permLevel] of permSkills.entries()) {
+      if (permLevel !== Lifestyle.casual) {
+        const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
+        visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
+      }
+    }
+  }
 
   visitUrl(
     `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${toInt(

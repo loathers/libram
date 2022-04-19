@@ -96,6 +96,7 @@ type MenuItemOptions<T> = {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+  useRetrievePrice?: boolean;
 };
 
 export class MenuItem<T> {
@@ -108,6 +109,9 @@ export class MenuItem<T> {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+
+  static defaultPriceFunction: (item: Item) => number = (item: Item) =>
+    npcPrice(item) > 0 ? npcPrice(item) : mallPrice(item);
 
   static defaultOptions<T>(): Map<Item, MenuItemOptions<T>> {
     return new Map([
@@ -224,10 +228,7 @@ export class MenuItem<T> {
   }
 
   price(): number {
-    return (
-      this.priceOverride ??
-      (npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item))
-    );
+    return this.priceOverride ?? MenuItem.defaultPriceFunction?.(this.item);
   }
 }
 

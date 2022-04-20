@@ -25,23 +25,25 @@ export enum Lifestyle {
 }
 
 export class AscendError extends Error {
-  constructor(failure?: Skill | Item | Class | Path) {
-    if (!failure) {
+  cause?: Skill | Item | Class | Path;
+  constructor(cause?: Skill | Item | Class | Path) {
+    if (!cause) {
       super("Failed to ascend--do you have a pending trade offer?");
-    } else if (failure instanceof Skill) {
-      const reason = failure.permable
-        ? haveSkill(failure)
+    } else if (cause instanceof Skill) {
+      const reason = cause.permable
+        ? haveSkill(cause)
           ? "invalid for mysterious reasons"
           : "not a skill you currently know"
         : "unpermable";
-      super(`Skill ${failure} is ${reason}!`);
-    } else if (failure instanceof Item) {
-      super(`Invalid astral item: ${failure}!`);
-    } else if (failure instanceof Class) {
-      super(`Invalid class ${failure} for this path!`);
+      super(`Skill ${cause} is ${reason}!`);
+    } else if (cause instanceof Item) {
+      super(`Invalid astral item: ${cause}!`);
+    } else if (cause instanceof Class) {
+      super(`Invalid class ${cause} for this path!`);
     } else {
-      super(`Invalid path ${failure}!`);
+      super(`Invalid path ${cause}!`);
     }
+    this.cause = cause;
   }
 }
 

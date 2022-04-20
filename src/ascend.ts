@@ -24,6 +24,27 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+export class AscendError extends Error {
+  constructor(failure?: Skill | Item | Class | Path) {
+    if (!failure) {
+      super("Failed to ascend--do you have a pending trade offer?");
+    } else if (failure instanceof Skill) {
+      const reason = failure.permable
+        ? haveSkill(failure)
+          ? "invalid for mysterious reasons"
+          : "not a skill you currently know"
+        : "unpermable";
+      super(`Skill ${failure} is ${reason}!`);
+    } else if (failure instanceof Item) {
+      super(`Invalid astral item: ${failure}!`);
+    } else if (failure instanceof Class) {
+      super(`Invalid class ${failure} for this path!`);
+    } else {
+      super(`Invalid path ${failure}!`);
+    }
+  }
+}
+
 type MoonSign =
   | number
   | "mongoose"
@@ -119,9 +140,9 @@ export function ascend(
   permSkills: Map<Skill, Lifestyle> | undefined = undefined
 ): void {
   if (!path.classes.includes(playerClass)) {
-    throw new Error(`Invalid class ${playerClass} for this path`);
+    throw new AscendError(playerClass);
   }
-  if (path.id < 0) throw new Error(`Invalid path ID ${path.id}`);
+  if (path.id < 0) throw new AscendError(path);
 
   const moonId = toMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
@@ -131,7 +152,7 @@ export function ascend(
       consumable
     )
   ) {
-    throw new Error(`Invalid consumable ${consumable}!`);
+    throw new AscendError(consumable);
   }
 
   if (
@@ -140,7 +161,7 @@ export function ascend(
       pet
     )
   ) {
-    throw new Error(`Invalid astral item ${pet}!`);
+    throw new AscendError(pet);
   }
 
   const illegalSkill = permSkills
@@ -149,14 +170,14 @@ export function ascend(
       )
     : undefined;
   if (illegalSkill) {
-    throw new Error(`Invalid skill ${illegalSkill}!`);
+    throw new AscendError(illegalSkill);
   }
 
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
   if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    throw new Error("Failed to ascend.");
+    throw new AscendError();
   }
 
   visitUrl("afterlife.php?action=pearlygates");

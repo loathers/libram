@@ -36,9 +36,9 @@ class Flower {
   }
 
   static plantsInZone(location = myLocation()): Flower[] {
-    return (this.plantNamesInZone(location)
+    return this.plantNamesInZone(location)
       .map((flowerName) => toFlower(flowerName))
-      .filter((flower) => flower !== undefined) ?? null) as Flower[];
+      .filter((flower) => flower !== undefined) as Flower[];
   }
 
   static modifiersInZone(location = myLocation()): Modifiers {

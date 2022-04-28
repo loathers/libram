@@ -47,3 +47,7 @@ export function fightsUntil(
       (1 + bonusExperience + (have_($skill`Testudinal Teachings`) ? 1 / 6 : 0))
   );
 }
+
+export function currentDrones(): number {
+  return get("gooseDronesRemaining");
+}

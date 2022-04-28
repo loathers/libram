@@ -26,6 +26,7 @@ import * as RetroCape from "./2020/RetroCape";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
+import * as GreyGoose from "./2022/GreyGoose";
 
 export {
   AsdonMartin,
@@ -39,6 +40,7 @@ export {
   DaylightShavings,
   DNALab,
   FloristFriar,
+  GreyGoose,
   Guzzlr,
   Latte,
   MayoClinic,

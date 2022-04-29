@@ -14,8 +14,19 @@ import {
 } from "kolmafia";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
-import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
+import {
+  Ceiling,
+  ceilings,
+  Desk,
+  desks,
+  getCeiling,
+  getDesk,
+  getNightstand,
+  Nightstand,
+  nightstands,
+} from "./resources/2015/ChateauMantegna";
 import { $item, $items, $stat } from "./template-string";
+import { createStringUnionTypeGuardFunction } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -43,6 +54,85 @@ export class AscendError extends Error {
     } else {
       super(`Invalid path ${cause}!`);
     }
+    this.cause = cause;
+  }
+}
+
+const worksheds = [
+  "warbear LP-ROM burner",
+  "warbear jackhammer drill press",
+  "warbear induction oven",
+  "warbear high-efficiency still",
+  "warbear chemistry lab",
+  "warbear auto-anvil",
+  "spinning wheel",
+  "snow machine",
+  "Little Geneticist DNA-Splicing Lab",
+  "portable Mayo Clinic",
+  "Asdon Martin keyfob",
+  "diabolic pizza cube",
+  "cold medicine cabinet",
+] as const;
+type Workshed = typeof worksheds[number];
+
+const gardens = [
+  "packet of pumpkin seeds",
+  "Peppermint Pip Packet",
+  "packet of dragon's teeth",
+  "packet of beer seeds",
+  "packet of winter seeds",
+  "packet of thanksgarden seeds",
+  "packet of tall grass seeds",
+  "packet of mushroom spores",
+] as const;
+type Garden = typeof gardens[number];
+
+const eudorae = [
+  "My Own Pen Pal kit",
+  "GameInformPowerDailyPro subscription card",
+  "Xi Receiver Unit",
+  "New-You Club Membership Form",
+  "Our Daily Candles™ order form",
+] as const;
+type Eudora = typeof eudorae[number];
+
+const isWorkshed = createStringUnionTypeGuardFunction(worksheds);
+const isGarden = createStringUnionTypeGuardFunction(gardens);
+const isEudora = createStringUnionTypeGuardFunction(eudorae);
+const isDesk = createStringUnionTypeGuardFunction(desks);
+const isNightstand = createStringUnionTypeGuardFunction(nightstands);
+const isCeiling = createStringUnionTypeGuardFunction(ceilings);
+
+export class AscensionPrepError extends Error {
+  cause: string;
+  constructor(cause: string) {
+    if (isWorkshed(cause)) {
+      super(
+        `Unable to swap workshed to ${cause}; workshed is currently ${getWorkshed()}.`
+      );
+    } else if (isGarden(cause)) {
+      super(
+        `Unable to swap garden to ${cause}; garden is currently ${Object.getOwnPropertyNames(
+          getCampground()
+        ).find(isGarden)}.`
+      );
+    } else if (isEudora(cause)) {
+      super(
+        `Unable to swap eudora to ${cause}; eudora is currently ${eudoraItem()}.`
+      );
+    } else if (isDesk(cause)) {
+      super(
+        `Unable to swap chateau desk to ${cause}; desk is currently ${getDesk()}.`
+      );
+    } else if (isNightstand(cause)) {
+      super(
+        `Unable to swap chateau nightstand to ${cause}; nightstand is currently ${getNightstand()}.`
+      );
+    } else if (isCeiling(cause)) {
+      super(
+        `Unable to swap chateau ceiling to ${cause}; ceiling is currently ${getCeiling()}.`
+      );
+    } else super(cause);
     this.cause = cause;
   }
 }
@@ -209,44 +299,6 @@ export function ascend(
   );
 }
 
-const worksheds = [
-  "warbear LP-ROM burner",
-  "warbear jackhammer drill press",
-  "warbear induction oven",
-  "warbear high-efficiency still",
-  "warbear chemistry lab",
-  "warbear auto-anvil",
-  "spinning wheel",
-  "snow machine",
-  "Little Geneticist DNA-Splicing Lab",
-  "portable Mayo Clinic",
-  "Asdon Martin keyfob",
-  "diabolic pizza cube",
-  "cold medicine cabinet",
-] as const;
-type Workshed = typeof worksheds[number];
-
-const gardens = [
-  "packet of pumpkin seeds",
-  "Peppermint Pip Packet",
-  "packet of dragon's teeth",
-  "packet of beer seeds",
-  "packet of winter seeds",
-  "packet of thanksgarden seeds",
-  "packet of tall grass seeds",
-  "packet of mushroom spores",
-] as const;
-type Garden = typeof gardens[number];
-
-const eudorae = [
-  "My Own Pen Pal kit",
-  "GameInformPowerDailyPro subscription card",
-  "Xi Receiver Unit",
-  "New-You Club Membership Form",
-  "Our Daily Candles™ order form",
-] as const;
-type Eudora = typeof eudorae[number];
-
 /**
  * Sets up various iotms you may want to use in the coming ascension
  * @param ascensionItems.workshed Workshed to switch to.
@@ -275,9 +327,7 @@ export function prepareAscension({
   if (workshed && getWorkshed() !== Item.get(workshed)) {
     use(Item.get(workshed));
     if (getWorkshed().name !== workshed && throwOnFail) {
-      throw new Error(
-        `Failed to switch workshed to ${workshed}; it is currently still ${getWorkshed()}.`
-      );
+      throw new AscensionPrepError(workshed);
     }
   }
 
@@ -288,9 +338,7 @@ export function prepareAscension({
       !Object.getOwnPropertyNames(getCampground()).includes(garden) &&
       throwOnFail
     ) {
-      throw new Error(
-        `We really thought we changed your garden to a ${garden}, but Mafia is saying otherwise.`
-      );
+      throw new AscensionPrepError(garden);
     }
   }
 
@@ -303,8 +351,8 @@ export function prepareAscension({
       ).includes(eudoraNumber.toString()) &&
       throwOnFail
     ) {
-      throw new Error(
-        `I'm sorry buddy, but you don't seem to be subscribed to ${eudora}. Which makes it REALLY hard to correspond with them.`
+      throw new AscensionPrepError(
+        `Unable to swap eudora to ${eudora} because you are not subscribed to it.`
       );
     } else {
       visitUrl(
@@ -314,9 +362,7 @@ export function prepareAscension({
     }
 
     if (eudoraItem() !== Item.get(eudora) && throwOnFail) {
-      throw new Error(
-        `We really thought we changed your eudora to a ${eudora}, but Mafia is saying otherwise.`
-      );
+      throw new AscensionPrepError(eudora);
     }
   }
 
@@ -324,25 +370,19 @@ export function prepareAscension({
     const { desk, ceiling, nightstand } = chateau;
     if (ceiling && ChateauMantegna.getCeiling() !== ceiling) {
       if (!ChateauMantegna.changeCeiling(ceiling) && throwOnFail) {
-        throw new Error(
-          `We tried, but were unable to change your chateau ceiling to ${ceiling}. Probably.`
-        );
+        throw new AscensionPrepError(ceiling);
       }
     }
 
     if (desk && ChateauMantegna.getDesk() !== desk) {
       if (!ChateauMantegna.changeDesk(desk) && throwOnFail) {
-        throw new Error(
-          `We tried, but were unable to change your chateau desk to ${desk}. Probably.`
-        );
+        throw new AscensionPrepError(desk);
       }
     }
 
     if (nightstand && ChateauMantegna.getNightstand() !== nightstand) {
       if (!ChateauMantegna.changeNightstand(nightstand) && throwOnFail) {
-        throw new Error(
-          `We tried, but were unable to change your chateau nightstand to ${nightstand}. Probably.`
-        );
+        throw new AscensionPrepError(nightstand);
       }
     }
   }

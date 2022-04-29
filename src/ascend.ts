@@ -36,8 +36,8 @@ export enum Lifestyle {
 }
 
 export class AscendError extends Error {
-  cause?: Skill | Item | Class | Path;
-  constructor(cause?: Skill | Item | Class | Path) {
+  cause?: Skill | Item | Class | Path | string;
+  constructor(cause?: Skill | Item | Class | Path | string) {
     if (!cause) {
       super("Failed to ascend--do you have a pending trade offer?");
     } else if (cause instanceof Skill) {
@@ -51,9 +51,9 @@ export class AscendError extends Error {
       super(`Invalid astral item: ${cause}!`);
     } else if (cause instanceof Class) {
       super(`Invalid class ${cause} for this path!`);
-    } else {
+    } else if (cause instanceof Path) {
       super(`Invalid path ${cause}!`);
-    }
+    } else super(cause);
     this.cause = cause;
   }
 }
@@ -171,7 +171,7 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
       case $stat`Moxie`:
         return 2;
       default:
-        throw new Error(`unknown prime stat for ${playerClass}`);
+        throw new AscendError(`unknown prime stat for ${playerClass}`);
     }
   };
 
@@ -208,7 +208,7 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
     case "gnomish gnomads camp":
       return 7 + offset();
     default:
-      return -1;
+      throw new AscendError("Invalid moon sign!");
   }
 }
 

@@ -66,10 +66,8 @@ class Flower {
   dig(): boolean {
     if (!this.isPlantedHere()) return false;
     const flowers = Flower.plantNamesInZone();
-    if (!flowers || !flowers[2]) return false;
-    const plantNumber = getFloristPlants()[myLocation().toString()].indexOf(
-      this.name
-    );
+    if (!flowers[2]) return false;
+    const plantNumber = flowers.indexOf(this.name);
     visitUrl(`choice.php?option=2&whichchoice=720&pwd&plnti=${plantNumber}`);
     return !this.isPlantedHere();
   }
@@ -92,8 +90,8 @@ function toFlower(name: string): Flower | undefined {
 
 export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
-  getFloristPlants()
-    [location.toString()].map(toFlower)
+  Flower.plantNamesInZone(location)
+    .map(toFlower)
     .forEach((flower) => {
       if (flower) returnValue.push(flower);
     });

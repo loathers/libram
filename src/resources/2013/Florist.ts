@@ -75,7 +75,9 @@ class Flower {
   plant(): boolean {
     if (this.isPlantedHere()) return true;
     if (isFull()) return false;
-    visitUrl(`choice.php?whichchoice=720&whichoption=1&pwd&plant=${this.id}`);
+    visitUrl(
+      `choice.php?whichchoice=720&whichoption=1&pwd&whichplant=${this.id}`
+    );
     return this.isPlantedHere();
   }
 }

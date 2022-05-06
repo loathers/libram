@@ -70,11 +70,14 @@ export function isFull(location = myLocation()): boolean {
   return plantNamesInZone(location).length >= 3;
 }
 
-function toFlower(name: FlowerName, environment: EnvironmentType): Flower {
+function toFlower(
+  name: FlowerName,
+  environment: EnvironmentType
+): Flower | null {
   switch (environment) {
     case "outdoor":
       if (!isOutdoorFlower(name)) {
-        throw new Error(`${name} is not a valid choice for ${environment}!`);
+        return null;
       } else {
         return outdoorFlowers[name];
       }
@@ -87,9 +90,10 @@ export function plant(flower: FlowerName): boolean {
   if (plantNamesInZone().includes(flower) || isFull()) return false;
   const environment = myLocation().environment as EnvironmentType;
   const flowerObject = toFlower(flower, environment);
+  if (!flowerObject) return false;
   if (
     flowerObject.territorial &&
-    plantNamesInZone().some((name) => toFlower(name, environment).territorial)
+    plantNamesInZone().some((name) => toFlower(name, environment)?.territorial)
   ) {
     return false;
   }

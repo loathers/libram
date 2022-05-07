@@ -7,66 +7,46 @@ export function have(): boolean {
   return have_($familiar`Crimbo Shrub`);
 }
 
-type Topper = "Muscle" | "Mysticality" | "Moxie";
-type Lights = "Prismatic" | "Hot" | "Cold" | "Stench" | "Spooky" | "Sleaze";
-type Garland = "HP Regen" | "PvP" | "Blocking";
-type Gifts = "Yellow Ray" | "Red Ray" | "Gifts";
+const Toppers = {
+  Muscle: 1,
+  Mysticality: 2,
+  Moxie: 3,
+} as const;
 
-function topperChoice(topper: Topper) {
-  switch (topper) {
-    case "Muscle":
-      return 1;
-    case "Mysticality":
-      return 2;
-    case "Moxie":
-      return 3;
-  }
-}
+type ShrubTopper = keyof typeof Toppers;
 
-function lightsChoice(lights: Lights) {
-  switch (lights) {
-    case "Prismatic":
-      return 1;
-    case "Hot":
-      return 2;
-    case "Cold":
-      return 3;
-    case "Stench":
-      return 4;
-    case "Spooky":
-      return 5;
-    case "Sleaze":
-      return 6;
-  }
-}
+const Lights = {
+  "Prismatic Damage": 1,
+  Hot: 2,
+  Cold: 3,
+  Stench: 4,
+  Spooky: 5,
+  Sleaze: 6,
+} as const;
 
-function garlandChoice(garland: Garland) {
-  switch (garland) {
-    case "HP Regen":
-      return 1;
-    case "PvP":
-      return 2;
-    case "Blocking":
-      return 3;
-  }
-}
+type ShrubLights = keyof typeof Lights;
 
-function giftsChoice(gifts: Gifts) {
-  switch (gifts) {
-    case "Yellow Ray":
-      return 1;
-    case "Red Ray":
-      return 2;
-    case "Gifts":
-      return 3;
-  }
-}
+const Garland = {
+  "HP Regen": 1,
+  "PvP Fights": 2,
+  Blocking: 3,
+} as const;
+
+type ShrubGarland = keyof typeof Garland;
+
+const Gifts = {
+  "Yellow Ray": 1,
+  "Red Ray": 2,
+  Gifts: 3,
+} as const;
+
+type ShrubGifts = keyof typeof Gifts;
 
 export function decorate(
-  topper: Topper,
-  lights: Lights,
-  garland: Garland,
-  gifts: Gifts
+  topper: ShrubTopper,
+  lights: ShrubLights,
+  garland: ShrubGarland,
+  gifts: ShrubGifts
 ): boolean {
   if (!have() || get("_shrubDecorated")) return false;
   visitUrl(
@@ -75,11 +55,7 @@ export function decorate(
     )}`
   );
   visitUrl(
-    `choice.php?whichchoice=999&pwd=&option=1&topper=${topperChoice(
-      topper
-    )}&lights=${lightsChoice(lights)}&garland=${garlandChoice(
-      garland
-    )}&gift=${giftsChoice(gifts)}`
+    `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`
   );
   return true;
 }

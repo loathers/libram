@@ -17,11 +17,11 @@ type ShrubTopper = keyof typeof Toppers;
 
 const Lights = {
   "Prismatic Damage": 1,
-  Hot: 2,
-  Cold: 3,
-  Stench: 4,
-  Spooky: 5,
-  Sleaze: 6,
+  "Hot Damage": 2,
+  "Cold Damage": 3,
+  "Stench Damage": 4,
+  "Spooky Damage": 5,
+  "Sleaze Damage": 6,
 } as const;
 
 type ShrubLights = keyof typeof Lights;

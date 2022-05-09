@@ -42,13 +42,43 @@ const Gifts = {
 
 type ShrubGifts = keyof typeof Gifts;
 
+const Prefs = {
+  Muscle: "Muscle",
+  Mysticality: "Mysticality",
+  Moxie: "Moxie",
+  Prismatic: "Prismatic Damage",
+  Hot: "Hot Damage",
+  Cold: "Cold Damage",
+  Stench: "Stench Damage",
+  Spooky: "Spooky Damage",
+  Sleaze: "Sleaze Damage",
+  HP: "HP Regen",
+  PvP: "PvP Fights",
+  blocking: "Blocking",
+  yellow: "Yellow Ray",
+  meat: "Red Ray",
+  gifts: "Gifts",
+};
+
+type ShrubPref = keyof typeof Prefs;
+
 export function decorate(
   topper: ShrubTopper,
   lights: ShrubLights,
   garland: ShrubGarland,
   gifts: ShrubGifts
 ): boolean {
-  if (!have() || get("_shrubDecorated")) return false;
+  if (!have()) return false;
+  if (get("_shrubDecorated")) {
+    const decorations = [
+      get("shrubTopper"),
+      get("shrubLights"),
+      get("shrubGarland"),
+      get("shrubGifts"),
+    ].map((item) => Prefs[item as ShrubPref]);
+    return decorations === [topper, lights, garland, gifts];
+  }
+
   visitUrl(
     `inv_use.php?pwd=&which=99&whichitem=${toInt(
       $item`box of old Crimbo decorations`

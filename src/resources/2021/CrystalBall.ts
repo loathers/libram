@@ -4,9 +4,16 @@ import {
   myTurncount,
   toLocation,
   toMonster,
+  availableAmount,
+  Item,
+  visitUrl,
 } from "kolmafia";
 import { get } from "../../property";
 
+export const orb = Item.get("miniature crystal ball");
+export function have(): boolean {
+  return availableAmount(orb) > 0;
+}
 const parsedProp = () =>
   get("crystalBallPredictions")
     .split("|")
@@ -34,5 +41,13 @@ export function currentPredictions(withFree = true): Map<Location, Monster> {
           (withFree && freeCondition(turncount, myTurncount()))
       )
       .map(([, location, monster]) => [location, monster])
+  );
+}
+
+export function ponder(): Map<Location, Monster> {
+  if (!have()) return new Map();
+  visitUrl("inventory.php?action=ponder");
+  return new Map(
+    parsedProp().map(([, location, monster]) => [location, monster])
   );
 }

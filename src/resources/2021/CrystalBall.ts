@@ -1,7 +1,6 @@
 import {
   Location,
   Monster,
-  myTurncount,
   toLocation,
   toMonster,
   availableAmount,
@@ -26,23 +25,6 @@ const parsedProp = () =>
           Monster
         ]
     );
-
-export function currentPredictions(withFree = true): Map<Location, Monster> {
-  const predictions = parsedProp();
-  const freeCondition = (predictedTurns: number, turns: number) =>
-    predictedTurns === turns;
-  const nonFreeCondition = (predictedTurns: number, turns: number) =>
-    predictedTurns + 1 === turns;
-  return new Map(
-    predictions
-      .filter(
-        ([turncount]) =>
-          nonFreeCondition(turncount, myTurncount()) ||
-          (withFree && freeCondition(turncount, myTurncount()))
-      )
-      .map(([, location, monster]) => [location, monster])
-  );
-}
 
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();

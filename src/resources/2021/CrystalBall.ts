@@ -18,18 +18,12 @@ const parsedProp = () =>
     .split("|")
     .map((element) => element.split(":") as [string, string, string])
     .map(
-      ([turncount, location, monster]) =>
-        [parseInt(turncount), toLocation(location), toMonster(monster)] as [
-          number,
-          Location,
-          Monster
-        ]
+      ([, location, monster]) =>
+        [toLocation(location), toMonster(monster)] as [Location, Monster]
     );
 
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
   visitUrl("inventory.php?action=ponder");
-  return new Map(
-    parsedProp().map(([, location, monster]) => [location, monster])
-  );
+  return new Map(parsedProp());
 }

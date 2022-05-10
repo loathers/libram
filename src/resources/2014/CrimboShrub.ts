@@ -58,9 +58,24 @@ const Prefs = {
   yellow: "Yellow Ray",
   meat: "Red Ray",
   gifts: "Gifts",
-};
+} as const;
 
 type ShrubPref = keyof typeof Prefs;
+
+function isDecoratedWith(
+  topper: ShrubTopper,
+  lights: ShrubLights,
+  garland: ShrubGarland,
+  gifts: ShrubGifts
+): boolean {
+  const decorations = [
+    get("shrubTopper"),
+    get("shrubLights"),
+    get("shrubGarland"),
+    get("shrubGifts"),
+  ].map((x) => Prefs[x as ShrubPref]);
+  return [topper, lights, garland, gifts].every((x, i) => x === decorations[i]);
+}
 
 export function decorate(
   topper: ShrubTopper,
@@ -69,15 +84,8 @@ export function decorate(
   gifts: ShrubGifts
 ): boolean {
   if (!have()) return false;
-  if (get("_shrubDecorated")) {
-    const decorations = [
-      get("shrubTopper"),
-      get("shrubLights"),
-      get("shrubGarland"),
-      get("shrubGifts"),
-    ].map((item) => Prefs[item as ShrubPref]);
-    return decorations === [topper, lights, garland, gifts];
-  }
+  if (get("_shrubDecorated"))
+    return isDecoratedWith(topper, lights, garland, gifts);
 
   visitUrl(
     `inv_use.php?pwd=&which=99&whichitem=${toInt(

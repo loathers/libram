@@ -24,6 +24,6 @@ const parsedProp = () =>
 
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
-  visitUrl("inventory.php?action=ponder");
+  visitUrl("inventory.php?action=ponder", false);
   return new Map(parsedProp());
 }

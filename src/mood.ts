@@ -78,7 +78,7 @@ export class MagicalSausages extends MpSource {
       availableAmount($item`magical sausage`) +
       availableAmount($item`magical sausage casing`);
     return this.available()
-      ? Math.min(maxSausages, 23 - get("_sausagesEaten"))
+      ? clamp(23 - get("_sausagesEaten"), 0, maxSausages)
       : 0;
   }
 

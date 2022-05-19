@@ -2,8 +2,14 @@ import { haveFamiliar, Item, Monster, Phylum } from "kolmafia";
 import { get } from "../../property";
 import { $familiar, $item, $phylum } from "../../template-string";
 
+/**
+ * The Robortender itself
+ */
 export const familiar = $familiar`Robortender`;
 
+/**
+ * @returns Whether you have the Robortender in your terrarium/available
+ */
 export function have(): boolean {
   return haveFamiliar(familiar);
 }
@@ -29,11 +35,21 @@ const phylumDrops = new Map<Phylum, Item>([
   [$phylum`Weird`, $item`imaginary lemon`],
 ]);
 
+/**
+ *
+ * @param target The phylum or monster you want to know the robortender drop of
+ * @returns The robortender drop associated with that phylum or monster
+ */
 export function dropFrom(target: Monster | Phylum): Item {
   const phylum = target instanceof Monster ? target.phylum : target;
   return phylumDrops.get(phylum) ?? $item`none`;
 }
 
+/**
+ * Determines the probability of getting a robortender drop based on number of drops received
+ * @param dropNumber The number of drops to assume you've already received; defaults to mafia's tracked amount
+ * @returns The probability of getting a robort drop
+ */
 export function dropChance(dropNumber = get("_roboDrops")): number {
   return [1, 0.5, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3][dropNumber] ?? 0.2;
 }

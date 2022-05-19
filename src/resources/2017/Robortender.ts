@@ -16,7 +16,8 @@ export function have(): boolean {
 
 const phylumDrops = new Map<Phylum, Item>([
   [$phylum`Bug`, $item`pickled grasshopper`],
-  [$phylum`Constellation`, $item`bottle of anís`],
+  // bottle of anís
+  [$phylum`Constellation`, Item.get(9348)],
   [$phylum`Demon`, $item`bottle of novelty hot sauce`],
   [$phylum`Elemental`, $item`elemental sugarcube`],
   [$phylum`Elf`, $item`peppermint sprig`],
@@ -26,7 +27,8 @@ const phylumDrops = new Map<Phylum, Item>([
   [$phylum`Hobo`, $item`can of cherry-flavored sterno`],
   [$phylum`Horror`, $item`lump of black ichor`],
   [$phylum`Humanoid`, $item`bottle of gregnadigne`],
-  [$phylum`Mer-kin`, $item`bottle of Crème de Fugu`],
+  // bottle of Crème de Fugu
+  [$phylum`Mer-kin`, Item.get(9358)],
   [$phylum`Orc`, $item`baby oil shooter`],
   [$phylum`Penguin`, $item`fish head`],
   [$phylum`Pirate`, $item`limepatch`],

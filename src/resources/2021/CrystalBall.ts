@@ -22,6 +22,9 @@ const parsedProp = () =>
         [toLocation(location), toMonster(monster)] as [Location, Monster]
     );
 
+/**
+ * @returns A list of all predictions currently active in an adventurer's miniature crystal ball, after visiting the "ponder" URL to refresh them.
+ */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
   visitUrl("inventory.php?action=ponder", false);

@@ -85,9 +85,7 @@ export function findMonster(
 ): Monster | null {
   if (!have() || reminiscesLeft() === 0) return null;
 
-  return (
-    availableLocketMonsters()
-      .filter(criteria)
-      .sort((a, b) => value(b) - value(a))[0] ?? null
-  );
+  const options = availableLocketMonsters().filter(criteria);
+  if (!options.length) return null;
+  return options.reduce((a, b) => (value(a) > value(b) ? a : b));
 }

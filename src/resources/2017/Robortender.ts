@@ -34,6 +34,6 @@ export function dropFrom(target: Monster | Phylum): Item {
   return phylumDrops.get(phylum) ?? $item`none`;
 }
 
-export function dropChance(): number {
-  return [1, 0.5, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3][get("_roboDrops")] ?? 0.2;
+export function dropChance(dropNumber = get("_roboDrops")): number {
+  return [1, 0.5, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3][dropNumber] ?? 0.2;
 }

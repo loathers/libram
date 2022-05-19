@@ -6,6 +6,10 @@ import {
   availableAmount,
   Item,
   visitUrl,
+  inMultiFight,
+  choiceFollowsFight,
+  currentRound,
+  handlingChoice,
 } from "kolmafia";
 import { get } from "../../property";
 
@@ -27,6 +31,11 @@ const parsedProp = () =>
  */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
-  visitUrl("inventory.php?action=ponder", false);
+  const otherwiseOccupied =
+    currentRound() ||
+    inMultiFight() ||
+    choiceFollowsFight() ||
+    handlingChoice();
+  if (!otherwiseOccupied) visitUrl("inventory.php?action=ponder", false);
   return new Map(parsedProp());
 }

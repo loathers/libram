@@ -35,22 +35,5 @@ export function dropFrom(target: Monster | Phylum): Item {
 }
 
 export function dropChance(): number {
-  switch (get("_roboDrops")) {
-    case 0:
-      return 1;
-    case 1:
-    case 2:
-    case 3:
-      return 0.5;
-    case 4:
-    case 5:
-    case 6:
-      return 0.4;
-    case 7:
-    case 8:
-    case 9:
-      return 0.3;
-    default:
-      return 0.2;
-  }
+  return [1, 0.5, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3][get("_roboDrops")] ?? 0.2;
 }

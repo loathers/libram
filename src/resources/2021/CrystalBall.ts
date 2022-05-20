@@ -6,11 +6,8 @@ import {
   availableAmount,
   Item,
   visitUrl,
-  inMultiFight,
-  choiceFollowsFight,
-  currentRound,
-  handlingChoice,
 } from "kolmafia";
+import { canVisitUrl } from "../../lib";
 import { get } from "../../property";
 
 export const orb = Item.get("miniature crystal ball");
@@ -32,11 +29,6 @@ const parsedProp = () =>
  */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
-  const otherwiseOccupied =
-    currentRound() ||
-    inMultiFight() ||
-    choiceFollowsFight() ||
-    handlingChoice();
-  if (!otherwiseOccupied) visitUrl("inventory.php?action=ponder", false);
+  if (canVisitUrl()) visitUrl("inventory.php?action=ponder", false);
   return new Map(parsedProp());
 }

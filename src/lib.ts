@@ -7,7 +7,9 @@ import {
   autosellPrice,
   availableAmount,
   booleanModifier,
+  choiceFollowsFight,
   cliExecute,
+  currentRound,
   Effect,
   Familiar,
   fullnessLimit,
@@ -16,12 +18,14 @@ import {
   getPlayerId,
   getPlayerName,
   getRelated,
+  handlingChoice,
   haveEffect,
   haveFamiliar,
   haveServant,
   haveSkill,
   holiday,
   inebrietyLimit,
+  inMultiFight,
   Item,
   Location,
   mallPrice,
@@ -684,4 +688,16 @@ export function getTodaysHolidayWanderers(): Monster[] {
     .split("/")
     .map((holiday) => holidayWanderers.get(holiday) ?? [])
     .flat();
+}
+
+/**
+ * Determines & returns whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
+ */
+export function canVisitUrl(): boolean {
+  return !(
+    currentRound() ||
+    inMultiFight() ||
+    choiceFollowsFight() ||
+    handlingChoice()
+  );
 }

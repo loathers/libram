@@ -27,7 +27,8 @@ const parsedProp = () =>
     );
 
 /**
- * @returns A list of all predictions currently active in an adventurer's miniature crystal ball, after visiting the "ponder" URL to refresh them.
+ * Ponders your orb (if it is able to do so safely) and then returns a Map keyed by location consisting of extant predictions
+ * @returns A map of all predictions currently active in an adventurer's miniature crystal ball, after visiting the "ponder" URL to refresh them.
  */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();

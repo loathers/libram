@@ -1,6 +1,7 @@
 import {
   haveFamiliar,
   Item,
+  itemAmount,
   Monster,
   Phylum,
   toInt,
@@ -89,6 +90,7 @@ export function feed(beverage: Item): boolean {
   if (currentDrinks().includes(beverage)) return true;
   if (currentDrinks().length >= 5) return false;
   if (!drinks.includes(beverage)) return false;
+  if (!itemAmount(beverage)) return false;
   visitUrl(`inventory.php?action=robooze&which=1&whichitem=${toInt(beverage)}`);
   return currentDrinks().includes(beverage);
 }

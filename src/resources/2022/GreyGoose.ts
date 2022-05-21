@@ -10,7 +10,8 @@ export function have(): boolean {
 }
 
 export function currentExperience(): number {
-  return goose.experience || have_($familiar`Shorter-Order Cook`)
+  return goose.experience ||
+    (have_($familiar`Shorter-Order Cook`) && !get("gooseReprocessed"))
     ? 81 + (have_($item`blue plate`) ? 19 : 0)
     : 0;
 }

@@ -18,13 +18,15 @@ export function have(): boolean {
 
 function toMonsterWrapper(name: string): Monster {
   const none = Monster.get("none");
-  // First we see if the regular ol' name is fine
+
   if (toMonster(name) !== none) return toMonster(name);
-  // Next, we see if removing "a " helps it
-  if (toMonster(name.slice(2)) !== none) return toMonster(name.slice(2));
-  // Next, we see if removing "the " helps it
-  if (toMonster(name.slice(4)) !== none) return toMonster(name.slice(4));
-  throw new Error(`Unable to parse monster name: ${name}.`);
+  const articles = ["a ", "the ", "some "];
+  for (const article of articles) {
+    if (name.toLowerCase().startsWith(article)) {
+      return toMonster(name.slice(article.length));
+    }
+  }
+  throw new Error(`Unable to identify monster ${name} by name!`);
 }
 
 const parsedProp = () =>

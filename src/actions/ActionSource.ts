@@ -1,4 +1,4 @@
-import { Familiar, Item, Skill, useFamiliar } from "kolmafia";
+import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
 import { sum } from "../utils";
@@ -102,6 +102,8 @@ function mergeConstraints(
  * A combat-based action resource in the game (e.g. a free run or free kill).
  */
 export class ActionSource {
+  static defaultPriceFunction = (item: Item) =>
+    mallPrice(item) > 0 ? mallPrice(item) : Infinity;
   source: Item | Skill | Familiar | Array<Item | Skill | Familiar>;
   potential: () => number; // Infinity: unlimited
   macro: Macro;

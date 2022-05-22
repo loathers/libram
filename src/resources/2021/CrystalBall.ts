@@ -20,7 +20,7 @@ function toMonsterWrapper(name: string): Monster {
   const none = Monster.get("none");
 
   if (toMonster(name) !== none) return toMonster(name);
-  const articles = ["a ", "the ", "some "];
+  const articles = ["a ", "an ", "the ", "some "];
   for (const article of articles) {
     if (name.toLowerCase().startsWith(article)) {
       return toMonster(name.slice(article.length));

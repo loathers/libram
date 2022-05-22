@@ -11,16 +11,29 @@ import { canVisitUrl } from "../../lib";
 import { get } from "../../property";
 
 export const orb = Item.get("miniature crystal ball");
+
 export function have(): boolean {
   return availableAmount(orb) > 0;
 }
+
+function toMonsterWrapper(name: string): Monster {
+  const none = Monster.get("none");
+  // First we see if the regular ol' name is fine
+  if (toMonster(name) !== none) return toMonster(name);
+  // Next, we see if removing "a " helps it
+  if (toMonster(name.slice(2)) !== none) return toMonster(name.slice(2));
+  // Next, we see if removing "the " helps it
+  if (toMonster(name.slice(4)) !== none) return toMonster(name.slice(4));
+  throw new Error(`Unable to parse monster name: ${name}.`);
+}
+
 const parsedProp = () =>
   get("crystalBallPredictions")
     .split("|")
     .map((element) => element.split(":") as [string, string, string])
     .map(
       ([, location, monster]) =>
-        [toLocation(location), toMonster(monster)] as [Location, Monster]
+        [toLocation(location), toMonsterWrapper(monster)] as [Location, Monster]
     );
 
 /**

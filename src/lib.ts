@@ -11,6 +11,8 @@ import {
   cliExecute,
   currentRound,
   Effect,
+  Element,
+  elementalResistance,
   Familiar,
   fullnessLimit,
   getCampground,
@@ -700,4 +702,18 @@ export function canVisitUrl(): boolean {
     choiceFollowsFight() ||
     handlingChoice()
   );
+}
+
+ * Calculate damage taken from a specific element after factoring in resistance
+ * @param baseDamage
+ * @param element
+ * @returns damage after factoring in resistances
+ */
+export function damageTakenByElement(
+  baseDamage: number,
+  element: Element
+): number {
+  if (baseDamage < 0) return 1;
+  const res = elementalResistance(element);
+  return Math.max(1, Math.ceil(baseDamage - (baseDamage * res) / 100));
 }

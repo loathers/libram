@@ -83,8 +83,8 @@ export function currentDrinks(): Item[] {
 }
 
 /**
- * @param beverage Feed the robortender a beverage of your choice.
- * @returns Whether or not the robort has drunk that drink at end of execution, regardless of whether we did it ourselves just now.
+ * @param beverage A robortender-consumable drink of choice (i.e. Drive-By Shooting, Single Entendre, etc)
+ * @returns A boolean; if true, the user's robortender has drunk that drink after execution. If false, it has not. This ALSO returns false if the user has not passed the function a robortender-consumable drink. If the user does not already have the beverage in their inventory, this function will not purchase the requested for you.
  */
 export function feed(beverage: Item): boolean {
   if (currentDrinks().includes(beverage)) return true;

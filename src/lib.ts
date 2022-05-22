@@ -704,6 +704,7 @@ export function canVisitUrl(): boolean {
   );
 }
 
+/**
  * Calculate damage taken from a specific element after factoring in resistance
  * @param baseDamage
  * @param element

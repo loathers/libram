@@ -244,12 +244,12 @@ export function findActionSource(
   actions: ActionSource[],
   constraints: FindActionSourceConstraints = {}
 ): ActionSource | null {
-  return (
-    actions
-      .filter((actions) => filterAction(actions, constraints))
-      .sort((a, b) => a.cost() - b.cost())
-      .find((action) => action) ?? null
+  const validActions = actions.filter((actions) =>
+    filterAction(actions, constraints)
   );
+  return validActions
+    ? validActions.reduce((a, b) => (a.cost() > b.cost() ? a : b))
+    : null;
 }
 
 /**

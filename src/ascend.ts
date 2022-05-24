@@ -11,6 +11,8 @@ import {
   visitUrl,
   xpath,
   haveSkill,
+  getPermedSkills,
+  toSkill,
 } from "kolmafia";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
@@ -22,6 +24,17 @@ export enum Lifestyle {
   softcore = 2,
   normal = 2,
   hardcore = 3,
+}
+
+export function permedSkills(): Map<Skill, Lifestyle> {
+  return new Map(
+    Array.from(Object.entries(getPermedSkills)).map(
+      ([skillName, isHardcore]) => [
+        toSkill(skillName),
+        isHardcore ? Lifestyle.hardcore : Lifestyle.softcore,
+      ]
+    )
+  );
 }
 
 export class AscendError extends Error {
@@ -191,6 +204,7 @@ export function ascend(
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
   if (permSkills) {
+    const;
     for (const [skill, permLevel] of permSkills.entries()) {
       if (permLevel !== Lifestyle.casual) {
         const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";

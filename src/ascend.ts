@@ -204,9 +204,9 @@ export function ascend(
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
   if (permSkills) {
-    const;
+    const currentPerms = permedSkills();
     for (const [skill, permLevel] of permSkills.entries()) {
-      if (permLevel !== Lifestyle.casual) {
+      if (permLevel > (currentPerms.get(skill) ?? Lifestyle.casual)) {
         const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
         visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
       }

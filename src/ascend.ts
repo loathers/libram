@@ -15,6 +15,7 @@ import {
   toSkill,
 } from "kolmafia";
 import { Path } from "./Path";
+import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 import { Ceiling, Desk, Nightstand } from "./resources/2015/ChateauMantegna";
 import { $item, $items, $stat } from "./template-string";
@@ -143,6 +144,7 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
  * @param moon Your moon sign as a string, or the zone you're looking for as a string
  * @param consumable From the astral deli. Pick the container item, not the product.
  * @param pet From the astral pet store.
+ * @param permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
  */
 
 export function ascend(
@@ -205,9 +207,15 @@ export function ascend(
 
   if (permSkills) {
     const currentPerms = permedSkills();
-    for (const [skill, permLevel] of permSkills.entries()) {
-      if (permLevel > (currentPerms.get(skill) ?? Lifestyle.casual)) {
-        const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
+    let karma = get("bankedKarma");
+    for (const [skill, prospectivePermLevel] of permSkills.entries()) {
+      const currentPermLevel = currentPerms.get(skill) ?? Lifestyle.casual;
+      if (prospectivePermLevel > currentPermLevel) {
+        const expectedKarma = 100 * (prospectivePermLevel - currentPermLevel);
+        if (karma < expectedKarma) continue;
+        karma -= expectedKarma;
+        const permText =
+          prospectivePermLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
         visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
       }
     }

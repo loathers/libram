@@ -29,7 +29,7 @@ export enum Lifestyle {
 
 export function permedSkills(): Map<Skill, Lifestyle> {
   return new Map(
-    Array.from(Object.entries(getPermedSkills)).map(
+    Array.from(Object.entries(getPermedSkills())).map(
       ([skillName, isHardcore]) => [
         toSkill(skillName),
         isHardcore ? Lifestyle.hardcore : Lifestyle.softcore,

@@ -47,7 +47,9 @@ const statCommunityServicePredictor = (stat: Stat) => {
       (1 / 30) *
         (myBuffedstat(stat) -
           myBasestat(
-            thralls.get(stat) === myThrall() ? $stat`mysticality` : stat
+            thralls.get(stat) === myThrall() && !have($effect`Expert Oiliness`)
+              ? $stat`mysticality`
+              : stat
           ))
     );
 };

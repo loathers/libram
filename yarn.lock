@@ -3846,10 +3846,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-kolmafia@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-2.1.1.tgz#be5696fbc11a6caedbc9a6dc69b46b0ee73ea8e2"
-  integrity sha512-vYI3KwDhA1NbhYq9+4kptf5P0TRA/USJJkEScRLRIieU/2Y7lyoC4Mwj4bQEAaScztFtj4K2t2ig2STfjuWbAA==
+kolmafia@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-2.1.3.tgz#623e259e1bf15706c9daa2df5e03514cf0d490f6"
+  integrity sha512-vBK4WaPWJqBswcWEhxXFKuLdnYU5M26nLVZonRD0vtjwogDcHYtO3V2zucFn8a/6t70+4DuVLsmfZdICt7sFPQ==
 
 leven@^3.1.0:
   version "3.1.0"
@@ -3871,16 +3871,6 @@ levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
-
-libram@^0.6.12:
-  version "0.6.12"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.6.12.tgz#edf005e9af0c164374444574f4672bd636d54feb"
-  integrity sha512-OGGF6bHAnkTi20ACVQzhqsTfUg5B4DuuvVP7Rv1tzc/vZmbltC2YGXqYeDwoKm8SLJr76q0jn1hyopeucJ8T0A==
-  dependencies:
-    "@babel/runtime-corejs3" "^7.17.2"
-    core-js "^3.21.0"
-    kolmafia "^2.1.1"
-    lodash "^4.17.21"
 
 lilconfig@2.0.4:
   version "2.0.4"

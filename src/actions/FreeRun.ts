@@ -1,6 +1,5 @@
 import {
   cliExecute,
-  mallPrice,
   myTurncount,
   restoreMp,
   retrieveItem,
@@ -234,8 +233,8 @@ const freeRunSources: ActionSource[] = [
       preparation: () => retrieveItem($item`peppermint parasol`),
       cost: () =>
         Math.min(
-          mallPrice($item`peppermint sprout`) * 5,
-          mallPrice($item`peppermint parasol`)
+          ActionSource.defaultPriceFunction($item`peppermint sprout`) * 5,
+          ActionSource.defaultPriceFunction($item`peppermint parasol`)
         ) / 10, // Breaks after 10 successful runaways.
     }
   ),
@@ -246,7 +245,7 @@ const freeRunSources: ActionSource[] = [
     Macro.item($item`human musk`),
     {
       preparation: () => retrieveItem($item`human musk`),
-      cost: () => mallPrice($item`human musk`),
+      cost: () => ActionSource.defaultPriceFunction($item`human musk`),
     }
   ),
 
@@ -255,7 +254,7 @@ const freeRunSources: ActionSource[] = [
     (item) =>
       new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
-        cost: () => mallPrice(item),
+        cost: () => ActionSource.defaultPriceFunction(item),
       })
   ),
 ];

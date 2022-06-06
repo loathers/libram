@@ -1,6 +1,15 @@
-import { haveFamiliar, Item, Monster, Phylum } from "kolmafia";
+import {
+  haveFamiliar,
+  Item,
+  itemAmount,
+  Monster,
+  Phylum,
+  toInt,
+  toItem,
+  visitUrl,
+} from "kolmafia";
 import { get } from "../../property";
-import { $familiar, $item, $phylum } from "../../template-string";
+import { $familiar, $item, $items, $phylum } from "../../template-string";
 
 /**
  * The Robortender itself
@@ -54,4 +63,34 @@ export function dropFrom(target: Monster | Phylum): Item {
  */
 export function dropChance(dropNumber = get("_roboDrops")): number {
   return [1, 0.5, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3][dropNumber] ?? 0.2;
+}
+
+export const minorDrinks = $items`literal grasshopper, double entendre, Phlegethon, Siberian sunrise, mentholated wine, low tide martini, shroomtini, morning dew, whiskey squeeze, great old fashioned, Gnomish sagngria, vodka stinger, extremely slippery nipple, piscatini, Churchill, soilzerac, London frog, nothingtini`;
+export const majorDrinks = $items`eighth plague, single entendre, reverse Tantalus, elemental caipiroska, Feliz Navidad, Bloody Nora, moreltini, hell in a bucket, Newark, R'lyeh, Gnollish sangria, vodka barracuda, Mysterious Island iced tea, drive-by shooting, gunner's daughter, dirt julep, Simepore slime, Phil Collins`;
+export const drinks = [...minorDrinks, ...majorDrinks];
+
+/**
+ * @returns An array consisting of the drinks you've fed your robortender today.
+ */
+export function currentDrinks(): Item[] {
+  const pref = get("_roboDrinks");
+  if (!pref) return [];
+  return pref
+    .split(",")
+    .filter((x) => x.trim())
+    .map((name) => toItem(name))
+    .filter((drink) => drinks.includes(drink));
+}
+
+/**
+ * @param beverage A robortender-consumable drink of choice (i.e. Drive-By Shooting, Single Entendre, etc)
+ * @returns A boolean; if true, the user's robortender has drunk that drink after execution. If false, it has not. This ALSO returns false if the user has not passed the function a robortender-consumable drink. If the user does not already have the beverage in their inventory, this function will not purchase the requested for you.
+ */
+export function feed(beverage: Item): boolean {
+  if (currentDrinks().includes(beverage)) return true;
+  if (currentDrinks().length >= 5) return false;
+  if (!drinks.includes(beverage)) return false;
+  if (!itemAmount(beverage)) return false;
+  visitUrl(`inventory.php?action=robooze&which=1&whichitem=${toInt(beverage)}`);
+  return currentDrinks().includes(beverage);
 }

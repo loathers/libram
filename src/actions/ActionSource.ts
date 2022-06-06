@@ -247,7 +247,7 @@ export function findActionSource(
   const validActions = actions.filter((actions) =>
     filterAction(actions, constraints)
   );
-  return validActions
+  return validActions.length
     ? validActions.reduce((a, b) => (a.cost() > b.cost() ? a : b))
     : null;
 }

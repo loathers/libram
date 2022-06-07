@@ -8,12 +8,12 @@ export function have(): boolean {
   return availableAmount(cleaver) > 0;
 }
 
-export function beeznarp(): number {
+export function getInterval(): number {
   return [1, 6, 10, 12, 15, 20][get("_juneCleaverEncounters")] ?? 30;
 }
 
 export function fightsToNextChoice(): number {
-  return beeznarp() - get("_juneCleaverCharge");
+  return getInterval() - get("_juneCleaverCharge");
 }
 
 export function damage(

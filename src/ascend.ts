@@ -11,20 +11,11 @@ import {
   visitUrl,
   xpath,
   haveSkill,
+  MafiaClass,
 } from "kolmafia";
 import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
-import {
-  Ceiling,
-  ceilings,
-  Desk,
-  desks,
-  getCeiling,
-  getDesk,
-  getNightstand,
-  Nightstand,
-  nightstands,
-} from "./resources/2015/ChateauMantegna";
+
 import { $item, $items, $stat } from "./template-string";
 import { createStringUnionTypeGuardFunction } from "./utils";
 
@@ -99,38 +90,38 @@ type Eudora = typeof eudorae[number];
 const isWorkshed = createStringUnionTypeGuardFunction(worksheds);
 const isGarden = createStringUnionTypeGuardFunction(gardens);
 const isEudora = createStringUnionTypeGuardFunction(eudorae);
-const isDesk = createStringUnionTypeGuardFunction(desks);
-const isNightstand = createStringUnionTypeGuardFunction(nightstands);
-const isCeiling = createStringUnionTypeGuardFunction(ceilings);
+const isDesk = createStringUnionTypeGuardFunction(ChateauMantegna.desks);
+const isNightstand = createStringUnionTypeGuardFunction(
+  ChateauMantegna.nightstands
+);
+const isCeiling = createStringUnionTypeGuardFunction(ChateauMantegna.ceilings);
 
 export class AscensionPrepError extends Error {
   cause: string;
-  constructor(cause: string) {
+  constructor(cause: string, original?: MafiaClass | string) {
     if (isWorkshed(cause)) {
       super(
-        `Unable to swap workshed to ${cause}; workshed is currently ${getWorkshed()}.`
+        `Unable to swap workshed to ${cause}; workshed is currently ${original}.`
       );
     } else if (isGarden(cause)) {
       super(
-        `Unable to swap garden to ${cause}; garden is currently ${Object.getOwnPropertyNames(
-          getCampground()
-        ).find(isGarden)}.`
+        `Unable to swap garden to ${cause}; garden is currently ${original}.`
       );
     } else if (isEudora(cause)) {
       super(
-        `Unable to swap eudora to ${cause}; eudora is currently ${eudoraItem()}.`
+        `Unable to swap eudora to ${cause}; eudora is currently ${original}.`
       );
     } else if (isDesk(cause)) {
       super(
-        `Unable to swap chateau desk to ${cause}; desk is currently ${getDesk()}.`
+        `Unable to swap chateau desk to ${cause}; desk is currently ${original}.`
       );
     } else if (isNightstand(cause)) {
       super(
-        `Unable to swap chateau nightstand to ${cause}; nightstand is currently ${getNightstand()}.`
+        `Unable to swap chateau nightstand to ${cause}; nightstand is currently ${original}.`
       );
     } else if (isCeiling(cause)) {
       super(
-        `Unable to swap chateau ceiling to ${cause}; ceiling is currently ${getCeiling()}.`
+        `Unable to swap chateau ceiling to ${cause}; ceiling is currently ${original}.`
       );
     } else super(cause);
     this.cause = cause;
@@ -317,9 +308,9 @@ export function prepareAscension({
   garden?: Garden;
   eudora?: Eudora;
   chateau?: {
-    desk?: Desk;
-    ceiling?: Ceiling;
-    nightstand?: Nightstand;
+    desk?: ChateauMantegna.Desk;
+    ceiling?: ChateauMantegna.Ceiling;
+    nightstand?: ChateauMantegna.Nightstand;
   };
   throwOnFail?: boolean;
 } = {}): void {
@@ -327,18 +318,17 @@ export function prepareAscension({
   if (workshed && getWorkshed() !== Item.get(workshed)) {
     use(Item.get(workshed));
     if (getWorkshed().name !== workshed && throwOnFail) {
-      throw new AscensionPrepError(workshed);
+      throw new AscensionPrepError(workshed, getWorkshed());
     }
   }
 
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
-
-    if (
-      !Object.getOwnPropertyNames(getCampground()).includes(garden) &&
-      throwOnFail
-    ) {
-      throw new AscensionPrepError(garden);
+    const gardenName = Object.getOwnPropertyNames(getCampground()).find(
+      isGarden
+    );
+    if (gardenName !== garden && throwOnFail) {
+      throw new AscensionPrepError(garden, gardenName);
     }
   }
 
@@ -362,7 +352,7 @@ export function prepareAscension({
     }
 
     if (eudoraItem() !== Item.get(eudora) && throwOnFail) {
-      throw new AscensionPrepError(eudora);
+      throw new AscensionPrepError(eudora, eudoraItem());
     }
   }
 
@@ -370,19 +360,28 @@ export function prepareAscension({
     const { desk, ceiling, nightstand } = chateau;
     if (ceiling && ChateauMantegna.getCeiling() !== ceiling) {
       if (!ChateauMantegna.changeCeiling(ceiling) && throwOnFail) {
-        throw new AscensionPrepError(ceiling);
+        throw new AscensionPrepError(
+          ceiling,
+          ChateauMantegna.getCeiling() ?? "unknown"
+        );
       }
     }
 
     if (desk && ChateauMantegna.getDesk() !== desk) {
       if (!ChateauMantegna.changeDesk(desk) && throwOnFail) {
-        throw new AscensionPrepError(desk);
+        throw new AscensionPrepError(
+          desk,
+          ChateauMantegna.getDesk() ?? "unknown"
+        );
       }
     }
 
     if (nightstand && ChateauMantegna.getNightstand() !== nightstand) {
       if (!ChateauMantegna.changeNightstand(nightstand) && throwOnFail) {
-        throw new AscensionPrepError(nightstand);
+        throw new AscensionPrepError(
+          nightstand,
+          ChateauMantegna.getNightstand() ?? "unknown"
+        );
       }
     }
   }

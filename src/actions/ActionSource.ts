@@ -248,7 +248,7 @@ export function findActionSource(
     filterAction(actions, constraints)
   );
   return validActions.length
-    ? validActions.reduce((a, b) => (a.cost() > b.cost() ? a : b))
+    ? validActions.reduce((a, b) => (a.cost() <= b.cost() ? a : b))
     : null;
 }
 

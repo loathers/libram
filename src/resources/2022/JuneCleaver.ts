@@ -1,6 +1,5 @@
 import { toItem, availableAmount } from "kolmafia";
 import { get } from "../../property";
-import { NumericProperty } from "../../propertyTypes";
 
 export const cleaver = toItem("June cleaver");
 
@@ -19,5 +18,5 @@ export function fightsToNextChoice(): number {
 export function damage(
   element: "Hot" | "Stench" | "Sleaze" | "Spooky" | "Cold"
 ): number {
-  return get(`_juneCleaver${element}` as NumericProperty);
+  return get(`_juneCleaver${element}`);
 }

@@ -15,17 +15,26 @@ export function getInterval(): number {
 }
 
 /**
- * @returns The number of fights until your next cleaver choice.
- */
-export function fightsToNextChoice(): number {
-  return getInterval() - get("_juneCleaverCharge");
-}
-
-/**
  * @returns The bonus damage your cleaver currently gives for a given element.
  */
 export function damage(
   element: "Hot" | "Stench" | "Sleaze" | "Spooky" | "Cold"
 ): number {
   return get(`_juneCleaver${element}`);
+}
+
+export function skipsRemaining(): number {
+  return 5 - get("_juneCleaverSkips");
+}
+
+export const choices = [
+  1467, 1468, 1469, 1470, 1471, 1472, 1473, 1474, 1475,
+] as const;
+
+export function choicesAvailable(): typeof choices[number][] {
+  const queue = get("juneCleaverQueue")
+    .split(",")
+    .filter((x) => x.trim().length > 0)
+    .map((x) => parseInt(x));
+  return choices.filter((choice) => !queue.includes(choice));
 }

@@ -27,6 +27,7 @@ import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 import * as GreyGoose from "./2022/GreyGoose";
+import * as JuneCleaver from "./2022/JuneCleaver";
 
 export {
   AsdonMartin,
@@ -42,6 +43,7 @@ export {
   FloristFriar,
   GreyGoose,
   Guzzlr,
+  JuneCleaver,
   Latte,
   MayoClinic,
   MummingTrunk,

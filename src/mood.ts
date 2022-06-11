@@ -165,8 +165,12 @@ class SkillMoodElement extends MoodElement {
       } else {
         const cost = mpCost(this.skill);
         maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        if (maxCasts === 0) {
-          mood.moreMp(cost);
+        if (maxCasts < remainingCasts) {
+          const bestMp = Math.min(
+            remainingCasts * mpCost(this.skill),
+            myMaxmp()
+          );
+          mood.moreMp(bestMp);
           maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
         }
       }

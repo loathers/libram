@@ -339,11 +339,11 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return (
-      sum(this.options.mpSources, (mpSource: MpSource) =>
-        mpSource.availableMpMin()
-      ) + Math.max(myMp() - this.options.reserveMp, 0)
-    );
+    return this.options.useNativeRestores
+      ? Infinity
+      : sum(this.options.mpSources, (mpSource: MpSource) =>
+          mpSource.availableMpMin()
+        ) + Math.max(myMp() - this.options.reserveMp, 0);
   }
 
   moreMp(minimumTarget: number): void {

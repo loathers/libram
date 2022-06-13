@@ -45,9 +45,7 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(
-      input.split(/\s*[^\\],\s*/).map((str) => str.replace("\\,", ","))
-    );
+    return Type.get<I>(input.split("s*(?<!\\),s*"));
   };
 
 /**

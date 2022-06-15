@@ -22,7 +22,7 @@ function splitByCommasWithEscapes(str: string): string[] {
 
   let ignoreNext = false;
   let currentString = "";
-  for (const char of str) {
+  for (const char of str.split("")) {
     if (char === "\\") {
       ignoreNext = true;
     } else {
@@ -44,7 +44,7 @@ const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]
 ) =>
-  literals.reduce(
+  literals.raw.reduce(
     (acc, literal, i) => acc + literal + (placeholders[i] || ""),
     ""
   );

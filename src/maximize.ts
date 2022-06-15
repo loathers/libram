@@ -31,6 +31,7 @@ export type MaximizeOptions = {
   bonusEquip: Map<Item, number>;
   onlySlot: Slot[];
   preventSlot: Slot[];
+  forceUpdate: boolean;
 };
 
 /**
@@ -75,6 +76,8 @@ function mergeMaximizeOptions(
       ...defaultOptions.preventSlot,
       ...(addendums.preventSlot ?? []),
     ],
+
+    forceUpdate: addendums.forceUpdate ?? defaultOptions.forceUpdate,
   };
 }
 
@@ -87,6 +90,7 @@ const defaultMaximizeOptions: MaximizeOptions = {
   bonusEquip: new Map(),
   onlySlot: [],
   preventSlot: [],
+  forceUpdate: false,
 };
 
 /**
@@ -443,6 +447,7 @@ export function maximizeCached(
     bonusEquip,
     onlySlot,
     preventSlot,
+    forceUpdate,
   }: {
     updateOnFamiliarChange: boolean;
     updateOnCanEquipChanged: boolean;
@@ -451,6 +456,7 @@ export function maximizeCached(
     bonusEquip: Map<Item, number>;
     onlySlot: Slot[];
     preventSlot: Slot[];
+    forceUpdate: boolean;
   } = fullOptions;
 
   // Sort each group in objective to ensure consistent ordering in string
@@ -467,7 +473,7 @@ export function maximizeCached(
   ].join(", ");
 
   const cacheEntry = checkCache(objective, fullOptions);
-  if (cacheEntry) {
+  if (cacheEntry && !forceUpdate) {
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {

@@ -35,7 +35,7 @@ function splitByCommasWithEscapes(str: string): string[] {
       ignoreNext = false;
     }
   }
-  returnValue.push(currentString);
+  returnValue.push(currentString.trim());
 
   return returnValue;
 }
@@ -45,7 +45,7 @@ const concatTemplateString = (
   ...placeholders: string[]
 ) =>
   literals.raw.reduce(
-    (acc, literal, i) => acc + literal + (placeholders[i] || ""),
+    (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
     ""
   );
 

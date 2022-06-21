@@ -546,6 +546,8 @@ export class Requirement {
           ...(optionsA.preventSlot ?? []),
           ...(optionsB.preventSlot ?? []),
         ],
+
+        forceUpdate: optionsA.forceUpdate || optionsB.forceUpdate,
       }
     );
   }

@@ -577,8 +577,8 @@ export function questStep(questName: string): number {
 }
 
 export class EnsureError extends Error {
-  constructor(cause: Item | Familiar | Effect) {
-    super(`Failed to ensure ${cause.name}!`);
+  constructor(cause: Item | Familiar | Effect, reason?: string) {
+    super(`Failed to ensure ${cause.name}!${reason ? ` ${reason}` : ""}`);
     this.name = "Ensure Error";
   }
 }
@@ -587,9 +587,15 @@ export class EnsureError extends Error {
  * Tries to get an effect using the default method
  * @param ef effect to try to get
  * @param turns turns to aim for; default of 1
+ *
+ * @throws {EnsureError} Throws an error if the effect cannot be guaranteed
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
+    if (ef.default === null) {
+      throw new EnsureError(ef, "No default action");
+    }
+
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
       throw new EnsureError(ef);
     }

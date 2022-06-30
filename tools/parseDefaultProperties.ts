@@ -48,7 +48,7 @@ const otherMonsters = ["romanticTarget", "yearbookCameraTarget"];
 const fakeMonsters = ["trackVoteMonster"];
 export function isMonsterProperty(property: string): boolean {
   if (otherMonsters.includes(property)) return true;
-  return property.endsWith("Monster") && !fakeMonsters.includes(property);
+  return (property.endsWith("Monster") || property.endsWith("Boss"))&& !fakeMonsters.includes(property);
 }
 
 export function isFamiliarProperty(property: string): boolean {

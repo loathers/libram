@@ -19,9 +19,9 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { clamp } from "lodash";
 import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
+import { clamp } from "../../utils";
 
 enum PriceAge {
   HISTORICAL, // If Mafia has a historical price stored, use it.

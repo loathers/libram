@@ -1,38 +1,34 @@
 import {
   Location,
   Monster,
-  myTurncount,
   toLocation,
   toMonster,
+  availableAmount,
+  Item,
+  visitUrl,
 } from "kolmafia";
+import { canVisitUrl } from "../../lib";
 import { get } from "../../property";
 
+export const orb = Item.get("miniature crystal ball");
+export function have(): boolean {
+  return availableAmount(orb) > 0;
+}
 const parsedProp = () =>
   get("crystalBallPredictions")
     .split("|")
     .map((element) => element.split(":") as [string, string, string])
     .map(
-      ([turncount, location, monster]) =>
-        [parseInt(turncount), toLocation(location), toMonster(monster)] as [
-          number,
-          Location,
-          Monster
-        ]
+      ([, location, monster]) =>
+        [toLocation(location), toMonster(monster)] as [Location, Monster]
     );
 
-export function currentPredictions(withFree = true): Map<Location, Monster> {
-  const predictions = parsedProp();
-  const freeCondition = (predictedTurns: number, turns: number) =>
-    predictedTurns === turns;
-  const nonFreeCondition = (predictedTurns: number, turns: number) =>
-    predictedTurns + 1 === turns;
-  return new Map(
-    predictions
-      .filter(
-        ([turncount]) =>
-          nonFreeCondition(turncount, myTurncount()) ||
-          (withFree && freeCondition(turncount, myTurncount()))
-      )
-      .map(([, location, monster]) => [location, monster])
-  );
+/**
+ * Ponders your orb (if it is able to do so safely) and then returns a Map keyed by location consisting of extant predictions
+ * @returns A map of all predictions currently active in an adventurer's miniature crystal ball, after visiting the "ponder" URL to refresh them.
+ */
+export function ponder(): Map<Location, Monster> {
+  if (!have()) return new Map();
+  if (canVisitUrl()) visitUrl("inventory.php?ponder=1", false);
+  return new Map(parsedProp());
 }

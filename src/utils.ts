@@ -116,3 +116,14 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
   }
   return returnValue;
 }
+
+/**
+ * Creates a Type Guard function for a string union type defined via an array as const.
+ */
+export function createStringUnionTypeGuardFunction<T extends string>(
+  array: readonly T[]
+): (x: string) => x is T {
+  return function (x: string): x is T {
+    return (array as readonly string[]).includes(x);
+  };
+}

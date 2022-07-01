@@ -55,7 +55,7 @@ export function reminiscesLeft(): number {
  * @returns An array consisting of the Monsters reminisced today.
  */
 export function monstersReminisced(): Monster[] {
-  return parseLocketProperty().map((id) => toMonster(parseInt(id)));
+  return parseLocketProperty().map((id) => toMonster(id));
 }
 
 /**
@@ -74,10 +74,10 @@ export function reminisce(monster: Monster): boolean {
 }
 
 /**
- * Find a reminiscable monster that meets certain criteria and optionally maximizes a valuation function.
- * @param criteria A function for delineating which monsters are "fair game" for the search.
+ * This function efficiently evaluates all of an adventurer's possibly reminiscable monsters, placing them through a filtering criteria and evaluating them based on a passed function.
+ * @param criteria A filtering function for delineating which monsters are "fair game" for the search, such as "is this monster free".
  * @param value A function for deciding which monsters are "better" than others.
- * @returns A monster that fulfills the criteria function and maximizes the value function.
+ * @returns A singular monster that fulfills the criteria function and maximizes the value function.
  */
 export function findMonster(
   criteria: (monster: Monster) => boolean,
@@ -85,9 +85,7 @@ export function findMonster(
 ): Monster | null {
   if (!have() || reminiscesLeft() === 0) return null;
 
-  return (
-    availableLocketMonsters()
-      .sort((a, b) => value(b) - value(a))
-      .find(criteria) ?? null
-  );
+  const options = availableLocketMonsters().filter(criteria);
+  if (!options.length) return null;
+  return options.reduce((a, b) => (value(a) > value(b) ? a : b));
 }

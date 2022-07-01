@@ -81,7 +81,7 @@ function expectedAdventures(
         adventures += 2;
       }
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
-      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
+      if (itemType(item) === "food" && modifiers.seasoning) adventures += 0.5;
       return adventures;
     }) / interpolated.length
   );
@@ -96,6 +96,7 @@ type MenuItemOptions<T> = {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+  useRetrievePrice?: boolean;
 };
 
 export class MenuItem<T> {
@@ -108,6 +109,9 @@ export class MenuItem<T> {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+
+  static defaultPriceFunction: (item: Item) => number = (item: Item) =>
+    npcPrice(item) > 0 ? npcPrice(item) : mallPrice(item);
 
   static defaultOptions<T>(): Map<Item, MenuItemOptions<T>> {
     return new Map([
@@ -224,10 +228,7 @@ export class MenuItem<T> {
   }
 
   price(): number {
-    return (
-      this.priceOverride ??
-      (npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item))
-    );
+    return this.priceOverride ?? MenuItem.defaultPriceFunction?.(this.item);
   }
 }
 
@@ -377,11 +378,12 @@ class DietPlanner<T> {
       forkMugPrice +
       (menuItem.additionalValue ?? 0);
 
-    const valueSpleen = $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-      menuItem.item
-    )
-      ? 5 * this.spleenValue
-      : 0;
+    const valueSpleen =
+      $items`jar of fermented pickle juice, extra-greasy slider`.includes(
+        menuItem.item
+      )
+        ? 5 * this.spleenValue
+        : 0;
 
     return forkMug && valueForkMug > valueRaw
       ? [[...helpers, forkMug, menuItem], valueForkMug + valueSpleen]

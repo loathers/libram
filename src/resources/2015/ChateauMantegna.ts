@@ -27,6 +27,7 @@ export function fightPainting(): string {
   return runCombat();
 }
 
+
 export function rest(): void {
   visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
 }
@@ -35,17 +36,17 @@ export function restIfFree(): boolean {
   return generalRestIfFree(rest);
 }
 
-const desks = [
+export const desks = [
   "fancy stationery set",
   "Swiss piggy bank",
   "continental juice bar",
 ] as const;
-const ceilings = [
+export const ceilings = [
   "antler chandelier",
   "ceiling fan",
   "artificial skylight",
 ] as const;
-const nightstands = [
+export const nightstands = [
   "foreign language tapes",
   "bowl of potpourri",
   "electric muscle stimulator",

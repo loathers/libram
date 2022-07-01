@@ -616,11 +616,8 @@ const riderLists = new Map<string, FamiliarRider[]>();
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;
-  const {
-    modifierValueFunction,
-    ignoreLimitedDrops,
-    excludeCurrentFamiliar,
-  } = modeData;
+  const { modifierValueFunction, ignoreLimitedDrops, excludeCurrentFamiliar } =
+    modeData;
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,

@@ -7,8 +7,12 @@ import {
   autosellPrice,
   availableAmount,
   booleanModifier,
+  choiceFollowsFight,
   cliExecute,
+  currentRound,
   Effect,
+  Element,
+  elementalResistance,
   Familiar,
   fullnessLimit,
   getCampground,
@@ -16,12 +20,14 @@ import {
   getPlayerId,
   getPlayerName,
   getRelated,
+  handlingChoice,
   haveEffect,
   haveFamiliar,
   haveServant,
   haveSkill,
   holiday,
   inebrietyLimit,
+  inMultiFight,
   Item,
   Location,
   mallPrice,
@@ -46,7 +52,14 @@ import {
 } from "kolmafia";
 
 import { get } from "./property";
-import { $class, $familiar, $item, $items, $monsters } from "./template-string";
+import {
+  $class,
+  $familiar,
+  $item,
+  $items,
+  $monsters,
+  $skill,
+} from "./template-string";
 import { chunk } from "./utils";
 
 /**
@@ -414,10 +427,24 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     if (foe === undefined || banisher === undefined) break;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
     const banisherItem = toItem(banisher);
-    const banisherObject = [Item.get("none"), null].includes(banisherItem)
-      ? Skill.get(banisher)
-      : banisherItem;
-    result.set(banisherObject, Monster.get(foe));
+    if (banisher.toLowerCase() === "saber force") {
+      result.set($skill`Use the Force`, Monster.get(foe));
+    } else if (
+      [
+        Item.get("none"),
+        Item.get(`training scroll:  Snokebomb`),
+        Item.get(`tomayohawk-style reflex hammer`),
+        null,
+      ].includes(banisherItem)
+    ) {
+      if (Skill.get(banisher) === $skill`none`) {
+        break;
+      } else {
+        result.set(Skill.get(banisher), Monster.get(foe));
+      }
+    } else {
+      result.set(banisherItem, Monster.get(foe));
+    }
   }
   return result;
 }
@@ -551,8 +578,8 @@ export function questStep(questName: string): number {
 }
 
 export class EnsureError extends Error {
-  constructor(cause: Item | Familiar | Effect) {
-    super(`Failed to ensure ${cause.name}!`);
+  constructor(cause: Item | Familiar | Effect, reason?: string) {
+    super(`Failed to ensure ${cause.name}!${reason ? ` ${reason}` : ""}`);
     this.name = "Ensure Error";
   }
 }
@@ -561,9 +588,15 @@ export class EnsureError extends Error {
  * Tries to get an effect using the default method
  * @param ef effect to try to get
  * @param turns turns to aim for; default of 1
+ *
+ * @throws {EnsureError} Throws an error if the effect cannot be guaranteed
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
+    if (ef.default === null) {
+      throw new EnsureError(ef, "No default action");
+    }
+
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
       throw new EnsureError(ef);
     }
@@ -677,4 +710,31 @@ export function restIfFree(restFunction: () => void): boolean {
     return true;
   }
   return false;
+}
+
+/**
+ * Determines & returns whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
+ */
+export function canVisitUrl(): boolean {
+  return !(
+    currentRound() ||
+    inMultiFight() ||
+    choiceFollowsFight() ||
+    handlingChoice()
+  );
+}
+
+/**
+ * Calculate damage taken from a specific element after factoring in resistance
+ * @param baseDamage
+ * @param element
+ * @returns damage after factoring in resistances
+ */
+export function damageTakenByElement(
+  baseDamage: number,
+  element: Element
+): number {
+  if (baseDamage < 0) return 1;
+  const res = elementalResistance(element);
+  return Math.max(1, Math.ceil(baseDamage - (baseDamage * res) / 100));
 }

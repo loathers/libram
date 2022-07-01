@@ -68,8 +68,7 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    const split = JSON.parse(JSON.stringify(splitByCommasWithEscapes(input))) as string[];
-    return Type.get<I>(split);
+    return Type.get<I>(splitByCommasWithEscapes(input));
   };
 
 /**

@@ -5,5 +5,7 @@ console.log(
 );
 
 console.log(
-  $items`hilarious comedy prop, Victor\, the Insult Comic Hellhound Puppet, observational glasses`.map(i => i.name).join(", ")
-)
+  $items`hilarious comedy prop, Victor\, the Insult Comic Hellhound Puppet, observational glasses`
+    .map((i) => i.name)
+    .join(", ")
+);

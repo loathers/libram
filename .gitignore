@@ -1,6 +1,7 @@
 .DS_Store
 node_modules/
 dist/
+examples/dist/
 KoLmafia/scripts/libram.js
 .vscode/
 src/**/*.js

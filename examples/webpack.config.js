@@ -1,6 +1,9 @@
-const { DefinePlugin, ProvidePlugin } = require("webpack");
-const path = require("path");
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-env node */
+
 const fs = require("fs");
+const path = require("path");
+const { DefinePlugin, ProvidePlugin } = require("webpack");
 
 module.exports = {
   mode: "development",
@@ -21,6 +24,7 @@ module.exports = {
   output: {
     libraryTarget: "commonjs",
     filename: "libram-example-[name].js",
+    path: path.resolve(process.cwd(), "examples/dist"),
   },
   target: "node",
   module: {
@@ -37,7 +41,6 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       "process.env.NODE_DEBUG": false,
-      "process.env.NODE_ENV": "'development'",
     }),
     new ProvidePlugin({
       Buffer: ["buffer", "Buffer"],

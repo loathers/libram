@@ -65,13 +65,15 @@ export function setStickers(
   visitUrl("bedazzle.php");
   const start = currentStickers();
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 0; i <= 2; i++) {
     const sticker = options[i];
     if (!sticker) continue;
     const item = stickers[sticker];
     if (start[i] === item) continue;
-    visitUrl(`bedazzle.php?action=peel&slot=${i}&pwd`);
-    visitUrl(`bedazzle.php?action=stick&slot=${i}&sticker=${toInt(item)}&pwd`);
+    visitUrl(`bedazzle.php?action=peel&slot=${i + 1}&pwd`);
+    visitUrl(
+      `bedazzle.php?action=stick&slot=${i + 1}&sticker=${toInt(item)}&pwd`
+    );
   }
 
   return currentStickers();

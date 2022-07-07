@@ -3,6 +3,7 @@ import {
   equippedItem,
   haveSkill,
   Item,
+  retrieveItem,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -47,7 +48,7 @@ export function foldWeapon(mode: keyof typeof weapons): boolean {
   const currentWep = weapon();
   if (!currentWep) return false;
   if (weapons[mode] === currentWep) return true;
-  visitUrl();
+  visitUrl("bedazzle.php?action=fold&pwd");
   return weapons[mode] === currentWep;
 }
 
@@ -62,6 +63,10 @@ export function currentStickers(): [Item, Item, Item] {
 export function setStickers(
   ...options: [Sticker | null, Sticker | null, Sticker | null]
 ): [Item, Item, Item] {
+  for (const s of options) {
+    if (s) retrieveItem(stickers[s], options.filter((x) => x === s).length);
+  }
+
   visitUrl("bedazzle.php");
   const start = currentStickers();
 

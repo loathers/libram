@@ -1,4 +1,6 @@
 import {
+  todayToString,
+  myName,
   bufferToFile,
   fileToBuffer,
   Item,
@@ -239,6 +241,12 @@ export class Session {
     );
   }
 
+  static getFilepath(filename: string): string {
+    return filename.endsWith(".json")
+      ? filename
+      : `snapshots/${myName()}/${todayToString()}_${filename}.json`;
+  }
+
   /**
    * Export this session to a file in the data/ directory. Conventionally this file should end in ".json"
    * @param filename The file into which to export
@@ -248,7 +256,7 @@ export class Session {
       meat: this.meat,
       items: Object.fromEntries(this.items),
     };
-    bufferToFile(JSON.stringify(val), filename);
+    bufferToFile(JSON.stringify(val), Session.getFilepath(filename));
   }
 
   /**
@@ -257,7 +265,7 @@ export class Session {
    * @returns the session represented by the file
    */
   static fromFile(filename: string): Session {
-    const fileValue = fileToBuffer(filename);
+    const fileValue = fileToBuffer(Session.getFilepath(filename));
     // fileToBuffer returns empty string for files that don't exist
     if (fileValue.length > 0) {
       const val: {

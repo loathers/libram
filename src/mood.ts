@@ -226,7 +226,7 @@ class PotionMoodElement extends MoodElement {
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
       const price = Math.floor(this.maxPricePerTurn * remainingDifference);
-      if (price >= mallPrice(this.potion)) {
+      if (price <= mallPrice(this.potion)) {
         if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }

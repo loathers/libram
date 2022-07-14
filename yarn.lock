@@ -3846,10 +3846,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-kolmafia@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-2.1.3.tgz#623e259e1bf15706c9daa2df5e03514cf0d490f6"
-  integrity sha512-vBK4WaPWJqBswcWEhxXFKuLdnYU5M26nLVZonRD0vtjwogDcHYtO3V2zucFn8a/6t70+4DuVLsmfZdICt7sFPQ==
+kolmafia@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-3.0.0.tgz#bdef466ab32b07544c3693db0ed006937678e0eb"
+  integrity sha512-XZDxo4OlSh1WfaDaxfbVOK+CKXnLsNrHh5fA1/mY20Jn6mry10g9lqvY4FnGeDrr9PnK9PXd70jMFC5k9aMhVQ==
 
 leven@^3.1.0:
   version "3.1.0"

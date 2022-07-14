@@ -17,28 +17,7 @@ import {
   Thrall,
 } from "kolmafia";
 
-function splitByCommasWithEscapes(str: string): string[] {
-  const returnValue = [];
-
-  let ignoreNext = false;
-  let currentString = "";
-  for (const char of str.split("")) {
-    if (char === "\\") {
-      ignoreNext = true;
-    } else {
-      if (char == "," && !ignoreNext) {
-        returnValue.push(currentString);
-        currentString = "";
-      } else {
-        currentString += char;
-      }
-      ignoreNext = false;
-    }
-  }
-  returnValue.push(currentString.trim());
-
-  return returnValue;
-}
+import { splitByCommasWithEscapes } from "./utils";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,

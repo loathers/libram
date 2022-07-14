@@ -138,12 +138,13 @@ export function splitByCommasWithEscapes(str: string): string[] {
 
   let ignoreNext = false;
   let currentString = "";
+
   for (const char of str.split("")) {
     if (char === "\\") {
       ignoreNext = true;
     } else {
       if (char == "," && !ignoreNext) {
-        returnValue.push(currentString);
+        returnValue.push(currentString.trim());
         currentString = "";
       } else {
         currentString += char;

@@ -3847,9 +3847,9 @@ kleur@^3.0.3:
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
 kolmafia@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-3.0.0.tgz#bdef466ab32b07544c3693db0ed006937678e0eb"
-  integrity sha512-XZDxo4OlSh1WfaDaxfbVOK+CKXnLsNrHh5fA1/mY20Jn6mry10g9lqvY4FnGeDrr9PnK9PXd70jMFC5k9aMhVQ==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-3.0.1.tgz#7798aabe104e9002edc7707b1ea7cbd5ac6640be"
+  integrity sha512-rmBJUqMwriVKa6UBRXS3w03uQNGrBUfWSQ5gxxAuVxMf9+sWHOKdivIdy1zJHllxl+LIxzyNBTOJiaLOQ/qqvQ==
 
 leven@^3.1.0:
   version "3.1.0"

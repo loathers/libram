@@ -44,6 +44,7 @@ import {
   Servant,
   Skill,
   spleenLimit,
+  Stat,
   Thrall,
   toItem,
   toSkill,
@@ -53,11 +54,13 @@ import {
 import { get } from "./property";
 import {
   $class,
+  $element,
   $familiar,
   $item,
   $items,
   $monsters,
   $skill,
+  $stat,
 } from "./template-string";
 import { chunk } from "./utils";
 
@@ -723,4 +726,79 @@ export function damageTakenByElement(
   if (baseDamage < 0) return 1;
   const res = elementalResistance(element);
   return Math.max(1, Math.ceil(baseDamage - (baseDamage * res) / 100));
+}
+
+const telescopeStats = new Map([
+  [
+    "standing around flexing their muscles and using grip exercisers",
+    $stat`Muscle`,
+  ],
+  [
+    "sitting around playing chess and solving complicated-looking logic puzzles",
+    $stat`Mysticality`,
+  ],
+  ["all wearing sunglasses and dancing", $stat`Moxie`],
+]);
+
+const telescopeElements = new Map([
+  ["people, all of whom appear to be on fire", $element`hot`],
+  ["people, surrounded by a cloud of eldritch mist", $element`spooky`],
+  ["greasy-looking people furtively skulking around", $element`sleaze`],
+  ["people, surrounded by garbage and clouds of flies", $element`stench`],
+  ["people, clustered around a group of igloos", $element`cold`],
+]);
+
+const hedgeTrap1 = new Map([
+  ["smoldering bushes on the outskirts of a hedge maze", $element`hot`],
+  [
+    "creepy-looking black bushes on the outskirts of a hedge maze",
+    $element`spooky`,
+  ],
+  ["purplish, greasy-looking hedges", $element`sleaze`],
+  [
+    "nasty-looking, dripping green bushes on the outskirts of a hedge maze",
+    $element`stench`,
+  ],
+  ["frost-rimed bushes on the outskirts of a hedge maze", $element`cold`],
+]);
+
+const hedgeTrap2 = new Map([
+  ["smoke rising from deeper within the maze", $element`hot`],
+  [
+    "a miasma of eldritch vapors rising from deeper within the maze",
+    $element`spooky`,
+  ],
+  [
+    "a greasy purple cloud hanging over the center of the maze",
+    $element`sleaze`,
+  ],
+  ["a cloud of green gas hovering over the maze", $element`stench`],
+  ["wintry mists rising from deeper within the maze", $element`cold`],
+]);
+
+const hedgeTrap3 = new Map([
+  ["with lava slowly oozing out of it", $element`hot`],
+  ["surrounded by creepy black mist", $element`spooky`],
+  ["that occasionally vomits out a greasy ball of hair", $element`sleaze`],
+  ["disgorging a really surprising amount of sewage", $element`stench`],
+  ["occasionally disgorging a bunch of ice cubes", $element`cold`],
+]);
+
+/**
+ * @returns An object with all information the telescope gives you about the sorceress's contests and maze
+ */
+export function telescope(): {
+  statContest?: Stat;
+  elementContest?: Element;
+  hedge1?: Element;
+  hedge2?: Element;
+  hedge3?: Element;
+} {
+  return {
+    statContest: telescopeStats.get(get("telescope1")),
+    elementContest: telescopeElements.get(get("telescope2")),
+    hedge1: hedgeTrap1.get(get("telescope3")),
+    hedge2: hedgeTrap2.get(get("telescope4")),
+    hedge3: hedgeTrap3.get(get("telescope5")),
+  };
 }

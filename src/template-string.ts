@@ -17,12 +17,35 @@ import {
   Thrall,
 } from "kolmafia";
 
+function splitByCommasWithEscapes(str: string): string[] {
+  const returnValue = [];
+
+  let ignoreNext = false;
+  let currentString = "";
+  for (const char of str.split("")) {
+    if (char === "\\") {
+      ignoreNext = true;
+    } else {
+      if (char == "," && !ignoreNext) {
+        returnValue.push(currentString);
+        currentString = "";
+      } else {
+        currentString += char;
+      }
+      ignoreNext = false;
+    }
+  }
+  returnValue.push(currentString.trim());
+
+  return returnValue;
+}
+
 const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]
 ) =>
-  literals.reduce(
-    (acc, literal, i) => acc + literal + (placeholders[i] || ""),
+  literals.raw.reduce(
+    (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
     ""
   );
 
@@ -45,7 +68,7 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(input.split(/\s*,\s*/));
+    return Type.get<I>(splitByCommasWithEscapes(input));
   };
 
 /**

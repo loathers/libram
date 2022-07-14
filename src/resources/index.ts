@@ -5,6 +5,7 @@ import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as StompingBoots from "./2011/StompingBoots";
 import * as RainDoh from "./2012/RainDoh";
 import * as FloristFriar from "./2013/Florist";
+import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
@@ -14,6 +15,7 @@ import * as Witchess from "./2016/Witchess";
 import * as AsdonMartin from "./2017/AsdonMartin";
 import * as MummingTrunk from "./2017/MummingTrunk";
 import * as Pantogram from "./2017/Pantogram";
+import * as Robortender from "./2017/Robortender";
 import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as SongBoom from "./2018/SongBoom";
@@ -24,6 +26,8 @@ import * as RetroCape from "./2020/RetroCape";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
+import * as GreyGoose from "./2022/GreyGoose";
+import * as JuneCleaver from "./2022/JuneCleaver";
 
 export {
   AsdonMartin,
@@ -31,12 +35,15 @@ export {
   BeachComb,
   ChateauMantegna,
   CombatLoversLocket,
+  CrimboShrub,
   CrownOfThrones,
   CrystalBall,
   DaylightShavings,
   DNALab,
   FloristFriar,
+  GreyGoose,
   Guzzlr,
+  JuneCleaver,
   Latte,
   MayoClinic,
   MummingTrunk,
@@ -44,6 +51,7 @@ export {
   Pantogram,
   RainDoh,
   RetroCape,
+  Robortender,
   Snapper,
   SongBoom,
   SourceTerminal,

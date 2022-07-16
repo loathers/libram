@@ -1,6 +1,6 @@
 import { cliExecute, Item, toInt, visitUrl } from "kolmafia";
 import { get } from "../../property";
-import { $item, $items } from "../../template-string";
+import { $item } from "../../template-string";
 
 export function have(): boolean {
   return get("spacegateAlways") || get("_spacegateToday");
@@ -52,17 +52,16 @@ export function murderBots() {
 }
 
 export function hazardEquipment(hazards: string): Item[] {
-  const equipment: Item[] = $items`none`;
-  if (hazards.includes("toxic atmosphere"))
-    equipment.push($item`filter helmet`);
-  if (hazards.includes("high gravity"))
-    equipment.push($item`exo-servo leg braces`);
-  if (hazards.includes("irradiated")) equipment.push($item`rad cloak`);
-  if (hazards.includes("magnetic storms"))
-    equipment.push($item`gate transceiver`);
-  if (hazards.includes("high winds"))
-    equipment.push($item`high-friction boots`);
-  return equipment.slice(1);
+  const hazardEquipment = {
+    "toxic atmosphere": $item`filter helmet`,
+    "high gravity": $item`exo-servo leg braces`,
+    irradiated: $item`rad cloak`,
+    "magnetic storms": $item`gate transceiver`,
+    "high winds": $item`high-friction boots`,
+  };
+  return Object.entries(hazardEquipment)
+    .filter(([clue]) => hazards.includes(clue))
+    .map(([, item]) => item);
 }
 
 export function getHazardEquipment(): void {

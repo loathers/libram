@@ -143,6 +143,10 @@ export function getVaccine(choice: Vaccine): void {
 }
 
 export function dial(address: string): void {
+  if (!have() || dialled()) {
+    //cannot dial if we already have or don't own it.
+    return;
+  }
   if (!address.match(`^[[alpha]]+$`) || address.length !== 7) {
     throw "Invalid Spacegate Address - must be exactly 7 alphabetic characters";
   } else {

@@ -1,4 +1,4 @@
-import { cliExecute, Item, visitUrl } from "kolmafia";
+import { cliExecute, Item, toInt, visitUrl } from "kolmafia";
 import { get } from "../../property";
 import { $item, $items } from "../../template-string";
 
@@ -6,12 +6,12 @@ export function have(): boolean {
   return get("spacegateAlways") || get("_spacegateToday");
 }
 
-export function checkStatus(): void {
+export function updateStatus(): void {
   visitUrl("place.php?whichplace=spacegate&action=sg_Terminal");
 }
 
 export function dialled(): boolean {
-  checkStatus();
+  updateStatus();
   return get("_spacegateCoordinates") !== "";
 }
 
@@ -51,7 +51,7 @@ export function murderBots() {
   return get("_spacegateMurderbot");
 }
 
-export function hazardEquipment(hazards: string): Item | Item[] {
+export function hazardEquipment(hazards: string): Item[] {
   const equipment: Item[] = $items`none`;
   if (hazards.includes("toxic atmosphere"))
     equipment.push($item`filter helmet`);
@@ -62,53 +62,17 @@ export function hazardEquipment(hazards: string): Item | Item[] {
     equipment.push($item`gate transceiver`);
   if (hazards.includes("high winds"))
     equipment.push($item`high-friction boots`);
-  if (equipment.length === 2) {
-    return equipment[1];
-  } else {
-    return equipment;
-  }
+  return equipment.slice(1);
 }
 
 export function getHazardEquipment(): void {
   const equipment = hazardEquipment(hazards());
 
-  if (Array.isArray(equipment)) {
-    equipment.forEach((equip) => {
-      const num = () => {
-        switch (equip) {
-          case $item`filter helmet`:
-            return 1;
-          case $item`exo-servo leg braces`:
-            return 2;
-          case $item`rad cloak`:
-            return 3;
-          case $item`gate transceiver`:
-            return 4;
-          case $item`high-friction boots`:
-            return 5;
-        }
-        visitUrl("place.php?whichplace=spacegate&action=sg_requisition");
-        visitUrl(`choice.php?whichchoice=1233&option=${num}`);
-      };
-    });
-  } else {
-    const num = () => {
-      switch (equipment) {
-        case $item`filter helmet`:
-          return 1;
-        case $item`exo-servo leg braces`:
-          return 2;
-        case $item`rad cloak`:
-          return 3;
-        case $item`gate transceiver`:
-          return 4;
-        case $item`high-friction boots`:
-          return 5;
-      }
-    };
+  equipment.forEach((equip) => {
+    const num = toInt(equip) - 9404; //Equipment items are 9405 - 9409,
     visitUrl("place.php?whichplace=spacegate&action=sg_requisition");
     visitUrl(`choice.php?whichchoice=1233&option=${num}`);
-  }
+  });
 }
 
 type Vaccine =

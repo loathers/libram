@@ -53,9 +53,9 @@ export class Path {
 
 export const Paths = {
   Unrestricted: new Path("Unrestricted", 0),
-  Boozetafarian: new Path("Boozetafarian", 1, false, true, true, true, 0),
-  Teetotaler: new Path("Teetotaler", 2, false, true, true, true, 15, 0),
-  Oxygenarian: new Path("Oxygenarian", 3, false, true, true, true, 0, 0),
+  Boozetafarian: new Path("Boozetafarian", 1, true, true, true, true, 0),
+  Teetotaler: new Path("Teetotaler", 2, true, true, true, true, 15, 0),
+  Oxygenarian: new Path("Oxygenarian", 3, true, true, true, true, 0, 0),
   BeesHateYou: new Path("Bees Hate You", 4),
   WayOfTheSurprisingFist: new Path("Way of the Surprising Fist", 6),
   Trendy: new Path("Trendy", 6),

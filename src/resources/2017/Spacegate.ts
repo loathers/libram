@@ -86,19 +86,15 @@ export function getVaccine(choice: Vaccine): void {
   if (get("_spacegateVaccine")) {
     return;
   }
-  const num = () => {
-    switch (choice) {
-      case "Rainbow":
-      case "Elemental Resistance":
-        return 1;
-      case "Broad-Spectrum":
-      case "Stats":
-        return 2;
-      case "Emotional":
-      case "Monster Level":
-        return 3;
-    }
+  const nums = {
+    Rainbow: 1,
+    "Elemental Resistance": 1,
+    "Broad-Spectrum": 2,
+    Stats: 2,
+    Emotional: 3,
+    "Monster Level": 3,
   };
+  const num = nums[choice];
   if (!get(`spacegateVaccine${num}`)) {
     throw "You don't appear to have that Vaccine Unlocked!";
   }

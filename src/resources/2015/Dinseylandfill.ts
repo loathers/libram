@@ -1,17 +1,17 @@
 import {
   abort,
-  buy,
+  availableAmount,
   containsText,
   indexOf,
   Item,
   Location,
-  mallPrice,
+  myAscensions,
   retrieveItem,
   runChoice,
   visitUrl,
 } from "kolmafia";
 import { get, set } from "../../property";
-import { $item, $location } from "../../template-string";
+import { $item, $items, $location } from "../../template-string";
 
 export function have(): boolean {
   return get("stenchAirportAlways");
@@ -260,7 +260,7 @@ export function hasActiveQuest(): boolean {
 
 export function getQuest(): void {
   const page: string = visitUrl(dinseyKiosk);
-  let choice: number = 6;
+  let choice = 6;
   const at: number = indexOf(page, "Available Assignments");
   if (at == -1) {
     return;
@@ -307,4 +307,14 @@ export function turnInQuest(): void {
     visitUrl(dinseyKiosk);
     runChoice(3);
   }
+}
+
+export function canFightWart(): boolean {
+  const keycards = $items`keycard α, keycard β, keycard γ, keycard δ`;
+  for (const card of keycards) {
+    if (availableAmount(card) === 0) {
+      return false;
+    }
+  }
+  return get("lastWartDinseyDefeated") === myAscensions() ? false : true;
 }

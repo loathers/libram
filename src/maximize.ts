@@ -532,11 +532,11 @@ export class Requirement {
         forceEquip: [
           ...(optionsA.forceEquip ?? []),
           ...(other.maximizeOptions.forceEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.preventEquip?.includes(x)),
         preventEquip: [
           ...(optionsA.preventEquip ?? []),
           ...(other.maximizeOptions.preventEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.forceEquip?.includes(x)),
         bonusEquip: new Map([
           ...(optionsA.bonusEquip?.entries() ?? []),
           ...(optionsB.bonusEquip?.entries() ?? []),

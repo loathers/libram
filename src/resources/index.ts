@@ -5,6 +5,7 @@ import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as StompingBoots from "./2011/StompingBoots";
 import * as RainDoh from "./2012/RainDoh";
 import * as FloristFriar from "./2013/Florist";
+import * as ConspiracyIsland from "./2014/ConspiracyIsland";
 import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
@@ -35,6 +36,7 @@ export {
   BeachComb,
   ChateauMantegna,
   CombatLoversLocket,
+  ConspiracyIsland,
   CrimboShrub,
   CrownOfThrones,
   CrystalBall,

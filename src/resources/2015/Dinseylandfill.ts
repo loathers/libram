@@ -21,7 +21,7 @@ export function available(): boolean {
   return have() || get("_stenchAirportToday");
 }
 
-class dinseyQuestData {
+class questData {
   name: string;
   priority: number;
   questNameKiosk: string;
@@ -71,19 +71,15 @@ class dinseyQuestData {
   }
 
   currentQuest(): boolean {
-    if (get(this.questStateProperty) !== "unstarted") {
-      return true;
-    } else {
-      return false;
-    }
+    return get(this.questStateProperty) !== "unstarted";
   }
 }
 
 const questLog = "questlog.php?which=1";
 const dinseyKiosk = "place.php?whichplace=airport_stench&action=airport3_kiosk";
 
-const dinseyQuests = [
-  new dinseyQuestData(
+export const quests = [
+  new questData(
     "lube",
     0,
     "Track Maintenance",
@@ -95,7 +91,7 @@ const dinseyQuests = [
     $item`lube-shoes`,
     $location`Barf Mountain`
   ),
-  new dinseyQuestData(
+  new questData(
     "fuel",
     1,
     "Electrical Maintenance",
@@ -107,7 +103,7 @@ const dinseyQuests = [
     $item`none`,
     $location`The Toxic Teacups`
   ),
-  new dinseyQuestData(
+  new questData(
     "sexism",
     2,
     "Sexism Reduction",
@@ -119,7 +115,7 @@ const dinseyQuests = [
     $item`none`,
     $location`Pirates of the Garbage Barges`
   ),
-  new dinseyQuestData(
+  new questData(
     "racism",
     3,
     "Racism Reduction",
@@ -131,7 +127,7 @@ const dinseyQuests = [
     $item`none`,
     $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
   ),
-  new dinseyQuestData(
+  new questData(
     "fun",
     4,
     "Compulsory Fun",
@@ -143,7 +139,7 @@ const dinseyQuests = [
     $item`Dinsey mascot mask`,
     $location`The Toxic Teacups`
   ),
-  new dinseyQuestData(
+  new questData(
     "trash",
     5,
     "Waterway Debris Removal",
@@ -155,7 +151,7 @@ const dinseyQuests = [
     $item`trash net`,
     $location`Pirates of the Garbage Barges`
   ),
-  new dinseyQuestData(
+  new questData(
     "bear",
     6,
     "Bear Removal",
@@ -167,7 +163,7 @@ const dinseyQuests = [
     $item`none`,
     $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
   ),
-  new dinseyQuestData(
+  new questData(
     "food",
     7,
     "Guest Sustenance Assurance",
@@ -194,8 +190,7 @@ export function disposeGarbage(): void {
 }
 
 export function hasQuest(): boolean {
-  for (let i = 0; i < dinseyQuests.length; i++) {
-    const quest = dinseyQuests[i];
+  for (const quest of quests) {
     if (get(quest.questStateProperty, "") !== "unstarted") {
       return true;
     }
@@ -204,15 +199,14 @@ export function hasQuest(): boolean {
   return false;
 }
 
-export function activeQuest(): dinseyQuestData {
-  for (let i = 0; i < dinseyQuests.length; i++) {
-    const quest = dinseyQuests[i];
+export function activeQuest(): questData {
+  for (const quest of quests) {
     if (get(quest.questStateProperty) !== "unstarted") {
       return quest;
     }
   }
 
-  return new dinseyQuestData(
+  return new questData(
     "",
     -1,
     "",
@@ -258,7 +252,7 @@ export function hasActiveQuest(): boolean {
   return hasQuest() && !questComplete();
 }
 
-export function getQuest(): void {
+export function acceptQuest(): void {
   const page: string = visitUrl(dinseyKiosk);
   let choice = 6;
   const at: number = indexOf(page, "Available Assignments");
@@ -272,17 +266,15 @@ export function getQuest(): void {
     `Sexism Reduction`,
     `Racism Reduction`,
     `Compulsory Fun`,
-    `Waterway Debris Removal`,
     `Bear Removal`,
+    `Waterway Debris Removal`,
     `Guest Sustenance Assurance`,
   ];
 
-  for (let i = 0; i < 4; i++) {
-    const job1 = jobs[i];
+  for (const job1 of jobs) {
     const job1At: number = indexOf(page, job1, at);
     if (job1At != -1) {
-      for (let j = i + 1; j < jobs.length; j++) {
-        const job2 = jobs[j];
+      for (const job2 of jobs) {
         const job2At: number = indexOf(page, job2, at);
         if (job2At != -1) {
           if (job1At < job2At) {

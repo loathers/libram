@@ -1,6 +1,13 @@
-import { canInteract, Item, Location, runChoice, visitUrl } from "kolmafia";
+import {
+  canInteract,
+  Item,
+  Location,
+  Monster,
+  runChoice,
+  visitUrl,
+} from "kolmafia";
 import { get } from "../../property";
-import { $item, $location } from "../../template-string";
+import { $item, $location, $monster } from "../../template-string";
 
 const radio = "place.php?whichplace=airport_spooky&action=airport2_radio";
 const omegapanel =
@@ -10,7 +17,7 @@ export function have(): boolean {
   return get("spookyAirportAlways");
 }
 
-class conspiracyQuestData {
+class questData {
   name: string;
   reward: number;
   accept: boolean;
@@ -67,16 +74,12 @@ class conspiracyQuestData {
   }
 
   currentQuest(): boolean {
-    if (get(this.questStateProperty) !== "unstarted") {
-      return true;
-    } else {
-      return false;
-    }
+    return get(this.questStateProperty) !== "unstarted";
   }
 }
 
-const conspiracyQuests = [
-  new conspiracyQuestData(
+export const quests = [
+  new questData(
     "Serum",
     30,
     true,
@@ -90,7 +93,7 @@ const conspiracyQuests = [
     $item`none`,
     "10 item, 10 pickpocket chance"
   ),
-  new conspiracyQuestData(
+  new questData(
     "Clipper",
     20,
     true,
@@ -104,7 +107,7 @@ const conspiracyQuests = [
     $item`none`,
     ""
   ),
-  new conspiracyQuestData(
+  new questData(
     "EVE",
     30,
     true,
@@ -118,7 +121,7 @@ const conspiracyQuests = [
     $item`none`,
     ""
   ),
-  new conspiracyQuestData(
+  new questData(
     "FakeMedium",
     30,
     true,
@@ -132,7 +135,7 @@ const conspiracyQuests = [
     $item`none`,
     ""
   ),
-  new conspiracyQuestData(
+  new questData(
     "Gore",
     20,
     true,
@@ -146,7 +149,7 @@ const conspiracyQuests = [
     $item`gore bucket`,
     "10 meat"
   ),
-  new conspiracyQuestData(
+  new questData(
     "JunglePun",
     20,
     false,
@@ -160,7 +163,7 @@ const conspiracyQuests = [
     $item`encrypted micro-cassette recorder`,
     "mys"
   ),
-  new conspiracyQuestData(
+  new questData(
     "OutOfOrder",
     30,
     true,
@@ -174,7 +177,7 @@ const conspiracyQuests = [
     $item`GPS-tracking wristwatch`,
     "10 Initiative"
   ),
-  new conspiracyQuestData(
+  new questData(
     "Smokes",
     30,
     true,
@@ -195,8 +198,7 @@ export function available(): boolean {
 }
 
 export function completedOneTimeQuests(): boolean {
-  for (const i in conspiracyQuests) {
-    const quest = conspiracyQuests[i];
+  for (const quest of quests) {
     if (quest.reward === 30 && get(quest.questStateProperty) !== "finished") {
       return false;
     }
@@ -206,8 +208,7 @@ export function completedOneTimeQuests(): boolean {
 }
 
 export function haveQuest(): boolean {
-  for (const i in conspiracyQuests) {
-    const quest = conspiracyQuests[i];
+  for (const quest of quests) {
     if (get(quest.questStateProperty) !== "") {
       return true;
     }
@@ -216,8 +217,7 @@ export function haveQuest(): boolean {
 }
 
 export function activeQuest(): string {
-  for (const i in conspiracyQuests) {
-    const quest = conspiracyQuests[i];
+  for (const quest of quests) {
     if (
       get(quest.questStateProperty) !== "unstarted" &&
       get(quest.questStateProperty) !== "finished"
@@ -228,7 +228,7 @@ export function activeQuest(): string {
   return "";
 }
 
-export function getQuest(): void {
+export function acceptQuest(): void {
   if (get(`_questESp`) === "" && !haveQuest() && canInteract() && available()) {
     visitUrl(radio);
     runChoice(1);
@@ -237,8 +237,7 @@ export function getQuest(): void {
 
 export function questComplete(): boolean {
   if (!haveQuest()) return false;
-  for (const i in conspiracyQuests) {
-    const quest = conspiracyQuests[i];
+  for (const quest of quests) {
     if (
       quest.questStateProperty ===
       (quest.requiredItem === $item`none` ? "step1" : "step2")
@@ -260,9 +259,34 @@ export function turnInQuest(): void {
   }
 }
 
-export function activateProtocol(protocol: number) {
+export const protocols = new Map<string, [Monster, Item, number]>([
+  ["Juan", [$monster`government scientist`, $item`none`, 1]],
+  ["3.14", [$monster`government scientist`, $item`battery-powered drill`, 2]],
+  ["D-R.00G", [$monster`lab monkey`, $item`none`, 3]],
+  ["B.A.R.F.", [$monster`lab monkey`, $item`monkey barf`, 4]],
+  ["VO-5", [$monster`creepy little girl`, $item`none`, 5]],
+  ["R-XPN", [$monster`creepy little girl`, $item`cuddly teddy bear`, 6]],
+  ["1862", [$monster`super-sized Cola Wars soldier`, $item`none`, 7]],
+  [
+    "1912",
+    [$monster`super-sized Cola Wars soldier`, $item`khaki duffel bag`, 8],
+  ],
+  ["0-0Z-E", [$monster`none`, $item`airborne mutagen`, 9]],
+  ["Ω", [$monster`none`, $item`none`, 10]],
+]);
+
+export function activateProtocol(protocol: number | string) {
   visitUrl(omegapanel);
-  runChoice(protocol);
+  if (typeof protocol === "number") {
+    runChoice(protocol);
+  } else {
+    for (const button of protocols) {
+      const name = button[0];
+      if (name === protocol) {
+        runChoice(button[1][2]);
+      }
+    }
+  }
 }
 
 export function activateOmega(): void {
@@ -279,7 +303,12 @@ export function activateOmega(): void {
     }
   }
 
-  if (get("controlPanelOmega") >= 100 && completedOneTimeQuests()) {
+  if (
+    get("controlPanelOmega") >= 100 &&
+    completedOneTimeQuests() &&
+    !haveQuest()
+  ) {
+    //Omega Button cannot be pushed with an active radio quest
     visitUrl(omegapanel);
     runChoice(10);
   }

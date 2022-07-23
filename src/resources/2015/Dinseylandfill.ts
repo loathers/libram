@@ -1,17 +1,17 @@
 import {
   abort,
-  availableAmount,
-  containsText,
   indexOf,
   Item,
   Location,
+  myAdventures,
   myAscensions,
   retrieveItem,
   runChoice,
   visitUrl,
 } from "kolmafia";
+import { getRemainingLiver, have as haveItem } from "../../lib";
 import { get, set } from "../../property";
-import { $item, $items, $location } from "../../template-string";
+import { $item, $location } from "../../template-string";
 
 export function have(): boolean {
   return get("stenchAirportAlways");
@@ -76,12 +76,13 @@ class questData {
 }
 
 const questLog = "questlog.php?which=1";
-const dinseyKiosk = "place.php?whichplace=airport_stench&action=airport3_kiosk";
+const kioskUrl = "place.php?whichplace=airport_stench&action=airport3_kiosk";
+const maintUrl = "place.php?whichplace=airport_stench&action=airport3_tunnels";
 
 export const quests = [
   new questData(
     "lube",
-    0,
+    1,
     "Track Maintenance",
     "Super Luber",
     "questEStSuperLuber",
@@ -93,7 +94,7 @@ export const quests = [
   ),
   new questData(
     "fuel",
-    1,
+    0,
     "Electrical Maintenance",
     "Give Me Fuel",
     "questEStGiveMeFuel",
@@ -141,7 +142,7 @@ export const quests = [
   ),
   new questData(
     "trash",
-    5,
+    6,
     "Waterway Debris Removal",
     "Teach a Man to Fish Trash",
     "questEStFishTrash",
@@ -153,7 +154,7 @@ export const quests = [
   ),
   new questData(
     "bear",
-    6,
+    5,
     "Bear Removal",
     "Nasty, Nasty Bears",
     "questEStNastyBears",
@@ -178,20 +179,15 @@ export const quests = [
 ];
 
 export function disposeGarbage(): void {
-  if (
-    !get("_dinseyGarbageDisposed") &&
-    retrieveItem(1, $item`bag of park garbage`)
-  ) {
-    visitUrl("place.php?whichplace=airport_stench&action=airport3_tunnels");
+  if (!get("_dinseyGarbageDisposed") && haveItem($item`bag of park garbage`)) {
+    visitUrl(maintUrl);
     runChoice(6);
-    if (!get("_dinseyGarbageDisposed"))
-      abort("We failed to dispose garbage somehow?");
   }
 }
 
 export function hasQuest(): boolean {
   for (const quest of quests) {
-    if (get(quest.questStateProperty, "") !== "unstarted") {
+    if (quest.currentQuest()) {
       return true;
     }
   }
@@ -201,7 +197,7 @@ export function hasQuest(): boolean {
 
 export function activeQuest(): questData {
   for (const quest of quests) {
-    if (get(quest.questStateProperty) !== "unstarted") {
+    if (quest.currentQuest()) {
       return quest;
     }
   }
@@ -221,39 +217,16 @@ export function activeQuest(): questData {
 }
 
 export function questComplete(): boolean {
-  if (hasQuest()) {
-    const quest = activeQuest();
-    switch (quest.name) {
-      case "fuel":
-        return retrieveItem(20, $item`toxic globule`);
-      case "lube":
-        return containsText(visitUrl(questLog), "<b>Kiosk</b>");
-      case "trash":
-        return (
-          get(quest.questProgressProperty, 100) <= quest.questProgressLimit &&
-          containsText(visitUrl(questLog), "<b>Kiosk</b>")
-        );
-      case "fun":
-      case "sexism":
-      case "racism":
-        return (
-          get(quest.questProgressProperty, 0) >= quest.questProgressLimit &&
-          containsText(visitUrl(questLog), "<b>Kiosk</b>")
-        );
-      default:
-        return get(quest.questProgressProperty, 0) >= quest.questProgressLimit;
-    }
-  } else {
-    return false;
-  }
+  const quest = activeQuest();
+  return hasQuest() && get(quest.questStateProperty) === "finished";
 }
 
 export function hasActiveQuest(): boolean {
   return hasQuest() && !questComplete();
 }
 
-export function acceptQuest(): void {
-  const page: string = visitUrl(dinseyKiosk);
+export function acceptQuest(priority: number | string): void {
+  const page: string = visitUrl(kioskUrl);
   let choice = 6;
   const at: number = indexOf(page, "Available Assignments");
   if (at == -1) {
@@ -270,8 +243,19 @@ export function acceptQuest(): void {
     `Waterway Debris Removal`,
     `Guest Sustenance Assurance`,
   ];
+  let prioritynum = 7;
+  if (typeof priority === "string") {
+    for (const quest of quests) {
+      if (quest.name === priority) {
+        prioritynum = quest.priority;
+        break;
+      }
+    }
+  } else {
+    prioritynum = priority;
+  }
 
-  for (const job1 of jobs) {
+  for (const job1 of jobs.slice(0, prioritynum)) {
     const job1At: number = indexOf(page, job1, at);
     if (job1At != -1) {
       for (const job2 of jobs) {
@@ -296,17 +280,40 @@ export function turnInQuest(): void {
   if (questComplete()) {
     if (activeQuest().name === "racism")
       set("questEStSocialJusticeI", "unstarted");
-    visitUrl(dinseyKiosk);
+    visitUrl(kioskUrl);
     runChoice(3);
   }
 }
 
-export function canFightWart(): boolean {
-  const keycards = $items`keycard α, keycard β, keycard γ, keycard δ`;
-  for (const card of keycards) {
-    if (availableAmount(card) === 0) {
-      return false;
-    }
-  }
-  return get("lastWartDinseyDefeated") === myAscensions() ? false : true;
+export const keyCardsLocations = new Map<Item, Location>([
+  [$item`keycard α`, $location`Barf Mountain`],
+  [$item`keycard β`, $location`Pirates of the Garbage Barges`],
+  [$item`keycard γ`, $location`The Toxic Teacups`],
+  [
+    $item`keycard δ`,
+    $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`,
+  ],
+]);
+
+export function canFightWartDinsey(): boolean {
+  return (
+    Array.from(keyCardsLocations.keys()).every((keycard) =>
+      haveItem(keycard)
+    ) &&
+    !foughtWartDinseyThisLife() &&
+    getRemainingLiver() >= 0 &&
+    myAdventures() > 0
+  );
+}
+
+export function coasterNextTurn(): boolean {
+  return get("dinseyRollercoasterNext");
+}
+
+export function foughtWartDinseyThisLife(): boolean {
+  return get("lastWartDinseyDefeated") === myAscensions();
+}
+
+export function hasDisposedGarbage(): boolean {
+  return get("_dinseyGarbageDisposed");
 }

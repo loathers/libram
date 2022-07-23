@@ -1,11 +1,9 @@
 import {
-  abort,
   indexOf,
   Item,
   Location,
   myAdventures,
   myAscensions,
-  retrieveItem,
   runChoice,
   visitUrl,
 } from "kolmafia";
@@ -75,7 +73,6 @@ class questData {
   }
 }
 
-const questLog = "questlog.php?which=1";
 const kioskUrl = "place.php?whichplace=airport_stench&action=airport3_kiosk";
 const maintUrl = "place.php?whichplace=airport_stench&action=airport3_tunnels";
 

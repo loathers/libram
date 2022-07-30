@@ -86,8 +86,9 @@ export function decorate(
   if (!have()) return false;
   if (get("_shrubDecorated"))
     return isDecoratedWith(topper, lights, garland, gifts);
-  if (!have_($item`box of old Crimbo decorations`))
+  if (!have_($item`box of old Crimbo decorations`)) {
     useFamiliar($familiar`Crimbo Shrub`);
+  }
 
   visitUrl(
     `inv_use.php?pwd=&which=99&whichitem=${toInt(

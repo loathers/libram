@@ -329,7 +329,7 @@ class DietPlanner<T> {
     if (
       this.seasoning &&
       itemType(menuItem.item) === "food" &&
-      this.mpa > mallPrice($item`Special Seasoning`)
+      this.mpa * 0.5 > mallPrice($item`Special Seasoning`)
     ) {
       helpers.push(this.seasoning);
     }

@@ -298,7 +298,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0);
   }
-  if (wanderer == Wanderer.Kramco) {
+  if (wanderer === Wanderer.Kramco) {
     return true;
   }
   if (wanderer === Wanderer.Vote) {

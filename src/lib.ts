@@ -272,7 +272,10 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
  * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
-  return totalTurnsPlayed() % 11 == 1 && get("lastVoteMonsterTurn") < totalTurnsPlayed();
+  return (
+    totalTurnsPlayed() % 11 === 1 &&
+    get("lastVoteMonsterTurn") < totalTurnsPlayed()
+  );
 }
 
 /**

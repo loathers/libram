@@ -272,7 +272,10 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
  * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
-  return totalTurnsPlayed() % 11 == 1;
+  return (
+    totalTurnsPlayed() % 11 === 1 &&
+    get("lastVoteMonsterTurn") < totalTurnsPlayed()
+  );
 }
 
 /**
@@ -295,7 +298,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0);
   }
-  if (wanderer == Wanderer.Kramco) {
+  if (wanderer === Wanderer.Kramco) {
     return true;
   }
   if (wanderer === Wanderer.Vote) {

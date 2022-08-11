@@ -82,7 +82,7 @@ function mySessionItemsWrapper(): Map<Item, number> {
  * @param commutative if true use the value of b for any items not in a. if false, ignore values not in a
  * @returns a new map representing the combined inventories
  */
-function inventoryOperation(
+export function inventoryOperation(
   a: Map<Item, number>,
   b: Map<Item, number>,
   op: (aPart: number, bPart: number) => number,
@@ -113,7 +113,7 @@ function inventoryOperation(
  * @member value the numeric value of the full quantity of items (to get value of each item, do value / quantity) (can be negative)
  * @member quantity the number of items for this detail
  */
-interface ItemDetail {
+export interface ItemDetail {
   item: Item;
   value: number;
   quantity: number;
@@ -126,7 +126,7 @@ interface ItemDetail {
  * @member total sum of meat and items
  * @member itemDetails a list of the detailed accounting for each item in this session
  */
-interface ItemResult {
+export interface ItemResult {
   meat: number;
   items: number;
   total: number;

@@ -6,6 +6,7 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
+import { Macro } from "../../combat";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -29,7 +30,7 @@ export const pieces = Monster.get([
   "Witchess Witch",
   "Witchess Ox",
 ]);
-export function fightPiece(piece: Monster): string {
+export function fightPiece(piece: Monster, macro?: Macro): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
@@ -51,5 +52,6 @@ export function fightPiece(piece: Monster): string {
   ) {
     throw new Error("Failed to start fight.");
   }
+  if (macro) return runCombat(macro.toString());
   return runCombat();
 }

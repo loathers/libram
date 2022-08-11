@@ -52,6 +52,5 @@ export function fightPiece(piece: Monster, macro?: Macro): string {
   ) {
     throw new Error("Failed to start fight.");
   }
-  if (macro) return runCombat(macro.toString());
-  return runCombat();
+  return runCombat(macro?.toString());
 }

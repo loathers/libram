@@ -164,10 +164,9 @@ export class Macro {
     const nextStepsStrings = ([] as string[]).concat(
       ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
     );
-    this.components = [
-      ...this.components,
-      ...nextStepsStrings.filter((s) => s.length > 0).map((s) => s + ";"),
-    ];
+    this.components.push(
+      ...nextStepsStrings.filter((s) => s.length > 0).map((s) => s + ";")
+    );
     return this;
   }
 

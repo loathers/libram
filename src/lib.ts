@@ -436,7 +436,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
       result.set($skill`Use the Force`, Monster.get(foe));
     } else if (
       [
-        Item.get("none"),
+        Item.none,
         Item.get(`training scroll:  Snokebomb`),
         Item.get(`tomayohawk-style reflex hammer`),
         null,
@@ -492,15 +492,15 @@ export function canUse(item: Item): boolean {
  */
 export function noneToNull<T>(thing: T): T | null {
   if (thing instanceof Effect) {
-    return thing === Effect.get("none") ? null : thing;
+    return thing === Effect.none ? null : thing;
   }
 
   if (thing instanceof Familiar) {
-    return thing === Familiar.get("none") ? null : thing;
+    return thing === Familiar.none ? null : thing;
   }
 
   if (thing instanceof Item) {
-    return thing === Item.get("none") ? null : thing;
+    return thing === Item.none ? null : thing;
   }
 
   return thing;

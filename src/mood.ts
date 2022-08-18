@@ -376,7 +376,7 @@ export class Mood {
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
-    if (!gainEffect && skill !== $skill`none`) {
+    if (!gainEffect && skill !== $skill.none) {
       this.skill(skill);
     } else {
       this.elements.push(new CustomMoodElement(effect, gainEffect));

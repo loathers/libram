@@ -284,7 +284,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     enthroneFamiliar(
-      entry.rider.get($item`Crown of Thrones`) || $familiar`none`
+      entry.rider.get($item`Crown of Thrones`) || $familiar.none
     );
   }
 
@@ -292,7 +292,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     equippedAmount($item`Buddy Bjorn`) > 0 &&
     entry.rider.get($item`Buddy Bjorn`)
   ) {
-    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
 }
 

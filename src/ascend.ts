@@ -235,7 +235,7 @@ export function ascend(
   moon: MoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined,
-  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort?: boolean }
+  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
 ): void {
   if (!path.classes.includes(playerClass)) {
     throw new AscendError(playerClass);

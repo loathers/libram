@@ -17,6 +17,7 @@ import {
   myMaxmp,
   myMp,
   numericModifier,
+  restoreMp,
   retrieveItem,
   Skill,
   toEffect,
@@ -104,6 +105,7 @@ type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
   reserveMp: number;
+  useNativeRestores: boolean;
 };
 
 abstract class MoodElement {
@@ -149,7 +151,10 @@ class SkillMoodElement extends MoodElement {
       const activeSongs = getActiveSongs();
       for (const song of activeSongs) {
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
-        if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
+        if (!slot || slot.includes(effect)) {
+          cliExecute(`shrug ${song}`);
+          break;
+        }
       }
     }
 
@@ -165,8 +170,12 @@ class SkillMoodElement extends MoodElement {
       } else {
         const cost = mpCost(this.skill);
         maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        if (maxCasts === 0) {
-          mood.moreMp(cost);
+        if (maxCasts < remainingCasts) {
+          const bestMp = Math.min(
+            remainingCasts * mpCost(this.skill),
+            myMaxmp()
+          );
+          mood.moreMp(bestMp);
           maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
         }
       }
@@ -217,7 +226,7 @@ class PotionMoodElement extends MoodElement {
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
       const price = Math.floor(this.maxPricePerTurn * remainingDifference);
-      if (price >= mallPrice(this.potion)) {
+      if (price <= mallPrice(this.potion)) {
         if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }
@@ -304,6 +313,7 @@ export class Mood {
     songSlots: [],
     mpSources: [MagicalSausages.instance, OscusSoda.instance],
     reserveMp: 0,
+    useNativeRestores: false,
   };
 
   /**
@@ -329,11 +339,11 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return (
-      sum(this.options.mpSources, (mpSource: MpSource) =>
-        mpSource.availableMpMin()
-      ) + Math.max(myMp() - this.options.reserveMp, 0)
-    );
+    return this.options.useNativeRestores
+      ? Infinity
+      : sum(this.options.mpSources, (mpSource: MpSource) =>
+          mpSource.availableMpMin()
+        ) + Math.max(myMp() - this.options.reserveMp, 0);
   }
 
   moreMp(minimumTarget: number): void {
@@ -343,6 +353,10 @@ export class Mood {
         mpSource.execute();
         if (myMp() >= minimumTarget) break;
       }
+    }
+
+    if (this.options.useNativeRestores) {
+      restoreMp(minimumTarget);
     }
   }
 

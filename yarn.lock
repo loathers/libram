@@ -2574,10 +2574,10 @@ eslint-plugin-jest@^25.2.3:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-libram@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.11.tgz#8e4e75bcdbd207c86221bc9dc6ade2b80f313c20"
-  integrity sha512-l9H/CH4UhyhwSjdbSUKy4UrvqsSG4U4uJsHU9sMcexoOquLjQmOxhNk3pNDuOnNwa/2GitVVOCehDTlL02HXTA==
+eslint-plugin-libram@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.12.tgz#cd00bd482bff04f86c492c40af36b89d81e592da"
+  integrity sha512-Tdd04lG0XOe+ULdtf1RxzsHFbiegJMyydVFPy0V0/EEThp8tzJtPW5A48UlzNfxZ/lY3/DIX5MI/Cfa+1SEuSQ==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"
@@ -3845,11 +3845,11 @@ kleur@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
-
-kolmafia@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-2.1.2.tgz#6f3a404d630e128a0c8cf0586bd74fe156e5a5ff"
-  integrity sha512-5mbA+Ngs9uBD3jZ0ZYXADpIzJUQLvzDJoKN/RCr4dqI/7dlTDILX8yJqGA3c7pijsqG7LzBojlQopfVdwHdJsw==
+  
+kolmafia@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-3.0.3.tgz#6d7e0a53ecdf2be11f4fd5de4e4b32c0b4cb6992"
+  integrity sha512-AD8emaY/+0HTzsgvcbO5UT35+88BlntOC/49PcKvZZs39UB+pqGOcwyWA48d1NR6Rthwi12zVSLXhHYH/2fk2g==
 
 leven@^3.1.0:
   version "3.1.0"

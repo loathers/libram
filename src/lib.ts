@@ -44,6 +44,7 @@ import {
   Servant,
   Skill,
   spleenLimit,
+  Stat,
   Thrall,
   toItem,
   toSkill,
@@ -53,11 +54,13 @@ import {
 import { get } from "./property";
 import {
   $class,
+  $element,
   $familiar,
   $item,
   $items,
   $monsters,
   $skill,
+  $stat,
 } from "./template-string";
 import { chunk } from "./utils";
 
@@ -269,7 +272,10 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
  * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
-  return totalTurnsPlayed() % 11 == 1;
+  return (
+    totalTurnsPlayed() % 11 === 1 &&
+    get("lastVoteMonsterTurn") < totalTurnsPlayed()
+  );
 }
 
 /**
@@ -292,7 +298,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0);
   }
-  if (wanderer == Wanderer.Kramco) {
+  if (wanderer === Wanderer.Kramco) {
     return true;
   }
   if (wanderer === Wanderer.Vote) {
@@ -577,8 +583,8 @@ export function questStep(questName: string): number {
 }
 
 export class EnsureError extends Error {
-  constructor(cause: Item | Familiar | Effect) {
-    super(`Failed to ensure ${cause.name}!`);
+  constructor(cause: Item | Familiar | Effect, reason?: string) {
+    super(`Failed to ensure ${cause.name}!${reason ? ` ${reason}` : ""}`);
     this.name = "Ensure Error";
   }
 }
@@ -587,9 +593,15 @@ export class EnsureError extends Error {
  * Tries to get an effect using the default method
  * @param ef effect to try to get
  * @param turns turns to aim for; default of 1
+ *
+ * @throws {EnsureError} Throws an error if the effect cannot be guaranteed
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
   if (haveEffect(ef) < turns) {
+    if (ef.default === null) {
+      throw new EnsureError(ef, "No default action");
+    }
+
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
       throw new EnsureError(ef);
     }
@@ -644,13 +656,15 @@ export type EnvironmentType = typeof Environment[keyof typeof Environment];
  * @param familiar The familiar whose leprechaun multiplier you're interested in
  */
 export function findLeprechaunMultiplier(familiar: Familiar): number {
-  if (familiar === $familiar`Mutant Cactus Bud`)
+  if (familiar === $familiar`Mutant Cactus Bud`) {
     return numericModifier(
       familiar,
       "Leprechaun Effectiveness",
       1,
       $item`none`
     );
+  }
+  if (familiar === $familiar`Reanimated Reanimator`) return 0;
   const meatBonus = numericModifier(familiar, "Meat Drop", 1, $item`none`);
   if (meatBonus === 0) return 0;
   return Math.pow(Math.sqrt(meatBonus / 2 + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
@@ -663,8 +677,10 @@ export function findLeprechaunMultiplier(familiar: Familiar): number {
  * @param familiar The familiar whose fairy multiplier you're interested in
  */
 export function findFairyMultiplier(familiar: Familiar): number {
-  if (familiar === $familiar`Mutant Fire Ant`)
+  if (familiar === $familiar`Mutant Fire Ant`) {
     return numericModifier(familiar, "Fairy Effectiveness", 1, $item`none`);
+  }
+  if (familiar === $familiar`Reanimated Reanimator`) return 0;
   const itemBonus = numericModifier(familiar, "Item Drop", 1, $item`none`);
   if (itemBonus === 0) return 0;
   return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
@@ -717,4 +733,79 @@ export function damageTakenByElement(
   if (baseDamage < 0) return 1;
   const res = elementalResistance(element);
   return Math.max(1, Math.ceil(baseDamage - (baseDamage * res) / 100));
+}
+
+const telescopeStats = new Map([
+  [
+    "standing around flexing their muscles and using grip exercisers",
+    $stat`Muscle`,
+  ],
+  [
+    "sitting around playing chess and solving complicated-looking logic puzzles",
+    $stat`Mysticality`,
+  ],
+  ["all wearing sunglasses and dancing", $stat`Moxie`],
+]);
+
+const telescopeElements = new Map([
+  ["people, all of whom appear to be on fire", $element`hot`],
+  ["people, surrounded by a cloud of eldritch mist", $element`spooky`],
+  ["greasy-looking people furtively skulking around", $element`sleaze`],
+  ["people, surrounded by garbage and clouds of flies", $element`stench`],
+  ["people, clustered around a group of igloos", $element`cold`],
+]);
+
+const hedgeTrap1 = new Map([
+  ["smoldering bushes on the outskirts of a hedge maze", $element`hot`],
+  [
+    "creepy-looking black bushes on the outskirts of a hedge maze",
+    $element`spooky`,
+  ],
+  ["purplish, greasy-looking hedges", $element`sleaze`],
+  [
+    "nasty-looking, dripping green bushes on the outskirts of a hedge maze",
+    $element`stench`,
+  ],
+  ["frost-rimed bushes on the outskirts of a hedge maze", $element`cold`],
+]);
+
+const hedgeTrap2 = new Map([
+  ["smoke rising from deeper within the maze", $element`hot`],
+  [
+    "a miasma of eldritch vapors rising from deeper within the maze",
+    $element`spooky`,
+  ],
+  [
+    "a greasy purple cloud hanging over the center of the maze",
+    $element`sleaze`,
+  ],
+  ["a cloud of green gas hovering over the maze", $element`stench`],
+  ["wintry mists rising from deeper within the maze", $element`cold`],
+]);
+
+const hedgeTrap3 = new Map([
+  ["with lava slowly oozing out of it", $element`hot`],
+  ["surrounded by creepy black mist", $element`spooky`],
+  ["that occasionally vomits out a greasy ball of hair", $element`sleaze`],
+  ["disgorging a really surprising amount of sewage", $element`stench`],
+  ["occasionally disgorging a bunch of ice cubes", $element`cold`],
+]);
+
+/**
+ * @returns An object with all information the telescope gives you about the sorceress's contests and maze
+ */
+export function telescope(): {
+  statContest?: Stat;
+  elementContest?: Element;
+  hedge1?: Element;
+  hedge2?: Element;
+  hedge3?: Element;
+} {
+  return {
+    statContest: telescopeStats.get(get("telescope1")),
+    elementContest: telescopeElements.get(get("telescope2")),
+    hedge1: hedgeTrap1.get(get("telescope3")),
+    hedge2: hedgeTrap2.get(get("telescope4")),
+    hedge3: hedgeTrap3.get(get("telescope5")),
+  };
 }

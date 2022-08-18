@@ -17,12 +17,14 @@ import {
   Thrall,
 } from "kolmafia";
 
+import { splitByCommasWithEscapes } from "./utils";
+
 const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]
 ) =>
-  literals.reduce(
-    (acc, literal, i) => acc + literal + (placeholders[i] || ""),
+  literals.raw.reduce(
+    (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
     ""
   );
 
@@ -45,7 +47,7 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(input.split(/\s*,\s*/));
+    return Type.get<I>(splitByCommasWithEscapes(input));
   };
 
 /**

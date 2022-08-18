@@ -116,3 +116,43 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
   }
   return returnValue;
 }
+
+/**
+ * Creates a Type Guard function for a string union type defined via an array as const.
+ */
+export function createStringUnionTypeGuardFunction<T extends string>(
+  array: readonly T[]
+): (x: string) => x is T {
+  return function (x: string): x is T {
+    return (array as readonly string[]).includes(x);
+  };
+}
+
+/**
+ * Splits a string by commas while also respecting escaping commas with a backslash
+ * @param str String to split
+ * @returns List of tokens
+ */
+export function splitByCommasWithEscapes(str: string): string[] {
+  const returnValue = [];
+
+  let ignoreNext = false;
+  let currentString = "";
+
+  for (const char of str.split("")) {
+    if (char === "\\") {
+      ignoreNext = true;
+    } else {
+      if (char == "," && !ignoreNext) {
+        returnValue.push(currentString.trim());
+        currentString = "";
+      } else {
+        currentString += char;
+      }
+      ignoreNext = false;
+    }
+  }
+  returnValue.push(currentString.trim());
+
+  return returnValue;
+}

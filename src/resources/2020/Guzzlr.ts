@@ -1,5 +1,5 @@
 import { Item, Location, mallPrice, runChoice, use, visitUrl } from "kolmafia";
-import { maxBy } from "lodash";
+import maxBy from "lodash/maxBy";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";

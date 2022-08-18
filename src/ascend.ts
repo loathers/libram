@@ -46,7 +46,7 @@ export class AscendError extends Error {
     } else if (cause instanceof Skill) {
       const reason = cause.permable
         ? haveSkill(cause)
-          ? "invalid for mysterious reasons"
+          ? "too karmaically expensive"
           : "not a skill you currently know"
         : "unpermable";
       super(`Skill ${cause} is ${reason}!`);
@@ -154,7 +154,7 @@ export function ascend(
   moon: MoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined,
-  permSkills: Map<Skill, Lifestyle> | undefined = undefined
+  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort?: boolean }
 ): void {
   if (!path.classes.includes(playerClass)) {
     throw new AscendError(playerClass);
@@ -181,8 +181,8 @@ export function ascend(
     throw new AscendError(pet);
   }
 
-  const illegalSkill = permSkills
-    ? Array.from(permSkills.keys()).find(
+  const illegalSkill = permOptions
+    ? Array.from(permOptions.permSkills.keys()).find(
         (skill) => !skill.permable || !haveSkill(skill)
       )
     : undefined;
@@ -205,14 +205,20 @@ export function ascend(
 
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
-  if (permSkills) {
+  if (permOptions) {
     const currentPerms = permedSkills();
     let karma = get("bankedKarma");
-    for (const [skill, prospectivePermLevel] of permSkills.entries()) {
+    for (const [
+      skill,
+      prospectivePermLevel,
+    ] of permOptions.permSkills.entries()) {
       const currentPermLevel = currentPerms.get(skill) ?? Lifestyle.casual;
       if (prospectivePermLevel > currentPermLevel) {
         const expectedKarma = 100 * (prospectivePermLevel - currentPermLevel);
-        if (karma < expectedKarma) continue;
+        if (karma < expectedKarma) {
+          if (!permOptions.neverAbort) throw new AscendError(skill);
+          continue;
+        }
         karma -= expectedKarma;
         const permText =
           prospectivePermLevel === Lifestyle.hardcore ? "hcperm" : "scperm";

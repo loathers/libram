@@ -166,7 +166,7 @@ export class Macro {
     );
     this.components = [
       ...this.components,
-      ...nextStepsStrings.filter((s) => s.length > 0).map((s)=>s+";"),
+      ...nextStepsStrings.filter((s) => s.length > 0).map((s) => s + ";"),
     ];
     return this;
   }

@@ -284,7 +284,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     enthroneFamiliar(
-      entry.rider.get($item`Crown of Thrones`) || $familiar`none`
+      entry.rider.get($item`Crown of Thrones`) || $familiar.none
     );
   }
 
@@ -292,7 +292,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     equippedAmount($item`Buddy Bjorn`) > 0 &&
     entry.rider.get($item`Buddy Bjorn`)
   ) {
-    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
 }
 
@@ -461,15 +461,19 @@ export function maximizeCached(
 
   // Sort each group in objective to ensure consistent ordering in string
   const objective = [
-    ...objectives.sort(),
-    ...forceEquip.map((item) => `equip ${item}`).sort(),
-    ...preventEquip.map((item) => `-equip ${item}`).sort(),
-    ...onlySlot.map((slot) => `${slot}`).sort(),
-    ...preventSlot.map((slot) => `-${slot}`).sort(),
-    ...Array.from(bonusEquip.entries())
-      .filter(([, bonus]) => bonus !== 0)
-      .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
-      .sort(),
+    ...new Set([
+      ...objectives.sort(),
+      ...forceEquip.map((item) => `equip ${item}`).sort(),
+      ...preventEquip.map((item) => `-equip ${item}`).sort(),
+      ...onlySlot.map((slot) => `${slot}`).sort(),
+      ...preventSlot.map((slot) => `-${slot}`).sort(),
+      ...Array.from(bonusEquip.entries())
+        .filter(([, bonus]) => bonus !== 0)
+        .map(
+          ([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`
+        )
+        .sort(),
+    ]),
   ].join(", ");
 
   const cacheEntry = checkCache(objective, fullOptions);

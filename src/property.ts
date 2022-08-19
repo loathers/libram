@@ -96,7 +96,7 @@ const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   createPropertyGetter((value) => {
     if (value === "") return null;
     const v = toType(value);
-    return v === Type.get<T>("none") ? null : v;
+    return v === Type.none ? null : v;
   });
 
 export const getString = createPropertyGetter((value) => value);

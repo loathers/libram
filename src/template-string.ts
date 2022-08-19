@@ -28,13 +28,20 @@ const concatTemplateString = (
     ""
   );
 
-const createSingleConstant =
-  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
-  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+const createSingleConstant = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T)
+) => {
+  const tagFunction = (
+    literals: TemplateStringsArray,
+    ...placeholders: string[]
+  ) => {
     const input = concatTemplateString(literals, ...placeholders);
     type I = InstanceType<typeof Type>;
     return Type.get<I>(input);
   };
+  tagFunction.none = Type.none as T;
+  return tagFunction;
+};
 
 const createPluralConstant =
   <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>

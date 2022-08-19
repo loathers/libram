@@ -99,21 +99,21 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
 /**
  * Returns the tonic item associated with a particular phylum.
  * @param phylum The phylum in question.
- * @returns The tonic item associated with that phylum; returns $item`none` for $phylum`none`.
+ * @returns The tonic item associated with that phylum; returns $item.none for $phylum.none.
  */
 export function getTonic(phylum: Phylum): Item {
-  return phylaTonics.get(phylum) ?? $item`none`;
-  //return $item`none` rather than null because it should never happen.
+  return phylaTonics.get(phylum) ?? $item.none;
+  //return $item.none rather than null because it should never happen.
 }
 
 /**
  * Returns the tonic effect associated with a particular phylum.
  * @param phylum The phylum in question.
- * @returns The tonic effect associated with that phylum; returns $effect`none` for $phylum`none`.
+ * @returns The tonic effect associated with that phylum; returns $effect.none for $phylum.none.
  */
 export function getEffect(phylum: Phylum): Effect {
-  return phylaEffects.get(phylum) ?? $effect`none`;
-  //return $effect`none` rather than null because it should never happen
+  return phylaEffects.get(phylum) ?? $effect.none;
+  //return $effect.none rather than null because it should never happen
 }
 
 /**

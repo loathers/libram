@@ -476,19 +476,32 @@ export function maximizeCached(
     ]),
   ].join(", ");
 
-  const cacheEntry = checkCache(objective, fullOptions);
+  // Items equipped in slots not touched by the maximizer must be in the cache key
+  const untouchedSlots = cachedSlots.filter(
+    (slot: Slot) =>
+      preventSlot.includes(slot) ||
+      (onlySlot.length > 0 && !onlySlot.includes(slot))
+  );
+  const cacheKey = [
+    objective,
+    ...untouchedSlots
+      .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
+      .sort(),
+  ].join("; ");
+
+  const cacheEntry = checkCache(cacheKey, fullOptions);
   if (cacheEntry && !forceUpdate) {
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
-      logger.info(`Equipped cached ${objective}`);
+      logger.info(`Equipped cached ${cacheKey}`);
       return true;
     }
     logger.warning("Maximize cache application failed, maximizing...");
   }
 
   const result = maximize(objective, false);
-  saveCached(objective, fullOptions);
+  saveCached(cacheKey, fullOptions);
   return result;
 }
 

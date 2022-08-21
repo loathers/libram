@@ -1,5 +1,6 @@
 import {
   canAdventure,
+  currentRound,
   handlingChoice,
   lastChoice,
   Location,
@@ -30,7 +31,8 @@ export function mapMonster(location: Location, monster: Monster): boolean {
   if (!get("mappingMonsters")) return false;
 
   const turns = myTurncount();
-  while (get("mappingMonsters")) {
+  while (currentRound() < 1) {
+    // Not in combat
     if (myTurncount() > turns) {
       throw new Error("Map the Monsters unsuccessful?");
     }
@@ -39,8 +41,7 @@ export function mapMonster(location: Location, monster: Monster): boolean {
       runChoice(1, `heyscriptswhatsupwinkwink=${monster.id}`);
       return true;
     } else {
-      // Handle zone intro adventures
-      runChoice(-1);
+      runChoice(-1, false);
     }
   }
   return false;

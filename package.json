@@ -62,8 +62,10 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.2",
     "core-js": "^3.21.0",
-    "kolmafia": "^3.4.0",
     "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "kolmafia": "^3.4.0"
   },
   "husky": {
     "hooks": {

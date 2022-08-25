@@ -4,7 +4,7 @@
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/Loathing-Associates-Scripting-Society/libram",
+  "repository": "https://github.com/loathers/libram",
   "author": "Samuel Gaus <sam@gaus.co.uk>",
   "license": "MIT",
   "private": false,

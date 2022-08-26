@@ -23,7 +23,7 @@ import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
 import { clamp } from "../../utils";
 
-enum PriceAge {
+const enum PriceAge {
   HISTORICAL, // If Mafia has a historical price stored, use it.
   RECENT, // Use historical price if less than a week old.
   TODAY, // Only use a price from this session.

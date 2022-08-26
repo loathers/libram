@@ -1,5 +1,7 @@
-// eslint-disable-next-line no-undef
-module.exports = {
+/* eslint-env node */
+
+/** @type {import('eslint').Linter.Config} */
+const config = {
   root: true,
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "libram"],
@@ -19,6 +21,13 @@ module.exports = {
         alphabetize: { order: "asc" },
       },
     ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        selector: "TSEnumDeclaration:not([const=true])",
+        message: "Don't declare non-const enums",
+      },
+    ],
   },
   settings: {
     "import/parsers": {
@@ -31,3 +40,5 @@ module.exports = {
     },
   },
 };
+
+module.exports = config;

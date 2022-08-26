@@ -19,7 +19,7 @@ import { ChateauMantegna } from "./resources";
 import { $item, $items, $stat } from "./template-string";
 import { createStringUnionTypeGuardFunction } from "./utils";
 
-export enum Lifestyle {
+export const enum Lifestyle {
   casual = 1,
   softcore = 2,
   normal = 2,

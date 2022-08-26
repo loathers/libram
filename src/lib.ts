@@ -224,7 +224,7 @@ export function haveInCampground(item: Item): boolean {
     .includes(item);
 }
 
-export enum Wanderer {
+export const enum Wanderer {
   Digitize = "Digitize Monster",
   Enamorang = "Enamorang Monster",
   Familiar = "Familiar",

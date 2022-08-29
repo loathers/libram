@@ -165,7 +165,9 @@ export class Macro {
       ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
     );
     this.components.push(
-      ...nextStepsStrings.filter((s) => s.length > 0).map((s) => s.endsWith(";") ? s : s + ";")
+      ...nextStepsStrings
+        .filter((s) => s.length > 0)
+        .map((s) => (s.endsWith(";") ? s : s + ";"))
     );
     return this;
   }

@@ -120,7 +120,7 @@ export class Macro {
    * Convert macro to string.
    */
   toString(): string {
-    return this.components.join("");
+    return (this.components.join(";") + ";").replace(/;;+/g, ";");
   }
 
   /**
@@ -164,11 +164,7 @@ export class Macro {
     const nextStepsStrings = ([] as string[]).concat(
       ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
     );
-    this.components.push(
-      ...nextStepsStrings
-        .filter((s) => s.length > 0)
-        .map((s) => (s.endsWith(";") ? s : s + ";"))
-    );
+    this.components.push(...nextStepsStrings.filter((s) => s.length > 0));
     return this;
   }
 

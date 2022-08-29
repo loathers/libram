@@ -49,6 +49,7 @@
     "husky": "^4.3.6",
     "java-parser": "^1.4.0",
     "jest": "^27.1.0",
+    "kolmafia": "^3.4.0",
     "lint-staged": ">=10",
     "node-fetch": "^2.6.1",
     "prettier": "^2.1.2",
@@ -62,8 +63,10 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.2",
     "core-js": "^3.21.0",
-    "kolmafia": "^3.4.0",
     "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "kolmafia": "^3.4.0"
   },
   "husky": {
     "hooks": {

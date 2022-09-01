@@ -64,7 +64,6 @@ import {
   $stat,
 } from "./template-string";
 import { chunk } from "./utils";
-import { Path } from "./Path";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head

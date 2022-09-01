@@ -9,6 +9,7 @@ import {
   Location,
   MafiaClass,
   Monster,
+  Path,
   Phylum,
   Servant,
   Skill,
@@ -281,3 +282,18 @@ export const $thrall = createSingleConstant(Thrall);
  * @category In-game constant
  */
 export const $thralls = createPluralConstant(Thrall);
+
+/**
+ * A Path specified by name.
+ *
+ * @category In-game constant
+ */
+export const $path = createSingleConstant(Path);
+
+/**
+ * A list of Paths specified by a comma-separated list of names.
+ * For a list of all possible Paths, leave the template string blank.
+ *
+ * @category In-game constant
+ */
+export const $paths = createPluralConstant(Path);

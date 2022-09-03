@@ -2574,10 +2574,10 @@ eslint-plugin-jest@^25.2.3:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-libram@^0.2.16:
-  version "0.2.16"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.16.tgz#7fd10292e785335cd238c3a2b6b39f683a06cf7a"
-  integrity sha512-Ow6vT2eyo0VrhiH14BjbauW6Qq3eom1AFDg71EhDu9ZOpfxaUh4bEoaZUiD+B7tnt3SOHEzrIEAc2k/dw32CQA==
+eslint-plugin-libram@^0.2.17:
+  version "0.2.17"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.17.tgz#cd18095efbe1086f5bb162e786f9764d23f9f957"
+  integrity sha512-WUDz3af4O5KGxWkm+6mrsqRiDoiu2F1kq5DWyPVMQI+RsifoVZATIJ6785i3rlhCGVSu9X1/NbpOiSrecjv8kg==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"

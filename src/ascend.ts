@@ -6,6 +6,7 @@ import {
   getCampground,
   getWorkshed,
   Item,
+  Path,
   toInt,
   use,
   visitUrl,
@@ -13,7 +14,6 @@ import {
   haveSkill,
   MafiaClass,
 } from "kolmafia";
-import { Path } from "./Path";
 import { ChateauMantegna } from "./resources";
 
 import { $item, $items, $stat } from "./template-string";
@@ -222,7 +222,10 @@ export function ascend(
   pet: Item | undefined = undefined,
   permSkills: Map<Skill, Lifestyle> | undefined = undefined
 ): void {
-  if (!path.classes.includes(playerClass)) {
+  if (
+    path === Path.none ||
+    playerClass.path !== (path.avatar ? path : Path.none)
+  ) {
     throw new AscendError(playerClass);
   }
   if (path.id < 0) throw new AscendError(path);

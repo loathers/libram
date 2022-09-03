@@ -222,7 +222,10 @@ export function ascend(
   pet: Item | undefined = undefined,
   permSkills: Map<Skill, Lifestyle> | undefined = undefined
 ): void {
-  if (path === Path.none || (playerClass.path !== (path.avatar ? path : Path.none))) {
+  if (
+    path === Path.none ||
+    playerClass.path !== (path.avatar ? path : Path.none)
+  ) {
     throw new AscendError(playerClass);
   }
   if (path.id < 0) throw new AscendError(path);

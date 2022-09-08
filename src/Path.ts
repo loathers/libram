@@ -58,7 +58,7 @@ export const Paths = {
   Oxygenarian: new Path("Oxygenarian", 3, true, true, true, true, 0, 0),
   BeesHateYou: new Path("Bees Hate You", 4),
   WayOfTheSurprisingFist: new Path("Way of the Surprising Fist", 6),
-  Trendy: new Path("Trendy", 6),
+  Trendy: new Path("Trendy", 7),
   AvatarOfBoris: new Path(
     "Avatar of Boris",
     8,
@@ -126,7 +126,7 @@ export const Paths = {
     0,
     0,
     5,
-    $classes`Ed`
+    $classes`Ed the Undying`
   ),
   OneCrazyRandomSummer: new Path("One Crazy Random Summer", 24),
   CommunityService: new Path("Community Service", 25),
@@ -207,7 +207,7 @@ export const Paths = {
     5,
     $classes`Plumber`
   ),
-  LowKeySummer: new Path("Low Key Summer", 40),
+  LowKeySummer: new Path("Low Key Summer", 39),
   GreyGoo: new Path("Grey Goo", 40),
   YouRobot: new Path("You, Robot", 41, false, false, false, true, 0, 0, 0),
   QuantumTerrarium: new Path("Quantum Terrarium", 42, true, true, true, false),

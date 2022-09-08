@@ -1,10 +1,10 @@
 {
   "name": "libram",
-  "version": "0.6.21",
+  "version": "0.7.1",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/Loathing-Associates-Scripting-Society/libram",
+  "repository": "https://github.com/loathers/libram",
   "author": "Samuel Gaus <sam@gaus.co.uk>",
   "license": "MIT",
   "private": false,
@@ -45,10 +45,11 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.2.3",
-    "eslint-plugin-libram": "^0.2.12",
+    "eslint-plugin-libram": "^0.2.17",
     "husky": "^4.3.6",
     "java-parser": "^1.4.0",
     "jest": "^27.1.0",
+    "kolmafia": "^4.0.1",
     "lint-staged": ">=10",
     "node-fetch": "^2.6.1",
     "prettier": "^2.1.2",
@@ -62,8 +63,10 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.2",
     "core-js": "^3.21.0",
-    "kolmafia": "^3.0.2",
     "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "kolmafia": "^4.0.0"
   },
   "husky": {
     "hooks": {

@@ -53,7 +53,7 @@ const phylumDrops = new Map<Phylum, Item>([
  */
 export function dropFrom(target: Monster | Phylum): Item {
   const phylum = target instanceof Monster ? target.phylum : target;
-  return phylumDrops.get(phylum) ?? $item`none`;
+  return phylumDrops.get(phylum) ?? $item.none;
 }
 
 /**

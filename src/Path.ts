@@ -126,7 +126,7 @@ export const Paths = {
     0,
     0,
     5,
-    $classes`Ed`
+    $classes`Ed the Undying`
   ),
   OneCrazyRandomSummer: new Path("One Crazy Random Summer", 24),
   CommunityService: new Path("Community Service", 25),

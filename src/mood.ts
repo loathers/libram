@@ -166,7 +166,7 @@ class SkillMoodElement extends MoodElement {
       let maxCasts;
       if (hpCost(this.skill) > 0) {
         // FIXME: restore HP
-        maxCasts = Math.floor(myHp() / hpCost(this.skill));
+        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill))); // Do not allow ourselves to hit 0 hp
       } else {
         const cost = mpCost(this.skill);
         maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);

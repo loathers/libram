@@ -41,6 +41,7 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
+  Path,
   Servant,
   Skill,
   spleenLimit,
@@ -464,7 +465,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
 export function canUse(item: Item): boolean {
   const path = myPath();
 
-  if (path !== "Nuclear Autumn") {
+  if (path !== Path.get("Nuclear Autumn")) {
     if (
       $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
         item
@@ -474,11 +475,11 @@ export function canUse(item: Item): boolean {
     }
   }
 
-  if (path === "G-Lover") {
+  if (path === Path.get("G-Lover")) {
     if (!item.name.toLowerCase().includes("g")) return false;
   }
 
-  if (path === "Bees Hate You") {
+  if (path === Path.get("Bees Hate You")) {
     if (item.name.toLowerCase().includes("b")) return false;
   }
 

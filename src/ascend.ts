@@ -6,6 +6,7 @@ import {
   getCampground,
   getWorkshed,
   Item,
+  Path,
   toInt,
   use,
   visitUrl,
@@ -15,7 +16,6 @@ import {
   getPermedSkills,
   toSkill,
 } from "kolmafia";
-import { Path } from "./Path";
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 
@@ -237,7 +237,7 @@ export function ascend(
   pet: Item | undefined = undefined,
   permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
 ): void {
-  if (!path.classes.includes(playerClass)) {
+  if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);
   }
   if (path.id < 0) throw new AscendError(path);

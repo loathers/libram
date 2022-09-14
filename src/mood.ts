@@ -166,7 +166,7 @@ class SkillMoodElement extends MoodElement {
       let maxCasts;
       if (hpCost(this.skill) > 0) {
         // FIXME: restore HP
-        maxCasts = Math.floor(myHp() / hpCost(this.skill));
+        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill))); // Do not allow ourselves to hit 0 hp
       } else {
         const cost = mpCost(this.skill);
         maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
@@ -226,7 +226,7 @@ class PotionMoodElement extends MoodElement {
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
       const price = Math.floor(this.maxPricePerTurn * remainingDifference);
-      if (price >= mallPrice(this.potion)) {
+      if (price <= mallPrice(this.potion)) {
         if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }
@@ -376,7 +376,7 @@ export class Mood {
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
-    if (!gainEffect && skill !== $skill`none`) {
+    if (!gainEffect && skill !== $skill.none) {
       this.skill(skill);
     } else {
       this.elements.push(new CustomMoodElement(effect, gainEffect));

@@ -284,7 +284,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     enthroneFamiliar(
-      entry.rider.get($item`Crown of Thrones`) || $familiar`none`
+      entry.rider.get($item`Crown of Thrones`) || $familiar.none
     );
   }
 
@@ -292,7 +292,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     equippedAmount($item`Buddy Bjorn`) > 0 &&
     entry.rider.get($item`Buddy Bjorn`)
   ) {
-    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
 }
 
@@ -461,30 +461,47 @@ export function maximizeCached(
 
   // Sort each group in objective to ensure consistent ordering in string
   const objective = [
-    ...objectives.sort(),
-    ...forceEquip.map((item) => `equip ${item}`).sort(),
-    ...preventEquip.map((item) => `-equip ${item}`).sort(),
-    ...onlySlot.map((slot) => `${slot}`).sort(),
-    ...preventSlot.map((slot) => `-${slot}`).sort(),
-    ...Array.from(bonusEquip.entries())
-      .filter(([, bonus]) => bonus !== 0)
-      .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
-      .sort(),
+    ...new Set([
+      ...objectives.sort(),
+      ...forceEquip.map((item) => `equip ${item}`).sort(),
+      ...preventEquip.map((item) => `-equip ${item}`).sort(),
+      ...onlySlot.map((slot) => `${slot}`).sort(),
+      ...preventSlot.map((slot) => `-${slot}`).sort(),
+      ...Array.from(bonusEquip.entries())
+        .filter(([, bonus]) => bonus !== 0)
+        .map(
+          ([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`
+        )
+        .sort(),
+    ]),
   ].join(", ");
 
-  const cacheEntry = checkCache(objective, fullOptions);
+  // Items equipped in slots not touched by the maximizer must be in the cache key
+  const untouchedSlots = cachedSlots.filter(
+    (slot: Slot) =>
+      preventSlot.includes(slot) ||
+      (onlySlot.length > 0 && !onlySlot.includes(slot))
+  );
+  const cacheKey = [
+    objective,
+    ...untouchedSlots
+      .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
+      .sort(),
+  ].join("; ");
+
+  const cacheEntry = checkCache(cacheKey, fullOptions);
   if (cacheEntry && !forceUpdate) {
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
-      logger.info(`Equipped cached ${objective}`);
+      logger.info(`Equipped cached ${cacheKey}`);
       return true;
     }
     logger.warning("Maximize cache application failed, maximizing...");
   }
 
   const result = maximize(objective, false);
-  saveCached(objective, fullOptions);
+  saveCached(cacheKey, fullOptions);
   return result;
 }
 
@@ -532,11 +549,11 @@ export class Requirement {
         forceEquip: [
           ...(optionsA.forceEquip ?? []),
           ...(other.maximizeOptions.forceEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.preventEquip?.includes(x)),
         preventEquip: [
           ...(optionsA.preventEquip ?? []),
           ...(other.maximizeOptions.preventEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.forceEquip?.includes(x)),
         bonusEquip: new Map([
           ...(optionsA.bonusEquip?.entries() ?? []),
           ...(optionsB.bonusEquip?.entries() ?? []),

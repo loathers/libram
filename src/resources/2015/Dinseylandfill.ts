@@ -183,23 +183,10 @@ export function disposeGarbage(): void {
 }
 
 export function hasQuest(): boolean {
-  for (const quest of quests) {
-    if (quest.currentQuest()) {
-      return true;
-    }
-  }
-
-  return false;
+  return quests.some(q => q.currentQuest())
 }
 
-export function activeQuest(): questData {
-  for (const quest of quests) {
-    if (quest.currentQuest()) {
-      return quest;
-    }
-  }
-
-  return new questData(
+const BLANK_QUEST = new questData(
     "",
     -1,
     "",
@@ -211,6 +198,9 @@ export function activeQuest(): questData {
     $item`none`,
     $location`none`
   );
+
+export function activeQuest(): questData {
+  return quests.find(q => q.currentQuest()) || BLANK_QUEST;
 }
 
 export function questComplete(): boolean {
@@ -240,17 +230,7 @@ export function acceptQuest(priority: number | string): void {
     `Waterway Debris Removal`,
     `Guest Sustenance Assurance`,
   ];
-  let prioritynum = 7;
-  if (typeof priority === "string") {
-    for (const quest of quests) {
-      if (quest.name === priority) {
-        prioritynum = quest.priority;
-        break;
-      }
-    }
-  } else {
-    prioritynum = priority;
-  }
+  const priorityNum = typeof priority === "string" ? (quests.find(q => q.name === priority)?.priority ?? 7) : priority;
 
   for (const job1 of jobs.slice(0, prioritynum)) {
     const job1At: number = indexOf(page, job1, at);

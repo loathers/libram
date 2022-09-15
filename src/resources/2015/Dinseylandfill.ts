@@ -7,6 +7,7 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
+import { forEach } from "lodash";
 import { getRemainingLiver, have as haveItem } from "../../lib";
 import { get, set } from "../../property";
 import { $item, $location } from "../../template-string";
@@ -19,7 +20,7 @@ export function available(): boolean {
   return have() || get("_stenchAirportToday");
 }
 
-class questData {
+class QuestData {
   name: string;
   priority: number;
   questNameKiosk: string;
@@ -77,7 +78,7 @@ const kioskUrl = "place.php?whichplace=airport_stench&action=airport3_kiosk";
 const maintUrl = "place.php?whichplace=airport_stench&action=airport3_tunnels";
 
 export const quests = [
-  new questData(
+  new QuestData(
     "lube",
     1,
     "Track Maintenance",
@@ -89,7 +90,7 @@ export const quests = [
     $item`lube-shoes`,
     $location`Barf Mountain`
   ),
-  new questData(
+  new QuestData(
     "fuel",
     0,
     "Electrical Maintenance",
@@ -101,7 +102,7 @@ export const quests = [
     $item`none`,
     $location`The Toxic Teacups`
   ),
-  new questData(
+  new QuestData(
     "sexism",
     2,
     "Sexism Reduction",
@@ -113,7 +114,7 @@ export const quests = [
     $item`none`,
     $location`Pirates of the Garbage Barges`
   ),
-  new questData(
+  new QuestData(
     "racism",
     3,
     "Racism Reduction",
@@ -125,7 +126,7 @@ export const quests = [
     $item`none`,
     $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
   ),
-  new questData(
+  new QuestData(
     "fun",
     4,
     "Compulsory Fun",
@@ -137,7 +138,7 @@ export const quests = [
     $item`Dinsey mascot mask`,
     $location`The Toxic Teacups`
   ),
-  new questData(
+  new QuestData(
     "trash",
     6,
     "Waterway Debris Removal",
@@ -149,7 +150,7 @@ export const quests = [
     $item`trash net`,
     $location`Pirates of the Garbage Barges`
   ),
-  new questData(
+  new QuestData(
     "bear",
     5,
     "Bear Removal",
@@ -161,7 +162,7 @@ export const quests = [
     $item`none`,
     $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
   ),
-  new questData(
+  new QuestData(
     "food",
     7,
     "Guest Sustenance Assurance",
@@ -183,29 +184,29 @@ export function disposeGarbage(): void {
 }
 
 export function hasQuest(): boolean {
-  return quests.some(q => q.currentQuest())
+  return quests.some((q) => q.currentQuest());
 }
 
-const BLANK_QUEST = new questData(
-    "",
-    -1,
-    "",
-    "",
-    "",
-    "",
-    -1,
-    false,
-    $item`none`,
-    $location`none`
-  );
+const BLANK_QUEST = new QuestData(
+  "",
+  -1,
+  "",
+  "",
+  "",
+  "",
+  -1,
+  false,
+  $item`none`,
+  $location`none`
+);
 
-export function activeQuest(): questData {
-  return quests.find(q => q.currentQuest()) || BLANK_QUEST;
+export function activeQuest(): QuestData {
+  return quests.find((q) => q.currentQuest()) || BLANK_QUEST;
 }
 
 export function questComplete(): boolean {
   const quest = activeQuest();
-  return hasQuest() && get(quest.questStateProperty) === "finished";
+  return quest !== BLANK_QUEST && get(quest.questStateProperty) === "finished";
 }
 
 export function hasActiveQuest(): boolean {
@@ -220,34 +221,39 @@ export function acceptQuest(priority: number | string): void {
     return;
   }
 
-  const jobs = [
-    `Electrical Maintenance`,
-    `Track Maintenance`,
-    `Sexism Reduction`,
-    `Racism Reduction`,
-    `Compulsory Fun`,
-    `Bear Removal`,
-    `Waterway Debris Removal`,
-    `Guest Sustenance Assurance`,
-  ];
-  const priorityNum = typeof priority === "string" ? (quests.find(q => q.name === priority)?.priority ?? 7) : priority;
+  const jobs: string[] = [];
+  quests.forEach((quest) => {
+    jobs.push(quest.name);
+  });
 
-  for (const job1 of jobs.slice(0, prioritynum)) {
-    const job1At: number = indexOf(page, job1, at);
-    if (job1At != -1) {
-      for (const job2 of jobs) {
-        const job2At: number = indexOf(page, job2, at);
-        if (job2At != -1) {
-          if (job1At < job2At) {
-            choice = 1;
-            break;
-          } else {
-            choice = 2;
-            break;
-          }
-        }
-      }
+  const priorityNum =
+    typeof priority === "string"
+      ? quests.find((q) => q.name === priority)?.priority ?? 7
+      : priority;
+
+  const availableJobs: QuestData[] = [];
+  const jobChoices: [[string, number]] = [["none", 999]];
+
+  for (const quest of quests) {
+    const job = quest.name;
+    const jobAt: number = indexOf(page, job, at);
+    if (jobAt != -1) {
+      availableJobs.push(quest);
+      jobChoices.push([job, jobAt]);
       break;
+    }
+  }
+
+  const bestJob = availableJobs.sort((a, b) => a.priority - b.priority)[0];
+  const sortedChoices = jobChoices.sort((a, b) => a[1] - b[1]);
+
+  if (bestJob.priority <= priorityNum) {
+    for (const index in sortedChoices) {
+      const jobName = sortedChoices[index][0];
+      if (jobName === bestJob.name) {
+        choice = parseInt(index) + 1;
+        break;
+      }
     }
   }
   runChoice(choice);

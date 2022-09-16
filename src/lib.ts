@@ -655,7 +655,7 @@ export function getCustomSaleValue(
  * @param items items whose value you care about
  */
 export function getSaleValue(...items: Item[]): number {
-  return getCustomSaleValue(mallPrice, items);
+  return getCustomSaleValue(mallPrice, ...items);
 }
 
 /**
@@ -670,7 +670,7 @@ export function getHistoricalSaleValue(
   return getCustomSaleValue(
     (item: Item) =>
       historicalAge(item) > maxAge ? mallPrice(item) : historicalPrice(item),
-    items
+    ...items
   );
 }
 

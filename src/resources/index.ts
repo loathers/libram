@@ -1,3 +1,4 @@
+import * as Stickers from "./2008/Stickers";
 import * as Bandersnatch from "./2009/Bandersnatch";
 import * as SpookyPutty from "./2009/SpookyPutty";
 import * as CrownOfThrones from "./2010/CrownOfThrones";
@@ -58,6 +59,7 @@ export {
   SongBoom,
   SourceTerminal,
   SpookyPutty,
+  Stickers,
   StompingBoots,
   TunnelOfLove,
   WinterGarden,

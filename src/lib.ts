@@ -616,13 +616,13 @@ const valueMap: Map<Item, number> = new Map();
 const MALL_VALUE_MODIFIER = 0.9;
 
 /**
- * Returns the average value--based on mallprice and autosell--of a collection of items
- * using a provided function to calculate mall price
- * @param mallPriceFunc function to invoke to get mall price
+ * Returns the average value--based on customprice and autosell--of a collection of items
+ * using a provided function to calculate price
+ * @param priceFunc function to invoke to get price
  * @param items items whose value you care about
  */
 export function getCustomSaleValue(
-  mallPriceFunc: (item: Item) => number,
+  priceFunc: (item: Item) => number,
   ...items: Item[]
 ) {
   return (
@@ -632,16 +632,14 @@ export function getCustomSaleValue(
         if (item.discardable) {
           valueMap.set(
             item,
-            mallPriceFunc(item) > Math.max(2 * autosellPrice(item), 100)
-              ? MALL_VALUE_MODIFIER * mallPriceFunc(item)
+            priceFunc(item) > Math.max(2 * autosellPrice(item), 100)
+              ? MALL_VALUE_MODIFIER * priceFunc(item)
               : autosellPrice(item)
           );
         } else {
           valueMap.set(
             item,
-            mallPriceFunc(item) > 100
-              ? MALL_VALUE_MODIFIER * mallPriceFunc(item)
-              : 0
+            priceFunc(item) > 100 ? MALL_VALUE_MODIFIER * priceFunc(item) : 0
           );
         }
         return valueMap.get(item) || 0;

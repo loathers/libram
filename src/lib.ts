@@ -25,6 +25,8 @@ import {
   haveFamiliar,
   haveServant,
   haveSkill,
+  historicalAge,
+  historicalPrice,
   holiday,
   inebrietyLimit,
   inMultiFight,
@@ -615,9 +617,14 @@ const MALL_VALUE_MODIFIER = 0.9;
 
 /**
  * Returns the average value--based on mallprice and autosell--of a collection of items
+ * using a provided function to calculate mall price
+ * @param mallPriceFunc function to invoke to get mall price
  * @param items items whose value you care about
  */
-export function getSaleValue(...items: Item[]): number {
+export function getCustomSaleValue(
+  mallPriceFunc: (item: Item) => number,
+  ...items: Item[]
+) {
   return (
     items
       .map((item) => {
@@ -625,19 +632,44 @@ export function getSaleValue(...items: Item[]): number {
         if (item.discardable) {
           valueMap.set(
             item,
-            mallPrice(item) > Math.max(2 * autosellPrice(item), 100)
-              ? MALL_VALUE_MODIFIER * mallPrice(item)
+            mallPriceFunc(item) > Math.max(2 * autosellPrice(item), 100)
+              ? MALL_VALUE_MODIFIER * mallPriceFunc(item)
               : autosellPrice(item)
           );
         } else {
           valueMap.set(
             item,
-            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0
+            mallPriceFunc(item) > 100
+              ? MALL_VALUE_MODIFIER * mallPriceFunc(item)
+              : 0
           );
         }
         return valueMap.get(item) || 0;
       })
       .reduce((s, price) => s + price, 0) / items.length
+  );
+}
+
+/**
+ * Returns the average value--based on mallprice and autosell--of a collection of items
+ * @param items items whose value you care about
+ */
+export function getSaleValue(...items: Item[]): number {
+  return getCustomSaleValue(mallPrice, items);
+}
+
+/**
+ * Returns the average value--based on historicalprice and autosell--of a collection of items
+ * @param maxAge max age in days for historical prices, otherwise mall search
+ * @param items items whose value you care about
+ */
+export function getHistoricalSaleValue(
+  maxAge: number,
+  ...items: Item[]
+): number {
+  return getCustomSaleValue(
+    historicalAge(item) > maxAge ? mallPrice : historicalPrice,
+    items
   );
 }
 

@@ -668,7 +668,8 @@ export function getHistoricalSaleValue(
   ...items: Item[]
 ): number {
   return getCustomSaleValue(
-    historicalAge(item) > maxAge ? mallPrice : historicalPrice,
+    (item: Item) =>
+      historicalAge(item) > maxAge ? mallPrice(item) : historicalPrice(item),
     items
   );
 }

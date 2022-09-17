@@ -17,10 +17,9 @@ export function have(): boolean {
   return get("spookyAirportAlways");
 }
 
-class questData {
+class QuestData {
   name: string;
   reward: number;
-  accept: boolean;
   questStateProperty: string;
   questProgressLimit: number;
   questProgressProperty: string;
@@ -35,7 +34,6 @@ class questData {
    * Process for determining where to put a wanderer to extract additional value from it
    * @param name easy to refer to name of the quest
    * @param reward how many coinspiracy we get for completing the quest
-   * @param accept whether to accept the quest
    * @param questStateProperty name of the mafia property tracing the current state of the quest (e.g. unstarted, step[x], finished)
    * @param questProgressLimit Maximum questProgressProperty can reach
    * @param questProgressProperty name of the mafia property that tracks progress of the current quest state
@@ -48,7 +46,6 @@ class questData {
   constructor(
     name: string,
     reward: number,
-    accept: boolean,
     questStateProperty: string,
     questProgressLimit: number,
     questProgressProperty: string,
@@ -61,7 +58,6 @@ class questData {
   ) {
     this.name = name;
     this.reward = reward;
-    this.accept = accept;
     this.questStateProperty = questStateProperty;
     this.questProgressLimit = questProgressLimit;
     this.questProgressProperty = questProgressProperty;
@@ -79,10 +75,9 @@ class questData {
 }
 
 export const quests = [
-  new questData(
+  new QuestData(
     "Serum",
     30,
-    true,
     "questESpSerum",
     5,
     "",
@@ -93,10 +88,9 @@ export const quests = [
     $item`none`,
     "10 item, 10 pickpocket chance"
   ),
-  new questData(
+  new QuestData(
     "Clipper",
     20,
-    true,
     "questESpClipper",
     23,
     "fingernailsClipped",
@@ -107,10 +101,9 @@ export const quests = [
     $item`none`,
     ""
   ),
-  new questData(
+  new QuestData(
     "EVE",
     30,
-    true,
     "questESpEVE",
     0,
     "",
@@ -121,10 +114,9 @@ export const quests = [
     $item`none`,
     ""
   ),
-  new questData(
+  new QuestData(
     "FakeMedium",
     30,
-    true,
     "questESpFakeMedium",
     0,
     "",
@@ -135,10 +127,9 @@ export const quests = [
     $item`none`,
     ""
   ),
-  new questData(
+  new QuestData(
     "Gore",
     20,
-    true,
     "questESpGore",
     100,
     "goreCollected",
@@ -149,10 +140,9 @@ export const quests = [
     $item`gore bucket`,
     "10 meat"
   ),
-  new questData(
+  new QuestData(
     "JunglePun",
     20,
-    false,
     "questESpJunglePun",
     11,
     "junglePuns",
@@ -163,10 +153,9 @@ export const quests = [
     $item`encrypted micro-cassette recorder`,
     "mys"
   ),
-  new questData(
+  new QuestData(
     "OutOfOrder",
     30,
-    true,
     "questESpOutOfOrder",
     99,
     "",
@@ -177,10 +166,9 @@ export const quests = [
     $item`GPS-tracking wristwatch`,
     "10 Initiative"
   ),
-  new questData(
+  new QuestData(
     "Smokes",
     30,
-    true,
     "questESpSmokes",
     10,
     "",
@@ -197,59 +185,52 @@ export function available(): boolean {
   return have() || get("_spookyAirportToday");
 }
 
+const BLANK_QUEST = new QuestData(
+  "",
+  0,
+  "",
+  0,
+  "",
+  false,
+  false,
+  false,
+  $location`none`,
+  $item`none`,
+  ""
+);
+
 export function completedOneTimeQuests(): boolean {
-  for (const quest of quests) {
-    if (quest.reward === 30 && get(quest.questStateProperty) !== "finished") {
-      return false;
-    }
-  }
-
-  return true;
+  return quests
+    .filter((q) => q.reward === 30)
+    .every((q) => get(q.questStateProperty) === "finished");
 }
 
-export function haveQuest(): boolean {
-  for (const quest of quests) {
-    if (get(quest.questStateProperty) !== "") {
-      return true;
-    }
-  }
-  return false;
+export function hasQuest(): boolean {
+  return quests.some((q) => q.currentQuest());
 }
 
-export function activeQuest(): string {
-  for (const quest of quests) {
-    if (
-      get(quest.questStateProperty) !== "unstarted" &&
-      get(quest.questStateProperty) !== "finished"
-    ) {
-      return quest.name;
-    }
-  }
-  return "";
+export function activeQuest(): QuestData {
+  return quests.find((q) => q.currentQuest()) || BLANK_QUEST;
 }
 
 export function acceptQuest(): void {
-  if (get(`_questESp`) === "" && !haveQuest() && canInteract() && available()) {
+  if (!hasQuest() && canInteract() && available()) {
     visitUrl(radio);
     runChoice(1);
   }
 }
 
 export function questComplete(): boolean {
-  if (!haveQuest()) return false;
-  for (const quest of quests) {
-    if (
-      quest.questStateProperty ===
+  const quest = activeQuest();
+  return (
+    quest !== BLANK_QUEST &&
+    get(quest.questStateProperty) ===
       (quest.requiredItem === $item`none` ? "step1" : "step2")
-    ) {
-      return true;
-    }
-  }
-  return false;
+  );
 }
 
 export function hasActiveQuest(): boolean {
-  return haveQuest() && !questComplete();
+  return hasQuest() && !questComplete();
 }
 
 export function turnInQuest(): void {
@@ -306,7 +287,7 @@ export function activateOmega(): void {
   if (
     get("controlPanelOmega") >= 100 &&
     completedOneTimeQuests() &&
-    !haveQuest()
+    !hasQuest()
   ) {
     //Omega Button cannot be pushed with an active radio quest
     visitUrl(omegapanel);

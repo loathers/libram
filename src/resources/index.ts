@@ -1,3 +1,4 @@
+import * as Stickers from "./2008/Stickers";
 import * as Bandersnatch from "./2009/Bandersnatch";
 import * as SpookyPutty from "./2009/SpookyPutty";
 import * as CrownOfThrones from "./2010/CrownOfThrones";
@@ -10,6 +11,7 @@ import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
+import * as Dinseylandfill from "./2015/Dinseylandfill";
 import * as MayoClinic from "./2015/MayoClinic";
 import * as SourceTerminal from "./2016/SourceTerminal";
 import * as Witchess from "./2016/Witchess";
@@ -41,6 +43,7 @@ export {
   CrownOfThrones,
   CrystalBall,
   DaylightShavings,
+  Dinseylandfill,
   DNALab,
   FloristFriar,
   GreyGoose,
@@ -58,6 +61,7 @@ export {
   SongBoom,
   SourceTerminal,
   SpookyPutty,
+  Stickers,
   StompingBoots,
   TunnelOfLove,
   WinterGarden,

@@ -1,8 +1,15 @@
 import "core-js/modules/es.object.values";
 
-import { cliExecute, Effect, Item, Monster, myPathId, Skill } from "kolmafia";
+import {
+  cliExecute,
+  Effect,
+  Item,
+  Monster,
+  Path,
+  myPath,
+  Skill,
+} from "kolmafia";
 import isEqual from "lodash/isEqual";
-import { Paths } from "../..";
 
 import { Copier } from "../../Copier";
 import { haveInCampground } from "../../lib";
@@ -266,7 +273,7 @@ export function getPortscanUses(): number {
  * Returns maximum number of times duplicate can be used
  */
 export function maximumDuplicateUses(): number {
-  return myPathId() === Paths.TheSource.id ? 5 : 1;
+  return myPath() === Path.get("The Source") ? 5 : 1;
 }
 
 /**

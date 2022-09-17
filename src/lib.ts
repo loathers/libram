@@ -41,6 +41,7 @@ import {
   myThrall,
   myTurncount,
   numericModifier,
+  Path,
   Servant,
   Skill,
   spleenLimit,
@@ -272,7 +273,10 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
  * @category Wanderers
  */
 export function isVoteWandererNow(): boolean {
-  return totalTurnsPlayed() % 11 == 1;
+  return (
+    totalTurnsPlayed() % 11 === 1 &&
+    get("lastVoteMonsterTurn") < totalTurnsPlayed()
+  );
 }
 
 /**
@@ -295,7 +299,7 @@ export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
     return haveCounter(wanderer, 0, 0);
   }
-  if (wanderer == Wanderer.Kramco) {
+  if (wanderer === Wanderer.Kramco) {
     return true;
   }
   if (wanderer === Wanderer.Vote) {
@@ -433,13 +437,13 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
       result.set($skill`Use the Force`, Monster.get(foe));
     } else if (
       [
-        Item.get("none"),
+        Item.none,
         Item.get(`training scroll:  Snokebomb`),
         Item.get(`tomayohawk-style reflex hammer`),
         null,
       ].includes(banisherItem)
     ) {
-      if (Skill.get(banisher) === $skill`none`) {
+      if (Skill.get(banisher) === $skill.none) {
         break;
       } else {
         result.set(Skill.get(banisher), Monster.get(foe));
@@ -461,7 +465,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
 export function canUse(item: Item): boolean {
   const path = myPath();
 
-  if (path !== "Nuclear Autumn") {
+  if (path !== Path.get("Nuclear Autumn")) {
     if (
       $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
         item
@@ -471,11 +475,11 @@ export function canUse(item: Item): boolean {
     }
   }
 
-  if (path === "G-Lover") {
+  if (path === Path.get("G-Lover")) {
     if (!item.name.toLowerCase().includes("g")) return false;
   }
 
-  if (path === "Bees Hate You") {
+  if (path === Path.get("Bees Hate You")) {
     if (item.name.toLowerCase().includes("b")) return false;
   }
 
@@ -489,15 +493,15 @@ export function canUse(item: Item): boolean {
  */
 export function noneToNull<T>(thing: T): T | null {
   if (thing instanceof Effect) {
-    return thing === Effect.get("none") ? null : thing;
+    return thing === Effect.none ? null : thing;
   }
 
   if (thing instanceof Familiar) {
-    return thing === Familiar.get("none") ? null : thing;
+    return thing === Familiar.none ? null : thing;
   }
 
   if (thing instanceof Item) {
-    return thing === Item.get("none") ? null : thing;
+    return thing === Item.none ? null : thing;
   }
 
   return thing;
@@ -653,14 +657,11 @@ export type EnvironmentType = typeof Environment[keyof typeof Environment];
  * @param familiar The familiar whose leprechaun multiplier you're interested in
  */
 export function findLeprechaunMultiplier(familiar: Familiar): number {
-  if (familiar === $familiar`Mutant Cactus Bud`)
-    return numericModifier(
-      familiar,
-      "Leprechaun Effectiveness",
-      1,
-      $item`none`
-    );
-  const meatBonus = numericModifier(familiar, "Meat Drop", 1, $item`none`);
+  if (familiar === $familiar`Mutant Cactus Bud`) {
+    return numericModifier(familiar, "Leprechaun Effectiveness", 1, $item.none);
+  }
+  if (familiar === $familiar`Reanimated Reanimator`) return 0;
+  const meatBonus = numericModifier(familiar, "Meat Drop", 1, $item.none);
   if (meatBonus === 0) return 0;
   return Math.pow(Math.sqrt(meatBonus / 2 + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }
@@ -672,9 +673,11 @@ export function findLeprechaunMultiplier(familiar: Familiar): number {
  * @param familiar The familiar whose fairy multiplier you're interested in
  */
 export function findFairyMultiplier(familiar: Familiar): number {
-  if (familiar === $familiar`Mutant Fire Ant`)
-    return numericModifier(familiar, "Fairy Effectiveness", 1, $item`none`);
-  const itemBonus = numericModifier(familiar, "Item Drop", 1, $item`none`);
+  if (familiar === $familiar`Mutant Fire Ant`) {
+    return numericModifier(familiar, "Fairy Effectiveness", 1, $item.none);
+  }
+  if (familiar === $familiar`Reanimated Reanimator`) return 0;
+  const itemBonus = numericModifier(familiar, "Item Drop", 1, $item.none);
   if (itemBonus === 0) return 0;
   return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }

@@ -369,7 +369,7 @@ export default class CommunityService {
               $familiar`Magic Dragonfish`,
               "Spell Damage Percent",
               familiarWeight($familiar`Magic Dragonfish`) + weightAdjustment(),
-              $item`none`
+              $item.none
             )
           : 0;
 

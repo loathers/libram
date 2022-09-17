@@ -9,6 +9,7 @@ import {
   Location,
   MafiaClass,
   Monster,
+  Path,
   Phylum,
   Servant,
   Skill,
@@ -17,22 +18,31 @@ import {
   Thrall,
 } from "kolmafia";
 
+import { splitByCommasWithEscapes } from "./utils";
+
 const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]
 ) =>
-  literals.reduce(
-    (acc, literal, i) => acc + literal + (placeholders[i] || ""),
+  literals.raw.reduce(
+    (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
     ""
   );
 
-const createSingleConstant =
-  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
-  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+const createSingleConstant = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T)
+) => {
+  const tagFunction = (
+    literals: TemplateStringsArray,
+    ...placeholders: string[]
+  ) => {
     const input = concatTemplateString(literals, ...placeholders);
     type I = InstanceType<typeof Type>;
     return Type.get<I>(input);
   };
+  tagFunction.none = Type.none as T;
+  return tagFunction;
+};
 
 const createPluralConstant =
   <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
@@ -45,7 +55,7 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(input.split(/\s*,\s*/));
+    return Type.get<I>(splitByCommasWithEscapes(input));
   };
 
 /**
@@ -272,3 +282,18 @@ export const $thrall = createSingleConstant(Thrall);
  * @category In-game constant
  */
 export const $thralls = createPluralConstant(Thrall);
+
+/**
+ * A Path specified by name.
+ *
+ * @category In-game constant
+ */
+export const $path = createSingleConstant(Path);
+
+/**
+ * A list of Paths specified by a comma-separated list of names.
+ * For a list of all possible Paths, leave the template string blank.
+ *
+ * @category In-game constant
+ */
+export const $paths = createPluralConstant(Path);

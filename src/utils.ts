@@ -127,3 +127,32 @@ export function createStringUnionTypeGuardFunction<T extends string>(
     return (array as readonly string[]).includes(x);
   };
 }
+
+/**
+ * Splits a string by commas while also respecting escaping commas with a backslash
+ * @param str String to split
+ * @returns List of tokens
+ */
+export function splitByCommasWithEscapes(str: string): string[] {
+  const returnValue = [];
+
+  let ignoreNext = false;
+  let currentString = "";
+
+  for (const char of str.split("")) {
+    if (char === "\\") {
+      ignoreNext = true;
+    } else {
+      if (char == "," && !ignoreNext) {
+        returnValue.push(currentString.trim());
+        currentString = "";
+      } else {
+        currentString += char;
+      }
+      ignoreNext = false;
+    }
+  }
+  returnValue.push(currentString.trim());
+
+  return returnValue;
+}

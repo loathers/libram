@@ -1,4 +1,5 @@
 import {
+  canEquip,
   cliExecute,
   myTurncount,
   restoreMp,
@@ -137,6 +138,7 @@ const freeRunSources: ActionSource[] = [
     $item`mafia middle finger ring`,
     () =>
       have($item`mafia middle finger ring`) &&
+      canEquip($item`mafia middle finger ring`) &&
       !get("_mafiaMiddleFingerRingUsed")
         ? 1
         : 0,

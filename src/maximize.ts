@@ -8,6 +8,7 @@ import {
   equippedAmount,
   equippedItem,
   Familiar,
+  haveEquipped,
   isWearingOutfit,
   Item,
   maximize,
@@ -19,6 +20,7 @@ import {
   Slot,
 } from "kolmafia";
 import logger from "./logger";
+import { get } from "./property";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import { setEqual } from "./utils";
 
@@ -108,6 +110,76 @@ export function setDefaultMaximizeOptions(
   Object.assign(defaultMaximizeOptions, options);
 }
 
+type Modes = {
+  backupcamera?: "ml" | "meat" | "init";
+  umbrella?:
+    | "broken"
+    | "forward"
+    | "bucket"
+    | "pitchfork"
+    | "twirling"
+    | "cocoon";
+  snowsuit?: "eyebrows" | "smirk" | "nose" | "goatee" | "hat";
+  edpiece?: "bear" | "owl" | "puma" | "hyena" | "mouse" | "weasel" | "fish";
+  retrocape?: [
+    "vampire" | "heck" | "robot",
+    "hold" | "thrill" | "kiss" | "kill"
+  ];
+  parka?:
+    | "kachungasaur"
+    | "dilophosaur"
+    | "ghostasaurus"
+    | "spikolodon"
+    | "pterodactyl";
+};
+
+const modeables = {
+  backupcamera: $item`backup camera`,
+  umbrella: $item`unbreakable umbrella`,
+  snowsuit: $item`Snow Suit`,
+  edpiece: $item`The Crown of Ed the Undying`,
+  retrocape: $item`unwrapped knock-off retro superhero cape`,
+  parka: $item`Jurassic Parka`,
+} as const;
+
+const modeableProperties = {
+  backupcamera: "backupCameraMode",
+  umbrella: "umbrellaState",
+  snowsuit: "snowsuit",
+  edpiece: "edPiece",
+  retrocape: ["retroCapeSuperhero", "retroCapeWashingInstructions"],
+  parka: "parkaMode",
+} as const;
+
+type Mode = keyof Modes;
+
+function getCurrentModeProp(mode: Mode) {
+  const propName = modeableProperties[mode];
+  return typeof propName === "string"
+    ? get(propName)
+    : propName.map((p) => get(p));
+}
+
+function getCurrentModes(): Modes {
+  const modes: { [x in string]: string | string[] } = {};
+  for (const [mode, item] of Object.entries(modeables)) {
+    if (haveEquipped(item)) {
+      modes[mode] = getCurrentModeProp(mode as Mode);
+    }
+  }
+  return modes as Modes;
+}
+
+function applyModes(modes: Modes) {
+  for (const [command, args] of Object.entries(modes)) {
+    if (haveEquipped(modeables[command as Mode])) {
+      cliExecute(
+        `${command} ${typeof args === "string" ? args : args.join(" ")}`
+      );
+    }
+  }
+}
+
 // Subset of slots that are valid for caching.
 const cachedSlots = $slots`hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar`;
 
@@ -116,17 +188,20 @@ class CacheEntry {
   rider: Map<Item, Familiar>;
   familiar: Familiar;
   canEquipItemCount: number;
+  modes: Modes;
 
   constructor(
     equipment: Map<Slot, Item>,
     rider: Map<Item, Familiar>,
     familiar: Familiar,
-    canEquipItemCount: number
+    canEquipItemCount: number,
+    modes: Modes
   ) {
     this.equipment = equipment;
     this.rider = rider;
     this.familiar = familiar;
     this.canEquipItemCount = canEquipItemCount;
+    this.modes = modes;
   }
 }
 
@@ -294,6 +369,8 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
   ) {
     bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
+
+  applyModes(entry.modes);
 }
 
 const slotStructure = [
@@ -415,7 +492,8 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     equipment,
     rider,
     myFamiliar(),
-    canEquipItemCount()
+    canEquipItemCount(),
+    getCurrentModes()
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {

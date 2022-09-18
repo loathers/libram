@@ -8,6 +8,7 @@ import {
   equippedAmount,
   equippedItem,
   Familiar,
+  getProperty,
   haveEquipped,
   isWearingOutfit,
   Item,
@@ -20,7 +21,6 @@ import {
   Slot,
 } from "kolmafia";
 import logger from "./logger";
-import { get } from "./property";
 import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import { setEqual } from "./utils";
 
@@ -110,30 +110,17 @@ export function setDefaultMaximizeOptions(
   Object.assign(defaultMaximizeOptions, options);
 }
 
-type Modes = {
-  backupcamera?: "ml" | "meat" | "init";
-  umbrella?:
-    | "broken"
-    | "forward"
-    | "bucket"
-    | "pitchfork"
-    | "twirling"
-    | "cocoon";
-  snowsuit?: "eyebrows" | "smirk" | "nose" | "goatee" | "hat";
-  edpiece?: "bear" | "owl" | "puma" | "hyena" | "mouse" | "weasel" | "fish";
-  retrocape?: [
-    "vampire" | "heck" | "robot",
-    "hold" | "thrill" | "kiss" | "kill"
-  ];
-  parka?:
-    | "kachungasaur"
-    | "dilophosaur"
-    | "ghostasaurus"
-    | "spikolodon"
-    | "pterodactyl";
-};
-
-const modeables = {
+const modeableCommands = [
+  "backupcamera",
+  "umbrella",
+  "snowsuit",
+  "edpiece",
+  "retrocape",
+  "parka",
+] as const;
+type Mode = typeof modeableCommands[number];
+type Modes = Partial<{ [x in Mode]: string }>;
+const modeableItems = {
   backupcamera: $item`backup camera`,
   umbrella: $item`unbreakable umbrella`,
   snowsuit: $item`Snow Suit`,
@@ -142,40 +129,34 @@ const modeables = {
   parka: $item`Jurassic Parka`,
 } as const;
 
-const modeableProperties = {
-  backupcamera: "backupCameraMode",
-  umbrella: "umbrellaState",
-  snowsuit: "snowsuit",
-  edpiece: "edPiece",
-  retrocape: ["retroCapeSuperhero", "retroCapeWashingInstructions"],
-  parka: "parkaMode",
+const modeableState = {
+  backupcamera: () => getProperty("backupCameraMode"),
+  umbrella: () => getProperty("umbrellaState"),
+  snowsuit: () => getProperty("snowsuit"),
+  edpiece: () => getProperty("edPiece"),
+  retrocape: () =>
+    getProperty("retroCapeSuperhero") +
+    " " +
+    getProperty("retroCapeWashingInstructions"),
+  parka: () => getProperty("parkaMode"),
 } as const;
 
-type Mode = keyof Modes;
-
-function getCurrentModeProp(mode: Mode) {
-  const propName = modeableProperties[mode];
-  return typeof propName === "string"
-    ? get(propName)
-    : propName.map((p) => get(p));
-}
-
 function getCurrentModes(): Modes {
-  const modes: { [x in string]: string | string[] } = {};
-  for (const [mode, item] of Object.entries(modeables)) {
-    if (haveEquipped(item)) {
-      modes[mode] = getCurrentModeProp(mode as Mode);
+  const modes: Modes = {};
+  for (const key of modeableCommands) {
+    if (haveEquipped(modeableItems[key])) {
+      modes[key] = modeableState[key]();
     }
   }
-  return modes as Modes;
+  return modes;
 }
 
 function applyModes(modes: Modes) {
-  for (const [command, args] of Object.entries(modes)) {
-    if (haveEquipped(modeables[command as Mode])) {
-      cliExecute(
-        `${command} ${typeof args === "string" ? args : args.join(" ")}`
-      );
+  for (const command of modeableCommands) {
+    if (haveEquipped(modeableItems[command])) {
+      if (modeableState[command]() !== modes[command]) {
+        cliExecute(command + " " + modes[command]);
+      }
     }
   }
 }

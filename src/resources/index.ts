@@ -9,6 +9,7 @@ import * as FloristFriar from "./2013/Florist";
 import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
+import * as BarrelShrine from "./2015/BarrelShrine";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
 import * as Dinseylandfill from "./2015/Dinseylandfill";
 import * as MayoClinic from "./2015/MayoClinic";
@@ -34,6 +35,7 @@ import * as JuneCleaver from "./2022/JuneCleaver";
 export {
   AsdonMartin,
   Bandersnatch,
+  BarrelShrine,
   BeachComb,
   ChateauMantegna,
   CombatLoversLocket,

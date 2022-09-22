@@ -20,6 +20,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { getAverageAdventures, have as haveItem } from "../../lib";
+import { PropertiesManager } from "../../property";
 import { $effect, $item, $items } from "../../template-string";
 import { clamp } from "../../utils";
 
@@ -107,7 +108,7 @@ function isFuelItem(it: Item) {
   );
 }
 
-function getBestFuel(targetUnits: number): Item {
+function getBestFuel(targetUnits: number): [Item, Item] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).
   const allFuel = $items``.filter(isFuelItem);
@@ -151,7 +152,7 @@ function getBestFuel(targetUnits: number): Item {
     );
   }
 
-  return candidates[0];
+  return [candidates[0], candidates[1]];
 }
 
 /**
@@ -176,22 +177,27 @@ export function insertFuel(it: Item, quantity = 1): boolean {
  */
 export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
+
+  const manager = new PropertiesManager();
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    let fuel;
-    if (canInteract()) fuel = getBestFuel(remaining);
-    else fuel = $item`loaf of soda bread`;
+    const [fuel, secondBest] = canInteract()
+      ? getBestFuel(remaining)
+      : [$item`loaf of soda bread`, undefined];
 
     const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
 
+    if (secondBest) manager.set({ autoBuyPriceLimit: mallPrice(secondBest) });
     retrieveItem(count, fuel);
 
-    if (!insertFuel(fuel, count)) {
+    if (!insertFuel(fuel, itemAmount(fuel))) {
+      manager.resetAll();
       throw new Error("Failed to fuel Asdon Martin.");
     }
   }
+  manager.resetAll();
   return getFuel() >= targetUnits;
 }
 

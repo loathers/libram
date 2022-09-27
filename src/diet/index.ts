@@ -61,7 +61,7 @@ function expectedAdventures(
     (itemType(item) === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
-  const seasoningAdventures = recordedMax - min <= 1 ? 1 : 0.5;
+  const seasoningAdventures = max - min <= 1 ? 1 : 0.5;
   const garish =
     modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
   const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");

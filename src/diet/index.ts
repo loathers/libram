@@ -332,6 +332,15 @@ class DietPlanner<T> {
       this.mpa * 0.5 > mallPrice($item`Special Seasoning`)
     ) {
       helpers.push(this.seasoning);
+    } else if (
+      this.seasoning &&
+      menuItem.item.adventures.split(/[-–—]/)[1] -
+        menuItem.item.adventures.split(/[-–—]/)[0] <=
+        1 &&
+      itemType(menuItem.item) === "food" &&
+      this.mpa > mallPrice($item`Special Seasoning`)
+    ) {
+      helpers.push(this.seasoning);
     }
     if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
       const mayo = menuItem.mayo

@@ -52,7 +52,7 @@ function expectedAdventures(
 ): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
-    .split(/[-–—]/)
+    .split(/[-]/)
     .map((s) => parseInt(s));
   const max = recordedMax ?? min;
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);

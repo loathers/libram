@@ -15,7 +15,6 @@ import {
   myPrimestat,
   mySpleenUse,
   npcPrice,
-  print,
   spleenLimit,
 } from "kolmafia";
 

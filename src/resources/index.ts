@@ -9,6 +9,7 @@ import * as FloristFriar from "./2013/Florist";
 import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
+import * as BarrelShrine from "./2015/BarrelShrine";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
 import * as Dinseylandfill from "./2015/Dinseylandfill";
 import * as MayoClinic from "./2015/MayoClinic";
@@ -23,6 +24,7 @@ import * as Latte from "./2018/LatteLoversMembersMug";
 import * as SongBoom from "./2018/SongBoom";
 import * as BeachComb from "./2019/BeachComb";
 import * as Snapper from "./2019/Snapper";
+import * as Cartography from "./2020/Cartography";
 import * as Guzzlr from "./2020/Guzzlr";
 import * as RetroCape from "./2020/RetroCape";
 import * as CrystalBall from "./2021/CrystalBall";
@@ -34,7 +36,9 @@ import * as JuneCleaver from "./2022/JuneCleaver";
 export {
   AsdonMartin,
   Bandersnatch,
+  BarrelShrine,
   BeachComb,
+  Cartography,
   ChateauMantegna,
   CombatLoversLocket,
   CrimboShrub,

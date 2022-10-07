@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  availableChoiceOptions,
   handlingChoice,
   Item,
   Location,
@@ -30,16 +31,27 @@ function checkLocations(html: string): Location[] {
 
 const use = () => visitUrl("inv_use.php?pwd&whichitem=10954");
 
-export function sendTo(location: Location): boolean {
+export function sendTo(location: Location, upgrade = true): boolean {
   if (!available()) return false;
 
   const pageHtml = use();
+
+  if (upgrade && availableChoiceOptions()[1]) runChoice(1);
+
   const locationsAvailable = checkLocations(pageHtml);
   if (!locationsAvailable.includes(location)) return false;
 
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) runChoice(3);
   return !available();
+}
+
+export function upgrade(): boolean {
+  use();
+  const canUpgrade = availableChoiceOptions()[1] !== undefined;
+  if (canUpgrade) runChoice(1);
+  runChoice(3);
+  return canUpgrade;
 }
 
 export function availableLocations(): Location[] {

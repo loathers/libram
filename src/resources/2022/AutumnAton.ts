@@ -32,7 +32,7 @@ function checkLocations(html: string): Location[] {
 const use = () => visitUrl("inv_use.php?pwd&whichitem=10954");
 
 export function sendTo(
-  target: Location | ((locations: Location[]) => Location),
+  target: Location | Location[] | ((locations: Location[]) => Location),
   upgrade = true
 ): boolean {
   if (!available()) return false;
@@ -43,7 +43,12 @@ export function sendTo(
 
   const locationsAvailable = checkLocations(pageHtml);
   const location =
-    target instanceof Location ? target : target(locationsAvailable);
+    target instanceof Location
+      ? target
+      : Array.isArray(target)
+      ? target.find((l) => locationsAvailable.includes(l))
+      : target(locationsAvailable);
+  if (!location) return false;
   if (!locationsAvailable.includes(location)) return false;
 
   runChoice(2, `heythereprogrammer=${location.id}`);

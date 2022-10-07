@@ -31,11 +31,15 @@ function checkLocations(html: string): Location[] {
 
 const use = () => visitUrl("inv_use.php?pwd&whichitem=10954");
 
+export function currentlyIn(): Location | null {
+  return get("autumnatonQuestLocation");
+}
+
 export function sendTo(
   target: Location | Location[] | ((locations: Location[]) => Location),
   upgrade = true
-): boolean {
-  if (!available()) return false;
+): Location | null {
+  if (!available()) return null;
 
   const pageHtml = use();
 
@@ -48,12 +52,12 @@ export function sendTo(
       : Array.isArray(target)
       ? target.find((l) => locationsAvailable.includes(l))
       : target(locationsAvailable);
-  if (!location) return false;
-  if (!locationsAvailable.includes(location)) return false;
+  if (!location) return null;
+  if (!locationsAvailable.includes(location)) return null;
 
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) runChoice(3);
-  return !available();
+  return currentlyIn();
 }
 
 export function upgrade(): boolean {
@@ -121,8 +125,4 @@ export function zoneItems(): 3 | 4 | 5 {
 
 export function seasonalItems(): 1 | 2 {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
-}
-
-export function currentlyIn(): Location | null {
-  return get("autumnatonQuestLocation");
 }

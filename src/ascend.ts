@@ -13,7 +13,10 @@ import {
   xpath,
   haveSkill,
   MafiaClass,
+  getPermedSkills,
+  toSkill,
 } from "kolmafia";
+import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 
 import { $item, $items, $stat } from "./template-string";
@@ -26,6 +29,17 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+export function permedSkills(): Map<Skill, Lifestyle> {
+  return new Map(
+    Array.from(Object.entries(getPermedSkills())).map(
+      ([skillName, isHardcore]) => [
+        toSkill(skillName),
+        isHardcore ? Lifestyle.hardcore : Lifestyle.softcore,
+      ]
+    )
+  );
+}
+
 export class AscendError extends Error {
   cause?: Skill | Item | Class | Path | string;
   constructor(cause?: Skill | Item | Class | Path | string) {
@@ -34,7 +48,7 @@ export class AscendError extends Error {
     } else if (cause instanceof Skill) {
       const reason = cause.permable
         ? haveSkill(cause)
-          ? "invalid for mysterious reasons"
+          ? "too karmaically expensive"
           : "not a skill you currently know"
         : "unpermable";
       super(`Skill ${cause} is ${reason}!`);
@@ -211,6 +225,7 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
  * @param moon Your moon sign as a string, or the zone you're looking for as a string
  * @param consumable From the astral deli. Pick the container item, not the product.
  * @param pet From the astral pet store.
+ * @param permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
  */
 
 export function ascend(
@@ -220,7 +235,7 @@ export function ascend(
   moon: MoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined,
-  permSkills: Map<Skill, Lifestyle> | undefined = undefined
+  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
 ): void {
   if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);
@@ -247,8 +262,8 @@ export function ascend(
     throw new AscendError(pet);
   }
 
-  const illegalSkill = permSkills
-    ? Array.from(permSkills.keys()).find(
+  const illegalSkill = permOptions
+    ? Array.from(permOptions.permSkills.keys()).find(
         (skill) => !skill.permable || !haveSkill(skill)
       )
     : undefined;
@@ -271,10 +286,23 @@ export function ascend(
 
   if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
 
-  if (permSkills) {
-    for (const [skill, permLevel] of permSkills.entries()) {
-      if (permLevel !== Lifestyle.casual) {
-        const permText = permLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
+  if (permOptions) {
+    const currentPerms = permedSkills();
+    let karma = get("bankedKarma");
+    for (const [
+      skill,
+      prospectivePermLevel,
+    ] of permOptions.permSkills.entries()) {
+      const currentPermLevel = currentPerms.get(skill) ?? Lifestyle.casual;
+      if (prospectivePermLevel > currentPermLevel) {
+        const expectedKarma = 100 * (prospectivePermLevel - currentPermLevel);
+        if (karma < expectedKarma) {
+          if (!permOptions.neverAbort) throw new AscendError(skill);
+          continue;
+        }
+        karma -= expectedKarma;
+        const permText =
+          prospectivePermLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
         visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
       }
     }

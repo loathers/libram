@@ -7,7 +7,6 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
-import { forEach } from "lodash";
 import { getRemainingLiver, have as haveItem } from "../../lib";
 import { get, set } from "../../property";
 import { $item, $location } from "../../template-string";

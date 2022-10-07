@@ -435,6 +435,8 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
     const banisherItem = toItem(banisher);
     if (banisher.toLowerCase() === "saber force") {
       result.set($skill`Use the Force`, Monster.get(foe));
+    } else if (banisher.toLowerCase() === "nanorhino") {
+      result.set($skill`Unleash Nanites`, Monster.get(foe));
     } else if (
       [
         Item.none,

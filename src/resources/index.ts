@@ -29,11 +29,13 @@ import * as Guzzlr from "./2020/Guzzlr";
 import * as RetroCape from "./2020/RetroCape";
 import * as CrystalBall from "./2021/CrystalBall";
 import * as DaylightShavings from "./2021/DaylightShavings";
+import * as AutumnAton from "./2022/AutumnAton";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 import * as GreyGoose from "./2022/GreyGoose";
 import * as JuneCleaver from "./2022/JuneCleaver";
 
 export {
+  AutumnAton,
   AsdonMartin,
   Bandersnatch,
   BarrelShrine,

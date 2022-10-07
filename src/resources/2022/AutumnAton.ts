@@ -109,7 +109,7 @@ export function zoneItems(): 3 | 4 | 5 {
 }
 
 export function seasonalItems(): 1 | 2 {
-  return currentUpgrades().includes("base_blackhat") ? 2 : 1;
+  return currentUpgrades().includes("cowcatcher") ? 2 : 1;
 }
 
 export function currentlyIn(): Location | null {

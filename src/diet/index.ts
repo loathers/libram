@@ -514,7 +514,7 @@ class DietPlanner<T> {
 
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
-      : [valueWith, [...planWith, [helpersAndItem, 1]]];
+      : [valueWith + value, [...planWith, [helpersAndItem, 1]]];
   }
 }
 

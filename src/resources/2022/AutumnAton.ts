@@ -31,7 +31,10 @@ function checkLocations(html: string): Location[] {
 
 const use = () => visitUrl("inv_use.php?pwd&whichitem=10954");
 
-export function sendTo(location: Location, upgrade = true): boolean {
+export function sendTo(
+  target: Location | ((locations: Location[]) => Location),
+  upgrade = true
+): boolean {
   if (!available()) return false;
 
   const pageHtml = use();
@@ -39,6 +42,8 @@ export function sendTo(location: Location, upgrade = true): boolean {
   if (upgrade && availableChoiceOptions()[1]) runChoice(1);
 
   const locationsAvailable = checkLocations(pageHtml);
+  const location =
+    target instanceof Location ? target : target(locationsAvailable);
   if (!locationsAvailable.includes(location)) return false;
 
   runChoice(2, `heythereprogrammer=${location.id}`);

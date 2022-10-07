@@ -86,6 +86,7 @@ export function turnsForQuest(): number {
   return (
     11 *
     Math.max(
+      1,
       get("_autumnatonQuests") -
         currentUpgrades().filter((u) => u.includes("leg")).length
     )

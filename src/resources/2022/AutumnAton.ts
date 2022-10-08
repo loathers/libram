@@ -72,7 +72,7 @@ export function sendTo(
 
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) runChoice(3);
-  return currentlyIn();
+  return location;
 }
 
 /**

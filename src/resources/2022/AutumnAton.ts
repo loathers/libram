@@ -12,7 +12,7 @@ import {
 } from "kolmafia";
 import { get } from "../../property";
 
-export const item = Item.get("Autumn-Aton");
+export const item = Item.get("autumn-aton");
 
 /**
  * Is the autumn-aton currently in your inventory, available to deploy?

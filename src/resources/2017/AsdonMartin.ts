@@ -20,6 +20,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { getAverageAdventures, have as haveItem } from "../../lib";
+import { PropertiesManager } from "../../property";
 import { $effect, $item, $items } from "../../template-string";
 import { clamp } from "../../utils";
 
@@ -107,10 +108,10 @@ function isFuelItem(it: Item) {
   );
 }
 
-function getBestFuel(targetUnits: number): Item {
+function getBestFuels(targetUnits: number): Item[] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).
-  const allFuel = $items``.filter(isFuelItem);
+  const allFuel = Item.all().filter(isFuelItem);
   if (allFuel.filter((item) => historicalPrice(item) === 0).length > 100) {
     mallPrices("food");
     mallPrices("booze");
@@ -151,7 +152,7 @@ function getBestFuel(targetUnits: number): Item {
     );
   }
 
-  return candidates[0];
+  return candidates;
 }
 
 /**
@@ -176,22 +177,34 @@ export function insertFuel(it: Item, quantity = 1): boolean {
  */
 export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
+
+  const manager = new PropertiesManager();
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    let fuel;
-    if (canInteract()) fuel = getBestFuel(remaining);
-    else fuel = $item`loaf of soda bread`;
+    const [bestFuel, secondBest] = canInteract()
+      ? getBestFuels(remaining)
+      : [$item`loaf of soda bread`, undefined];
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
+    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
 
-    retrieveItem(count, fuel);
+    if (secondBest) {
+      const efficiencyOfSecondBest =
+        mallPrice(secondBest) / getAverageAdventures(secondBest);
+      const ceiling = Math.ceil(
+        efficiencyOfSecondBest * getAverageAdventures(bestFuel)
+      );
+      manager.setMaximumValue("autoBuyPriceLimit", ceiling);
+    }
+    retrieveItem(count, bestFuel);
 
-    if (!insertFuel(fuel, count)) {
+    if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
+      manager.resetAll();
       throw new Error("Failed to fuel Asdon Martin.");
     }
   }
+  manager.resetAll();
   return getFuel() >= targetUnits;
 }
 

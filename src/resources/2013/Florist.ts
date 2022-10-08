@@ -3,6 +3,7 @@ import {
   getFloristPlants,
   Location,
   myLocation,
+  runChoice,
   visitUrl,
 } from "kolmafia";
 import { EnvironmentType } from "../../lib";
@@ -29,6 +30,10 @@ class Flower {
     this.environment = environment;
     this.modifier = modifier;
     this.territorial = territorial;
+  }
+
+  private static visit() {
+    visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
   }
 
   static plantNamesInZone(location = myLocation()): string[] {
@@ -68,14 +73,16 @@ class Flower {
     const flowers = Flower.plantNamesInZone();
     if (!flowers[2]) return false;
     const plantNumber = flowers.indexOf(this.name);
-    visitUrl(`whichchoice=720&choice.php?option=2&plnti=${plantNumber}&pwd`);
+    Flower.visit();
+    runChoice(2, `plnti=${plantNumber}`);
     return !this.isPlantedHere();
   }
 
   plant(): boolean {
     if (this.isPlantedHere()) return true;
     if (isFull()) return false;
-    visitUrl(`choice.php?whichchoice=720&option=1&plant=${this.id}&pwd`);
+    Flower.visit();
+    runChoice(1, `plant=${this.id}`);
     return this.isPlantedHere();
   }
 }

@@ -30,7 +30,7 @@ export function isNumericOrStringProperty(property: string): boolean {
   return choiceAdventurePattern.test(property);
 }
 
-const fakeBooleans = ["_jickJarAvailable"];
+const fakeBooleans = ["_jickJarAvailable", "trackVoteMonster"];
 function hasBooleanDefault(property: string, defaultValue: string): boolean {
   if (fakeBooleans.includes(property)) return false;
   return ["true", "false"].includes(defaultValue);

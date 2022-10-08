@@ -183,18 +183,23 @@ export function fillTo(targetUnits: number): boolean {
     const remaining = targetUnits - getFuel();
 
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    const [fuel, secondBest] = canInteract()
+    const [bestFuel, secondBest] = canInteract()
       ? getBestFuels(remaining)
       : [$item`loaf of soda bread`, undefined];
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
+    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
 
     if (secondBest) {
-      manager.setMaximumValue("autoBuyPriceLimit", mallPrice(secondBest));
+      const efficiencyOfSecondBest =
+        mallPrice(secondBest) / getAverageAdventures(secondBest);
+      const ceiling = Math.ceil(
+        efficiencyOfSecondBest * getAverageAdventures(bestFuel)
+      );
+      manager.setMaximumValue("autoBuyPriceLimit", ceiling);
     }
-    retrieveItem(count, fuel);
+    retrieveItem(count, bestFuel);
 
-    if (!insertFuel(fuel, itemAmount(fuel))) {
+    if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
       manager.resetAll();
       throw new Error("Failed to fuel Asdon Martin.");
     }

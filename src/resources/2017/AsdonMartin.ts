@@ -108,10 +108,10 @@ function isFuelItem(it: Item) {
   );
 }
 
-function getBestFuel(targetUnits: number): [Item, Item] {
+function getBestFuels(targetUnits: number): Item[] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).
-  const allFuel = $items``.filter(isFuelItem);
+  const allFuel = Item.all().filter(isFuelItem);
   if (allFuel.filter((item) => historicalPrice(item) === 0).length > 100) {
     mallPrices("food");
     mallPrices("booze");
@@ -152,7 +152,7 @@ function getBestFuel(targetUnits: number): [Item, Item] {
     );
   }
 
-  return [candidates[0], candidates[1]];
+  return candidates;
 }
 
 /**
@@ -184,12 +184,14 @@ export function fillTo(targetUnits: number): boolean {
 
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
     const [fuel, secondBest] = canInteract()
-      ? getBestFuel(remaining)
+      ? getBestFuels(remaining)
       : [$item`loaf of soda bread`, undefined];
 
     const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
 
-    if (secondBest) manager.set({ autoBuyPriceLimit: mallPrice(secondBest) });
+    if (secondBest) {
+      manager.setMaximumValue("autoBuyPriceLimit", mallPrice(secondBest));
+    }
     retrieveItem(count, fuel);
 
     if (!insertFuel(fuel, itemAmount(fuel))) {

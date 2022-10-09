@@ -19,6 +19,7 @@ import * as AsdonMartin from "./2017/AsdonMartin";
 import * as MummingTrunk from "./2017/MummingTrunk";
 import * as Pantogram from "./2017/Pantogram";
 import * as Robortender from "./2017/Robortender";
+import * as Spacegate from "./2017/Spacegate";
 import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as SongBoom from "./2018/SongBoom";
@@ -64,6 +65,7 @@ export {
   Snapper,
   SongBoom,
   SourceTerminal,
+  Spacegate,
   SpookyPutty,
   Stickers,
   StompingBoots,

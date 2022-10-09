@@ -4,19 +4,24 @@ import {
   booleanModifier,
   Class,
   classModifier,
+  cliExecuteOutput,
   Effect,
   effectModifier,
   Familiar,
+  familiarWeight,
   Item,
   Monster,
   monsterModifier,
+  myFamiliar,
   numericModifier,
+  print,
   Skill,
   skillModifier,
   Stat,
   statModifier,
   stringModifier,
 } from "kolmafia";
+import { have } from "./lib";
 
 import {
   BooleanModifier,
@@ -36,6 +41,7 @@ import {
   StringModifier,
   stringModifiers,
 } from "./modifierTypes";
+import { $effect } from "./template-string";
 import { arrayContains } from "./utils";
 
 export function get(
@@ -166,4 +172,179 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
  */
 export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
   return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
+}
+
+function replaceAll(
+  str: string,
+  searchValue: string,
+  replaceValue: string
+): string {
+  const newStr = str.replace(searchValue, replaceValue);
+  if (newStr === str) return newStr;
+  return replaceAll(newStr, searchValue, replaceValue);
+}
+
+/**
+ * Prints the modtrace to the log.
+ * @param modifiers A string (or string[]) containing the modtrace lookup term(s).
+ * @param baseModifier A string where all the info about modifiers in the string[] array can be grabbed with this one lookup term. (Automatically generated in most cases)
+ * Example: printModtrace("Meat Drop") or printModtrace(["Item Drop", "Booze Drop"])
+ */
+
+export function printModtrace(
+  modifiers: string | string[],
+  baseModifier?: string
+): void {
+  if (typeof modifiers === "string") {
+    return printModtrace([modifiers], modifiers);
+  } else {
+    if (modifiers.length === 0) return;
+    if (!baseModifier) {
+      const baseModifiers = new Map(
+        modifiers.map((key) => {
+          return [key, 1];
+        })
+      );
+
+      modifiers.forEach((keyThis) => {
+        for (const keyNext of modifiers) {
+          if (keyThis === keyNext) continue;
+          if (keyThis.includes(keyNext)) {
+            baseModifiers.set(keyThis, 0);
+            break;
+          }
+        }
+      });
+
+      modifiers.forEach((keyThis) => {
+        if (baseModifiers.get(keyThis) ?? 0 !== 0) {
+          const modifiersSubset = [keyThis];
+
+          for (const keyNext of modifiers) {
+            if (keyThis === keyNext) continue;
+            if (keyNext.includes(keyThis)) modifiersSubset.push(keyNext);
+          }
+          printModtrace(modifiersSubset, keyThis);
+        }
+      });
+    } else {
+      let htmlOutput = cliExecuteOutput(`modtrace ${baseModifier}`);
+      let htmlHeader = htmlOutput.substring(
+        htmlOutput.indexOf("<tr>") + 4,
+        htmlOutput.indexOf("</tr>")
+      );
+      let headers = [] as string[];
+      let headerMatches = htmlHeader.match("(>)(.*?)(</td>)");
+      while (headerMatches) {
+        const header = headerMatches[2];
+        headers.push(header);
+
+        const idx =
+          headerMatches[0].length + htmlHeader.search("(>)(.*?)(</td>)");
+        htmlHeader = htmlHeader.substring(idx);
+        headerMatches = htmlHeader.match("(>)(.*?)(</td>)");
+      }
+      headers = headers.slice(2);
+
+      const exactModifierColIdx = headers.findIndex(
+        (header) => header.toLowerCase() === baseModifier.toLowerCase()
+      );
+
+      if (exactModifierColIdx === -1) {
+        print(
+          `Could not find exact string match of ${baseModifier} in ${modifiers.toString()}`,
+          "red"
+        );
+        return;
+      }
+
+      let totalVal = 0.0;
+      // Maps modifier name to its value
+      const modifierVals = new Map(
+        headers.map((header) => {
+          return [header, 0];
+        })
+      );
+
+      const lowerCaseModifiers = modifiers.map((modifier) =>
+        modifier.toLowerCase()
+      );
+
+      if (baseModifier.toLowerCase() === "familiar weight") {
+        totalVal += familiarWeight(myFamiliar());
+        print(`[Familiar Weight] Base weight (${totalVal})`);
+      }
+
+      htmlOutput = htmlOutput.substring(
+        htmlOutput.indexOf("</tr>") + 5,
+        htmlOutput.indexOf("</table>")
+      );
+
+      while (htmlOutput.length > 0) {
+        const idxStart = htmlOutput.indexOf("<tr>");
+        const idxEnd = htmlOutput.indexOf("</tr>");
+        if (idxStart === -1) break;
+
+        let row = replaceAll(
+          htmlOutput.substring(idxStart + 4, idxEnd),
+          "></td>",
+          ">0</td>"
+        );
+        const rowArr = [] as string[];
+        let rowMatches = row.match("(>)(.*?)(</td>)");
+        while (rowMatches) {
+          rowArr.push(rowMatches[2]);
+          row = row.replace(rowMatches[0], "");
+          rowMatches = row.match("(>)(.*?)(</td>)");
+        }
+        rowArr
+          .slice(2)
+          .filter((e, idx) => idx % 2 === 0)
+          .forEach((e, idx) => {
+            const val = parseInt(e);
+            modifierVals.set(
+              headers[idx],
+              (modifierVals.get(headers[idx]) ?? 0) + val
+            );
+            if (
+              val !== 0 &&
+              lowerCaseModifiers.includes(headers[idx].toLowerCase())
+            ) {
+              print(`[${headers[idx]}] ${rowArr[1]} (${val.toFixed(1)})`);
+            }
+          });
+
+        htmlOutput = htmlOutput.substring(idxEnd + 5);
+      }
+
+      let total = 0.0;
+      for (const modifier of headers) {
+        if (lowerCaseModifiers.includes(modifier.toLowerCase())) {
+          let totalVal = modifierVals.get(modifier) ?? 0;
+          if (modifier.toLowerCase() === "weapon damage") {
+            if (have($effect`Bow-Legged Swagger`)) {
+              print(
+                `[Weapon Damage] Bow-Legged Swagger (${totalVal.toFixed(1)})`
+              );
+              totalVal += totalVal;
+            }
+          } else if (modifier.toLowerCase() === "weapon damage percent") {
+            if (have($effect`Bow-Legged Swagger`)) {
+              print(
+                `[Weapon Damage Percent] Bow-Legged Swagger (${totalVal.toFixed(
+                  1
+                )})`
+              );
+              totalVal += totalVal;
+            }
+          }
+          print(`${modifier} => ${totalVal.toFixed(1)}`, "purple");
+
+          total += totalVal;
+        }
+      }
+
+      print(`Total ${baseModifier}: ${total.toFixed(1)}`, "blue");
+    }
+  }
 }

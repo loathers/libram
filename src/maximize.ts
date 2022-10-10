@@ -34,6 +34,7 @@ export type MaximizeOptions = {
   onlySlot: Slot[];
   preventSlot: Slot[];
   forceUpdate: boolean;
+  modes: Modes;
 };
 
 /**
@@ -80,6 +81,7 @@ function mergeMaximizeOptions(
     ],
 
     forceUpdate: addendums.forceUpdate ?? defaultOptions.forceUpdate,
+    modes: { ...defaultOptions.modes, ...(addendums.modes ?? {}) },
   };
 }
 
@@ -93,6 +95,7 @@ const defaultMaximizeOptions: MaximizeOptions = {
   onlySlot: [],
   preventSlot: [],
   forceUpdate: false,
+  modes: {},
 };
 
 /**
@@ -351,7 +354,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
 
-  applyModes(entry.modes);
+  applyModes({ ...entry.modes, ...options.modes });
 }
 
 const slotStructure = [
@@ -474,7 +477,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     rider,
     myFamiliar(),
     canEquipItemCount(),
-    getCurrentModes()
+    { ...getCurrentModes(), ...options.modes }
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {

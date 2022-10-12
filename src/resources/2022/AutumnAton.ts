@@ -71,7 +71,7 @@ export function sendTo(
   if (!locationsAvailable.includes(location)) return null;
 
   runChoice(2, `heythereprogrammer=${location.id}`);
-  if (handlingChoice()) runChoice(3);
+  if (handlingChoice()) visitUrl("main.php");
   return location;
 }
 
@@ -93,7 +93,7 @@ export function upgrade(): boolean {
 export function availableLocations(): Location[] {
   if (!available()) return [];
   const pageHtml = use();
-  runChoice(3);
+  visitUrl("main.php");
   return checkLocations(pageHtml);
 }
 

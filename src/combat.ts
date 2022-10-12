@@ -241,6 +241,7 @@ export class Macro {
         `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`
       );
       Macro.cachedAutoAttacks.delete(name);
+      Macro.cachedMacroIds.delete(name);
     }
   }
 

@@ -34,6 +34,7 @@ export type MaximizeOptions = {
   onlySlot: Slot[];
   preventSlot: Slot[];
   forceUpdate: boolean;
+  modes: Modes;
 };
 
 /**
@@ -80,6 +81,7 @@ function mergeMaximizeOptions(
     ],
 
     forceUpdate: addendums.forceUpdate ?? defaultOptions.forceUpdate,
+    modes: { ...defaultOptions.modes, ...(addendums.modes ?? {}) },
   };
 }
 
@@ -93,6 +95,7 @@ const defaultMaximizeOptions: MaximizeOptions = {
   onlySlot: [],
   preventSlot: [],
   forceUpdate: false,
+  modes: {},
 };
 
 /**
@@ -118,9 +121,9 @@ const modeableCommands = [
   "retrocape",
   "parka",
 ] as const;
-type Mode = typeof modeableCommands[number];
-type Modes = Partial<{ [x in Mode]: string }>;
-const modeableItems = {
+export type Mode = typeof modeableCommands[number];
+export type Modes = Partial<{ [x in Mode]: string }>;
+export const modeableItems = {
   backupcamera: $item`backup camera`,
   umbrella: $item`unbreakable umbrella`,
   snowsuit: $item`Snow Suit`,
@@ -129,7 +132,7 @@ const modeableItems = {
   parka: $item`Jurassic Parka`,
 } as const;
 
-const modeableState = {
+export const modeableState = {
   backupcamera: () => getProperty("backupCameraMode"),
   umbrella: () => getProperty("umbrellaState"),
   snowsuit: () => getProperty("snowsuit"),
@@ -141,7 +144,7 @@ const modeableState = {
   parka: () => getProperty("parkaMode"),
 } as const;
 
-function getCurrentModes(): Modes {
+export function getCurrentModes(): Modes {
   const modes: Modes = {};
   for (const key of modeableCommands) {
     if (haveEquipped(modeableItems[key])) {
@@ -151,7 +154,7 @@ function getCurrentModes(): Modes {
   return modes;
 }
 
-function applyModes(modes: Modes) {
+export function applyModes(modes: Modes) {
   for (const command of modeableCommands) {
     if (haveEquipped(modeableItems[command])) {
       if (modeableState[command]() !== modes[command]) {
@@ -351,7 +354,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
 
-  applyModes(entry.modes);
+  applyModes({ ...entry.modes, ...options.modes });
 }
 
 const slotStructure = [
@@ -474,7 +477,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     rider,
     myFamiliar(),
     canEquipItemCount(),
-    getCurrentModes()
+    { ...getCurrentModes(), ...options.modes }
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {

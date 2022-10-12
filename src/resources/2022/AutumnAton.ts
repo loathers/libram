@@ -83,7 +83,7 @@ export function upgrade(): boolean {
   use();
   const canUpgrade = availableChoiceOptions()[1] !== undefined;
   if (canUpgrade) runChoice(1);
-  runChoice(3);
+  visitUrl("main.php");
   return canUpgrade;
 }
 

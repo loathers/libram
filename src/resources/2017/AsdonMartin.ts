@@ -2,6 +2,7 @@ import "core-js/modules/es.object.values";
 
 import {
   autosellPrice,
+  buy,
   canInteract,
   cliExecute,
   Effect,
@@ -15,12 +16,10 @@ import {
   itemAmount,
   mallPrice,
   mallPrices,
-  retrieveItem,
   toInt,
   visitUrl,
 } from "kolmafia";
 import { getAverageAdventures, have as haveItem } from "../../lib";
-import { PropertiesManager } from "../../property";
 import { $effect, $item, $items } from "../../template-string";
 import { clamp } from "../../utils";
 
@@ -178,7 +177,6 @@ export function insertFuel(it: Item, quantity = 1): boolean {
 export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
 
-  const manager = new PropertiesManager();
   while (getFuel() < targetUnits) {
     const remaining = targetUnits - getFuel();
 
@@ -189,22 +187,20 @@ export function fillTo(targetUnits: number): boolean {
 
     const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
 
+    let ceiling: number | undefined = undefined;
     if (secondBest) {
       const efficiencyOfSecondBest =
         mallPrice(secondBest) / getAverageAdventures(secondBest);
-      const ceiling = Math.ceil(
+      ceiling = Math.ceil(
         efficiencyOfSecondBest * getAverageAdventures(bestFuel)
       );
-      manager.setMaximumValue("autoBuyPriceLimit", ceiling);
     }
-    retrieveItem(count, bestFuel);
+    ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
 
     if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
-      manager.resetAll();
       throw new Error("Failed to fuel Asdon Martin.");
     }
   }
-  manager.resetAll();
   return getFuel() >= targetUnits;
 }
 

@@ -121,9 +121,9 @@ const modeableCommands = [
   "retrocape",
   "parka",
 ] as const;
-type Mode = typeof modeableCommands[number];
-type Modes = Partial<{ [x in Mode]: string }>;
-const modeableItems = {
+export type Mode = typeof modeableCommands[number];
+export type Modes = Partial<{ [x in Mode]: string }>;
+export const modeableItems = {
   backupcamera: $item`backup camera`,
   umbrella: $item`unbreakable umbrella`,
   snowsuit: $item`Snow Suit`,
@@ -132,7 +132,7 @@ const modeableItems = {
   parka: $item`Jurassic Parka`,
 } as const;
 
-const modeableState = {
+export const modeableState = {
   backupcamera: () => getProperty("backupCameraMode"),
   umbrella: () => getProperty("umbrellaState"),
   snowsuit: () => getProperty("snowsuit"),
@@ -144,7 +144,7 @@ const modeableState = {
   parka: () => getProperty("parkaMode"),
 } as const;
 
-function getCurrentModes(): Modes {
+export function getCurrentModes(): Modes {
   const modes: Modes = {};
   for (const key of modeableCommands) {
     if (haveEquipped(modeableItems[key])) {
@@ -154,7 +154,7 @@ function getCurrentModes(): Modes {
   return modes;
 }
 
-function applyModes(modes: Modes) {
+export function applyModes(modes: Modes) {
   for (const command of modeableCommands) {
     if (haveEquipped(modeableItems[command])) {
       if (modeableState[command]() !== modes[command]) {

@@ -40,7 +40,7 @@ export function getMacroId(name = MACRO_NAME): number {
       `account_combatmacros.php?macroid=0&name=${name}&macrotext=abort&action=save`
     );
     return parseInt(
-      xpath(newMacroText, "//input[@name=macroid]/@value")[0],
+      xpath(newMacroText, `//input[@name=${name}]/@value`)[0],
       10
     );
   } else {
@@ -241,6 +241,7 @@ export class Macro {
         `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`
       );
       Macro.cachedAutoAttacks.delete(name);
+      Macro.cachedMacroIds.delete(name);
     }
   }
 

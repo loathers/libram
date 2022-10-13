@@ -16,7 +16,6 @@ import {
   itemAmount,
   mallPrice,
   mallPrices,
-  print,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -188,7 +187,6 @@ export function fillTo(targetUnits: number): boolean {
         efficiencyOfSecondBest * getAverageAdventures(bestFuel)
       );
     }
-    print(`Buying ${count} ${bestFuel} at ${ceiling}`, "red");
     ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
 
     if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {

@@ -296,6 +296,47 @@ export class Macro {
       | Stat,
     ifTrue: string | Macro
   ): this {
+    return this.step(`if ${this.createBalls(condition)}`)
+      .step(ifTrue)
+      .step("endif");
+  }
+
+  /**
+   * Add an "if not" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifFalse Continuation if the condition is false.
+   * @returns {Macro} This object itself.
+   */
+  ifNot_(
+    condition:
+      | string
+      | Monster
+      | Monster[]
+      | Effect
+      | Skill
+      | Item
+      | Location
+      | Class
+      | Stat,
+    ifFalse: string | Macro
+  ): this {
+    return this.step(`if !${this.createBalls(condition)}`)
+      .step(ifFalse)
+      .step("endif");
+  }
+
+  private createBalls(
+    condition:
+      | string
+      | Monster
+      | Monster[]
+      | Effect
+      | Skill
+      | Item
+      | Location
+      | Class
+      | Stat
+  ) {
     let ballsCondition = "";
     if (condition instanceof Monster) {
       ballsCondition = `monsterid ${condition.id}`;
@@ -339,7 +380,8 @@ export class Macro {
     } else {
       ballsCondition = condition;
     }
-    return this.step(`if ${ballsCondition}`).step(ifTrue).step("endif");
+
+    return ballsCondition;
   }
 
   /**
@@ -354,6 +396,20 @@ export class Macro {
     ifTrue: string | Macro
   ): T {
     return new this().if_(condition, ifTrue);
+  }
+
+  /**
+   * Create a new macro with an "if !" statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifFalse Continuation if the condition is false.
+   * @returns {Macro} This object itself.
+   */
+  static ifNot_<T extends Macro>(
+    this: Constructor<T>,
+    condition: Parameters<T["ifNot_"]>[0],
+    ifFalse: string | Macro
+  ): T {
+    return new this().ifNot_(condition, ifFalse);
   }
 
   /**

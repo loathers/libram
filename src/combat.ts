@@ -361,12 +361,23 @@ export class Macro {
     return new this().if_(condition, ifTrue);
   }
 
+  /**
+   * Add an "if" statement to this macro, inverting the condition.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
   ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
     return this.step(`if !(${Macro.makeBALLSPredicate(condition)})`)
       .step(ifTrue)
       .step("endif");
   }
-
+  /**
+   * Create a new macro with an "if" statement, inverting the condition.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
   static ifNot<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,

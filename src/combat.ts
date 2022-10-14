@@ -79,6 +79,17 @@ function itemOrItemsBallsMacroPredicate(
   }
 }
 
+type PreBALLSPredicate =
+  | string
+  | Monster
+  | Monster[]
+  | Effect
+  | Skill
+  | Item
+  | Location
+  | Class
+  | Stat;
+
 type SkillOrName = Skill | string;
 function skillOrNameToSkill(skillOrName: SkillOrName) {
   if (typeof skillOrName === "string") {
@@ -277,25 +288,7 @@ export class Macro {
     return new this().runaway();
   }
 
-  /**
-   * Add an "if" statement to this macro.
-   * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
-   * @returns {Macro} This object itself.
-   */
-  if_(
-    condition:
-      | string
-      | Monster
-      | Monster[]
-      | Effect
-      | Skill
-      | Item
-      | Location
-      | Class
-      | Stat,
-    ifTrue: string | Macro
-  ): this {
+  private static makeBALLSPredicate(condition: PreBALLSPredicate): string {
     let ballsCondition = "";
     if (condition instanceof Monster) {
       ballsCondition = `monsterid ${condition.id}`;
@@ -339,7 +332,19 @@ export class Macro {
     } else {
       ballsCondition = condition;
     }
-    return this.step(`if ${ballsCondition}`).step(ifTrue).step("endif");
+    return ballsCondition;
+  }
+
+  /**
+   * Add an "if" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  if_(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
+    return this.step(`if ${Macro.makeBALLSPredicate(condition)}`)
+      .step(ifTrue)
+      .step("endif");
   }
 
   /**
@@ -350,10 +355,24 @@ export class Macro {
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
-    condition: Parameters<T["if_"]>[0],
+    condition: PreBALLSPredicate,
     ifTrue: string | Macro
   ): T {
     return new this().if_(condition, ifTrue);
+  }
+
+  ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
+    return this.step(`if !(${Macro.makeBALLSPredicate(condition)})`)
+      .step(ifTrue)
+      .step("endif");
+  }
+
+  static ifNot<T extends Macro>(
+    this: Constructor<T>,
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro
+  ): T {
+    return new this().ifNot(condition, ifTrue);
   }
 
   /**

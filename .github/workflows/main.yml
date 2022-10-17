@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install modules
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+      - name: Install modules
         run: yarn install --immutable
       - name: Run ESLint & Prettier
         run: yarn run lint
@@ -26,10 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install modules
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+      - name: Install modules
         run: yarn install --immutable
       - name: Build
         run: yarn run build
@@ -41,10 +41,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install modules
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+      - name: Install modules
         run: yarn install --immutable
       - name: Build
         run: yarn run build

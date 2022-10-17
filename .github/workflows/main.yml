@@ -4,48 +4,54 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+
+env:
+  node-version: "16"
+  path: "KoLmafia"
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install modules
-        run: yarn install --frozen-lockfile
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
       - name: Run ESLint & Prettier
         run: yarn run lint
 
   testBuild:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install modules
-        run: yarn install --frozen-lockfile
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
       - name: Build
         run: yarn run build
 
-  build:
+  push:
     runs-on: ubuntu-latest
     needs: [lint, testBuild]
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          git config user.name "O.A.F."
-          git config user.email "<>"
+      - uses: actions/checkout@v3
       - name: Install modules
-        run: yarn install --frozen-lockfile
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
       - name: Build
         run: yarn run build
-      - name: Switch to release branch
-        run: |
-          mv KoLmafia/scripts ./scripts
-          git fetch --all
-          if git show-ref refs/remotes/origin/release; then git switch release; else git switch --orphan release; fi
-      - name: Commit built Mafia files
-        run: |
-          git add scripts/
-          {
-            git commit -m "Build Mafia files for commit $GITHUB_SHA"
-            git push origin release
-          } || exit 0
+
+      - name: Push to Release
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: release
+          FOLDER: ${{ env.path }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build: ({sha}) {msg}"
+          SKIP_EMPTY_COMMITS: true

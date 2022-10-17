@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+        run: yarn install --immutable
       - name: Run ESLint & Prettier
         run: yarn run lint
 
@@ -29,6 +30,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+        run: yarn install --immutable
       - name: Build
         run: yarn run build
 
@@ -43,6 +45,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+        run: yarn install --immutable
       - name: Build
         run: yarn run build
 

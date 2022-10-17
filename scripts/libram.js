@@ -15242,7 +15242,7 @@ var Impatiens = new Flower("Impatiens", 14, "indoor", {
 });
 var SpiderPlant = new Flower("Spider Plant", 15, "indoor", "Poison");
 var RedFern = new Flower("Red Fern", 16, "indoor", "Delevels Enemy");
-var BamBoo = new Flower("Bam BOO!", 17, "indoor", {
+var BamBoo = new Flower("BamBOO!", 17, "indoor", {
   "Spooky Damage": 12.5
 });
 var ArcticMoss = new Flower("Arctic Moss", 18, "indoor", {

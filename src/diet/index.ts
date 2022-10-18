@@ -478,6 +478,13 @@ class DietPlanner<T> {
       const current = organCapacitiesWithMap.get(organ);
       if (current !== undefined) {
         organCapacitiesWithMap.set(organ, current - size);
+      } else if (size > 0) {
+        // If item requires an organ that is unavailable
+        return this.planOrgansWithTrials(
+          organCapacities,
+          trialItems.slice(1),
+          overrideModifiers
+        );
       }
     }
     const organCapacitiesWith = [...organCapacitiesWithMap];

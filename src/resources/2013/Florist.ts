@@ -192,7 +192,7 @@ export const Impatiens = new Flower("Impatiens", 14, "indoor", {
 });
 export const SpiderPlant = new Flower("Spider Plant", 15, "indoor", "Poison");
 export const RedFern = new Flower("Red Fern", 16, "indoor", "Delevels Enemy");
-export const BamBoo = new Flower("Bam BOO!", 17, "indoor", {
+export const BamBoo = new Flower("BamBOO!", 17, "indoor", {
   "Spooky Damage": 12.5,
 });
 export const ArcticMoss = new Flower("Arctic Moss", 18, "indoor", {

@@ -1,64 +1,71 @@
 import { printHtml } from "kolmafia";
+export enum LogLevels {
+  NONE = 0,
+  ERROR = 1,
+  WARNING = 2,
+  INFO = 3,
+  DEBUG = 4,
+}
 
 const defaultHandlers = {
-  info: (message: string): unknown => printHtml(`<b>[Libram]</b> ${message}`),
-  warning: (message: string): unknown =>
+  [LogLevels.INFO]: (message: string): unknown =>
+    printHtml(`<b>[Libram Info]</b> ${message}`),
+  [LogLevels.WARNING]: (message: string): unknown =>
     printHtml(
-      `<span style="background: orange; color: white;"><b>[Libram]</b> ${message}</span>`
+      `<span style="background: orange; color: white;"><b>[Libram Warning]</b> ${message}</span>`
     ),
-  error: (error: string | Error): unknown =>
+  [LogLevels.ERROR]: (error: string | Error): unknown =>
     printHtml(
-      `<span style="background: red; color: white;"><b>[Libram]</b> ${error.toString()}</span>`
+      `<span style="background: red; color: white;"><b>[Libram Error]</b> ${error.toString()}</span>`
     ),
-  debug: (message: string): unknown => {
-    if (Logger.debugMode) {
-      printHtml(
-        `<span style="background: red; color: white;"><b>[Libram Debug]</b> ${message}</span>`
-      );
-      return;
-    }
+  [LogLevels.DEBUG]: (message: string): unknown => {
+    printHtml(
+      `<span style="background: red; color: white;"><b>[Libram Debug]</b> ${message}</span>`
+    );
+    return;
   },
 };
 
-export type LogLevel = keyof typeof defaultHandlers;
+type LogLevel = keyof typeof defaultHandlers;
 type LogFunction<T extends LogLevel> = typeof defaultHandlers[T];
 
 class Logger {
   handlers = defaultHandlers;
-  private static debug = false;
+  private static currentLevel = LogLevels.ERROR;
 
-  static get debugMode(): boolean {
-    return Logger.debug;
+  get level(): LogLevels {
+    return Logger.currentLevel;
   }
-  static set debugActive(debug: boolean) {
-    Logger.debug = debug;
+
+  setLevel(level: LogLevels): void {
+    Logger.currentLevel = level;
   }
 
   setHandler<T extends LogLevel>(level: T, callback: LogFunction<T>): void {
     this.handlers[level] = callback;
   }
 
-  log(level: "error", message: string | Error): void;
-  log(level: "warning" | "info" | "debug", message: string): void;
+  log(level: LogLevels.ERROR, message: string | Error): void;
+  log(level: LogLevel, message: string): void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   log(level: LogLevel, message: any): void {
-    this.handlers[level](message);
+    if (this.level >= level) this.handlers[level](message);
   }
 
   info(message: string) {
-    this.log("info", message);
+    this.log(LogLevels.INFO, message);
   }
 
   warning(message: string) {
-    this.log("warning", message);
+    this.log(LogLevels.WARNING, message);
   }
 
   error(message: string | Error) {
-    this.log("error", message);
+    this.log(LogLevels.ERROR, message);
   }
 
   debug(message: string) {
-    this.log("debug", message);
+    this.log(LogLevels.DEBUG, message);
   }
 }
 

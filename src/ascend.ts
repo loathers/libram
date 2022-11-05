@@ -217,6 +217,14 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
   }
 }
 
+function isInValhalla(): boolean {
+  const charPaneText = visitUrl("charpane.php");
+  return (
+    containsText(charPaneText, "Lvl. <img src=") ||
+    containsText(charPaneText, "Level <img src=")
+  );
+}
+
 /**
  * Hops the gash, perming no skills
  * @param path path of choice, as a Path object--these exist as properties of Paths
@@ -271,10 +279,10 @@ export function ascend(
     throw new AscendError(illegalSkill);
   }
 
-  if (!containsText(visitUrl("charpane.php"), "Lvl. <img src=")) {
+  if (!isInValhalla()) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Lvl. <img src=")) {
+  if (!isInValhalla()) {
     throw new AscendError(
       "Couldn't determine whether ascension completed successfully"
     );

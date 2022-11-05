@@ -271,11 +271,13 @@ export function ascend(
     throw new AscendError(illegalSkill);
   }
 
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!containsText(visitUrl("charpane.php"), "Lvl. <img src=")) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
-    throw new AscendError();
+  if (!containsText(visitUrl("charpane.php"), "Lvl. <img src=")) {
+    throw new AscendError(
+      "Couldn't determine whether ascension completed successfully"
+    );
   }
 
   visitUrl("afterlife.php?action=pearlygates");

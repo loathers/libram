@@ -218,11 +218,7 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
 }
 
 function isInValhalla(): boolean {
-  const charPaneText = visitUrl("charpane.php");
-  return (
-    containsText(charPaneText, "Lvl. <img src=") ||
-    containsText(charPaneText, "Level <img src=")
-  );
+  return containsText(visitUrl("charpane.php"), "Karma:");
 }
 
 /**

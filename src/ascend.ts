@@ -279,9 +279,7 @@ export function ascend(
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
   if (!isInValhalla()) {
-    throw new AscendError(
-      "Couldn't determine whether ascension completed successfully"
-    );
+    throw new AscendError();
   }
 
   visitUrl("afterlife.php?action=pearlygates");

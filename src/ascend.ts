@@ -217,6 +217,10 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
   }
 }
 
+function isInValhalla(): boolean {
+  return containsText(visitUrl("charpane.php"), "Karma:");
+}
+
 /**
  * Hops the gash, perming no skills
  * @param path path of choice, as a Path object--these exist as properties of Paths
@@ -271,10 +275,10 @@ export function ascend(
     throw new AscendError(illegalSkill);
   }
 
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     throw new AscendError();
   }
 

@@ -11613,6 +11613,10 @@ function toMoonId(moon, playerClass) {
       throw new AscendError("Invalid moon sign!");
   }
 }
+
+function isInValhalla() {
+  return (0,external_kolmafia_namespaceObject.containsText)((0,external_kolmafia_namespaceObject.visitUrl)("charpane.php"), "Karma:");
+}
 /**
  * Hops the gash, perming no skills
  * @param path path of choice, as a Path object--these exist as properties of Paths
@@ -11652,11 +11656,11 @@ function ascend(path, playerClass, lifestyle, moon) {
     throw new AscendError(illegalSkill);
   }
 
-  if (!(0,external_kolmafia_namespaceObject.containsText)((0,external_kolmafia_namespaceObject.visitUrl)("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     (0,external_kolmafia_namespaceObject.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
 
-  if (!(0,external_kolmafia_namespaceObject.containsText)((0,external_kolmafia_namespaceObject.visitUrl)("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     throw new AscendError();
   }
 

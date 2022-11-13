@@ -22,6 +22,7 @@ export function chosenParts(): Item[] {
 
 export function choosePart(part: BodyPart): boolean {
   if (!have()) return false;
+  if (_have(bodyParts[part])) return true;
   visitUrl("arena.php");
   runChoice(4);
   return chosenParts().includes(bodyParts[part]);

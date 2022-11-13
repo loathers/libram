@@ -16,19 +16,17 @@ export const bodyParts = {
 
 export type BodyPart = keyof typeof bodyParts;
 
-export function chosenPart(): Item | undefined {
-  return Object.values(bodyParts).find((part) => _have(part));
+export function chosenParts(): Item[] {
+  return Object.values(bodyParts).filter((part) => _have(part));
 }
 
 export function choosePart(part: BodyPart): boolean {
   if (!have()) return false;
-  if (!chosenPart()) {
-    visitUrl("arena.php");
-    runChoice(4);
-  }
-  return chosenPart() === bodyParts[part];
+  visitUrl("arena.php");
+  runChoice(4);
+  return chosenParts().includes(bodyParts[part]);
 }
 
 export function expectedAdvsPerCombat(weight: number): number {
-  return 0.01 + weight / 1000;
+  return Math.min(0.01 + weight / 1000, 1);
 }

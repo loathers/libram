@@ -1,7 +1,6 @@
 import {
   Skill,
   Class,
-  containsText,
   eudoraItem,
   getCampground,
   getWorkshed,
@@ -218,7 +217,14 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
 }
 
 function isInValhalla(): boolean {
-  return containsText(visitUrl("charpane.php"), "Karma:");
+  const charPaneText = visitUrl("charpane.php");
+  // Match the infinity images (inf_small.gif, inf_large.gif)
+  // At time of writing, the full img tag used is:
+  // <img src="https://d2uyhvukfffg5a.cloudfront.net/otherimages/inf_small.gif">
+  const matches = charPaneText.match(
+    /<img src="[^"]*\/otherimages\/inf_\w+\.gif">/
+  );
+  return matches !== null;
 }
 
 /**

@@ -11615,7 +11615,12 @@ function toMoonId(moon, playerClass) {
 }
 
 function isInValhalla() {
-  return (0,external_kolmafia_namespaceObject.containsText)((0,external_kolmafia_namespaceObject.visitUrl)("charpane.php"), "Karma:");
+  var charPaneText = (0,external_kolmafia_namespaceObject.visitUrl)("charpane.php"); // Match the infinity images (inf_small.gif, inf_large.gif)
+  // At time of writing, the full img tag used is:
+  // <img src="https://d2uyhvukfffg5a.cloudfront.net/otherimages/inf_small.gif">
+
+  var matches = charPaneText.match(/<img src="[^"]*\/otherimages\/inf_\w+\.gif">/);
+  return matches !== null;
 }
 /**
  * Hops the gash, perming no skills

@@ -29,5 +29,5 @@ export function choosePart(part: BodyPart): boolean {
 }
 
 export function expectedAdvsPerCombat(weight: number): number {
-  return Math.min(0.01 + weight / 1000, 1);
+  return Math.min(0.01 + (weight / 1000) * 0.99, 1);
 }

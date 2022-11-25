@@ -6140,7 +6140,7 @@ module.exports = toString;
 
 /***/ }),
 
-/***/ 9097:
+/***/ 9189:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6231,6 +6231,7 @@ __webpack_require__.d(__webpack_exports__, {
   "PropertiesManager": () => (/* reexport */ PropertiesManager),
   "RainDoh": () => (/* reexport */ RainDoh_namespaceObject),
   "RainDohBlackBox": () => (/* reexport */ RainDohBlackBox),
+  "ReagnimatedGnome": () => (/* reexport */ ReagnimatedGnome_namespaceObject),
   "Requirement": () => (/* reexport */ Requirement),
   "RetroCape": () => (/* reexport */ RetroCape_namespaceObject),
   "Robortender": () => (/* reexport */ Robortender_namespaceObject),
@@ -6553,6 +6554,17 @@ __webpack_require__.d(RainDoh_namespaceObject, {
   "getRainDohBlackBoxMonster": () => (getRainDohBlackBoxMonster),
   "have": () => (RainDoh_have),
   "useRainDohBlackBox": () => (useRainDohBlackBox)
+});
+
+// NAMESPACE OBJECT: ./src/resources/2012/ReagnimatedGnome.ts
+var ReagnimatedGnome_namespaceObject = {};
+__webpack_require__.r(ReagnimatedGnome_namespaceObject);
+__webpack_require__.d(ReagnimatedGnome_namespaceObject, {
+  "bodyParts": () => (bodyParts),
+  "choosePart": () => (choosePart),
+  "chosenParts": () => (chosenParts),
+  "expectedAdvsPerCombat": () => (expectedAdvsPerCombat),
+  "have": () => (ReagnimatedGnome_have)
 });
 
 // NAMESPACE OBJECT: ./src/resources/2013/Florist.ts
@@ -15070,6 +15082,37 @@ function getRainDohBlackBoxMonster() {
 function useRainDohBlackBox() {
   return (0,external_kolmafia_namespaceObject.use)(box);
 }
+;// CONCATENATED MODULE: ./src/resources/2012/ReagnimatedGnome.ts
+var ReagnimatedGnome_templateObject, ReagnimatedGnome_templateObject2, ReagnimatedGnome_templateObject3, ReagnimatedGnome_templateObject4, ReagnimatedGnome_templateObject5, ReagnimatedGnome_templateObject6;
+
+function ReagnimatedGnome_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+function ReagnimatedGnome_have() {
+  return have($familiar(ReagnimatedGnome_templateObject || (ReagnimatedGnome_templateObject = ReagnimatedGnome_taggedTemplateLiteral(["Reagnimated Gnome"]))));
+}
+var bodyParts = {
+  ears: $item(ReagnimatedGnome_templateObject2 || (ReagnimatedGnome_templateObject2 = ReagnimatedGnome_taggedTemplateLiteral(["gnomish swimmer's ears"]))),
+  lung: $item(ReagnimatedGnome_templateObject3 || (ReagnimatedGnome_templateObject3 = ReagnimatedGnome_taggedTemplateLiteral(["gnomish coal miner's lung"]))),
+  elbow: $item(ReagnimatedGnome_templateObject4 || (ReagnimatedGnome_templateObject4 = ReagnimatedGnome_taggedTemplateLiteral(["gnomish tennis elbow"]))),
+  kgnee: $item(ReagnimatedGnome_templateObject5 || (ReagnimatedGnome_templateObject5 = ReagnimatedGnome_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
+  foot: $item(ReagnimatedGnome_templateObject6 || (ReagnimatedGnome_templateObject6 = ReagnimatedGnome_taggedTemplateLiteral(["gnomish athlete's foot"])))
+};
+function chosenParts() {
+  return Object.values(bodyParts).filter(part => have(part));
+}
+function choosePart(part) {
+  if (!ReagnimatedGnome_have()) return false;
+  if (have(bodyParts[part])) return true;
+  (0,external_kolmafia_namespaceObject.visitUrl)("arena.php");
+  (0,external_kolmafia_namespaceObject.runChoice)(4);
+  return chosenParts().includes(bodyParts[part]);
+}
+function expectedAdvsPerCombat(weight) {
+  return Math.min(0.01 + weight / 1000 * 0.99, 1);
+}
 ;// CONCATENATED MODULE: ./src/resources/2013/Florist.ts
 function Florist_toConsumableArray(arr) { return Florist_arrayWithoutHoles(arr) || Florist_iterableToArray(arr) || Florist_unsupportedIterableToArray(arr) || Florist_nonIterableSpread(); }
 
@@ -17933,6 +17976,7 @@ function bestLibramToCast() {
 
 
 
+
 ;// CONCATENATED MODULE: ./src/since.ts
 function since_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -19139,7 +19183,7 @@ function SlimeTube_findLoot() {
 /******/ 	// module cache are used so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 9097);
+/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 9189);
 /******/ 	var __webpack_export_target__ = exports;
 /******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
 /******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });

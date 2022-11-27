@@ -3,9 +3,11 @@ import {
   Item,
   itemAmount,
   Monster,
+  myFamiliar,
   Phylum,
   toInt,
   toItem,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { get } from "../../property";
@@ -91,6 +93,10 @@ export function feed(beverage: Item): boolean {
   if (currentDrinks().length >= 5) return false;
   if (!drinks.includes(beverage)) return false;
   if (!itemAmount(beverage)) return false;
+  if (!have()) return false;
+  const priorFamiliar = myFamiliar();
+  useFamiliar(familiar); // must equip Robortender to feed it
   visitUrl(`inventory.php?action=robooze&which=1&whichitem=${toInt(beverage)}`);
+  useFamiliar(priorFamiliar);
   return currentDrinks().includes(beverage);
 }

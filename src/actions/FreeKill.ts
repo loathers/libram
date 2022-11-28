@@ -1,4 +1,4 @@
-import { myLightning, restoreMp, retrieveItem, use } from "kolmafia";
+import { canEquip, myLightning, restoreMp, retrieveItem, use } from "kolmafia";
 
 import { Macro } from "../combat";
 import { have } from "../lib";
@@ -48,7 +48,11 @@ const freeKillSources: ActionSource[] = [
   new ActionSource(
     $item`The Jokester's gun`,
     () =>
-      !get("_firedJokestersGun") && have($item`The Jokester's gun`) ? 1 : 0,
+      !get("_firedJokestersGun") &&
+      have($item`The Jokester's gun`) &&
+      canEquip($item`The Jokester's gun`)
+        ? 1
+        : 0,
     Macro.skill($skill`Fire the Jokester's Gun`),
     {
       equipmentRequirements: () =>

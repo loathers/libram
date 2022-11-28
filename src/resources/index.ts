@@ -5,6 +5,7 @@ import * as CrownOfThrones from "./2010/CrownOfThrones";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as StompingBoots from "./2011/StompingBoots";
 import * as RainDoh from "./2012/RainDoh";
+import * as ReagnimatedGnome from "./2012/ReagnimatedGnome";
 import * as FloristFriar from "./2013/Florist";
 import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
@@ -60,6 +61,7 @@ export {
   ObtuseAngel,
   Pantogram,
   RainDoh,
+  ReagnimatedGnome,
   RetroCape,
   Robortender,
   Snapper,

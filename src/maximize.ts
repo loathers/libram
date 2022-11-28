@@ -156,7 +156,7 @@ export function getCurrentModes(): Modes {
 
 export function applyModes(modes: Modes) {
   for (const command of modeableCommands) {
-    if (haveEquipped(modeableItems[command])) {
+    if (haveEquipped(modeableItems[command]) && modes[command] !== undefined) {
       if (modeableState[command]() !== modes[command]) {
         cliExecute(command + " " + modes[command]);
       }

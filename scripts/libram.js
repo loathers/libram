@@ -9835,7 +9835,7 @@ function applyModes(modes) {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var command = _step2.value;
 
-      if ((0,external_kolmafia_namespaceObject.haveEquipped)(modeableItems[command])) {
+      if ((0,external_kolmafia_namespaceObject.haveEquipped)(modeableItems[command]) && modes[command] !== undefined) {
         if (modeableState[command]() !== modes[command]) {
           (0,external_kolmafia_namespaceObject.cliExecute)(command + " " + modes[command]);
         }

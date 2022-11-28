@@ -16374,7 +16374,12 @@ function feed(beverage) {
   if (currentDrinks().length >= 5) return false;
   if (!drinks.includes(beverage)) return false;
   if (!(0,external_kolmafia_namespaceObject.itemAmount)(beverage)) return false;
+  if (!Robortender_have()) return false;
+  var priorFamiliar = (0,external_kolmafia_namespaceObject.myFamiliar)();
+  (0,external_kolmafia_namespaceObject.useFamiliar)(Robortender_familiar); // must equip Robortender to feed it
+
   (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?action=robooze&which=1&whichitem=".concat((0,external_kolmafia_namespaceObject.toInt)(beverage)));
+  (0,external_kolmafia_namespaceObject.useFamiliar)(priorFamiliar);
   return currentDrinks().includes(beverage);
 }
 ;// CONCATENATED MODULE: ./src/resources/2017/Spacegate.ts

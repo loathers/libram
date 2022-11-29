@@ -241,6 +241,11 @@ class OutfitLRUCache {
       return `${OutfitLRUCache.OUTFIT_PREFIX} ${index}`;
     }
   }
+
+  clear(): void {
+    this.#outfitSlots = [];
+    this.#useHistory = [];
+  }
 }
 
 /**
@@ -657,4 +662,12 @@ export class Requirement {
   static maximize(...requirements: Requirement[]): void {
     Requirement.merge(requirements).maximize();
   }
+}
+
+/**
+ * Clear all outfits cached by the maximizer.
+ */
+export function clearMaximizerCache(): void {
+  outfitCache.clear();
+  for (const member in cachedObjectives) delete cachedObjectives[member];
 }

@@ -16,6 +16,7 @@ import {
   itemAmount,
   mallPrice,
   mallPrices,
+  retrieveItem,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -187,7 +188,9 @@ export function fillTo(targetUnits: number): boolean {
         efficiencyOfSecondBest * getAverageAdventures(bestFuel)
       );
     }
-    ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
+
+    if (!canInteract()) retrieveItem(count, bestFuel);
+    else ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
 
     if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
       throw new Error("Failed to fuel Asdon Martin.");

@@ -6263,6 +6263,7 @@ __webpack_require__.d(__webpack_exports__, {
   "canVisitUrl": () => (/* reexport */ canVisitUrl),
   "chunk": () => (/* reexport */ chunk),
   "clamp": () => (/* reexport */ clamp),
+  "clearMaximizerCache": () => (/* reexport */ clearMaximizerCache),
   "console": () => (/* reexport */ console_namespaceObject),
   "couldUseRainDohBlackBox": () => (/* reexport */ couldUseRainDohBlackBox),
   "couldUseSpookyPuttySheet": () => (/* reexport */ couldUseSpookyPuttySheet),
@@ -9949,6 +9950,13 @@ var OutfitLRUCache = /*#__PURE__*/function () {
         return "".concat(OutfitLRUCache.OUTFIT_PREFIX, " ").concat(index);
       }
     }
+  }, {
+    key: "clear",
+    value: function clear() {
+      _classPrivateFieldSet(this, _outfitSlots, []);
+
+      _classPrivateFieldSet(this, _useHistory, []);
+    }
   }]);
 
   return OutfitLRUCache;
@@ -10398,6 +10406,17 @@ var Requirement = /*#__PURE__*/function () {
 
   return Requirement;
 }();
+/**
+ * Clear all outfits cached by the maximizer.
+ */
+
+function clearMaximizerCache() {
+  outfitCache.clear();
+
+  for (var member in cachedObjectives) {
+    delete cachedObjectives[member];
+  }
+}
 ;// CONCATENATED MODULE: ./src/actions/ActionSource.ts
 function ActionSource_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

@@ -3,7 +3,6 @@ import {
   Class,
   eudoraItem,
   getCampground,
-  getWorkshed,
   Item,
   Path,
   toInt,
@@ -62,23 +61,6 @@ export class AscendError extends Error {
   }
 }
 
-const worksheds = [
-  "warbear LP-ROM burner",
-  "warbear jackhammer drill press",
-  "warbear induction oven",
-  "warbear high-efficiency still",
-  "warbear chemistry lab",
-  "warbear auto-anvil",
-  "spinning wheel",
-  "snow machine",
-  "Little Geneticist DNA-Splicing Lab",
-  "portable Mayo Clinic",
-  "Asdon Martin keyfob",
-  "diabolic pizza cube",
-  "cold medicine cabinet",
-] as const;
-type Workshed = typeof worksheds[number];
-
 const gardens = [
   "packet of pumpkin seeds",
   "Peppermint Pip Packet",
@@ -100,7 +82,6 @@ const eudorae = [
 ] as const;
 type Eudora = typeof eudorae[number];
 
-const isWorkshed = createStringUnionTypeGuardFunction(worksheds);
 const isGarden = createStringUnionTypeGuardFunction(gardens);
 const isEudora = createStringUnionTypeGuardFunction(eudorae);
 const isDesk = createStringUnionTypeGuardFunction(ChateauMantegna.desks);
@@ -112,11 +93,7 @@ const isCeiling = createStringUnionTypeGuardFunction(ChateauMantegna.ceilings);
 export class AscensionPrepError extends Error {
   cause: string;
   constructor(cause: string, original?: MafiaClass | string) {
-    if (isWorkshed(cause)) {
-      super(
-        `Unable to swap workshed to ${cause}; workshed is currently ${original}.`
-      );
-    } else if (isGarden(cause)) {
+    if (isGarden(cause)) {
       super(
         `Unable to swap garden to ${cause}; garden is currently ${original}.`
       );
@@ -330,19 +307,16 @@ export function ascend(
 
 /**
  * Sets up various iotms you may want to use in the coming ascension
- * @param ascensionItems.workshed Workshed to switch to.
  * @param ascensionItems.garden Garden to switch to.
  * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
  * @param throwOnFail If true, this will throw an error when it fails to switch something
  */
 export function prepareAscension({
-  workshed,
   garden,
   eudora,
   chateau,
   throwOnFail,
 }: {
-  workshed?: Workshed;
   garden?: Garden;
   eudora?: Eudora;
   chateau?: {
@@ -353,13 +327,6 @@ export function prepareAscension({
   throwOnFail?: boolean;
 } = {}): void {
   throwOnFail = throwOnFail ?? true;
-  if (workshed && getWorkshed() !== Item.get(workshed)) {
-    use(Item.get(workshed));
-    if (getWorkshed().name !== workshed && throwOnFail) {
-      throw new AscensionPrepError(workshed, getWorkshed());
-    }
-  }
-
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
     const gardenName = Object.getOwnPropertyNames(getCampground()).find(

@@ -186,7 +186,7 @@ export function maxBy<
     return [...array].reduce(
       ({ value, item }, other) => {
         const otherValue = optimizer(other);
-        return value >= otherValue
+        return value >= otherValue !== reverse
           ? { value, item }
           : { value: otherValue, item: other };
       },
@@ -194,7 +194,7 @@ export function maxBy<
     ).item;
   } else {
     return array.reduce((a, b) =>
-      a[optimizer] > b[optimizer] !== reverse ? a : b
+      a[optimizer] >= b[optimizer] !== reverse ? a : b
     );
   }
 }

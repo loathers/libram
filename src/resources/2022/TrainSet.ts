@@ -2,7 +2,7 @@ import { Effect, getWorkshed, runChoice, visitUrl } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $effect, $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { clamp, Tuple } from "../../utils";
 
 export const item = $item`model train set`;
 
@@ -72,16 +72,7 @@ export function doubledEffect(station: Station): Effect | null {
   return trainsetEffectsDoubled.get(station) ?? null;
 }
 
-export type Cycle = [
-  Station,
-  Station,
-  Station,
-  Station,
-  Station,
-  Station,
-  Station,
-  Station
-];
+export type Cycle = Tuple<Station, 8>;
 
 export function cycle(): Cycle {
   return get("trainsetConfiguration").split(",") as Cycle;

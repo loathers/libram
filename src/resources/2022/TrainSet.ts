@@ -15,53 +15,111 @@ export function have(): boolean {
 }
 
 export enum Station {
+  /**
+   * Unknown station
+   */
   UNKNOWN = "",
+  /**
+   * Empty station
+   */
   EMPTY = "empty",
-  MEAT = "meat_mine",
-  MP = "tower_fizzy",
-  EXP = "viewing_platform",
-  HOT_RES = "tower_frozen",
-  COLD_DMG = "tower_frozen",
-  STENCH_RES = "spooky_graveyard",
-  SPOOKY_DMG = "spooky_graveyard",
-  BRIDGE_PARTS = "logging_mill",
-  CANDY = "candy_factory",
-  COAL = "coal_hopper",
-  COLD_RES = "tower_sewage",
-  STENCH_DMG = "tower_sewage",
-  SPOOKY_RES = "oil_refinery",
-  SLEAZE_DMG = "oil_refinery",
-  SLEAZE_RES = "oil_bridge",
-  HOT_DMG = "oil_bridge",
-  ML = "water_bridge",
-  MOXIE_EXP = "groin_silo",
-  BOOZE = "grain_silo",
-  MYSTICALITY_EXP = "brain_silo",
-  MUSCLE_EXP = "brawn_silo",
-  FOOD_DROPS = "prawn_silo",
-  LAST_FOOD = "trackside_diner",
-  ORE = "ore_hopper",
+  /**
+   * Gain 800 meat
+   */
+  GAIN_MEAT = "meat_mine",
+  /**
+   * Effect: Regenerate MP
+   */
+  TOWER_FIZZY = "tower_fizzy",
+  /**
+   * Gain mus, mys, mox stats
+   */
+  VIEWING_PLATFORM = "viewing_platform",
+  /**
+   * Effect: Hot resist, cold damage
+   */
+  TOWER_FROZEN = "tower_frozen",
+  /**
+   * Effect: Stench resist, spooky damage
+   */
+  SPOOKY_GRAVEYARD = "spooky_graveyard",
+  /**
+   * Get smut bridge part, or stats
+   */
+  LOGGING_MILL = "logging_mill",
+  /**
+   * Get some candy
+   */
+  CANDY_FACTORY = "candy_factory",
+  /**
+   * Double strength of next station
+   */
+  COAL_HOPPER = "coal_hopper",
+  /**
+   * Effect: Cold resist, stench damage
+   */
+  TOWER_SEWAGE = "tower_sewage",
+  /**
+   * Effect: Spooky resist, sleaze damage
+   */
+  OIL_REFINERY = "oil_refinery",
+  /**
+   * Effect: Sleaze resist, hot damage
+   */
+  OIL_BRIDGE = "oil_bridge",
+  /**
+   * Effect: Increased Monster Level
+   */
+  WATER_BRIDGE = "water_bridge",
+  /**
+   * Get moxie stats
+   */
+  GROIN_SILO = "groin_silo",
+  /**
+   * Get random booze
+   */
+  GRAIN_SILO = "grain_silo",
+  /**
+   * Get mys stats
+   */
+  BRAIN_SILO = "brain_silo",
+  /**
+   * Get muscle stats
+   */
+  BRAWN_SILO = "brawn_silo",
+  /**
+   * Effect: 50% food drop
+   */
+  PRAWN_SILO = "prawn_silo",
+  /**
+   * Dupe last food dropped, or gain random food
+   */
+  TRACKSIDE_DINER = "trackside_diner",
+  /**
+   * Drop random ore, or trapper ore if known
+   */
+  ORE_HOPPER = "ore_hopper",
 }
 
 const trainsetEffects: Map<Station, Effect> = new Map([
-  [Station.MP, $effect`Carbonated`],
-  [Station.HOT_RES, $effect`Frozen`],
-  [Station.STENCH_RES, $effect`Shivering Spine`],
-  [Station.COLD_RES, $effect`Hot Soupy Garbage`],
-  [Station.SLEAZE_RES, $effect`Burningly Oiled`],
-  [Station.SPOOKY_RES, $effect`Spookily Greasy`],
-  [Station.ML, $effect`Troubled Waters`],
-  [Station.FOOD_DROPS, $effect`Craving Prawns`],
+  [Station.TOWER_FIZZY, Effect.get("Carbonated")],
+  [Station.TOWER_FROZEN, Effect.get("Frozen")],
+  [Station.SPOOKY_GRAVEYARD, Effect.get("Shivering Spine")],
+  [Station.TOWER_SEWAGE, Effect.get("Hot Soupy Garbage")],
+  [Station.OIL_BRIDGE, Effect.get("Burningly Oiled")],
+  [Station.OIL_REFINERY, Effect.get("Spookily Greasy")],
+  [Station.WATER_BRIDGE, Effect.get("Troubled Waters")],
+  [Station.PRAWN_SILO, Effect.get("Craving Prawns")],
 ]);
 const trainsetEffectsDoubled: Map<Station, Effect> = new Map([
-  [Station.MP, $effect`Double Carbonated`],
-  [Station.HOT_RES, $effect`Double Frozen`],
-  [Station.STENCH_RES, $effect`Doubly Shivering Spine`],
-  [Station.COLD_RES, $effect`Double Hot Soupy Garbage`],
-  [Station.SLEAZE_RES, $effect`Doubly Burningly Oiled`],
-  [Station.SPOOKY_RES, $effect`Doubly Spookily Greasy`],
-  [Station.ML, $effect`Doubly Troubled Waters`],
-  [Station.FOOD_DROPS, $effect`Doubly Craving Prawns`],
+  [Station.TOWER_FIZZY, Effect.get("Double Carbonated")],
+  [Station.TOWER_FROZEN, Effect.get("Double Frozen")],
+  [Station.SPOOKY_GRAVEYARD, Effect.get("Doubly Shivering Spine")],
+  [Station.TOWER_SEWAGE, Effect.get("Double Hot Soupy Garbage")],
+  [Station.OIL_BRIDGE, Effect.get("Doubly Burningly Oiled")],
+  [Station.OIL_REFINERY, Effect.get("Doubly Spookily Greasy")],
+  [Station.WATER_BRIDGE, Effect.get("Doubly Troubled Waters")],
+  [Station.PRAWN_SILO, Effect.get("Doubly Craving Prawns")],
 ]);
 
 export function effect(station: Station): Effect | null {
@@ -92,26 +150,26 @@ export function canConfigure(): boolean {
 
 const pieces: Station[] = [
   Station.EMPTY,
-  Station.MEAT,
-  Station.MP,
-  Station.EXP,
-  Station.HOT_RES,
-  Station.STENCH_RES,
-  Station.BRIDGE_PARTS,
-  Station.CANDY,
-  Station.COAL,
-  Station.COLD_RES,
+  Station.GAIN_MEAT,
+  Station.TOWER_FIZZY,
+  Station.VIEWING_PLATFORM,
+  Station.TOWER_FROZEN,
+  Station.SPOOKY_GRAVEYARD,
+  Station.LOGGING_MILL,
+  Station.CANDY_FACTORY,
+  Station.COAL_HOPPER,
+  Station.TOWER_SEWAGE,
   Station.UNKNOWN,
-  Station.SPOOKY_RES,
-  Station.SLEAZE_RES,
-  Station.ML,
-  Station.MOXIE_EXP,
-  Station.BOOZE,
-  Station.MYSTICALITY_EXP,
-  Station.MUSCLE_EXP,
-  Station.FOOD_DROPS,
-  Station.LAST_FOOD,
-  Station.ORE,
+  Station.OIL_REFINERY,
+  Station.OIL_BRIDGE,
+  Station.WATER_BRIDGE,
+  Station.GROIN_SILO,
+  Station.GRAIN_SILO,
+  Station.BRAIN_SILO,
+  Station.BRAWN_SILO,
+  Station.PRAWN_SILO,
+  Station.TRACKSIDE_DINER,
+  Station.ORE_HOPPER,
 ];
 
 function stationToInt(station: Station): number {

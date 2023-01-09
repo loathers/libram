@@ -11521,10 +11521,8 @@ var AscendError = /*#__PURE__*/function (_Error) {
 
   return ascend_createClass(AscendError);
 }( /*#__PURE__*/ascend_wrapNativeSuper(Error));
-var worksheds = ["warbear LP-ROM burner", "warbear jackhammer drill press", "warbear induction oven", "warbear high-efficiency still", "warbear chemistry lab", "warbear auto-anvil", "spinning wheel", "snow machine", "Little Geneticist DNA-Splicing Lab", "portable Mayo Clinic", "Asdon Martin keyfob", "diabolic pizza cube", "cold medicine cabinet"];
 var gardens = ["packet of pumpkin seeds", "Peppermint Pip Packet", "packet of dragon's teeth", "packet of beer seeds", "packet of winter seeds", "packet of thanksgarden seeds", "packet of tall grass seeds", "packet of mushroom spores"];
 var eudorae = ["My Own Pen Pal kit", "GameInformPowerDailyPro subscription card", "Xi Receiver Unit", "New-You Club Membership Form", "Our Daily Candles™ order form"];
-var isWorkshed = createStringUnionTypeGuardFunction(worksheds);
 var isGarden = createStringUnionTypeGuardFunction(gardens);
 var isEudora = createStringUnionTypeGuardFunction(eudorae);
 var isDesk = createStringUnionTypeGuardFunction(desks);
@@ -11540,11 +11538,7 @@ var AscensionPrepError = /*#__PURE__*/function (_Error2) {
 
     ascend_classCallCheck(this, AscensionPrepError);
 
-    if (isWorkshed(cause)) {
-      _this2 = _super2.call(this, "Unable to swap workshed to ".concat(cause, "; workshed is currently ").concat(original, "."));
-
-      ascend_defineProperty(ascend_assertThisInitialized(_this2), "cause", void 0);
-    } else if (isGarden(cause)) {
+    if (isGarden(cause)) {
       _this2 = _super2.call(this, "Unable to swap garden to ".concat(cause, "; garden is currently ").concat(original, "."));
 
       ascend_defineProperty(ascend_assertThisInitialized(_this2), "cause", void 0);
@@ -11749,7 +11743,6 @@ function ascend(path, playerClass, lifestyle, moon) {
 }
 /**
  * Sets up various iotms you may want to use in the coming ascension
- * @param ascensionItems.workshed Workshed to switch to.
  * @param ascensionItems.garden Garden to switch to.
  * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
  * @param throwOnFail If true, this will throw an error when it fails to switch something
@@ -11759,21 +11752,12 @@ function prepareAscension() {
   var _throwOnFail;
 
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      workshed = _ref3.workshed,
       garden = _ref3.garden,
       eudora = _ref3.eudora,
       chateau = _ref3.chateau,
       throwOnFail = _ref3.throwOnFail;
 
   throwOnFail = (_throwOnFail = throwOnFail) !== null && _throwOnFail !== void 0 ? _throwOnFail : true;
-
-  if (workshed && (0,external_kolmafia_namespaceObject.getWorkshed)() !== external_kolmafia_namespaceObject.Item.get(workshed)) {
-    (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get(workshed));
-
-    if ((0,external_kolmafia_namespaceObject.getWorkshed)().name !== workshed && throwOnFail) {
-      throw new AscensionPrepError(workshed, (0,external_kolmafia_namespaceObject.getWorkshed)());
-    }
-  }
 
   if (garden && !Object.getOwnPropertyNames((0,external_kolmafia_namespaceObject.getCampground)()).includes(garden)) {
     (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get(garden));

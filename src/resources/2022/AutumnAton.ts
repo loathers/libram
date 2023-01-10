@@ -129,18 +129,15 @@ export function turnsLeft(): number {
   return get("autumnatonQuestTurn") - totalTurnsPlayed();
 }
 
+export function legs(): number {
+  return currentUpgrades().filter((u) => u.includes("leg")).length;
+}
+
 /**
  * @returns The number of turns we expect your next autumn-aton quest to take.
  */
 export function turnsForQuest(): number {
-  return (
-    11 *
-    Math.max(
-      1,
-      get("_autumnatonQuests") -
-        currentUpgrades().filter((u) => u.includes("leg")).length
-    )
-  );
+  return 11 * Math.max(1, get("_autumnatonQuests") - legs());
 }
 
 /**

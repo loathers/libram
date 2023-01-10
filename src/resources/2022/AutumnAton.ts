@@ -10,9 +10,9 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { EnvironmentType } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
+import { arrayContains } from "../../utils";
 
 export const item = Item.get("autumn-aton");
 
@@ -172,7 +172,7 @@ export function seasonalItems(): 1 | 2 {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
 }
 
-type Difficulty = "low" | "mid" | "high";
+const difficulties = ["low", "mid", "high"] as const;
 const UNIQUES = {
   outdoor: {
     low: { index: 4, item: $item`autumn leaf` },
@@ -191,16 +191,18 @@ const UNIQUES = {
   },
 };
 
-function fallbotEnv(location: Location): "underground" | "indoor" | "outdoor" {
-  const env = location.environment as EnvironmentType;
-  return env === "underwater" ? "underground" : env;
-}
-
 export function getUniques(location: Location): {
   upgrade: Upgrade;
   item: Item;
-} {
-  const { index, item } =
-    UNIQUES[fallbotEnv(location)][location.difficultyLevel as Difficulty];
-  return { upgrade: possibleUpgrades[index], item };
+} | null {
+  const env = location.environment;
+  const difficulty = location.difficultyLevel;
+  if (
+    arrayContains(env, ["outdoor", "indoor", "underground"] as const) &&
+    arrayContains(difficulty, difficulties)
+  ) {
+    const { index, item } = UNIQUES[env][difficulty];
+    return { upgrade: possibleUpgrades[index], item };
+  }
+  return null;
 }

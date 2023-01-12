@@ -10283,6 +10283,7 @@ function maximizeCached(objectives) {
   var cacheEntry = checkCache(cacheKey, fullOptions);
 
   if (cacheEntry && !forceUpdate) {
+    if (verifyCached(cacheEntry)) return true;
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
 

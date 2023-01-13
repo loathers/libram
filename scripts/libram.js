@@ -17805,13 +17805,13 @@ function stationToInt(station) {
 function setConfiguration(configuration) {
   if (!canConfigure()) return false;
   (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
-  (0,external_kolmafia_namespaceObject.runChoice)(1, "forceoption=0".concat(configuration.map((station, index) => "&slot[".concat(index, "]=").concat(stationToInt(station)))));
+  (0,external_kolmafia_namespaceObject.runChoice)(1, "forceoption=0".concat(configuration.map((station, index) => "&slot[".concat(index, "]=").concat(stationToInt(station))).join("")));
   (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
   var currentConfiguration = cycle();
   return configuration.every((station, index) => station === currentConfiguration[index]);
 }
 function next() {
-  return cycle()[get("lastTrainsetConfiguration") % 8];
+  return cycle()[get("trainsetPosition") % 8];
 }
 ;// CONCATENATED MODULE: ./src/resources/putty-likes.ts
 

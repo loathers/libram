@@ -1,7 +1,7 @@
 import { Effect, getWorkshed, runChoice, visitUrl } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
-import { $effect, $item } from "../../template-string";
+import { $item } from "../../template-string";
 import { clamp, Tuple } from "../../utils";
 
 export const item = $item`model train set`;
@@ -193,4 +193,8 @@ export function setConfiguration(configuration: Cycle): boolean {
   return configuration.every(
     (station, index) => station === currentConfiguration[index]
   );
+}
+
+export function next(): Station {
+  return cycle()[get("lastTrainsetConfiguration") % 8];
 }

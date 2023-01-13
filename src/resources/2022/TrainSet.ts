@@ -145,7 +145,7 @@ export function nextConfigurable(): number {
 }
 
 export function canConfigure(): boolean {
-  return installed() && !nextConfigurable();
+  return installed() && nextConfigurable() >= 40;
 }
 
 const pieces: Station[] = [

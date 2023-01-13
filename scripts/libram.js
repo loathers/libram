@@ -6924,8 +6924,10 @@ __webpack_require__.d(AutumnAton_namespaceObject, {
   "availableLocations": () => (availableLocations),
   "currentUpgrades": () => (currentUpgrades),
   "currentlyIn": () => (currentlyIn),
+  "getUniques": () => (getUniques),
   "have": () => (AutumnAton_have),
   "item": () => (AutumnAton_item),
+  "legs": () => (legs),
   "possibleUpgrades": () => (possibleUpgrades),
   "seasonalItems": () => (seasonalItems),
   "sendTo": () => (sendTo),
@@ -17306,6 +17308,12 @@ function buffsUntil(buff) {
   return diff === 0 ? 11 : diff;
 }
 ;// CONCATENATED MODULE: ./src/resources/2022/AutumnAton.ts
+var AutumnAton_templateObject, AutumnAton_templateObject2, AutumnAton_templateObject3, AutumnAton_templateObject4, AutumnAton_templateObject5, AutumnAton_templateObject6, AutumnAton_templateObject7, AutumnAton_templateObject8, AutumnAton_templateObject9;
+
+function AutumnAton_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
 
 
 var AutumnAton_item = external_kolmafia_namespaceObject.Item.get("autumn-aton");
@@ -17398,12 +17406,15 @@ function currentUpgrades() {
 function turnsLeft() {
   return get("autumnatonQuestTurn") - (0,external_kolmafia_namespaceObject.totalTurnsPlayed)();
 }
+function legs() {
+  return currentUpgrades().filter(u => u.includes("leg")).length;
+}
 /**
  * @returns The number of turns we expect your next autumn-aton quest to take.
  */
 
 function turnsForQuest() {
-  return 11 * Math.max(1, get("_autumnatonQuests") - currentUpgrades().filter(u => u.includes("leg")).length);
+  return 11 * Math.max(1, get("_autumnatonQuests") - legs());
 }
 /**
  * @returns The current visual acuity level of your autumn-aton as determined by the current upgrade-state.
@@ -17426,6 +17437,67 @@ function zoneItems() {
 
 function seasonalItems() {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
+}
+var difficulties = ["low", "mid", "high"];
+var UNIQUES = {
+  outdoor: {
+    low: {
+      index: 4,
+      item: $item(AutumnAton_templateObject || (AutumnAton_templateObject = AutumnAton_taggedTemplateLiteral(["autumn leaf"])))
+    },
+    mid: {
+      index: 2,
+      item: $item(AutumnAton_templateObject2 || (AutumnAton_templateObject2 = AutumnAton_taggedTemplateLiteral(["autumn debris shield"])))
+    },
+    high: {
+      index: 6,
+      item: $item(AutumnAton_templateObject3 || (AutumnAton_templateObject3 = AutumnAton_taggedTemplateLiteral(["autumn leaf pendant"])))
+    }
+  },
+  indoor: {
+    low: {
+      index: 0,
+      item: $item(AutumnAton_templateObject4 || (AutumnAton_templateObject4 = AutumnAton_taggedTemplateLiteral(["AutumnFest ale"])))
+    },
+    mid: {
+      index: 3,
+      item: $item(AutumnAton_templateObject5 || (AutumnAton_templateObject5 = AutumnAton_taggedTemplateLiteral(["autumn-spice donut"])))
+    },
+    high: {
+      index: 7,
+      item: $item(AutumnAton_templateObject6 || (AutumnAton_templateObject6 = AutumnAton_taggedTemplateLiteral(["autumn breeze"])))
+    }
+  },
+  underground: {
+    low: {
+      index: 1,
+      item: $item(AutumnAton_templateObject7 || (AutumnAton_templateObject7 = AutumnAton_taggedTemplateLiteral(["autumn sweater-weather sweater"])))
+    },
+    mid: {
+      index: 5,
+      item: $item(AutumnAton_templateObject8 || (AutumnAton_templateObject8 = AutumnAton_taggedTemplateLiteral(["autumn dollar"])))
+    },
+    high: {
+      index: 8,
+      item: $item(AutumnAton_templateObject9 || (AutumnAton_templateObject9 = AutumnAton_taggedTemplateLiteral(["autumn years wisdom"])))
+    }
+  }
+};
+function getUniques(location) {
+  var env = location.environment;
+  var difficulty = location.difficultyLevel;
+
+  if (arrayContains(env, ["outdoor", "indoor", "underground"]) && arrayContains(difficulty, difficulties)) {
+    var _UNIQUES$env$difficul = UNIQUES[env][difficulty],
+        index = _UNIQUES$env$difficul.index,
+        _item = _UNIQUES$env$difficul.item;
+    return {
+      upgrade: possibleUpgrades[index],
+      item: _item
+    };
+  }
+
+  return null;
 }
 ;// CONCATENATED MODULE: ./src/resources/2022/CombatLoversLocket.ts
 var CombatLoversLocket_templateObject;

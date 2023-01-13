@@ -183,9 +183,9 @@ export function setConfiguration(configuration: Cycle): boolean {
 
   runChoice(
     1,
-    `forceoption=0${configuration.map(
-      (station, index) => `&slot[${index}]=${stationToInt(station)}`
-    )}`
+    `forceoption=0${configuration
+      .map((station, index) => `&slot[${index}]=${stationToInt(station)}`)
+      .join("")}`
   );
   visitUrl("main.php");
 

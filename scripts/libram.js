@@ -6140,7 +6140,7 @@ module.exports = toString;
 
 /***/ }),
 
-/***/ 9189:
+/***/ 3632:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6246,6 +6246,7 @@ __webpack_require__.d(__webpack_exports__, {
   "Stickers": () => (/* reexport */ Stickers_namespaceObject),
   "StompingBoots": () => (/* reexport */ StompingBoots_namespaceObject),
   "StrictMacro": () => (/* reexport */ StrictMacro),
+  "TrainSet": () => (/* reexport */ TrainSet_namespaceObject),
   "TunnelOfLove": () => (/* reexport */ TunnelOfLove_namespaceObject),
   "Wanderer": () => (/* reexport */ Wanderer),
   "WinterGarden": () => (/* reexport */ WinterGarden_namespaceObject),
@@ -6981,6 +6982,23 @@ __webpack_require__.d(JuneCleaver_namespaceObject, {
   "have": () => (JuneCleaver_have),
   "queue": () => (queue),
   "skipsRemaining": () => (skipsRemaining)
+});
+
+// NAMESPACE OBJECT: ./src/resources/2022/TrainSet.ts
+var TrainSet_namespaceObject = {};
+__webpack_require__.r(TrainSet_namespaceObject);
+__webpack_require__.d(TrainSet_namespaceObject, {
+  "Station": () => (Station),
+  "canConfigure": () => (canConfigure),
+  "cycle": () => (cycle),
+  "doubledEffect": () => (doubledEffect),
+  "effect": () => (effect),
+  "have": () => (TrainSet_have),
+  "installed": () => (TrainSet_installed),
+  "item": () => (TrainSet_item),
+  "next": () => (next),
+  "nextConfigurable": () => (nextConfigurable),
+  "setConfiguration": () => (setConfiguration)
 });
 
 // NAMESPACE OBJECT: ./src/console.ts
@@ -17714,6 +17732,87 @@ function choicesAvailable() {
   var currentQueue = queue();
   return choices.filter(choice => !currentQueue.includes(choice));
 }
+;// CONCATENATED MODULE: ./src/resources/2022/TrainSet.ts
+var TrainSet_templateObject;
+
+function TrainSet_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+
+var TrainSet_item = $item(TrainSet_templateObject || (TrainSet_templateObject = TrainSet_taggedTemplateLiteral(["model train set"])));
+function TrainSet_installed() {
+  return (0,external_kolmafia_namespaceObject.getWorkshed)() === TrainSet_item;
+}
+function TrainSet_have() {
+  return TrainSet_installed() || have(TrainSet_item);
+}
+var Station;
+
+(function (Station) {
+  Station["UNKNOWN"] = "";
+  Station["EMPTY"] = "empty";
+  Station["GAIN_MEAT"] = "meat_mine";
+  Station["TOWER_FIZZY"] = "tower_fizzy";
+  Station["VIEWING_PLATFORM"] = "viewing_platform";
+  Station["TOWER_FROZEN"] = "tower_frozen";
+  Station["SPOOKY_GRAVEYARD"] = "spooky_graveyard";
+  Station["LOGGING_MILL"] = "logging_mill";
+  Station["CANDY_FACTORY"] = "candy_factory";
+  Station["COAL_HOPPER"] = "coal_hopper";
+  Station["TOWER_SEWAGE"] = "tower_sewage";
+  Station["OIL_REFINERY"] = "oil_refinery";
+  Station["OIL_BRIDGE"] = "oil_bridge";
+  Station["WATER_BRIDGE"] = "water_bridge";
+  Station["GROIN_SILO"] = "groin_silo";
+  Station["GRAIN_SILO"] = "grain_silo";
+  Station["BRAIN_SILO"] = "brain_silo";
+  Station["BRAWN_SILO"] = "brawn_silo";
+  Station["PRAWN_SILO"] = "prawn_silo";
+  Station["TRACKSIDE_DINER"] = "trackside_diner";
+  Station["ORE_HOPPER"] = "ore_hopper";
+})(Station || (Station = {}));
+
+var trainsetEffects = new Map([[Station.TOWER_FIZZY, external_kolmafia_namespaceObject.Effect.get("Carbonated")], [Station.TOWER_FROZEN, external_kolmafia_namespaceObject.Effect.get("Frozen")], [Station.SPOOKY_GRAVEYARD, external_kolmafia_namespaceObject.Effect.get("Shivering Spine")], [Station.TOWER_SEWAGE, external_kolmafia_namespaceObject.Effect.get("Hot Soupy Garbage")], [Station.OIL_BRIDGE, external_kolmafia_namespaceObject.Effect.get("Burningly Oiled")], [Station.OIL_REFINERY, external_kolmafia_namespaceObject.Effect.get("Spookily Greasy")], [Station.WATER_BRIDGE, external_kolmafia_namespaceObject.Effect.get("Troubled Waters")], [Station.PRAWN_SILO, external_kolmafia_namespaceObject.Effect.get("Craving Prawns")]]);
+var trainsetEffectsDoubled = new Map([[Station.TOWER_FIZZY, external_kolmafia_namespaceObject.Effect.get("Double Carbonated")], [Station.TOWER_FROZEN, external_kolmafia_namespaceObject.Effect.get("Double Frozen")], [Station.SPOOKY_GRAVEYARD, external_kolmafia_namespaceObject.Effect.get("Doubly Shivering Spine")], [Station.TOWER_SEWAGE, external_kolmafia_namespaceObject.Effect.get("Double Hot Soupy Garbage")], [Station.OIL_BRIDGE, external_kolmafia_namespaceObject.Effect.get("Doubly Burningly Oiled")], [Station.OIL_REFINERY, external_kolmafia_namespaceObject.Effect.get("Doubly Spookily Greasy")], [Station.WATER_BRIDGE, external_kolmafia_namespaceObject.Effect.get("Doubly Troubled Waters")], [Station.PRAWN_SILO, external_kolmafia_namespaceObject.Effect.get("Doubly Craving Prawns")]]);
+function effect(station) {
+  var _trainsetEffects$get;
+
+  return (_trainsetEffects$get = trainsetEffects.get(station)) !== null && _trainsetEffects$get !== void 0 ? _trainsetEffects$get : null;
+}
+function doubledEffect(station) {
+  var _trainsetEffectsDoubl;
+
+  return (_trainsetEffectsDoubl = trainsetEffectsDoubled.get(station)) !== null && _trainsetEffectsDoubl !== void 0 ? _trainsetEffectsDoubl : null;
+}
+function cycle() {
+  return get("trainsetConfiguration").split(",");
+}
+function nextConfigurable() {
+  return clamp(get("trainsetPosition", 0) - get("lastTrainsetConfiguration", 0), 0, 40);
+}
+function canConfigure() {
+  return TrainSet_installed() && !nextConfigurable();
+}
+var TrainSet_pieces = [Station.EMPTY, Station.GAIN_MEAT, Station.TOWER_FIZZY, Station.VIEWING_PLATFORM, Station.TOWER_FROZEN, Station.SPOOKY_GRAVEYARD, Station.LOGGING_MILL, Station.CANDY_FACTORY, Station.COAL_HOPPER, Station.TOWER_SEWAGE, Station.UNKNOWN, Station.OIL_REFINERY, Station.OIL_BRIDGE, Station.WATER_BRIDGE, Station.GROIN_SILO, Station.GRAIN_SILO, Station.BRAIN_SILO, Station.BRAWN_SILO, Station.PRAWN_SILO, Station.TRACKSIDE_DINER, Station.ORE_HOPPER];
+
+function stationToInt(station) {
+  return TrainSet_pieces.indexOf(station);
+}
+
+function setConfiguration(configuration) {
+  if (!canConfigure()) return false;
+  (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
+  (0,external_kolmafia_namespaceObject.runChoice)(1, "forceoption=0".concat(configuration.map((station, index) => "&slot[".concat(index, "]=").concat(stationToInt(station)))));
+  (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+  var currentConfiguration = cycle();
+  return configuration.every((station, index) => station === currentConfiguration[index]);
+}
+function next() {
+  return cycle()[get("lastTrainsetConfiguration") % 8];
+}
 ;// CONCATENATED MODULE: ./src/resources/putty-likes.ts
 
 
@@ -18018,6 +18117,7 @@ function bestLibramToCast() {
   })) !== null && _maxBy !== void 0 ? _maxBy : [null])[0];
 }
 ;// CONCATENATED MODULE: ./src/resources/index.ts
+
 
 
 
@@ -19264,7 +19364,7 @@ function SlimeTube_findLoot() {
 /******/ 	// module cache are used so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 9189);
+/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 3632);
 /******/ 	var __webpack_export_target__ = exports;
 /******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
 /******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });

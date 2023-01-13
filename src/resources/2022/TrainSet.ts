@@ -196,5 +196,5 @@ export function setConfiguration(configuration: Cycle): boolean {
 }
 
 export function next(): Station {
-  return cycle()[get("lastTrainsetConfiguration") % 8];
+  return cycle()[get("trainsetPosition") % 8];
 }

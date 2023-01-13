@@ -138,14 +138,14 @@ export function cycle(): Cycle {
 
 export function nextConfigurable(): number {
   return clamp(
-    get("trainsetPosition", 0) - get("lastTrainsetConfiguration", 0),
+    get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"),
     0,
     40
   );
 }
 
 export function canConfigure(): boolean {
-  return installed() && nextConfigurable() >= 40;
+  return installed() && !nextConfigurable();
 }
 
 const pieces: Station[] = [

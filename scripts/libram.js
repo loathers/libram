@@ -17791,7 +17791,7 @@ function cycle() {
   return get("trainsetConfiguration").split(",");
 }
 function nextConfigurable() {
-  return clamp(get("trainsetPosition", 0) - get("lastTrainsetConfiguration", 0), 0, 40);
+  return clamp(get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"), 0, 40);
 }
 function canConfigure() {
   return TrainSet_installed() && !nextConfigurable();

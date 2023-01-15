@@ -377,7 +377,7 @@ const slotStructure = [
  * @param entry The CacheEntry to verify
  * @returns If all desired equipment was appliedn in the correct slots.
  */
-function verifyCached(entry: CacheEntry): boolean {
+function verifyCached(entry: CacheEntry, warn = true): boolean {
   let success = true;
   for (const slotGroup of slotStructure) {
     const desiredSlots = slotGroup
@@ -386,11 +386,13 @@ function verifyCached(entry: CacheEntry): boolean {
     const desiredSet = desiredSlots.map(([, item]) => item);
     const equippedSet = desiredSlots.map(([slot]) => equippedItem(slot));
     if (!setEqual(desiredSet, equippedSet)) {
-      logger.warning(
-        `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
-          ", "
-        )}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
+            ", "
+          )}.`
+        );
+      }
       success = false;
     }
   }
@@ -400,11 +402,13 @@ function verifyCached(entry: CacheEntry): boolean {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     if (entry.rider.get($item`Crown of Thrones`) !== myEnthronedFamiliar()) {
-      logger.warning(
-        `Failed to apply ${entry.rider.get(
-          $item`Crown of Thrones`
-        )} in ${$item`Crown of Thrones`}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply ${entry.rider.get(
+            $item`Crown of Thrones`
+          )} in ${$item`Crown of Thrones`}.`
+        );
+      }
       success = false;
     }
   }
@@ -414,11 +418,13 @@ function verifyCached(entry: CacheEntry): boolean {
     entry.rider.get($item`Buddy Bjorn`)
   ) {
     if (entry.rider.get($item`Buddy Bjorn`) !== myBjornedFamiliar()) {
-      logger.warning(
-        `Failed to apply${entry.rider.get(
-          $item`Buddy Bjorn`
-        )} in ${$item`Buddy Bjorn`}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply${entry.rider.get(
+            $item`Buddy Bjorn`
+          )} in ${$item`Buddy Bjorn`}.`
+        );
+      }
       success = false;
     }
   }
@@ -558,7 +564,7 @@ export function maximizeCached(
 
   const cacheEntry = checkCache(cacheKey, fullOptions);
   if (cacheEntry && !forceUpdate) {
-    if (verifyCached(cacheEntry)) return true;
+    if (verifyCached(cacheEntry, false)) return true;
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {

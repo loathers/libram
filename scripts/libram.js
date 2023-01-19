@@ -10107,6 +10107,7 @@ var slotStructure = [$slots(maximize_templateObject17 || (maximize_templateObjec
  */
 
 function verifyCached(entry) {
+  var warn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   var success = true;
 
   var _iterator4 = maximize_createForOfIteratorHelper(slotStructure),
@@ -10139,7 +10140,10 @@ function verifyCached(entry) {
       });
 
       if (!setEqual(desiredSet, equippedSet)) {
-        logger.warning("Failed to apply cached ".concat(desiredSet.join(", "), " in ").concat(slotGroup.join(", "), "."));
+        if (warn) {
+          logger.warning("Failed to apply cached ".concat(desiredSet.join(", "), " in ").concat(slotGroup.join(", "), "."));
+        }
+
         success = false;
       }
     }
@@ -10151,14 +10155,20 @@ function verifyCached(entry) {
 
   if ((0,external_kolmafia_namespaceObject.equippedAmount)($item(maximize_templateObject24 || (maximize_templateObject24 = maximize_taggedTemplateLiteral(["Crown of Thrones"])))) > 0 && entry.rider.get($item(maximize_templateObject25 || (maximize_templateObject25 = maximize_taggedTemplateLiteral(["Crown of Thrones"]))))) {
     if (entry.rider.get($item(maximize_templateObject26 || (maximize_templateObject26 = maximize_taggedTemplateLiteral(["Crown of Thrones"])))) !== (0,external_kolmafia_namespaceObject.myEnthronedFamiliar)()) {
-      logger.warning("Failed to apply ".concat(entry.rider.get($item(maximize_templateObject27 || (maximize_templateObject27 = maximize_taggedTemplateLiteral(["Crown of Thrones"])))), " in ").concat($item(maximize_templateObject28 || (maximize_templateObject28 = maximize_taggedTemplateLiteral(["Crown of Thrones"]))), "."));
+      if (warn) {
+        logger.warning("Failed to apply ".concat(entry.rider.get($item(maximize_templateObject27 || (maximize_templateObject27 = maximize_taggedTemplateLiteral(["Crown of Thrones"])))), " in ").concat($item(maximize_templateObject28 || (maximize_templateObject28 = maximize_taggedTemplateLiteral(["Crown of Thrones"]))), "."));
+      }
+
       success = false;
     }
   }
 
   if ((0,external_kolmafia_namespaceObject.equippedAmount)($item(maximize_templateObject29 || (maximize_templateObject29 = maximize_taggedTemplateLiteral(["Buddy Bjorn"])))) > 0 && entry.rider.get($item(maximize_templateObject30 || (maximize_templateObject30 = maximize_taggedTemplateLiteral(["Buddy Bjorn"]))))) {
     if (entry.rider.get($item(maximize_templateObject31 || (maximize_templateObject31 = maximize_taggedTemplateLiteral(["Buddy Bjorn"])))) !== (0,external_kolmafia_namespaceObject.myBjornedFamiliar)()) {
-      logger.warning("Failed to apply".concat(entry.rider.get($item(maximize_templateObject32 || (maximize_templateObject32 = maximize_taggedTemplateLiteral(["Buddy Bjorn"])))), " in ").concat($item(maximize_templateObject33 || (maximize_templateObject33 = maximize_taggedTemplateLiteral(["Buddy Bjorn"]))), "."));
+      if (warn) {
+        logger.warning("Failed to apply".concat(entry.rider.get($item(maximize_templateObject32 || (maximize_templateObject32 = maximize_taggedTemplateLiteral(["Buddy Bjorn"])))), " in ").concat($item(maximize_templateObject33 || (maximize_templateObject33 = maximize_taggedTemplateLiteral(["Buddy Bjorn"]))), "."));
+      }
+
       success = false;
     }
   }
@@ -10303,7 +10313,7 @@ function maximizeCached(objectives) {
   var cacheEntry = checkCache(cacheKey, fullOptions);
 
   if (cacheEntry && !forceUpdate) {
-    if (verifyCached(cacheEntry)) return true;
+    if (verifyCached(cacheEntry, false)) return true;
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
 

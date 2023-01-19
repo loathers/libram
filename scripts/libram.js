@@ -6820,7 +6820,14 @@ __webpack_require__.d(SongBoom_namespaceObject, {
 var BeachComb_namespaceObject = {};
 __webpack_require__.r(BeachComb_namespaceObject);
 __webpack_require__.d(BeachComb_namespaceObject, {
+  "canComb": () => (canComb),
+  "comb": () => (comb),
+  "freeCombs": () => (freeCombs),
+  "have": () => (BeachComb_have),
+  "head": () => (head),
+  "headAvailable": () => (headAvailable),
   "headBuffs": () => (headBuffs),
+  "tideLevel": () => (tideLevel),
   "tryHead": () => (tryHead)
 });
 
@@ -16713,7 +16720,7 @@ function dropProgress() {
   return get("_boomBoxFights");
 }
 ;// CONCATENATED MODULE: ./src/resources/2019/BeachComb.ts
-var BeachComb_templateObject, BeachComb_templateObject2, BeachComb_templateObject3, BeachComb_templateObject4, BeachComb_templateObject5, BeachComb_templateObject6, BeachComb_templateObject7, BeachComb_templateObject8, BeachComb_templateObject9, BeachComb_templateObject10, BeachComb_templateObject11;
+var BeachComb_templateObject, BeachComb_templateObject2, BeachComb_templateObject3, BeachComb_templateObject4, BeachComb_templateObject5, BeachComb_templateObject6, BeachComb_templateObject7, BeachComb_templateObject8, BeachComb_templateObject9, BeachComb_templateObject10, BeachComb_templateObject11, BeachComb_templateObject12, BeachComb_templateObject13, BeachComb_templateObject14, BeachComb_templateObject15, BeachComb_templateObject16, BeachComb_templateObject17, BeachComb_templateObject18, BeachComb_templateObject19, BeachComb_templateObject20, BeachComb_templateObject21;
 
 function BeachComb_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -16721,11 +16728,69 @@ function BeachComb_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strin
 
 
 
+
+function BeachComb_have() {
+  return have(external_kolmafia_namespaceObject.Item.get("Beach Comb"));
+}
 var headBuffs = [$effect(BeachComb_templateObject || (BeachComb_templateObject = BeachComb_taggedTemplateLiteral(["Hot-Headed"]))), $effect(BeachComb_templateObject2 || (BeachComb_templateObject2 = BeachComb_taggedTemplateLiteral(["Cold as Nice"]))), $effect(BeachComb_templateObject3 || (BeachComb_templateObject3 = BeachComb_taggedTemplateLiteral(["A Brush with Grossness"]))), $effect(BeachComb_templateObject4 || (BeachComb_templateObject4 = BeachComb_taggedTemplateLiteral(["Does It Have a Skull In There??"]))), $effect(BeachComb_templateObject5 || (BeachComb_templateObject5 = BeachComb_taggedTemplateLiteral(["Oiled, Slick"]))), $effect(BeachComb_templateObject6 || (BeachComb_templateObject6 = BeachComb_taggedTemplateLiteral(["Lack of Body-Building"]))), $effect(BeachComb_templateObject7 || (BeachComb_templateObject7 = BeachComb_taggedTemplateLiteral(["We're All Made of Starfish"]))), $effect(BeachComb_templateObject8 || (BeachComb_templateObject8 = BeachComb_taggedTemplateLiteral(["Pomp & Circumsands"]))), $effect(BeachComb_templateObject9 || (BeachComb_templateObject9 = BeachComb_taggedTemplateLiteral(["Resting Beach Face"]))), $effect(BeachComb_templateObject10 || (BeachComb_templateObject10 = BeachComb_taggedTemplateLiteral(["Do I Know You From Somewhere?"]))), $effect(BeachComb_templateObject11 || (BeachComb_templateObject11 = BeachComb_taggedTemplateLiteral(["You Learned Something Maybe!"])))];
-function tryHead(effect) {
-  if (!headBuffs.includes(effect)) return false;
+var head = {
+  HOT: $effect(BeachComb_templateObject12 || (BeachComb_templateObject12 = BeachComb_taggedTemplateLiteral(["Hot-Headed"]))),
+  COLD: $effect(BeachComb_templateObject13 || (BeachComb_templateObject13 = BeachComb_taggedTemplateLiteral(["Cold as Nice"]))),
+  STENCH: $effect(BeachComb_templateObject14 || (BeachComb_templateObject14 = BeachComb_taggedTemplateLiteral(["A Brush with Grossness"]))),
+  SPOOKY: $effect(BeachComb_templateObject15 || (BeachComb_templateObject15 = BeachComb_taggedTemplateLiteral(["Does It Have a Skull In There??"]))),
+  SLEAZE: $effect(BeachComb_templateObject16 || (BeachComb_templateObject16 = BeachComb_taggedTemplateLiteral(["Oiled, Slick"]))),
+  MUSCLE: $effect(BeachComb_templateObject17 || (BeachComb_templateObject17 = BeachComb_taggedTemplateLiteral(["Lack of Body-Building"]))),
+  MYSTICALITY: $effect(BeachComb_templateObject18 || (BeachComb_templateObject18 = BeachComb_taggedTemplateLiteral(["We're All Made of Starfish"]))),
+  INITIATIVE: $effect(BeachComb_templateObject19 || (BeachComb_templateObject19 = BeachComb_taggedTemplateLiteral(["Resting Beach Face"]))),
+  FAMILIAR: $effect(BeachComb_templateObject20 || (BeachComb_templateObject20 = BeachComb_taggedTemplateLiteral(["Do I Know You From Somewhere?"]))),
+  EXPERIENCE: $effect(BeachComb_templateObject21 || (BeachComb_templateObject21 = BeachComb_taggedTemplateLiteral(["You Learned Something Maybe!"])))
+};
+/**
+ * Column starts at 0, rows at 1
+ */
+
+function tideLevel() {
+  var day = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (0,external_kolmafia_namespaceObject.gamedayToInt)();
+  var dayOfMonth = 1 + day % 8;
+  return 4 - Math.abs(4 - dayOfMonth);
+}
+function canComb(_ref) {
+  var row = _ref.row;
+  return row > tideLevel();
+}
+function freeCombs() {
+  return BeachComb_have() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
+}
+function comb() {
+  for (var _len = arguments.length, tiles = new Array(_len), _key = 0; _key < _len; _key++) {
+    tiles[_key] = arguments[_key];
+  }
+
+  if (!BeachComb_have() || !tiles.length) return;
+
+  for (var _i = 0, _tiles = tiles; _i < _tiles.length; _i++) {
+    var tile = _tiles[_i];
+
+    if (canComb(tile)) {
+      var minute = tile.minute,
+          row = tile.row,
+          column = tile.column;
+      (0,external_kolmafia_namespaceObject.cliExecute)("beach wander ".concat(minute));
+      (0,external_kolmafia_namespaceObject.cliExecute)("beach comb ".concat(row, " ").concat(column));
+    }
+  }
+
+  if ((0,external_kolmafia_namespaceObject.handlingChoice)()) (0,external_kolmafia_namespaceObject.runChoice)(5);
+}
+function headAvailable(target) {
+  var effect = target instanceof external_kolmafia_namespaceObject.Effect ? target : head[target];
   var headNumber = 1 + headBuffs.indexOf(effect);
-  if (getString("_beachHeadsUsed").split(",").includes(headNumber.toString())) return false;
+  return (0,external_kolmafia_namespaceObject.getProperty)("beachHeadsUnlocked").split(",").includes(headNumber.toString()) && !(0,external_kolmafia_namespaceObject.getProperty)("_beachHeadsUsed").split(",").includes(headNumber.toString());
+}
+function tryHead(target) {
+  var effect = target instanceof external_kolmafia_namespaceObject.Effect ? target : head[target];
+  if (!headBuffs.includes(effect)) return false;
+  if (!headAvailable(target)) return false;
   (0,external_kolmafia_namespaceObject.cliExecute)(effect.default);
   return have(effect);
 }

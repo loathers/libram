@@ -2,12 +2,13 @@ import {
   cliExecute,
   Effect,
   gamedayToInt,
+  getProperty,
   handlingChoice,
   Item,
   runChoice,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
-import { get, getString } from "../../property";
+import { get } from "../../property";
 import { $effect } from "../../template-string";
 import { clamp } from "../../utils";
 
@@ -74,12 +75,22 @@ export function comb(...tiles: BeachTile[]): void {
   if (handlingChoice()) runChoice(5);
 }
 
+export function headAvailable(target: Effect | keyof typeof head): boolean {
+  const effect = target instanceof Effect ? target : head[target];
+  const headNumber = 1 + headBuffs.indexOf(effect);
+
+  return (
+    getProperty("beachHeadsUnlocked")
+      .split(",")
+      .includes(headNumber.toString()) &&
+    !getProperty("_beachHeadsUsed").split(",").includes(headNumber.toString())
+  );
+}
+
 export function tryHead(target: Effect | keyof typeof head): boolean {
   const effect = target instanceof Effect ? target : head[target];
   if (!headBuffs.includes(effect)) return false;
-  const headNumber = 1 + headBuffs.indexOf(effect);
-  if (getString("_beachHeadsUsed").split(",").includes(headNumber.toString()))
-    return false;
+  if (!headAvailable(target)) return false;
   cliExecute(effect.default);
   return have_(effect);
 }

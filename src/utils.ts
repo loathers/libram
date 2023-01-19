@@ -182,6 +182,7 @@ export function maxBy<
   optimizer: ((element: T) => number) | S,
   reverse = false
 ): T {
+  if (!array.length) throw new Error("Cannot call maxBy on an empty array!");
   if (typeof optimizer === "function") {
     return [...array].reduce(
       ({ value, item }, other) => {

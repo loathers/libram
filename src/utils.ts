@@ -208,4 +208,3 @@ export type Tuple<T, N extends number> = N extends N
 type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
   ? R
   : _tupleOf<T, N, [T, ...R]>;
-

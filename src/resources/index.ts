@@ -35,6 +35,7 @@ import * as AutumnAton from "./2022/AutumnAton";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 import * as GreyGoose from "./2022/GreyGoose";
 import * as JuneCleaver from "./2022/JuneCleaver";
+import * as TrainSet from "./2022/TrainSet";
 
 export {
   AutumnAton,
@@ -71,6 +72,7 @@ export {
   SpookyPutty,
   Stickers,
   StompingBoots,
+  TrainSet,
   TunnelOfLove,
   WinterGarden,
   Witchess,

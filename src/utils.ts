@@ -208,3 +208,11 @@ export type Tuple<T, N extends number> = N extends N
 type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
   ? R
   : _tupleOf<T, N, [T, ...R]>;
+
+export function arrayEquals<T>(
+  left: T[] | readonly T[],
+  right: T[] | readonly T[]
+): boolean {
+  if (left.length !== right.length) return false;
+  return left.every((element, index) => element === right[index]);
+}

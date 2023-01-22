@@ -9662,9 +9662,18 @@ function logger_defineProperty(obj, key, value) { if (key in obj) { Object.defin
 
 
 var defaultHandlers = {
-  info: message => (0,external_kolmafia_namespaceObject.printHtml)("<b>[Libram]</b> ".concat(message)),
-  warning: message => (0,external_kolmafia_namespaceObject.printHtml)("<span style=\"background: orange; color: white;\"><b>[Libram]</b> ".concat(message, "</span>")),
-  error: _error => (0,external_kolmafia_namespaceObject.printHtml)("<span style=\"background: red; color: white;\"><b>[Libram]</b> ".concat(_error.toString(), "</span>"))
+  info: message => {
+    (0,external_kolmafia_namespaceObject.printHtml)("<b>[Libram]</b> ".concat(message));
+    (0,external_kolmafia_namespaceObject.logprint)("[Libram] ".concat(message));
+  },
+  warning: message => {
+    (0,external_kolmafia_namespaceObject.printHtml)("<span style=\"background: orange; color: white;\"><b>[Libram]</b> ".concat(message, "</span>"));
+    (0,external_kolmafia_namespaceObject.logprint)("[Libram] ".concat(message));
+  },
+  error: _error => {
+    (0,external_kolmafia_namespaceObject.printHtml)("<span style=\"background: red; color: white;\"><b>[Libram]</b> ".concat(_error.toString(), "</span>"));
+    (0,external_kolmafia_namespaceObject.logprint)("[Libram] ".concat(_error.toString()));
+  }
 };
 
 var Logger = /*#__PURE__*/function () {

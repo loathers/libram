@@ -138,7 +138,7 @@ export function cycle(): Cycle {
 
 export function nextConfigurable(): number {
   return clamp(
-    get("trainsetPosition", 0) - get("lastTrainsetConfiguration", 0),
+    get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"),
     0,
     40
   );
@@ -183,9 +183,9 @@ export function setConfiguration(configuration: Cycle): boolean {
 
   runChoice(
     1,
-    `forceoption=0${configuration.map(
-      (station, index) => `&slot[${index}]=${stationToInt(station)}`
-    )}`
+    `forceoption=0${configuration
+      .map((station, index) => `&slot[${index}]=${stationToInt(station)}`)
+      .join("")}`
   );
   visitUrl("main.php");
 
@@ -196,5 +196,5 @@ export function setConfiguration(configuration: Cycle): boolean {
 }
 
 export function next(): Station {
-  return cycle()[get("lastTrainsetConfiguration") % 8];
+  return cycle()[get("trainsetPosition") % 8];
 }

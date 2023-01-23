@@ -173,7 +173,8 @@ export default class CommunityService {
     let additionalTurns: number;
     try {
       additionalTurns = prepare() ?? 0;
-    } catch {
+    } catch (e) {
+      print(`${e}`, "red");
       return "failed";
     }
 

@@ -12605,7 +12605,8 @@ var CommunityService = /*#__PURE__*/function () {
         var _prepare;
 
         additionalTurns = (_prepare = prepare()) !== null && _prepare !== void 0 ? _prepare : 0;
-      } catch (_unused) {
+      } catch (e) {
+        (0,external_kolmafia_namespaceObject.print)("".concat(e), "red");
         return "failed";
       }
 

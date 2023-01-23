@@ -17464,6 +17464,7 @@ function sendTo(target) {
   var location = target instanceof external_kolmafia_namespaceObject.Location ? target : Array.isArray(target) ? target.find(l => locationsAvailable.includes(l)) : target(locationsAvailable);
   if (!location) return null;
   if (!locationsAvailable.includes(location)) return null;
+  if (!(0,external_kolmafia_namespaceObject.handlingChoice)()) use();
   (0,external_kolmafia_namespaceObject.runChoice)(2, "heythereprogrammer=".concat(location.id));
   if ((0,external_kolmafia_namespaceObject.handlingChoice)()) (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
   return location;

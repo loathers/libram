@@ -1,4 +1,4 @@
-import { printHtml } from "kolmafia";
+import { logprint, printHtml } from "kolmafia";
 export enum LogLevels {
   NONE = 0,
   ERROR = 1,
@@ -8,20 +8,30 @@ export enum LogLevels {
 }
 
 const defaultHandlers = {
-  [LogLevels.INFO]: (message: string): unknown =>
-    printHtml(`<b>[Libram Info]</b> ${message}`),
-  [LogLevels.WARNING]: (message: string): unknown =>
+  [LogLevels.INFO]: (message: string): unknown => {
+    printHtml(`<b>[Libram Info]</b> ${message}`);
+    logprint(`[Libram] ${message}`);
+    return;
+  },
+  [LogLevels.WARNING]: (message: string): unknown => {
     printHtml(
       `<span style="background: orange; color: white;"><b>[Libram Warning]</b> ${message}</span>`
-    ),
-  [LogLevels.ERROR]: (error: string | Error): unknown =>
+    );
+    logprint(`[Libram] ${message}`);
+    return;
+  },
+  [LogLevels.ERROR]: (error: string | Error): unknown => {
     printHtml(
       `<span style="background: red; color: white;"><b>[Libram Error]</b> ${error.toString()}</span>`
-    ),
+    );
+    logprint(`[Libram] ${error}`);
+    return;
+  },
   [LogLevels.DEBUG]: (message: string): unknown => {
     printHtml(
       `<span style="background: red; color: white;"><b>[Libram Debug]</b> ${message}</span>`
     );
+    logprint(`[Libram] ${message}`);
     return;
   },
 };

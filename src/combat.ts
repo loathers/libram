@@ -53,7 +53,9 @@ function itemOrNameToItem(itemOrName: ItemOrName) {
   return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
 }
 
+// The list of all combat items whose name is a strict substring of another combat item
 const substringCombatItems = $items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, bowling ball, adder, red button, pile of sand, mushroom, deluxe mushroom`;
+// The list of all combat skills whose name is a strict substring of another combat skill
 const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Snipe, Cleave, Boil, Slice, Rainbow`;
 
 function itemOrItemsBallsMacroName(

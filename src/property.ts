@@ -96,7 +96,7 @@ const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   createPropertyGetter((value) => {
     if (value === "") return null;
     const v = toType(value);
-    return v === Type.get<T>("none") ? null : v;
+    return v === Type.none ? null : v;
   });
 
 export const getString = createPropertyGetter((value) => value);
@@ -342,6 +342,15 @@ export class PropertiesManager {
   }
 
   /**
+   * Sets a single choice adventure property to the given value, storing the old value.
+   * @param choiceToSet The number of the choice adventure to set the property for.
+   * @param value The value to assign to that choice adventure.
+   */
+  setChoice(choiceToSet: number, value: number | string): void {
+    this.setChoices({ [choiceToSet]: value });
+  }
+
+  /**
    * Resets the given properties to their original stored value. Does not delete entries from the manager.
    * @param properties Collection of properties to reset.
    */
@@ -406,5 +415,71 @@ export class PropertiesManager {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Creates a new PropertiesManager with identical stored values to this one.
+   * @returns A new PropertiesManager, with identical stored values to this one.
+   */
+  clone(): PropertiesManager {
+    const newGuy = new PropertiesManager();
+    newGuy.properties = this.storedValues;
+    return newGuy;
+  }
+
+  /**
+   * Clamps a numeric property, modulating it up or down to fit within a specified range
+   * @param property The numeric property to clamp
+   * @param min The lower bound for what we want the property to be allowed to be.
+   * @param max The upper bound for what we want the property to be allowed to be.
+   * @returns Whether we ended up changing the property or not.
+   */
+  clamp(property: NumericProperty, min: number, max: number): boolean {
+    if (max < min) return false;
+
+    const start = get(property);
+
+    this.setMinimumValue(property, min);
+    this.setMaximumValue(property, max);
+
+    return start !== get(property);
+  }
+
+  /**
+   * Determines whether this PropertiesManager has identical stored values to another.
+   * @param other The PropertiesManager to compare to this one.
+   * @returns Whether their StoredValues are identical.
+   */
+  equals(other: PropertiesManager): boolean {
+    const thisProps = Object.entries(this.storedValues);
+    const otherProps = new Map(Object.entries(other.storedValues));
+
+    if (thisProps.length !== otherProps.size) return false;
+    for (const [propertyName, propertyValue] of thisProps) {
+      if (otherProps.get(propertyName) === propertyValue) return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Merges a PropertiesManager onto this one, letting the input win in the event that both PropertiesManagers have a value stored.
+   * @param other The PropertiesManager to be merged onto this one.
+   * @returns A new PropertiesManager with stored values from both its parents.
+   */
+  merge(other: PropertiesManager): PropertiesManager {
+    const newGuy = new PropertiesManager();
+    newGuy.properties = { ...this.properties, ...other.properties };
+    return newGuy;
+  }
+
+  /**
+   * Merges an arbitrary collection of PropertiesManagers, letting the rightmost PropertiesManager win in the event of verlap.
+   * @param mergees The PropertiesManagers to merge together.
+   * @returns A PropertiesManager that is just an amalgam of all the constituents.
+   */
+  static merge(...mergees: PropertiesManager[]): PropertiesManager {
+    if (mergees.length === 0) return new PropertiesManager();
+    return mergees.reduce((a, b) => a.merge(b));
   }
 }

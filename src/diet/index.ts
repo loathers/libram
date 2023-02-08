@@ -52,7 +52,7 @@ function expectedAdventures(
 ): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
-    .split(/[-–—]/)
+    .split(/[-]/)
     .map((s) => parseInt(s));
   const max = recordedMax ?? min;
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
@@ -61,6 +61,7 @@ function expectedAdventures(
     (itemType(item) === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
+  const seasoningAdventures = max - min <= 1 ? 1 : 0.5;
   const garish =
     modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
   const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");
@@ -81,7 +82,8 @@ function expectedAdventures(
         adventures += 2;
       }
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
-      if (itemType(item) === "food" && modifiers.seasoning) adventures += 0.5;
+      if (itemType(item) === "food" && modifiers.seasoning)
+        adventures += seasoningAdventures;
       return adventures;
     }) / interpolated.length
   );
@@ -96,6 +98,7 @@ type MenuItemOptions<T> = {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+  useRetrievePrice?: boolean;
 };
 
 export class MenuItem<T> {
@@ -108,6 +111,9 @@ export class MenuItem<T> {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+
+  static defaultPriceFunction: (item: Item) => number = (item: Item) =>
+    npcPrice(item) > 0 ? npcPrice(item) : mallPrice(item);
 
   static defaultOptions<T>(): Map<Item, MenuItemOptions<T>> {
     return new Map([
@@ -224,10 +230,7 @@ export class MenuItem<T> {
   }
 
   price(): number {
-    return (
-      this.priceOverride ??
-      (npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item))
-    );
+    return this.priceOverride ?? MenuItem.defaultPriceFunction?.(this.item);
   }
 }
 
@@ -325,13 +328,6 @@ class DietPlanner<T> {
     overrideModifiers: Partial<ConsumptionModifiers>
   ): RawDietEntry<T> {
     const helpers = [];
-    if (
-      this.seasoning &&
-      itemType(menuItem.item) === "food" &&
-      this.mpa > mallPrice($item`Special Seasoning`)
-    ) {
-      helpers.push(this.seasoning);
-    }
     if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
       const mayo = menuItem.mayo
         ? this.mayoLookup.get(menuItem.mayo)
@@ -353,6 +349,23 @@ class DietPlanner<T> {
       tuxedoShirt: have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
       ...overrideModifiers,
     };
+
+    if (
+      this.seasoning &&
+      itemType(menuItem.item) === "food" &&
+      this.mpa *
+        (expectedAdventures(menuItem.item, {
+          ...defaultModifiers,
+          seasoning: true,
+        }) -
+          expectedAdventures(menuItem.item, {
+            ...defaultModifiers,
+            seasoning: false,
+          })) >
+        mallPrice($item`Special Seasoning`)
+    ) {
+      helpers.push(this.seasoning);
+    }
 
     const forkMug =
       itemType(menuItem.item) === "food"
@@ -501,7 +514,7 @@ class DietPlanner<T> {
 
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
-      : [valueWith, [...planWith, [helpersAndItem, 1]]];
+      : [valueWith + value, [...planWith, [helpersAndItem, 1]]];
   }
 }
 

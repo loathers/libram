@@ -3,6 +3,7 @@ import {
   getFloristPlants,
   Location,
   myLocation,
+  runChoice,
   visitUrl,
 } from "kolmafia";
 import { EnvironmentType } from "../../lib";
@@ -31,14 +32,18 @@ class Flower {
     this.territorial = territorial;
   }
 
-  static plantNamesInZone(location = myLocation()): string[] | null {
-    return getFloristPlants()[location.toString()] ?? null;
+  private static visit() {
+    visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
   }
 
-  static plantsInZone(location = myLocation()): Flower[] | null {
-    return (this.plantNamesInZone(location)
-      ?.map((flowerName) => toFlower(flowerName))
-      .filter((flower) => flower !== undefined) ?? null) as Flower[] | null;
+  static plantNamesInZone(location = myLocation()): string[] {
+    return getFloristPlants()[location.toString()] ?? [];
+  }
+
+  static plantsInZone(location = myLocation()): Flower[] {
+    return this.plantNamesInZone(location)
+      .map((flowerName) => toFlower(flowerName))
+      .filter((flower) => flower !== undefined) as Flower[];
   }
 
   static modifiersInZone(location = myLocation()): Modifiers {
@@ -66,18 +71,18 @@ class Flower {
   dig(): boolean {
     if (!this.isPlantedHere()) return false;
     const flowers = Flower.plantNamesInZone();
-    if (!flowers || !flowers[2]) return false;
-    const plantNumber = getFloristPlants()[myLocation().toString()].indexOf(
-      this.name
-    );
-    visitUrl(`choice.php?option=2&whichchoice=720&pwd&plnti=${plantNumber}`);
+    if (!flowers[2]) return false;
+    const plantNumber = flowers.indexOf(this.name);
+    Flower.visit();
+    runChoice(2, `plnti=${plantNumber}`);
     return !this.isPlantedHere();
   }
 
   plant(): boolean {
     if (this.isPlantedHere()) return true;
     if (isFull()) return false;
-    visitUrl(`choice.php?whichchoice=720&whichoption=1&pwd&plant=${this.id}`);
+    Flower.visit();
+    runChoice(1, `plant=${this.id}`);
     return this.isPlantedHere();
   }
 }
@@ -92,8 +97,8 @@ function toFlower(name: string): Flower | undefined {
 
 export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
-  getFloristPlants()
-    [location.toString()].map(toFlower)
+  Flower.plantNamesInZone(location)
+    .map(toFlower)
     .forEach((flower) => {
       if (flower) returnValue.push(flower);
     });
@@ -187,7 +192,7 @@ export const Impatiens = new Flower("Impatiens", 14, "indoor", {
 });
 export const SpiderPlant = new Flower("Spider Plant", 15, "indoor", "Poison");
 export const RedFern = new Flower("Red Fern", 16, "indoor", "Delevels Enemy");
-export const BamBoo = new Flower("Bam BOO!", 17, "indoor", {
+export const BamBoo = new Flower("BamBOO!", 17, "indoor", {
   "Spooky Damage": 12.5,
 });
 export const ArcticMoss = new Flower("Arctic Moss", 18, "indoor", {

@@ -8,6 +8,8 @@ import {
   equippedAmount,
   equippedItem,
   Familiar,
+  getProperty,
+  haveEquipped,
   isWearingOutfit,
   Item,
   maximize,
@@ -31,6 +33,8 @@ export type MaximizeOptions = {
   bonusEquip: Map<Item, number>;
   onlySlot: Slot[];
   preventSlot: Slot[];
+  forceUpdate: boolean;
+  modes: Modes;
 };
 
 /**
@@ -75,6 +79,9 @@ function mergeMaximizeOptions(
       ...defaultOptions.preventSlot,
       ...(addendums.preventSlot ?? []),
     ],
+
+    forceUpdate: addendums.forceUpdate ?? defaultOptions.forceUpdate,
+    modes: { ...defaultOptions.modes, ...(addendums.modes ?? {}) },
   };
 }
 
@@ -87,6 +94,8 @@ const defaultMaximizeOptions: MaximizeOptions = {
   bonusEquip: new Map(),
   onlySlot: [],
   preventSlot: [],
+  forceUpdate: false,
+  modes: {},
 };
 
 /**
@@ -104,6 +113,57 @@ export function setDefaultMaximizeOptions(
   Object.assign(defaultMaximizeOptions, options);
 }
 
+const modeableCommands = [
+  "backupcamera",
+  "umbrella",
+  "snowsuit",
+  "edpiece",
+  "retrocape",
+  "parka",
+] as const;
+export type Mode = typeof modeableCommands[number];
+export type Modes = Partial<{ [x in Mode]: string }>;
+export const modeableItems = {
+  backupcamera: $item`backup camera`,
+  umbrella: $item`unbreakable umbrella`,
+  snowsuit: $item`Snow Suit`,
+  edpiece: $item`The Crown of Ed the Undying`,
+  retrocape: $item`unwrapped knock-off retro superhero cape`,
+  parka: $item`Jurassic Parka`,
+} as const;
+
+export const modeableState = {
+  backupcamera: () => getProperty("backupCameraMode"),
+  umbrella: () => getProperty("umbrellaState"),
+  snowsuit: () => getProperty("snowsuit"),
+  edpiece: () => getProperty("edPiece"),
+  retrocape: () =>
+    getProperty("retroCapeSuperhero") +
+    " " +
+    getProperty("retroCapeWashingInstructions"),
+  parka: () => getProperty("parkaMode"),
+} as const;
+
+export function getCurrentModes(): Modes {
+  const modes: Modes = {};
+  for (const key of modeableCommands) {
+    if (haveEquipped(modeableItems[key])) {
+      modes[key] = modeableState[key]();
+    }
+  }
+  return modes;
+}
+
+export function applyModes(modes: Modes) {
+  for (const command of modeableCommands) {
+    if (haveEquipped(modeableItems[command]) && modes[command] !== undefined) {
+      if (modeableState[command]() !== modes[command]) {
+        cliExecute(command + " " + modes[command]);
+      }
+    }
+  }
+}
+
 // Subset of slots that are valid for caching.
 const cachedSlots = $slots`hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar`;
 
@@ -112,17 +172,20 @@ class CacheEntry {
   rider: Map<Item, Familiar>;
   familiar: Familiar;
   canEquipItemCount: number;
+  modes: Modes;
 
   constructor(
     equipment: Map<Slot, Item>,
     rider: Map<Item, Familiar>,
     familiar: Familiar,
-    canEquipItemCount: number
+    canEquipItemCount: number,
+    modes: Modes
   ) {
     this.equipment = equipment;
     this.rider = rider;
     this.familiar = familiar;
     this.canEquipItemCount = canEquipItemCount;
+    this.modes = modes;
   }
 }
 
@@ -177,6 +240,11 @@ class OutfitLRUCache {
       this.checkConsistent();
       return `${OutfitLRUCache.OUTFIT_PREFIX} ${index}`;
     }
+  }
+
+  clear(): void {
+    this.#outfitSlots = [];
+    this.#useHistory = [];
   }
 }
 
@@ -280,7 +348,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     enthroneFamiliar(
-      entry.rider.get($item`Crown of Thrones`) || $familiar`none`
+      entry.rider.get($item`Crown of Thrones`) || $familiar.none
     );
   }
 
@@ -288,8 +356,10 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     equippedAmount($item`Buddy Bjorn`) > 0 &&
     entry.rider.get($item`Buddy Bjorn`)
   ) {
-    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar`none`);
+    bjornifyFamiliar(entry.rider.get($item`Buddy Bjorn`) || $familiar.none);
   }
+
+  applyModes({ ...entry.modes, ...options.modes });
 }
 
 const slotStructure = [
@@ -307,7 +377,7 @@ const slotStructure = [
  * @param entry The CacheEntry to verify
  * @returns If all desired equipment was appliedn in the correct slots.
  */
-function verifyCached(entry: CacheEntry): boolean {
+function verifyCached(entry: CacheEntry, warn = true): boolean {
   let success = true;
   for (const slotGroup of slotStructure) {
     const desiredSlots = slotGroup
@@ -316,11 +386,13 @@ function verifyCached(entry: CacheEntry): boolean {
     const desiredSet = desiredSlots.map(([, item]) => item);
     const equippedSet = desiredSlots.map(([slot]) => equippedItem(slot));
     if (!setEqual(desiredSet, equippedSet)) {
-      logger.warning(
-        `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
-          ", "
-        )}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
+            ", "
+          )}.`
+        );
+      }
       success = false;
     }
   }
@@ -330,11 +402,13 @@ function verifyCached(entry: CacheEntry): boolean {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     if (entry.rider.get($item`Crown of Thrones`) !== myEnthronedFamiliar()) {
-      logger.warning(
-        `Failed to apply ${entry.rider.get(
-          $item`Crown of Thrones`
-        )} in ${$item`Crown of Thrones`}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply ${entry.rider.get(
+            $item`Crown of Thrones`
+          )} in ${$item`Crown of Thrones`}.`
+        );
+      }
       success = false;
     }
   }
@@ -344,11 +418,13 @@ function verifyCached(entry: CacheEntry): boolean {
     entry.rider.get($item`Buddy Bjorn`)
   ) {
     if (entry.rider.get($item`Buddy Bjorn`) !== myBjornedFamiliar()) {
-      logger.warning(
-        `Failed to apply${entry.rider.get(
-          $item`Buddy Bjorn`
-        )} in ${$item`Buddy Bjorn`}.`
-      );
+      if (warn) {
+        logger.warning(
+          `Failed to apply${entry.rider.get(
+            $item`Buddy Bjorn`
+          )} in ${$item`Buddy Bjorn`}.`
+        );
+      }
       success = false;
     }
   }
@@ -411,7 +487,8 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     equipment,
     rider,
     myFamiliar(),
-    canEquipItemCount()
+    canEquipItemCount(),
+    { ...getCurrentModes(), ...options.modes }
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {
@@ -443,6 +520,7 @@ export function maximizeCached(
     bonusEquip,
     onlySlot,
     preventSlot,
+    forceUpdate,
   }: {
     updateOnFamiliarChange: boolean;
     updateOnCanEquipChanged: boolean;
@@ -451,34 +529,53 @@ export function maximizeCached(
     bonusEquip: Map<Item, number>;
     onlySlot: Slot[];
     preventSlot: Slot[];
+    forceUpdate: boolean;
   } = fullOptions;
 
   // Sort each group in objective to ensure consistent ordering in string
   const objective = [
-    ...objectives.sort(),
-    ...forceEquip.map((item) => `equip ${item}`).sort(),
-    ...preventEquip.map((item) => `-equip ${item}`).sort(),
-    ...onlySlot.map((slot) => `${slot}`).sort(),
-    ...preventSlot.map((slot) => `-${slot}`).sort(),
-    ...Array.from(bonusEquip.entries())
-      .filter(([, bonus]) => bonus !== 0)
-      .map(([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`)
-      .sort(),
+    ...new Set([
+      ...objectives.sort(),
+      ...forceEquip.map((item) => `equip ${item}`).sort(),
+      ...preventEquip.map((item) => `-equip ${item}`).sort(),
+      ...onlySlot.map((slot) => `${slot}`).sort(),
+      ...preventSlot.map((slot) => `-${slot}`).sort(),
+      ...Array.from(bonusEquip.entries())
+        .filter(([, bonus]) => bonus !== 0)
+        .map(
+          ([item, bonus]) => `${Math.round(bonus * 100) / 100} bonus ${item}`
+        )
+        .sort(),
+    ]),
   ].join(", ");
 
-  const cacheEntry = checkCache(objective, fullOptions);
-  if (cacheEntry) {
+  // Items equipped in slots not touched by the maximizer must be in the cache key
+  const untouchedSlots = cachedSlots.filter(
+    (slot: Slot) =>
+      preventSlot.includes(slot) ||
+      (onlySlot.length > 0 && !onlySlot.includes(slot))
+  );
+  const cacheKey = [
+    objective,
+    ...untouchedSlots
+      .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
+      .sort(),
+  ].join("; ");
+
+  const cacheEntry = checkCache(cacheKey, fullOptions);
+  if (cacheEntry && !forceUpdate) {
+    if (verifyCached(cacheEntry, false)) return true;
     logger.info("Equipment found in maximize cache, equipping...");
     applyCached(cacheEntry, fullOptions);
     if (verifyCached(cacheEntry)) {
-      logger.info(`Equipped cached ${objective}`);
+      logger.info(`Equipped cached ${cacheKey}`);
       return true;
     }
     logger.warning("Maximize cache application failed, maximizing...");
   }
 
   const result = maximize(objective, false);
-  saveCached(objective, fullOptions);
+  saveCached(cacheKey, fullOptions);
   return result;
 }
 
@@ -526,11 +623,11 @@ export class Requirement {
         forceEquip: [
           ...(optionsA.forceEquip ?? []),
           ...(other.maximizeOptions.forceEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.preventEquip?.includes(x)),
         preventEquip: [
           ...(optionsA.preventEquip ?? []),
           ...(other.maximizeOptions.preventEquip ?? []),
-        ],
+        ].filter((x) => !other.maximizeOptions.forceEquip?.includes(x)),
         bonusEquip: new Map([
           ...(optionsA.bonusEquip?.entries() ?? []),
           ...(optionsB.bonusEquip?.entries() ?? []),
@@ -540,6 +637,8 @@ export class Requirement {
           ...(optionsA.preventSlot ?? []),
           ...(optionsB.preventSlot ?? []),
         ],
+
+        forceUpdate: optionsA.forceUpdate || optionsB.forceUpdate,
       }
     );
   }
@@ -570,4 +669,12 @@ export class Requirement {
   static maximize(...requirements: Requirement[]): void {
     Requirement.merge(requirements).maximize();
   }
+}
+
+/**
+ * Clear all outfits cached by the maximizer.
+ */
+export function clearMaximizerCache(): void {
+  outfitCache.clear();
+  for (const member in cachedObjectives) delete cachedObjectives[member];
 }

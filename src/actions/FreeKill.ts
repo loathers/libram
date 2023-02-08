@@ -1,4 +1,4 @@
-import { mallPrice, myLightning, restoreMp, retrieveItem, use } from "kolmafia";
+import { canEquip, myLightning, restoreMp, retrieveItem, use } from "kolmafia";
 
 import { Macro } from "../combat";
 import { have } from "../lib";
@@ -48,7 +48,11 @@ const freeKillSources: ActionSource[] = [
   new ActionSource(
     $item`The Jokester's gun`,
     () =>
-      !get("_firedJokestersGun") && have($item`The Jokester's gun`) ? 1 : 0,
+      !get("_firedJokestersGun") &&
+      have($item`The Jokester's gun`) &&
+      canEquip($item`The Jokester's gun`)
+        ? 1
+        : 0,
     Macro.skill($skill`Fire the Jokester's Gun`),
     {
       equipmentRequirements: () =>
@@ -93,7 +97,7 @@ const freeKillSources: ActionSource[] = [
     Macro.item($item`powdered madness`),
     {
       preparation: () => retrieveItem($item`powdered madness`),
-      cost: () => mallPrice($item`powdered madness`),
+      cost: () => ActionSource.defaultPriceFunction($item`powdered madness`),
     }
   ),
 
@@ -104,7 +108,7 @@ const freeKillSources: ActionSource[] = [
     {
       familiar: () => $familiar`Puck Man`,
       preparation: () => retrieveItem($item`power pill`),
-      cost: () => mallPrice($item`power pill`),
+      cost: () => ActionSource.defaultPriceFunction($item`power pill`),
     }
   ),
 
@@ -115,7 +119,7 @@ const freeKillSources: ActionSource[] = [
     {
       familiar: () => $familiar`Ms. Puck Man`,
       preparation: () => retrieveItem($item`power pill`),
-      cost: () => mallPrice($item`power pill`),
+      cost: () => ActionSource.defaultPriceFunction($item`power pill`),
     }
   ),
 
@@ -134,7 +138,7 @@ const freeKillSources: ActionSource[] = [
         }
         return get("shockingLickCharges") > 0;
       },
-      cost: () => mallPrice($item`battery (AAA)`) * 4,
+      cost: () => ActionSource.defaultPriceFunction($item`battery (AAA)`) * 4,
     }
   ),
 
@@ -142,7 +146,7 @@ const freeKillSources: ActionSource[] = [
     (item) =>
       new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
-        cost: () => mallPrice(item),
+        cost: () => ActionSource.defaultPriceFunction(item),
       })
   ),
 ];

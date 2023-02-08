@@ -2,6 +2,7 @@ import "core-js/modules/es.object.values";
 
 import {
   autosellPrice,
+  buy,
   canInteract,
   cliExecute,
   Effect,
@@ -19,9 +20,9 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { clamp } from "lodash";
 import { getAverageAdventures, have as haveItem } from "../../lib";
 import { $effect, $item, $items } from "../../template-string";
+import { clamp } from "../../utils";
 
 enum PriceAge {
   HISTORICAL, // If Mafia has a historical price stored, use it.
@@ -87,13 +88,9 @@ function inventoryItems(): Item[] {
 }
 
 // Efficiency in meat per fuel.
-function calculateFuelUnitCost(
-  it: Item,
-  targetUnits: number,
-  priceAge = PriceAge.RECENT
-): number {
+function calculateFuelUnitCost(it: Item, priceAge = PriceAge.RECENT): number {
   const units = getAverageAdventures(it);
-  return price(it, priceAge) / Math.min(targetUnits, units);
+  return price(it, priceAge) / units;
 }
 
 function isFuelItem(it: Item) {
@@ -107,17 +104,17 @@ function isFuelItem(it: Item) {
   );
 }
 
-function getBestFuel(targetUnits: number): Item {
+function getBestFuels(): Item[] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).
-  const allFuel = $items``.filter(isFuelItem);
+  const allFuel = Item.all().filter(isFuelItem);
   if (allFuel.filter((item) => historicalPrice(item) === 0).length > 100) {
     mallPrices("food");
     mallPrices("booze");
   }
 
   const keyHistorical = (item: Item) =>
-    calculateFuelUnitCost(item, targetUnits, PriceAge.HISTORICAL);
+    calculateFuelUnitCost(item, PriceAge.HISTORICAL);
   allFuel.sort((x, y) => keyHistorical(x) - keyHistorical(y));
   const bestUnitCost = keyHistorical(allFuel[0]);
   const firstBadIndex = allFuel.findIndex(
@@ -133,25 +130,23 @@ function getBestFuel(targetUnits: number): Item {
   }
 
   const key1 = (item: Item) => -getAverageAdventures(item);
-  const key2 = (item: Item) =>
-    calculateFuelUnitCost(item, targetUnits, PriceAge.RECENT);
+  const key2 = (item: Item) => calculateFuelUnitCost(item, PriceAge.RECENT);
   potentialFuel.sort((x: Item, y: Item) => key1(x) - key1(y));
   potentialFuel.sort((x: Item, y: Item) => key2(x) - key2(y));
 
   // 3. Find result using precise price for those top candidates.
   const candidates = potentialFuel.slice(0, 10);
-  const key3 = (item: Item) =>
-    calculateFuelUnitCost(item, targetUnits, PriceAge.TODAY);
+  const key3 = (item: Item) => calculateFuelUnitCost(item, PriceAge.TODAY);
   candidates.sort((x: Item, y: Item) => key3(x) - key3(y));
 
-  if (calculateFuelUnitCost(candidates[0], targetUnits, PriceAge.TODAY) > 100) {
+  if (calculateFuelUnitCost(candidates[0], PriceAge.TODAY) > 100) {
     throw new Error(
       "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
         "This means something went wrong."
     );
   }
 
-  return candidates[0];
+  return candidates;
 }
 
 /**
@@ -176,19 +171,28 @@ export function insertFuel(it: Item, quantity = 1): boolean {
  */
 export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
+
   while (getFuel() < targetUnits) {
-    const remaining = targetUnits - getFuel();
-
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    let fuel;
-    if (canInteract()) fuel = getBestFuel(remaining);
-    else fuel = $item`loaf of soda bread`;
+    const [bestFuel, secondBest] = canInteract()
+      ? getBestFuels()
+      : [$item`loaf of soda bread`, undefined];
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
+    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
 
-    retrieveItem(count, fuel);
+    let ceiling: number | undefined = undefined;
+    if (secondBest) {
+      const efficiencyOfSecondBest =
+        mallPrice(secondBest) / getAverageAdventures(secondBest);
+      ceiling = Math.ceil(
+        efficiencyOfSecondBest * getAverageAdventures(bestFuel)
+      );
+    }
 
-    if (!insertFuel(fuel, count)) {
+    if (!canInteract()) retrieveItem(count, bestFuel);
+    else ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
+
+    if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
       throw new Error("Failed to fuel Asdon Martin.");
     }
   }

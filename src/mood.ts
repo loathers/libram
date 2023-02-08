@@ -11,13 +11,13 @@ import {
   haveSkill,
   hpCost,
   Item,
-  itemAmount,
   mallPrice,
   mpCost,
   myHp,
   myMaxmp,
   myMp,
   numericModifier,
+  restoreMp,
   retrieveItem,
   Skill,
   toEffect,
@@ -33,8 +33,8 @@ import { $item, $skill } from "./template-string";
 import { clamp, sum } from "./utils";
 
 export abstract class MpSource {
-  usesRemaining(): number | null {
-    return null;
+  usesRemaining(): number {
+    return 0;
   }
   abstract availableMpMin(): number;
   availableMpMax(): number {
@@ -50,16 +50,16 @@ export class OscusSoda extends MpSource {
     return have($item`Oscus's neverending soda`);
   }
 
-  usesRemaining(): number | null {
+  usesRemaining(): number {
     return get("oscusSodaUsed") ? 0 : 1;
   }
 
   availableMpMin(): number {
-    return this.available() ? 200 : 0;
+    return this.available() && this.usesRemaining() > 0 ? 200 : 0;
   }
 
   availableMpMax(): number {
-    return this.available() ? 300 : 0;
+    return this.available() && this.usesRemaining() > 0 ? 300 : 0;
   }
 
   execute(): void {
@@ -70,19 +70,23 @@ export class OscusSoda extends MpSource {
 export class MagicalSausages extends MpSource {
   static instance = new MagicalSausages();
 
+  available(): boolean {
+    return have($item`Kramco Sausage-o-Matic™`);
+  }
+
   usesRemaining(): number {
-    return have($item`Kramco Sausage-o-Matic™`)
-      ? 23 - get("_sausagesEaten")
+    const maxSausages =
+      availableAmount($item`magical sausage`) +
+      availableAmount($item`magical sausage casing`);
+    return this.available()
+      ? clamp(23 - get("_sausagesEaten"), 0, maxSausages)
       : 0;
   }
 
   availableMpMin(): number {
-    const maxSausages = Math.min(
-      this.usesRemaining(),
-      itemAmount($item`magical sausage`) +
-        itemAmount($item`magical sausage casing`)
-    );
-    return Math.min(myMaxmp(), 999) * maxSausages;
+    return this.available()
+      ? Math.min(myMaxmp(), 999) * this.usesRemaining()
+      : 0;
   }
 
   execute(): void {
@@ -90,8 +94,6 @@ export class MagicalSausages extends MpSource {
     if (mpSpaceAvailable < 700) return;
     const maxSausages = Math.min(
       this.usesRemaining(),
-      itemAmount($item`magical sausage`) +
-        itemAmount($item`magical sausage casing`),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 999))
     );
     retrieveItem(maxSausages, $item`magical sausage`);
@@ -103,6 +105,7 @@ type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
   reserveMp: number;
+  useNativeRestores: boolean;
 };
 
 abstract class MoodElement {
@@ -148,7 +151,10 @@ class SkillMoodElement extends MoodElement {
       const activeSongs = getActiveSongs();
       for (const song of activeSongs) {
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
-        if (!slot || slot.includes(effect)) cliExecute(`shrug ${song}`);
+        if (!slot || slot.includes(effect)) {
+          cliExecute(`shrug ${song}`);
+          break;
+        }
       }
     }
 
@@ -160,13 +166,17 @@ class SkillMoodElement extends MoodElement {
       let maxCasts;
       if (hpCost(this.skill) > 0) {
         // FIXME: restore HP
-        maxCasts = Math.floor(myHp() / hpCost(this.skill));
+        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill))); // Do not allow ourselves to hit 0 hp
       } else {
         const cost = mpCost(this.skill);
-        maxCasts = Math.floor(myMp() / cost);
-        if (maxCasts === 0) {
-          mood.moreMp(cost);
-          maxCasts = Math.floor(myMp() / cost);
+        maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+        if (maxCasts < remainingCasts) {
+          const bestMp = Math.min(
+            remainingCasts * mpCost(this.skill),
+            myMaxmp()
+          );
+          mood.moreMp(bestMp);
+          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
         }
       }
       const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
@@ -216,7 +226,7 @@ class PotionMoodElement extends MoodElement {
     const remainingDifference = ensureTurns - haveEffect(effect);
     if (remainingDifference > 0) {
       const price = Math.floor(this.maxPricePerTurn * remainingDifference);
-      if (price >= mallPrice(this.potion)) {
+      if (price <= mallPrice(this.potion)) {
         if (availableAmount(this.potion) || buy(1, this.potion, price)) {
           use(1, this.potion);
         }
@@ -303,6 +313,7 @@ export class Mood {
     songSlots: [],
     mpSources: [MagicalSausages.instance, OscusSoda.instance],
     reserveMp: 0,
+    useNativeRestores: false,
   };
 
   /**
@@ -328,20 +339,24 @@ export class Mood {
    * Get the MP available for casting skills.
    */
   availableMp(): number {
-    return (
-      sum(this.options.mpSources, (mpSource: MpSource) =>
-        mpSource.availableMpMin()
-      ) + Math.max(myMp() - this.options.reserveMp, 0)
-    );
+    return this.options.useNativeRestores
+      ? Infinity
+      : sum(this.options.mpSources, (mpSource: MpSource) =>
+          mpSource.availableMpMin()
+        ) + Math.max(myMp() - this.options.reserveMp, 0);
   }
 
   moreMp(minimumTarget: number): void {
+    if (myMp() >= minimumTarget) return;
     for (const mpSource of this.options.mpSources) {
-      const usesRemaining = mpSource.usesRemaining();
-      if (usesRemaining !== null && usesRemaining > 0) {
+      if (mpSource.usesRemaining() > 0) {
         mpSource.execute();
         if (myMp() >= minimumTarget) break;
       }
+    }
+
+    if (this.options.useNativeRestores) {
+      restoreMp(minimumTarget);
     }
   }
 
@@ -361,7 +376,7 @@ export class Mood {
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
-    if (!gainEffect && skill !== $skill`none`) {
+    if (!gainEffect && skill !== $skill.none) {
       this.skill(skill);
     } else {
       this.elements.push(new CustomMoodElement(effect, gainEffect));
@@ -424,6 +439,7 @@ export class Mood {
       }
       completeSuccess = element.execute(this, elementTurns) && completeSuccess;
     }
+    this.moreMp(this.options.reserveMp);
     return completeSuccess;
   }
 }

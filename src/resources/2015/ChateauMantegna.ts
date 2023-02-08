@@ -18,17 +18,17 @@ export function fightPainting(): string {
   return runCombat();
 }
 
-const desks = [
+export const desks = [
   "fancy stationery set",
   "Swiss piggy bank",
   "continental juice bar",
 ] as const;
-const ceilings = [
+export const ceilings = [
   "antler chandelier",
   "ceiling fan",
   "artificial skylight",
 ] as const;
-const nightstands = [
+export const nightstands = [
   "foreign language tapes",
   "bowl of potpourri",
   "electric muscle stimulator",

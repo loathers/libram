@@ -56,6 +56,9 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
+const baseWeight = (): number =>
+  have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
+
 export default class CommunityService {
   private choice: number;
   private stat: string;
@@ -173,7 +176,8 @@ export default class CommunityService {
     let additionalTurns: number;
     try {
       additionalTurns = prepare() ?? 0;
-    } catch {
+    } catch (e) {
+      print(`${e}`, "red");
       return "failed";
     }
 
@@ -317,8 +321,7 @@ export default class CommunityService {
     5,
     "Familiar Weight",
     "Breed More Collies",
-    () =>
-      60 - Math.floor((familiarWeight(myFamiliar()) + weightAdjustment()) / 5),
+    () => 60 - Math.floor((baseWeight() + weightAdjustment()) / 5),
     new Requirement(["Familiar Weight"], {})
   );
 
@@ -368,7 +371,7 @@ export default class CommunityService {
           ? numericModifier(
               $familiar`Magic Dragonfish`,
               "Spell Damage Percent",
-              familiarWeight($familiar`Magic Dragonfish`) + weightAdjustment(),
+              baseWeight() + weightAdjustment(),
               $item.none
             )
           : 0;
@@ -413,7 +416,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Item Drop",
-          familiarWeight(myFamiliar()) + weightAdjustment(),
+          baseWeight() + weightAdjustment(),
           equippedItem($slot`familiar`)
         ) +
         mummingBuff -
@@ -423,7 +426,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Booze Drop",
-          familiarWeight(myFamiliar()) + weightAdjustment(),
+          baseWeight() + weightAdjustment(),
           equippedItem($slot`familiar`)
         ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 

@@ -1,15 +1,22 @@
-import { printHtml } from "kolmafia";
+import { logprint, printHtml } from "kolmafia";
 
 const defaultHandlers = {
-  info: (message: string) => printHtml(`<b>[Libram]</b> ${message}`),
-  warning: (message: string) =>
+  info: (message: string) => {
+    printHtml(`<b>[Libram]</b> ${message}`);
+    logprint(`[Libram] ${message}`);
+  },
+  warning: (message: string) => {
     printHtml(
       `<span style="background: orange; color: white;"><b>[Libram]</b> ${message}</span>`
-    ),
-  error: (error: string | Error) =>
+    );
+    logprint(`[Libram] ${message}`);
+  },
+  error: (error: string | Error) => {
     printHtml(
       `<span style="background: red; color: white;"><b>[Libram]</b> ${error.toString()}</span>`
-    ),
+    );
+    logprint(`[Libram] ${error.toString()}`);
+  },
 };
 
 export type LogLevel = keyof typeof defaultHandlers;

@@ -16,9 +16,8 @@ import {
 } from "kolmafia";
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
-
 import { $item, $items, $stat } from "./template-string";
-import { createStringUnionTypeGuardFunction } from "./utils";
+import { arrayContains } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -82,13 +81,12 @@ const eudorae = [
 ] as const;
 type Eudora = typeof eudorae[number];
 
-const isGarden = createStringUnionTypeGuardFunction(gardens);
-const isEudora = createStringUnionTypeGuardFunction(eudorae);
-const isDesk = createStringUnionTypeGuardFunction(ChateauMantegna.desks);
-const isNightstand = createStringUnionTypeGuardFunction(
-  ChateauMantegna.nightstands
-);
-const isCeiling = createStringUnionTypeGuardFunction(ChateauMantegna.ceilings);
+const isGarden = (x: string) => arrayContains(x, gardens);
+const isEudora = (x: string) => arrayContains(x, eudorae);
+const isDesk = (x: string) => arrayContains(x, ChateauMantegna.desks);
+const isNightstand = (x: string) =>
+  arrayContains(x, ChateauMantegna.nightstands);
+const isCeiling = (x: string) => arrayContains(x, ChateauMantegna.ceilings);
 
 export class AscensionPrepError extends Error {
   cause: string;

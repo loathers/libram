@@ -6140,7 +6140,7 @@ module.exports = toString;
 
 /***/ }),
 
-/***/ 3632:
+/***/ 6909:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6200,6 +6200,7 @@ __webpack_require__.d(__webpack_exports__, {
   "CrystalBall": () => (/* reexport */ CrystalBall_namespaceObject),
   "DNALab": () => (/* reexport */ DNALab_namespaceObject),
   "DaylightShavings": () => (/* reexport */ DaylightShavings_namespaceObject),
+  "DeckOfEveryCard": () => (/* reexport */ DeckOfEveryCard_namespaceObject),
   "Diet": () => (/* reexport */ Diet),
   "Dinseylandfill": () => (/* reexport */ Dinseylandfill_namespaceObject),
   "Dreadsylvania": () => (/* reexport */ Dreadsylvania_namespaceObject),
@@ -6661,6 +6662,17 @@ __webpack_require__.r(BarrelShrine_namespaceObject);
 __webpack_require__.d(BarrelShrine_namespaceObject, {
   "have": () => (BarrelShrine_have),
   "smashParty": () => (smashParty)
+});
+
+// NAMESPACE OBJECT: ./src/resources/2015/DeckOfEveryCard.ts
+var DeckOfEveryCard_namespaceObject = {};
+__webpack_require__.r(DeckOfEveryCard_namespaceObject);
+__webpack_require__.d(DeckOfEveryCard_namespaceObject, {
+  "cheatCard": () => (cheatCard),
+  "getCardsDrawn": () => (getCardsDrawn),
+  "getCardsSeen": () => (getCardsSeen),
+  "getRemainingDraws": () => (getRemainingDraws),
+  "have": () => (DeckOfEveryCard_have)
 });
 
 // NAMESPACE OBJECT: ./src/resources/2015/Dinseylandfill.ts
@@ -15677,6 +15689,34 @@ function smashParty() {
     (0,external_kolmafia_namespaceObject.runChoice)(2);
   }
 }
+;// CONCATENATED MODULE: ./src/resources/2015/DeckOfEveryCard.ts
+var DeckOfEveryCard_templateObject;
+
+function DeckOfEveryCard_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+
+function DeckOfEveryCard_have() {
+  return have($item(DeckOfEveryCard_templateObject || (DeckOfEveryCard_templateObject = DeckOfEveryCard_taggedTemplateLiteral(["Deck of Every Card"]))));
+}
+var cards = (/* unused pure expression or super */ null && (["X of Clubs", "X of Diamonds", "X of Hearts", "X of Spades", "X of Papayas", "X of Kumquats", "X of Salads", "X of Cups", "X of Coins", "X of Swords", "X of Wands", "XVI - The Tower", "Professor Plum", "Spare Tire", "Extra Tank", "Sheep", "Year of Plenty", "Mine", "Laboratory", "Plains", "Swamp", "Mountain", "Forest", "Island", "Lead Pipe", "Rope", "Wrench", "Candlestick", "Knife", "Revolver", "Gift Card", "1952 Mickey Mantle", "XXI - The World", "III - The Empress", "VI - The Lovers", "Healing Salve", "Dark Ritual", "Lightning Bolt", "Giant Growth", "Ancestral Recall", "XI - Strength", "I - The Magician", "0 - The Fool", "X - The Wheel of Fortune", "The Race Card", "Green Card", "IV - The Emperor", "IX - The Hermit", "Werewolf", "The Hive", "XVII - The Star", "VII - The Chariot", "XV - The Devil", "V - The Hierophant", "Fire Elemental", "Christmas Card", "Go Fish", "Goblin Sapper", "II - The High Priestess", "XIV - Temperance", "XVIII - The Moon", "Hunky Fireman Card", "Aquarius Horoscope", "XII - The Hanged Man", "Suit Warehouse Discount Card", "Pirate Birthday Card", "Plantable Greeting Card", "Slimer Trading Card", "XIII - Death", "Unstable Portal"]));
+function getCardsDrawn() {
+  return clamp(get("_deckCardsDrawn"), 0, 15);
+}
+function getRemainingDraws() {
+  return 15 - getCardsDrawn();
+}
+function getCardsSeen() {
+  return get("_deckCardsSeen") ? get("_deckCardsSeen").split("|") : [];
+}
+function cheatCard(card) {
+  if (getCardsSeen().includes(card)) return true;
+  if (getRemainingDraws() < 5) return false;
+  return (0,external_kolmafia_namespaceObject.cliExecute)("cheat ".concat(card));
+}
 ;// CONCATENATED MODULE: ./src/resources/2015/Dinseylandfill.ts
 var Dinseylandfill_templateObject, Dinseylandfill_templateObject2, Dinseylandfill_templateObject3, Dinseylandfill_templateObject4, Dinseylandfill_templateObject5, Dinseylandfill_templateObject6, Dinseylandfill_templateObject7, Dinseylandfill_templateObject8, Dinseylandfill_templateObject9, Dinseylandfill_templateObject10, Dinseylandfill_templateObject11, Dinseylandfill_templateObject12, Dinseylandfill_templateObject13, Dinseylandfill_templateObject14, Dinseylandfill_templateObject15, Dinseylandfill_templateObject16, Dinseylandfill_templateObject17, Dinseylandfill_templateObject18, Dinseylandfill_templateObject19, Dinseylandfill_templateObject20, Dinseylandfill_templateObject21, Dinseylandfill_templateObject22, Dinseylandfill_templateObject23, Dinseylandfill_templateObject24, Dinseylandfill_templateObject25, Dinseylandfill_templateObject26, Dinseylandfill_templateObject27;
 
@@ -18248,6 +18288,7 @@ function bestLibramToCast() {
 
 
 
+
 ;// CONCATENATED MODULE: ./src/since.ts
 function since_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -19454,7 +19495,7 @@ function SlimeTube_findLoot() {
 /******/ 	// module cache are used so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 3632);
+/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 6909);
 /******/ 	var __webpack_export_target__ = exports;
 /******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
 /******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });

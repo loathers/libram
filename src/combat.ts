@@ -53,8 +53,10 @@ function itemOrNameToItem(itemOrName: ItemOrName) {
   return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
 }
 
-const substringCombatItems = $items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, adder, red button, pile of sand, mushroom, deluxe mushroom`;
-const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Cleave, Boil, Slice, Rainbow`;
+// The list of all combat items whose name is a strict substring of another combat item
+const substringCombatItems = $items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, bowling ball, adder, red button, pile of sand, mushroom, deluxe mushroom`;
+// The list of all combat skills whose name is a strict substring of another combat skill
+const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Snipe, Cleave, Boil, Slice, Rainbow`;
 
 function itemOrItemsBallsMacroName(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
@@ -78,6 +80,17 @@ function itemOrItemsBallsMacroPredicate(
     return `hascombatitem ${itemOrItems}`;
   }
 }
+
+type PreBALLSPredicate =
+  | string
+  | Monster
+  | Monster[]
+  | Effect
+  | Skill
+  | Item
+  | Location
+  | Class
+  | Stat;
 
 type SkillOrName = Skill | string;
 function skillOrNameToSkill(skillOrName: SkillOrName) {
@@ -277,25 +290,7 @@ export class Macro {
     return new this().runaway();
   }
 
-  /**
-   * Add an "if" statement to this macro.
-   * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
-   * @returns {Macro} This object itself.
-   */
-  if_(
-    condition:
-      | string
-      | Monster
-      | Monster[]
-      | Effect
-      | Skill
-      | Item
-      | Location
-      | Class
-      | Stat,
-    ifTrue: string | Macro
-  ): this {
+  private static makeBALLSPredicate(condition: PreBALLSPredicate): string {
     let ballsCondition = "";
     if (condition instanceof Monster) {
       ballsCondition = `monsterid ${condition.id}`;
@@ -339,7 +334,19 @@ export class Macro {
     } else {
       ballsCondition = condition;
     }
-    return this.step(`if ${ballsCondition}`).step(ifTrue).step("endif");
+    return ballsCondition;
+  }
+
+  /**
+   * Add an "if" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  if_(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
+    return this.step(`if ${Macro.makeBALLSPredicate(condition)}`)
+      .step(ifTrue)
+      .step("endif");
   }
 
   /**
@@ -350,10 +357,35 @@ export class Macro {
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
-    condition: Parameters<T["if_"]>[0],
+    condition: PreBALLSPredicate,
     ifTrue: string | Macro
   ): T {
     return new this().if_(condition, ifTrue);
+  }
+
+  /**
+   * Add an "if" statement to this macro, inverting the condition.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
+    return this.step(`if !(${Macro.makeBALLSPredicate(condition)})`)
+      .step(ifTrue)
+      .step("endif");
+  }
+  /**
+   * Create a new macro with an "if" statement, inverting the condition.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  static ifNot<T extends Macro>(
+    this: Constructor<T>,
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro
+  ): T {
+    return new this().ifNot(condition, ifTrue);
   }
 
   /**

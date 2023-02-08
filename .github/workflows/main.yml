@@ -40,10 +40,12 @@ jobs:
       - name: Switch to release branch
         run: |
           git fetch --all
-          if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
+          if git show-ref refs/remotes/origin/release; then git switch release; else git switch --orphan release; fi
       - name: Commit built Mafia files
         run: |
-          git add KoLmafia/
+          rm -r ./scripts
+          mv KoLmafia/scripts ./scripts
+          git add scripts/
           {
             git commit -m "Build Mafia files for commit $GITHUB_SHA"
             git push origin release

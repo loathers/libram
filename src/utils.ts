@@ -60,15 +60,28 @@ export function countedMapToString<T>(map: Map<T, number>): string {
 /**
  * Sum an array of numbers.
  * @param addends Addends to sum.
- * @param mappingFunction function to turn elements into numbers
+ * @param property Property of the elements to be summing
  */
-
+export function sum<
+  S extends string | number | symbol,
+  T extends { [s in S]: number }
+>(addends: T[], property: S): number;
+/**
+ * Sum an array of numbers.
+ * @param addends Addends to sum.
+ * @param mappingFunction Mapping function to turn addends into actual numbers.
+ */
 export function sum<T>(
   addends: T[],
   mappingFunction: (element: T) => number
-): number {
+): number;
+export function sum<
+  S extends string | number | symbol,
+  T extends { [s in S]: number }
+>(addends: T[], x: ((element: T) => number) | S): number {
   return addends.reduce(
-    (subtotal, element) => subtotal + mappingFunction(element),
+    (subtotal, element) =>
+      subtotal + (typeof x === "function" ? x(element) : element[x]),
     0
   );
 }
@@ -118,17 +131,6 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
 }
 
 /**
- * Creates a Type Guard function for a string union type defined via an array as const.
- */
-export function createStringUnionTypeGuardFunction<T extends string>(
-  array: readonly T[]
-): (x: string) => x is T {
-  return function (x: string): x is T {
-    return (array as readonly string[]).includes(x);
-  };
-}
-
-/**
  * Splits a string by commas while also respecting escaping commas with a backslash
  * @param str String to split
  * @returns List of tokens
@@ -155,4 +157,62 @@ export function splitByCommasWithEscapes(str: string): string[] {
   returnValue.push(currentString.trim());
 
   return returnValue;
+}
+
+/**
+ * Find the best element of an array, where "best" is defined by some given criteria.
+ * @param array The array to traverse and find the best element of.
+ * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
+ * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.
+ */
+export function maxBy<T>(
+  array: T[] | readonly T[],
+  optimizer: (element: T) => number,
+  reverse?: boolean
+): T;
+export function maxBy<
+  S extends string | number | symbol,
+  T extends { [x in S]: number }
+>(array: T[] | readonly T[], key: S, reverse?: boolean): T;
+export function maxBy<
+  S extends string | number | symbol,
+  T extends { [x in S]: number }
+>(
+  array: T[] | readonly T[],
+  optimizer: ((element: T) => number) | S,
+  reverse = false
+): T {
+  if (!array.length) throw new Error("Cannot call maxBy on an empty array!");
+  if (typeof optimizer === "function") {
+    return [...array].reduce(
+      ({ value, item }, other) => {
+        const otherValue = optimizer(other);
+        return value >= otherValue !== reverse
+          ? { value, item }
+          : { value: otherValue, item: other };
+      },
+      { item: array[0], value: optimizer(array[0]) }
+    ).item;
+  } else {
+    return array.reduce((a, b) =>
+      a[optimizer] >= b[optimizer] !== reverse ? a : b
+    );
+  }
+}
+
+export type Tuple<T, N extends number> = N extends N
+  ? number extends N
+    ? T[]
+    : _tupleOf<T, N, []>
+  : never;
+type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
+  ? R
+  : _tupleOf<T, N, [T, ...R]>;
+
+export function arrayEquals<T>(
+  left: T[] | readonly T[],
+  right: T[] | readonly T[]
+): boolean {
+  if (left.length !== right.length) return false;
+  return left.every((element, index) => element === right[index]);
 }

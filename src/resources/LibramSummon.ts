@@ -1,7 +1,6 @@
 import { Skill, Item } from "kolmafia";
-import maxBy from "lodash/maxBy";
 import { getSaleValue } from "../lib";
-import { sumNumbers } from "../utils";
+import { sum, maxBy } from "../utils";
 import {
   expected as candyHeartsExpected,
   have as candyHeartsHave,
@@ -94,11 +93,13 @@ export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
 }
 
 export function bestLibramToCast(): Skill | null {
-  return (maxBy(Array.from(possibleLibramSummons().entries()), ([, itemMap]) =>
-    sumNumbers(
-      Array.from(itemMap.entries()).map(
-        ([item, weight]) => weight * getSaleValue(item)
-      )
+  const arr = Array.from(possibleLibramSummons().entries());
+  if (!arr.length) return null;
+
+  return maxBy(arr, ([, itemMap]) =>
+    sum(
+      Array.from(itemMap.entries()),
+      ([item, weight]) => weight * getSaleValue(item)
     )
-  ) ?? [null])[0];
+  )[0];
 }

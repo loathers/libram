@@ -9,12 +9,12 @@ import {
   myPath,
   Skill,
 } from "kolmafia";
-import isEqual from "lodash/isEqual";
 
 import { Copier } from "../../Copier";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $effect, $item, $skill } from "../../template-string";
+import { arrayEquals } from "../../utils";
 
 export const item = $item`Source terminal`;
 
@@ -107,7 +107,7 @@ export const Skills = {
  */
 export function educate(skills: Skill | [Skill, Skill]): boolean {
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
-  if (isEqual(skillsArray, getSkills())) return true;
+  if (arrayEquals(skillsArray, getSkills())) return true;
 
   for (const skill of skillsArray) {
     if (!Object.values(Skills).includes(skill)) return false;

@@ -11,6 +11,8 @@ import {
   xpath,
 } from "kolmafia";
 import { get } from "../../property";
+import { $item } from "../../template-string";
+import { arrayContains } from "../../utils";
 
 export const item = Item.get("autumn-aton");
 
@@ -70,6 +72,7 @@ export function sendTo(
   if (!location) return null;
   if (!locationsAvailable.includes(location)) return null;
 
+  if (!handlingChoice()) use();
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) visitUrl("main.php");
   return location;
@@ -127,18 +130,15 @@ export function turnsLeft(): number {
   return get("autumnatonQuestTurn") - totalTurnsPlayed();
 }
 
+export function legs(): number {
+  return currentUpgrades().filter((u) => u.includes("leg")).length;
+}
+
 /**
  * @returns The number of turns we expect your next autumn-aton quest to take.
  */
 export function turnsForQuest(): number {
-  return (
-    11 *
-    Math.max(
-      1,
-      get("_autumnatonQuests") -
-        currentUpgrades().filter((u) => u.includes("leg")).length
-    )
-  );
+  return 11 * Math.max(1, get("_autumnatonQuests") - legs());
 }
 
 /**
@@ -168,4 +168,39 @@ export function zoneItems(): 3 | 4 | 5 {
  */
 export function seasonalItems(): 1 | 2 {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
+}
+
+const difficulties = ["low", "mid", "high"] as const;
+const UNIQUES = {
+  outdoor: {
+    low: { index: 4, item: $item`autumn leaf` },
+    mid: { index: 2, item: $item`autumn debris shield` },
+    high: { index: 6, item: $item`autumn leaf pendant` },
+  },
+  indoor: {
+    low: { index: 0, item: $item`AutumnFest ale` },
+    mid: { index: 3, item: $item`autumn-spice donut` },
+    high: { index: 7, item: $item`autumn breeze` },
+  },
+  underground: {
+    low: { index: 1, item: $item`autumn sweater-weather sweater` },
+    mid: { index: 5, item: $item`autumn dollar` },
+    high: { index: 8, item: $item`autumn years wisdom` },
+  },
+};
+
+export function getUniques(location: Location): {
+  upgrade: Upgrade;
+  item: Item;
+} | null {
+  const env = location.environment;
+  const difficulty = location.difficultyLevel;
+  if (
+    arrayContains(env, ["outdoor", "indoor", "underground"] as const) &&
+    arrayContains(difficulty, difficulties)
+  ) {
+    const { index, item } = UNIQUES[env][difficulty];
+    return { upgrade: possibleUpgrades[index], item };
+  }
+  return null;
 }

@@ -1,10 +1,8 @@
 import {
   Skill,
   Class,
-  containsText,
   eudoraItem,
   getCampground,
-  getWorkshed,
   Item,
   Path,
   toInt,
@@ -18,9 +16,8 @@ import {
 } from "kolmafia";
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
-
 import { $item, $items, $stat } from "./template-string";
-import { createStringUnionTypeGuardFunction } from "./utils";
+import { arrayContains } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -63,23 +60,6 @@ export class AscendError extends Error {
   }
 }
 
-const worksheds = [
-  "warbear LP-ROM burner",
-  "warbear jackhammer drill press",
-  "warbear induction oven",
-  "warbear high-efficiency still",
-  "warbear chemistry lab",
-  "warbear auto-anvil",
-  "spinning wheel",
-  "snow machine",
-  "Little Geneticist DNA-Splicing Lab",
-  "portable Mayo Clinic",
-  "Asdon Martin keyfob",
-  "diabolic pizza cube",
-  "cold medicine cabinet",
-] as const;
-type Workshed = typeof worksheds[number];
-
 const gardens = [
   "packet of pumpkin seeds",
   "Peppermint Pip Packet",
@@ -101,23 +81,17 @@ const eudorae = [
 ] as const;
 type Eudora = typeof eudorae[number];
 
-const isWorkshed = createStringUnionTypeGuardFunction(worksheds);
-const isGarden = createStringUnionTypeGuardFunction(gardens);
-const isEudora = createStringUnionTypeGuardFunction(eudorae);
-const isDesk = createStringUnionTypeGuardFunction(ChateauMantegna.desks);
-const isNightstand = createStringUnionTypeGuardFunction(
-  ChateauMantegna.nightstands
-);
-const isCeiling = createStringUnionTypeGuardFunction(ChateauMantegna.ceilings);
+const isGarden = (x: string) => arrayContains(x, gardens);
+const isEudora = (x: string) => arrayContains(x, eudorae);
+const isDesk = (x: string) => arrayContains(x, ChateauMantegna.desks);
+const isNightstand = (x: string) =>
+  arrayContains(x, ChateauMantegna.nightstands);
+const isCeiling = (x: string) => arrayContains(x, ChateauMantegna.ceilings);
 
 export class AscensionPrepError extends Error {
   cause: string;
   constructor(cause: string, original?: MafiaClass | string) {
-    if (isWorkshed(cause)) {
-      super(
-        `Unable to swap workshed to ${cause}; workshed is currently ${original}.`
-      );
-    } else if (isGarden(cause)) {
+    if (isGarden(cause)) {
       super(
         `Unable to swap garden to ${cause}; garden is currently ${original}.`
       );
@@ -217,6 +191,17 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
   }
 }
 
+function isInValhalla(): boolean {
+  const charPaneText = visitUrl("charpane.php");
+  // Match the infinity images (inf_small.gif, inf_large.gif)
+  // At time of writing, the full img tag used is:
+  // <img src="https://d2uyhvukfffg5a.cloudfront.net/otherimages/inf_small.gif">
+  const matches = charPaneText.match(
+    /<img src="[^"]*\/otherimages\/inf_\w+\.gif">/
+  );
+  return matches !== null;
+}
+
 /**
  * Hops the gash, perming no skills
  * @param path path of choice, as a Path object--these exist as properties of Paths
@@ -271,10 +256,10 @@ export function ascend(
     throw new AscendError(illegalSkill);
   }
 
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     throw new AscendError();
   }
 
@@ -320,19 +305,16 @@ export function ascend(
 
 /**
  * Sets up various iotms you may want to use in the coming ascension
- * @param ascensionItems.workshed Workshed to switch to.
  * @param ascensionItems.garden Garden to switch to.
  * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
  * @param throwOnFail If true, this will throw an error when it fails to switch something
  */
 export function prepareAscension({
-  workshed,
   garden,
   eudora,
   chateau,
   throwOnFail,
 }: {
-  workshed?: Workshed;
   garden?: Garden;
   eudora?: Eudora;
   chateau?: {
@@ -343,13 +325,6 @@ export function prepareAscension({
   throwOnFail?: boolean;
 } = {}): void {
   throwOnFail = throwOnFail ?? true;
-  if (workshed && getWorkshed() !== Item.get(workshed)) {
-    use(Item.get(workshed));
-    if (getWorkshed().name !== workshed && throwOnFail) {
-      throw new AscensionPrepError(workshed, getWorkshed());
-    }
-  }
-
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
     const gardenName = Object.getOwnPropertyNames(getCampground()).find(

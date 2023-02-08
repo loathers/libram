@@ -12,6 +12,7 @@ import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
 import * as BarrelShrine from "./2015/BarrelShrine";
 import * as ChateauMantegna from "./2015/ChateauMantegna";
+import * as DeckOfEveryCard from "./2015/DeckOfEveryCard";
 import * as Dinseylandfill from "./2015/Dinseylandfill";
 import * as MayoClinic from "./2015/MayoClinic";
 import * as SourceTerminal from "./2016/SourceTerminal";
@@ -50,6 +51,7 @@ export {
   CrownOfThrones,
   CrystalBall,
   DaylightShavings,
+  DeckOfEveryCard,
   Dinseylandfill,
   DNALab,
   FloristFriar,

@@ -3431,22 +3431,28 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     /**
      * Gives your macro a new name to be used when saving an autoattack.
      * @param name The name to be used when saving as an autoattack.
-     * @returns The previous name assigned to this macro.
+     * @returns The macro in question
      */
   }, {
     key: "rename",
     value: function(name) {
-      var returnValue = this.name;
-      return this.name = name, returnValue;
+      return this.name = name, this;
     }
     /**
-     * Save a macro to a Mafia property for use in a consult script.
+     * Creates a new Macro with a name other than the default name.
+     * @param name The name to assign this macro.
+     * @returns A new Macro with the assigned name.
      */
   }, {
     key: "save",
-    value: function() {
-      _set(Macro2.SAVED_MACRO_PROPERTY, this.toString());
-    }
+    value: (
+      /**
+       * Save a macro to a Mafia property for use in a consult script.
+       */
+      function() {
+        _set(Macro2.SAVED_MACRO_PROPERTY, this.toString());
+      }
+    )
     /**
      * Load a saved macro from the Mafia property.
      */
@@ -3780,6 +3786,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * @param macro The macro to place inside the if_ statement
      */
   }], [{
+    key: "rename",
+    value: function(name) {
+      return new this().rename(name);
+    }
+  }, {
     key: "load",
     value: function() {
       var _this;

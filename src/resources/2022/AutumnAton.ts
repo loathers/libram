@@ -72,6 +72,7 @@ export function sendTo(
   if (!location) return null;
   if (!locationsAvailable.includes(location)) return null;
 
+  if (!handlingChoice()) use();
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) visitUrl("main.php");
   return location;

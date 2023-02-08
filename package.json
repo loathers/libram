@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -62,8 +62,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.2",
-    "core-js": "^3.21.0",
-    "lodash": "^4.17.21"
+    "core-js": "^3.21.0"
   },
   "peerDependencies": {
     "kolmafia": "^5.26781.0"

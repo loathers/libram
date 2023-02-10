@@ -1878,6 +1878,9 @@ __export(src_exports, {
   maximizeCached: function() {
     return maximizeCached;
   },
+  mergeMaximizeOptions: function() {
+    return mergeMaximizeOptions;
+  },
   modeableItems: function() {
     return modeableItems;
   },
@@ -14023,6 +14026,7 @@ function findLoot4() {
   logger,
   maxBy,
   maximizeCached,
+  mergeMaximizeOptions,
   modeableItems,
   modeableState,
   noneToNull,

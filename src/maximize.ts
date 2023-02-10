@@ -42,7 +42,7 @@ export type MaximizeOptions = {
  * @param defaultOptions MaximizeOptions to use as a "base."
  * @param addendums Options to attempt to merge onto defaultOptions.
  */
-function mergeMaximizeOptions(
+export function mergeMaximizeOptions(
   defaultOptions: MaximizeOptions,
   addendums: Partial<MaximizeOptions>
 ): MaximizeOptions {

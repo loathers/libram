@@ -217,23 +217,44 @@ export function arrayEquals<T>(
   return left.every((element, index) => element === right[index]);
 }
 
+/**
+ * Type that extends any non-function entity--like a string, number, or array--into a itself and a no-input function that returns it.
+ * Used to interact with objects that could either be functions or static values.
+ */
+// The square brackets here are used to prevent type distribution; don't worry about it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Delayed<T> = [T] extends [(...args: any) => any]
   ? never
   : T | (() => T);
+
+/**
+ * Used to collapse a Delayed<T> object into an entity of type "T" as represented by the object.
+ * @param delayedObject Object of type Delayed<T> that represents either a value of type T or a function returning a value of type T.
+ * @returns The return value of the function, if delayedObject is a function. Otherwise, this returns the original element.
+ */
 export function undelay<T>(delayedObject: Delayed<T>): T {
   return typeof delayedObject === "function" ? delayedObject() : delayedObject;
 }
 
+/**
+ * An object keyed by string type T, with values of S.
+ *  or contains a 'default' parameter to use as a fallback.
+ */
 export type Switch<T extends string, S> =
   | Record<T, S>
   | (Partial<{ [x in T]: S }> & { default: S });
+
+/**
+ * Makes a byX function, like byStat or byClass
+ * @param source A method for finding your stat, or class, or whatever X is in this context
+ * @returns A function akin to byStat or byClass; it accepts an object that either is "complete" in the sense that it has a key for every conceivable value, or contains a `default` parameter. If an inappropriate input is provided, returns undefined.
+ */
 export function makeByXFunction<T extends string>(
   source: Delayed<T>
-): <S>(x: Switch<T, S>) => S {
-  return <S>(x: Switch<T, S>) => {
+): <S>(options: Switch<T, S>) => S {
+  return function <S>(options: Switch<T, S>) {
     const val = undelay(source);
-    if ("default" in x) return x[val] ?? x.default;
-    return x[val];
+    if ("default" in options) return options[val] ?? options.default;
+    return options[val];
   };
 }

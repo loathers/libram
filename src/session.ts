@@ -90,17 +90,10 @@ function inventoryOperation(
   // return every entry that is in a and not in b
   const difference = new Map<Item, number>();
 
-  for (const [item, quantity] of a.entries()) {
-    const combinedQuantity = op(quantity, b.get(item) ?? 0);
-    difference.set(item, combinedQuantity);
+  for (const item of new Set([...a.keys(), ...b.keys()])) {
+    difference.set(item, op(a.get(item) ?? 0, b.get(item) ?? 0));
   }
 
-  for (const [item, quantity] of b.entries()) {
-    // Only loop over elements we haven't touched yet
-    if (!a.has(item)) {
-      difference.set(item, op(0, quantity));
-    }
-  }
   const diffEntries: [Item, number][] = [...difference.entries()];
 
   return new Map<Item, number>(diffEntries.filter((value) => value[1] !== 0));

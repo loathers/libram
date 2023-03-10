@@ -7,6 +7,7 @@ import {
   Item,
   visitUrl,
 } from "kolmafia";
+import { logger } from "../..";
 import { canVisitUrl } from "../../lib";
 import { get } from "../../property";
 
@@ -29,6 +30,11 @@ const parsedProp = () =>
  */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
-  if (canVisitUrl()) visitUrl("inventory.php?ponder=1", false);
+  if (canVisitUrl()) {
+    logger.debug("Now pondering Crystal Ball.");
+    visitUrl("inventory.php?ponder=1", false);
+  } else {
+    logger.debug("Failed to ponder Crystall Ball.");
+  }
   return new Map(parsedProp());
 }

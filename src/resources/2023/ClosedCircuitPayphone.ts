@@ -5,9 +5,14 @@ import {
   getMonsters,
   itemDrops,
   canAdventure,
+  use,
+  runChoice,
+  toItem,
+  toMonster,
 } from "kolmafia";
+import { KnownProperty } from "../..";
 import { have as have_ } from "../../lib";
-import { get } from "../../property";
+import { get, withProperty } from "../../property";
 import { $item, $location } from "../../template-string";
 import { maxBy } from "../../utils";
 
@@ -91,4 +96,36 @@ export function chooseRift(options: {
   const validRifts = [...RIFTS].filter(filterFunction);
   if (!validRifts.length) return null;
   return options.sortBy ? maxBy(validRifts, options.sortBy) : validRifts[0];
+}
+
+/**
+ * Choose a quest based on the options available to us
+ * @param chooser A function that maps quest-options to a choice
+ * @returns Whether we successfully accepted a quest
+ */
+export function chooseQuest(
+  chooser: ({
+    entity,
+    artifact,
+    items,
+  }: {
+    entity: Monster;
+    artifact: Item;
+    items: Item;
+  }) => 1 | 2 | 3 | 4
+): boolean {
+  if (get("questRufus") !== "unstarted") return false;
+  if (!have()) return false;
+  withProperty("choiceAdventure1497" as KnownProperty, "", () => {
+    use(item);
+    runChoice(
+      chooser({
+        artifact: toItem(get("rufusDesiredArtifact")),
+        entity: toMonster(get("rufusDesiredEntity")),
+        items: toItem(get("rufusDesiredItems")),
+      })
+    );
+  });
+
+  return get("questRufus") !== "unstarted";
 }

@@ -85,23 +85,15 @@ function mySessionItemsWrapper(): Map<Item, number> {
 function inventoryOperation(
   a: Map<Item, number>,
   b: Map<Item, number>,
-  op: (aPart: number, bPart: number) => number,
-  commutative: boolean
+  op: (aPart: number, bPart: number) => number
 ): Map<Item, number> {
   // return every entry that is in a and not in b
   const difference = new Map<Item, number>();
 
-  for (const [item, quantity] of a.entries()) {
-    const combinedQuantity = op(quantity, b.get(item) ?? 0);
-    difference.set(item, combinedQuantity);
+  for (const item of new Set([...a.keys(), ...b.keys()])) {
+    difference.set(item, op(a.get(item) ?? 0, b.get(item) ?? 0));
   }
-  if (commutative) {
-    for (const [item, quantity] of b.entries()) {
-      if (!a.has(item)) {
-        difference.set(item, quantity);
-      }
-    }
-  }
+
   const diffEntries: [Item, number][] = [...difference.entries()];
 
   return new Map<Item, number>(diffEntries.filter((value) => value[1] !== 0));
@@ -197,8 +189,7 @@ export class Session {
       inventoryOperation(
         this.items,
         other.items,
-        (a: number, b: number) => a - b,
-        false
+        (a: number, b: number) => a - b
       )
     );
   }
@@ -224,8 +215,7 @@ export class Session {
       inventoryOperation(
         this.items,
         other.items,
-        (a: number, b: number) => a + b,
-        true
+        (a: number, b: number) => a + b
       )
     );
   }

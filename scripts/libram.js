@@ -3183,7 +3183,7 @@ function getTodaysHolidayWanderers() {
   }).flat();
 }
 function canVisitUrl() {
-  return !((0, import_kolmafia3.currentRound)() || (0, import_kolmafia3.inMultiFight)() || (0, import_kolmafia3.choiceFollowsFight)() || (0, import_kolmafia3.handlingChoice)());
+  return (0, import_kolmafia3.currentRound)() ? (logger_default.debug("Current round is ".concat((0, import_kolmafia3.currentRound)(), "; you're in combat.")), !1) : (0, import_kolmafia3.inMultiFight)() ? (logger_default.debug("You're in a multifight."), !1) : (0, import_kolmafia3.choiceFollowsFight)() ? (logger_default.debug("A choice follows this fight."), !1) : (0, import_kolmafia3.handlingChoice)() ? (logger_default.debug("You're currently in a choice adventure"), !1) : !0;
 }
 function damageTakenByElement(baseDamage, element) {
   if (baseDamage < 0)
@@ -4100,7 +4100,7 @@ var import_kolmafia6 = require("kolmafia");
 
 // src/logger.ts
 init_kolmafia_polyfill();
-var import_kolmafia5 = require("kolmafia");
+var import_kolmafia5 = require("kolmafia"), _defaultHandlers;
 function _classCallCheck4(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
@@ -4117,53 +4117,69 @@ function _createClass4(Constructor, protoProps, staticProps) {
 function _defineProperty3(obj, key, value) {
   return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
-var defaultHandlers = {
-  info: function(message) {
-    (0, import_kolmafia5.printHtml)("<b>[Libram]</b> ".concat(message)), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
-  },
-  warning: function(message) {
-    (0, import_kolmafia5.printHtml)('<span style="background: orange; color: white;"><b>[Libram]</b> '.concat(message, "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
-  },
-  error: function(_error) {
-    (0, import_kolmafia5.printHtml)('<span style="background: red; color: white;"><b>[Libram]</b> '.concat(_error.toString(), "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(_error.toString()));
-  }
-}, Logger = /* @__PURE__ */ function() {
+var LogLevels;
+(function(LogLevels2) {
+  LogLevels2[LogLevels2.NONE = 0] = "NONE", LogLevels2[LogLevels2.ERROR = 1] = "ERROR", LogLevels2[LogLevels2.WARNING = 2] = "WARNING", LogLevels2[LogLevels2.INFO = 3] = "INFO", LogLevels2[LogLevels2.DEBUG = 4] = "DEBUG";
+})(LogLevels || (LogLevels = {}));
+var defaultHandlers = (_defaultHandlers = {}, _defineProperty3(_defaultHandlers, LogLevels.INFO, function(message) {
+  (0, import_kolmafia5.printHtml)("<b>[Libram Info]</b> ".concat(message)), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
+}), _defineProperty3(_defaultHandlers, LogLevels.WARNING, function(message) {
+  (0, import_kolmafia5.printHtml)('<span style="background: orange; color: white;"><b>[Libram Warning]</b> '.concat(message, "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
+}), _defineProperty3(_defaultHandlers, LogLevels.ERROR, function(error2) {
+  (0, import_kolmafia5.printHtml)('<span style="background: red; color: white;"><b>[Libram Error]</b> '.concat(error2.toString(), "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(error2));
+}), _defineProperty3(_defaultHandlers, LogLevels.DEBUG, function(message) {
+  (0, import_kolmafia5.printHtml)('<span style="background: red; color: white;"><b>[Libram Debug]</b> '.concat(message, "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
+}), _defaultHandlers), Logger = /* @__PURE__ */ function() {
   function Logger2() {
     _classCallCheck4(this, Logger2), _defineProperty3(this, "handlers", defaultHandlers);
   }
   return _createClass4(Logger2, [{
+    key: "level",
+    get: function() {
+      return Logger2.currentLevel;
+    }
+  }, {
+    key: "setLevel",
+    value: function(level) {
+      Logger2.currentLevel = level;
+    }
+  }, {
     key: "setHandler",
-    value: (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function(level, callback) {
-        this.handlers[level] = callback;
-      }
-    )
+    value: function(level, callback) {
+      this.handlers[level] = callback;
+    }
   }, {
     key: "log",
     value: (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function(level, message) {
-        this.handlers[level](message);
+        this.level >= level && this.handlers[level](message);
       }
     )
   }, {
     key: "info",
     value: function(message) {
-      this.log("info", message);
+      this.log(LogLevels.INFO, message);
     }
   }, {
     key: "warning",
     value: function(message) {
-      this.log("warning", message);
+      this.log(LogLevels.WARNING, message);
     }
   }, {
     key: "error",
     value: function(message) {
-      this.log("error", message);
+      this.log(LogLevels.ERROR, message);
+    }
+  }, {
+    key: "debug",
+    value: function(message) {
+      this.log(LogLevels.DEBUG, message);
     }
   }]), Logger2;
-}(), logger_default = new Logger();
+}();
+_defineProperty3(Logger, "currentLevel", LogLevels.ERROR);
+var logger_default = new Logger();
 
 // src/maximize.ts
 var _templateObject36, _templateObject211, _templateObject37, _templateObject42, _templateObject52, _templateObject62, _templateObject72, _templateObject82, _templateObject92, _templateObject102, _templateObject112, _templateObject122, _templateObject132, _templateObject142, _templateObject152, _templateObject162, _templateObject172, _templateObject182, _templateObject192, _templateObject202, _templateObject212, _templateObject222, _templateObject232, _templateObject242, _templateObject252, _templateObject262, _templateObject272, _templateObject282, _templateObject292, _templateObject302, _templateObject312, _templateObject322, _templateObject332, _templateObject342, _templateObject352, _templateObject362, _templateObject372, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject422, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48;
@@ -9550,7 +9566,7 @@ var parsedProp = function() {
   });
 };
 function ponder() {
-  return have32() ? (canVisitUrl() && (0, import_kolmafia42.visitUrl)("inventory.php?ponder=1", !1), new Map(parsedProp())) : /* @__PURE__ */ new Map();
+  return have32() ? (canVisitUrl() ? (logger_default.debug("Now pondering Crystal Ball."), (0, import_kolmafia42.visitUrl)("inventory.php?ponder=1", !1)) : logger_default.debug("Failed to ponder Crystall Ball."), new Map(parsedProp())) : /* @__PURE__ */ new Map();
 }
 
 // src/resources/2021/DaylightShavings.ts

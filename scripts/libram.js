@@ -13483,30 +13483,17 @@ function mySessionItemsWrapper() {
   }
   return inventory;
 }
-function inventoryOperation(a, b, op, commutative) {
-  var difference = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper16(a.entries()), _step;
+function inventoryOperation(a, b, op) {
+  var difference = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper16(new Set([].concat(_toConsumableArray17(a.keys()), _toConsumableArray17(b.keys())))), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var _b$get, _step$value = _slicedToArray20(_step.value, 2), _item3 = _step$value[0], _quantity = _step$value[1], combinedQuantity = op(_quantity, (_b$get = b.get(_item3)) !== null && _b$get !== void 0 ? _b$get : 0);
-      difference.set(_item3, combinedQuantity);
+      var _a$get, _b$get, _item2 = _step.value;
+      difference.set(_item2, op((_a$get = a.get(_item2)) !== null && _a$get !== void 0 ? _a$get : 0, (_b$get = b.get(_item2)) !== null && _b$get !== void 0 ? _b$get : 0));
     }
   } catch (err) {
     _iterator.e(err);
   } finally {
     _iterator.f();
-  }
-  if (commutative) {
-    var _iterator2 = _createForOfIteratorHelper16(b.entries()), _step2;
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
-        var _step2$value = _slicedToArray20(_step2.value, 2), _item2 = _step2$value[0], quantity = _step2$value[1];
-        a.has(_item2) || difference.set(_item2, quantity);
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
-    }
   }
   var diffEntries = _toConsumableArray17(difference.entries());
   return new Map(diffEntries.filter(function(value) {
@@ -13563,7 +13550,7 @@ var Session = /* @__PURE__ */ function() {
     value: function(other) {
       return new Session2(this.meat - other.meat, inventoryOperation(this.items, other.items, function(a, b) {
         return a - b;
-      }, !1));
+      }));
     }
     /**
      * Subtract the contents of snasphot b from session a, removing any items that have a resulting quantity of 0
@@ -13583,7 +13570,7 @@ var Session = /* @__PURE__ */ function() {
       function(other) {
         return new Session2(this.meat + other.meat, inventoryOperation(this.items, other.items, function(a, b) {
           return a + b;
-        }, !0));
+        }));
       }
     )
     /**

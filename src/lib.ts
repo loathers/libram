@@ -47,9 +47,11 @@ import {
   spleenLimit,
   Stat,
   Thrall,
+  toInt,
   toItem,
   toSkill,
   totalTurnsPlayed,
+  visitUrl,
 } from "kolmafia";
 
 import { get } from "./property";
@@ -819,4 +821,16 @@ export function telescope(): {
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5")),
   };
+}
+
+export function examine(thing: Item | Familiar | Effect | Skill): string {
+  const url =
+    thing instanceof Item
+      ? `desc_item.php?whichitem=${thing.descid}`
+      : thing instanceof Familiar
+      ? `desc_familiar.php?which=${toInt(thing)}`
+      : thing instanceof Effect
+      ? `desc_effect.php?whicheffect=${thing.descid}`
+      : `desc_skill.php?whichskill=${toInt(thing)}`;
+  return visitUrl(url);
 }

@@ -139,12 +139,20 @@ export class Macro {
   /**
    * Gives your macro a new name to be used when saving an autoattack.
    * @param name The name to be used when saving as an autoattack.
-   * @returns The previous name assigned to this macro.
+   * @returns The macro in question
    */
-  rename(name: string): string {
-    const returnValue = this.name;
+  rename(name: string): this {
     this.name = name;
-    return returnValue;
+    return this;
+  }
+
+  /**
+   * Creates a new Macro with a name other than the default name.
+   * @param name The name to assign this macro.
+   * @returns A new Macro with the assigned name.
+   */
+  static rename<T extends Macro>(this: Constructor<T>, name: string): T {
+    return new this().rename(name);
   }
 
   /**

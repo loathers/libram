@@ -441,7 +441,11 @@ export default class CommunityService {
       return (
         60 -
         Math.floor(
-          (multiplier * (getModifier("Item Drop") - familiarItemDrop)) / 30 +
+          (multiplier *
+            (getModifier("Item Drop") -
+              familiarItemDrop -
+              numericModifier(myThrall(), "Item Drop"))) /
+            30 +
             0.001
         ) -
         Math.floor((getModifier("Booze Drop") - familiarBoozeDrop) / 15 + 0.001)

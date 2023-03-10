@@ -66,6 +66,7 @@ import {
   $stat,
 } from "./template-string";
 import { chunk } from "./utils";
+import { logger } from ".";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -712,12 +713,24 @@ export function getTodaysHolidayWanderers(): Monster[] {
  * Determines & returns whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
  */
 export function canVisitUrl(): boolean {
-  return !(
-    currentRound() ||
-    inMultiFight() ||
-    choiceFollowsFight() ||
-    handlingChoice()
-  );
+  if (currentRound()) {
+    logger.debug(`Current round is ${currentRound()}; you're in combat.`);
+    return false;
+  }
+  if (inMultiFight()) {
+    logger.debug("You're in a multifight.");
+    return false;
+  }
+  if (choiceFollowsFight()) {
+    logger.debug("A choice follows this fight.");
+    return false;
+  }
+  if (handlingChoice()) {
+    logger.debug("You're currently in a choice adventure");
+    return false;
+  }
+
+  return true;
 }
 
 /**

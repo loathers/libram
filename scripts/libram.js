@@ -1728,6 +1728,9 @@ __export(src_exports, {
   ensureFreeRun: function() {
     return ensureFreeRun;
   },
+  examine: function() {
+    return examine;
+  },
   expectedLibramSummon: function() {
     return expectedLibramSummon;
   },
@@ -3200,6 +3203,10 @@ function telescope() {
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5"))
   };
+}
+function examine(thing) {
+  var url = thing instanceof import_kolmafia3.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia3.Familiar ? "desc_familiar.php?which=".concat((0, import_kolmafia3.toInt)(thing)) : thing instanceof import_kolmafia3.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat((0, import_kolmafia3.toInt)(thing));
+  return (0, import_kolmafia3.visitUrl)(url);
 }
 
 // src/combat.ts
@@ -13992,6 +13999,7 @@ function findLoot4() {
   ensureEffect,
   ensureFreeKill,
   ensureFreeRun,
+  examine,
   expectedLibramSummon,
   findActionSource,
   findFairyMultiplier,

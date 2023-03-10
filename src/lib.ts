@@ -47,9 +47,11 @@ import {
   spleenLimit,
   Stat,
   Thrall,
+  toInt,
   toItem,
   toSkill,
   totalTurnsPlayed,
+  visitUrl,
 } from "kolmafia";
 
 import { get } from "./property";
@@ -64,6 +66,7 @@ import {
   $stat,
 } from "./template-string";
 import { chunk } from "./utils";
+import { logger } from ".";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -710,12 +713,24 @@ export function getTodaysHolidayWanderers(): Monster[] {
  * Determines & returns whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
  */
 export function canVisitUrl(): boolean {
-  return !(
-    currentRound() ||
-    inMultiFight() ||
-    choiceFollowsFight() ||
-    handlingChoice()
-  );
+  if (currentRound()) {
+    logger.debug(`Current round is ${currentRound()}; you're in combat.`);
+    return false;
+  }
+  if (inMultiFight()) {
+    logger.debug("You're in a multifight.");
+    return false;
+  }
+  if (choiceFollowsFight()) {
+    logger.debug("A choice follows this fight.");
+    return false;
+  }
+  if (handlingChoice()) {
+    logger.debug("You're currently in a choice adventure");
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -806,4 +821,16 @@ export function telescope(): {
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5")),
   };
+}
+
+export function examine(thing: Item | Familiar | Effect | Skill): string {
+  const url =
+    thing instanceof Item
+      ? `desc_item.php?whichitem=${thing.descid}`
+      : thing instanceof Familiar
+      ? `desc_familiar.php?which=${toInt(thing)}`
+      : thing instanceof Effect
+      ? `desc_effect.php?whicheffect=${thing.descid}`
+      : `desc_skill.php?whichskill=${toInt(thing)}`;
+  return visitUrl(url);
 }

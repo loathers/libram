@@ -54,9 +54,11 @@ export function get(
 ): string;
 export function get(name: StatModifier, subject: Effect): Stat;
 /**
+ * Get the value of a modifier
  *
- * @param name
- * @param subject
+ * @param name Modifier name
+ * @param subject Subject of modifier
+ * @returns Value of modifier
  */
 export function get(
   name:

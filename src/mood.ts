@@ -337,6 +337,8 @@ export class Mood {
 
   /**
    * Get the MP available for casting skills.
+   *
+   * @returns Available MP
    */
   availableMp(): number {
     return this.options.useNativeRestores
@@ -364,6 +366,7 @@ export class Mood {
    * Add a skill to the mood.
    *
    * @param skill Skill to add.
+   * @returns This mood to enable chaining
    */
   skill(skill: Skill): Mood {
     this.elements.push(new SkillMoodElement(skill));
@@ -375,6 +378,7 @@ export class Mood {
    *
    * @param effect Effect to add.
    * @param gainEffect How to gain the effect. Only runs if we don't have the effect.
+   * @returns This mood to enable chaining
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
@@ -391,6 +395,7 @@ export class Mood {
    *
    * @param potion Potion to add.
    * @param maxPricePerTurn Maximum price to pay per turn of the effect.
+   * @returns This mood to enable chaining
    */
   potion(potion: Item, maxPricePerTurn: number): Mood {
     this.elements.push(new PotionMoodElement(potion, maxPricePerTurn));
@@ -401,6 +406,7 @@ export class Mood {
    * Add an effect to acquire via pocket wishes to the mood.
    *
    * @param effect Effect to wish for in the mood.
+   * @returns This mood to enable chaining
    */
   genie(effect: Effect): Mood {
     this.elements.push(new GenieMoodElement(effect));
@@ -411,6 +417,7 @@ export class Mood {
    * Add an Asdon Martin driving style to the mood.
    *
    * @param effect Driving style to add to the mood.
+   * @returns This mood to enable chaining
    */
   drive(effect: Effect): Mood {
     if (

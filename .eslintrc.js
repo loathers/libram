@@ -1,14 +1,14 @@
-// eslint-disable-next-line no-undef
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint", "libram"],
+  plugins: ["@typescript-eslint", "libram", "jsdoc"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:jsdoc/recommended",
   ],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
@@ -26,7 +26,8 @@ module.exports = {
     },
     "import/resolver": {
       typescript: {
-        alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        alwaysTryTypes: true,
       },
     },
   },

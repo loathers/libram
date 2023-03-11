@@ -1,3 +1,4 @@
+/* eslint-env node */
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
@@ -8,7 +9,7 @@ module.exports = {
     "prettier",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:jsdoc/recommended-error",
+    "plugin:jsdoc/recommended-error"
   ],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
@@ -19,6 +20,9 @@ module.exports = {
         alphabetize: { order: "asc" },
       },
     ],
+    "jsdoc/require-param-type": 0,
+    "jsdoc/require-returns-type": 0,
+    "jsdoc/require-property-type": 0,
   },
   settings: {
     "import/parsers": {

@@ -41,9 +41,6 @@ export function unlockedLocketMonsters(): Monster[] {
   return Object.entries(getLocketMonsters()).map(([name]) => toMonster(name));
 }
 
-/**
- *
- */
 function parseLocketProperty() {
   return get("_locketMonstersFought")
     .split(",")

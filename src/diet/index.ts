@@ -40,9 +40,6 @@ type ConsumptionModifiers = {
   tuxedoShirt: boolean;
 };
 
-/**
- *
- */
 function isMonday() {
   // Checking Tuesday's ruby is a hack to see if it's Monday in Arizona.
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;

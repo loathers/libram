@@ -94,9 +94,6 @@ function price(item: Item, priceAge: PriceAge) {
   }
 }
 
-/**
- *
- */
 function inventoryItems(): Item[] {
   return Item.all()
     .filter(isFuelItem)
@@ -133,9 +130,6 @@ function isFuelItem(it: Item) {
   );
 }
 
-/**
- *
- */
 function getBestFuels(): Item[] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).

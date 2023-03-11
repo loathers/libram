@@ -9,7 +9,7 @@ module.exports = {
     "prettier",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:jsdoc/recommended-error"
+    "plugin:jsdoc/recommended-error",
   ],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
@@ -18,6 +18,12 @@ module.exports = {
       "error",
       {
         alphabetize: { order: "asc" },
+      },
+    ],
+    "jsdoc/require-jsdoc": [
+      "error",
+      {
+        "publicOnly": true,
       },
     ],
     "jsdoc/require-param-type": 0,

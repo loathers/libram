@@ -4,14 +4,18 @@ import { get } from "../../property";
 export const cleaver = toItem("June cleaver");
 
 /**
+ * Determines whether you currently `have` the June cleaver
  *
+ * @returns Whether you currently `have` the June cleaver
  */
 export function have(): boolean {
   return availableAmount(cleaver) > 0;
 }
 
 /**
- * @param encounters
+ * Determines the number of cleaver-combats it takes to get a particular encounter number.
+ *
+ * @param encounters The ordinal value of the June cleaver encounter you're asking about
  * @returns The number of cleaver-combats it takes to get a particular encounter number--this is agnostic of your current fights.
  */
 export function getInterval(
@@ -21,7 +25,9 @@ export function getInterval(
 }
 
 /**
- * @param encounters
+ * Determines the number of cleaver-combats it takes to get a particular encounter number, when a skip is in the mix
+ *
+ * @param encounters The ordinal value of the June cleaver encounter you're asking about, assuming you've skipped
  * @returns The number of cleaver-combats it would take to get a particular encounter after skipping.
  */
 export function getSkippedInterval(
@@ -31,7 +37,9 @@ export function getSkippedInterval(
 }
 
 /**
- * @param element
+ * Determines the amount of bonus elemental damage your cleaver currently grants
+ *
+ * @param element The element in question
  * @returns The bonus damage your cleaver currently gives for a given element.
  */
 export function damage(
@@ -41,6 +49,8 @@ export function damage(
 }
 
 /**
+ * Determines the number of times today you can skip a june cleaver choice
+ *
  * @returns The number of additional times you can select option 4 in a cleaver choice today.
  */
 export function skipsRemaining(): number {
@@ -52,6 +62,8 @@ export const choices = [
 ] as const;
 
 /**
+ * Returns the current June cleaver queue; you are not currently able to encounter any June cleaver choice adventure in this list
+ *
  * @returns An array consisting of the cleaver choice adventures currently in the queue.
  */
 export function queue(): typeof choices[number][] {
@@ -62,6 +74,8 @@ export function queue(): typeof choices[number][] {
 }
 
 /**
+ * Determines which choices are currently eligible to be encountered with your June cleaver
+ *
  * @returns An array consisting of the cleaver choice adventures not currently in the queue.
  */
 export function choicesAvailable(): typeof choices[number][] {

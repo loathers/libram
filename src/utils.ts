@@ -1,14 +1,18 @@
 /**
+ * Type guard against null value
  *
- * @param value
+ * @param value Value that can be null
+ * @returns Whether the value is not null or... not
  */
 export function notNull<T>(value: T | null): value is T {
   return value !== null;
 }
 
 /**
+ * Parse string to number, stripping commas
  *
- * @param n
+ * @param n Numberical string to parse
+ * @returns Numerical value of string
  */
 export function parseNumber(n: string): number {
   return Number.parseInt(n.replace(/,/g, ""));
@@ -20,6 +24,7 @@ export function parseNumber(n: string): number {
  * @param n Number to clamp.
  * @param min Lower bound.
  * @param max Upper bound.
+ * @returns Clamped value
  */
 export function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
@@ -30,6 +35,7 @@ export function clamp(n: number, min: number, max: number): number {
  *
  * @param array Array to split
  * @param chunkSize Size of chunk
+ * @returns Split array
  */
 export function chunk<T>(array: T[], chunkSize: number): T[][] {
   const result = [];
@@ -42,8 +48,10 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
 }
 
 /**
+ * Count distinct values in an array
  *
- * @param array
+ * @param array Array of values
+ * @returns Map of distinct values to count
  */
 export function arrayToCountedMap<T>(
   array: T[] | Map<T, number>
@@ -60,8 +68,10 @@ export function arrayToCountedMap<T>(
 }
 
 /**
+ * Turn map of distinct values to count into array of values
  *
- * @param map
+ * @param map Map to turn into array
+ * @returns Array of values
  */
 export function countedMapToArray<T>(map: Map<T, number>): T[] {
   return ([] as T[]).concat(
@@ -70,8 +80,10 @@ export function countedMapToArray<T>(map: Map<T, number>): T[] {
 }
 
 /**
+ * Stringify a counted map
  *
- * @param map
+ * @param map Map of counted values
+ * @returns String representing map of counted values
  */
 export function countedMapToString<T>(map: Map<T, number>): string {
   return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
@@ -82,6 +94,7 @@ export function countedMapToString<T>(map: Map<T, number>): string {
  *
  * @param addends Addends to sum.
  * @param property Property of the elements to be summing
+ * @returns Sum of numbers
  */
 export function sum<
   S extends string | number | symbol,
@@ -92,15 +105,18 @@ export function sum<
  *
  * @param addends Addends to sum.
  * @param mappingFunction Mapping function to turn addends into actual numbers.
+ * @returns Sum of numbers
  */
 export function sum<T>(
   addends: T[],
   mappingFunction: (element: T) => number
 ): number;
 /**
+ * Sum an array of numbers.
  *
- * @param addends
- * @param x
+ * @param addends Addends to sum.
+ * @param x Property or mapping function of addends to sum
+ * @returns Sum of numbers
  */
 export function sum<
   S extends string | number | symbol,
@@ -114,8 +130,10 @@ export function sum<
 }
 
 /**
+ * Sum array of numbers
  *
- * @param addends
+ * @param addends Numbers to sum
+ * @returns Sum of numbers
  */
 export function sumNumbers(addends: number[]): number {
   return sum(addends, (x: number) => x);
@@ -155,6 +173,7 @@ export function setEqual<T>(a: T[], b: T[]): boolean {
  * Reverses keys and values for a given map
  *
  * @param map Map to invert
+ * @returns Inverted map
  */
 export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
   const returnValue = new Map<T2, T1>();
@@ -194,13 +213,6 @@ export function splitByCommasWithEscapes(str: string): string[] {
   return returnValue;
 }
 
-/**
- * Find the best element of an array, where "best" is defined by some given criteria.
- *
- * @param array The array to traverse and find the best element of.
- * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
- * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.
- */
 export function maxBy<T>(
   array: T[] | readonly T[],
   optimizer: (element: T) => number,
@@ -211,10 +223,12 @@ export function maxBy<
   T extends { [x in S]: number }
 >(array: T[] | readonly T[], key: S, reverse?: boolean): T;
 /**
+ * Find the best element of an array, where "best" is defined by some given criteria.
  *
- * @param array
- * @param optimizer
- * @param reverse
+ * @param array The array to traverse and find the best element of.
+ * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
+ * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.
+ * @returns Best element by optimizer function
  */
 export function maxBy<
   S extends string | number | symbol,
@@ -252,9 +266,11 @@ type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
   : _tupleOf<T, N, [T, ...R]>;
 
 /**
+ * Compare arrays shallowly
  *
- * @param left
- * @param right
+ * @param left One array to compare
+ * @param right The other array to compare
+ * @returns Whether the two arrays are shallowly equal
  */
 export function arrayEquals<T>(
   left: T[] | readonly T[],

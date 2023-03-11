@@ -23,7 +23,7 @@ module.exports = {
     "jsdoc/require-jsdoc": [
       "error",
       {
-        "publicOnly": true,
+        publicOnly: true,
       },
     ],
     "jsdoc/require-param-type": 0,

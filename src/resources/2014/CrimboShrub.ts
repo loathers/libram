@@ -3,6 +3,9 @@ import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 
+/**
+ *
+ */
 export function have(): boolean {
   return have_($familiar`Crimbo Shrub`);
 }
@@ -62,6 +65,13 @@ const Prefs = {
 
 type ShrubPref = keyof typeof Prefs;
 
+/**
+ *
+ * @param topper
+ * @param lights
+ * @param garland
+ * @param gifts
+ */
 function isDecoratedWith(
   topper: ShrubTopper,
   lights: ShrubLights,
@@ -77,6 +87,13 @@ function isDecoratedWith(
   return [topper, lights, garland, gifts].every((x, i) => x === decorations[i]);
 }
 
+/**
+ *
+ * @param topper
+ * @param lights
+ * @param garland
+ * @param gifts
+ */
 export function decorate(
   topper: ShrubTopper,
   lights: ShrubLights,

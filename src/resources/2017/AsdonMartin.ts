@@ -46,22 +46,39 @@ export function have(): boolean {
 
 const fuelSkiplist = $items`cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"`;
 
+/**
+ *
+ * @param item
+ */
 function priceTooOld(item: Item) {
   return historicalPrice(item) === 0 || historicalAge(item) >= 7;
 }
 
 // Return mall max if historicalPrice returns -1.
+/**
+ *
+ * @param item
+ */
 function historicalPriceOrMax(item: Item): number {
   const historical = historicalPrice(item);
   return historical < 0 ? 999999999 : historical;
 }
 
 // Return mall max if mallPrice returns -1.
+/**
+ *
+ * @param item
+ */
 function mallPriceOrMax(item: Item): number {
   const mall = mallPrice(item);
   return mall < 0 ? 999999999 : mall;
 }
 
+/**
+ *
+ * @param item
+ * @param priceAge
+ */
 function price(item: Item, priceAge: PriceAge) {
   switch (priceAge) {
     case PriceAge.HISTORICAL: {
@@ -77,6 +94,9 @@ function price(item: Item, priceAge: PriceAge) {
   }
 }
 
+/**
+ *
+ */
 function inventoryItems(): Item[] {
   return Item.all()
     .filter(isFuelItem)
@@ -88,11 +108,20 @@ function inventoryItems(): Item[] {
 }
 
 // Efficiency in meat per fuel.
+/**
+ *
+ * @param it
+ * @param priceAge
+ */
 function calculateFuelUnitCost(it: Item, priceAge = PriceAge.RECENT): number {
   const units = getAverageAdventures(it);
   return price(it, priceAge) / units;
 }
 
+/**
+ *
+ * @param it
+ */
 function isFuelItem(it: Item) {
   return (
     !isNpcItem(it) &&
@@ -104,6 +133,9 @@ function isFuelItem(it: Item) {
   );
 }
 
+/**
+ *
+ */
 function getBestFuels(): Item[] {
   // Three stages.
   // 1. Filter to reasonable items using historical cost (within 5x of historical best).
@@ -151,6 +183,7 @@ function getBestFuels(): Item[] {
 
 /**
  * Fuel your Asdon Martin with a given quantity of a given item
+ *
  * @param it Item to fuel with.
  * @param quantity Number of items to fuel with.
  * @returns Whether we succeeded at fueling with the given items.
@@ -166,6 +199,7 @@ export function insertFuel(it: Item, quantity = 1): boolean {
 
 /**
  * Fill your Asdon Martin to the given fuel level in the cheapest way possible
+ *
  * @param targetUnits Fuel level to attempt to reach.
  * @returns Whether we succeeded at filling to the target fuel level.
  */
@@ -199,6 +233,10 @@ export function fillTo(targetUnits: number): boolean {
   return getFuel() >= targetUnits;
 }
 
+/**
+ *
+ * @param targetUnits
+ */
 function fillWithBestInventoryItem(targetUnits: number): boolean {
   const options = inventoryItems().sort(
     (a, b) =>
@@ -220,6 +258,7 @@ function fillWithBestInventoryItem(targetUnits: number): boolean {
 
 /**
  * Fill your Asdon Martin by prioritizing mallmin items in your inventory. Default to the behavior of fillTo.
+ *
  * @param targetUnits Fuel level to attempt to reach.
  * @returns Whether we succeeded at filling to the target fuel level.
  */
@@ -251,6 +290,7 @@ export const Driving = {
 
 /**
  * Attempt to drive with a particular style for a particular number of turns.
+ *
  * @param style The driving style to use.
  * @param turns The number of turns to attempt to get.
  * @param preferInventory Whether we should preferentially value items currently in our inventory.

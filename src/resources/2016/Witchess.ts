@@ -11,10 +11,16 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 
 export const item = $item`Witchess Set`;
+/**
+ *
+ */
 export function have(): boolean {
   return haveInCampground(item);
 }
 
+/**
+ *
+ */
 export function fightsDone(): number {
   return get("_witchessFights");
 }
@@ -29,6 +35,10 @@ export const pieces = Monster.get([
   "Witchess Witch",
   "Witchess Ox",
 ]);
+/**
+ *
+ * @param piece
+ */
 export function fightPiece(piece: Monster): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (

@@ -87,14 +87,25 @@ class Flower {
   }
 }
 
+/**
+ *
+ */
 export function have(): boolean {
   return floristAvailable();
 }
 
+/**
+ *
+ * @param name
+ */
 function toFlower(name: string): Flower | undefined {
   return all.find((flower) => name === flower.name);
 }
 
+/**
+ *
+ * @param location
+ */
 export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
   Flower.plantNamesInZone(location)
@@ -105,12 +116,20 @@ export function flowersIn(location: Location): Flower[] {
   return returnValue;
 }
 
+/**
+ *
+ * @param location
+ */
 export function flowersAvailableFor(
   location: Location = myLocation()
 ): Flower[] {
   return all.filter((flower) => flower.available(location));
 }
 
+/**
+ *
+ * @param location
+ */
 export function isFull(location = myLocation()): boolean {
   return flowersIn(location).length === 3;
 }

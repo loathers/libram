@@ -7,16 +7,29 @@ import {
   SlimeTube,
 } from "./Dungeon";
 
+/**
+ *
+ */
 export function close(): boolean {
   return closeDungeon(SlimeTube);
 }
 
+/**
+ *
+ * @param paymentPolicy
+ */
 export function open(
   paymentPolicy: "None" | "All" | "Difference" = "Difference"
 ): boolean {
   return openDungeon(SlimeTube, paymentPolicy);
 }
 
+/**
+ *
+ * @param idOrName
+ * @param loot
+ * @param distributeAllOfAGivenItem
+ */
 export function distribute(
   idOrName: number | string = myId(),
   loot: Item | Item[] | Map<Item, number> = SlimeTube.loot,
@@ -25,6 +38,9 @@ export function distribute(
   distributeDungeon(SlimeTube, idOrName, loot, distributeAllOfAGivenItem);
 }
 
+/**
+ *
+ */
 export function findLoot(): Map<Item, number> {
   return findLootDungeon(SlimeTube);
 }

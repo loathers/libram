@@ -247,6 +247,9 @@ const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 /**
  * Return whether the player has the queried counter
  *
+ * @param counterName
+ * @param minTurns
+ * @param maxTurns
  * @category General
  */
 export function haveCounter(
@@ -260,6 +263,7 @@ export function haveCounter(
 /**
  * Return whether the player has the queried wandering counter
  *
+ * @param wanderer
  * @category Wanderers
  */
 export function haveWandererCounter(wanderer: Wanderer): boolean {
@@ -599,9 +603,9 @@ export class EnsureError extends Error {
 
 /**
  * Tries to get an effect using the default method
+ *
  * @param ef effect to try to get
  * @param turns turns to aim for; default of 1
- *
  * @throws {EnsureError} Throws an error if the effect cannot be guaranteed
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
@@ -622,6 +626,7 @@ const MALL_VALUE_MODIFIER = 0.9;
 
 /**
  * Returns the average value--based on mallprice and autosell--of a collection of items
+ *
  * @param items items whose value you care about
  */
 export function getSaleValue(...items: Item[]): number {
@@ -661,6 +666,7 @@ export type EnvironmentType = typeof Environment[keyof typeof Environment];
  * Returns the weight-coefficient of any leprechaunning that this familiar may find itself doing
  * Assumes the familiar is nude and thus fails for hatrack & pantsrack
  * For the Mutant Cactus Bud, returns the efficacy-multiplier instead
+ *
  * @param familiar The familiar whose leprechaun multiplier you're interested in
  */
 export function findLeprechaunMultiplier(familiar: Familiar): number {
@@ -677,6 +683,7 @@ export function findLeprechaunMultiplier(familiar: Familiar): number {
  * Returns the weight-coefficient of any baby gravy fairying that this familiar may find itself doing
  * Assumes the familiar is nude and thus fails for hatrack & pantsrack
  * For the Mutant Fire Ant, returns the efficacy-multiplier instead
+ *
  * @param familiar The familiar whose fairy multiplier you're interested in
  */
 export function findFairyMultiplier(familiar: Familiar): number {
@@ -704,6 +711,9 @@ export const holidayWanderers = new Map<string, Monster[]>([
   ],
 ]);
 
+/**
+ *
+ */
 export function getTodaysHolidayWanderers(): Monster[] {
   return holiday()
     .split("/")
@@ -737,6 +747,7 @@ export function canVisitUrl(): boolean {
 
 /**
  * Calculate damage taken from a specific element after factoring in resistance
+ *
  * @param baseDamage
  * @param element
  * @returns damage after factoring in resistances
@@ -825,6 +836,10 @@ export function telescope(): {
   };
 }
 
+/**
+ *
+ * @param thing
+ */
 export function examine(thing: Item | Familiar | Effect | Skill): string {
   const url =
     thing instanceof Item
@@ -839,12 +854,14 @@ export function examine(thing: Item | Familiar | Effect | Skill): string {
 
 /**
  * Picks an option based on your primestat
+ *
  * @param options An object keyed by stat; it must either contain all stats, or have a `default` parameter.
  * @returns The option corresponding to your primestat.
  */
 export const byStat = makeByXFunction(() => myPrimestat().toString());
 /**
  * Picks an option based on your player class
+ *
  * @param options An object keyed by player class; it must either contain all classes, or have a `default` parameter.
  * @returns The option corresponding to your player class.
  */

@@ -6,10 +6,16 @@ import { $familiar, $item, $skill } from "../../template-string";
 
 export const goose = $familiar`Grey Goose`;
 
+/**
+ *
+ */
 export function have(): boolean {
   return have_(goose);
 }
 
+/**
+ *
+ */
 export function currentExperience(): number {
   return goose.experience ||
     (have_($familiar`Shorter-Order Cook`) && !get("gooseReprocessed"))
@@ -17,10 +23,17 @@ export function currentExperience(): number {
     : 0;
 }
 
+/**
+ *
+ */
 export function currentWeight(): number {
   return Math.min(Math.floor(Math.sqrt(currentExperience())), 20);
 }
 
+/**
+ *
+ * @param weight
+ */
 export function expectedDrones(weight = currentWeight()): number {
   return Math.max(0, weight - 5);
 }
@@ -33,14 +46,26 @@ export function expectedExperience(weight = currentWeight()): number {
   return Math.pow(Math.max(weight - 5, 0), toInt(myClass()) === 27 ? 2 : 3);
 }
 
+/**
+ *
+ * @param weight
+ */
 export function expectedMeat(weight = currentWeight()): number {
   return Math.pow(Math.max(weight - 5, 0), 4);
 }
 
+/**
+ *
+ */
 export function hasMeatified(): boolean {
   return get("_meatifyMatterUsed");
 }
 
+/**
+ *
+ * @param target
+ * @param bonusExperience
+ */
 export function fightsUntil(
   target: number,
   bonusExperience = getModifier("Familiar Experience")
@@ -54,6 +79,9 @@ export function fightsUntil(
   );
 }
 
+/**
+ *
+ */
 export function currentDrones(): number {
   return get("gooseDronesRemaining");
 }

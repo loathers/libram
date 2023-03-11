@@ -27,6 +27,7 @@ export function have(): boolean {
 
 /**
  * Returns the number of free runaways that have already been used
+ *
  * @see StompingBoots with which the Bandersnatch shares a counter
  */
 export function getRunaways(): number {

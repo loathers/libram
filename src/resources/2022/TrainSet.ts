@@ -6,10 +6,16 @@ import { clamp, Tuple } from "../../utils";
 
 export const item = $item`model train set`;
 
+/**
+ *
+ */
 export function installed(): boolean {
   return getWorkshed() === item;
 }
 
+/**
+ *
+ */
 export function have(): boolean {
   return installed() || have_(item);
 }
@@ -122,20 +128,34 @@ const trainsetEffectsDoubled: Map<Station, Effect> = new Map([
   [Station.PRAWN_SILO, Effect.get("Doubly Craving Prawns")],
 ]);
 
+/**
+ *
+ * @param station
+ */
 export function effect(station: Station): Effect | null {
   return trainsetEffects.get(station) ?? null;
 }
 
+/**
+ *
+ * @param station
+ */
 export function doubledEffect(station: Station): Effect | null {
   return trainsetEffectsDoubled.get(station) ?? null;
 }
 
 export type Cycle = Tuple<Station, 8>;
 
+/**
+ *
+ */
 export function cycle(): Cycle {
   return get("trainsetConfiguration").split(",") as Cycle;
 }
 
+/**
+ *
+ */
 export function nextConfigurable(): number {
   return clamp(
     get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"),
@@ -144,6 +164,9 @@ export function nextConfigurable(): number {
   );
 }
 
+/**
+ *
+ */
 export function canConfigure(): boolean {
   return installed() && !nextConfigurable();
 }
@@ -172,10 +195,18 @@ const pieces: Station[] = [
   Station.ORE_HOPPER,
 ];
 
+/**
+ *
+ * @param station
+ */
 function stationToInt(station: Station): number {
   return pieces.indexOf(station);
 }
 
+/**
+ *
+ * @param configuration
+ */
 export function setConfiguration(configuration: Cycle): boolean {
   if (!canConfigure()) return false;
 
@@ -195,6 +226,9 @@ export function setConfiguration(configuration: Cycle): boolean {
   );
 }
 
+/**
+ *
+ */
 export function next(): Station {
   return cycle()[get("trainsetPosition") % 8];
 }

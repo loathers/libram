@@ -577,6 +577,12 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
 ];
 
+/**
+ *
+ * @param rider
+ * @param modifierValueFunction
+ * @param ignoreLimitedDrops
+ */
 export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (modifiers: Modifiers) => number,
@@ -598,6 +604,13 @@ type RiderMode = {
 
 const riderModes = new Map<string, RiderMode>();
 
+/**
+ *
+ * @param name
+ * @param modifierValueFunction
+ * @param ignoreLimitedDrops
+ * @param excludeCurrentFamiliar
+ */
 export function createRiderMode(
   name: string,
   modifierValueFunction: (modifiers: Modifiers) => number,
@@ -613,6 +626,10 @@ export function createRiderMode(
 
 const riderLists = new Map<string, FamiliarRider[]>();
 
+/**
+ *
+ * @param mode
+ */
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;

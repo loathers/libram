@@ -29,50 +29,86 @@ const familiarPropertiesSet = new Set(familiarProperties);
 const statPropertiesSet = new Set(statProperties);
 const phylumPropertiesSet = new Set(phylumProperties);
 
+/**
+ *
+ * @param property
+ */
 export function isBooleanProperty(
   property: string
 ): property is BooleanProperty {
   return (booleanPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isNumericProperty(
   property: string
 ): property is NumericProperty {
   return (numericPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isNumericOrStringProperty(
   property: string
 ): property is NumericOrStringProperty {
   return (numericOrStringPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isStringProperty(property: string): property is StringProperty {
   return (stringPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isLocationProperty(
   property: string
 ): property is LocationProperty {
   return (locationPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isMonsterProperty(
   property: string
 ): property is MonsterProperty {
   return (monsterPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isFamiliarProperty(
   property: string
 ): property is FamiliarProperty {
   return (familiarPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isStatProperty(property: string): property is StatProperty {
   return (statPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ *
+ * @param property
+ */
 export function isPhylumProperty(property: string): property is PhylumProperty {
   return (phylumPropertiesSet as Set<string>).has(property);
 }

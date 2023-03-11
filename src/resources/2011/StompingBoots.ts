@@ -15,6 +15,7 @@ export function have(): boolean {
 
 /**
  * Returns the number of free runaways that have already been used
+ *
  * @see Bandersnatch with which the Stomping Boots shares a counter
  */
 export function getRunaways(): number {

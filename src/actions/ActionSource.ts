@@ -67,6 +67,10 @@ export type ActionConstraints = {
   cost?: () => number;
 };
 
+/**
+ *
+ * @param {...any} allConstraints
+ */
 function mergeConstraints(
   ...allConstraints: ActionConstraints[]
 ): ActionConstraints | null {
@@ -164,6 +168,7 @@ export class ActionSource {
 
   /**
    * Create a compound action source with merged constraints.
+   *
    * @param others Other actions to have available.
    * @returns Merged constraints, or null if they are inconsistent.
    */
@@ -186,6 +191,7 @@ export class ActionSource {
 
   /**
    * Perform all preparation necessary to make this action available.
+   *
    * @param otherRequirements Any other equipment requirements.
    * @returns Whether preparation succeeded.
    */
@@ -206,6 +212,7 @@ export class ActionSource {
   /**
    * Perform all preparation necessary to make this action available.
    * Throws an error if preparation fails.
+   *
    * @param otherRequirements Any other equipment requirements.
    */
   ensure(otherRequirements?: Requirement): void {
@@ -215,6 +222,11 @@ export class ActionSource {
   }
 }
 
+/**
+ *
+ * @param action
+ * @param constraints
+ */
 function filterAction(
   action: ActionSource,
   constraints: FindActionSourceConstraints
@@ -236,6 +248,7 @@ function filterAction(
 
 /**
  * Find an available action source subject to constraints.
+ *
  * @param actions Action source list.
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Available action source satisfying constraints, or null.
@@ -254,6 +267,7 @@ export function findActionSource(
 /**
  * Count available action sources subject to constraints. Note that, if
  * constraints.maximumCost is high enough, this will return Infinity.
+ *
  * @param actions Action source list.
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Count of available action sources.

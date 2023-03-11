@@ -161,9 +161,11 @@ export default class Kmail {
    *
    * @param to The player name or id to receive the gift
    * @param note The note on the outside of the gift
+   * @param message
    * @param items The items to be attached
    * @param meat The quantity of meat to be attached
    * @param insideNode The note on the inside of the gift
+   * @param insideNote
    * @returns True if the gift was successfully sent
    */
   static gift(
@@ -244,8 +246,10 @@ export default class Kmail {
   /**
    * Reply to kmail
    *
+   * @param message
+   * @param items
+   * @param meat
    * @see Kmail.send
-   *
    * @returns True if the kmail was successfully sent
    */
   reply(

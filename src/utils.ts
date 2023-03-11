@@ -1,7 +1,15 @@
+/**
+ *
+ * @param value
+ */
 export function notNull<T>(value: T | null): value is T {
   return value !== null;
 }
 
+/**
+ *
+ * @param n
+ */
 export function parseNumber(n: string): number {
   return Number.parseInt(n.replace(/,/g, ""));
 }
@@ -33,6 +41,10 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
   return result;
 }
 
+/**
+ *
+ * @param array
+ */
 export function arrayToCountedMap<T>(
   array: T[] | Map<T, number>
 ): Map<T, number> {
@@ -47,18 +59,27 @@ export function arrayToCountedMap<T>(
   return map;
 }
 
+/**
+ *
+ * @param map
+ */
 export function countedMapToArray<T>(map: Map<T, number>): T[] {
   return ([] as T[]).concat(
     ...[...map].map(([item, quantity]) => Array(quantity).fill(item))
   );
 }
 
+/**
+ *
+ * @param map
+ */
 export function countedMapToString<T>(map: Map<T, number>): string {
   return [...map].map(([item, quantity]) => `${quantity} x ${item}`).join(", ");
 }
 
 /**
  * Sum an array of numbers.
+ *
  * @param addends Addends to sum.
  * @param property Property of the elements to be summing
  */
@@ -68,6 +89,7 @@ export function sum<
 >(addends: T[], property: S): number;
 /**
  * Sum an array of numbers.
+ *
  * @param addends Addends to sum.
  * @param mappingFunction Mapping function to turn addends into actual numbers.
  */
@@ -75,6 +97,11 @@ export function sum<T>(
   addends: T[],
   mappingFunction: (element: T) => number
 ): number;
+/**
+ *
+ * @param addends
+ * @param x
+ */
 export function sum<
   S extends string | number | symbol,
   T extends { [s in S]: number }
@@ -86,12 +113,17 @@ export function sum<
   );
 }
 
+/**
+ *
+ * @param addends
+ */
 export function sumNumbers(addends: number[]): number {
   return sum(addends, (x: number) => x);
 }
 
 /**
  * Checks if a given item is in a readonly array, acting as a typeguard.
+ *
  * @param item Needle
  * @param array Readonly array haystack
  * @returns Whether the item is in the array, and narrows the type of the item.
@@ -105,6 +137,7 @@ export function arrayContains<T, A extends T>(
 
 /**
  * Checks if two arrays contain the same elements in the same quantity.
+ *
  * @param a First array for comparison
  * @param b Second array for comparison
  * @returns Whether the two arrays are equal, irrespective of order.
@@ -120,6 +153,7 @@ export function setEqual<T>(a: T[], b: T[]): boolean {
 
 /**
  * Reverses keys and values for a given map
+ *
  * @param map Map to invert
  */
 export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
@@ -132,6 +166,7 @@ export function invertMap<T1, T2>(map: Map<T1, T2>): Map<T2, T1> {
 
 /**
  * Splits a string by commas while also respecting escaping commas with a backslash
+ *
  * @param str String to split
  * @returns List of tokens
  */
@@ -161,6 +196,7 @@ export function splitByCommasWithEscapes(str: string): string[] {
 
 /**
  * Find the best element of an array, where "best" is defined by some given criteria.
+ *
  * @param array The array to traverse and find the best element of.
  * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
  * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.
@@ -174,6 +210,12 @@ export function maxBy<
   S extends string | number | symbol,
   T extends { [x in S]: number }
 >(array: T[] | readonly T[], key: S, reverse?: boolean): T;
+/**
+ *
+ * @param array
+ * @param optimizer
+ * @param reverse
+ */
 export function maxBy<
   S extends string | number | symbol,
   T extends { [x in S]: number }
@@ -209,6 +251,11 @@ type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
   ? R
   : _tupleOf<T, N, [T, ...R]>;
 
+/**
+ *
+ * @param left
+ * @param right
+ */
 export function arrayEquals<T>(
   left: T[] | readonly T[],
   right: T[] | readonly T[]
@@ -229,6 +276,7 @@ export type Delayed<T> = [T] extends [(...args: any) => any]
 
 /**
  * Used to collapse a Delayed<T> object into an entity of type "T" as represented by the object.
+ *
  * @param delayedObject Object of type Delayed<T> that represents either a value of type T or a function returning a value of type T.
  * @returns The return value of the function, if delayedObject is a function. Otherwise, this returns the original element.
  */
@@ -246,6 +294,7 @@ export type Switch<T extends string, S> =
 
 /**
  * Makes a byX function, like byStat or byClass
+ *
  * @param source A method for finding your stat, or class, or whatever X is in this context
  * @returns A function akin to byStat or byClass; it accepts an object that either is "complete" in the sense that it has a key for every conceivable value, or contains a `default` parameter. If an inappropriate input is provided, returns undefined.
  */

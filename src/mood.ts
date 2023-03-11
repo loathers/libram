@@ -318,6 +318,7 @@ export class Mood {
 
   /**
    * Set default options for new Mood instances.
+   *
    * @param options Default options for new Mood instances.
    */
   static setDefaultOptions(options: Partial<MoodOptions>): void {
@@ -329,6 +330,7 @@ export class Mood {
 
   /**
    * Construct a new Mood instance.
+   *
    * @param options Options for mood.
    */
   constructor(options: Partial<MoodOptions> = {}) {
@@ -362,6 +364,7 @@ export class Mood {
 
   /**
    * Add a skill to the mood.
+   *
    * @param skill Skill to add.
    */
   skill(skill: Skill): Mood {
@@ -371,6 +374,7 @@ export class Mood {
 
   /**
    * Add an effect to the mood, with casting based on {effect.default}.
+   *
    * @param effect Effect to add.
    * @param gainEffect How to gain the effect. Only runs if we don't have the effect.
    */
@@ -386,6 +390,7 @@ export class Mood {
 
   /**
    * Add a potion to the mood.
+   *
    * @param potion Potion to add.
    * @param maxPricePerTurn Maximum price to pay per turn of the effect.
    */
@@ -396,6 +401,7 @@ export class Mood {
 
   /**
    * Add an effect to acquire via pocket wishes to the mood.
+   *
    * @param effect Effect to wish for in the mood.
    */
   genie(effect: Effect): Mood {
@@ -405,6 +411,7 @@ export class Mood {
 
   /**
    * Add an Asdon Martin driving style to the mood.
+   *
    * @param effect Driving style to add to the mood.
    */
   drive(effect: Effect): Mood {
@@ -419,6 +426,7 @@ export class Mood {
 
   /**
    * Execute the mood, trying to ensure {ensureTurns} of each effect.
+   *
    * @param ensureTurns Turns of each effect to try and achieve.
    * @returns Whether or not we successfully got this many turns of every effect in the mood.
    */

@@ -3,11 +3,15 @@ import { get } from "../../property";
 
 export const cleaver = toItem("June cleaver");
 
+/**
+ *
+ */
 export function have(): boolean {
   return availableAmount(cleaver) > 0;
 }
 
 /**
+ * @param encounters
  * @returns The number of cleaver-combats it takes to get a particular encounter number--this is agnostic of your current fights.
  */
 export function getInterval(
@@ -17,6 +21,7 @@ export function getInterval(
 }
 
 /**
+ * @param encounters
  * @returns The number of cleaver-combats it would take to get a particular encounter after skipping.
  */
 export function getSkippedInterval(
@@ -26,6 +31,7 @@ export function getSkippedInterval(
 }
 
 /**
+ * @param element
  * @returns The bonus damage your cleaver currently gives for a given element.
  */
 export function damage(

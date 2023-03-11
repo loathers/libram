@@ -40,12 +40,20 @@ type ConsumptionModifiers = {
   tuxedoShirt: boolean;
 };
 
+/**
+ *
+ */
 function isMonday() {
   // Checking Tuesday's ruby is a hack to see if it's Monday in Arizona.
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
 // TODO: Include Salty Mouth and potentially other modifiers.
+/**
+ *
+ * @param item
+ * @param modifiers
+ */
 function expectedAdventures(
   item: Item,
   modifiers: ConsumptionModifiers
@@ -174,6 +182,7 @@ export class MenuItem<T> {
 
   /**
    * Construct a new menu item, possibly with extra properties. Items in MenuItem.defaultOptions have intelligent defaults.
+   *
    * @param item Item to add to menu.
    * @param options.organ Designate item as belonging to a specific organ.
    * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
@@ -182,6 +191,7 @@ export class MenuItem<T> {
    * @param options.effect Effect associated with this menu item (pocket wish effect, sweet synthesis effect, pill keeper potion extension)
    * @param options.mayo Which mayo to use before item (ignored if mayo clinic is not installed or item is not a food)
    * @param options.note Any note to track information about item, to be used later
+   * @param options
    */
   constructor(item: Item, options: MenuItemOptions<T> = {}) {
     const {
@@ -238,6 +248,10 @@ const organs = ["food", "booze", "spleen item"] as const;
 type Organ = typeof organs[number];
 type OrganSize = [Organ, number];
 
+/**
+ *
+ * @param x
+ */
 function isOrgan(x: string): x is Organ {
   return (organs as readonly string[]).includes(x);
 }
@@ -310,6 +324,7 @@ class DietPlanner<T> {
 
   /**
    * Determine the value of consuming a menu item with any profitable helpers.
+   *
    * @param menuItem Menu item to check.
    * @returns Value for consuming that menu item.
    */
@@ -319,6 +334,7 @@ class DietPlanner<T> {
 
   /**
    * Determine which helpers will be used with a menu item and its resulting value.
+   *
    * @param menuItem Menu item to check.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair [array of helpers and base menu item, value].
@@ -404,6 +420,8 @@ class DietPlanner<T> {
 
   /**
    * Plan an individual organ.
+   *
+   * @param organ
    * @param capacity Organ capacity.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -430,6 +448,7 @@ class DietPlanner<T> {
 
   /**
    * Plan organs.
+   *
    * @param organCapacities Organ capacities.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -450,6 +469,7 @@ class DietPlanner<T> {
   /**
    * Plan organs, retrying with and without each trial item. Runtime is
    * proportional to 2 ^ trialItems.length.
+   *
    * @param organCapacities Organ capacities.
    * @param trialItems Items to rerun solver with and without.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
@@ -574,6 +594,7 @@ const interactingItems: [Item | Effect, OrganSize[]][] = [
 
 /**
  * Plan out an optimal diet using a knapsack algorithm.
+ *
  * @param mpa Meat per adventure value.
  * @param menu Array of MenuItems to consider for diet purposes.
  * @param organCapacities Optional override of each organ's capacity.

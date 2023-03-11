@@ -144,6 +144,7 @@ export const getThrall = createMafiaClassPropertyGetter(Thrall, toThrall);
 
 /**
  * Returns the value of a mafia property, either built in or custom
+ *
  * @param property Name of the property
  * @param _default Default value for the property to take if not set
  */
@@ -174,6 +175,11 @@ export function get(property: string, _default: Familiar): Familiar | null;
 export function get(property: string, _default: boolean): boolean;
 export function get(property: string, _default: number): number;
 export function get(property: string, _default?: string): string;
+/**
+ *
+ * @param property
+ * @param _default
+ */
 export function get(property: string, _default?: unknown): unknown {
   const value = getString(property);
 
@@ -222,6 +228,7 @@ export function get(property: string, _default?: unknown): unknown {
 
 /**
  * Sets the value of a mafia property, either built in or custom
+ *
  * @param property Name of the property
  * @param value Value to give the property
  */
@@ -242,6 +249,11 @@ export function set<D extends { toString(): string }>(
   value: D
 ): void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ *
+ * @param property
+ * @param value
+ */
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
@@ -254,12 +266,21 @@ type Properties = Partial<{
   [P in KnownProperty]: unknown;
 }>;
 
+/**
+ *
+ * @param properties
+ */
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {
     set(prop, value as { toString(): string });
   }
 }
 
+/**
+ *
+ * @param properties
+ * @param callback
+ */
 export function withProperties(
   properties: Properties,
   callback: () => void
@@ -275,6 +296,12 @@ export function withProperties(
   }
 }
 
+/**
+ *
+ * @param property
+ * @param value
+ * @param callback
+ */
 export function withProperty<P extends KnownProperty>(
   property: P,
   value: unknown,
@@ -283,6 +310,10 @@ export function withProperty<P extends KnownProperty>(
   withProperties({ [property]: value }, callback);
 }
 
+/**
+ *
+ * @param callback
+ */
 export function withChoices(
   choices: { [choice: number]: number | string },
   callback: () => void
@@ -296,6 +327,12 @@ export function withChoices(
   withProperties(properties, callback);
 }
 
+/**
+ *
+ * @param choice
+ * @param value
+ * @param callback
+ */
 export function withChoice(
   choice: number,
   value: number | string,
@@ -313,6 +350,7 @@ export class PropertiesManager {
 
   /**
    * Sets a collection of properties to the given values, storing the old values.
+   *
    * @param propertiesToSet A Properties object, keyed by property name.
    */
   set(propertiesToSet: Properties): void {
@@ -328,6 +366,7 @@ export class PropertiesManager {
 
   /**
    * Sets a collection of choice adventure properties to the given values, storing the old values.
+   *
    * @param choicesToSet An object keyed by choice adventure number.
    */
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
@@ -343,6 +382,7 @@ export class PropertiesManager {
 
   /**
    * Sets a single choice adventure property to the given value, storing the old value.
+   *
    * @param choiceToSet The number of the choice adventure to set the property for.
    * @param value The value to assign to that choice adventure.
    */
@@ -352,6 +392,7 @@ export class PropertiesManager {
 
   /**
    * Resets the given properties to their original stored value. Does not delete entries from the manager.
+   *
    * @param properties Collection of properties to reset.
    */
   reset(...properties: KnownProperty[]): void {
@@ -372,6 +413,7 @@ export class PropertiesManager {
 
   /**
    * Stops storing the original values of inputted properties.
+   *
    * @param properties Properties for the manager to forget.
    */
   clear(...properties: KnownProperty[]): void {
@@ -391,6 +433,7 @@ export class PropertiesManager {
 
   /**
    * Increases a numeric property to the given value if necessary.
+   *
    * @param property The numeric property we want to potentially raise.
    * @param value The minimum value we want that property to have.
    * @returns Whether we needed to change the property.
@@ -405,6 +448,7 @@ export class PropertiesManager {
 
   /**
    * Decrease a numeric property to the given value if necessary.
+   *
    * @param property The numeric property we want to potentially lower.
    * @param value The maximum value we want that property to have.
    * @returns Whether we needed to change the property.
@@ -419,6 +463,7 @@ export class PropertiesManager {
 
   /**
    * Creates a new PropertiesManager with identical stored values to this one.
+   *
    * @returns A new PropertiesManager, with identical stored values to this one.
    */
   clone(): PropertiesManager {
@@ -429,6 +474,7 @@ export class PropertiesManager {
 
   /**
    * Clamps a numeric property, modulating it up or down to fit within a specified range
+   *
    * @param property The numeric property to clamp
    * @param min The lower bound for what we want the property to be allowed to be.
    * @param max The upper bound for what we want the property to be allowed to be.
@@ -447,6 +493,7 @@ export class PropertiesManager {
 
   /**
    * Determines whether this PropertiesManager has identical stored values to another.
+   *
    * @param other The PropertiesManager to compare to this one.
    * @returns Whether their StoredValues are identical.
    */
@@ -464,6 +511,7 @@ export class PropertiesManager {
 
   /**
    * Merges a PropertiesManager onto this one, letting the input win in the event that both PropertiesManagers have a value stored.
+   *
    * @param other The PropertiesManager to be merged onto this one.
    * @returns A new PropertiesManager with stored values from both its parents.
    */
@@ -475,6 +523,7 @@ export class PropertiesManager {
 
   /**
    * Merges an arbitrary collection of PropertiesManagers, letting the rightmost PropertiesManager win in the event of verlap.
+   *
    * @param mergees The PropertiesManagers to merge together.
    * @returns A PropertiesManager that is just an amalgam of all the constituents.
    */

@@ -5,14 +5,24 @@ import { $item, $items } from "../../template-string";
 import { invertMap, maxBy } from "../../utils";
 
 export const item = $item`Guzzlr tablet`;
+/**
+ *
+ */
 export function have(): boolean {
   return haveItem(item);
 }
 
+/**
+ *
+ * @param option
+ */
 function useTabletWithChoice(option: number) {
   withChoice(1412, option, () => use(1, item));
 }
 
+/**
+ *
+ */
 export function isQuestActive(): boolean {
   return get("questGuzzlr") !== "unstarted";
 }
@@ -197,6 +207,10 @@ export const platinumCocktailToIngredient = invertMap(
   ingredientToPlatinumCocktail
 );
 
+/**
+ *
+ * @param freeCraft
+ */
 export function getCheapestPlatinumCocktail(freeCraft = true): Item {
   if (freeCraft) {
     return maxBy(
@@ -212,6 +226,10 @@ export function getCheapestPlatinumCocktail(freeCraft = true): Item {
   }
 }
 
+/**
+ *
+ * @param useShoes
+ */
 export function turnsLeftOnQuest(useShoes = false) {
   const progressPerTurn = useShoes
     ? Math.floor((10 - get("_guzzlrDeliveries")) * 1.5)
@@ -219,6 +237,10 @@ export function turnsLeftOnQuest(useShoes = false) {
   return Math.ceil((100 - get("guzzlrDeliveryProgress")) / progressPerTurn);
 }
 
+/**
+ *
+ * @param usePants
+ */
 export function expectedReward(usePants = false) {
   switch (getTier()) {
     case "platinum":

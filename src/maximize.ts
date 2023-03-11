@@ -39,6 +39,7 @@ export type MaximizeOptions = {
 
 /**
  * Merges a Partial<MaximizeOptions> onto a MaximizeOptions. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
+ *
  * @param defaultOptions MaximizeOptions to use as a "base."
  * @param addendums Options to attempt to merge onto defaultOptions.
  */
@@ -144,6 +145,9 @@ export const modeableState = {
   parka: () => getProperty("parkaMode"),
 } as const;
 
+/**
+ *
+ */
 export function getCurrentModes(): Modes {
   const modes: Modes = {};
   for (const key of modeableCommands) {
@@ -154,6 +158,10 @@ export function getCurrentModes(): Modes {
   return modes;
 }
 
+/**
+ *
+ * @param modes
+ */
 export function applyModes(modes: Modes) {
   for (const command of modeableCommands) {
     if (haveEquipped(modeableItems[command]) && modes[command] !== undefined) {
@@ -250,6 +258,7 @@ class OutfitLRUCache {
 
 /**
  * Save current equipment as KoL-native outfit.
+ *
  * @param name Name of new outfit.
  */
 function saveOutfit(name: string): void {
@@ -266,6 +275,7 @@ let cachedCanEquipItemCount = 0;
 
 /**
  * Count the number of unique items that can be equipped.
+ *
  * @returns The count of unique items.
  */
 function canEquipItemCount(): number {
@@ -282,9 +292,11 @@ function canEquipItemCount(): number {
 
 /**
  * Checks the objective cache for a valid entry.
+ *
  * @param cacheKey The cache key to check.
  * @param updateOnFamiliarChange Ignore cache if familiar has changed.
  * @param updateOnCanEquipChanged Ignore cache if stats have changed what can be equipped.
+ * @param options
  * @returns A valid CacheEntry or null.
  */
 function checkCache(
@@ -318,7 +330,9 @@ function checkCache(
 
 /**
  * Applies equipment that was found in the cache.
+ *
  * @param entry The CacheEntry to apply
+ * @param options
  */
 function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
   const outfitName = options.useOutfitCaching
@@ -374,7 +388,9 @@ const slotStructure = [
 
 /**
  * Verifies that a CacheEntry was applied successfully.
+ *
  * @param entry The CacheEntry to verify
+ * @param warn
  * @returns If all desired equipment was appliedn in the correct slots.
  */
 function verifyCached(entry: CacheEntry, warn = true): boolean {
@@ -434,7 +450,9 @@ function verifyCached(entry: CacheEntry, warn = true): boolean {
 
 /**
  * Save current equipment to the objective cache.
+ *
  * @param cacheKey The cache key to save.
+ * @param options
  */
 function saveCached(cacheKey: string, options: MaximizeOptions): void {
   const equipment: Map<Slot, Item> = new Map<Slot, Item>();
@@ -500,6 +518,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
 
 /**
  * Run the maximizer, but only if the objective and certain pieces of game state haven't changed since it was last run.
+ *
  * @param objectives Objectives to maximize for.
  * @param options Options for this run of the maximizer.
  * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
@@ -585,6 +604,7 @@ export class Requirement {
 
   /**
    * A convenient way of combining maximization parameters and options
+   *
    * @param maximizeParameters Parameters you're attempting to maximize
    * @param maximizeOptions Object potentially containing forceEquips, bonusEquips, preventEquips, and preventSlots
    */
@@ -605,6 +625,7 @@ export class Requirement {
   }
   /**
    * Merges two requirements, concanating relevant arrays. Typically used in static form.
+   *
    * @param other Requirement to merge with.
    */
 
@@ -645,6 +666,7 @@ export class Requirement {
 
   /**
    * Merges a set of requirements together, starting with an empty requirement.
+   *
    * @param allRequirements Requirements to merge
    */
   static merge(allRequirements: Requirement[]): Requirement {
@@ -656,6 +678,7 @@ export class Requirement {
 
   /**
    * Runs maximizeCached, using the maximizeParameters and maximizeOptions contained by this requirement.
+   *
    * @returns Whether the maximize call succeeded.
    */
   maximize(): boolean {
@@ -664,6 +687,7 @@ export class Requirement {
 
   /**
    * Merges requirements, and then runs maximizeCached on the combined requirement.
+   *
    * @param requirements Requirements to maximize on
    */
   static maximize(...requirements: Requirement[]): void {

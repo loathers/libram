@@ -4,6 +4,9 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 
 export const item = $item`SongBoom™ BoomBox`;
+/**
+ *
+ */
 export function have(): boolean {
   return haveItem(item);
 }
@@ -37,6 +40,7 @@ export function songChangesLeft(): number {
 
 /**
  * Change the song.
+ *
  * @param newSong Song to change to.
  */
 export function setSong(newSong: SongBoomSong): boolean {

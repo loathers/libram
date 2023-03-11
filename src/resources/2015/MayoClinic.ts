@@ -13,16 +13,23 @@ export const Mayo = {
   flex: $item`Mayoflex`,
 };
 
+/**
+ *
+ */
 export function installed(): boolean {
   return getWorkshed() === $item`portable Mayo Clinic`;
 }
 
+/**
+ *
+ */
 export function have(): boolean {
   return haveItem($item`portable Mayo Clinic`) || installed();
 }
 
 /**
  * Sets mayo minder to a particular mayo, and ensures you have enough of it.
+ *
  * @param mayo Mayo to use
  * @param quantity Quantity to ensure
  */

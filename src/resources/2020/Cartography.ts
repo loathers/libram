@@ -18,10 +18,18 @@ import { $skill } from "../../template-string";
 export const passive = $skill`Comprehensive Cartography`;
 export const skill = $skill`Map the Monsters`;
 
+/**
+ *
+ */
 export function have(): boolean {
   return _have(passive);
 }
 
+/**
+ *
+ * @param location
+ * @param monster
+ */
 export function mapMonster(location: Location, monster: Monster): boolean {
   if (!have()) return false;
   if (get("_monstersMapped") >= 3) return false;

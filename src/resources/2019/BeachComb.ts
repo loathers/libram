@@ -12,6 +12,9 @@ import { get } from "../../property";
 import { $effect } from "../../template-string";
 import { clamp } from "../../utils";
 
+/**
+ *
+ */
 export function have(): boolean {
   return have_(Item.get("Beach Comb"));
 }
@@ -48,19 +51,35 @@ export const head = {
  */
 export type BeachTile = { minute: number; row: number; column: number };
 
+/**
+ *
+ * @param day
+ */
 export function tideLevel(day = gamedayToInt()): number {
   const dayOfMonth = 1 + (day % 8);
   return 4 - Math.abs(4 - dayOfMonth);
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.row
+ */
 export function canComb({ row }: BeachTile): boolean {
   return row > tideLevel();
 }
 
+/**
+ *
+ */
 export function freeCombs(): number {
   return have() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
 }
 
+/**
+ *
+ * @param {...any} tiles
+ */
 export function comb(...tiles: BeachTile[]): void {
   if (!have() || !tiles.length) return;
 
@@ -75,6 +94,10 @@ export function comb(...tiles: BeachTile[]): void {
   if (handlingChoice()) runChoice(5);
 }
 
+/**
+ *
+ * @param target
+ */
 export function headAvailable(target: Effect | keyof typeof head): boolean {
   const effect = target instanceof Effect ? target : head[target];
   const headNumber = 1 + headBuffs.indexOf(effect);
@@ -87,6 +110,10 @@ export function headAvailable(target: Effect | keyof typeof head): boolean {
   );
 }
 
+/**
+ *
+ * @param target
+ */
 export function tryHead(target: Effect | keyof typeof head): boolean {
   const effect = target instanceof Effect ? target : head[target];
   if (!headBuffs.includes(effect)) return false;

@@ -20,10 +20,16 @@ export const stickers = {
 
 export type Sticker = keyof typeof stickers;
 
+/**
+ *
+ */
 export function have(): boolean {
   return haveSkill($skill`Summon Stickers`);
 }
 
+/**
+ *
+ */
 export function weapon(): Item | null {
   return (
     $items`scratch 'n' sniff sword, scratch 'n' sniff crossbow`.find((i) =>
@@ -37,6 +43,10 @@ const weapons = {
   crossbow: $item`scratch 'n' sniff crossbow`,
 };
 
+/**
+ *
+ * @param sticker
+ */
 export function makeSword(sticker: Sticker): void {
   if (weapon()) return;
 
@@ -44,6 +54,10 @@ export function makeSword(sticker: Sticker): void {
   visitUrl(`bedazzle.php?action=juststick&sticker=${id}&pwd`);
 }
 
+/**
+ *
+ * @param mode
+ */
 export function foldWeapon(mode: keyof typeof weapons): boolean {
   const currentWep = weapon();
   if (!currentWep) return false;
@@ -52,6 +66,9 @@ export function foldWeapon(mode: keyof typeof weapons): boolean {
   return weapons[mode] === currentWep;
 }
 
+/**
+ *
+ */
 export function currentStickers(): [Item, Item, Item] {
   return $slots`sticker1, sticker2, sticker3`.map((s) => equippedItem(s)) as [
     Item,
@@ -60,6 +77,10 @@ export function currentStickers(): [Item, Item, Item] {
   ];
 }
 
+/**
+ *
+ * @param {...any} options
+ */
 export function setStickers(
   ...options: [Sticker | null, Sticker | null, Sticker | null]
 ): [Item, Item, Item] {

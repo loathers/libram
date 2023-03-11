@@ -26,6 +26,9 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+/**
+ *
+ */
 export function permedSkills(): Map<Skill, Lifestyle> {
   return new Map(
     Array.from(Object.entries(getPermedSkills())).map(
@@ -138,6 +141,11 @@ type MoonSign =
   | "gnomish"
   | "gnomish gnomads camp";
 
+/**
+ *
+ * @param moon
+ * @param playerClass
+ */
 function toMoonId(moon: MoonSign, playerClass: Class): number {
   if (typeof moon === "number") return moon;
 
@@ -191,6 +199,9 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
   }
 }
 
+/**
+ *
+ */
 function isInValhalla(): boolean {
   const charPaneText = visitUrl("charpane.php");
   // Match the infinity images (inf_small.gif, inf_large.gif)
@@ -204,6 +215,7 @@ function isInValhalla(): boolean {
 
 /**
  * Hops the gash, perming no skills
+ *
  * @param path path of choice, as a Path object--these exist as properties of Paths
  * @param playerClass Your class of choice for this ascension
  * @param lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
@@ -213,6 +225,18 @@ function isInValhalla(): boolean {
  * @param permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
  */
 
+/**
+ *
+ * @param path
+ * @param playerClass
+ * @param lifestyle
+ * @param moon
+ * @param consumable
+ * @param pet
+ * @param permOptions
+ * @param permOptions.permSkills
+ * @param permOptions.neverAbort
+ */
 export function ascend(
   path: Path,
   playerClass: Class,
@@ -305,9 +329,16 @@ export function ascend(
 
 /**
  * Sets up various iotms you may want to use in the coming ascension
+ *
  * @param ascensionItems.garden Garden to switch to.
  * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
  * @param throwOnFail If true, this will throw an error when it fails to switch something
+ * @param ascensionItems.eudora
+ * @param ascensionItems.chateau
+ * @param ascensionItems.chateau.desk
+ * @param ascensionItems.chateau.ceiling
+ * @param ascensionItems.chateau.nightstand
+ * @param ascensionItems.throwOnFail
  */
 export function prepareAscension({
   garden,

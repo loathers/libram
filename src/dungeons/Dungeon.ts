@@ -16,12 +16,20 @@ export type Dungeon = {
 
 /**
  * Distributes loot from given dungeon
+ *
  * @param dungeon The dungeon to distribute loot from
  * @param idOrName The player you're trying to distribute to, either as a username or a player ID. Defaults to self.
  * @param loot The loot you're looking to distribute, specific to this dungeon
  * @param distributeAllOfAGivenItem For items that you can get multiple of in a dungeon. When true, this will give everything of that ilk to your chosen player.
  */
 
+/**
+ *
+ * @param dungeon
+ * @param idOrName
+ * @param loot
+ * @param distributeAllOfAGivenItem
+ */
 export function distribute(
   dungeon: Dungeon,
   idOrName: number | string = myId(),
@@ -61,6 +69,10 @@ export function distribute(
   });
 }
 
+/**
+ *
+ * @param dungeon
+ */
 export function close(dungeon: Dungeon): boolean {
   visitUrl(
     `clan_basement.php?action=${dungeon.closeAction}&confirm=true`,
@@ -72,6 +84,7 @@ export function close(dungeon: Dungeon): boolean {
 
 /**
  * Opens clan dungeon and, if relevant, pays meat to do so
+ *
  * @param dungeon The Dungeon to open
  * @param paymentPolicy "None", "All", or "Difference". Difference pays into the stash the exact amount needed to open the dungeon.
  */
@@ -100,6 +113,7 @@ export function open(
 
 /**
  * Creates dungeon object for managing clan dungeons
+ *
  * @param name Name of the dungeon in question
  * @param loot Distributable loot dropped by bosses in dungeon
  * @param openAction String action used in form submission to open dungeon
@@ -158,6 +172,10 @@ export const SlimeTube = createDungeon(
   "greasespot.gif"
 );
 
+/**
+ *
+ * @param dungeon
+ */
 export function findLoot(dungeon: Dungeon): Map<Item, number> {
   const returnValue = new Map<Item, number>();
   const pageText = visitUrl("clan_basement.php");

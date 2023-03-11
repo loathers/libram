@@ -2,6 +2,9 @@ import { Item, runChoice, visitUrl } from "kolmafia";
 import { have as _have } from "../../lib";
 import { $familiar, $item } from "../../template-string";
 
+/**
+ *
+ */
 export function have(): boolean {
   return _have($familiar`Reagnimated Gnome`);
 }
@@ -16,10 +19,17 @@ export const bodyParts = {
 
 export type BodyPart = keyof typeof bodyParts;
 
+/**
+ *
+ */
 export function chosenParts(): Item[] {
   return Object.values(bodyParts).filter((part) => _have(part));
 }
 
+/**
+ *
+ * @param part
+ */
 export function choosePart(part: BodyPart): boolean {
   if (!have()) return false;
   if (_have(bodyParts[part])) return true;
@@ -28,6 +38,10 @@ export function choosePart(part: BodyPart): boolean {
   return chosenParts().includes(bodyParts[part]);
 }
 
+/**
+ *
+ * @param weight
+ */
 export function expectedAdvsPerCombat(weight: number): number {
   return Math.min(0.01 + (weight / 1000) * 0.99, 1);
 }

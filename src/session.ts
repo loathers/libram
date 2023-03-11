@@ -14,6 +14,7 @@ import { sumNumbers } from "./utils";
 
 /**
  * Return a mapping of the session items, mapping foldable items to a single of their forms
+ *
  * @returns the item session results, with foldables mapped to a single of their folding forms
  */
 function mySessionItemsWrapper(): Map<Item, number> {
@@ -76,6 +77,7 @@ function mySessionItemsWrapper(): Map<Item, number> {
 
 /**
  * Performa a binary element-wise operation on two inventories
+ *
  * @param a The LHS inventory to perform the operation on
  * @param b The RHS inventory to perform the operation on
  * @param op an operator to compute between the sets
@@ -101,6 +103,7 @@ function inventoryOperation(
 
 /**
  * An entry showing the value of each Item in a session
+ *
  * @member item the item associated with this detail
  * @member value the numeric value of the full quantity of items (to get value of each item, do value / quantity) (can be negative)
  * @member quantity the number of items for this detail
@@ -113,6 +116,7 @@ interface ItemDetail {
 
 /**
  * The full value (in meat) results of a session
+ *
  * @member meat the value of this session in pure meat
  * @member items the value of the items in this session in meat
  * @member total sum of meat and items
@@ -129,6 +133,7 @@ interface ItemResult {
  * A wrapper around tracking items and meat gained from this session
  * Smartly handles foldables being added/removed based on their state
  * Provides operations to add sessions and subtract Sessions so you can isolate the value of each Session using a baseline
+ *
  * @member meat the raw meat associated with this Session
  * @member items a map representing the items gained/lost during this Session
  */
@@ -137,6 +142,7 @@ export class Session {
   items: Map<Item, number>;
   /**
    * Construct a new session
+   *
    * @param meat the amount of meat associated with this session
    * @param items the items associated with this session
    */
@@ -147,6 +153,7 @@ export class Session {
 
   /**
    * Register session results that do not get tracked natively
+   *
    * @param target either the Item or a string saying "meat" of what quantity to modify
    * @param quantity How much to modify the tracked amount by
    */
@@ -160,6 +167,7 @@ export class Session {
 
   /**
    * Value this session
+   *
    * @param itemValue a function that, when given an item, will give a meat value of the item
    * @returns ItemResult with the full value of this session given the input function
    */
@@ -180,6 +188,7 @@ export class Session {
   /**
    * Subtract the contents of another session from this one, removing any items that have a resulting quantity of 0
    *  (this will ignore elements in b but not in a)
+   *
    * @param other the session from which to pull values to remove from this session
    * @returns a new session representing the difference between this session and the other session
    */
@@ -196,6 +205,7 @@ export class Session {
   /**
    * Subtract the contents of snasphot b from session a, removing any items that have a resulting quantity of 0
    *  (this will ignore elements in b but not in a)
+   *
    * @param a the session from which to subtract elements
    * @param b the session from which to add elements
    * @returns a new session representing the difference between a and b
@@ -206,6 +216,7 @@ export class Session {
 
   /**
    * Generate a new session combining multiple sessions together
+   *
    * @param other the session from which to add elements to this set
    * @returns a new session representing the addition of other to this
    */
@@ -222,6 +233,7 @@ export class Session {
 
   /**
    * Combine the contents of sessions
+   *
    * @param sessions the set of sessions to combine together
    * @returns a new session representing the difference between a and b
    */
@@ -239,6 +251,7 @@ export class Session {
 
   /**
    * Export this session to a file in the data/ directory. Conventionally this file should end in ".json"
+   *
    * @param filename The file into which to export
    */
   toFile(filename: string): void {
@@ -251,6 +264,7 @@ export class Session {
 
   /**
    * Import a session from a file in the data/ directory. Conventionally the file should end in ".json"
+   *
    * @param filename The file from which to import
    * @returns the session represented by the file
    */

@@ -4,22 +4,37 @@ import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib";
 import { get, set } from "../../property";
 import { $item, $location } from "../../template-string";
 
+/**
+ *
+ */
 export function have(): boolean {
   return get("loveTunnelAvailable");
 }
 
+/**
+ *
+ */
 export function isUsed(): boolean {
   return get("_loveTunnelUsed");
 }
 
+/**
+ *
+ */
 export function haveLovEnamorang(): boolean {
   return haveItem($item`LOV Enamorang`);
 }
 
+/**
+ *
+ */
 export function getLovEnamorangUses(): number {
   return get("_enamorangs");
 }
 
+/**
+ *
+ */
 export function couldUseLoveEnamorang(): boolean {
   return (
     !haveWandererCounter(Wanderer.Enamorang) &&
@@ -28,6 +43,9 @@ export function couldUseLoveEnamorang(): boolean {
   );
 }
 
+/**
+ *
+ */
 export function getLovEnamorangMonster(): Monster | null {
   return get("enamorangMonster");
 }
@@ -50,6 +68,10 @@ type LOVExtra =
   | "toast"
   | null;
 
+/**
+ *
+ * @param equipment
+ */
 function equipmentChoice(equipment: LOVEquipment) {
   switch (equipment) {
     case "LOV Eardigan":
@@ -61,6 +83,10 @@ function equipmentChoice(equipment: LOVEquipment) {
   }
 }
 
+/**
+ *
+ * @param effect
+ */
 function effectChoice(effect: LOVEffect) {
   switch (effect) {
     case "Lovebotamy":
@@ -72,6 +98,10 @@ function effectChoice(effect: LOVEffect) {
   }
 }
 
+/**
+ *
+ * @param extra
+ */
 function extraChoice(extra: LOVExtra) {
   switch (extra) {
     case "LOV Enamorang":
@@ -93,6 +123,7 @@ function extraChoice(extra: LOVExtra) {
 
 /**
  * Fight all LOV monsters and get buffs/equipment.
+ *
  * @param equipment Equipment to take from LOV.
  * @param effect Effect to take from LOV.
  * @param extra Extra item to take from LOV.

@@ -4,6 +4,9 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp } from "../../utils";
 
+/**
+ *
+ */
 export function have(): boolean {
   return have_($item`Deck of Every Card`);
 }
@@ -83,20 +86,33 @@ const cards = [
 
 type Card = keyof typeof cards;
 
+/**
+ *
+ */
 export function getCardsDrawn(): number {
   return clamp(get("_deckCardsDrawn"), 0, 15);
 }
 
+/**
+ *
+ */
 export function getRemainingDraws(): number {
   return 15 - getCardsDrawn();
 }
 
+/**
+ *
+ */
 export function getCardsSeen(): Card[] {
   return get("_deckCardsSeen")
     ? (get("_deckCardsSeen").split("|") as Card[])
     : [];
 }
 
+/**
+ *
+ * @param card
+ */
 export function cheatCard(card: Card): boolean {
   if (getCardsSeen().includes(card)) return true;
   if (getRemainingDraws() < 5) return false;

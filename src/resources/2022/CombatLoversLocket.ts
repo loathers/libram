@@ -13,12 +13,16 @@ import { clamp } from "../../utils";
 // eslint-disable-next-line libram/verify-constants
 export const locket = $item`Combat Lover's Locket`;
 
+/**
+ *
+ */
 export function have(): boolean {
   return haveItem(locket);
 }
 
 /**
  * Filters the set of all unlocked locket monsters to only the ones available to be locketed right now.
+ *
  * @returns An array consisting of all Monsters you can fight with your locket right now.
  */
 export function availableLocketMonsters(): Monster[] {
@@ -30,12 +34,16 @@ export function availableLocketMonsters(): Monster[] {
 
 /**
  * Parses getLocketMonsters and returns the collection of all Monsters as an Array.
+ *
  * @returns An array consisting of all Monsters you can hypothetically fight, regardless of whether they've been fought today.
  */
 export function unlockedLocketMonsters(): Monster[] {
   return Object.entries(getLocketMonsters()).map(([name]) => toMonster(name));
 }
 
+/**
+ *
+ */
 function parseLocketProperty() {
   return get("_locketMonstersFought")
     .split(",")
@@ -44,6 +52,7 @@ function parseLocketProperty() {
 
 /**
  * Determines how many reminisces remain by parsing the _locketMonstersFought property.
+ *
  * @returns The number of reminisces a player has available; 0 if they lack the Locket.
  */
 export function reminiscesLeft(): number {
@@ -52,6 +61,7 @@ export function reminiscesLeft(): number {
 
 /**
  * Determines which monsters were reminisced today by parsing the _locketMonstersFought property.
+ *
  * @returns An array consisting of the Monsters reminisced today.
  */
 export function monstersReminisced(): Monster[] {
@@ -60,6 +70,7 @@ export function monstersReminisced(): Monster[] {
 
 /**
  * Fight a Monster using the Combat Lover's Locket
+ *
  * @param monster The Monster to fight
  * @returns false if we are unable to reminisce about this monster. Else, returns whether, at the end of all things, we have reminisced about this monster.
  */
@@ -75,6 +86,7 @@ export function reminisce(monster: Monster): boolean {
 
 /**
  * This function efficiently evaluates all of an adventurer's possibly reminiscable monsters, placing them through a filtering criteria and evaluating them based on a passed function.
+ *
  * @param criteria A filtering function for delineating which monsters are "fair game" for the search, such as "is this monster free".
  * @param value A function for deciding which monsters are "better" than others.
  * @returns A singular monster that fulfills the criteria function and maximizes the value function.

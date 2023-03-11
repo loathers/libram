@@ -102,6 +102,7 @@ export class Clan {
 
   /**
    * Join a clan and return its instance
+   *
    * @param clanIdOrName Clan id or name
    */
   static join(clanIdOrName: string | number): Clan {
@@ -139,7 +140,9 @@ export class Clan {
   /**
    * Execute callback as a member of a clan
    * and then restore prior membership
+   *
    * @param clanIdOrName Clan id or name
+   * @param callback
    */
   static with<T>(
     clanIdOrName: string | number,
@@ -278,6 +281,7 @@ export class Clan {
   /**
    * Add a player to the current clan's whitelist.
    * If the player is already in the whitelist this will change their rank or title.
+   *
    * @param player Player id or name
    * @param rankName Rank to give the player. If not provided they will be given the lowest rank
    * @param title Title to give the player. If not provided, will be blank
@@ -310,6 +314,7 @@ export class Clan {
 
   /**
    * Remove a player from the current clan's whitelist
+   *
    * @param player Player id or name
    */
   removePlayerFromWhitelist(player: string | number): boolean {
@@ -339,6 +344,7 @@ export class Clan {
 
   /**
    * Add the given amount of meat to the current clan's coffer.
+   *
    * @param amount Amount of meat to put in coffer
    */
   putMeatInCoffer(amount: number): boolean {
@@ -405,6 +411,7 @@ export class Clan {
 
   /**
    * Put items in the stash
+   *
    * @param items Items to put in the stash
    * @returns Items successfully put in the stash
    */

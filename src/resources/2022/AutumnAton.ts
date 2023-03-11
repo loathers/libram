@@ -30,6 +30,10 @@ export function have(): boolean {
   return get("hasAutumnaton") || available();
 }
 
+/**
+ *
+ * @param html
+ */
 function checkLocations(html: string): Location[] {
   return xpath(
     html,
@@ -48,6 +52,7 @@ export function currentlyIn(): Location | null {
 
 /**
  * Deploy the autumn-aton to a location of your choosing.
+ *
  * @param target A location to send the autumn-aton to, or a prioritized list of locations to send it to, or a function to pick which location to send it to.
  * @param upgrade Should we apply any upgrades we see available?
  * @returns Where we ended up sending the autumn-aton; null if we didn't send it off.
@@ -80,6 +85,7 @@ export function sendTo(
 
 /**
  * Install any available upgrades for the autumn-aton.
+ *
  * @returns Whether there were any upgrades to install.
  */
 export function upgrade(): boolean {
@@ -130,6 +136,9 @@ export function turnsLeft(): number {
   return get("autumnatonQuestTurn") - totalTurnsPlayed();
 }
 
+/**
+ *
+ */
 export function legs(): number {
   return currentUpgrades().filter((u) => u.includes("leg")).length;
 }
@@ -189,6 +198,10 @@ const UNIQUES = {
   },
 };
 
+/**
+ *
+ * @param location
+ */
 export function getUniques(location: Location): {
   upgrade: Upgrade;
   item: Item;

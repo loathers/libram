@@ -18,6 +18,9 @@ import { arrayEquals } from "../../utils";
 
 export const item = $item`Source terminal`;
 
+/**
+ *
+ */
 export function have(): boolean {
   return haveInCampground(item);
 }
@@ -43,6 +46,7 @@ export const Buffs = {
 
 /**
  * Acquire a buff from the Source Terminal
+ *
  * @param buff The buff to acquire
  * @see Buffs
  */
@@ -70,7 +74,9 @@ export const RolloverBuffs = {
 
 /**
  * Acquire a buff from the Source Terminal
+ *
  * @param buff The buff to acquire
+ * @param rolloverBuff
  * @see RolloverBuffs
  */
 export function enquiry(rolloverBuff: Effect): boolean {
@@ -102,7 +108,9 @@ export const Skills = {
 /**
  * Make a skill available.
  * The Source Terminal can give the player access to two skills at any time
+ *
  * @param skill Skill to learn
+ * @param skills
  * @see Skills
  */
 export function educate(skills: Skill | [Skill, Skill]): boolean {
@@ -128,6 +136,10 @@ export function getSkills(): Skill[] {
     .map((s) => Skill.get(s.slice(0, -4)));
 }
 
+/**
+ *
+ * @param skills
+ */
 export function isCurrentSkill(skills: Skill | [Skill, Skill]): boolean {
   const currentSkills = getSkills();
   const skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
@@ -153,6 +165,7 @@ export const Items = new Map<Item, string>([
 
 /**
  * Collect an item from the Source Terminal (up to three times a day)
+ *
  * @param item Item to collect
  * @see Items
  */
@@ -224,6 +237,9 @@ export function couldDigitize(): boolean {
   return getDigitizeUses() < getMaximumDigitizeUses();
 }
 
+/**
+ *
+ */
 export function prepareDigitize(): boolean {
   if (!isCurrentSkill(Skills.Digitize)) {
     return educate(Skills.Digitize);

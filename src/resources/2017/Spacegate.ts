@@ -2,55 +2,95 @@ import { cliExecute, Item, toInt, visitUrl } from "kolmafia";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
+/**
+ *
+ */
 export function have(): boolean {
   return get("spacegateAlways") || get("_spacegateToday");
 }
 
+/**
+ *
+ */
 export function updateStatus(): void {
   visitUrl("place.php?whichplace=spacegate&action=sg_Terminal");
 }
 
+/**
+ *
+ */
 export function dialled(): boolean {
   updateStatus();
   return get("_spacegateCoordinates") !== "";
 }
 
+/**
+ *
+ */
 export function hazards() {
   return get("_spacegateHazards");
 }
 
+/**
+ *
+ */
 export function planetName() {
   return get("_spacegatePlanetName");
 }
 
+/**
+ *
+ */
 export function planetCoords() {
   return get("_spacegateCoordinates");
 }
 
+/**
+ *
+ */
 export function plantLife() {
   return get("_spacegatePlantLife");
 }
 
+/**
+ *
+ */
 export function animalLife() {
   return get("_spacegateAnimalLife");
 }
 
+/**
+ *
+ */
 export function intelligentLife() {
   return get("_spacegateIntelligentLife");
 }
 
+/**
+ *
+ */
 export function ruins() {
   return get("_spacegateRuins");
 }
 
+/**
+ *
+ */
 export function spants() {
   return get("_spacegateSpant");
 }
 
+/**
+ *
+ */
 export function murderBots() {
   return get("_spacegateMurderbot");
 }
 
+/**
+ *
+ * @param hazards
+ */
 export function hazardEquipment(hazards: string): Item[] {
   const hazardEquipment = {
     "toxic atmosphere": $item`filter helmet`,
@@ -64,6 +104,9 @@ export function hazardEquipment(hazards: string): Item[] {
     .map(([, item]) => item);
 }
 
+/**
+ *
+ */
 export function getHazardEquipment(): void {
   const equipment = hazardEquipment(hazards());
 
@@ -82,6 +125,10 @@ type Vaccine =
   | "Stats"
   | "Monster Level";
 
+/**
+ *
+ * @param choice
+ */
 export function getVaccine(choice: Vaccine): void {
   if (get("_spacegateVaccine")) {
     return;
@@ -101,6 +148,10 @@ export function getVaccine(choice: Vaccine): void {
   cliExecute(`spacegate vaccine ${num}`);
 }
 
+/**
+ *
+ * @param address
+ */
 export function dial(address: string): void {
   if (!have() || dialled()) {
     //cannot dial if we already have or don't own it.

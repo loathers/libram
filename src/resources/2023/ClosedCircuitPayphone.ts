@@ -129,3 +129,10 @@ export function chooseQuest(
 
   return get("questRufus") !== "unstarted";
 }
+
+/**
+ * @returns Array containing all shadow rift locations
+ */
+export function rifts(): Location[] {
+  return [...RIFTS];
+}

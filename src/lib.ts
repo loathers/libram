@@ -1,7 +1,5 @@
 /** @module GeneralLibrary */
-import "core-js/modules/es.object.entries";
-import "core-js/features/array/flat";
-
+import flat from "array.prototype.flat";
 import {
   appearanceRates,
   autosellPrice,
@@ -715,10 +713,11 @@ export const holidayWanderers = new Map<string, Monster[]>([
  *
  */
 export function getTodaysHolidayWanderers(): Monster[] {
-  return holiday()
-    .split("/")
-    .map((holiday) => holidayWanderers.get(holiday) ?? [])
-    .flat();
+  return flat(
+    holiday()
+      .split("/")
+      .map((holiday) => holidayWanderers.get(holiday) ?? [])
+  );
 }
 
 /**

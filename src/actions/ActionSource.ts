@@ -1,4 +1,6 @@
+import flat from "array.prototype.flat";
 import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
+
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
 import { sum } from "../utils";
@@ -182,7 +184,7 @@ export class ActionSource {
       return null;
     }
     return new ActionSource(
-      [...actions.map((action) => action.source).flat()],
+      [...flat(actions.map((action) => action.source))],
       () => sum(actions, (action) => action.potential()),
       Macro.step(...actions.map((action) => action.macro)),
       constraints

@@ -31,6 +31,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.15.0",
     "@tsconfig/node16": "^1.0.2",
+    "@types/array.prototype.flat": "^1.2.1",
     "@types/jest": "^27.0.1",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^16.11.11",
@@ -61,7 +62,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.2",
-    "core-js": "^3.21.0"
+    "array.prototype.flat": "^1.3.1"
   },
   "peerDependencies": {
     "kolmafia": "^5.26781.0"

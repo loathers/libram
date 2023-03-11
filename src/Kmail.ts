@@ -1,5 +1,3 @@
-import "core-js/modules/es.object.entries";
-
 import {
   extractItems,
   extractMeat,

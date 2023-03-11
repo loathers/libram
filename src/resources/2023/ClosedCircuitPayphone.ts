@@ -75,7 +75,6 @@ const RIFTS: readonly Location[] = Array.from(Object.values(INGRESS_RIFTS));
  * @param options.drops Set to an array of item drops you want to come from monsters in the rift
  * @param options.otherFilter Set an optional additional filtering function not covered by the above logic
  * @param options.sortBy Set a function used to compare valid rifts between eachother; bigger numbers are better
- * @param options
  * @returns A rift that meets the criteria you specify, if one exists
  */
 export function chooseRift(options: {

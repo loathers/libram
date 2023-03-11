@@ -144,6 +144,7 @@ export function effect(station: Station): Effect | null {
 
 /**
  * Returns an effect--if one exists--for a given train station, assuming it's been primed by the coal station
+ *
  * @param station The train station to check the doubled effect of
  * @returns The effect associated with given station, under the influence of coal
  */
@@ -211,7 +212,8 @@ const pieces: Station[] = [
 /**
  * Converts a given station to the integer value KoL associates with them
  *
- * @param station The integer value KoL assigns the train station in question
+ * @param station The station in question
+ * @returns The integer value KoL assigns the train station in question
  */
 function stationToInt(station: Station): number {
   return pieces.indexOf(station);

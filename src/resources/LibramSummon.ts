@@ -93,7 +93,8 @@ export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
 }
 
 /**
- *
+ * Determines the best libram to cast, based on expected meat value in mall
+ * @returns The best libram to cast, based on expected meat value in mall
  */
 export function bestLibramToCast(): Skill | null {
   const arr = Array.from(possibleLibramSummons().entries());

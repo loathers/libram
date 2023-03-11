@@ -44,7 +44,8 @@ export const RainDohBlackBox = new Copier(
 );
 
 /**
- *
+ * Determines whether you can still use a spooky putty sheet
+ * @returns Whether you can still use a spooky putty sheet
  */
 export function couldUseSpookyPuttySheet(): boolean {
   return (

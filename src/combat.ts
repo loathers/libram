@@ -26,7 +26,7 @@ const MACRO_NAME = "Script Autoattack Macro";
 /**
  * Get the KoL native ID of the macro with name name.
  *
- * @param name
+ * @param name Name of the macro
  * @category Combat
  * @returns {number} The macro ID.
  */
@@ -51,8 +51,10 @@ export function getMacroId(name = MACRO_NAME): number {
 
 type ItemOrName = Item | string;
 /**
- *
- * @param itemOrName
+ * Converts an item name to a Item, or passes through an existing instance of Item
+ * 
+ * @param itemOrName Item name or Item instance
+ * @returns KoLmafia Item instance
  */
 function itemOrNameToItem(itemOrName: ItemOrName) {
   return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
@@ -64,8 +66,10 @@ const substringCombatItems = $items`spider web, really sticky spider web, dictio
 const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Snipe, Cleave, Boil, Slice, Rainbow`;
 
 /**
- *
- * @param itemOrItems
+ * Create a string of the item or items provided that is compatible with BALLS syntax and is non-ambiguous
+ * 
+ * @param itemOrItems Item name, item instance, or 2-tuple of item name or item instance
+ * @returns BALLS macro-compatible value for item or items provided
  */
 function itemOrItemsBallsMacroName(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
@@ -81,8 +85,10 @@ function itemOrItemsBallsMacroName(
 }
 
 /**
- *
- * @param itemOrItems
+ * Generate a BALLS macro condition to check wither the player has either a single or a 2-tuple of combat items
+ * 
+ * @param itemOrItems Single or 2-tuple of combat items
+ * @returns BALLS macro condition
  */
 function itemOrItemsBallsMacroPredicate(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
@@ -107,8 +113,10 @@ type PreBALLSPredicate =
 
 type SkillOrName = Skill | string;
 /**
- *
- * @param skillOrName
+ * Converts a skill name to a Skill, or passes through an existing instance of Skill
+ * 
+ * @param skillOrName Skill name or Skill instance
+ * @returns KoLmafia Skill instance
  */
 function skillOrNameToSkill(skillOrName: SkillOrName) {
   if (typeof skillOrName === "string") {
@@ -119,8 +127,10 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 }
 
 /**
- *
- * @param skillOrName
+ * Get a skill name in a form that is appropriate for BALLS macros
+ * 
+ * @param skillOrName Skill name or Skill instance
+ * @returns BALLS macro-suitable skill name
  */
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
@@ -152,6 +162,8 @@ export class Macro {
 
   /**
    * Convert macro to string.
+   *
+   * @returns BALLS macro
    */
   toString(): string {
     return (this.components.join(";") + ";").replace(/;;+/g, ";");
@@ -187,6 +199,8 @@ export class Macro {
 
   /**
    * Load a saved macro from the Mafia property.
+   * 
+   * @returns Loaded macro text
    */
   static load<T extends Macro>(this: Constructor<T>): T {
     return new this().step(...get(Macro.SAVED_MACRO_PROPERTY).split(";"));
@@ -228,6 +242,8 @@ export class Macro {
 
   /**
    * Submit the built macro to KoL. Only works inside combat.
+   * 
+   * @returns Contents of the fight page after macro submission
    */
   submit(): string {
     const final = this.toString();
@@ -666,6 +682,7 @@ export class Macro {
    * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, unmutated.
    *
    * @param macro The macro to place in the if_ statement
+   * @returns This macro with supplied macro wapped in if statement matching holiday wanderers
    */
   ifHolidayWanderer(macro: Macro): this {
     const todaysWanderers = getTodaysHolidayWanderers();
@@ -679,6 +696,7 @@ export class Macro {
    * Create a new macro starting with an ifHolidayWanderer step.
    *
    * @param macro The macro to place inside the if_ statement
+   * @returns New macro with supplied macro wrapped in if statement matching holiday wanderers
    */
   static ifHolidayWanderer<T extends Macro>(
     this: Constructor<T>,
@@ -691,6 +709,7 @@ export class Macro {
    * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, with the input macro appended.
    *
    * @param macro The macro to place in the if_ statement.
+   * @returns This macro with supplied macro wrapped in if statement matching monsters that are not holiday wanderers
    */
   ifNotHolidayWanderer(macro: Macro): this {
     const todaysWanderers = getTodaysHolidayWanderers();
@@ -704,6 +723,7 @@ export class Macro {
    * Create a new macro starting with an ifNotHolidayWanderer step.
    *
    * @param macro The macro to place inside the if_ statement
+   * @returns New macro with supplied macro wrapped in if statement matching monsters that are not holiday wanderers
    */
   static ifNotHolidayWanderer<T extends Macro>(
     this: Constructor<T>,

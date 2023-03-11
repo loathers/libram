@@ -1,11 +1,11 @@
 import { Monster } from "kolmafia";
 
 export class Copier {
-  private couldCopy: () => boolean;
-  private prepare: (() => boolean) | null;
-  private canCopy: () => boolean;
-  private copiedMonster: () => Monster | null;
-  private fightCopy: (() => boolean) | null = null;
+  readonly couldCopy: () => boolean;
+  readonly prepare: (() => boolean) | null;
+  readonly canCopy: () => boolean;
+  readonly copiedMonster: () => Monster | null;
+  readonly fightCopy: (() => boolean) | null = null;
 
   constructor(
     couldCopy: () => boolean,
@@ -20,22 +20,4 @@ export class Copier {
     this.copiedMonster = copiedMonster;
     if (fightCopy) this.fightCopy = fightCopy;
   }
-
-  // static PrintScreenButton = new Copier(
-  //   $item`print screen button`,
-  //   null,
-  //   $item`screencapped monster`,
-  //   () => property.getMonster(`screencappedMonster`),
-  //   () => 1,
-  //   () => use($item`screencapped monster`)
-  // );
-
-  // static PulledGreenTaffy = new Copier(
-  //   $item`pulled green taffy`,
-  //   null,
-  //   $item`envyfish egg`,
-  //   () => property.getMonster(`screencappedMonster`),
-  //   () => (property.getBoolean("_envyfishEggUsed") ? 0 : 1),
-  //   () => use($item`envyfish egg`)
-  // );
 }

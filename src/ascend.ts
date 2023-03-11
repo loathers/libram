@@ -27,7 +27,11 @@ export enum Lifestyle {
 }
 
 /**
+ * Get a mapping of permed skills to the extent to which they're permed.
  *
+ * If a skill is not permed at all, it will not appear in the mapping.
+ *
+ * @returns Permed skills mapping
  */
 export function permedSkills(): Map<Skill, Lifestyle> {
   return new Map(
@@ -142,14 +146,16 @@ type MoonSign =
   | "gnomish gnomads camp";
 
 /**
+ * Determine the id of the appropriate moon sign.
  *
- * @param moon
- * @param playerClass
+ * @param moon Either a moon sign or the desired unlocked zone name
+ * @param playerClass Class, required for working out a moon sign based on the desired zone
+ * @returns Moon sign id
  */
 function toMoonId(moon: MoonSign, playerClass: Class): number {
   if (typeof moon === "number") return moon;
 
-  const offset = (): number => {
+  const offset = () => {
     switch (playerClass.primestat) {
       case $stat`Muscle`:
         return 0;
@@ -200,7 +206,9 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
 }
 
 /**
+ * Determine if player is currently in Valhalla
  *
+ * @returns Whether player is in Valhalla
  */
 function isInValhalla(): boolean {
   const charPaneText = visitUrl("charpane.php");
@@ -222,20 +230,9 @@ function isInValhalla(): boolean {
  * @param moon Your moon sign as a string, or the zone you're looking for as a string
  * @param consumable From the astral deli. Pick the container item, not the product.
  * @param pet From the astral pet store.
- * @param permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
- */
-
-/**
- *
- * @param path
- * @param playerClass
- * @param lifestyle
- * @param moon
- * @param consumable
- * @param pet
- * @param permOptions
- * @param permOptions.permSkills
- * @param permOptions.neverAbort
+ * @param permOptions Options for perming during a player's stay in Valhalla
+ * @param permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param permOptions.neverAbort Whether the ascension shouold abort on failure
  */
 export function ascend(
   path: Path,
@@ -330,15 +327,14 @@ export function ascend(
 /**
  * Sets up various iotms you may want to use in the coming ascension
  *
- * @param ascensionItems.garden Garden to switch to.
- * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
- * @param throwOnFail If true, this will throw an error when it fails to switch something
- * @param ascensionItems.eudora
- * @param ascensionItems.chateau
- * @param ascensionItems.chateau.desk
- * @param ascensionItems.chateau.ceiling
- * @param ascensionItems.chateau.nightstand
- * @param ascensionItems.throwOnFail
+ * @param ascensionPrep Configuration for various ascension prep settings. Any ommitted key will be kept as-is
+ * @param ascensionPrep.garden Garden to which to switch
+ * @param ascensionPrep.eudora Eudora to which to switch
+ * @param ascensionPrep.chateau Chateau configuration
+ * @param ascensionPrep.chateau.desk Chateau desk configuration
+ * @param ascensionPrep.chateau.ceiling Chateau ceiling configuration
+ * @param ascensionPrep.chateau.nightstand Chateau nightstand configuration
+ * @param ascensionPrep.throwOnFail If true, this will throw an error when it fails to switch something
  */
 export function prepareAscension({
   garden,

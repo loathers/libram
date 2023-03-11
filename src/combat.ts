@@ -52,7 +52,7 @@ export function getMacroId(name = MACRO_NAME): number {
 type ItemOrName = Item | string;
 /**
  * Converts an item name to a Item, or passes through an existing instance of Item
- * 
+ *
  * @param itemOrName Item name or Item instance
  * @returns KoLmafia Item instance
  */
@@ -67,7 +67,7 @@ const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing,
 
 /**
  * Create a string of the item or items provided that is compatible with BALLS syntax and is non-ambiguous
- * 
+ *
  * @param itemOrItems Item name, item instance, or 2-tuple of item name or item instance
  * @returns BALLS macro-compatible value for item or items provided
  */
@@ -86,7 +86,7 @@ function itemOrItemsBallsMacroName(
 
 /**
  * Generate a BALLS macro condition to check wither the player has either a single or a 2-tuple of combat items
- * 
+ *
  * @param itemOrItems Single or 2-tuple of combat items
  * @returns BALLS macro condition
  */
@@ -114,7 +114,7 @@ type PreBALLSPredicate =
 type SkillOrName = Skill | string;
 /**
  * Converts a skill name to a Skill, or passes through an existing instance of Skill
- * 
+ *
  * @param skillOrName Skill name or Skill instance
  * @returns KoLmafia Skill instance
  */
@@ -128,7 +128,7 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 
 /**
  * Get a skill name in a form that is appropriate for BALLS macros
- * 
+ *
  * @param skillOrName Skill name or Skill instance
  * @returns BALLS macro-suitable skill name
  */
@@ -199,7 +199,7 @@ export class Macro {
 
   /**
    * Load a saved macro from the Mafia property.
-   * 
+   *
    * @returns Loaded macro text
    */
   static load<T extends Macro>(this: Constructor<T>): T {
@@ -242,7 +242,7 @@ export class Macro {
 
   /**
    * Submit the built macro to KoL. Only works inside combat.
-   * 
+   *
    * @returns Contents of the fight page after macro submission
    */
   submit(): string {

@@ -18,6 +18,8 @@ export const item = Item.get("autumn-aton");
 
 /**
  * Is the autumn-aton currently in your inventory, available to deploy?
+ *
+ * @returns The whether the autumn-aton is currently available for deployment
  */
 export function available(): boolean {
   return availableAmount(item) > 0;
@@ -25,14 +27,18 @@ export function available(): boolean {
 
 /**
  * Do you own the autumn-aton?
+ *
+ * @returns Whether you are an autumn-aton `have`r
  */
 export function have(): boolean {
   return get("hasAutumnaton") || available();
 }
 
 /**
+ * Internal function used to parse the fallbot's choice adventure to determine which zones are currently available
  *
- * @param html
+ * @param html The pagetext of the fallbot's choice adventure
+ * @returns The locations currently available to send the fallbot to
  */
 function checkLocations(html: string): Location[] {
   return xpath(
@@ -137,7 +143,7 @@ export function turnsLeft(): number {
 }
 
 /**
- *
+ * @returns The number of leg-upgrades your autumn-aton has installed
  */
 export function legs(): number {
   return currentUpgrades().filter((u) => u.includes("leg")).length;
@@ -199,8 +205,10 @@ const UNIQUES = {
 };
 
 /**
+ * Determines and returns the upgrade and item drop associated with the given location
  *
- * @param location
+ * @param location The location to check the expected autumn-aton-unique drops of
+ * @returns `null` if the location has no upgrade or drop; otherwise, the upgrade and the autumn-aton item associated with that item
  */
 export function getUniques(location: Location): {
   upgrade: Upgrade;

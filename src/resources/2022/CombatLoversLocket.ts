@@ -10,11 +10,10 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp } from "../../utils";
 
-// eslint-disable-next-line libram/verify-constants
 export const locket = $item`Combat Lover's Locket`;
 
 /**
- *
+ * @returns Whether you `have` the Combat Lover's Locket
  */
 export function have(): boolean {
   return haveItem(locket);

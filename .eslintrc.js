@@ -23,6 +23,13 @@ module.exports = {
     "jsdoc/require-param-type": 0,
     "jsdoc/require-returns-type": 0,
     "jsdoc/require-property-type": 0,
+    "jsdoc/check-tag-names": [
+      "error",
+      {
+        // TypeDoc defines some additional valid tags https://typedoc.org/guides/tags/
+        definedTags: ["category", "packageDocumentation"],
+      },
+    ],
   },
   settings: {
     "import/parsers": {

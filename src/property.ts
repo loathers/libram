@@ -139,12 +139,6 @@ export const getStat = createMafiaClassPropertyGetter(Stat, toStat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall, toThrall);
 
-/**
- * Returns the value of a mafia property, either built in or custom
- *
- * @param property Name of the property
- * @param _default Default value for the property to take if not set
- */
 export function get(property: BooleanProperty): boolean;
 export function get(property: BooleanProperty, _default: boolean): boolean;
 export function get(property: NumericProperty): number;
@@ -173,9 +167,11 @@ export function get(property: string, _default: boolean): boolean;
 export function get(property: string, _default: number): number;
 export function get(property: string, _default?: string): string;
 /**
+ * Gets the value of a mafia property, either built in or custom
  *
- * @param property
- * @param _default
+ * @param property Name of the property
+ * @param _default Default value for the property to take if not set
+ * @returns Value of the mafia property
  */
 export function get(property: string, _default?: unknown): unknown {
   const value = getString(property);
@@ -223,12 +219,6 @@ export function get(property: string, _default?: unknown): unknown {
   }
 }
 
-/**
- * Sets the value of a mafia property, either built in or custom
- *
- * @param property Name of the property
- * @param value Value to give the property
- */
 export function set(property: BooleanProperty, value: boolean): void;
 export function set(property: NumericProperty, value: number): void;
 export function set(
@@ -245,11 +235,11 @@ export function set<D extends { toString(): string }>(
   property: string,
   value: D
 ): void;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 /**
+ * Sets the value of a mafia property, either built in or custom
  *
- * @param property
- * @param value
+ * @param property Name of the property
+ * @param value Value to give the property
  */
 export function set<D extends { toString(): string }>(
   property: string,
@@ -264,8 +254,9 @@ type Properties = Partial<{
 }>;
 
 /**
+ * Sets the value of a set of mafia properties
  *
- * @param properties
+ * @param properties Set of properties
  */
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {
@@ -274,68 +265,77 @@ export function setProperties(properties: Properties): void {
 }
 
 /**
+ * Carries out a callback during which a set of properties will be set as supplied
  *
- * @param properties
- * @param callback
+ * @param properties Properties to set during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
  */
-export function withProperties(
+export function withProperties<T>(
   properties: Properties,
-  callback: () => void
-): void {
+  callback: () => T
+): T {
   const propertiesBackup = Object.fromEntries(
     Object.entries(properties).map(([prop]) => [prop, get(prop)])
   ) as Properties;
   setProperties(properties);
   try {
-    callback();
+    return callback();
   } finally {
     setProperties(propertiesBackup);
   }
 }
 
 /**
+ * Carries out a callback during which a property will be set as supplied
  *
- * @param property
- * @param value
- * @param callback
+ * @param property Property to set during callback
+ * @param value Value to set property during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
  */
-export function withProperty<P extends KnownProperty>(
+export function withProperty<P extends KnownProperty, T>(
   property: P,
   value: unknown,
-  callback: () => void
-): void {
-  withProperties({ [property]: value }, callback);
+  callback: () => T
+): T {
+  return withProperties({ [property]: value }, callback);
 }
 
 /**
+ * Carries out a callback during which a set of choices will be handled as supplied
  *
- * @param callback
+ * @param choices Choices to set during callback
+ * @param callback Callback to execute with set choices
+ * @returns Return value of the supplied callback
  */
-export function withChoices(
+export function withChoices<T>(
   choices: { [choice: number]: number | string },
-  callback: () => void
-): void {
+  callback: () => T
+): T {
   const properties = Object.fromEntries(
     Object.entries(choices).map(([choice, option]) => [
       `choiceAdventure${choice}` as NumericOrStringProperty,
       option,
     ])
   );
-  withProperties(properties, callback);
+  return withProperties(properties, callback);
 }
 
 /**
+ * Carries out a callback during which a choice will be handled as supplied
  *
- * @param choice
- * @param value
- * @param callback
+ * @param choice Choice to set during callback
+ * @param value How to handle choice during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
  */
-export function withChoice(
+export function withChoice<T>(
   choice: number,
   value: number | string,
-  callback: () => void
-): void {
-  withChoices({ [choice]: value }, callback);
+  callback: () => T
+): T {
+  return withChoices({ [choice]: value }, callback);
 }
 
 export class PropertiesManager {

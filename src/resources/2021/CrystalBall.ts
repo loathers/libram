@@ -13,7 +13,9 @@ import { get } from "../../property";
 
 export const orb = Item.get("miniature crystal ball");
 /**
+ * Determines whether you `have` the Miniature Crystal Ball
  *
+ * @returns Whether you `have` the Miniature Crystal Ball
  */
 export function have(): boolean {
   return availableAmount(orb) > 0;

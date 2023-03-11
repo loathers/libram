@@ -221,18 +221,20 @@ export function printModtrace(
     );
   }
 
-  let total = 0.0;
+  const initialVal =
+    baseModifier.toLowerCase() === "familiar weight"
+      ? (() => {
+          const wt = familiarWeight(myFamiliar());
+          print(`[Familiar Weight] Base weight (${wt})`);
+          return wt;
+        })()
+      : 0;
   const modifierVals = new Map(
-    modtraceModifiers.map((modifier) => [modifier, 0])
+    modtraceModifiers.map((modifier) => [modifier, initialVal])
   ); // Maps modifier name to its value
   const lowerCaseModifiers = inputModifiers.map((modifier) =>
     modifier.toLowerCase()
   );
-
-  if (baseModifier.toLowerCase() === "familiar weight") {
-    total += familiarWeight(myFamiliar());
-    print(`[Familiar Weight] Base weight (${total})`);
-  }
 
   Array.from(htmlOutput.match(RegExp("<tr>(.*?)</tr>", "g")) ?? [])
     .slice(1)
@@ -262,7 +264,7 @@ export function printModtrace(
         });
     });
 
-  total += sumNumbers(
+  const total = sumNumbers(
     modtraceModifiers.map((modifier) => {
       if (lowerCaseModifiers.includes(modifier.toLowerCase())) {
         let modVal = modifierVals.get(modifier) ?? 0;

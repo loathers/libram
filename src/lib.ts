@@ -32,11 +32,13 @@ import {
   Location,
   mallPrice,
   Monster,
+  myClass,
   myEffects,
   myFamiliar,
   myFullness,
   myInebriety,
   myPath,
+  myPrimestat,
   mySpleenUse,
   myThrall,
   myTurncount,
@@ -54,6 +56,7 @@ import {
   visitUrl,
 } from "kolmafia";
 
+import logger from "./logger";
 import { get } from "./property";
 import {
   $class,
@@ -65,8 +68,7 @@ import {
   $skill,
   $stat,
 } from "./template-string";
-import { chunk } from "./utils";
-import { logger } from ".";
+import { makeByXFunction, chunk } from "./utils";
 
 /**
  * Returns the current maximum Accordion Thief songs the player can have in their head
@@ -834,3 +836,16 @@ export function examine(thing: Item | Familiar | Effect | Skill): string {
       : `desc_skill.php?whichskill=${toInt(thing)}`;
   return visitUrl(url);
 }
+
+/**
+ * Picks an option based on your primestat
+ * @param options An object keyed by stat; it must either contain all stats, or have a `default` parameter.
+ * @returns The option corresponding to your primestat.
+ */
+export const byStat = makeByXFunction(() => myPrimestat().toString());
+/**
+ * Picks an option based on your player class
+ * @param options An object keyed by player class; it must either contain all classes, or have a `default` parameter.
+ * @returns The option corresponding to your player class.
+ */
+export const byClass = makeByXFunction(() => myClass().toString());

@@ -182,47 +182,50 @@ export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
  */
 
 export function printModtrace(
-  modifiers: string | string[],
+  inputModifiers: string | string[], // the user's list of modifiers to look up
   baseModifier?: string
 ): void {
-  if (typeof modifiers === "string")
-    return printModtrace([modifiers], modifiers);
-  else if (modifiers.length === 0) return;
+  if (typeof inputModifiers === "string")
+    return printModtrace([inputModifiers], inputModifiers);
+  else if (inputModifiers.length === 0) return;
   else if (!baseModifier) {
-    return modifiers
+    return inputModifiers
       .filter(
         (mod1) =>
-          !modifiers.some((mod2) => mod2 !== mod1 && mod1.includes(mod2))
+          !inputModifiers.some((mod2) => mod2 !== mod1 && mod1.includes(mod2))
       )
       .forEach((baseMod) =>
         printModtrace(
-          modifiers.filter((mod) => mod.includes(baseMod)),
+          inputModifiers.filter((mod) => mod.includes(baseMod)),
           baseMod
         )
       );
   }
 
   const htmlOutput = cliExecuteOutput(`modtrace ${baseModifier}`);
-  const headers = Array.from(
+  // The list of matched modifiers that mafia returns
+  const modtraceModifiers = Array.from(
     htmlOutput.match(RegExp("(>)(.*?)(</td>)", "g")) ?? []
   )
     .map((s) => s.slice(1, -5))
     .slice(2);
 
   if (
-    !headers.some(
-      (header) => header.toLowerCase() === baseModifier.toLowerCase()
+    !modtraceModifiers.some(
+      (modifier) => modifier.toLowerCase() === baseModifier.toLowerCase()
     )
   ) {
     return print(
-      `Could not find exact string match of ${baseModifier} in ${modifiers.toString()}`,
+      `Could not find exact string match of ${baseModifier} in ${inputModifiers.toString()}`,
       "red"
     );
   }
 
   let total = 0.0;
-  const modifierVals = new Map(headers.map((header) => [header, 0])); // Maps modifier name to its value
-  const lowerCaseModifiers = modifiers.map((modifier) =>
+  const modifierVals = new Map(
+    modtraceModifiers.map((modifier) => [modifier, 0])
+  ); // Maps modifier name to its value
+  const lowerCaseModifiers = inputModifiers.map((modifier) =>
     modifier.toLowerCase()
   );
 
@@ -247,20 +250,20 @@ export function printModtrace(
         .forEach((e, idx) => {
           const val = parseInt(e);
           modifierVals.set(
-            headers[idx],
-            (modifierVals.get(headers[idx]) ?? 0) + val
+            modtraceModifiers[idx],
+            (modifierVals.get(modtraceModifiers[idx]) ?? 0) + val
           );
           if (
             val !== 0 &&
-            lowerCaseModifiers.includes(headers[idx].toLowerCase())
+            lowerCaseModifiers.includes(modtraceModifiers[idx].toLowerCase())
           ) {
-            print(`[${headers[idx]}] ${rowName} (${val.toFixed(1)})`);
+            print(`[${modtraceModifiers[idx]}] ${rowName} (${val.toFixed(1)})`);
           }
         });
     });
 
   total += sumNumbers(
-    headers.map((modifier) => {
+    modtraceModifiers.map((modifier) => {
       if (lowerCaseModifiers.includes(modifier.toLowerCase())) {
         let modVal = modifierVals.get(modifier) ?? 0;
         if (

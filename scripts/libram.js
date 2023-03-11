@@ -1683,6 +1683,12 @@ __export(src_exports, {
   bestLibramToCast: function() {
     return bestLibramToCast;
   },
+  byClass: function() {
+    return byClass;
+  },
+  byStat: function() {
+    return byStat;
+  },
   canRememberSong: function() {
     return canRememberSong;
   },
@@ -1875,6 +1881,9 @@ __export(src_exports, {
   logger: function() {
     return logger_default;
   },
+  makeByXFunction: function() {
+    return makeByXFunction;
+  },
   maxBy: function() {
     return maxBy;
   },
@@ -1953,6 +1962,9 @@ __export(src_exports, {
   tryFindFreeRun: function() {
     return tryFindFreeRun;
   },
+  undelay: function() {
+    return undelay;
+  },
   uneffect: function() {
     return uneffect;
   },
@@ -1978,7 +1990,7 @@ var import_kolmafia7 = require("kolmafia");
 
 // src/combat.ts
 init_kolmafia_polyfill();
-var import_kolmafia4 = require("kolmafia");
+var import_kolmafia5 = require("kolmafia");
 
 // src/lib.ts
 init_kolmafia_polyfill();
@@ -1996,7 +2008,90 @@ $({
 });
 
 // src/lib.ts
-var import_flat = __toESM(require_flat4()), import_kolmafia3 = require("kolmafia");
+var import_flat = __toESM(require_flat4()), import_kolmafia4 = require("kolmafia");
+
+// src/logger.ts
+init_kolmafia_polyfill();
+var import_kolmafia = require("kolmafia"), _defaultHandlers;
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor))
+    throw new TypeError("Cannot call a class as a function");
+}
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+function _createClass(Constructor, protoProps, staticProps) {
+  return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
+}
+function _defineProperty(obj, key, value) {
+  return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
+}
+var LogLevels;
+(function(LogLevels2) {
+  LogLevels2[LogLevels2.NONE = 0] = "NONE", LogLevels2[LogLevels2.ERROR = 1] = "ERROR", LogLevels2[LogLevels2.WARNING = 2] = "WARNING", LogLevels2[LogLevels2.INFO = 3] = "INFO", LogLevels2[LogLevels2.DEBUG = 4] = "DEBUG";
+})(LogLevels || (LogLevels = {}));
+var defaultHandlers = (_defaultHandlers = {}, _defineProperty(_defaultHandlers, LogLevels.INFO, function(message) {
+  (0, import_kolmafia.printHtml)("<b>[Libram Info]</b> ".concat(message)), (0, import_kolmafia.logprint)("[Libram] ".concat(message));
+}), _defineProperty(_defaultHandlers, LogLevels.WARNING, function(message) {
+  (0, import_kolmafia.printHtml)('<span style="background: orange; color: white;"><b>[Libram Warning]</b> '.concat(message, "</span>")), (0, import_kolmafia.logprint)("[Libram] ".concat(message));
+}), _defineProperty(_defaultHandlers, LogLevels.ERROR, function(error2) {
+  (0, import_kolmafia.printHtml)('<span style="background: red; color: white;"><b>[Libram Error]</b> '.concat(error2.toString(), "</span>")), (0, import_kolmafia.logprint)("[Libram] ".concat(error2));
+}), _defineProperty(_defaultHandlers, LogLevels.DEBUG, function(message) {
+  (0, import_kolmafia.printHtml)('<span style="background: red; color: white;"><b>[Libram Debug]</b> '.concat(message, "</span>")), (0, import_kolmafia.logprint)("[Libram] ".concat(message));
+}), _defaultHandlers), Logger = /* @__PURE__ */ function() {
+  function Logger2() {
+    _classCallCheck(this, Logger2), _defineProperty(this, "handlers", defaultHandlers);
+  }
+  return _createClass(Logger2, [{
+    key: "level",
+    get: function() {
+      return Logger2.currentLevel;
+    }
+  }, {
+    key: "setLevel",
+    value: function(level) {
+      Logger2.currentLevel = level;
+    }
+  }, {
+    key: "setHandler",
+    value: function(level, callback) {
+      this.handlers[level] = callback;
+    }
+  }, {
+    key: "log",
+    value: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function(level, message) {
+        this.level >= level && this.handlers[level](message);
+      }
+    )
+  }, {
+    key: "info",
+    value: function(message) {
+      this.log(LogLevels.INFO, message);
+    }
+  }, {
+    key: "warning",
+    value: function(message) {
+      this.log(LogLevels.WARNING, message);
+    }
+  }, {
+    key: "error",
+    value: function(message) {
+      this.log(LogLevels.ERROR, message);
+    }
+  }, {
+    key: "debug",
+    value: function(message) {
+      this.log(LogLevels.DEBUG, message);
+    }
+  }]), Logger2;
+}();
+_defineProperty(Logger, "currentLevel", LogLevels.ERROR);
+var logger_default = new Logger();
 
 // src/property.ts
 var property_exports = {};
@@ -2103,7 +2198,7 @@ $2({
 });
 
 // src/property.ts
-var import_kolmafia = require("kolmafia");
+var import_kolmafia2 = require("kolmafia");
 
 // src/propertyTyping.ts
 init_kolmafia_polyfill();
@@ -2187,27 +2282,27 @@ function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
     i % 2 ? ownKeys(Object(source), !0).forEach(function(key) {
-      _defineProperty(target, key, source[key]);
+      _defineProperty2(target, key, source[key]);
     }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
   return target;
 }
-function _classCallCheck(instance, Constructor) {
+function _classCallCheck2(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
 }
-function _defineProperties(target, props) {
+function _defineProperties2(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-function _createClass(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
+function _createClass2(Constructor, protoProps, staticProps) {
+  return protoProps && _defineProperties2(Constructor.prototype, protoProps), staticProps && _defineProperties2(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
-function _defineProperty(obj, key, value) {
+function _defineProperty2(obj, key, value) {
   return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
 function _slicedToArray(arr, i) {
@@ -2259,7 +2354,7 @@ function _arrayWithHoles(arr) {
 }
 var createPropertyGetter = function(transform) {
   return function(property, default_) {
-    var value = (0, import_kolmafia.getProperty)(property);
+    var value = (0, import_kolmafia2.getProperty)(property);
     return default_ !== void 0 && value === "" ? default_ : transform(value, property);
   };
 }, createMafiaClassPropertyGetter = function(Type, toType) {
@@ -2277,7 +2372,7 @@ var createPropertyGetter = function(transform) {
   return value === "true";
 }), getNumber = createPropertyGetter(function(value) {
   return Number(value);
-}), getBounty = createMafiaClassPropertyGetter(import_kolmafia.Bounty, import_kolmafia.toBounty), getClass = createMafiaClassPropertyGetter(import_kolmafia.Class, import_kolmafia.toClass), getCoinmaster = createMafiaClassPropertyGetter(import_kolmafia.Coinmaster, import_kolmafia.toCoinmaster), getEffect = createMafiaClassPropertyGetter(import_kolmafia.Effect, import_kolmafia.toEffect), getElement = createMafiaClassPropertyGetter(import_kolmafia.Element, import_kolmafia.toElement), getFamiliar = createMafiaClassPropertyGetter(import_kolmafia.Familiar, import_kolmafia.toFamiliar), getItem = createMafiaClassPropertyGetter(import_kolmafia.Item, import_kolmafia.toItem), getLocation = createMafiaClassPropertyGetter(import_kolmafia.Location, import_kolmafia.toLocation), getMonster = createMafiaClassPropertyGetter(import_kolmafia.Monster, import_kolmafia.toMonster), getPhylum = createMafiaClassPropertyGetter(import_kolmafia.Phylum, import_kolmafia.toPhylum), getServant = createMafiaClassPropertyGetter(import_kolmafia.Servant, import_kolmafia.toServant), getSkill = createMafiaClassPropertyGetter(import_kolmafia.Skill, import_kolmafia.toSkill), getSlot = createMafiaClassPropertyGetter(import_kolmafia.Slot, import_kolmafia.toSlot), getStat = createMafiaClassPropertyGetter(import_kolmafia.Stat, import_kolmafia.toStat), getThrall = createMafiaClassPropertyGetter(import_kolmafia.Thrall, import_kolmafia.toThrall);
+}), getBounty = createMafiaClassPropertyGetter(import_kolmafia2.Bounty, import_kolmafia2.toBounty), getClass = createMafiaClassPropertyGetter(import_kolmafia2.Class, import_kolmafia2.toClass), getCoinmaster = createMafiaClassPropertyGetter(import_kolmafia2.Coinmaster, import_kolmafia2.toCoinmaster), getEffect = createMafiaClassPropertyGetter(import_kolmafia2.Effect, import_kolmafia2.toEffect), getElement = createMafiaClassPropertyGetter(import_kolmafia2.Element, import_kolmafia2.toElement), getFamiliar = createMafiaClassPropertyGetter(import_kolmafia2.Familiar, import_kolmafia2.toFamiliar), getItem = createMafiaClassPropertyGetter(import_kolmafia2.Item, import_kolmafia2.toItem), getLocation = createMafiaClassPropertyGetter(import_kolmafia2.Location, import_kolmafia2.toLocation), getMonster = createMafiaClassPropertyGetter(import_kolmafia2.Monster, import_kolmafia2.toMonster), getPhylum = createMafiaClassPropertyGetter(import_kolmafia2.Phylum, import_kolmafia2.toPhylum), getServant = createMafiaClassPropertyGetter(import_kolmafia2.Servant, import_kolmafia2.toServant), getSkill = createMafiaClassPropertyGetter(import_kolmafia2.Skill, import_kolmafia2.toSkill), getSlot = createMafiaClassPropertyGetter(import_kolmafia2.Slot, import_kolmafia2.toSlot), getStat = createMafiaClassPropertyGetter(import_kolmafia2.Stat, import_kolmafia2.toStat), getThrall = createMafiaClassPropertyGetter(import_kolmafia2.Thrall, import_kolmafia2.toThrall);
 function get(property, _default) {
   var value = getString(property);
   if (isBooleanProperty(property)) {
@@ -2302,11 +2397,11 @@ function get(property, _default) {
     if (isStringProperty(property))
       return value;
   }
-  return _default instanceof import_kolmafia.Location ? getLocation(property, _default) : _default instanceof import_kolmafia.Monster ? getMonster(property, _default) : _default instanceof import_kolmafia.Familiar ? getFamiliar(property, _default) : _default instanceof import_kolmafia.Stat ? getStat(property, _default) : _default instanceof import_kolmafia.Phylum ? getPhylum(property, _default) : typeof _default == "boolean" ? value === "true" ? !0 : value === "false" ? !1 : _default : typeof _default == "number" ? value === "" ? _default : parseInt(value) : value === "" ? _default === void 0 ? "" : _default : value;
+  return _default instanceof import_kolmafia2.Location ? getLocation(property, _default) : _default instanceof import_kolmafia2.Monster ? getMonster(property, _default) : _default instanceof import_kolmafia2.Familiar ? getFamiliar(property, _default) : _default instanceof import_kolmafia2.Stat ? getStat(property, _default) : _default instanceof import_kolmafia2.Phylum ? getPhylum(property, _default) : typeof _default == "boolean" ? value === "true" ? !0 : value === "false" ? !1 : _default : typeof _default == "number" ? value === "" ? _default : parseInt(value) : value === "" ? _default === void 0 ? "" : _default : value;
 }
 function _set(property, value) {
   var stringValue = value === null ? "" : value.toString();
-  (0, import_kolmafia.setProperty)(property, stringValue);
+  (0, import_kolmafia2.setProperty)(property, stringValue);
 }
 function setProperties(properties) {
   for (var _i = 0, _Object$entries = Object.entries(properties); _i < _Object$entries.length; _i++) {
@@ -2327,7 +2422,7 @@ function withProperties(properties, callback) {
   }
 }
 function withProperty(property, value, callback) {
-  withProperties(_defineProperty({}, property, value), callback);
+  withProperties(_defineProperty2({}, property, value), callback);
 }
 function withChoices(choices2, callback) {
   var properties = Object.fromEntries(Object.entries(choices2).map(function(_ref3) {
@@ -2337,13 +2432,13 @@ function withChoices(choices2, callback) {
   withProperties(properties, callback);
 }
 function withChoice(choice, value, callback) {
-  withChoices(_defineProperty({}, choice, value), callback);
+  withChoices(_defineProperty2({}, choice, value), callback);
 }
 var PropertiesManager = /* @__PURE__ */ function() {
   function PropertiesManager2() {
-    _classCallCheck(this, PropertiesManager2), _defineProperty(this, "properties", {});
+    _classCallCheck2(this, PropertiesManager2), _defineProperty2(this, "properties", {});
   }
-  return _createClass(PropertiesManager2, [{
+  return _createClass2(PropertiesManager2, [{
     key: "storedValues",
     get: function() {
       return this.properties;
@@ -2380,7 +2475,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
   }, {
     key: "setChoice",
     value: function(choiceToSet, value) {
-      this.setChoices(_defineProperty({}, choiceToSet, value));
+      this.setChoices(_defineProperty2({}, choiceToSet, value));
     }
     /**
      * Resets the given properties to their original stored value. Does not delete entries from the manager.
@@ -2435,7 +2530,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
   }, {
     key: "setMinimumValue",
     value: function(property, value) {
-      return get(property, 0) < value ? (this.set(_defineProperty({}, property, value)), !0) : !1;
+      return get(property, 0) < value ? (this.set(_defineProperty2({}, property, value)), !0) : !1;
     }
     /**
      * Decrease a numeric property to the given value if necessary.
@@ -2446,7 +2541,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
   }, {
     key: "setMaximumValue",
     value: function(property, value) {
-      return get(property, 0) > value ? (this.set(_defineProperty({}, property, value)), !0) : !1;
+      return get(property, 0) > value ? (this.set(_defineProperty2({}, property, value)), !0) : !1;
     }
     /**
      * Creates a new PropertiesManager with identical stored values to this one.
@@ -2521,7 +2616,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
 
 // src/template-string.ts
 init_kolmafia_polyfill();
-var import_kolmafia2 = require("kolmafia");
+var import_kolmafia3 = require("kolmafia");
 
 // src/utils.ts
 init_kolmafia_polyfill();
@@ -2725,6 +2820,15 @@ function arrayEquals(left, right) {
     return element === right[index];
   });
 }
+function undelay(delayedObject) {
+  return typeof delayedObject == "function" ? delayedObject() : delayedObject;
+}
+function makeByXFunction(source) {
+  return function(options) {
+    var _options$val, val = undelay(source);
+    return "default" in options ? (_options$val = options[val]) !== null && _options$val !== void 0 ? _options$val : options.default : options[val];
+  };
+}
 
 // src/template-string.ts
 var concatTemplateString = function(literals) {
@@ -2749,20 +2853,20 @@ var concatTemplateString = function(literals) {
     var input = concatTemplateString.apply(void 0, [literals].concat(placeholders));
     return input === "" ? Type.all() : Type.get(splitByCommasWithEscapes(input));
   };
-}, $bounty = createSingleConstant(import_kolmafia2.Bounty), $bounties = createPluralConstant(import_kolmafia2.Bounty), $class = createSingleConstant(import_kolmafia2.Class), $classes = createPluralConstant(import_kolmafia2.Class), $coinmaster = createSingleConstant(import_kolmafia2.Coinmaster), $coinmasters = createPluralConstant(import_kolmafia2.Coinmaster), $effect = createSingleConstant(import_kolmafia2.Effect), $effects = createPluralConstant(import_kolmafia2.Effect), $element = createSingleConstant(import_kolmafia2.Element), $elements = createPluralConstant(import_kolmafia2.Element), $familiar = createSingleConstant(import_kolmafia2.Familiar), $familiars = createPluralConstant(import_kolmafia2.Familiar), $item = createSingleConstant(import_kolmafia2.Item), $items = createPluralConstant(import_kolmafia2.Item), $location = createSingleConstant(import_kolmafia2.Location), $locations = createPluralConstant(import_kolmafia2.Location), $monster = createSingleConstant(import_kolmafia2.Monster), $monsters = createPluralConstant(import_kolmafia2.Monster), $phylum = createSingleConstant(import_kolmafia2.Phylum), $phyla = createPluralConstant(import_kolmafia2.Phylum), $servant = createSingleConstant(import_kolmafia2.Servant), $servants = createPluralConstant(import_kolmafia2.Servant), $skill = createSingleConstant(import_kolmafia2.Skill), $skills = createPluralConstant(import_kolmafia2.Skill), $slot = createSingleConstant(import_kolmafia2.Slot), $slots = createPluralConstant(import_kolmafia2.Slot), $stat = createSingleConstant(import_kolmafia2.Stat), $stats = createPluralConstant(import_kolmafia2.Stat), $thrall = createSingleConstant(import_kolmafia2.Thrall), $thralls = createPluralConstant(import_kolmafia2.Thrall), $path = createSingleConstant(import_kolmafia2.Path), $paths = createPluralConstant(import_kolmafia2.Path);
+}, $bounty = createSingleConstant(import_kolmafia3.Bounty), $bounties = createPluralConstant(import_kolmafia3.Bounty), $class = createSingleConstant(import_kolmafia3.Class), $classes = createPluralConstant(import_kolmafia3.Class), $coinmaster = createSingleConstant(import_kolmafia3.Coinmaster), $coinmasters = createPluralConstant(import_kolmafia3.Coinmaster), $effect = createSingleConstant(import_kolmafia3.Effect), $effects = createPluralConstant(import_kolmafia3.Effect), $element = createSingleConstant(import_kolmafia3.Element), $elements = createPluralConstant(import_kolmafia3.Element), $familiar = createSingleConstant(import_kolmafia3.Familiar), $familiars = createPluralConstant(import_kolmafia3.Familiar), $item = createSingleConstant(import_kolmafia3.Item), $items = createPluralConstant(import_kolmafia3.Item), $location = createSingleConstant(import_kolmafia3.Location), $locations = createPluralConstant(import_kolmafia3.Location), $monster = createSingleConstant(import_kolmafia3.Monster), $monsters = createPluralConstant(import_kolmafia3.Monster), $phylum = createSingleConstant(import_kolmafia3.Phylum), $phyla = createPluralConstant(import_kolmafia3.Phylum), $servant = createSingleConstant(import_kolmafia3.Servant), $servants = createPluralConstant(import_kolmafia3.Servant), $skill = createSingleConstant(import_kolmafia3.Skill), $skills = createPluralConstant(import_kolmafia3.Skill), $slot = createSingleConstant(import_kolmafia3.Slot), $slots = createPluralConstant(import_kolmafia3.Slot), $stat = createSingleConstant(import_kolmafia3.Stat), $stats = createPluralConstant(import_kolmafia3.Stat), $thrall = createSingleConstant(import_kolmafia3.Thrall), $thralls = createPluralConstant(import_kolmafia3.Thrall), $path = createSingleConstant(import_kolmafia3.Path), $paths = createPluralConstant(import_kolmafia3.Path);
 
 // src/lib.ts
 var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34;
-function _defineProperties2(target, props) {
+function _defineProperties3(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-function _createClass2(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties2(Constructor.prototype, protoProps), staticProps && _defineProperties2(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
+function _createClass3(Constructor, protoProps, staticProps) {
+  return protoProps && _defineProperties3(Constructor.prototype, protoProps), staticProps && _defineProperties3(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
-function _classCallCheck2(instance, Constructor) {
+function _classCallCheck3(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
 }
@@ -2929,17 +3033,17 @@ function _taggedTemplateLiteral(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 function getSongLimit() {
-  return 3 + ((0, import_kolmafia3.booleanModifier)("Four Songs") ? 1 : 0) + (0, import_kolmafia3.numericModifier)("Additional Song");
+  return 3 + ((0, import_kolmafia4.booleanModifier)("Four Songs") ? 1 : 0) + (0, import_kolmafia4.numericModifier)("Additional Song");
 }
 function isSong(skillOrEffect) {
-  if (skillOrEffect instanceof import_kolmafia3.Effect && skillOrEffect.attributes.includes("song"))
+  if (skillOrEffect instanceof import_kolmafia4.Effect && skillOrEffect.attributes.includes("song"))
     return !0;
-  var skill2 = skillOrEffect instanceof import_kolmafia3.Effect ? (0, import_kolmafia3.toSkill)(skillOrEffect) : skillOrEffect;
+  var skill2 = skillOrEffect instanceof import_kolmafia4.Effect ? (0, import_kolmafia4.toSkill)(skillOrEffect) : skillOrEffect;
   return skill2.class === $class(_templateObject || (_templateObject = _taggedTemplateLiteral(["Accordion Thief"]))) && skill2.buff;
 }
 function getActiveEffects() {
-  return Object.keys((0, import_kolmafia3.myEffects)()).map(function(e) {
-    return import_kolmafia3.Effect.get(e);
+  return Object.keys((0, import_kolmafia4.myEffects)()).map(function(e) {
+    return import_kolmafia4.Effect.get(e);
   });
 }
 function getActiveSongs() {
@@ -2953,40 +3057,40 @@ function canRememberSong() {
   return getSongLimit() - getSongCount() >= quantity;
 }
 function getMonsterLocations(monster) {
-  return import_kolmafia3.Location.all().filter(function(location) {
-    return monster.name in (0, import_kolmafia3.appearanceRates)(location);
+  return import_kolmafia4.Location.all().filter(function(location) {
+    return monster.name in (0, import_kolmafia4.appearanceRates)(location);
   });
 }
 function getRemainingLiver() {
-  return (0, import_kolmafia3.inebrietyLimit)() - (0, import_kolmafia3.myInebriety)();
+  return (0, import_kolmafia4.inebrietyLimit)() - (0, import_kolmafia4.myInebriety)();
 }
 function getRemainingStomach() {
-  return (0, import_kolmafia3.fullnessLimit)() - (0, import_kolmafia3.myFullness)();
+  return (0, import_kolmafia4.fullnessLimit)() - (0, import_kolmafia4.myFullness)();
 }
 function getRemainingSpleen() {
-  return (0, import_kolmafia3.spleenLimit)() - (0, import_kolmafia3.mySpleenUse)();
+  return (0, import_kolmafia4.spleenLimit)() - (0, import_kolmafia4.mySpleenUse)();
 }
 function have(thing) {
   var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
-  if (thing instanceof import_kolmafia3.Effect)
-    return (0, import_kolmafia3.haveEffect)(thing) >= quantity;
-  if (thing instanceof import_kolmafia3.Familiar)
-    return (0, import_kolmafia3.haveFamiliar)(thing);
-  if (thing instanceof import_kolmafia3.Item)
-    return (0, import_kolmafia3.availableAmount)(thing) >= quantity;
-  if (thing instanceof import_kolmafia3.Servant)
-    return (0, import_kolmafia3.haveServant)(thing);
-  if (thing instanceof import_kolmafia3.Skill)
-    return (0, import_kolmafia3.haveSkill)(thing);
-  if (thing instanceof import_kolmafia3.Thrall) {
-    var thrall = (0, import_kolmafia3.myThrall)();
+  if (thing instanceof import_kolmafia4.Effect)
+    return (0, import_kolmafia4.haveEffect)(thing) >= quantity;
+  if (thing instanceof import_kolmafia4.Familiar)
+    return (0, import_kolmafia4.haveFamiliar)(thing);
+  if (thing instanceof import_kolmafia4.Item)
+    return (0, import_kolmafia4.availableAmount)(thing) >= quantity;
+  if (thing instanceof import_kolmafia4.Servant)
+    return (0, import_kolmafia4.haveServant)(thing);
+  if (thing instanceof import_kolmafia4.Skill)
+    return (0, import_kolmafia4.haveSkill)(thing);
+  if (thing instanceof import_kolmafia4.Thrall) {
+    var thrall = (0, import_kolmafia4.myThrall)();
     return thrall.id === thing.id && thrall.level >= quantity;
   }
   return !1;
 }
 function haveInCampground(item8) {
-  return Object.keys((0, import_kolmafia3.getCampground)()).map(function(i) {
-    return import_kolmafia3.Item.get(i);
+  return Object.keys((0, import_kolmafia4.getCampground)()).map(function(i) {
+    return import_kolmafia4.Item.get(i);
   }).includes(item8);
 }
 var Wanderer;
@@ -2996,7 +3100,7 @@ var Wanderer;
 var deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 function haveCounter(counterName) {
   var minTurns = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0, maxTurns = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : 500;
-  return (0, import_kolmafia3.getCounters)(counterName, minTurns, maxTurns) === counterName;
+  return (0, import_kolmafia4.getCounters)(counterName, minTurns, maxTurns) === counterName;
 }
 function haveWandererCounter(wanderer) {
   if (deterministicWanderers.includes(wanderer))
@@ -3005,7 +3109,7 @@ function haveWandererCounter(wanderer) {
   return haveCounter(begin) || haveCounter(end);
 }
 function isVoteWandererNow() {
-  return (0, import_kolmafia3.totalTurnsPlayed)() % 11 === 1 && get("lastVoteMonsterTurn") < (0, import_kolmafia3.totalTurnsPlayed)();
+  return (0, import_kolmafia4.totalTurnsPlayed)() % 11 === 1 && get("lastVoteMonsterTurn") < (0, import_kolmafia4.totalTurnsPlayed)();
 }
 function isWandererNow(wanderer) {
   if (deterministicWanderers.includes(wanderer))
@@ -3020,9 +3124,9 @@ function isWandererNow(wanderer) {
   return !haveCounter(begin, 1) && haveCounter(end);
 }
 function getKramcoWandererChance() {
-  var fights = get("_sausageFights"), lastFight = get("_lastSausageMonsterTurn"), totalTurns = (0, import_kolmafia3.totalTurnsPlayed)();
+  var fights = get("_sausageFights"), lastFight = get("_lastSausageMonsterTurn"), totalTurns = (0, import_kolmafia4.totalTurnsPlayed)();
   if (fights < 1)
-    return lastFight === totalTurns && (0, import_kolmafia3.myTurncount)() < 1 ? 0.5 : 1;
+    return lastFight === totalTurns && (0, import_kolmafia4.myTurncount)() < 1 ? 0.5 : 1;
   var turnsSinceLastFight = totalTurns - lastFight;
   return Math.min(1, (turnsSinceLastFight + 1) / (5 + fights * 3 + Math.max(0, fights - 5) ** 3));
 }
@@ -3041,26 +3145,26 @@ function getWandererChance(wanderer) {
     return 0;
   var counters = get("relayCounters"), re = new RegExp("(\\d+):" + end), matches = counters.match(re);
   if (matches && matches.length === 2) {
-    var window2 = Number.parseInt(matches[1]) - (0, import_kolmafia3.myTurncount)();
+    var window2 = Number.parseInt(matches[1]) - (0, import_kolmafia4.myTurncount)();
     return 1 / window2;
   }
   return 0;
 }
 function isCurrentFamiliar(familiar6) {
-  return (0, import_kolmafia3.myFamiliar)() === familiar6;
+  return (0, import_kolmafia4.myFamiliar)() === familiar6;
 }
 function getFoldGroup(item8) {
-  return Object.entries((0, import_kolmafia3.getRelated)(item8, "fold")).sort(function(_ref, _ref2) {
+  return Object.entries((0, import_kolmafia4.getRelated)(item8, "fold")).sort(function(_ref, _ref2) {
     var _ref3 = _slicedToArray3(_ref, 2), a = _ref3[1], _ref4 = _slicedToArray3(_ref2, 2), b = _ref4[1];
     return a - b;
   }).map(function(_ref5) {
     var _ref6 = _slicedToArray3(_ref5, 1), i = _ref6[0];
-    return import_kolmafia3.Item.get(i);
+    return import_kolmafia4.Item.get(i);
   });
 }
 function getZapGroup(item8) {
-  return Object.keys((0, import_kolmafia3.getRelated)(item8, "zap")).map(function(i) {
-    return import_kolmafia3.Item.get(i);
+  return Object.keys((0, import_kolmafia4.getRelated)(item8, "zap")).map(function(i) {
+    return import_kolmafia4.Item.get(i);
   });
 }
 function getBanishedMonsters() {
@@ -3070,17 +3174,17 @@ function getBanishedMonsters() {
       var _step$value = _slicedToArray3(_step.value, 2), foe = _step$value[0], banisher = _step$value[1];
       if (foe === void 0 || banisher === void 0)
         break;
-      var banisherItem = (0, import_kolmafia3.toItem)(banisher);
+      var banisherItem = (0, import_kolmafia4.toItem)(banisher);
       if (banisher.toLowerCase() === "saber force")
-        result.set($skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), import_kolmafia3.Monster.get(foe));
+        result.set($skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), import_kolmafia4.Monster.get(foe));
       else if (banisher.toLowerCase() === "nanorhino")
-        result.set($skill(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["Unleash Nanites"]))), import_kolmafia3.Monster.get(foe));
-      else if ([import_kolmafia3.Item.none, import_kolmafia3.Item.get("training scroll:  Snokebomb"), import_kolmafia3.Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
-        if (import_kolmafia3.Skill.get(banisher) === $skill.none)
+        result.set($skill(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["Unleash Nanites"]))), import_kolmafia4.Monster.get(foe));
+      else if ([import_kolmafia4.Item.none, import_kolmafia4.Item.get("training scroll:  Snokebomb"), import_kolmafia4.Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
+        if (import_kolmafia4.Skill.get(banisher) === $skill.none)
           break;
-        result.set(import_kolmafia3.Skill.get(banisher), import_kolmafia3.Monster.get(foe));
+        result.set(import_kolmafia4.Skill.get(banisher), import_kolmafia4.Monster.get(foe));
       } else
-        result.set(banisherItem, import_kolmafia3.Monster.get(foe));
+        result.set(banisherItem, import_kolmafia4.Monster.get(foe));
     }
   } catch (err) {
     _iterator.e(err);
@@ -3090,11 +3194,11 @@ function getBanishedMonsters() {
   return result;
 }
 function canUse(item8) {
-  var path = (0, import_kolmafia3.myPath)();
-  return !(path !== import_kolmafia3.Path.get("Nuclear Autumn") && $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record"]))).includes(item8) || path === import_kolmafia3.Path.get("G-Lover") && !item8.name.toLowerCase().includes("g") || path === import_kolmafia3.Path.get("Bees Hate You") && item8.name.toLowerCase().includes("b"));
+  var path = (0, import_kolmafia4.myPath)();
+  return !(path !== import_kolmafia4.Path.get("Nuclear Autumn") && $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record"]))).includes(item8) || path === import_kolmafia4.Path.get("G-Lover") && !item8.name.toLowerCase().includes("g") || path === import_kolmafia4.Path.get("Bees Hate You") && item8.name.toLowerCase().includes("b"));
 }
 function noneToNull(thing) {
-  return thing instanceof import_kolmafia3.Effect ? thing === import_kolmafia3.Effect.none ? null : thing : thing instanceof import_kolmafia3.Familiar ? thing === import_kolmafia3.Familiar.none ? null : thing : thing instanceof import_kolmafia3.Item && thing === import_kolmafia3.Item.none ? null : thing;
+  return thing instanceof import_kolmafia4.Effect ? thing === import_kolmafia4.Effect.none ? null : thing : thing instanceof import_kolmafia4.Familiar ? thing === import_kolmafia4.Familiar.none ? null : thing : thing instanceof import_kolmafia4.Item && thing === import_kolmafia4.Item.none ? null : thing;
 }
 function getAverage(range) {
   var _range$match;
@@ -3107,12 +3211,12 @@ function getAverageAdventures(item8) {
   return getAverage(item8.adventures);
 }
 function uneffect(effect2) {
-  return (0, import_kolmafia3.cliExecute)("uneffect ".concat(effect2.name));
+  return (0, import_kolmafia4.cliExecute)("uneffect ".concat(effect2.name));
 }
 function getPlayerFromIdOrName(idOrName) {
-  var id = typeof idOrName == "number" ? idOrName : parseInt((0, import_kolmafia3.getPlayerId)(idOrName));
+  var id = typeof idOrName == "number" ? idOrName : parseInt((0, import_kolmafia4.getPlayerId)(idOrName));
   return {
-    name: (0, import_kolmafia3.getPlayerName)(id),
+    name: (0, import_kolmafia4.getPlayerName)(id),
     id: id
   };
 }
@@ -3133,16 +3237,16 @@ var EnsureError = /* @__PURE__ */ function(_Error) {
   var _super = _createSuper(EnsureError2);
   function EnsureError2(cause, reason) {
     var _this;
-    return _classCallCheck2(this, EnsureError2), _this = _super.call(this, "Failed to ensure ".concat(cause.name, "!").concat(reason ? " ".concat(reason) : "")), _this.name = "Ensure Error", _this;
+    return _classCallCheck3(this, EnsureError2), _this = _super.call(this, "Failed to ensure ".concat(cause.name, "!").concat(reason ? " ".concat(reason) : "")), _this.name = "Ensure Error", _this;
   }
-  return _createClass2(EnsureError2);
+  return _createClass3(EnsureError2);
 }(/* @__PURE__ */ _wrapNativeSuper(Error));
 function ensureEffect(ef) {
   var turns = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
-  if ((0, import_kolmafia3.haveEffect)(ef) < turns) {
+  if ((0, import_kolmafia4.haveEffect)(ef) < turns) {
     if (ef.default === null)
       throw new EnsureError(ef, "No default action");
-    if (!(0, import_kolmafia3.cliExecute)(ef.default) || (0, import_kolmafia3.haveEffect)(ef) === 0)
+    if (!(0, import_kolmafia4.cliExecute)(ef.default) || (0, import_kolmafia4.haveEffect)(ef) === 0)
       throw new EnsureError(ef);
   }
 }
@@ -3151,7 +3255,7 @@ function getSaleValue() {
   for (var _len = arguments.length, items = new Array(_len), _key = 0; _key < _len; _key++)
     items[_key] = arguments[_key];
   return items.map(function(item8) {
-    return valueMap.has(item8) || (item8.discardable ? valueMap.set(item8, (0, import_kolmafia3.mallPrice)(item8) > Math.max(2 * (0, import_kolmafia3.autosellPrice)(item8), 100) ? MALL_VALUE_MODIFIER * (0, import_kolmafia3.mallPrice)(item8) : (0, import_kolmafia3.autosellPrice)(item8)) : valueMap.set(item8, (0, import_kolmafia3.mallPrice)(item8) > 100 ? MALL_VALUE_MODIFIER * (0, import_kolmafia3.mallPrice)(item8) : 0)), valueMap.get(item8) || 0;
+    return valueMap.has(item8) || (item8.discardable ? valueMap.set(item8, (0, import_kolmafia4.mallPrice)(item8) > Math.max(2 * (0, import_kolmafia4.autosellPrice)(item8), 100) ? MALL_VALUE_MODIFIER * (0, import_kolmafia4.mallPrice)(item8) : (0, import_kolmafia4.autosellPrice)(item8)) : valueMap.set(item8, (0, import_kolmafia4.mallPrice)(item8) > 100 ? MALL_VALUE_MODIFIER * (0, import_kolmafia4.mallPrice)(item8) : 0)), valueMap.get(item8) || 0;
   }).reduce(function(s, price2) {
     return s + price2;
   }, 0) / items.length;
@@ -3164,34 +3268,34 @@ var Environment = {
 };
 function findLeprechaunMultiplier(familiar6) {
   if (familiar6 === $familiar(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["Mutant Cactus Bud"]))))
-    return (0, import_kolmafia3.numericModifier)(familiar6, "Leprechaun Effectiveness", 1, $item.none);
+    return (0, import_kolmafia4.numericModifier)(familiar6, "Leprechaun Effectiveness", 1, $item.none);
   if (familiar6 === $familiar(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["Reanimated Reanimator"]))))
     return 0;
-  var meatBonus = (0, import_kolmafia3.numericModifier)(familiar6, "Meat Drop", 1, $item.none);
+  var meatBonus = (0, import_kolmafia4.numericModifier)(familiar6, "Meat Drop", 1, $item.none);
   return meatBonus === 0 ? 0 : Math.pow(Math.sqrt(meatBonus / 2 + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }
 function findFairyMultiplier(familiar6) {
   if (familiar6 === $familiar(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["Mutant Fire Ant"]))))
-    return (0, import_kolmafia3.numericModifier)(familiar6, "Fairy Effectiveness", 1, $item.none);
+    return (0, import_kolmafia4.numericModifier)(familiar6, "Fairy Effectiveness", 1, $item.none);
   if (familiar6 === $familiar(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["Reanimated Reanimator"]))))
     return 0;
-  var itemBonus = (0, import_kolmafia3.numericModifier)(familiar6, "Item Drop", 1, $item.none);
+  var itemBonus = (0, import_kolmafia4.numericModifier)(familiar6, "Item Drop", 1, $item.none);
   return itemBonus === 0 ? 0 : Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }
 var holidayWanderers = /* @__PURE__ */ new Map([["El Dia De Los Muertos Borrachos", $monsters(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["Novia Cad\xE1ver, Novio Cad\xE1ver, Padre Cad\xE1ver, Persona Inocente Cad\xE1ver"])))], ["Feast of Boris", $monsters(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["Candied Yam Golem, Malevolent Tofurkey, Possessed Can of Cranberry Sauce, Stuffing Golem"])))], ["Talk Like a Pirate Day", $monsters(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["ambulatory pirate, migratory pirate, peripatetic pirate"])))]]);
 function getTodaysHolidayWanderers() {
-  return (0, import_kolmafia3.holiday)().split("/").map(function(holiday2) {
+  return (0, import_kolmafia4.holiday)().split("/").map(function(holiday2) {
     var _holidayWanderers$get;
     return (_holidayWanderers$get = holidayWanderers.get(holiday2)) !== null && _holidayWanderers$get !== void 0 ? _holidayWanderers$get : [];
   }).flat();
 }
 function canVisitUrl() {
-  return (0, import_kolmafia3.currentRound)() ? (logger_default.debug("Current round is ".concat((0, import_kolmafia3.currentRound)(), "; you're in combat.")), !1) : (0, import_kolmafia3.inMultiFight)() ? (logger_default.debug("You're in a multifight."), !1) : (0, import_kolmafia3.choiceFollowsFight)() ? (logger_default.debug("A choice follows this fight."), !1) : (0, import_kolmafia3.handlingChoice)() ? (logger_default.debug("You're currently in a choice adventure"), !1) : !0;
+  return (0, import_kolmafia4.currentRound)() ? (logger_default.debug("Current round is ".concat((0, import_kolmafia4.currentRound)(), "; you're in combat.")), !1) : (0, import_kolmafia4.inMultiFight)() ? (logger_default.debug("You're in a multifight."), !1) : (0, import_kolmafia4.choiceFollowsFight)() ? (logger_default.debug("A choice follows this fight."), !1) : (0, import_kolmafia4.handlingChoice)() ? (logger_default.debug("You're currently in a choice adventure"), !1) : !0;
 }
 function damageTakenByElement(baseDamage, element) {
   if (baseDamage < 0)
     return 1;
-  var res = (0, import_kolmafia3.elementalResistance)(element);
+  var res = (0, import_kolmafia4.elementalResistance)(element);
   return Math.max(1, Math.ceil(baseDamage - baseDamage * res / 100));
 }
 var telescopeStats = /* @__PURE__ */ new Map([["standing around flexing their muscles and using grip exercisers", $stat(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["Muscle"])))], ["sitting around playing chess and solving complicated-looking logic puzzles", $stat(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["Mysticality"])))], ["all wearing sunglasses and dancing", $stat(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["Moxie"])))]]), telescopeElements = /* @__PURE__ */ new Map([["people, all of whom appear to be on fire", $element(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["hot"])))], ["people, surrounded by a cloud of eldritch mist", $element(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["spooky"])))], ["greasy-looking people furtively skulking around", $element(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["sleaze"])))], ["people, surrounded by garbage and clouds of flies", $element(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["stench"])))], ["people, clustered around a group of igloos", $element(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap1 = /* @__PURE__ */ new Map([["smoldering bushes on the outskirts of a hedge maze", $element(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["hot"])))], ["creepy-looking black bushes on the outskirts of a hedge maze", $element(_templateObject21 || (_templateObject21 = _taggedTemplateLiteral(["spooky"])))], ["purplish, greasy-looking hedges", $element(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral(["sleaze"])))], ["nasty-looking, dripping green bushes on the outskirts of a hedge maze", $element(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral(["stench"])))], ["frost-rimed bushes on the outskirts of a hedge maze", $element(_templateObject24 || (_templateObject24 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap2 = /* @__PURE__ */ new Map([["smoke rising from deeper within the maze", $element(_templateObject25 || (_templateObject25 = _taggedTemplateLiteral(["hot"])))], ["a miasma of eldritch vapors rising from deeper within the maze", $element(_templateObject26 || (_templateObject26 = _taggedTemplateLiteral(["spooky"])))], ["a greasy purple cloud hanging over the center of the maze", $element(_templateObject27 || (_templateObject27 = _taggedTemplateLiteral(["sleaze"])))], ["a cloud of green gas hovering over the maze", $element(_templateObject28 || (_templateObject28 = _taggedTemplateLiteral(["stench"])))], ["wintry mists rising from deeper within the maze", $element(_templateObject29 || (_templateObject29 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap3 = /* @__PURE__ */ new Map([["with lava slowly oozing out of it", $element(_templateObject30 || (_templateObject30 = _taggedTemplateLiteral(["hot"])))], ["surrounded by creepy black mist", $element(_templateObject31 || (_templateObject31 = _taggedTemplateLiteral(["spooky"])))], ["that occasionally vomits out a greasy ball of hair", $element(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral(["sleaze"])))], ["disgorging a really surprising amount of sewage", $element(_templateObject33 || (_templateObject33 = _taggedTemplateLiteral(["stench"])))], ["occasionally disgorging a bunch of ice cubes", $element(_templateObject34 || (_templateObject34 = _taggedTemplateLiteral(["cold"])))]]);
@@ -3205,9 +3309,14 @@ function telescope() {
   };
 }
 function examine(thing) {
-  var url = thing instanceof import_kolmafia3.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia3.Familiar ? "desc_familiar.php?which=".concat((0, import_kolmafia3.toInt)(thing)) : thing instanceof import_kolmafia3.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat((0, import_kolmafia3.toInt)(thing));
-  return (0, import_kolmafia3.visitUrl)(url);
+  var url = thing instanceof import_kolmafia4.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia4.Familiar ? "desc_familiar.php?which=".concat((0, import_kolmafia4.toInt)(thing)) : thing instanceof import_kolmafia4.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat((0, import_kolmafia4.toInt)(thing));
+  return (0, import_kolmafia4.visitUrl)(url);
 }
+var byStat = makeByXFunction(function() {
+  return (0, import_kolmafia4.myPrimestat)().toString();
+}), byClass = makeByXFunction(function() {
+  return (0, import_kolmafia4.myClass)().toString();
+});
 
 // src/combat.ts
 var _templateObject35, _templateObject210;
@@ -3288,19 +3397,19 @@ function _arrayLikeToArray4(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _defineProperty2(obj, key, value) {
+function _defineProperty3(obj, key, value) {
   return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
-function _defineProperties3(target, props) {
+function _defineProperties4(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-function _createClass3(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties3(Constructor.prototype, protoProps), staticProps && _defineProperties3(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
+function _createClass4(Constructor, protoProps, staticProps) {
+  return protoProps && _defineProperties4(Constructor.prototype, protoProps), staticProps && _defineProperties4(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
-function _classCallCheck3(instance, Constructor) {
+function _classCallCheck4(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
 }
@@ -3389,46 +3498,46 @@ function _taggedTemplateLiteral2(strings, raw) {
 }
 var MACRO_NAME = "Script Autoattack Macro";
 function getMacroId() {
-  var name = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : MACRO_NAME, macroMatches = (0, import_kolmafia4.xpath)((0, import_kolmafia4.visitUrl)("account_combatmacros.php"), '//select[@name="macroid"]/option[text()="'.concat(name, '"]/@value'));
+  var name = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : MACRO_NAME, macroMatches = (0, import_kolmafia5.xpath)((0, import_kolmafia5.visitUrl)("account_combatmacros.php"), '//select[@name="macroid"]/option[text()="'.concat(name, '"]/@value'));
   if (macroMatches.length === 0) {
-    (0, import_kolmafia4.visitUrl)("account_combatmacros.php?action=new");
-    var newMacroText = (0, import_kolmafia4.visitUrl)("account_combatmacros.php?macroid=0&name=".concat(name, "&macrotext=abort&action=save"));
-    return parseInt((0, import_kolmafia4.xpath)(newMacroText, "//input[@name=".concat(name, "]/@value"))[0], 10);
+    (0, import_kolmafia5.visitUrl)("account_combatmacros.php?action=new");
+    var newMacroText = (0, import_kolmafia5.visitUrl)("account_combatmacros.php?macroid=0&name=".concat(name, "&macrotext=abort&action=save"));
+    return parseInt((0, import_kolmafia5.xpath)(newMacroText, "//input[@name=".concat(name, "]/@value"))[0], 10);
   } else
     return parseInt(macroMatches[0], 10);
 }
 function itemOrNameToItem(itemOrName) {
-  return typeof itemOrName == "string" ? import_kolmafia4.Item.get(itemOrName) : itemOrName;
+  return typeof itemOrName == "string" ? import_kolmafia5.Item.get(itemOrName) : itemOrName;
 }
 var substringCombatItems = $items(_templateObject35 || (_templateObject35 = _taggedTemplateLiteral2(["spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, bowling ball, adder, red button, pile of sand, mushroom, deluxe mushroom"]))), substringCombatSkills = $skills(_templateObject210 || (_templateObject210 = _taggedTemplateLiteral2(["Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Snipe, Cleave, Boil, Slice, Rainbow"])));
 function itemOrItemsBallsMacroName(itemOrItems) {
   if (Array.isArray(itemOrItems))
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   var item8 = itemOrNameToItem(itemOrItems);
-  return substringCombatItems.includes(item8) ? (0, import_kolmafia4.toInt)(item8).toString() : item8.name;
+  return substringCombatItems.includes(item8) ? (0, import_kolmafia5.toInt)(item8).toString() : item8.name;
 }
 function itemOrItemsBallsMacroPredicate(itemOrItems) {
   return Array.isArray(itemOrItems) ? itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItems);
 }
 function skillOrNameToSkill(skillOrName) {
-  return typeof skillOrName == "string" ? import_kolmafia4.Skill.get(skillOrName) : skillOrName;
+  return typeof skillOrName == "string" ? import_kolmafia5.Skill.get(skillOrName) : skillOrName;
 }
 function skillBallsMacroName(skillOrName) {
   var skill2 = skillOrNameToSkill(skillOrName);
-  return skill2.name.match(/^[A-Za-z ]+$/) && !substringCombatSkills.includes(skill2) ? skill2.name : (0, import_kolmafia4.toInt)(skill2);
+  return skill2.name.match(/^[A-Za-z ]+$/) && !substringCombatSkills.includes(skill2) ? skill2.name : (0, import_kolmafia5.toInt)(skill2);
 }
 var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   _inherits2(InvalidMacroError2, _Error);
   var _super = _createSuper2(InvalidMacroError2);
   function InvalidMacroError2() {
-    return _classCallCheck3(this, InvalidMacroError2), _super.apply(this, arguments);
+    return _classCallCheck4(this, InvalidMacroError2), _super.apply(this, arguments);
   }
-  return _createClass3(InvalidMacroError2);
+  return _createClass4(InvalidMacroError2);
 }(/* @__PURE__ */ _wrapNativeSuper2(Error)), Macro = /* @__PURE__ */ function() {
   function Macro2() {
-    _classCallCheck3(this, Macro2), _defineProperty2(this, "components", []), _defineProperty2(this, "name", MACRO_NAME);
+    _classCallCheck4(this, Macro2), _defineProperty3(this, "components", []), _defineProperty3(this, "name", MACRO_NAME);
   }
-  return _createClass3(Macro2, [{
+  return _createClass4(Macro2, [{
     key: "toString",
     value: (
       /**
@@ -3498,7 +3607,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        */
       function() {
         var final = this.toString();
-        return (0, import_kolmafia4.visitUrl)("fight.php?action=macro&macrotext=".concat((0, import_kolmafia4.urlEncode)(final)), !0, !0);
+        return (0, import_kolmafia5.visitUrl)("fight.php?action=macro&macrotext=".concat((0, import_kolmafia5.urlEncode)(final)), !0, !0);
       }
     )
     /**
@@ -3508,7 +3617,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     key: "setAutoAttack",
     value: function() {
       var id = Macro2.cachedMacroIds.get(this.name);
-      id === void 0 && (id = getMacroId(this.name), Macro2.cachedMacroIds.set(this.name, id)), !((0, import_kolmafia4.getAutoAttack)() === 99e6 + id && this.toString() === Macro2.cachedAutoAttacks.get(this.name)) && ((0, import_kolmafia4.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&name=").concat((0, import_kolmafia4.urlEncode)(this.name), "&macrotext=").concat((0, import_kolmafia4.urlEncode)(this.toString()), "&action=save"), !0, !0), (0, import_kolmafia4.visitUrl)("account.php?am=1&action=autoattack&value=".concat(99e6 + id, "&ajax=1")), Macro2.cachedAutoAttacks.set(this.name, this.toString()));
+      id === void 0 && (id = getMacroId(this.name), Macro2.cachedMacroIds.set(this.name, id)), !((0, import_kolmafia5.getAutoAttack)() === 99e6 + id && this.toString() === Macro2.cachedAutoAttacks.get(this.name)) && ((0, import_kolmafia5.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&name=").concat((0, import_kolmafia5.urlEncode)(this.name), "&macrotext=").concat((0, import_kolmafia5.urlEncode)(this.toString()), "&action=save"), !0, !0), (0, import_kolmafia5.visitUrl)("account.php?am=1&action=autoattack&value=".concat(99e6 + id, "&ajax=1")), Macro2.cachedAutoAttacks.set(this.name, this.toString()));
     }
     /**
      * Renames the macro, then sets it as an autoattack.
@@ -3812,7 +3921,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   }, {
     key: "clearSaved",
     value: function() {
-      (0, import_kolmafia4.removeProperty)(Macro2.SAVED_MACRO_PROPERTY);
+      (0, import_kolmafia5.removeProperty)(Macro2.SAVED_MACRO_PROPERTY);
     }
   }, {
     key: "step",
@@ -3827,7 +3936,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var _Macro$cachedMacroIds, name = _step.value, id = (_Macro$cachedMacroIds = Macro2.cachedMacroIds.get(name)) !== null && _Macro$cachedMacroIds !== void 0 ? _Macro$cachedMacroIds : getMacroId(name);
-          (0, import_kolmafia4.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&action=edit&what=Delete&confirm=1")), Macro2.cachedAutoAttacks.delete(name), Macro2.cachedMacroIds.delete(name);
+          (0, import_kolmafia5.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&action=edit&what=Delete&confirm=1")), Macro2.cachedAutoAttacks.delete(name), Macro2.cachedMacroIds.delete(name);
         }
       } catch (err) {
         _iterator.e(err);
@@ -3849,31 +3958,31 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     key: "makeBALLSPredicate",
     value: function(condition) {
       var ballsCondition = "";
-      if (condition instanceof import_kolmafia4.Monster)
+      if (condition instanceof import_kolmafia5.Monster)
         ballsCondition = "monsterid ".concat(condition.id);
       else if (condition instanceof Array)
         ballsCondition = condition.map(function(mon) {
           return "monsterid ".concat(mon.id);
         }).join(" || "), ballsCondition = "(".concat(ballsCondition, ")");
-      else if (condition instanceof import_kolmafia4.Effect)
-        ballsCondition = "haseffect ".concat((0, import_kolmafia4.toInt)(condition));
-      else if (condition instanceof import_kolmafia4.Skill)
+      else if (condition instanceof import_kolmafia5.Effect)
+        ballsCondition = "haseffect ".concat((0, import_kolmafia5.toInt)(condition));
+      else if (condition instanceof import_kolmafia5.Skill)
         ballsCondition = "hasskill ".concat(skillBallsMacroName(condition));
-      else if (condition instanceof import_kolmafia4.Item) {
+      else if (condition instanceof import_kolmafia5.Item) {
         if (!condition.combat)
           throw new InvalidMacroError("Item ".concat(condition, " cannot be made a valid BALLS predicate (it is not combat-usable)"));
         ballsCondition = "hascombatitem ".concat(itemOrItemsBallsMacroName(condition));
-      } else if (condition instanceof import_kolmafia4.Location) {
+      } else if (condition instanceof import_kolmafia5.Location) {
         var snarfblat = condition.id;
         if (snarfblat < 1)
           throw new InvalidMacroError("Location ".concat(condition, " cannot be made a valid BALLS predicate (it has no location id)"));
         ballsCondition = "snarfblat ".concat(snarfblat);
-      } else if (condition instanceof import_kolmafia4.Class) {
-        if ((0, import_kolmafia4.toInt)(condition) > 6)
+      } else if (condition instanceof import_kolmafia5.Class) {
+        if ((0, import_kolmafia5.toInt)(condition) > 6)
           throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
         ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
       } else
-        condition instanceof import_kolmafia4.Stat ? ballsCondition = "".concat(condition.toString().toLowerCase(), "class") : ballsCondition = condition;
+        condition instanceof import_kolmafia5.Stat ? ballsCondition = "".concat(condition.toString().toLowerCase(), "class") : ballsCondition = condition;
       return ballsCondition;
     }
   }, {
@@ -3943,15 +4052,15 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     }
   }]), Macro2;
 }();
-_defineProperty2(Macro, "SAVED_MACRO_PROPERTY", "libram_savedMacro");
-_defineProperty2(Macro, "cachedMacroIds", /* @__PURE__ */ new Map());
-_defineProperty2(Macro, "cachedAutoAttacks", /* @__PURE__ */ new Map());
+_defineProperty3(Macro, "SAVED_MACRO_PROPERTY", "libram_savedMacro");
+_defineProperty3(Macro, "cachedMacroIds", /* @__PURE__ */ new Map());
+_defineProperty3(Macro, "cachedAutoAttacks", /* @__PURE__ */ new Map());
 function adventureMacro(loc, macro) {
-  macro.save(), (0, import_kolmafia4.setAutoAttack)(0);
+  macro.save(), (0, import_kolmafia5.setAutoAttack)(0);
   try {
-    for ((0, import_kolmafia4.adv1)(loc, 0, ""); (0, import_kolmafia4.inMultiFight)(); )
-      (0, import_kolmafia4.runCombat)();
-    (0, import_kolmafia4.choiceFollowsFight)() && (0, import_kolmafia4.visitUrl)("choice.php");
+    for ((0, import_kolmafia5.adv1)(loc, 0, ""); (0, import_kolmafia5.inMultiFight)(); )
+      (0, import_kolmafia5.runCombat)();
+    (0, import_kolmafia5.choiceFollowsFight)() && (0, import_kolmafia5.visitUrl)("choice.php");
   } finally {
     Macro.clearSaved();
   }
@@ -3960,9 +4069,9 @@ function adventureMacroAuto(loc, autoMacro) {
   var _nextMacro, nextMacro = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : null;
   nextMacro = (_nextMacro = nextMacro) !== null && _nextMacro !== void 0 ? _nextMacro : Macro.abort(), autoMacro.setAutoAttack(), nextMacro.save();
   try {
-    for ((0, import_kolmafia4.adv1)(loc, 0, ""); (0, import_kolmafia4.inMultiFight)(); )
-      (0, import_kolmafia4.runCombat)();
-    (0, import_kolmafia4.choiceFollowsFight)() && (0, import_kolmafia4.visitUrl)("choice.php");
+    for ((0, import_kolmafia5.adv1)(loc, 0, ""); (0, import_kolmafia5.inMultiFight)(); )
+      (0, import_kolmafia5.runCombat)();
+    (0, import_kolmafia5.choiceFollowsFight)() && (0, import_kolmafia5.visitUrl)("choice.php");
   } finally {
     Macro.clearSaved();
   }
@@ -3971,9 +4080,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro) {
   _inherits2(StrictMacro2, _Macro);
   var _super2 = _createSuper2(StrictMacro2);
   function StrictMacro2() {
-    return _classCallCheck3(this, StrictMacro2), _super2.apply(this, arguments);
+    return _classCallCheck4(this, StrictMacro2), _super2.apply(this, arguments);
   }
-  return _createClass3(StrictMacro2, [{
+  return _createClass4(StrictMacro2, [{
     key: "skill",
     value: (
       /**
@@ -4104,91 +4213,6 @@ var StrictMacro = /* @__PURE__ */ function(_Macro) {
 // src/maximize.ts
 init_kolmafia_polyfill();
 var import_kolmafia6 = require("kolmafia");
-
-// src/logger.ts
-init_kolmafia_polyfill();
-var import_kolmafia5 = require("kolmafia"), _defaultHandlers;
-function _classCallCheck4(instance, Constructor) {
-  if (!(instance instanceof Constructor))
-    throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties4(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-function _createClass4(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties4(Constructor.prototype, protoProps), staticProps && _defineProperties4(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
-}
-function _defineProperty3(obj, key, value) {
-  return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
-}
-var LogLevels;
-(function(LogLevels2) {
-  LogLevels2[LogLevels2.NONE = 0] = "NONE", LogLevels2[LogLevels2.ERROR = 1] = "ERROR", LogLevels2[LogLevels2.WARNING = 2] = "WARNING", LogLevels2[LogLevels2.INFO = 3] = "INFO", LogLevels2[LogLevels2.DEBUG = 4] = "DEBUG";
-})(LogLevels || (LogLevels = {}));
-var defaultHandlers = (_defaultHandlers = {}, _defineProperty3(_defaultHandlers, LogLevels.INFO, function(message) {
-  (0, import_kolmafia5.printHtml)("<b>[Libram Info]</b> ".concat(message)), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
-}), _defineProperty3(_defaultHandlers, LogLevels.WARNING, function(message) {
-  (0, import_kolmafia5.printHtml)('<span style="background: orange; color: white;"><b>[Libram Warning]</b> '.concat(message, "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
-}), _defineProperty3(_defaultHandlers, LogLevels.ERROR, function(error2) {
-  (0, import_kolmafia5.printHtml)('<span style="background: red; color: white;"><b>[Libram Error]</b> '.concat(error2.toString(), "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(error2));
-}), _defineProperty3(_defaultHandlers, LogLevels.DEBUG, function(message) {
-  (0, import_kolmafia5.printHtml)('<span style="background: red; color: white;"><b>[Libram Debug]</b> '.concat(message, "</span>")), (0, import_kolmafia5.logprint)("[Libram] ".concat(message));
-}), _defaultHandlers), Logger = /* @__PURE__ */ function() {
-  function Logger2() {
-    _classCallCheck4(this, Logger2), _defineProperty3(this, "handlers", defaultHandlers);
-  }
-  return _createClass4(Logger2, [{
-    key: "level",
-    get: function() {
-      return Logger2.currentLevel;
-    }
-  }, {
-    key: "setLevel",
-    value: function(level) {
-      Logger2.currentLevel = level;
-    }
-  }, {
-    key: "setHandler",
-    value: function(level, callback) {
-      this.handlers[level] = callback;
-    }
-  }, {
-    key: "log",
-    value: (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function(level, message) {
-        this.level >= level && this.handlers[level](message);
-      }
-    )
-  }, {
-    key: "info",
-    value: function(message) {
-      this.log(LogLevels.INFO, message);
-    }
-  }, {
-    key: "warning",
-    value: function(message) {
-      this.log(LogLevels.WARNING, message);
-    }
-  }, {
-    key: "error",
-    value: function(message) {
-      this.log(LogLevels.ERROR, message);
-    }
-  }, {
-    key: "debug",
-    value: function(message) {
-      this.log(LogLevels.DEBUG, message);
-    }
-  }]), Logger2;
-}();
-_defineProperty3(Logger, "currentLevel", LogLevels.ERROR);
-var logger_default = new Logger();
-
-// src/maximize.ts
 var _templateObject36, _templateObject211, _templateObject37, _templateObject42, _templateObject52, _templateObject62, _templateObject72, _templateObject82, _templateObject92, _templateObject102, _templateObject112, _templateObject122, _templateObject132, _templateObject142, _templateObject152, _templateObject162, _templateObject172, _templateObject182, _templateObject192, _templateObject202, _templateObject212, _templateObject222, _templateObject232, _templateObject242, _templateObject252, _templateObject262, _templateObject272, _templateObject282, _templateObject292, _templateObject302, _templateObject312, _templateObject322, _templateObject332, _templateObject342, _templateObject352, _templateObject362, _templateObject372, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject422, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48;
 function _slicedToArray4(arr, i) {
   return _arrayWithHoles4(arr) || _iterableToArrayLimit4(arr, i) || _unsupportedIterableToArray5(arr, i) || _nonIterableRest4();
@@ -13971,6 +13995,8 @@ function findLoot4() {
   arrayToCountedMap,
   ascend,
   bestLibramToCast,
+  byClass,
+  byStat,
   canRememberSong,
   canUse,
   canVisitUrl,
@@ -14035,6 +14061,7 @@ function findLoot4() {
   isVoteWandererNow,
   isWandererNow,
   logger,
+  makeByXFunction,
   maxBy,
   maximizeCached,
   mergeMaximizeOptions,
@@ -14061,6 +14088,7 @@ function findLoot4() {
   telescope,
   tryFindFreeKill,
   tryFindFreeRun,
+  undelay,
   uneffect,
   withChoice,
   withChoices,

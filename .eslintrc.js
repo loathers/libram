@@ -8,7 +8,7 @@ module.exports = {
     "prettier",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:jsdoc/recommended",
+    "plugin:jsdoc/recommended-error",
   ],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],

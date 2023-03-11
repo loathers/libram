@@ -76,12 +76,11 @@ function mySessionItemsWrapper(): Map<Item, number> {
 }
 
 /**
- * Performa a binary element-wise operation on two inventories
+ * Perform a binary element-wise operation on two inventories
  *
  * @param a The LHS inventory to perform the operation on
  * @param b The RHS inventory to perform the operation on
  * @param op an operator to compute between the sets
- * @param commutative if true use the value of b for any items not in a. if false, ignore values not in a
  * @returns a new map representing the combined inventories
  */
 function inventoryOperation(

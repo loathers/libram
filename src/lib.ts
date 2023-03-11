@@ -69,9 +69,10 @@ import {
 import { makeByXFunction, chunk } from "./utils";
 
 /**
- * Returns the current maximum Accordion Thief songs the player can have in their head
+ * Determines the current maximum Accordion Thief songs the player can have in their head
  *
  * @category General
+ * @returns Maximum number of songs for player
  */
 export function getSongLimit(): number {
   return (

@@ -38,10 +38,11 @@ export type MaximizeOptions = {
 };
 
 /**
- * Merges a Partial<MaximizeOptions> onto a MaximizeOptions. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
+ * Merges a partial set of maximizer options onto a full set maximizer options. We merge via overriding for all boolean properties and for onlySlot, and concat all other array properties.
  *
  * @param defaultOptions MaximizeOptions to use as a "base."
  * @param addendums Options to attempt to merge onto defaultOptions.
+ * @returns Merged maximizer options
  */
 export function mergeMaximizeOptions(
   defaultOptions: MaximizeOptions,
@@ -146,7 +147,9 @@ export const modeableState = {
 } as const;
 
 /**
+ * Get set of current modes for modeables
  *
+ * @returns Set of modes
  */
 export function getCurrentModes(): Modes {
   const modes: Modes = {};
@@ -159,8 +162,9 @@ export function getCurrentModes(): Modes {
 }
 
 /**
+ * Apply set of modes
  *
- * @param modes
+ * @param modes Modes to apply
  */
 export function applyModes(modes: Modes) {
   for (const command of modeableCommands) {
@@ -294,9 +298,7 @@ function canEquipItemCount(): number {
  * Checks the objective cache for a valid entry.
  *
  * @param cacheKey The cache key to check.
- * @param updateOnFamiliarChange Ignore cache if familiar has changed.
- * @param updateOnCanEquipChanged Ignore cache if stats have changed what can be equipped.
- * @param options
+ * @param options Set of maximizer options
  * @returns A valid CacheEntry or null.
  */
 function checkCache(
@@ -332,7 +334,7 @@ function checkCache(
  * Applies equipment that was found in the cache.
  *
  * @param entry The CacheEntry to apply
- * @param options
+ * @param options Set of maximizer options
  */
 function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
   const outfitName = options.useOutfitCaching
@@ -390,7 +392,7 @@ const slotStructure = [
  * Verifies that a CacheEntry was applied successfully.
  *
  * @param entry The CacheEntry to verify
- * @param warn
+ * @param warn Whether to warn if the cache could not be applied
  * @returns If all desired equipment was appliedn in the correct slots.
  */
 function verifyCached(entry: CacheEntry, warn = true): boolean {
@@ -452,7 +454,7 @@ function verifyCached(entry: CacheEntry, warn = true): boolean {
  * Save current equipment to the objective cache.
  *
  * @param cacheKey The cache key to save.
- * @param options
+ * @param options Set of maximizer options
  */
 function saveCached(cacheKey: string, options: MaximizeOptions): void {
   const equipment: Map<Slot, Item> = new Map<Slot, Item>();
@@ -668,6 +670,7 @@ export class Requirement {
    * Merges a set of requirements together, starting with an empty requirement.
    *
    * @param allRequirements Requirements to merge
+   * @returns Merged requirements
    */
   static merge(allRequirements: Requirement[]): Requirement {
     return allRequirements.reduce(

@@ -30,8 +30,10 @@ const statPropertiesSet = new Set(statProperties);
 const phylumPropertiesSet = new Set(phylumProperties);
 
 /**
+ * Determine whether a property has a boolean value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a boolean value
  */
 export function isBooleanProperty(
   property: string
@@ -40,8 +42,10 @@ export function isBooleanProperty(
 }
 
 /**
+ * Determine whether a property has a numeric value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a numeric value
  */
 export function isNumericProperty(
   property: string
@@ -50,8 +54,10 @@ export function isNumericProperty(
 }
 
 /**
+ * Determine whether a property has a numeric or string value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a numeric or string value
  */
 export function isNumericOrStringProperty(
   property: string
@@ -60,16 +66,20 @@ export function isNumericOrStringProperty(
 }
 
 /**
+ * Determine whether a property has a string value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a string value
  */
 export function isStringProperty(property: string): property is StringProperty {
   return (stringPropertiesSet as Set<string>).has(property);
 }
 
 /**
+ * Determine whether a property has a Location value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a Location value
  */
 export function isLocationProperty(
   property: string
@@ -78,8 +88,10 @@ export function isLocationProperty(
 }
 
 /**
+ * Determine whether a property has a Monster value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a Monster value
  */
 export function isMonsterProperty(
   property: string
@@ -88,8 +100,10 @@ export function isMonsterProperty(
 }
 
 /**
+ * Determine whether a property has a Familiar value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a Familiar value
  */
 export function isFamiliarProperty(
   property: string
@@ -98,16 +112,20 @@ export function isFamiliarProperty(
 }
 
 /**
+ * Determine whether a property has a Stat value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a Stat value
  */
 export function isStatProperty(property: string): property is StatProperty {
   return (statPropertiesSet as Set<string>).has(property);
 }
 
 /**
+ * Determine whether a property has a Phylum value
  *
- * @param property
+ * @param property Property to check
+ * @returns Whether the supplied property has a Phylum value
  */
 export function isPhylumProperty(property: string): property is PhylumProperty {
   return (phylumPropertiesSet as Set<string>).has(property);

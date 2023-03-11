@@ -189,7 +189,7 @@ export function printModtrace(
     return printModtrace([modifiers], modifiers);
   else if (modifiers.length === 0) return;
   else if (!baseModifier) {
-    modifiers
+    return modifiers
       .filter(
         (mod1) =>
           !modifiers.some((mod2) => mod2 !== mod1 && mod1.includes(mod2))
@@ -200,7 +200,6 @@ export function printModtrace(
           baseMod
         )
       );
-    return;
   }
 
   const htmlOutput = cliExecuteOutput(`modtrace ${baseModifier}`);
@@ -211,25 +210,18 @@ export function printModtrace(
     .slice(2);
 
   if (
-    headers.findIndex(
+    !headers.some(
       (header) => header.toLowerCase() === baseModifier.toLowerCase()
-    ) === -1
+    )
   ) {
-    print(
+    return print(
       `Could not find exact string match of ${baseModifier} in ${modifiers.toString()}`,
       "red"
     );
-    return;
   }
 
   let total = 0.0;
-  // Maps modifier name to its value
-  const modifierVals = new Map(
-    headers.map((header) => {
-      return [header, 0];
-    })
-  );
-
+  const modifierVals = new Map(headers.map((header) => [header, 0])); // Maps modifier name to its value
   const lowerCaseModifiers = modifiers.map((modifier) =>
     modifier.toLowerCase()
   );

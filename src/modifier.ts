@@ -42,7 +42,7 @@ import {
   stringModifiers,
 } from "./modifierTypes";
 import { $effect } from "./template-string";
-import { arrayContains, sumNumbers } from "./utils";
+import { arrayContains, sum } from "./utils";
 
 export function get(
   name: BooleanModifier,
@@ -183,7 +183,9 @@ export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
 
 export function printModtrace(
   inputModifiers: string | string[], // the user's list of modifiers to look up
-  baseModifier?: string
+  baseModifier?: string,
+  componentColor = "purple",
+  totalColor = "blue"
 ): void {
   if (typeof inputModifiers === "string")
     return printModtrace([inputModifiers], inputModifiers);
@@ -205,7 +207,7 @@ export function printModtrace(
   const htmlOutput = cliExecuteOutput(`modtrace ${baseModifier}`);
   // The list of matched modifiers that mafia returns
   const modtraceModifiers = Array.from(
-    htmlOutput.match(RegExp("(>)(.*?)(</td>)", "g")) ?? []
+    htmlOutput.match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? []
   )
     .map((s) => s.slice(1, -5))
     .slice(2);
@@ -236,21 +238,21 @@ export function printModtrace(
     modifier.toLowerCase()
   );
 
-  Array.from(htmlOutput.match(RegExp("<tr>(.*?)</tr>", "g")) ?? [])
+  Array.from(htmlOutput.match(RegExp(/<tr>(.*?)<\/tr>/g)) ?? [])
     .slice(1)
     .map((s) => s.slice(4, -5))
     .forEach((s) => {
       const rowArr = Array.from(
         s
-          .replace(RegExp("></td>", "g"), ">0</td>")
-          .match(RegExp("(>)(.*?)(</td>)", "g")) ?? []
+          .replace(RegExp(/><\/td>/g), ">0</td>")
+          .match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? []
       ).map((s) => s.slice(1, -5));
       const rowName = rowArr[1];
       rowArr
         .slice(2)
         .filter((e, idx) => idx % 2 === 0)
         .forEach((e, idx) => {
-          const val = parseInt(e);
+          const val = parseFloat(e);
           modifierVals.set(
             modtraceModifiers[idx],
             (modifierVals.get(modtraceModifiers[idx]) ?? 0) + val
@@ -264,22 +266,20 @@ export function printModtrace(
         });
     });
 
-  const total = sumNumbers(
-    modtraceModifiers.map((modifier) => {
-      if (lowerCaseModifiers.includes(modifier.toLowerCase())) {
-        let modVal = modifierVals.get(modifier) ?? 0;
-        if (
-          have($effect`Bow-Legged Swagger`) &&
-          modifier.includes("Weapon Damage")
-        ) {
-          print(`[${modifier}] Bow-Legged Swagger (${modVal.toFixed(1)})`);
-          modVal *= 2;
-        }
-        print(`${modifier} => ${modVal.toFixed(1)}`, "purple");
-        return modVal;
-      } else return 0;
-    })
-  );
+  const total = sum(modtraceModifiers, (modifier) => {
+    if (lowerCaseModifiers.includes(modifier.toLowerCase())) {
+      let modVal = modifierVals.get(modifier) ?? 0;
+      if (
+        have($effect`Bow-Legged Swagger`) &&
+        modifier.includes("Weapon Damage")
+      ) {
+        print(`[${modifier}] Bow-Legged Swagger (${modVal.toFixed(1)})`);
+        modVal *= 2;
+      }
+      print(`${modifier} => ${modVal.toFixed(1)}`, componentColor);
+      return modVal;
+    } else return 0;
+  });
 
-  print(`Total ${baseModifier}: ${total.toFixed(1)}`, "blue");
+  print(`Total ${baseModifier}: ${total.toFixed(1)}`, totalColor);
 }

@@ -70,8 +70,10 @@ export type ActionConstraints = {
 };
 
 /**
+ * Merge a set of constraints into one
  *
- * @param {...any} allConstraints
+ * @param allConstraints Constraints to mege
+ * @returns Merged constraints
  */
 function mergeConstraints(
   ...allConstraints: ActionConstraints[]
@@ -225,9 +227,11 @@ export class ActionSource {
 }
 
 /**
+ * See if a supplied action meets a set of constraints
  *
- * @param action
- * @param constraints
+ * @param action Action to test
+ * @param constraints Constraints to apply
+ * @returns Whether action meets constraints
  */
 function filterAction(
   action: ActionSource,

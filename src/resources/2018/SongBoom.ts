@@ -5,7 +5,7 @@ import { $item } from "../../template-string";
 
 export const item = $item`SongBoom™ BoomBox`;
 /**
- *
+ * @returns Whether we `have` the SongBoom™ BoomBox
  */
 export function have(): boolean {
   return haveItem(item);
@@ -21,10 +21,10 @@ const keywords = {
 
 export type SongBoomSong = keyof typeof keywords | null;
 
-export const songBoomSongs = new Set<string>(Object.keys(keywords));
+export const songBoomSongs = new Set(Object.keys(keywords));
 
 /**
- * Current song.
+ * @returns The `SongBoomSong` you currently have active; `null` if none is active at this time
  */
 export function song(): SongBoomSong {
   const stored = get("boomBoxSong");
@@ -32,16 +32,17 @@ export function song(): SongBoomSong {
 }
 
 /**
- * Song changes left today.
+ * @returns Song changes left today.
  */
 export function songChangesLeft(): number {
   return get("_boomBoxSongsLeft");
 }
 
 /**
- * Change the song.
+ * Change the song. Throws an error if unable.
  *
  * @param newSong Song to change to.
+ * @returns Whether we successfully changed the song; `false` thus means that this was already our current song.
  */
 export function setSong(newSong: SongBoomSong): boolean {
   if (song() !== newSong) {
@@ -54,7 +55,7 @@ export function setSong(newSong: SongBoomSong): boolean {
 }
 
 /**
- * Progress to next song drop (e.g. gathered meat-clip).
+ * @returns Progress to next song drop (e.g. gathered meat-clip).
  */
 export function dropProgress(): number {
   return get("_boomBoxFights");

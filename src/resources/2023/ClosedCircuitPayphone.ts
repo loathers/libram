@@ -10,7 +10,7 @@ import {
   toItem,
   toMonster,
 } from "kolmafia";
-import { KnownProperty } from "../..";
+import { KnownProperty, makeByXFunction } from "../..";
 import { have as have_ } from "../../lib";
 import { get, withProperty } from "../../property";
 import { $item, $location } from "../../template-string";
@@ -41,7 +41,7 @@ export function rufusTarget(): Monster | Item | string | null {
   }
 }
 
-const INGRESS_RIFTS: { [x in string]: Location } = {
+const INGRESS_RIFTS = {
   desertbeach: $location`Shadow Rift (Desert Beach)`,
   forestvillage: $location`Shadow Rift (Forest Village)`,
   mclargehuge: $location`Shadow Rift (Mt. McLargeHuge)`,
@@ -57,11 +57,21 @@ const INGRESS_RIFTS: { [x in string]: Location } = {
   town_right: $location`Shadow Rift (The Right Side of the Tracks)`,
 } as const;
 
+export type Ingress = "" | keyof typeof INGRESS_RIFTS;
+
+/**
+ * @returns Your current `shadowRiftIngress`; `null` if none is set this ascension
+ */
+export function currentIngress(): Ingress {
+  return get("shadowRiftIngress") as Ingress;
+}
+
 /**
  * @returns The current shadow rift that Mafia thinks KoL thinks you're in.
  */
 export function currentRift(): Location | null {
-  return INGRESS_RIFTS[get("shadowRiftIngress")] ?? null;
+  const ingress = currentIngress();
+  return ingress ? INGRESS_RIFTS[ingress] : null;
 }
 
 const RIFTS: readonly Location[] = Array.from(Object.values(INGRESS_RIFTS));
@@ -136,3 +146,10 @@ export function chooseQuest(
 export function rifts(): Location[] {
   return [...RIFTS];
 }
+
+/**
+ * Picks an option based on your current shadow rift ingress
+ * @param options An object keyed by shadow rift ingress; it must either contain all possible ingresses, or have a `default` parameter.
+ * @returns The option corresponding to your current shadow rift ingress.
+ */
+export const byIngress = makeByXFunction(currentIngress);

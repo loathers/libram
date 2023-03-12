@@ -6,14 +6,14 @@ const pantogram = $item`portable pantogram`;
 const pants = $item`pantogram pants`;
 
 /**
- *
+ * @returns Do we `have` the Pantogram itself?
  */
 export function have(): boolean {
   return haveItem(pantogram);
 }
 
 /**
- *
+ * @returns Do we `have` pantogram pants?
  */
 export function havePants(): boolean {
   return haveItem(pants);
@@ -52,8 +52,10 @@ const LeftSacrifice = {
 type PantogramSacrificeL = keyof typeof LeftSacrifice;
 
 /**
+ * Internal function used for `makePants`
  *
- * @param mod
+ * @param mod Modifier to get from our Left sacrifice
+ * @returns Item-tuple to use in our URL string
  */
 function getLeftSacPair(mod: PantogramSacrificeL): [Item | number, number] {
   return LeftSacrifice[mod] as [Item | number, number];
@@ -76,8 +78,10 @@ const MiddleSacrifice = {
 type PantogramSacrificeM = keyof typeof MiddleSacrifice;
 
 /**
+ * Internal function used for `makePants`
  *
- * @param mod
+ * @param mod Modifier to get from our Middle sacrifice
+ * @returns Item-tuple to use in our URL string
  */
 function getMiddleSacPair(mod: PantogramSacrificeM): [Item | number, number] {
   return MiddleSacrifice[mod] as [Item | number, number];
@@ -100,8 +104,10 @@ const RightSacrifice = {
 type PantogramSacrificeR = keyof typeof RightSacrifice;
 
 /**
+ * Internal function used for `makePants`
  *
- * @param mod
+ * @param mod Modifier to get from our Right sacrifice
+ * @returns Item-tuple to use in our URL string
  */
 function getRightSacPair(mod: PantogramSacrificeR): [Item | number, number] {
   return RightSacrifice[mod] as [Item | number, number];
@@ -151,8 +157,10 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
 }
 
 /**
+ * Internal function used in `makePants`
  *
- * @param pair
+ * @param pair Tuple consisting of an item or number and another number
+ * @returns URL parameter associated with the tuple
  */
 function sacrificePairToURL(pair: [number | Item, number]): string {
   const [rawSacrifice, quantity] = pair;

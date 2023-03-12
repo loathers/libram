@@ -160,11 +160,10 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
   {
     familiar: $familiar`Party Mouse`,
-    meatVal: () => 50,
-    /*
-    The below code is more accurate. However, party mouse is virtually never going to be worthwhile and this causes so many useless mall hits it isn't funny.
-
-      getSaleValue(
+    meatVal: (slow = false) => {
+      if (!slow) return 50;
+      // Party mouse is virtually never going to be worthwhile and this causes so many useless mall hits it isn't funny.
+      return getSaleValue(
         ...Item.all().filter(
           (booze) =>
             ["decent", "good"].includes(booze.quality) &&
@@ -175,8 +174,8 @@ export const ridingFamiliars: FamiliarRider[] = [
               booze
             )
         )
-      ),
-      */
+      );
+    },
     probability: 0.05,
     modifier: {
       ["Booze Drop"]: 25,

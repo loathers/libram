@@ -80,6 +80,7 @@ export function hasMeatified(): boolean {
  *
  * @param target The weight you want to reach
  * @param bonusExperience The amount of bonus exdperience you'll be running--defaults to the current value
+ * @returns Number of fights needed
  */
 export function fightsUntil(
   target: number,

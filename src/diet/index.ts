@@ -45,11 +45,13 @@ function isMonday() {
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
-// TODO: Include Salty Mouth and potentially other modifiers.
 /**
+ * Expected adventures from an item given a specified state
  *
- * @param item
- * @param modifiers
+ * @todo Include Salty Mouth and potentially other modifiers.
+ * @param item Item to consider
+ * @param modifiers Consumption modifiers to consider
+ * @returns Adventures expected
  */
 function expectedAdventures(
   item: Item,
@@ -181,6 +183,7 @@ export class MenuItem<T> {
    * Construct a new menu item, possibly with extra properties. Items in MenuItem.defaultOptions have intelligent defaults.
    *
    * @param item Item to add to menu.
+   * @param options Options for this menu item
    * @param options.organ Designate item as belonging to a specific organ.
    * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
    * @param options.maximum Maximum uses remaining today, or "auto" to check dailyusesleft Mafia property.
@@ -188,7 +191,6 @@ export class MenuItem<T> {
    * @param options.effect Effect associated with this menu item (pocket wish effect, sweet synthesis effect, pill keeper potion extension)
    * @param options.mayo Which mayo to use before item (ignored if mayo clinic is not installed or item is not a food)
    * @param options.note Any note to track information about item, to be used later
-   * @param options
    */
   constructor(item: Item, options: MenuItemOptions<T> = {}) {
     const {
@@ -246,8 +248,8 @@ type Organ = typeof organs[number];
 type OrganSize = [Organ, number];
 
 /**
- *
- * @param x
+ * @param x Name of thing that might be an organ
+ * @returns Whether the string supplied is the name of an organ
  */
 function isOrgan(x: string): x is Organ {
   return (organs as readonly string[]).includes(x);
@@ -418,7 +420,7 @@ class DietPlanner<T> {
   /**
    * Plan an individual organ.
    *
-   * @param organ
+   * @param organ Organ to plan
    * @param capacity Organ capacity.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].

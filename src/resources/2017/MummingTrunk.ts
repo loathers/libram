@@ -3,8 +3,10 @@ import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 
 /**
+ * Internal function used to parse mods
  *
- * @param input
+ * @param input The modstring used in your mummery pref
+ * @returns a NumericModifier matching that string
  */
 function toModifier(input: string): NumericModifier {
   const regExp = new RegExp(/Experience \((.*?)\)/);
@@ -22,7 +24,7 @@ export function currentCostumes(): Map<Familiar, [NumericModifier, number]> {
   const entries = get("_mummeryMods").split(",");
   const returnValue = new Map<Familiar, [NumericModifier, number]>();
 
-  const regExp = new RegExp(/([^:]+): \[(d+)\*fam\(([^)]+)\)\]/);
+  const regExp = new RegExp(/([^:]+): \[(\d+)\*fam\(([^)]+)\)\]/);
 
   for (const entry of entries) {
     const matcher = entry.match(regExp);

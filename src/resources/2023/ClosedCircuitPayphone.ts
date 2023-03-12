@@ -10,11 +10,10 @@ import {
   toItem,
   toMonster,
 } from "kolmafia";
-import { KnownProperty, makeByXFunction } from "../..";
 import { have as have_ } from "../../lib";
-import { get, withProperty } from "../../property";
+import { get, withChoice } from "../../property";
 import { $item, $location } from "../../template-string";
-import { maxBy } from "../../utils";
+import { makeByXFunction, maxBy } from "../../utils";
 
 export const item = $item`closed-circuit pay phone`;
 
@@ -126,7 +125,7 @@ export function chooseQuest(
 ): boolean {
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
-  withProperty("choiceAdventure1497" as KnownProperty, "", () => {
+  withChoice(1497, "", () => {
     use(item);
     runChoice(
       chooser({

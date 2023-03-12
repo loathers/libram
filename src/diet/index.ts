@@ -23,7 +23,7 @@ import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { sum, sumNumbers } from "../utils";
+import { sum } from "../utils";
 import { knapsack } from "./knapsack";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
@@ -734,9 +734,7 @@ class DietEntry<T> {
     const gross =
       mpa * this.expectedAdventures(diet) +
       this.quantity *
-        sumNumbers(
-          this.menuItems.map((menuItem) => menuItem.additionalValue ?? 0)
-        );
+        sum(this.menuItems, (menuItem) => menuItem.additionalValue ?? 0);
     if (method === "gross") {
       return gross;
     } else {
@@ -745,10 +743,7 @@ class DietEntry<T> {
   }
 
   expectedPrice(): number {
-    return (
-      this.quantity *
-      sumNumbers(this.menuItems.map((menuItem) => menuItem.price()))
-    );
+    return this.quantity * sum(this.menuItems, (menuItem) => menuItem.price());
   }
 }
 interface OrganCapacity {
@@ -801,23 +796,17 @@ export class Diet<T> {
   }
 
   expectedAdventures(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedAdventures(this))
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedAdventures(this));
   }
 
   expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) =>
-        dietEntry.expectedValue(mpa, this, method)
-      )
+    return sum(this.entries, (dietEntry) =>
+      dietEntry.expectedValue(mpa, this, method)
     );
   }
 
   expectedPrice(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedPrice())
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedPrice());
   }
 
   copy(): Diet<T> {

@@ -12,14 +12,14 @@ export const Mayo = {
 };
 
 /**
- *
+ * @returns Whether the Mayo Clinic is our current active workshed
  */
 export function installed(): boolean {
   return getWorkshed() === $item`portable Mayo Clinic`;
 }
 
 /**
- *
+ * @returns Whether we `have` the Mayo Clinic, or it's installed
  */
 export function have(): boolean {
   return haveItem($item`portable Mayo Clinic`) || installed();
@@ -30,6 +30,7 @@ export function have(): boolean {
  *
  * @param mayo Mayo to use
  * @param quantity Quantity to ensure
+ * @returns Whether we succeeded in this endeavor; a trivial `false` for people without the clinic `installed`
  */
 export function setMayoMinder(mayo: Item, quantity = 1): boolean {
   if (getWorkshed() !== $item`portable Mayo Clinic`) return false;

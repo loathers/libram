@@ -16,14 +16,14 @@ import { clamp } from "../../utils";
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
 /**
- * Checks if you have DNA lab in inventory or installed
+ * @returns Whether or not you `have` DNA lab or it's installed
  */
 export function have(): boolean {
   return haveItem(lab) || getWorkshed() === lab;
 }
 
 /**
- * Checks if you have DNA lab installed
+ * @returns Whether the DNA Lab is your currently active workshed
  */
 export function installed(): boolean {
   return getWorkshed() === lab;
@@ -83,6 +83,7 @@ const tonicEffects = Array.from(phylaEffects.values());
  * Tells you whether you are currently hybridized. When passed with an input of any sort, tells you whether you are currently hybridized with that effect.
  *
  * @param tonic Optional input. When passed, the function returns whether that specific effect is hybridized.
+ * @returns Whether the given tonic is currently hybridized
  */
 export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
   if (!tonic) return installed() && get("_dnaHybrid");

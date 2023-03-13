@@ -88,23 +88,25 @@ class Flower {
 }
 
 /**
- *
+ * @returns Whether or not the Florist is currently available
  */
 export function have(): boolean {
   return floristAvailable();
 }
 
 /**
+ * Internal function used to convert strings to Flower instances
  *
- * @param name
+ * @param name The flower name
+ * @returns a Flower instance
  */
 function toFlower(name: string): Flower | undefined {
   return all.find((flower) => name === flower.name);
 }
 
 /**
- *
- * @param location
+ * @param location The location to check
+ * @returns an array of the Flowers in that location
  */
 export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
@@ -117,8 +119,8 @@ export function flowersIn(location: Location): Flower[] {
 }
 
 /**
- *
- * @param location
+ * @param location The location to check
+ * @returns an array of the Flowers we can plant in that location
  */
 export function flowersAvailableFor(
   location: Location = myLocation()
@@ -127,8 +129,8 @@ export function flowersAvailableFor(
 }
 
 /**
- *
- * @param location
+ * @param location The location to check
+ * @returns `true` if the location has 3 flowers in it; `false` otherwise
  */
 export function isFull(location = myLocation()): boolean {
   return flowersIn(location).length === 3;

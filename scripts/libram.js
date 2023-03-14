@@ -14063,18 +14063,18 @@ var DietEntry = /* @__PURE__ */ function() {
   }, {
     key: "expectedValue",
     value: function(mpa, diet) {
-      var method = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : "gross", gross = mpa * this.expectedAdventures(diet) + this.quantity * sumNumbers(this.menuItems.map(function(menuItem) {
+      var method = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : "gross", gross = mpa * this.expectedAdventures(diet) + this.quantity * sum(this.menuItems, function(menuItem) {
         var _menuItem$additionalV3;
         return (_menuItem$additionalV3 = menuItem.additionalValue) !== null && _menuItem$additionalV3 !== void 0 ? _menuItem$additionalV3 : 0;
-      }));
+      });
       return method === "gross" ? gross : gross - this.expectedPrice();
     }
   }, {
     key: "expectedPrice",
     value: function() {
-      return this.quantity * sumNumbers(this.menuItems.map(function(menuItem) {
+      return this.quantity * sum(this.menuItems, function(menuItem) {
         return menuItem.price();
-      }));
+      });
     }
   }]), DietEntry2;
 }(), Diet = /* @__PURE__ */ function() {
@@ -14119,25 +14119,25 @@ var DietEntry = /* @__PURE__ */ function() {
     key: "expectedAdventures",
     value: function() {
       var _this = this;
-      return sumNumbers(this.entries.map(function(dietEntry) {
+      return sum(this.entries, function(dietEntry) {
         return dietEntry.expectedAdventures(_this);
-      }));
+      });
     }
   }, {
     key: "expectedValue",
     value: function(mpa) {
       var _this = this;
       var method = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "gross";
-      return sumNumbers(this.entries.map(function(dietEntry) {
+      return sum(this.entries, function(dietEntry) {
         return dietEntry.expectedValue(mpa, _this, method);
-      }));
+      });
     }
   }, {
     key: "expectedPrice",
     value: function() {
-      return sumNumbers(this.entries.map(function(dietEntry) {
+      return sum(this.entries, function(dietEntry) {
         return dietEntry.expectedPrice();
-      }));
+      });
     }
   }, {
     key: "copy",
@@ -15582,9 +15582,7 @@ var Session = /* @__PURE__ */ function() {
           quantity: quantity,
           value: itemValue(item9) * quantity
         };
-      }), items = Math.floor(sumNumbers(itemDetails.map(function(detail) {
-        return detail.value;
-      })));
+      }), items = Math.floor(sum(itemDetails, "value"));
       return {
         meat: meat,
         items: items,

@@ -1,3 +1,4 @@
+/* eslint "jsdoc/require-jsdoc": "warn" */
 import {
   indexOf,
   Item,
@@ -33,6 +34,7 @@ class QuestData {
 
   /**
    * Process for determining where to put a wanderer to extract additional value from it
+   *
    * @param name easy to refer to name of the quest
    * @param priority ranked preference of quests
    * @param questNameKiosk returns the name of the quest as found at the dinseylandfill Job Kiosk

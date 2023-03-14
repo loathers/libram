@@ -17,6 +17,7 @@ const lastTeaPartyEffect = $effect`Oleaginous Soles`;
 
 /**
  * Checks if an item is a valid hat for The Mad Tea Party
+ *
  * @param item The item to check
  * @param characters The desired nameLength for The Mad Tea Party effect
  * @returns If this item is a valid hat for The Mad Tea Party
@@ -34,6 +35,7 @@ function validTeaPartyHat(item: Item, characters: number): boolean {
 
 /**
  * Find the name length required to get an effect from The Mad Tea Party
+ *
  * @param effect The effect to check
  * @returns The number of characters required to get an effect
  */
@@ -50,6 +52,7 @@ export function findTeaPartyHatLength(effect: Effect): number {
 
 /**
  * Find all hats that will get an effect from The Mad Tea Party
+ *
  * @param effect The effect to check
  * @returns An array of equippable hats
  */
@@ -63,6 +66,7 @@ export function findTeaPartyHats(effect: Effect): Item[] {
 
 /**
  * Check if a hat is available to get an effect from The Mad Tea Party
+ *
  * @param effect The effect to check
  * @returns If any valid hat is in inventory
  */
@@ -80,6 +84,7 @@ export function haveTeaPartyHat(effect: Effect): boolean {
 
 /**
  * Try to get an effect from The Mad Tea Party
+ *
  * @param effect The effect to get
  * @returns If the request was successful
  */

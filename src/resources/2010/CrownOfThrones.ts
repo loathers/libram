@@ -1,4 +1,4 @@
-import { Familiar, myFamiliar } from "kolmafia";
+import { Familiar, Item, myFamiliar } from "kolmafia";
 import { getSaleValue, have } from "../../lib";
 import { Modifiers } from "../../modifier";
 import { get } from "../../property";
@@ -160,11 +160,10 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
   {
     familiar: $familiar`Party Mouse`,
-    meatVal: () => 50,
-    /*
-    The below code is more accurate. However, party mouse is virtually never going to be worthwhile and this causes so many useless mall hits it isn't funny.
-
-      getSaleValue(
+    meatVal: (slow = false) => {
+      if (!slow) return 50;
+      // Party mouse is virtually never going to be worthwhile and this causes so many useless mall hits it isn't funny.
+      return getSaleValue(
         ...Item.all().filter(
           (booze) =>
             ["decent", "good"].includes(booze.quality) &&
@@ -175,8 +174,8 @@ export const ridingFamiliars: FamiliarRider[] = [
               booze
             )
         )
-      ),
-      */
+      );
+    },
     probability: 0.05,
     modifier: {
       ["Booze Drop"]: 25,
@@ -577,6 +576,14 @@ export const ridingFamiliars: FamiliarRider[] = [
   },
 ];
 
+/**
+ * Value a specified familiar Crown rider
+ *
+ * @param rider Familiar to value
+ * @param modifierValueFunction Value of the extra modifiers the familiar provides
+ * @param ignoreLimitedDrops Whether to ignore drops that are daily or otherwise limited
+ * @returns Rider value (in meat)
+ */
 export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (modifiers: Modifiers) => number,
@@ -598,6 +605,15 @@ type RiderMode = {
 
 const riderModes = new Map<string, RiderMode>();
 
+/**
+ * Creates a rider mode for this session
+ *
+ * @param name Rider mode name
+ * @param modifierValueFunction Function to value modifiers of a rider
+ * @param ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
+ * @param excludeCurrentFamiliar Whether to exclude the player's current familiar
+ * @returns Map of all rider modes created this session, including the one that was just made
+ */
 export function createRiderMode(
   name: string,
   modifierValueFunction: (modifiers: Modifiers) => number,
@@ -613,6 +629,12 @@ export function createRiderMode(
 
 const riderLists = new Map<string, FamiliarRider[]>();
 
+/**
+ * Pick a rider
+ *
+ * @param mode Mode by which to select possible riders
+ * @returns Picked faimiliar rider or null if no rider could be selected
+ */
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;

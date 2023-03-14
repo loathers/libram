@@ -1,3 +1,4 @@
+/* eslint "jsdoc/require-jsdoc": "warn" */
 import { cliExecute, Item, toInt, visitUrl } from "kolmafia";
 import { get } from "../../property";
 import { $item } from "../../template-string";

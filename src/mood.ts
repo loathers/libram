@@ -1,5 +1,3 @@
-import "core-js/modules/es.object.values";
-
 import {
   availableAmount,
   buy,
@@ -318,6 +316,7 @@ export class Mood {
 
   /**
    * Set default options for new Mood instances.
+   *
    * @param options Default options for new Mood instances.
    */
   static setDefaultOptions(options: Partial<MoodOptions>): void {
@@ -329,6 +328,7 @@ export class Mood {
 
   /**
    * Construct a new Mood instance.
+   *
    * @param options Options for mood.
    */
   constructor(options: Partial<MoodOptions> = {}) {
@@ -337,6 +337,8 @@ export class Mood {
 
   /**
    * Get the MP available for casting skills.
+   *
+   * @returns Available MP
    */
   availableMp(): number {
     return this.options.useNativeRestores
@@ -362,7 +364,9 @@ export class Mood {
 
   /**
    * Add a skill to the mood.
+   *
    * @param skill Skill to add.
+   * @returns This mood to enable chaining
    */
   skill(skill: Skill): Mood {
     this.elements.push(new SkillMoodElement(skill));
@@ -371,8 +375,10 @@ export class Mood {
 
   /**
    * Add an effect to the mood, with casting based on {effect.default}.
+   *
    * @param effect Effect to add.
    * @param gainEffect How to gain the effect. Only runs if we don't have the effect.
+   * @returns This mood to enable chaining
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
@@ -386,8 +392,10 @@ export class Mood {
 
   /**
    * Add a potion to the mood.
+   *
    * @param potion Potion to add.
    * @param maxPricePerTurn Maximum price to pay per turn of the effect.
+   * @returns This mood to enable chaining
    */
   potion(potion: Item, maxPricePerTurn: number): Mood {
     this.elements.push(new PotionMoodElement(potion, maxPricePerTurn));
@@ -396,7 +404,9 @@ export class Mood {
 
   /**
    * Add an effect to acquire via pocket wishes to the mood.
+   *
    * @param effect Effect to wish for in the mood.
+   * @returns This mood to enable chaining
    */
   genie(effect: Effect): Mood {
     this.elements.push(new GenieMoodElement(effect));
@@ -405,7 +415,9 @@ export class Mood {
 
   /**
    * Add an Asdon Martin driving style to the mood.
+   *
    * @param effect Driving style to add to the mood.
+   * @returns This mood to enable chaining
    */
   drive(effect: Effect): Mood {
     if (
@@ -419,6 +431,7 @@ export class Mood {
 
   /**
    * Execute the mood, trying to ensure {ensureTurns} of each effect.
+   *
    * @param ensureTurns Turns of each effect to try and achieve.
    * @returns Whether or not we successfully got this many turns of every effect in the mood.
    */

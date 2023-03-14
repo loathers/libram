@@ -77,6 +77,8 @@ const RIFTS: readonly Location[] = Array.from(Object.values(INGRESS_RIFTS));
 
 /**
  * Choose a shadow rift to suit your needs
+ *
+ * @param options An object of various requirements you might have for the rift you want
  * @param options.canAdventure Set to `true` if you want to only select a rift that you can currently access
  * @param options.monsters Set to an array of Shadow Monsters you want to be available in the rift
  * @param options.drops Set to an array of item drops you want to come from monsters in the rift
@@ -109,6 +111,7 @@ export function chooseRift(options: {
 
 /**
  * Choose a quest based on the options available to us
+ *
  * @param chooser A function that maps quest-options to a choice
  * @returns Whether we successfully accepted a quest
  */

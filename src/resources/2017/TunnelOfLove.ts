@@ -4,22 +4,37 @@ import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib";
 import { get, set } from "../../property";
 import { $item, $location } from "../../template-string";
 
+/**
+ * @returns Is the love tunnel available?
+ */
 export function have(): boolean {
   return get("loveTunnelAvailable");
 }
 
+/**
+ * @returns Have we visited the love tunnel yet today?
+ */
 export function isUsed(): boolean {
   return get("_loveTunnelUsed");
 }
 
+/**
+ * @returns Do we `have` an Enamorang?
+ */
 export function haveLovEnamorang(): boolean {
   return haveItem($item`LOV Enamorang`);
 }
 
+/**
+ * @returns How many enamorangs have we used today?
+ */
 export function getLovEnamorangUses(): number {
   return get("_enamorangs");
 }
 
+/**
+ * @returns Can we currently use an enamorang?
+ */
 export function couldUseLoveEnamorang(): boolean {
   return (
     !haveWandererCounter(Wanderer.Enamorang) &&
@@ -28,6 +43,9 @@ export function couldUseLoveEnamorang(): boolean {
   );
 }
 
+/**
+ * @returns The Monster currently in our enamorang; `null` for none
+ */
 export function getLovEnamorangMonster(): Monster | null {
   return get("enamorangMonster");
 }
@@ -50,6 +68,12 @@ type LOVExtra =
   | "toast"
   | null;
 
+/**
+ * Internal function used for `fightAll`
+ *
+ * @param equipment The equipment to select from the tunnel
+ * @returns The relevant choice option
+ */
 function equipmentChoice(equipment: LOVEquipment) {
   switch (equipment) {
     case "LOV Eardigan":
@@ -61,6 +85,12 @@ function equipmentChoice(equipment: LOVEquipment) {
   }
 }
 
+/**
+ *Internal function used for `fightAll`
+ *
+ * @param effect The effect to select from the tunnel
+ * @returns The relevant choice option
+ */
 function effectChoice(effect: LOVEffect) {
   switch (effect) {
     case "Lovebotamy":
@@ -72,6 +102,12 @@ function effectChoice(effect: LOVEffect) {
   }
 }
 
+/**
+ * Internal function used for `fightAll`
+ *
+ * @param extra The extra item to select from the tunnel
+ * @returns The relevant choice option
+ */
 function extraChoice(extra: LOVExtra) {
   switch (extra) {
     case "LOV Enamorang":
@@ -93,6 +129,7 @@ function extraChoice(extra: LOVExtra) {
 
 /**
  * Fight all LOV monsters and get buffs/equipment.
+ *
  * @param equipment Equipment to take from LOV.
  * @param effect Effect to take from LOV.
  * @param extra Extra item to take from LOV.

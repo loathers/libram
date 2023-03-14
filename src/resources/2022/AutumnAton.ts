@@ -18,6 +18,8 @@ export const item = Item.get("autumn-aton");
 
 /**
  * Is the autumn-aton currently in your inventory, available to deploy?
+ *
+ * @returns The whether the autumn-aton is currently available for deployment
  */
 export function available(): boolean {
   return availableAmount(item) > 0;
@@ -25,11 +27,19 @@ export function available(): boolean {
 
 /**
  * Do you own the autumn-aton?
+ *
+ * @returns Whether you are an autumn-aton `have`r
  */
 export function have(): boolean {
   return get("hasAutumnaton") || available();
 }
 
+/**
+ * Internal function used to parse the fallbot's choice adventure to determine which zones are currently available
+ *
+ * @param html The pagetext of the fallbot's choice adventure
+ * @returns The locations currently available to send the fallbot to
+ */
 function checkLocations(html: string): Location[] {
   return xpath(
     html,
@@ -48,6 +58,7 @@ export function currentlyIn(): Location | null {
 
 /**
  * Deploy the autumn-aton to a location of your choosing.
+ *
  * @param target A location to send the autumn-aton to, or a prioritized list of locations to send it to, or a function to pick which location to send it to.
  * @param upgrade Should we apply any upgrades we see available?
  * @returns Where we ended up sending the autumn-aton; null if we didn't send it off.
@@ -80,6 +91,7 @@ export function sendTo(
 
 /**
  * Install any available upgrades for the autumn-aton.
+ *
  * @returns Whether there were any upgrades to install.
  */
 export function upgrade(): boolean {
@@ -130,6 +142,9 @@ export function turnsLeft(): number {
   return get("autumnatonQuestTurn") - totalTurnsPlayed();
 }
 
+/**
+ * @returns The number of leg-upgrades your autumn-aton has installed
+ */
 export function legs(): number {
   return currentUpgrades().filter((u) => u.includes("leg")).length;
 }
@@ -189,6 +204,12 @@ const UNIQUES = {
   },
 };
 
+/**
+ * Determines and returns the upgrade and item drop associated with the given location
+ *
+ * @param location The location to check the expected autumn-aton-unique drops of
+ * @returns `null` if the location has no upgrade or drop; otherwise, the upgrade and the autumn-aton item associated with that item
+ */
 export function getUniques(location: Location): {
   upgrade: Upgrade;
   item: Item;

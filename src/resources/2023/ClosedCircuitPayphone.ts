@@ -151,6 +151,7 @@ export function rifts(): Location[] {
 
 /**
  * Picks an option based on your current shadow rift ingress
+ *
  * @param options An object keyed by shadow rift ingress; it must either contain all possible ingresses, or have a `default` parameter.
  * @returns The option corresponding to your current shadow rift ingress.
  */

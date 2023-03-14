@@ -11877,11 +11877,17 @@ function next() {
 // src/resources/2023/ClosedCircuitPayphone.ts
 var ClosedCircuitPayphone_exports = {};
 __export(ClosedCircuitPayphone_exports, {
+  byIngress: function() {
+    return byIngress;
+  },
   chooseQuest: function() {
     return chooseQuest;
   },
   chooseRift: function() {
     return chooseRift;
+  },
+  currentIngress: function() {
+    return currentIngress;
   },
   currentRift: function() {
     return currentRift;
@@ -11967,9 +11973,12 @@ var INGRESS_RIFTS = {
   plains: $location(_templateObject1315 || (_templateObject1315 = _taggedTemplateLiteral39(["Shadow Rift (The Nearby Plains)"]))),
   town_right: $location(_templateObject1412 || (_templateObject1412 = _taggedTemplateLiteral39(["Shadow Rift (The Right Side of the Tracks)"])))
 };
+function currentIngress() {
+  return get("shadowRiftIngress");
+}
 function currentRift() {
-  var _INGRESS_RIFTS$get;
-  return (_INGRESS_RIFTS$get = INGRESS_RIFTS[get("shadowRiftIngress")]) !== null && _INGRESS_RIFTS$get !== void 0 ? _INGRESS_RIFTS$get : null;
+  var ingress = currentIngress();
+  return ingress ? INGRESS_RIFTS[ingress] : null;
 }
 var RIFTS = Array.from(Object.values(INGRESS_RIFTS));
 function chooseRift(options) {
@@ -11986,7 +11995,7 @@ function chooseRift(options) {
   return validRifts.length ? options.sortBy ? maxBy(validRifts, options.sortBy) : validRifts[0] : null;
 }
 function chooseQuest(chooser) {
-  return get("questRufus") !== "unstarted" || !have39() ? !1 : (withProperty("choiceAdventure1497", "", function() {
+  return get("questRufus") !== "unstarted" || !have39() ? !1 : (withChoice(1497, "", function() {
     (0, import_kolmafia49.use)(item8), (0, import_kolmafia49.runChoice)(chooser({
       artifact: (0, import_kolmafia49.toItem)(get("rufusDesiredArtifact")),
       entity: (0, import_kolmafia49.toMonster)(get("rufusDesiredEntity")),
@@ -11997,6 +12006,7 @@ function chooseQuest(chooser) {
 function rifts() {
   return _toConsumableArray13(RIFTS);
 }
+var byIngress = makeByXFunction(currentIngress);
 
 // src/resources/putty-likes.ts
 init_kolmafia_polyfill();

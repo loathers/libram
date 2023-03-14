@@ -10,7 +10,7 @@ import {
 } from "kolmafia";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
-import { sumNumbers } from "./utils";
+import { sum } from "./utils";
 
 /**
  * Return a mapping of the session items, mapping foldable items to a single of their forms
@@ -177,9 +177,7 @@ export class Session {
     const itemDetails = [...this.items.entries()].map(([item, quantity]) => {
       return { item, quantity, value: itemValue(item) * quantity };
     });
-    const items = Math.floor(
-      sumNumbers(itemDetails.map((detail) => detail.value))
-    );
+    const items = Math.floor(sum(itemDetails, "value"));
 
     return { meat, items, total: meat + items, itemDetails };
   }

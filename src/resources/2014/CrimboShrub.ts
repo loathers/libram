@@ -3,6 +3,9 @@ import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 
+/**
+ * @returns Whether we `have` the Crimbo Shrub in our terrarium
+ */
 export function have(): boolean {
   return have_($familiar`Crimbo Shrub`);
 }
@@ -62,6 +65,15 @@ const Prefs = {
 
 type ShrubPref = keyof typeof Prefs;
 
+/**
+ * Internal function used to check whether decour perfectly matches what we want
+ *
+ * @param topper Topper to check for
+ * @param lights Lights to check for
+ * @param garland Garland to check for
+ * @param gifts Gifts to check for
+ * @returns Whether every single decour matches what we expect
+ */
 function isDecoratedWith(
   topper: ShrubTopper,
   lights: ShrubLights,
@@ -77,6 +89,15 @@ function isDecoratedWith(
   return [topper, lights, garland, gifts].every((x, i) => x === decorations[i]);
 }
 
+/**
+ * Decorates our Crimbo Shrub with the chosen decour, if able
+ *
+ * @param topper The shrub Topper to select
+ * @param lights The shrub Lights to select
+ * @param garland The shrub Garland to select
+ * @param gifts The shrub Gifts to select
+ * @returns Whether the shrub's decour perfectly matches the given decour
+ */
 export function decorate(
   topper: ShrubTopper,
   lights: ShrubLights,
@@ -98,5 +119,6 @@ export function decorate(
   visitUrl(
     `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`
   );
-  return true;
+
+  return isDecoratedWith(topper, lights, garland, gifts);
 }

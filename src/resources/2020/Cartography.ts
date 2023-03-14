@@ -18,10 +18,23 @@ import { $skill } from "../../template-string";
 export const passive = $skill`Comprehensive Cartography`;
 export const skill = $skill`Map the Monsters`;
 
+/**
+ * Determines whether you `have` the skill Comprehensive Cartography
+ *
+ * @returns Whether you currently `have` the skill
+ */
 export function have(): boolean {
   return _have(passive);
 }
 
+/**
+ * Map a particular monster in a particular location
+ * You'll need to set your autoattack or CCS in advance of using this. Additionally, it will loop to try to avoid time-spinner pranks or zone intro adventures
+ *
+ * @param location The location to target
+ * @param monster The monster to target
+ * @returns Whether we successfully mapped the monster
+ */
 export function mapMonster(location: Location, monster: Monster): boolean {
   if (!have()) return false;
   if (get("_monstersMapped") >= 3) return false;

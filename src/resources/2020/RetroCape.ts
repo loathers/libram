@@ -7,6 +7,7 @@ import { $item, $skill } from "../../template-string";
 export const item = $item`unwrapped knock-off retro superhero cape`;
 /**
  * Determines whether you have() the Retro Cape.
+ *
  * @returns Whether you have the Retro Cape available.
  */
 export function have(): boolean {
@@ -73,6 +74,7 @@ const modeMap = new Map<[Hero, Mode], Modifiers>([
 
 /**
  * Tunes retro cape to a given setting
+ *
  * @param hero The Superhero to set it to
  * @param mode The washing instructions to set it to
  * @returns Whether we successfully tuned the Retro Cape.
@@ -86,6 +88,7 @@ export function set(hero: Hero, mode: Mode): boolean {
 
 /**
  * Returns the expected Modifiers of the Retro Cape for a particular setting
+ *
  * @param hero The Superhero setting
  * @param mode The washing instructions setting
  * @returns A Modifiers object describing the Retro Cape were it to be tuned to that setting.
@@ -111,6 +114,7 @@ const skills = new Map<Skill, [Hero, Mode]>([
 
 /**
  * Tunes the Retro Cape to allow it to grant a particular skill.
+ *
  * @param skill The skill to tune the Retro Cape to.
  * @returns Whether we successfully tuned the cape.
  */

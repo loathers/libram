@@ -13,10 +13,20 @@ import {
   useRainDohBlackBox,
 } from "./2012/RainDoh";
 
+/**
+ * Get total putty-like copies made
+ *
+ * @returns Total copies made
+ */
 export function getTotalPuttyLikeCopiesMade(): number {
   return getSpookyPuttySheetCopiesMade() + getRainDohBlackBoxCopiesMade();
 }
 
+/**
+ * Determine if Rain-Doh black box can be used
+ *
+ * @returns Whether it can be used
+ */
 export function couldUseRainDohBlackBox(): boolean {
   return (
     haveRainDoh() &&
@@ -33,6 +43,11 @@ export const RainDohBlackBox = new Copier(
   () => useRainDohBlackBox()
 );
 
+/**
+ * Determines whether you can still use a spooky putty sheet
+ *
+ * @returns Whether you can still use a spooky putty sheet
+ */
 export function couldUseSpookyPuttySheet(): boolean {
   return (
     haveSpookyPutty() &&

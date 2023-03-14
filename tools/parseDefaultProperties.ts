@@ -9,6 +9,11 @@ const PROPS_FILE =
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
+/**
+ * @param property Property name
+ * @param value Property value
+ * @returns Whether the default value for this property is numeric
+ */
 export function hasNumericDefault(property: string, value: string): boolean {
   return !isNaN(Number(value)) && !isNaN(parseFloat(value));
 }
@@ -25,6 +30,10 @@ const numericOrStringProperties = [
   "statusWasteProcessing",
 ];
 const choiceAdventurePattern = /^choiceAdventure\d+$/;
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a number or string
+ */
 export function isNumericOrStringProperty(property: string): boolean {
   if (numericOrStringProperties.includes(property)) return true;
   return choiceAdventurePattern.test(property);
@@ -41,12 +50,20 @@ const otherLocations = [
   "nextSpookyravenStephenRoom",
   "sourceOracleTarget",
 ];
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a
+ */
 export function isLocationProperty(property: string): boolean {
   return otherLocations.includes(property) || property.endsWith("Location");
 }
 
 const otherMonsters = ["romanticTarget", "yearbookCameraTarget"];
 const fakeMonsters = ["trackVoteMonster"];
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a Monster
+ */
 export function isMonsterProperty(property: string): boolean {
   if (otherMonsters.includes(property)) return true;
   return (
@@ -55,16 +72,28 @@ export function isMonsterProperty(property: string): boolean {
   );
 }
 
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a Familiar
+ */
 export function isFamiliarProperty(property: string): boolean {
   return property.endsWith("Familiar");
 }
 
 const statProps = ["nsChallenge1", "shrugTopper", "snojoSetting"];
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a Stat
+ */
 export function isStatProperty(property: string): boolean {
   return statProps.includes(property);
 }
 
 const phylumProps = ["dnaSyringe"];
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to a Phylum
+ */
 export function isPhylumProperty(property: string): boolean {
   return phylumProps.includes(property) || property.endsWith("Phylum");
 }

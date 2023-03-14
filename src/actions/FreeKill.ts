@@ -153,6 +153,7 @@ const freeKillSources: ActionSource[] = [
 
 /**
  * Find an available free kill source subject to constraints.
+ *
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Free kill source satisfying constraints, or null.
  */
@@ -165,6 +166,7 @@ export function tryFindFreeKill(
 /**
  * Ensure an available free kill source subject to constraints.
  * Throws an error if no source can be found.
+ *
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Free kill source satisfying constraints.
  */

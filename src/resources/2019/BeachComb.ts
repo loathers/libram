@@ -12,6 +12,11 @@ import { get } from "../../property";
 import { $effect } from "../../template-string";
 import { clamp } from "../../utils";
 
+/**
+ * Determines whether we `have` the beach comb
+ *
+ * @returns Whether we `have` the beach comb
+ */
 export function have(): boolean {
   return have_(Item.get("Beach Comb"));
 }
@@ -48,19 +53,39 @@ export const head = {
  */
 export type BeachTile = { minute: number; row: number; column: number };
 
+/**
+ * Calculates the tide level for a given game day
+ *
+ * @param day The day to check the tide level of; defaults to today
+ * @returns The tide level as an integer
+ */
 export function tideLevel(day = gamedayToInt()): number {
   const dayOfMonth = 1 + (day % 8);
   return 4 - Math.abs(4 - dayOfMonth);
 }
 
-export function canComb({ row }: BeachTile): boolean {
-  return row > tideLevel();
+/**
+ * Determines whether a given tile can currently be combed, based on the tide level
+ *
+ * @param tile The tile to check
+ * @returns Whether today's tides permit the combing of this tile
+ */
+export function canComb(tile: BeachTile): boolean {
+  return tile.row > tideLevel();
 }
 
+/**
+ * @returns The number of free combs we have available for today
+ */
 export function freeCombs(): number {
   return have() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
 }
 
+/**
+ * Comb a tile or tiles; skips any presently uncombablle tiles
+ *
+ * @param tiles The tiles to comb
+ */
 export function comb(...tiles: BeachTile[]): void {
   if (!have() || !tiles.length) return;
 
@@ -75,6 +100,12 @@ export function comb(...tiles: BeachTile[]): void {
   if (handlingChoice()) runChoice(5);
 }
 
+/**
+ * Determines whether a given Beach Head can be combed today
+ *
+ * @param target The head in question, either as the Effect it grants or as its name
+ * @returns Whether the given head is combable
+ */
 export function headAvailable(target: Effect | keyof typeof head): boolean {
   const effect = target instanceof Effect ? target : head[target];
   const headNumber = 1 + headBuffs.indexOf(effect);
@@ -87,6 +118,12 @@ export function headAvailable(target: Effect | keyof typeof head): boolean {
   );
 }
 
+/**
+ * Tries to comb a given Beach Head
+ *
+ * @param target The Beach Head to comb, given either as its effect or as its name
+ * @returns Whether we have the head effect at the end of the whole rigamarole; this means that if you `tryHead` when you already have the effect, it will (presumably) fail to comb but will return `true`
+ */
 export function tryHead(target: Effect | keyof typeof head): boolean {
   const effect = target instanceof Effect ? target : head[target];
   if (!headBuffs.includes(effect)) return false;

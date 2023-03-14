@@ -1,52 +1,85 @@
-import { Item, Location, mallPrice, runChoice, use, visitUrl } from "kolmafia";
+import {
+  Item,
+  itemAmount,
+  Location,
+  mallPrice,
+  runChoice,
+  use,
+  visitUrl,
+} from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
 import { invertMap, maxBy } from "../../utils";
 
 export const item = $item`Guzzlr tablet`;
+/**
+ * Determines whether you `have` Guzzlr
+ *
+ * @returns Whether you `have` Guzzlr
+ */
 export function have(): boolean {
   return haveItem(item);
 }
 
+/**
+ * Internal function used to navigate the Guzzlr interface
+ *
+ * @param option Choice option to select
+ */
 function useTabletWithChoice(option: number) {
   withChoice(1412, option, () => use(1, item));
 }
 
+/**
+ * Determines whether you currently have an active Guzzlr quest
+ *
+ * @returns Whether you currently have an active Guzzlr quest
+ */
 export function isQuestActive(): boolean {
   return get("questGuzzlr") !== "unstarted";
 }
 
 /**
- * Platinum deliveries completed overall
+ * Determines total number of Platinum deliveries completed
+ *
+ * @returns Platinum deliveries completed overall
  */
 export function getPlatinum(): number {
   return get("guzzlrPlatinumDeliveries");
 }
 
 /**
- * Platinum deliveries completed today
+ * Determines the number of Platinum deliveries completed today
+ *
+ * @returns Platinum deliveries completed today
  */
 export function getPlatinumToday(): number {
   return get("_guzzlrPlatinumDeliveries");
 }
 
 /**
- * Can do a platinum delivery (haven't done one today)
+ * Determines whether you are currently eligible to do a Platinum delivery
+ *
+ * @returns Whether you are currently eligible to do a Platinum delivery
  */
 export function canPlatinum(): boolean {
   return !isQuestActive() && getGold() >= 5 && getPlatinumToday() < 1;
 }
 
 /**
- * Have fully unlocked the platinum delivery bonuses (done >= 30)
+ * Determines whether you have fully unlocked the Platinum delivery bonuses (done >= 30)
+ *
+ * @returns Whether you have fully unlocked the Platinum delivery enchantment bonuses
  */
 export function haveFullPlatinumBonus(): boolean {
   return getPlatinum() >= 30;
 }
 
 /**
- * Accept platinum delivery
+ * Accepts a Platinum delivery
+ *
+ * @returns Whether we succeeded in this endeavor
  */
 export function acceptPlatinum(): boolean {
   if (!canPlatinum()) return false;
@@ -55,35 +88,45 @@ export function acceptPlatinum(): boolean {
 }
 
 /**
- * Gold deliveries completed overall
+ * Determines total number of Gold deliveries completed
+ *
+ * @returns Gold deliveries completed overall
  */
 export function getGold(): number {
   return get("guzzlrGoldDeliveries");
 }
 
 /**
- * Gold deliveries completed today
+ * Determines the number of Gold deliveries completed today
+ *
+ * @returns Gold deliveries completed today
  */
 export function getGoldToday(): number {
   return get("_guzzlrGoldDeliveries");
 }
 
 /**
- * Can do a gold delivery (have done fewer than 3 today)
+ * Determines whether you are currently eligible to do a Gold delivery
+ *
+ * @returns Whether you are currently eligible to do a Gold delivery
  */
 export function canGold(): boolean {
   return !isQuestActive() && getBronze() >= 5 && getGoldToday() < 3;
 }
 
 /**
- * Have fully unlocked the platinum delivery bonuses (done >= 30)
+ * Determines whether you have fully unlocked the Gold delivery bonuses (done >= 150)
+ *
+ * @returns Whether you have fully unlocked the Gold delivery enchantment bonuses
  */
 export function haveFullGoldBonus(): boolean {
   return getGold() >= 150;
 }
 
 /**
- * Accept gold delivery
+ * Accepts a Gold delivery
+ *
+ * @returns Whether we succeeded in this endeavor
  */
 export function acceptGold(): boolean {
   if (!canGold()) return false;
@@ -92,14 +135,27 @@ export function acceptGold(): boolean {
 }
 
 /**
- * Bronze deliveries completed overall
+ * Determines total number of Bronze deliveries completed
+ *
+ * @returns Bronze deliveries completed overall
  */
 export function getBronze(): number {
   return get("guzzlrBronzeDeliveries");
 }
 
 /**
- * Accept bronze delivery
+ * Determines whether you have fully unlocked the Bronze delivery bonuses (done >= 196)
+ *
+ * @returns Whether you have fully unlocked the Bronze delivery enchantment bonuses
+ */
+export function haveFullBronzeBonus(): boolean {
+  return getBronze() >= 196;
+}
+
+/**
+ * Accepts a Bronze delivery
+ *
+ * @returns Whether we succeeded in this endeavor
  */
 export function acceptBronze(): boolean {
   if (isQuestActive()) return false;
@@ -108,21 +164,18 @@ export function acceptBronze(): boolean {
 }
 
 /**
- * Have fully unlocked the platinum delivery bonuses (done >= 30)
- */
-export function haveFullBronzeBonus(): boolean {
-  return getBronze() >= 196;
-}
-
-/**
- * Can abandon the current Guzzlr quest
+ * Determines whether we can abandon the current Guzzlr quest
+ *
+ * @returns Whether we are able to abandon our current Guzzlr quest
  */
 export function canAbandon(): boolean {
   return isQuestActive() && !get("_guzzlrQuestAbandoned");
 }
 
 /**
- * Abandon Guzzlr quest
+ * Abandons Guzzlr quest
+ *
+ * @returns `false` if we were unable to abandon a quest; `true` otherwise
  */
 export function abandon(): boolean {
   if (!canAbandon()) return false;
@@ -133,14 +186,18 @@ export function abandon(): boolean {
 }
 
 /**
- * Get current Guzzlr quest location
+ * Determines the target location for your current Guzzlr quest
+ *
+ * @returns The current target location for your Guzzlr quest, if it exists
  */
 export function getLocation(): Location | null {
   return get("guzzlrQuestLocation");
 }
 
 /**
- * Get current Guzzlr quest tier
+ * Determines the tier of your current Guzzlr quest
+ *
+ * @returns The tier of your current Guzzlr quest; `null` if there is no active quest
  */
 export function getTier(): "platinum" | "gold" | "bronze" | null {
   const tier = get("guzzlrQuestTier") as "platinum" | "gold" | "bronze" | "";
@@ -148,7 +205,9 @@ export function getTier(): "platinum" | "gold" | "bronze" | null {
 }
 
 /**
- * Get current Guzzlr quest booze
+ * Determines the current booze item you need to deliver for your current Guzzlr quest
+ *
+ * @returns The booze item associated with your Guzzlr quest if it exists; `null` otherwise
  */
 export function getBooze(): Item | null {
   const booze = get("guzzlrQuestBooze");
@@ -162,16 +221,18 @@ export function getBooze(): Item | null {
 export const Cocktails = $items`Buttery Boy, Steamboat, Ghiaccio Colada, Nog-on-the-Cob, Sourfinger`;
 
 /**
- * Returns true if the user has a platinum cocktail in their inventory
+ * Determines whether you currently have a Platinum cocktail available
+ *
+ * @returns `true` if you have at least one Platinum cocktail in your inventory; `false` otherwise
  */
 export function havePlatinumBooze(): boolean {
-  return Cocktails.some((cock) => haveItem(cock));
+  return Cocktails.some((cock) => itemAmount(cock) > 0);
 }
 
 /**
- * Returns true if the user has the cocktail that they need for their current quest
+ * Determines if you currently have in your inventory the booze necessary to progress your Guzzlr quest
  *
- * If they have no quest, returns false
+ * @returns `true` if you have the booze necessary to progress your Guzzlr quest
  */
 export function haveBooze(): boolean {
   const booze = getBooze();
@@ -181,7 +242,7 @@ export function haveBooze(): boolean {
     case $item`Guzzlr cocktail set`:
       return havePlatinumBooze();
     default:
-      return haveItem(booze);
+      return itemAmount(booze) > 0;
   }
 }
 
@@ -197,6 +258,12 @@ export const platinumCocktailToIngredient = invertMap(
   ingredientToPlatinumCocktail
 );
 
+/**
+ * Determines the cheapest Platinum cocktail to obtain or produce
+ *
+ * @param freeCraft Defaults to `true`; if set to `false`, will count the price of any turns spent cocktailcrafting
+ * @returns The expected price of the cheapest Platinum cocktail to obtain or produce
+ */
 export function getCheapestPlatinumCocktail(freeCraft = true): Item {
   if (freeCraft) {
     return maxBy(
@@ -212,6 +279,12 @@ export function getCheapestPlatinumCocktail(freeCraft = true): Item {
   }
 }
 
+/**
+ * Calculates the number of turns remaining for your Guzzlr quest
+ *
+ * @param useShoes Whether or not the calculation should assume you are using Guzzlr shoes
+ * @returns The expected number of turns needed to finish your current delivery
+ */
 export function turnsLeftOnQuest(useShoes = false) {
   const progressPerTurn = useShoes
     ? Math.floor((10 - get("_guzzlrDeliveries")) * 1.5)
@@ -219,6 +292,12 @@ export function turnsLeftOnQuest(useShoes = false) {
   return Math.ceil((100 - get("guzzlrDeliveryProgress")) / progressPerTurn);
 }
 
+/**
+ * Calculates the expected Guzzlrbuck reward for completing your current Guzzlr quest
+ *
+ * @param usePants Whether or not we should account for Guzzlr pants in our calculation
+ * @returns The expected Guzzlrbuck reward of our current Guzzlr quest
+ */
 export function expectedReward(usePants = false) {
   switch (getTier()) {
     case "platinum":

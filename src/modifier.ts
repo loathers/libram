@@ -1,5 +1,3 @@
-import "core-js/modules/es.object.values";
-
 import {
   booleanModifier,
   Class,
@@ -61,6 +59,13 @@ export function get(
   subject?: string | Effect | Item
 ): string;
 export function get(name: StatModifier, subject: Effect): Stat;
+/**
+ * Get the value of a modifier
+ *
+ * @param name Modifier name
+ * @param subject Subject of modifier
+ * @returns Value of modifier
+ */
 export function get(
   name:
     | BooleanModifier
@@ -143,6 +148,7 @@ export type Modifiers = Partial<{
 }>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
+ *
  * @param modifiers1 Modifiers objects to be merged onto.
  * @param modifiers2 Modifiers object to merge.
  * @returns A single Modifiers object obtained by merging.
@@ -167,6 +173,7 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
 
 /**
  * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
+ *
  * @param modifierss Modifiers objects to be merged together.
  * @returns A single Modifiers object obtained by merging.
  */

@@ -20,10 +20,16 @@ export const stickers = {
 
 export type Sticker = keyof typeof stickers;
 
+/**
+ * @returns Whether the player has the Summon Stickers skill
+ */
 export function have(): boolean {
   return haveSkill($skill`Summon Stickers`);
 }
 
+/**
+ * @returns The player's current sticker weapon
+ */
 export function weapon(): Item | null {
   return (
     $items`scratch 'n' sniff sword, scratch 'n' sniff crossbow`.find((i) =>
@@ -37,6 +43,11 @@ const weapons = {
   crossbow: $item`scratch 'n' sniff crossbow`,
 };
 
+/**
+ * Make a sword
+ *
+ * @param sticker Sticker to use when making the sword
+ */
 export function makeSword(sticker: Sticker): void {
   if (weapon()) return;
 
@@ -44,6 +55,12 @@ export function makeSword(sticker: Sticker): void {
   visitUrl(`bedazzle.php?action=juststick&sticker=${id}&pwd`);
 }
 
+/**
+ * Change weapon mode
+ *
+ * @param mode New weapon mode
+ * @returns Success
+ */
 export function foldWeapon(mode: keyof typeof weapons): boolean {
   const currentWep = weapon();
   if (!currentWep) return false;
@@ -52,6 +69,11 @@ export function foldWeapon(mode: keyof typeof weapons): boolean {
   return weapons[mode] === currentWep;
 }
 
+/**
+ * Get current stickers on sticker weapon
+ *
+ * @returns Tuple of stickers
+ */
 export function currentStickers(): [Item, Item, Item] {
   return $slots`sticker1, sticker2, sticker3`.map((s) => equippedItem(s)) as [
     Item,
@@ -60,6 +82,12 @@ export function currentStickers(): [Item, Item, Item] {
   ];
 }
 
+/**
+ * Set configuration for sticker weapon
+ *
+ * @param options Tuple of either sticker or null
+ * @returns Resultant configuration
+ */
 export function setStickers(
   ...options: [Sticker | null, Sticker | null, Sticker | null]
 ): [Item, Item, Item] {

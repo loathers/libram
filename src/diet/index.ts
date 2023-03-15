@@ -23,7 +23,7 @@ import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { sum, sumNumbers } from "../utils";
+import { sum } from "../utils";
 import { knapsack } from "./knapsack";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
@@ -45,7 +45,14 @@ function isMonday() {
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
-// TODO: Include Salty Mouth and potentially other modifiers.
+/**
+ * Expected adventures from an item given a specified state
+ *
+ * @todo Include Salty Mouth and potentially other modifiers.
+ * @param item Item to consider
+ * @param modifiers Consumption modifiers to consider
+ * @returns Adventures expected
+ */
 function expectedAdventures(
   item: Item,
   modifiers: ConsumptionModifiers
@@ -174,7 +181,9 @@ export class MenuItem<T> {
 
   /**
    * Construct a new menu item, possibly with extra properties. Items in MenuItem.defaultOptions have intelligent defaults.
+   *
    * @param item Item to add to menu.
+   * @param options Options for this menu item
    * @param options.organ Designate item as belonging to a specific organ.
    * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
    * @param options.maximum Maximum uses remaining today, or "auto" to check dailyusesleft Mafia property.
@@ -238,6 +247,10 @@ const organs = ["food", "booze", "spleen item"] as const;
 type Organ = typeof organs[number];
 type OrganSize = [Organ, number];
 
+/**
+ * @param x Name of thing that might be an organ
+ * @returns Whether the string supplied is the name of an organ
+ */
 function isOrgan(x: string): x is Organ {
   return (organs as readonly string[]).includes(x);
 }
@@ -310,6 +323,7 @@ class DietPlanner<T> {
 
   /**
    * Determine the value of consuming a menu item with any profitable helpers.
+   *
    * @param menuItem Menu item to check.
    * @returns Value for consuming that menu item.
    */
@@ -319,6 +333,7 @@ class DietPlanner<T> {
 
   /**
    * Determine which helpers will be used with a menu item and its resulting value.
+   *
    * @param menuItem Menu item to check.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair [array of helpers and base menu item, value].
@@ -404,6 +419,8 @@ class DietPlanner<T> {
 
   /**
    * Plan an individual organ.
+   *
+   * @param organ Organ to plan
    * @param capacity Organ capacity.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -430,6 +447,7 @@ class DietPlanner<T> {
 
   /**
    * Plan organs.
+   *
    * @param organCapacities Organ capacities.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -450,6 +468,7 @@ class DietPlanner<T> {
   /**
    * Plan organs, retrying with and without each trial item. Runtime is
    * proportional to 2 ^ trialItems.length.
+   *
    * @param organCapacities Organ capacities.
    * @param trialItems Items to rerun solver with and without.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
@@ -574,6 +593,7 @@ const interactingItems: [Item | Effect, OrganSize[]][] = [
 
 /**
  * Plan out an optimal diet using a knapsack algorithm.
+ *
  * @param mpa Meat per adventure value.
  * @param menu Array of MenuItems to consider for diet purposes.
  * @param organCapacities Optional override of each organ's capacity.
@@ -734,9 +754,7 @@ class DietEntry<T> {
     const gross =
       mpa * this.expectedAdventures(diet) +
       this.quantity *
-        sumNumbers(
-          this.menuItems.map((menuItem) => menuItem.additionalValue ?? 0)
-        );
+        sum(this.menuItems, (menuItem) => menuItem.additionalValue ?? 0);
     if (method === "gross") {
       return gross;
     } else {
@@ -745,10 +763,7 @@ class DietEntry<T> {
   }
 
   expectedPrice(): number {
-    return (
-      this.quantity *
-      sumNumbers(this.menuItems.map((menuItem) => menuItem.price()))
-    );
+    return this.quantity * sum(this.menuItems, (menuItem) => menuItem.price());
   }
 }
 interface OrganCapacity {
@@ -801,23 +816,17 @@ export class Diet<T> {
   }
 
   expectedAdventures(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedAdventures(this))
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedAdventures(this));
   }
 
   expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) =>
-        dietEntry.expectedValue(mpa, this, method)
-      )
+    return sum(this.entries, (dietEntry) =>
+      dietEntry.expectedValue(mpa, this, method)
     );
   }
 
   expectedPrice(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedPrice())
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedPrice());
   }
 
   copy(): Diet<T> {

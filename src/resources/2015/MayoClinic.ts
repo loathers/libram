@@ -1,5 +1,3 @@
-import "core-js/modules/es.object.values";
-
 import { buy, getWorkshed, Item, retrieveItem, toInt, use } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import logger from "../../logger";
@@ -13,18 +11,26 @@ export const Mayo = {
   flex: $item`Mayoflex`,
 };
 
+/**
+ * @returns Whether the Mayo Clinic is our current active workshed
+ */
 export function installed(): boolean {
   return getWorkshed() === $item`portable Mayo Clinic`;
 }
 
+/**
+ * @returns Whether we `have` the Mayo Clinic, or it's installed
+ */
 export function have(): boolean {
   return haveItem($item`portable Mayo Clinic`) || installed();
 }
 
 /**
  * Sets mayo minder to a particular mayo, and ensures you have enough of it.
+ *
  * @param mayo Mayo to use
  * @param quantity Quantity to ensure
+ * @returns Whether we succeeded in this endeavor; a trivial `false` for people without the clinic `installed`
  */
 export function setMayoMinder(mayo: Item, quantity = 1): boolean {
   if (getWorkshed() !== $item`portable Mayo Clinic`) return false;

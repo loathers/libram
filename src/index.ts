@@ -5,6 +5,7 @@ export * from "./challengePaths";
 export * from "./combat";
 export * as Counter from "./counter";
 export * from "./diet";
+export * from "./Dungeon";
 export * from "./lib";
 export * from "./maximize";
 export * from "./mood";
@@ -32,13 +33,9 @@ export {
 export { get as getModifier } from "./modifier";
 export { Session } from "./session";
 
-export * as Dreadsylvania from "./dungeons/Dreadsylvania";
-export * as Hobopolis from "./dungeons/Hobopolis";
-export * as SlimeTube from "./dungeons/SlimeTube";
-
 // Necessary to avoid webpack error when reexporting type-only symbols.
 // See https://github.com/microsoft/TypeScript/issues/28481
-import { LogLevel as LogLevelInternal } from "./logger";
+import { LogLevels as LogLevelInternal } from "./logger";
 export type LogLevel = LogLevelInternal;
 import { Modifiers as ModifiersInternal } from "./modifier";
 export type Modifiers = ModifiersInternal;

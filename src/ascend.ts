@@ -1,10 +1,8 @@
 import {
   Skill,
   Class,
-  containsText,
   eudoraItem,
   getCampground,
-  getWorkshed,
   Item,
   Path,
   toInt,
@@ -18,9 +16,8 @@ import {
 } from "kolmafia";
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
-
 import { $item, $items, $stat } from "./template-string";
-import { createStringUnionTypeGuardFunction } from "./utils";
+import { arrayContains } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -29,6 +26,13 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+/**
+ * Get a mapping of permed skills to the extent to which they're permed.
+ *
+ * If a skill is not permed at all, it will not appear in the mapping.
+ *
+ * @returns Permed skills mapping
+ */
 export function permedSkills(): Map<Skill, Lifestyle> {
   return new Map(
     Array.from(Object.entries(getPermedSkills())).map(
@@ -63,23 +67,6 @@ export class AscendError extends Error {
   }
 }
 
-const worksheds = [
-  "warbear LP-ROM burner",
-  "warbear jackhammer drill press",
-  "warbear induction oven",
-  "warbear high-efficiency still",
-  "warbear chemistry lab",
-  "warbear auto-anvil",
-  "spinning wheel",
-  "snow machine",
-  "Little Geneticist DNA-Splicing Lab",
-  "portable Mayo Clinic",
-  "Asdon Martin keyfob",
-  "diabolic pizza cube",
-  "cold medicine cabinet",
-] as const;
-type Workshed = typeof worksheds[number];
-
 const gardens = [
   "packet of pumpkin seeds",
   "Peppermint Pip Packet",
@@ -101,23 +88,17 @@ const eudorae = [
 ] as const;
 type Eudora = typeof eudorae[number];
 
-const isWorkshed = createStringUnionTypeGuardFunction(worksheds);
-const isGarden = createStringUnionTypeGuardFunction(gardens);
-const isEudora = createStringUnionTypeGuardFunction(eudorae);
-const isDesk = createStringUnionTypeGuardFunction(ChateauMantegna.desks);
-const isNightstand = createStringUnionTypeGuardFunction(
-  ChateauMantegna.nightstands
-);
-const isCeiling = createStringUnionTypeGuardFunction(ChateauMantegna.ceilings);
+const isGarden = (x: string) => arrayContains(x, gardens);
+const isEudora = (x: string) => arrayContains(x, eudorae);
+const isDesk = (x: string) => arrayContains(x, ChateauMantegna.desks);
+const isNightstand = (x: string) =>
+  arrayContains(x, ChateauMantegna.nightstands);
+const isCeiling = (x: string) => arrayContains(x, ChateauMantegna.ceilings);
 
 export class AscensionPrepError extends Error {
   cause: string;
   constructor(cause: string, original?: MafiaClass | string) {
-    if (isWorkshed(cause)) {
-      super(
-        `Unable to swap workshed to ${cause}; workshed is currently ${original}.`
-      );
-    } else if (isGarden(cause)) {
+    if (isGarden(cause)) {
       super(
         `Unable to swap garden to ${cause}; garden is currently ${original}.`
       );
@@ -164,10 +145,17 @@ type MoonSign =
   | "gnomish"
   | "gnomish gnomads camp";
 
+/**
+ * Determine the id of the appropriate moon sign.
+ *
+ * @param moon Either a moon sign or the desired unlocked zone name
+ * @param playerClass Class, required for working out a moon sign based on the desired zone
+ * @returns Moon sign id
+ */
 function toMoonId(moon: MoonSign, playerClass: Class): number {
   if (typeof moon === "number") return moon;
 
-  const offset = (): number => {
+  const offset = () => {
     switch (playerClass.primestat) {
       case $stat`Muscle`:
         return 0;
@@ -218,16 +206,34 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
 }
 
 /**
+ * Determine if player is currently in Valhalla
+ *
+ * @returns Whether player is in Valhalla
+ */
+function isInValhalla(): boolean {
+  const charPaneText = visitUrl("charpane.php");
+  // Match the infinity images (inf_small.gif, inf_large.gif)
+  // At time of writing, the full img tag used is:
+  // <img src="https://d2uyhvukfffg5a.cloudfront.net/otherimages/inf_small.gif">
+  const matches = charPaneText.match(
+    /<img src="[^"]*\/otherimages\/inf_\w+\.gif">/
+  );
+  return matches !== null;
+}
+
+/**
  * Hops the gash, perming no skills
+ *
  * @param path path of choice, as a Path object--these exist as properties of Paths
  * @param playerClass Your class of choice for this ascension
  * @param lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
  * @param moon Your moon sign as a string, or the zone you're looking for as a string
  * @param consumable From the astral deli. Pick the container item, not the product.
  * @param pet From the astral pet store.
- * @param permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param permOptions Options for perming during a player's stay in Valhalla
+ * @param permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param permOptions.neverAbort Whether the ascension shouold abort on failure
  */
-
 export function ascend(
   path: Path,
   playerClass: Class,
@@ -271,10 +277,10 @@ export function ascend(
     throw new AscendError(illegalSkill);
   }
 
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) {
+  if (!isInValhalla()) {
     throw new AscendError();
   }
 
@@ -320,19 +326,22 @@ export function ascend(
 
 /**
  * Sets up various iotms you may want to use in the coming ascension
- * @param ascensionItems.workshed Workshed to switch to.
- * @param ascensionItems.garden Garden to switch to.
- * @param ascensionItems An object potentially containing your workshed, garden, chateau, and eudora, all as strings
- * @param throwOnFail If true, this will throw an error when it fails to switch something
+ *
+ * @param ascensionPrep Configuration for various ascension prep settings. Any ommitted key will be kept as-is
+ * @param ascensionPrep.garden Garden to which to switch
+ * @param ascensionPrep.eudora Eudora to which to switch
+ * @param ascensionPrep.chateau Chateau configuration
+ * @param ascensionPrep.chateau.desk Chateau desk configuration
+ * @param ascensionPrep.chateau.ceiling Chateau ceiling configuration
+ * @param ascensionPrep.chateau.nightstand Chateau nightstand configuration
+ * @param ascensionPrep.throwOnFail If true, this will throw an error when it fails to switch something
  */
 export function prepareAscension({
-  workshed,
   garden,
   eudora,
   chateau,
   throwOnFail,
 }: {
-  workshed?: Workshed;
   garden?: Garden;
   eudora?: Eudora;
   chateau?: {
@@ -343,13 +352,6 @@ export function prepareAscension({
   throwOnFail?: boolean;
 } = {}): void {
   throwOnFail = throwOnFail ?? true;
-  if (workshed && getWorkshed() !== Item.get(workshed)) {
-    use(Item.get(workshed));
-    if (getWorkshed().name !== workshed && throwOnFail) {
-      throw new AscensionPrepError(workshed, getWorkshed());
-    }
-  }
-
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
     const gardenName = Object.getOwnPropertyNames(getCampground()).find(

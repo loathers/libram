@@ -18,14 +18,14 @@ const libramExpected = new Map<Item, number>([
 ]);
 
 /**
- * @returns true if the player can Summon Resolutions
+ * @returns Whether the player can Summon Resolutions
  */
 export function have(): boolean {
   return _have(summonSkill);
 }
 
 /**
- * @returns map containing the chance of an item to be summoned
+ * @returns Map containing the chance of an item to be summoned
  */
 export function expected(): Map<Item, number> {
   return libramExpected;

@@ -56,6 +56,9 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
+const baseWeight = (): number =>
+  have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
+
 export default class CommunityService {
   private choice: number;
   private stat: string;
@@ -65,6 +68,7 @@ export default class CommunityService {
 
   /**
    * Class to store properties of various CS tests.
+   *
    * @param id The id the game HTML uses to identify the test; this is used primarily in runChoice.
    * @param stat The principle stat the test measures, often used as more easily memorable shorthand for the specific tests
    * @param property The name of the test as a string, often used as part of the string property "csServicesPerformed".
@@ -130,6 +134,7 @@ export default class CommunityService {
 
   /**
    * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
+   *
    * @returns Whether mafia currently believes this test is complete.
    */
   isDone(): boolean {
@@ -145,6 +150,7 @@ export default class CommunityService {
 
   /**
    * Attempts to turn in the test to the Council of Loathing.
+   *
    * @returns Whether mafia believes the test is complete at the end of this function.
    */
   do(): boolean {
@@ -157,6 +163,7 @@ export default class CommunityService {
 
   /**
    * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
+   *
    * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit. Optionally returns the number of turns you expect to spend preparing for the test.
    * @param maxTurns We will run the test iff the predicted/actual turns is less than or equal to this parameter.
    * @returns "completed", "failed", or "already completed".
@@ -173,7 +180,8 @@ export default class CommunityService {
     let additionalTurns: number;
     try {
       additionalTurns = prepare() ?? 0;
-    } catch {
+    } catch (e) {
+      print(`${e}`, "red");
       return "failed";
     }
 
@@ -206,6 +214,7 @@ export default class CommunityService {
 
   /**
    * Checks council.php to verify that a test is complete; more reliable than isDone, but requires an additional pagehit.
+   *
    * @returns Whether council.php suggests that the test is complete.
    */
   verifyIsDone(): boolean {
@@ -221,6 +230,7 @@ export default class CommunityService {
 
   /**
    * Checks council.php for the number of turns this test will take; more reliable than prediction, but requires an additional pagehit.
+   *
    * @returns The number of turns to complete this test according to council.php.
    */
   actualCost(): number {
@@ -241,6 +251,7 @@ export default class CommunityService {
 
   /**
    * Prints turncount and time details of the test in question.
+   *
    * @param colour The colour (or color) you'd like the log to be printed in.
    */
   static printLog(colour = "blue"): void {
@@ -317,8 +328,7 @@ export default class CommunityService {
     5,
     "Familiar Weight",
     "Breed More Collies",
-    () =>
-      60 - Math.floor((familiarWeight(myFamiliar()) + weightAdjustment()) / 5),
+    () => 60 - Math.floor((baseWeight() + weightAdjustment()) / 5),
     new Requirement(["Familiar Weight"], {})
   );
 
@@ -368,7 +378,7 @@ export default class CommunityService {
           ? numericModifier(
               $familiar`Magic Dragonfish`,
               "Spell Damage Percent",
-              familiarWeight($familiar`Magic Dragonfish`) + weightAdjustment(),
+              baseWeight() + weightAdjustment(),
               $item.none
             )
           : 0;
@@ -413,7 +423,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Item Drop",
-          familiarWeight(myFamiliar()) + weightAdjustment(),
+          baseWeight() + weightAdjustment(),
           equippedItem($slot`familiar`)
         ) +
         mummingBuff -
@@ -423,7 +433,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Booze Drop",
-          familiarWeight(myFamiliar()) + weightAdjustment(),
+          baseWeight() + weightAdjustment(),
           equippedItem($slot`familiar`)
         ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 
@@ -438,7 +448,11 @@ export default class CommunityService {
       return (
         60 -
         Math.floor(
-          (multiplier * (getModifier("Item Drop") - familiarItemDrop)) / 30 +
+          (multiplier *
+            (getModifier("Item Drop") -
+              familiarItemDrop -
+              numericModifier(myThrall(), "Item Drop"))) /
+            30 +
             0.001
         ) -
         Math.floor((getModifier("Booze Drop") - familiarBoozeDrop) / 15 + 0.001)

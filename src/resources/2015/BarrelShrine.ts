@@ -4,10 +4,16 @@ import { $items } from "../../template-string";
 
 const BARRELS = $items`little firkin, normal barrel, big tun, weathered barrel, dusty barrel, disintegrating barrel, moist barrel, rotting barrel, mouldering barrel, barnacled barrel`;
 
+/**
+ * @returns Whether we have the barrel shrine
+ */
 export function have() {
   return get("barrelShrineUnlocked");
 }
 
+/**
+ * Smashes all barrels in our inventory
+ */
 export function smashParty() {
   if (!have()) return;
 

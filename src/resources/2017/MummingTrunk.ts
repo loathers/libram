@@ -2,6 +2,12 @@ import { Familiar, toFamiliar } from "kolmafia";
 import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 
+/**
+ * Internal function used to parse mods
+ *
+ * @param input The modstring used in your mummery pref
+ * @returns a NumericModifier matching that string
+ */
 function toModifier(input: string): NumericModifier {
   const regExp = new RegExp(/Experience \((.*?)\)/);
 
@@ -11,13 +17,14 @@ function toModifier(input: string): NumericModifier {
 
 /**
  * Parses the _mummeryMods preference into a Map for easier use.
+ *
  * @returns A map, mapping Familiars to a Tuple consisting of the NumericModifier attached to the familiar, and the value thereof.
  */
 export function currentCostumes(): Map<Familiar, [NumericModifier, number]> {
   const entries = get("_mummeryMods").split(",");
   const returnValue = new Map<Familiar, [NumericModifier, number]>();
 
-  const regExp = new RegExp(/([^:]+): \[(d+)\*fam\(([^)]+)\)\]/);
+  const regExp = new RegExp(/([^:]+): \[(\d+)\*fam\(([^)]+)\)\]/);
 
   for (const entry of entries) {
     const matcher = entry.match(regExp);

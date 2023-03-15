@@ -87,14 +87,27 @@ class Flower {
   }
 }
 
+/**
+ * @returns Whether or not the Florist is currently available
+ */
 export function have(): boolean {
   return floristAvailable();
 }
 
+/**
+ * Internal function used to convert strings to Flower instances
+ *
+ * @param name The flower name
+ * @returns a Flower instance
+ */
 function toFlower(name: string): Flower | undefined {
   return all.find((flower) => name === flower.name);
 }
 
+/**
+ * @param location The location to check
+ * @returns an array of the Flowers in that location
+ */
 export function flowersIn(location: Location): Flower[] {
   const returnValue: Flower[] = [];
   Flower.plantNamesInZone(location)
@@ -105,12 +118,20 @@ export function flowersIn(location: Location): Flower[] {
   return returnValue;
 }
 
+/**
+ * @param location The location to check
+ * @returns an array of the Flowers we can plant in that location
+ */
 export function flowersAvailableFor(
   location: Location = myLocation()
 ): Flower[] {
   return all.filter((flower) => flower.available(location));
 }
 
+/**
+ * @param location The location to check
+ * @returns `true` if the location has 3 flowers in it; `false` otherwise
+ */
 export function isFull(location = myLocation()): boolean {
   return flowersIn(location).length === 3;
 }
@@ -192,7 +213,7 @@ export const Impatiens = new Flower("Impatiens", 14, "indoor", {
 });
 export const SpiderPlant = new Flower("Spider Plant", 15, "indoor", "Poison");
 export const RedFern = new Flower("Red Fern", 16, "indoor", "Delevels Enemy");
-export const BamBoo = new Flower("Bam BOO!", 17, "indoor", {
+export const BamBoo = new Flower("BamBOO!", 17, "indoor", {
   "Spooky Damage": 12.5,
 });
 export const ArcticMoss = new Flower("Arctic Moss", 18, "indoor", {

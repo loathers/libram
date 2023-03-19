@@ -185,8 +185,11 @@ export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
  * Prints the modtrace to the log.
  * Example: printModtrace("Meat Drop") or printModtrace(["Item Drop", "Booze Drop"])
  *
- * @param modifiers A string (or string[]) containing the modtrace lookup term(s).
+ * @param inputModifiers A string (or string[]) containing the modtrace lookup term(s).
  * @param baseModifier A string where all the info about modifiers in the string[] array can be grabbed with this one lookup term. (Automatically generated in most cases)
+ * @param componentColor The print color for the sum returned for each input modifier
+ * @param totalColor The print color for the total sum over every input modifier
+ * @returns void
  */
 export function printModtrace(
   inputModifiers: string | string[], // the user's list of modifiers to look up

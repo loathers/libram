@@ -183,11 +183,11 @@ export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
 
 /**
  * Prints the modtrace to the log.
+ * Example: printModtrace("Meat Drop") or printModtrace(["Item Drop", "Booze Drop"])
+ *
  * @param modifiers A string (or string[]) containing the modtrace lookup term(s).
  * @param baseModifier A string where all the info about modifiers in the string[] array can be grabbed with this one lookup term. (Automatically generated in most cases)
- * Example: printModtrace("Meat Drop") or printModtrace(["Item Drop", "Booze Drop"])
  */
-
 export function printModtrace(
   inputModifiers: string | string[], // the user's list of modifiers to look up
   baseModifier?: string,

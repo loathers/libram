@@ -9072,11 +9072,7 @@ function have14() {
 }
 function smashParty() {
   if (have14()) {
-    var total = BARRELS.map(function(i2) {
-      return (0, import_kolmafia23.availableAmount)(i2);
-    }).reduce(function(sum2, q) {
-      return sum2 + q;
-    }, 0);
+    var total = sum(BARRELS, import_kolmafia23.availableAmount);
     if (!(total <= 0)) {
       (0, import_kolmafia23.visitUrl)("inv_use.php?pwd&whichitem=8568&choice=1");
       for (var i = 0; i < total / 100; i++)

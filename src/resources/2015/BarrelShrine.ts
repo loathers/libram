@@ -1,6 +1,7 @@
 import { availableAmount, runChoice, visitUrl } from "kolmafia";
 import { get } from "../../property";
 import { $items } from "../../template-string";
+import { sum } from "../../utils";
 
 const BARRELS = $items`little firkin, normal barrel, big tun, weathered barrel, dusty barrel, disintegrating barrel, moist barrel, rotting barrel, mouldering barrel, barnacled barrel`;
 
@@ -17,10 +18,7 @@ export function have() {
 export function smashParty() {
   if (!have()) return;
 
-  const total = BARRELS.map((i) => availableAmount(i)).reduce(
-    (sum, q) => sum + q,
-    0
-  );
+  const total = sum(BARRELS, availableAmount);
   if (total <= 0) return;
 
   visitUrl("inv_use.php?pwd&whichitem=8568&choice=1");

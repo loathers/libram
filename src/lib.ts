@@ -1,5 +1,4 @@
 /** @module GeneralLibrary */
-import flat from "array.prototype.flat";
 import {
   appearanceRates,
   autosellPrice,
@@ -66,7 +65,7 @@ import {
   $skill,
   $stat,
 } from "./template-string";
-import { makeByXFunction, chunk } from "./utils";
+import { makeByXFunction, chunk, flat } from "./utils";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head

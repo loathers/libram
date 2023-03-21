@@ -1,7 +1,3 @@
-This directory contains some examples of code written with libram, as well as a Webpack configuration to build them.
+This directory contains some examples of code written with libram.
 
-To build them, run the following command in the project root directory:
-
-```
-yarn run webpack -c examples/webpack.config.js
-```
+We don't have a good way to build them right now because we removed webpack. But only Gausie ever used them so it's fine.

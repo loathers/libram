@@ -1,9 +1,8 @@
-import flat from "array.prototype.flat";
 import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
 
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
-import { sum } from "../utils";
+import { sum, flat } from "../utils";
 
 export type FindActionSourceConstraints = {
   /**

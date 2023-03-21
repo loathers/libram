@@ -323,3 +323,26 @@ export function makeByXFunction<T extends string>(
     return options[val];
   };
 }
+
+/**
+ * Flattens an array. Basically replacing Array.prototype.flat for which Rhino doesn't yet have an implementation
+ *
+ * @param arr Array to flatten
+ * @param depth Level to flatten
+ * @returns Flattened array
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function flat<A extends any[], D extends number = 1>(
+  arr: A,
+  depth = 1
+): FlatArray<A, D>[] {
+  let flatArray: FlatArray<A, D>[] = [];
+  for (const item of arr) {
+    if (Array.isArray(item) && depth > 0) {
+      flatArray = flatArray.concat(flat(item, depth - 1));
+    } else {
+      flatArray.push(item);
+    }
+  }
+  return flatArray;
+}

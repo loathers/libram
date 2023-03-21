@@ -33,9 +33,5 @@ export {
 export { get as getModifier } from "./modifier";
 export { Session } from "./session";
 
-// Necessary to avoid webpack error when reexporting type-only symbols.
-// See https://github.com/microsoft/TypeScript/issues/28481
-import { LogLevels as LogLevelInternal } from "./logger";
-export type LogLevel = LogLevelInternal;
-import { Modifiers as ModifiersInternal } from "./modifier";
-export type Modifiers = ModifiersInternal;
+export type { LogLevels } from "./logger";
+export type { Modifiers } from "./modifier";

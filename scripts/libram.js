@@ -1,19 +1,8 @@
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = function(fn, res) {
-  return function() {
-    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-  };
-};
-var __commonJS = function(cb, mod) {
-  return function() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-};
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = function(target, all2) {
   for (var name in all2)
     __defProp(target, name, { get: all2[name], enumerable: !0 });
@@ -25,2976 +14,9 @@ var __export = function(target, all2) {
       }.bind(null, key), enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   return to;
 };
-var __toESM = function(mod, isNodeMode, target) {
-  return target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: !0 }) : target,
-    mod
-  );
-}, __toCommonJS = function(mod) {
+var __toCommonJS = function(mod) {
   return __copyProps(__defProp({}, "__esModule", { value: !0 }), mod);
 };
-
-// kolmafia-polyfill.js
-var kolmafia, console, init_kolmafia_polyfill = __esm({
-  "kolmafia-polyfill.js": function() {
-    "use strict";
-    kolmafia = require("kolmafia"), console = {
-      log: kolmafia.print
-    };
-  }
-});
-
-// node_modules/object-keys/isArguments.js
-var require_isArguments = __commonJS({
-  "node_modules/object-keys/isArguments.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var toStr = Object.prototype.toString;
-    module2.exports = function(value) {
-      var str = toStr.call(value), isArgs = str === "[object Arguments]";
-      return isArgs || (isArgs = str !== "[object Array]" && value !== null && typeof value == "object" && typeof value.length == "number" && value.length >= 0 && toStr.call(value.callee) === "[object Function]"), isArgs;
-    };
-  }
-});
-
-// node_modules/object-keys/implementation.js
-var require_implementation = __commonJS({
-  "node_modules/object-keys/implementation.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var keysShim;
-    Object.keys || (has = Object.prototype.hasOwnProperty, toStr = Object.prototype.toString, isArgs = require_isArguments(), isEnumerable = Object.prototype.propertyIsEnumerable, hasDontEnumBug = !isEnumerable.call({
-      toString: null
-    }, "toString"), hasProtoEnumBug = isEnumerable.call(function() {
-    }, "prototype"), dontEnums = ["toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable", "constructor"], equalsConstructorPrototype = function(o) {
-      var ctor = o.constructor;
-      return ctor && ctor.prototype === o;
-    }, excludedKeys = {
-      $applicationCache: !0,
-      $console: !0,
-      $external: !0,
-      $frame: !0,
-      $frameElement: !0,
-      $frames: !0,
-      $innerHeight: !0,
-      $innerWidth: !0,
-      $onmozfullscreenchange: !0,
-      $onmozfullscreenerror: !0,
-      $outerHeight: !0,
-      $outerWidth: !0,
-      $pageXOffset: !0,
-      $pageYOffset: !0,
-      $parent: !0,
-      $scrollLeft: !0,
-      $scrollTop: !0,
-      $scrollX: !0,
-      $scrollY: !0,
-      $self: !0,
-      $webkitIndexedDB: !0,
-      $webkitStorageInfo: !0,
-      $window: !0
-    }, hasAutomationEqualityBug = function() {
-      if (typeof window == "undefined")
-        return !1;
-      for (var k in window)
-        try {
-          if (!excludedKeys["$" + k] && has.call(window, k) && window[k] !== null && typeof window[k] == "object")
-            try {
-              equalsConstructorPrototype(window[k]);
-            } catch (e) {
-              return !0;
-            }
-        } catch (e) {
-          return !0;
-        }
-      return !1;
-    }(), equalsConstructorPrototypeIfNotBuggy = function(o) {
-      if (typeof window == "undefined" || !hasAutomationEqualityBug)
-        return equalsConstructorPrototype(o);
-      try {
-        return equalsConstructorPrototype(o);
-      } catch (e) {
-        return !1;
-      }
-    }, keysShim = function(object) {
-      var isObject = object !== null && typeof object == "object", isFunction = toStr.call(object) === "[object Function]", isArguments = isArgs(object), isString = isObject && toStr.call(object) === "[object String]", theKeys = [];
-      if (!isObject && !isFunction && !isArguments)
-        throw new TypeError("Object.keys called on a non-object");
-      var skipProto = hasProtoEnumBug && isFunction;
-      if (isString && object.length > 0 && !has.call(object, 0))
-        for (var i = 0; i < object.length; ++i)
-          theKeys.push(String(i));
-      if (isArguments && object.length > 0)
-        for (var j = 0; j < object.length; ++j)
-          theKeys.push(String(j));
-      else
-        for (var name in object)
-          !(skipProto && name === "prototype") && has.call(object, name) && theKeys.push(String(name));
-      if (hasDontEnumBug)
-        for (var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object), k = 0; k < dontEnums.length; ++k)
-          !(skipConstructor && dontEnums[k] === "constructor") && has.call(object, dontEnums[k]) && theKeys.push(dontEnums[k]);
-      return theKeys;
-    });
-    var has, toStr, isArgs, isEnumerable, hasDontEnumBug, hasProtoEnumBug, dontEnums, equalsConstructorPrototype, excludedKeys, hasAutomationEqualityBug, equalsConstructorPrototypeIfNotBuggy;
-    module2.exports = keysShim;
-  }
-});
-
-// node_modules/object-keys/index.js
-var require_object_keys = __commonJS({
-  "node_modules/object-keys/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var slice = Array.prototype.slice, isArgs = require_isArguments(), origKeys = Object.keys, keysShim = origKeys ? function(o) {
-      return origKeys(o);
-    } : require_implementation(), originalKeys = Object.keys;
-    keysShim.shim = function() {
-      if (Object.keys) {
-        var keysWorksWithArguments = function() {
-          var args = Object.keys(arguments);
-          return args && args.length === arguments.length;
-        }(1, 2);
-        keysWorksWithArguments || (Object.keys = function(object) {
-          return isArgs(object) ? originalKeys(slice.call(object)) : originalKeys(object);
-        });
-      } else
-        Object.keys = keysShim;
-      return Object.keys || keysShim;
-    };
-    module2.exports = keysShim;
-  }
-});
-
-// node_modules/has-symbols/shams.js
-var require_shams = __commonJS({
-  "node_modules/has-symbols/shams.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function() {
-      if (typeof Symbol != "function" || typeof Object.getOwnPropertySymbols != "function")
-        return !1;
-      if (typeof Symbol.iterator == "symbol")
-        return !0;
-      var obj = {}, sym = Symbol("test"), symObj = Object(sym);
-      if (typeof sym == "string" || Object.prototype.toString.call(sym) !== "[object Symbol]" || Object.prototype.toString.call(symObj) !== "[object Symbol]")
-        return !1;
-      var symVal = 42;
-      obj[sym] = symVal;
-      for (sym in obj)
-        return !1;
-      if (typeof Object.keys == "function" && Object.keys(obj).length !== 0 || typeof Object.getOwnPropertyNames == "function" && Object.getOwnPropertyNames(obj).length !== 0)
-        return !1;
-      var syms = Object.getOwnPropertySymbols(obj);
-      if (syms.length !== 1 || syms[0] !== sym || !Object.prototype.propertyIsEnumerable.call(obj, sym))
-        return !1;
-      if (typeof Object.getOwnPropertyDescriptor == "function") {
-        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
-          return !1;
-      }
-      return !0;
-    };
-  }
-});
-
-// node_modules/has-symbols/index.js
-var require_has_symbols = __commonJS({
-  "node_modules/has-symbols/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var origSymbol = typeof Symbol != "undefined" && Symbol, hasSymbolSham = require_shams();
-    module2.exports = function() {
-      return typeof origSymbol != "function" || typeof Symbol != "function" || typeof origSymbol("foo") != "symbol" || typeof Symbol("bar") != "symbol" ? !1 : hasSymbolSham();
-    };
-  }
-});
-
-// node_modules/function-bind/implementation.js
-var require_implementation2 = __commonJS({
-  "node_modules/function-bind/implementation.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ", slice = Array.prototype.slice, toStr = Object.prototype.toString, funcType = "[object Function]";
-    module2.exports = function(that) {
-      var target = this;
-      if (typeof target != "function" || toStr.call(target) !== funcType)
-        throw new TypeError(ERROR_MESSAGE + target);
-      for (var args = slice.call(arguments, 1), bound, binder = function() {
-        if (this instanceof bound) {
-          var result = target.apply(this, args.concat(slice.call(arguments)));
-          return Object(result) === result ? result : this;
-        } else
-          return target.apply(that, args.concat(slice.call(arguments)));
-      }, boundLength = Math.max(0, target.length - args.length), boundArgs = [], i = 0; i < boundLength; i++)
-        boundArgs.push("$" + i);
-      if (bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder), target.prototype) {
-        var Empty = function() {
-        };
-        Empty.prototype = target.prototype, bound.prototype = new Empty(), Empty.prototype = null;
-      }
-      return bound;
-    };
-  }
-});
-
-// node_modules/function-bind/index.js
-var require_function_bind = __commonJS({
-  "node_modules/function-bind/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var implementation = require_implementation2();
-    module2.exports = Function.prototype.bind || implementation;
-  }
-});
-
-// node_modules/has/src/index.js
-var require_src = __commonJS({
-  "node_modules/has/src/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var bind = require_function_bind();
-    module2.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
-  }
-});
-
-// node_modules/get-intrinsic/index.js
-var require_get_intrinsic = __commonJS({
-  "node_modules/get-intrinsic/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var undefined2, $SyntaxError = SyntaxError, $Function = Function, $TypeError = TypeError, getEvalledConstructor = function(expressionSyntax) {
-      try {
-        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-      } catch (e) {
-      }
-    }, $gOPD = Object.getOwnPropertyDescriptor;
-    if ($gOPD)
-      try {
-        $gOPD({}, "");
-      } catch (e) {
-        $gOPD = null;
-      }
-    var throwTypeError = function() {
-      throw new $TypeError();
-    }, ThrowTypeError = $gOPD ? function() {
-      try {
-        return arguments.callee, throwTypeError;
-      } catch (calleeThrows) {
-        try {
-          return $gOPD(arguments, "callee").get;
-        } catch (gOPDthrows) {
-          return throwTypeError;
-        }
-      }
-    }() : throwTypeError, hasSymbols = require_has_symbols()(), getProto = Object.getPrototypeOf || function(x) {
-      return x.__proto__;
-    }, needsEval = {}, TypedArray = typeof Uint8Array == "undefined" ? undefined2 : getProto(Uint8Array), INTRINSICS = {
-      "%AggregateError%": typeof AggregateError == "undefined" ? undefined2 : AggregateError,
-      "%Array%": Array,
-      "%ArrayBuffer%": typeof ArrayBuffer == "undefined" ? undefined2 : ArrayBuffer,
-      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
-      "%AsyncFromSyncIteratorPrototype%": undefined2,
-      "%AsyncFunction%": needsEval,
-      "%AsyncGenerator%": needsEval,
-      "%AsyncGeneratorFunction%": needsEval,
-      "%AsyncIteratorPrototype%": needsEval,
-      "%Atomics%": typeof Atomics == "undefined" ? undefined2 : Atomics,
-      "%BigInt%": typeof BigInt == "undefined" ? undefined2 : BigInt,
-      "%Boolean%": Boolean,
-      "%DataView%": typeof DataView == "undefined" ? undefined2 : DataView,
-      "%Date%": Date,
-      "%decodeURI%": decodeURI,
-      "%decodeURIComponent%": decodeURIComponent,
-      "%encodeURI%": encodeURI,
-      "%encodeURIComponent%": encodeURIComponent,
-      "%Error%": Error,
-      "%eval%": eval,
-      // eslint-disable-line no-eval
-      "%EvalError%": EvalError,
-      "%Float32Array%": typeof Float32Array == "undefined" ? undefined2 : Float32Array,
-      "%Float64Array%": typeof Float64Array == "undefined" ? undefined2 : Float64Array,
-      "%FinalizationRegistry%": typeof FinalizationRegistry == "undefined" ? undefined2 : FinalizationRegistry,
-      "%Function%": $Function,
-      "%GeneratorFunction%": needsEval,
-      "%Int8Array%": typeof Int8Array == "undefined" ? undefined2 : Int8Array,
-      "%Int16Array%": typeof Int16Array == "undefined" ? undefined2 : Int16Array,
-      "%Int32Array%": typeof Int32Array == "undefined" ? undefined2 : Int32Array,
-      "%isFinite%": isFinite,
-      "%isNaN%": isNaN,
-      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
-      "%JSON%": typeof JSON == "object" ? JSON : undefined2,
-      "%Map%": typeof Map == "undefined" ? undefined2 : Map,
-      "%MapIteratorPrototype%": typeof Map == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-      "%Math%": Math,
-      "%Number%": Number,
-      "%Object%": Object,
-      "%parseFloat%": parseFloat,
-      "%parseInt%": parseInt,
-      "%Promise%": typeof Promise == "undefined" ? undefined2 : Promise,
-      "%Proxy%": typeof Proxy == "undefined" ? undefined2 : Proxy,
-      "%RangeError%": RangeError,
-      "%ReferenceError%": ReferenceError,
-      "%Reflect%": typeof Reflect == "undefined" ? undefined2 : Reflect,
-      "%RegExp%": RegExp,
-      "%Set%": typeof Set == "undefined" ? undefined2 : Set,
-      "%SetIteratorPrototype%": typeof Set == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-      "%SharedArrayBuffer%": typeof SharedArrayBuffer == "undefined" ? undefined2 : SharedArrayBuffer,
-      "%String%": String,
-      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
-      "%Symbol%": hasSymbols ? Symbol : undefined2,
-      "%SyntaxError%": $SyntaxError,
-      "%ThrowTypeError%": ThrowTypeError,
-      "%TypedArray%": TypedArray,
-      "%TypeError%": $TypeError,
-      "%Uint8Array%": typeof Uint8Array == "undefined" ? undefined2 : Uint8Array,
-      "%Uint8ClampedArray%": typeof Uint8ClampedArray == "undefined" ? undefined2 : Uint8ClampedArray,
-      "%Uint16Array%": typeof Uint16Array == "undefined" ? undefined2 : Uint16Array,
-      "%Uint32Array%": typeof Uint32Array == "undefined" ? undefined2 : Uint32Array,
-      "%URIError%": URIError,
-      "%WeakMap%": typeof WeakMap == "undefined" ? undefined2 : WeakMap,
-      "%WeakRef%": typeof WeakRef == "undefined" ? undefined2 : WeakRef,
-      "%WeakSet%": typeof WeakSet == "undefined" ? undefined2 : WeakSet
-    }, doEval = function doEval2(name) {
-      var value;
-      if (name === "%AsyncFunction%")
-        value = getEvalledConstructor("async function () {}");
-      else if (name === "%GeneratorFunction%")
-        value = getEvalledConstructor("function* () {}");
-      else if (name === "%AsyncGeneratorFunction%")
-        value = getEvalledConstructor("async function* () {}");
-      else if (name === "%AsyncGenerator%") {
-        var fn = doEval2("%AsyncGeneratorFunction%");
-        fn && (value = fn.prototype);
-      } else if (name === "%AsyncIteratorPrototype%") {
-        var gen = doEval2("%AsyncGenerator%");
-        gen && (value = getProto(gen.prototype));
-      }
-      return INTRINSICS[name] = value, value;
-    }, LEGACY_ALIASES = {
-      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-      "%ArrayPrototype%": ["Array", "prototype"],
-      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-      "%ArrayProto_values%": ["Array", "prototype", "values"],
-      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-      "%BooleanPrototype%": ["Boolean", "prototype"],
-      "%DataViewPrototype%": ["DataView", "prototype"],
-      "%DatePrototype%": ["Date", "prototype"],
-      "%ErrorPrototype%": ["Error", "prototype"],
-      "%EvalErrorPrototype%": ["EvalError", "prototype"],
-      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-      "%FunctionPrototype%": ["Function", "prototype"],
-      "%Generator%": ["GeneratorFunction", "prototype"],
-      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-      "%JSONParse%": ["JSON", "parse"],
-      "%JSONStringify%": ["JSON", "stringify"],
-      "%MapPrototype%": ["Map", "prototype"],
-      "%NumberPrototype%": ["Number", "prototype"],
-      "%ObjectPrototype%": ["Object", "prototype"],
-      "%ObjProto_toString%": ["Object", "prototype", "toString"],
-      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-      "%PromisePrototype%": ["Promise", "prototype"],
-      "%PromiseProto_then%": ["Promise", "prototype", "then"],
-      "%Promise_all%": ["Promise", "all"],
-      "%Promise_reject%": ["Promise", "reject"],
-      "%Promise_resolve%": ["Promise", "resolve"],
-      "%RangeErrorPrototype%": ["RangeError", "prototype"],
-      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-      "%RegExpPrototype%": ["RegExp", "prototype"],
-      "%SetPrototype%": ["Set", "prototype"],
-      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-      "%StringPrototype%": ["String", "prototype"],
-      "%SymbolPrototype%": ["Symbol", "prototype"],
-      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-      "%TypeErrorPrototype%": ["TypeError", "prototype"],
-      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-      "%URIErrorPrototype%": ["URIError", "prototype"],
-      "%WeakMapPrototype%": ["WeakMap", "prototype"],
-      "%WeakSetPrototype%": ["WeakSet", "prototype"]
-    }, bind = require_function_bind(), hasOwn = require_src(), $concat = bind.call(Function.call, Array.prototype.concat), $spliceApply = bind.call(Function.apply, Array.prototype.splice), $replace = bind.call(Function.call, String.prototype.replace), $strSlice = bind.call(Function.call, String.prototype.slice), rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g, reEscapeChar = /\\(\\)?/g, stringToPath = function(string) {
-      var first = $strSlice(string, 0, 1), last = $strSlice(string, -1);
-      if (first === "%" && last !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-      if (last === "%" && first !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-      var result = [];
-      return $replace(string, rePropName, function(match, number, quote, subString) {
-        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-      }), result;
-    }, getBaseIntrinsic = function(name, allowMissing) {
-      var intrinsicName = name, alias;
-      if (hasOwn(LEGACY_ALIASES, intrinsicName) && (alias = LEGACY_ALIASES[intrinsicName], intrinsicName = "%" + alias[0] + "%"), hasOwn(INTRINSICS, intrinsicName)) {
-        var value = INTRINSICS[intrinsicName];
-        if (value === needsEval && (value = doEval(intrinsicName)), typeof value == "undefined" && !allowMissing)
-          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-        return {
-          alias: alias,
-          name: intrinsicName,
-          value: value
-        };
-      }
-      throw new $SyntaxError("intrinsic " + name + " does not exist!");
-    };
-    module2.exports = function(name, allowMissing) {
-      if (typeof name != "string" || name.length === 0)
-        throw new $TypeError("intrinsic name must be a non-empty string");
-      if (arguments.length > 1 && typeof allowMissing != "boolean")
-        throw new $TypeError('"allowMissing" argument must be a boolean');
-      var parts = stringToPath(name), intrinsicBaseName = parts.length > 0 ? parts[0] : "", intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing), intrinsicRealName = intrinsic.name, value = intrinsic.value, skipFurtherCaching = !1, alias = intrinsic.alias;
-      alias && (intrinsicBaseName = alias[0], $spliceApply(parts, $concat([0, 1], alias)));
-      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
-        var part = parts[i], first = $strSlice(part, 0, 1), last = $strSlice(part, -1);
-        if ((first === '"' || first === "'" || first === "`" || last === '"' || last === "'" || last === "`") && first !== last)
-          throw new $SyntaxError("property names with quotes must have matching quotes");
-        if ((part === "constructor" || !isOwn) && (skipFurtherCaching = !0), intrinsicBaseName += "." + part, intrinsicRealName = "%" + intrinsicBaseName + "%", hasOwn(INTRINSICS, intrinsicRealName))
-          value = INTRINSICS[intrinsicRealName];
-        else if (value != null) {
-          if (!(part in value)) {
-            if (!allowMissing)
-              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-            return;
-          }
-          if ($gOPD && i + 1 >= parts.length) {
-            var desc = $gOPD(value, part);
-            isOwn = !!desc, isOwn && "get" in desc && !("originalValue" in desc.get) ? value = desc.get : value = value[part];
-          } else
-            isOwn = hasOwn(value, part), value = value[part];
-          isOwn && !skipFurtherCaching && (INTRINSICS[intrinsicRealName] = value);
-        }
-      }
-      return value;
-    };
-  }
-});
-
-// node_modules/has-property-descriptors/index.js
-var require_has_property_descriptors = __commonJS({
-  "node_modules/has-property-descriptors/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic(), $defineProperty = GetIntrinsic("%Object.defineProperty%", !0), hasPropertyDescriptors = function() {
-      if ($defineProperty)
-        try {
-          return $defineProperty({}, "a", {
-            value: 1
-          }), !0;
-        } catch (e) {
-          return !1;
-        }
-      return !1;
-    };
-    hasPropertyDescriptors.hasArrayLengthDefineBug = function() {
-      if (!hasPropertyDescriptors())
-        return null;
-      try {
-        return $defineProperty([], "length", {
-          value: 1
-        }).length !== 1;
-      } catch (e) {
-        return !0;
-      }
-    };
-    module2.exports = hasPropertyDescriptors;
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/define-properties/index.js
-var require_define_properties = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/define-properties/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var keys = require_object_keys(), hasSymbols = typeof Symbol == "function" && typeof Symbol("foo") == "symbol", toStr = Object.prototype.toString, concat = Array.prototype.concat, origDefineProperty = Object.defineProperty, isFunction = function(fn) {
-      return typeof fn == "function" && toStr.call(fn) === "[object Function]";
-    }, hasPropertyDescriptors = require_has_property_descriptors()(), supportsDescriptors = origDefineProperty && hasPropertyDescriptors, defineProperty = function(object, name, value, predicate) {
-      if (name in object) {
-        if (predicate === !0) {
-          if (object[name] === value)
-            return;
-        } else if (!isFunction(predicate) || !predicate())
-          return;
-      }
-      supportsDescriptors ? origDefineProperty(object, name, {
-        configurable: !0,
-        enumerable: !1,
-        value: value,
-        writable: !0
-      }) : object[name] = value;
-    }, defineProperties = function(object, map) {
-      var predicates = arguments.length > 2 ? arguments[2] : {}, props = keys(map);
-      hasSymbols && (props = concat.call(props, Object.getOwnPropertySymbols(map)));
-      for (var i = 0; i < props.length; i += 1)
-        defineProperty(object, props[i], map[props[i]], predicates[props[i]]);
-    };
-    defineProperties.supportsDescriptors = !!supportsDescriptors;
-    module2.exports = defineProperties;
-  }
-});
-
-// node_modules/call-bind/index.js
-var require_call_bind = __commonJS({
-  "node_modules/call-bind/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var bind = require_function_bind(), GetIntrinsic = require_get_intrinsic(), $apply = GetIntrinsic("%Function.prototype.apply%"), $call = GetIntrinsic("%Function.prototype.call%"), $reflectApply = GetIntrinsic("%Reflect.apply%", !0) || bind.call($call, $apply), $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", !0), $defineProperty = GetIntrinsic("%Object.defineProperty%", !0), $max = GetIntrinsic("%Math.max%");
-    if ($defineProperty)
-      try {
-        $defineProperty({}, "a", {
-          value: 1
-        });
-      } catch (e) {
-        $defineProperty = null;
-      }
-    module2.exports = function(originalFunction) {
-      var func = $reflectApply(bind, $call, arguments);
-      if ($gOPD && $defineProperty) {
-        var desc = $gOPD(func, "length");
-        desc.configurable && $defineProperty(func, "length", {
-          value: 1 + $max(0, originalFunction.length - (arguments.length - 1))
-        });
-      }
-      return func;
-    };
-    var applyBind = function() {
-      return $reflectApply(bind, $apply, arguments);
-    };
-    $defineProperty ? $defineProperty(module2.exports, "apply", {
-      value: applyBind
-    }) : module2.exports.apply = applyBind;
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/has-symbols/shams.js
-var require_shams2 = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/has-symbols/shams.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function() {
-      if (typeof Symbol != "function" || typeof Object.getOwnPropertySymbols != "function")
-        return !1;
-      if (typeof Symbol.iterator == "symbol")
-        return !0;
-      var obj = {}, sym = Symbol("test"), symObj = Object(sym);
-      if (typeof sym == "string" || Object.prototype.toString.call(sym) !== "[object Symbol]" || Object.prototype.toString.call(symObj) !== "[object Symbol]")
-        return !1;
-      var symVal = 42;
-      obj[sym] = symVal;
-      for (sym in obj)
-        return !1;
-      if (typeof Object.keys == "function" && Object.keys(obj).length !== 0 || typeof Object.getOwnPropertyNames == "function" && Object.getOwnPropertyNames(obj).length !== 0)
-        return !1;
-      var syms = Object.getOwnPropertySymbols(obj);
-      if (syms.length !== 1 || syms[0] !== sym || !Object.prototype.propertyIsEnumerable.call(obj, sym))
-        return !1;
-      if (typeof Object.getOwnPropertyDescriptor == "function") {
-        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
-          return !1;
-      }
-      return !0;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/has-symbols/index.js
-var require_has_symbols2 = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/has-symbols/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var origSymbol = typeof Symbol != "undefined" && Symbol, hasSymbolSham = require_shams2();
-    module2.exports = function() {
-      return typeof origSymbol != "function" || typeof Symbol != "function" || typeof origSymbol("foo") != "symbol" || typeof Symbol("bar") != "symbol" ? !1 : hasSymbolSham();
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/get-intrinsic/index.js
-var require_get_intrinsic2 = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/get-intrinsic/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var undefined2, $SyntaxError = SyntaxError, $Function = Function, $TypeError = TypeError, getEvalledConstructor = function(expressionSyntax) {
-      try {
-        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-      } catch (e) {
-      }
-    }, $gOPD = Object.getOwnPropertyDescriptor;
-    if ($gOPD)
-      try {
-        $gOPD({}, "");
-      } catch (e) {
-        $gOPD = null;
-      }
-    var throwTypeError = function() {
-      throw new $TypeError();
-    }, ThrowTypeError = $gOPD ? function() {
-      try {
-        return arguments.callee, throwTypeError;
-      } catch (calleeThrows) {
-        try {
-          return $gOPD(arguments, "callee").get;
-        } catch (gOPDthrows) {
-          return throwTypeError;
-        }
-      }
-    }() : throwTypeError, hasSymbols = require_has_symbols2()(), getProto = Object.getPrototypeOf || function(x) {
-      return x.__proto__;
-    }, needsEval = {}, TypedArray = typeof Uint8Array == "undefined" ? undefined2 : getProto(Uint8Array), INTRINSICS = {
-      "%AggregateError%": typeof AggregateError == "undefined" ? undefined2 : AggregateError,
-      "%Array%": Array,
-      "%ArrayBuffer%": typeof ArrayBuffer == "undefined" ? undefined2 : ArrayBuffer,
-      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
-      "%AsyncFromSyncIteratorPrototype%": undefined2,
-      "%AsyncFunction%": needsEval,
-      "%AsyncGenerator%": needsEval,
-      "%AsyncGeneratorFunction%": needsEval,
-      "%AsyncIteratorPrototype%": needsEval,
-      "%Atomics%": typeof Atomics == "undefined" ? undefined2 : Atomics,
-      "%BigInt%": typeof BigInt == "undefined" ? undefined2 : BigInt,
-      "%BigInt64Array%": typeof BigInt64Array == "undefined" ? undefined2 : BigInt64Array,
-      "%BigUint64Array%": typeof BigUint64Array == "undefined" ? undefined2 : BigUint64Array,
-      "%Boolean%": Boolean,
-      "%DataView%": typeof DataView == "undefined" ? undefined2 : DataView,
-      "%Date%": Date,
-      "%decodeURI%": decodeURI,
-      "%decodeURIComponent%": decodeURIComponent,
-      "%encodeURI%": encodeURI,
-      "%encodeURIComponent%": encodeURIComponent,
-      "%Error%": Error,
-      "%eval%": eval,
-      // eslint-disable-line no-eval
-      "%EvalError%": EvalError,
-      "%Float32Array%": typeof Float32Array == "undefined" ? undefined2 : Float32Array,
-      "%Float64Array%": typeof Float64Array == "undefined" ? undefined2 : Float64Array,
-      "%FinalizationRegistry%": typeof FinalizationRegistry == "undefined" ? undefined2 : FinalizationRegistry,
-      "%Function%": $Function,
-      "%GeneratorFunction%": needsEval,
-      "%Int8Array%": typeof Int8Array == "undefined" ? undefined2 : Int8Array,
-      "%Int16Array%": typeof Int16Array == "undefined" ? undefined2 : Int16Array,
-      "%Int32Array%": typeof Int32Array == "undefined" ? undefined2 : Int32Array,
-      "%isFinite%": isFinite,
-      "%isNaN%": isNaN,
-      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
-      "%JSON%": typeof JSON == "object" ? JSON : undefined2,
-      "%Map%": typeof Map == "undefined" ? undefined2 : Map,
-      "%MapIteratorPrototype%": typeof Map == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-      "%Math%": Math,
-      "%Number%": Number,
-      "%Object%": Object,
-      "%parseFloat%": parseFloat,
-      "%parseInt%": parseInt,
-      "%Promise%": typeof Promise == "undefined" ? undefined2 : Promise,
-      "%Proxy%": typeof Proxy == "undefined" ? undefined2 : Proxy,
-      "%RangeError%": RangeError,
-      "%ReferenceError%": ReferenceError,
-      "%Reflect%": typeof Reflect == "undefined" ? undefined2 : Reflect,
-      "%RegExp%": RegExp,
-      "%Set%": typeof Set == "undefined" ? undefined2 : Set,
-      "%SetIteratorPrototype%": typeof Set == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-      "%SharedArrayBuffer%": typeof SharedArrayBuffer == "undefined" ? undefined2 : SharedArrayBuffer,
-      "%String%": String,
-      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
-      "%Symbol%": hasSymbols ? Symbol : undefined2,
-      "%SyntaxError%": $SyntaxError,
-      "%ThrowTypeError%": ThrowTypeError,
-      "%TypedArray%": TypedArray,
-      "%TypeError%": $TypeError,
-      "%Uint8Array%": typeof Uint8Array == "undefined" ? undefined2 : Uint8Array,
-      "%Uint8ClampedArray%": typeof Uint8ClampedArray == "undefined" ? undefined2 : Uint8ClampedArray,
-      "%Uint16Array%": typeof Uint16Array == "undefined" ? undefined2 : Uint16Array,
-      "%Uint32Array%": typeof Uint32Array == "undefined" ? undefined2 : Uint32Array,
-      "%URIError%": URIError,
-      "%WeakMap%": typeof WeakMap == "undefined" ? undefined2 : WeakMap,
-      "%WeakRef%": typeof WeakRef == "undefined" ? undefined2 : WeakRef,
-      "%WeakSet%": typeof WeakSet == "undefined" ? undefined2 : WeakSet
-    };
-    try {
-      null.error;
-    } catch (e) {
-      errorProto = getProto(getProto(e)), INTRINSICS["%Error.prototype%"] = errorProto;
-    }
-    var errorProto, doEval = function doEval2(name) {
-      var value;
-      if (name === "%AsyncFunction%")
-        value = getEvalledConstructor("async function () {}");
-      else if (name === "%GeneratorFunction%")
-        value = getEvalledConstructor("function* () {}");
-      else if (name === "%AsyncGeneratorFunction%")
-        value = getEvalledConstructor("async function* () {}");
-      else if (name === "%AsyncGenerator%") {
-        var fn = doEval2("%AsyncGeneratorFunction%");
-        fn && (value = fn.prototype);
-      } else if (name === "%AsyncIteratorPrototype%") {
-        var gen = doEval2("%AsyncGenerator%");
-        gen && (value = getProto(gen.prototype));
-      }
-      return INTRINSICS[name] = value, value;
-    }, LEGACY_ALIASES = {
-      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-      "%ArrayPrototype%": ["Array", "prototype"],
-      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-      "%ArrayProto_values%": ["Array", "prototype", "values"],
-      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-      "%BooleanPrototype%": ["Boolean", "prototype"],
-      "%DataViewPrototype%": ["DataView", "prototype"],
-      "%DatePrototype%": ["Date", "prototype"],
-      "%ErrorPrototype%": ["Error", "prototype"],
-      "%EvalErrorPrototype%": ["EvalError", "prototype"],
-      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-      "%FunctionPrototype%": ["Function", "prototype"],
-      "%Generator%": ["GeneratorFunction", "prototype"],
-      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-      "%JSONParse%": ["JSON", "parse"],
-      "%JSONStringify%": ["JSON", "stringify"],
-      "%MapPrototype%": ["Map", "prototype"],
-      "%NumberPrototype%": ["Number", "prototype"],
-      "%ObjectPrototype%": ["Object", "prototype"],
-      "%ObjProto_toString%": ["Object", "prototype", "toString"],
-      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-      "%PromisePrototype%": ["Promise", "prototype"],
-      "%PromiseProto_then%": ["Promise", "prototype", "then"],
-      "%Promise_all%": ["Promise", "all"],
-      "%Promise_reject%": ["Promise", "reject"],
-      "%Promise_resolve%": ["Promise", "resolve"],
-      "%RangeErrorPrototype%": ["RangeError", "prototype"],
-      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-      "%RegExpPrototype%": ["RegExp", "prototype"],
-      "%SetPrototype%": ["Set", "prototype"],
-      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-      "%StringPrototype%": ["String", "prototype"],
-      "%SymbolPrototype%": ["Symbol", "prototype"],
-      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-      "%TypeErrorPrototype%": ["TypeError", "prototype"],
-      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-      "%URIErrorPrototype%": ["URIError", "prototype"],
-      "%WeakMapPrototype%": ["WeakMap", "prototype"],
-      "%WeakSetPrototype%": ["WeakSet", "prototype"]
-    }, bind = require_function_bind(), hasOwn = require_src(), $concat = bind.call(Function.call, Array.prototype.concat), $spliceApply = bind.call(Function.apply, Array.prototype.splice), $replace = bind.call(Function.call, String.prototype.replace), $strSlice = bind.call(Function.call, String.prototype.slice), $exec = bind.call(Function.call, RegExp.prototype.exec), rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g, reEscapeChar = /\\(\\)?/g, stringToPath = function(string) {
-      var first = $strSlice(string, 0, 1), last = $strSlice(string, -1);
-      if (first === "%" && last !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-      if (last === "%" && first !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-      var result = [];
-      return $replace(string, rePropName, function(match, number, quote, subString) {
-        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-      }), result;
-    }, getBaseIntrinsic = function(name, allowMissing) {
-      var intrinsicName = name, alias;
-      if (hasOwn(LEGACY_ALIASES, intrinsicName) && (alias = LEGACY_ALIASES[intrinsicName], intrinsicName = "%" + alias[0] + "%"), hasOwn(INTRINSICS, intrinsicName)) {
-        var value = INTRINSICS[intrinsicName];
-        if (value === needsEval && (value = doEval(intrinsicName)), typeof value == "undefined" && !allowMissing)
-          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-        return {
-          alias: alias,
-          name: intrinsicName,
-          value: value
-        };
-      }
-      throw new $SyntaxError("intrinsic " + name + " does not exist!");
-    };
-    module2.exports = function(name, allowMissing) {
-      if (typeof name != "string" || name.length === 0)
-        throw new $TypeError("intrinsic name must be a non-empty string");
-      if (arguments.length > 1 && typeof allowMissing != "boolean")
-        throw new $TypeError('"allowMissing" argument must be a boolean');
-      if ($exec(/^%?[^%]*%?$/, name) === null)
-        throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
-      var parts = stringToPath(name), intrinsicBaseName = parts.length > 0 ? parts[0] : "", intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing), intrinsicRealName = intrinsic.name, value = intrinsic.value, skipFurtherCaching = !1, alias = intrinsic.alias;
-      alias && (intrinsicBaseName = alias[0], $spliceApply(parts, $concat([0, 1], alias)));
-      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
-        var part = parts[i], first = $strSlice(part, 0, 1), last = $strSlice(part, -1);
-        if ((first === '"' || first === "'" || first === "`" || last === '"' || last === "'" || last === "`") && first !== last)
-          throw new $SyntaxError("property names with quotes must have matching quotes");
-        if ((part === "constructor" || !isOwn) && (skipFurtherCaching = !0), intrinsicBaseName += "." + part, intrinsicRealName = "%" + intrinsicBaseName + "%", hasOwn(INTRINSICS, intrinsicRealName))
-          value = INTRINSICS[intrinsicRealName];
-        else if (value != null) {
-          if (!(part in value)) {
-            if (!allowMissing)
-              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-            return;
-          }
-          if ($gOPD && i + 1 >= parts.length) {
-            var desc = $gOPD(value, part);
-            isOwn = !!desc, isOwn && "get" in desc && !("originalValue" in desc.get) ? value = desc.get : value = value[part];
-          } else
-            isOwn = hasOwn(value, part), value = value[part];
-          isOwn && !skipFurtherCaching && (INTRINSICS[intrinsicRealName] = value);
-        }
-      }
-      return value;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/abs.js
-var require_abs = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/abs.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $abs = GetIntrinsic("%Math.abs%");
-    module2.exports = function(x) {
-      return $abs(x);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/5/Type.js
-var require_Type = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/5/Type.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(x) {
-      if (x === null)
-        return "Null";
-      if (typeof x == "undefined")
-        return "Undefined";
-      if (typeof x == "function" || typeof x == "object")
-        return "Object";
-      if (typeof x == "number")
-        return "Number";
-      if (typeof x == "boolean")
-        return "Boolean";
-      if (typeof x == "string")
-        return "String";
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/Type.js
-var require_Type2 = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/Type.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var ES5Type = require_Type();
-    module2.exports = function(x) {
-      return typeof x == "symbol" ? "Symbol" : typeof x == "bigint" ? "BigInt" : ES5Type(x);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/floor.js
-var require_floor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/floor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var Type = require_Type2(), $floor = Math.floor;
-    module2.exports = function(x) {
-      return Type(x) === "BigInt" ? x : $floor(x);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isNaN.js
-var require_isNaN = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isNaN.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = Number.isNaN || function(a) {
-      return a !== a;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isFinite.js
-var require_isFinite = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isFinite.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var $isNaN = require_isNaN();
-    module2.exports = function(x) {
-      return (typeof x == "number" || typeof x == "bigint") && !$isNaN(x) && x !== 1 / 0 && x !== -1 / 0;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsIntegralNumber.js
-var require_IsIntegralNumber = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsIntegralNumber.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var abs = require_abs(), floor = require_floor(), Type = require_Type2(), $isNaN = require_isNaN(), $isFinite = require_isFinite();
-    module2.exports = function(argument) {
-      if (Type(argument) !== "Number" || $isNaN(argument) || !$isFinite(argument))
-        return !1;
-      var absValue = abs(argument);
-      return floor(absValue) === absValue;
-    };
-  }
-});
-
-// node_modules/has-proto/index.js
-var require_has_proto = __commonJS({
-  "node_modules/has-proto/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var test = {
-      foo: {}
-    }, $Object = Object;
-    module2.exports = function() {
-      return {
-        __proto__: test
-      }.foo === test.foo && !({
-        __proto__: null
-      } instanceof $Object);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ArrayCreate.js
-var require_ArrayCreate = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ArrayCreate.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $ArrayPrototype = GetIntrinsic("%Array.prototype%"), $RangeError = GetIntrinsic("%RangeError%"), $SyntaxError = GetIntrinsic("%SyntaxError%"), $TypeError = GetIntrinsic("%TypeError%"), IsIntegralNumber = require_IsIntegralNumber(), MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1, hasProto = require_has_proto()(), $setProto = GetIntrinsic("%Object.setPrototypeOf%", !0) || (hasProto ? function(O, proto) {
-      return O.__proto__ = proto, O;
-    } : null);
-    module2.exports = function(length) {
-      if (!IsIntegralNumber(length) || length < 0)
-        throw new $TypeError("Assertion failed: `length` must be an integer Number >= 0");
-      if (length > MAX_ARRAY_LENGTH)
-        throw new $RangeError("length is greater than (2**32 - 1)");
-      var proto = arguments.length > 1 ? arguments[1] : $ArrayPrototype, A = [];
-      if (proto !== $ArrayPrototype) {
-        if (!$setProto)
-          throw new $SyntaxError("ArrayCreate: a `proto` argument that is not `Array.prototype` is not supported in an environment that does not support setting the [[Prototype]]");
-        $setProto(A, proto);
-      }
-      return length !== 0 && (A.length = length), A;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/object-inspect/util.inspect.js
-var require_util_inspect = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/object-inspect/util.inspect.js": function(exports, module2) {
-    init_kolmafia_polyfill();
-    module2.exports = require("util").inspect;
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/object-inspect/index.js
-var require_object_inspect = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/object-inspect/index.js": function(exports, module2) {
-    init_kolmafia_polyfill();
-    var hasMap = typeof Map == "function" && Map.prototype, mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, "size") : null, mapSize = hasMap && mapSizeDescriptor && typeof mapSizeDescriptor.get == "function" ? mapSizeDescriptor.get : null, mapForEach = hasMap && Map.prototype.forEach, hasSet = typeof Set == "function" && Set.prototype, setSizeDescriptor = Object.getOwnPropertyDescriptor && hasSet ? Object.getOwnPropertyDescriptor(Set.prototype, "size") : null, setSize = hasSet && setSizeDescriptor && typeof setSizeDescriptor.get == "function" ? setSizeDescriptor.get : null, setForEach = hasSet && Set.prototype.forEach, hasWeakMap = typeof WeakMap == "function" && WeakMap.prototype, weakMapHas = hasWeakMap ? WeakMap.prototype.has : null, hasWeakSet = typeof WeakSet == "function" && WeakSet.prototype, weakSetHas = hasWeakSet ? WeakSet.prototype.has : null, hasWeakRef = typeof WeakRef == "function" && WeakRef.prototype, weakRefDeref = hasWeakRef ? WeakRef.prototype.deref : null, booleanValueOf = Boolean.prototype.valueOf, objectToString = Object.prototype.toString, functionToString = Function.prototype.toString, $match = String.prototype.match, $slice = String.prototype.slice, $replace = String.prototype.replace, $toUpperCase = String.prototype.toUpperCase, $toLowerCase = String.prototype.toLowerCase, $test = RegExp.prototype.test, $concat = Array.prototype.concat, $join = Array.prototype.join, $arrSlice = Array.prototype.slice, $floor = Math.floor, bigIntValueOf = typeof BigInt == "function" ? BigInt.prototype.valueOf : null, gOPS = Object.getOwnPropertySymbols, symToString = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? Symbol.prototype.toString : null, hasShammedSymbols = typeof Symbol == "function" && typeof Symbol.iterator == "object", toStringTag = typeof Symbol == "function" && Symbol.toStringTag && (typeof Symbol.toStringTag === hasShammedSymbols || "symbol") ? Symbol.toStringTag : null, isEnumerable = Object.prototype.propertyIsEnumerable, gPO = (typeof Reflect == "function" ? Reflect.getPrototypeOf : Object.getPrototypeOf) || ([].__proto__ === Array.prototype ? function(O) {
-      return O.__proto__;
-    } : null);
-    function addNumericSeparator(num, str) {
-      if (num === 1 / 0 || num === -1 / 0 || num !== num || num && num > -1e3 && num < 1e3 || $test.call(/e/, str))
-        return str;
-      var sepRegex = /[0-9](?=(?:[0-9]{3})+(?![0-9]))/g;
-      if (typeof num == "number") {
-        var int = num < 0 ? -$floor(-num) : $floor(num);
-        if (int !== num) {
-          var intStr = String(int), dec = $slice.call(str, intStr.length + 1);
-          return $replace.call(intStr, sepRegex, "$&_") + "." + $replace.call($replace.call(dec, /([0-9]{3})/g, "$&_"), /_$/, "");
-        }
-      }
-      return $replace.call(str, sepRegex, "$&_");
-    }
-    var utilInspect = require_util_inspect(), inspectCustom = utilInspect.custom, inspectSymbol = isSymbol(inspectCustom) ? inspectCustom : null;
-    module2.exports = function inspect_(obj, options, depth, seen) {
-      var opts = options || {};
-      if (has(opts, "quoteStyle") && opts.quoteStyle !== "single" && opts.quoteStyle !== "double")
-        throw new TypeError('option "quoteStyle" must be "single" or "double"');
-      if (has(opts, "maxStringLength") && (typeof opts.maxStringLength == "number" ? opts.maxStringLength < 0 && opts.maxStringLength !== 1 / 0 : opts.maxStringLength !== null))
-        throw new TypeError('option "maxStringLength", if provided, must be a positive integer, Infinity, or `null`');
-      var customInspect = has(opts, "customInspect") ? opts.customInspect : !0;
-      if (typeof customInspect != "boolean" && customInspect !== "symbol")
-        throw new TypeError("option \"customInspect\", if provided, must be `true`, `false`, or `'symbol'`");
-      if (has(opts, "indent") && opts.indent !== null && opts.indent !== "	" && !(parseInt(opts.indent, 10) === opts.indent && opts.indent > 0))
-        throw new TypeError('option "indent" must be "\\t", an integer > 0, or `null`');
-      if (has(opts, "numericSeparator") && typeof opts.numericSeparator != "boolean")
-        throw new TypeError('option "numericSeparator", if provided, must be `true` or `false`');
-      var numericSeparator = opts.numericSeparator;
-      if (typeof obj == "undefined")
-        return "undefined";
-      if (obj === null)
-        return "null";
-      if (typeof obj == "boolean")
-        return obj ? "true" : "false";
-      if (typeof obj == "string")
-        return inspectString(obj, opts);
-      if (typeof obj == "number") {
-        if (obj === 0)
-          return 1 / 0 / obj > 0 ? "0" : "-0";
-        var str = String(obj);
-        return numericSeparator ? addNumericSeparator(obj, str) : str;
-      }
-      if (typeof obj == "bigint") {
-        var bigIntStr = String(obj) + "n";
-        return numericSeparator ? addNumericSeparator(obj, bigIntStr) : bigIntStr;
-      }
-      var maxDepth = typeof opts.depth == "undefined" ? 5 : opts.depth;
-      if (typeof depth == "undefined" && (depth = 0), depth >= maxDepth && maxDepth > 0 && typeof obj == "object")
-        return isArray(obj) ? "[Array]" : "[Object]";
-      var indent = getIndent(opts, depth);
-      if (typeof seen == "undefined")
-        seen = [];
-      else if (indexOf2(seen, obj) >= 0)
-        return "[Circular]";
-      function inspect(value, from, noIndent) {
-        if (from && (seen = $arrSlice.call(seen), seen.push(from)), noIndent) {
-          var newOpts = {
-            depth: opts.depth
-          };
-          return has(opts, "quoteStyle") && (newOpts.quoteStyle = opts.quoteStyle), inspect_(value, newOpts, depth + 1, seen);
-        }
-        return inspect_(value, opts, depth + 1, seen);
-      }
-      if (typeof obj == "function" && !isRegExp(obj)) {
-        var name = nameOf(obj), keys = arrObjKeys(obj, inspect);
-        return "[Function" + (name ? ": " + name : " (anonymous)") + "]" + (keys.length > 0 ? " { " + $join.call(keys, ", ") + " }" : "");
-      }
-      if (isSymbol(obj)) {
-        var symString = hasShammedSymbols ? $replace.call(String(obj), /^(Symbol\(.*\))_[^)]*$/, "$1") : symToString.call(obj);
-        return typeof obj == "object" && !hasShammedSymbols ? markBoxed(symString) : symString;
-      }
-      if (isElement(obj)) {
-        for (var s = "<" + $toLowerCase.call(String(obj.nodeName)), attrs = obj.attributes || [], i = 0; i < attrs.length; i++)
-          s += " " + attrs[i].name + "=" + wrapQuotes(quote(attrs[i].value), "double", opts);
-        return s += ">", obj.childNodes && obj.childNodes.length && (s += "..."), s += "</" + $toLowerCase.call(String(obj.nodeName)) + ">", s;
-      }
-      if (isArray(obj)) {
-        if (obj.length === 0)
-          return "[]";
-        var xs = arrObjKeys(obj, inspect);
-        return indent && !singleLineValues(xs) ? "[" + indentedJoin(xs, indent) + "]" : "[ " + $join.call(xs, ", ") + " ]";
-      }
-      if (isError(obj)) {
-        var parts = arrObjKeys(obj, inspect);
-        return !("cause" in Error.prototype) && "cause" in obj && !isEnumerable.call(obj, "cause") ? "{ [" + String(obj) + "] " + $join.call($concat.call("[cause]: " + inspect(obj.cause), parts), ", ") + " }" : parts.length === 0 ? "[" + String(obj) + "]" : "{ [" + String(obj) + "] " + $join.call(parts, ", ") + " }";
-      }
-      if (typeof obj == "object" && customInspect) {
-        if (inspectSymbol && typeof obj[inspectSymbol] == "function" && utilInspect)
-          return utilInspect(obj, {
-            depth: maxDepth - depth
-          });
-        if (customInspect !== "symbol" && typeof obj.inspect == "function")
-          return obj.inspect();
-      }
-      if (isMap(obj)) {
-        var mapParts = [];
-        return mapForEach && mapForEach.call(obj, function(value, key) {
-          mapParts.push(inspect(key, obj, !0) + " => " + inspect(value, obj));
-        }), collectionOf("Map", mapSize.call(obj), mapParts, indent);
-      }
-      if (isSet(obj)) {
-        var setParts = [];
-        return setForEach && setForEach.call(obj, function(value) {
-          setParts.push(inspect(value, obj));
-        }), collectionOf("Set", setSize.call(obj), setParts, indent);
-      }
-      if (isWeakMap(obj))
-        return weakCollectionOf("WeakMap");
-      if (isWeakSet(obj))
-        return weakCollectionOf("WeakSet");
-      if (isWeakRef(obj))
-        return weakCollectionOf("WeakRef");
-      if (isNumber(obj))
-        return markBoxed(inspect(Number(obj)));
-      if (isBigInt(obj))
-        return markBoxed(inspect(bigIntValueOf.call(obj)));
-      if (isBoolean(obj))
-        return markBoxed(booleanValueOf.call(obj));
-      if (isString(obj))
-        return markBoxed(inspect(String(obj)));
-      if (!isDate(obj) && !isRegExp(obj)) {
-        var ys = arrObjKeys(obj, inspect), isPlainObject = gPO ? gPO(obj) === Object.prototype : obj instanceof Object || obj.constructor === Object, protoTag = obj instanceof Object ? "" : "null prototype", stringTag = !isPlainObject && toStringTag && Object(obj) === obj && toStringTag in obj ? $slice.call(toStr(obj), 8, -1) : protoTag ? "Object" : "", constructorTag = isPlainObject || typeof obj.constructor != "function" ? "" : obj.constructor.name ? obj.constructor.name + " " : "", tag = constructorTag + (stringTag || protoTag ? "[" + $join.call($concat.call([], stringTag || [], protoTag || []), ": ") + "] " : "");
-        return ys.length === 0 ? tag + "{}" : indent ? tag + "{" + indentedJoin(ys, indent) + "}" : tag + "{ " + $join.call(ys, ", ") + " }";
-      }
-      return String(obj);
-    };
-    function wrapQuotes(s, defaultStyle, opts) {
-      var quoteChar = (opts.quoteStyle || defaultStyle) === "double" ? '"' : "'";
-      return quoteChar + s + quoteChar;
-    }
-    function quote(s) {
-      return $replace.call(String(s), /"/g, "&quot;");
-    }
-    function isArray(obj) {
-      return toStr(obj) === "[object Array]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isDate(obj) {
-      return toStr(obj) === "[object Date]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isRegExp(obj) {
-      return toStr(obj) === "[object RegExp]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isError(obj) {
-      return toStr(obj) === "[object Error]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isString(obj) {
-      return toStr(obj) === "[object String]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isNumber(obj) {
-      return toStr(obj) === "[object Number]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isBoolean(obj) {
-      return toStr(obj) === "[object Boolean]" && (!toStringTag || !(typeof obj == "object" && toStringTag in obj));
-    }
-    function isSymbol(obj) {
-      if (hasShammedSymbols)
-        return obj && typeof obj == "object" && obj instanceof Symbol;
-      if (typeof obj == "symbol")
-        return !0;
-      if (!obj || typeof obj != "object" || !symToString)
-        return !1;
-      try {
-        return symToString.call(obj), !0;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isBigInt(obj) {
-      if (!obj || typeof obj != "object" || !bigIntValueOf)
-        return !1;
-      try {
-        return bigIntValueOf.call(obj), !0;
-      } catch (e) {
-      }
-      return !1;
-    }
-    var hasOwn = Object.prototype.hasOwnProperty || function(key) {
-      return key in this;
-    };
-    function has(obj, key) {
-      return hasOwn.call(obj, key);
-    }
-    function toStr(obj) {
-      return objectToString.call(obj);
-    }
-    function nameOf(f) {
-      if (f.name)
-        return f.name;
-      var m = $match.call(functionToString.call(f), /^function\s*([\w$]+)/);
-      return m ? m[1] : null;
-    }
-    function indexOf2(xs, x) {
-      if (xs.indexOf)
-        return xs.indexOf(x);
-      for (var i = 0, l = xs.length; i < l; i++)
-        if (xs[i] === x)
-          return i;
-      return -1;
-    }
-    function isMap(x) {
-      if (!mapSize || !x || typeof x != "object")
-        return !1;
-      try {
-        mapSize.call(x);
-        try {
-          setSize.call(x);
-        } catch (s) {
-          return !0;
-        }
-        return x instanceof Map;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isWeakMap(x) {
-      if (!weakMapHas || !x || typeof x != "object")
-        return !1;
-      try {
-        weakMapHas.call(x, weakMapHas);
-        try {
-          weakSetHas.call(x, weakSetHas);
-        } catch (s) {
-          return !0;
-        }
-        return x instanceof WeakMap;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isWeakRef(x) {
-      if (!weakRefDeref || !x || typeof x != "object")
-        return !1;
-      try {
-        return weakRefDeref.call(x), !0;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isSet(x) {
-      if (!setSize || !x || typeof x != "object")
-        return !1;
-      try {
-        setSize.call(x);
-        try {
-          mapSize.call(x);
-        } catch (m) {
-          return !0;
-        }
-        return x instanceof Set;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isWeakSet(x) {
-      if (!weakSetHas || !x || typeof x != "object")
-        return !1;
-      try {
-        weakSetHas.call(x, weakSetHas);
-        try {
-          weakMapHas.call(x, weakMapHas);
-        } catch (s) {
-          return !0;
-        }
-        return x instanceof WeakSet;
-      } catch (e) {
-      }
-      return !1;
-    }
-    function isElement(x) {
-      return !x || typeof x != "object" ? !1 : typeof HTMLElement != "undefined" && x instanceof HTMLElement ? !0 : typeof x.nodeName == "string" && typeof x.getAttribute == "function";
-    }
-    function inspectString(str, opts) {
-      if (str.length > opts.maxStringLength) {
-        var remaining = str.length - opts.maxStringLength, trailer = "... " + remaining + " more character" + (remaining > 1 ? "s" : "");
-        return inspectString($slice.call(str, 0, opts.maxStringLength), opts) + trailer;
-      }
-      var s = $replace.call($replace.call(str, /(['\\])/g, "\\$1"), /[\x00-\x1f]/g, lowbyte);
-      return wrapQuotes(s, "single", opts);
-    }
-    function lowbyte(c) {
-      var n = c.charCodeAt(0), x = {
-        8: "b",
-        9: "t",
-        10: "n",
-        12: "f",
-        13: "r"
-      }[n];
-      return x ? "\\" + x : "\\x" + (n < 16 ? "0" : "") + $toUpperCase.call(n.toString(16));
-    }
-    function markBoxed(str) {
-      return "Object(" + str + ")";
-    }
-    function weakCollectionOf(type) {
-      return type + " { ? }";
-    }
-    function collectionOf(type, size, entries, indent) {
-      var joinedEntries = indent ? indentedJoin(entries, indent) : $join.call(entries, ", ");
-      return type + " (" + size + ") {" + joinedEntries + "}";
-    }
-    function singleLineValues(xs) {
-      for (var i = 0; i < xs.length; i++)
-        if (indexOf2(xs[i], "\n") >= 0)
-          return !1;
-      return !0;
-    }
-    function getIndent(opts, depth) {
-      var baseIndent;
-      if (opts.indent === "	")
-        baseIndent = "	";
-      else if (typeof opts.indent == "number" && opts.indent > 0)
-        baseIndent = $join.call(Array(opts.indent + 1), " ");
-      else
-        return null;
-      return {
-        base: baseIndent,
-        prev: $join.call(Array(depth + 1), baseIndent)
-      };
-    }
-    function indentedJoin(xs, indent) {
-      if (xs.length === 0)
-        return "";
-      var lineJoiner = "\n" + indent.prev + indent.base;
-      return lineJoiner + $join.call(xs, "," + lineJoiner) + "\n" + indent.prev;
-    }
-    function arrObjKeys(obj, inspect) {
-      var isArr = isArray(obj), xs = [];
-      if (isArr) {
-        xs.length = obj.length;
-        for (var i = 0; i < obj.length; i++)
-          xs[i] = has(obj, i) ? inspect(obj[i], obj) : "";
-      }
-      var syms = typeof gOPS == "function" ? gOPS(obj) : [], symMap;
-      if (hasShammedSymbols) {
-        symMap = {};
-        for (var k = 0; k < syms.length; k++)
-          symMap["$" + syms[k]] = syms[k];
-      }
-      for (var key in obj)
-        has(obj, key) && (isArr && String(Number(key)) === key && key < obj.length || hasShammedSymbols && symMap["$" + key] instanceof Symbol || ($test.call(/[^\w$]/, key) ? xs.push(inspect(key, obj) + ": " + inspect(obj[key], obj)) : xs.push(key + ": " + inspect(obj[key], obj))));
-      if (typeof gOPS == "function")
-        for (var j = 0; j < syms.length; j++)
-          isEnumerable.call(obj, syms[j]) && xs.push("[" + inspect(syms[j]) + "]: " + inspect(obj[syms[j]], obj));
-      return xs;
-    }
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsPropertyKey.js
-var require_IsPropertyKey = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsPropertyKey.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(argument) {
-      return typeof argument == "string" || typeof argument == "symbol";
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/Get.js
-var require_Get = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/Get.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), inspect = require_object_inspect(), IsPropertyKey = require_IsPropertyKey(), Type = require_Type2();
-    module2.exports = function(O, P) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: Type(O) is not Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: IsPropertyKey(P) is not true, got " + inspect(P));
-      return O[P];
-    };
-  }
-});
-
-// node_modules/call-bind/callBound.js
-var require_callBound = __commonJS({
-  "node_modules/call-bind/callBound.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic(), callBind = require_call_bind(), $indexOf = callBind(GetIntrinsic("String.prototype.indexOf"));
-    module2.exports = function(name, allowMissing) {
-      var intrinsic = GetIntrinsic(name, !!allowMissing);
-      return typeof intrinsic == "function" && $indexOf(name, ".prototype.") > -1 ? callBind(intrinsic) : intrinsic;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/IsArray.js
-var require_IsArray = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/IsArray.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $Array = GetIntrinsic("%Array%"), toStr = !$Array.isArray && require_callBound()("Object.prototype.toString");
-    module2.exports = $Array.isArray || function(argument) {
-      return toStr(argument) === "[object Array]";
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsArray.js
-var require_IsArray2 = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsArray.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = require_IsArray();
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/GetIntrinsic.js
-var require_GetIntrinsic = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/GetIntrinsic.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = require_get_intrinsic2();
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isPropertyDescriptor.js
-var require_isPropertyDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isPropertyDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), has = require_src(), $TypeError = GetIntrinsic("%TypeError%");
-    module2.exports = function(ES, Desc) {
-      if (ES.Type(Desc) !== "Object")
-        return !1;
-      var allowed = {
-        "[[Configurable]]": !0,
-        "[[Enumerable]]": !0,
-        "[[Get]]": !0,
-        "[[Set]]": !0,
-        "[[Value]]": !0,
-        "[[Writable]]": !0
-      };
-      for (var key in Desc)
-        if (has(Desc, key) && !allowed[key])
-          return !1;
-      if (ES.IsDataDescriptor(Desc) && ES.IsAccessorDescriptor(Desc))
-        throw new $TypeError("Property Descriptors may not be both accessor and data descriptors");
-      return !0;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/DefineOwnProperty.js
-var require_DefineOwnProperty = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/DefineOwnProperty.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var hasPropertyDescriptors = require_has_property_descriptors(), GetIntrinsic = require_get_intrinsic2(), $defineProperty = hasPropertyDescriptors() && GetIntrinsic("%Object.defineProperty%", !0), hasArrayLengthDefineBug = hasPropertyDescriptors.hasArrayLengthDefineBug(), isArray = hasArrayLengthDefineBug && require_IsArray(), callBound = require_callBound(), $isEnumerable = callBound("Object.prototype.propertyIsEnumerable");
-    module2.exports = function(IsDataDescriptor, SameValue, FromPropertyDescriptor, O, P, desc) {
-      if (!$defineProperty) {
-        if (!IsDataDescriptor(desc) || !desc["[[Configurable]]"] || !desc["[[Writable]]"] || P in O && $isEnumerable(O, P) !== !!desc["[[Enumerable]]"])
-          return !1;
-        var V = desc["[[Value]]"];
-        return O[P] = V, SameValue(O[P], V);
-      }
-      return hasArrayLengthDefineBug && P === "length" && "[[Value]]" in desc && isArray(O) && O.length !== desc["[[Value]]"] ? (O.length = desc["[[Value]]"], O.length === desc["[[Value]]"]) : ($defineProperty(O, P, FromPropertyDescriptor(desc)), !0);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isMatchRecord.js
-var require_isMatchRecord = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isMatchRecord.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var has = require_src();
-    module2.exports = function(record) {
-      return has(record, "[[StartIndex]]") && has(record, "[[EndIndex]]") && record["[[StartIndex]]"] >= 0 && record["[[EndIndex]]"] >= record["[[StartIndex]]"] && String(parseInt(record["[[StartIndex]]"], 10)) === String(record["[[StartIndex]]"]) && String(parseInt(record["[[EndIndex]]"], 10)) === String(record["[[EndIndex]]"]);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/assertRecord.js
-var require_assertRecord = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/assertRecord.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), $SyntaxError = GetIntrinsic("%SyntaxError%"), has = require_src(), isMatchRecord = require_isMatchRecord(), predicates = {
-      // https://262.ecma-international.org/6.0/#sec-property-descriptor-specification-type
-      "Property Descriptor": function(Desc) {
-        var allowed = {
-          "[[Configurable]]": !0,
-          "[[Enumerable]]": !0,
-          "[[Get]]": !0,
-          "[[Set]]": !0,
-          "[[Value]]": !0,
-          "[[Writable]]": !0
-        };
-        for (var key in Desc)
-          if (has(Desc, key) && !allowed[key])
-            return !1;
-        var isData = has(Desc, "[[Value]]"), IsAccessor = has(Desc, "[[Get]]") || has(Desc, "[[Set]]");
-        if (isData && IsAccessor)
-          throw new $TypeError("Property Descriptors may not be both accessor and data descriptors");
-        return !0;
-      },
-      // https://262.ecma-international.org/13.0/#sec-match-records
-      "Match Record": isMatchRecord,
-      "Iterator Record": function(value) {
-        return has(value, "[[Iterator]]") && has(value, "[[NextMethod]]") && has(value, "[[Done]]");
-      },
-      "PromiseCapability Record": function(value) {
-        return value && has(value, "[[Resolve]]") && typeof value["[[Resolve]]"] == "function" && has(value, "[[Reject]]") && typeof value["[[Reject]]"] == "function" && has(value, "[[Promise]]") && value["[[Promise]]"] && typeof value["[[Promise]]"].then == "function";
-      },
-      "AsyncGeneratorRequest Record": function(value) {
-        return value && has(value, "[[Completion]]") && has(value, "[[Capability]]") && predicates["PromiseCapability Record"](value["[[Capability]]"]);
-      }
-    };
-    module2.exports = function(Type, recordType, argumentName, value) {
-      var predicate = predicates[recordType];
-      if (typeof predicate != "function")
-        throw new $SyntaxError("unknown record type: " + recordType);
-      if (Type(value) !== "Object" || !predicate(value))
-        throw new $TypeError(argumentName + " must be a " + recordType);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/fromPropertyDescriptor.js
-var require_fromPropertyDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/fromPropertyDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(Desc) {
-      if (typeof Desc == "undefined")
-        return Desc;
-      var obj = {};
-      return "[[Value]]" in Desc && (obj.value = Desc["[[Value]]"]), "[[Writable]]" in Desc && (obj.writable = !!Desc["[[Writable]]"]), "[[Get]]" in Desc && (obj.get = Desc["[[Get]]"]), "[[Set]]" in Desc && (obj.set = Desc["[[Set]]"]), "[[Enumerable]]" in Desc && (obj.enumerable = !!Desc["[[Enumerable]]"]), "[[Configurable]]" in Desc && (obj.configurable = !!Desc["[[Configurable]]"]), obj;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/FromPropertyDescriptor.js
-var require_FromPropertyDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/FromPropertyDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var assertRecord = require_assertRecord(), fromPropertyDescriptor = require_fromPropertyDescriptor(), Type = require_Type2();
-    module2.exports = function(Desc) {
-      return typeof Desc != "undefined" && assertRecord(Type, "Property Descriptor", "Desc", Desc), fromPropertyDescriptor(Desc);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsAccessorDescriptor.js
-var require_IsAccessorDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsAccessorDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var has = require_src(), assertRecord = require_assertRecord(), Type = require_Type2();
-    module2.exports = function(Desc) {
-      return !(typeof Desc == "undefined" || (assertRecord(Type, "Property Descriptor", "Desc", Desc), !has(Desc, "[[Get]]") && !has(Desc, "[[Set]]")));
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsDataDescriptor.js
-var require_IsDataDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsDataDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var has = require_src(), assertRecord = require_assertRecord(), Type = require_Type2();
-    module2.exports = function(Desc) {
-      return !(typeof Desc == "undefined" || (assertRecord(Type, "Property Descriptor", "Desc", Desc), !has(Desc, "[[Value]]") && !has(Desc, "[[Writable]]")));
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/SameValue.js
-var require_SameValue = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/SameValue.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var $isNaN = require_isNaN();
-    module2.exports = function(x, y) {
-      return x === y ? x === 0 ? 1 / x === 1 / y : !0 : $isNaN(x) && $isNaN(y);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToBoolean.js
-var require_ToBoolean = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToBoolean.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(value) {
-      return !!value;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/is-callable/index.js
-var require_is_callable = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/is-callable/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var fnToStr = Function.prototype.toString, reflectApply = typeof Reflect == "object" && Reflect !== null && Reflect.apply, badArrayLike, isCallableMarker;
-    if (typeof reflectApply == "function" && typeof Object.defineProperty == "function")
-      try {
-        badArrayLike = Object.defineProperty({}, "length", {
-          get: function() {
-            throw isCallableMarker;
-          }
-        }), isCallableMarker = {}, reflectApply(function() {
-          throw 42;
-        }, null, badArrayLike);
-      } catch (_) {
-        _ !== isCallableMarker && (reflectApply = null);
-      }
-    else
-      reflectApply = null;
-    var constructorRegex = /^\s*class\b/, isES6ClassFn = function(value) {
-      try {
-        var fnStr = fnToStr.call(value);
-        return constructorRegex.test(fnStr);
-      } catch (e) {
-        return !1;
-      }
-    }, tryFunctionObject = function(value) {
-      try {
-        return isES6ClassFn(value) ? !1 : (fnToStr.call(value), !0);
-      } catch (e) {
-        return !1;
-      }
-    }, toStr = Object.prototype.toString, objectClass = "[object Object]", fnClass = "[object Function]", genClass = "[object GeneratorFunction]", ddaClass = "[object HTMLAllCollection]", ddaClass2 = "[object HTML document.all class]", ddaClass3 = "[object HTMLCollection]", hasToStringTag = typeof Symbol == "function" && !!Symbol.toStringTag, isIE68 = !(0 in [,]), isDDA = function() {
-      return !1;
-    };
-    typeof document == "object" && (all2 = document.all, toStr.call(all2) === toStr.call(document.all) && (isDDA = function(value) {
-      if ((isIE68 || !value) && (typeof value == "undefined" || typeof value == "object"))
-        try {
-          var str = toStr.call(value);
-          return (str === ddaClass || str === ddaClass2 || str === ddaClass3 || str === objectClass) && value("") == null;
-        } catch (e) {
-        }
-      return !1;
-    }));
-    var all2;
-    module2.exports = reflectApply ? function(value) {
-      if (isDDA(value))
-        return !0;
-      if (!value || typeof value != "function" && typeof value != "object")
-        return !1;
-      try {
-        reflectApply(value, null, badArrayLike);
-      } catch (e) {
-        if (e !== isCallableMarker)
-          return !1;
-      }
-      return !isES6ClassFn(value) && tryFunctionObject(value);
-    } : function(value) {
-      if (isDDA(value))
-        return !0;
-      if (!value || typeof value != "function" && typeof value != "object")
-        return !1;
-      if (hasToStringTag)
-        return tryFunctionObject(value);
-      if (isES6ClassFn(value))
-        return !1;
-      var strClass = toStr.call(value);
-      return strClass !== fnClass && strClass !== genClass && !/^\[object HTML/.test(strClass) ? !1 : tryFunctionObject(value);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsCallable.js
-var require_IsCallable = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsCallable.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = require_is_callable();
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToPropertyDescriptor.js
-var require_ToPropertyDescriptor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToPropertyDescriptor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var has = require_src(), GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), Type = require_Type2(), ToBoolean = require_ToBoolean(), IsCallable = require_IsCallable();
-    module2.exports = function(Obj) {
-      if (Type(Obj) !== "Object")
-        throw new $TypeError("ToPropertyDescriptor requires an object");
-      var desc = {};
-      if (has(Obj, "enumerable") && (desc["[[Enumerable]]"] = ToBoolean(Obj.enumerable)), has(Obj, "configurable") && (desc["[[Configurable]]"] = ToBoolean(Obj.configurable)), has(Obj, "value") && (desc["[[Value]]"] = Obj.value), has(Obj, "writable") && (desc["[[Writable]]"] = ToBoolean(Obj.writable)), has(Obj, "get")) {
-        var getter = Obj.get;
-        if (typeof getter != "undefined" && !IsCallable(getter))
-          throw new $TypeError("getter must be a function");
-        desc["[[Get]]"] = getter;
-      }
-      if (has(Obj, "set")) {
-        var setter = Obj.set;
-        if (typeof setter != "undefined" && !IsCallable(setter))
-          throw new $TypeError("setter must be a function");
-        desc["[[Set]]"] = setter;
-      }
-      if ((has(desc, "[[Get]]") || has(desc, "[[Set]]")) && (has(desc, "[[Value]]") || has(desc, "[[Writable]]")))
-        throw new $TypeError("Invalid property descriptor. Cannot both specify accessors and a value or writable attribute");
-      return desc;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/DefinePropertyOrThrow.js
-var require_DefinePropertyOrThrow = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/DefinePropertyOrThrow.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), isPropertyDescriptor = require_isPropertyDescriptor(), DefineOwnProperty = require_DefineOwnProperty(), FromPropertyDescriptor = require_FromPropertyDescriptor(), IsAccessorDescriptor = require_IsAccessorDescriptor(), IsDataDescriptor = require_IsDataDescriptor(), IsPropertyKey = require_IsPropertyKey(), SameValue = require_SameValue(), ToPropertyDescriptor = require_ToPropertyDescriptor(), Type = require_Type2();
-    module2.exports = function(O, P, desc) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: Type(O) is not Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: IsPropertyKey(P) is not true");
-      var Desc = isPropertyDescriptor({
-        Type: Type,
-        IsDataDescriptor: IsDataDescriptor,
-        IsAccessorDescriptor: IsAccessorDescriptor
-      }, desc) ? desc : ToPropertyDescriptor(desc);
-      if (!isPropertyDescriptor({
-        Type: Type,
-        IsDataDescriptor: IsDataDescriptor,
-        IsAccessorDescriptor: IsAccessorDescriptor
-      }, Desc))
-        throw new $TypeError("Assertion failed: Desc is not a valid Property Descriptor");
-      return DefineOwnProperty(IsDataDescriptor, SameValue, FromPropertyDescriptor, O, P, Desc);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsConstructor.js
-var require_IsConstructor = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsConstructor.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_GetIntrinsic(), $construct = GetIntrinsic("%Reflect.construct%", !0), DefinePropertyOrThrow = require_DefinePropertyOrThrow();
-    try {
-      DefinePropertyOrThrow({}, "", {
-        "[[Get]]": function() {
-        }
-      });
-    } catch (e) {
-      DefinePropertyOrThrow = null;
-    }
-    DefinePropertyOrThrow && $construct ? (isConstructorMarker = {}, badArrayLike = {}, DefinePropertyOrThrow(badArrayLike, "length", {
-      "[[Get]]": function() {
-        throw isConstructorMarker;
-      },
-      "[[Enumerable]]": !0
-    }), module2.exports = function(argument) {
-      try {
-        $construct(argument, badArrayLike);
-      } catch (err) {
-        return err === isConstructorMarker;
-      }
-    }) : module2.exports = function(argument) {
-      return typeof argument == "function" && !!argument.prototype;
-    };
-    var isConstructorMarker, badArrayLike;
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ArraySpeciesCreate.js
-var require_ArraySpeciesCreate = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ArraySpeciesCreate.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $species = GetIntrinsic("%Symbol.species%", !0), $TypeError = GetIntrinsic("%TypeError%"), ArrayCreate = require_ArrayCreate(), Get = require_Get(), IsArray = require_IsArray2(), IsConstructor = require_IsConstructor(), IsIntegralNumber = require_IsIntegralNumber(), Type = require_Type2();
-    module2.exports = function(originalArray, length) {
-      if (!IsIntegralNumber(length) || length < 0)
-        throw new $TypeError("Assertion failed: length must be an integer >= 0");
-      var isArray = IsArray(originalArray);
-      if (!isArray)
-        return ArrayCreate(length);
-      var C = Get(originalArray, "constructor");
-      if ($species && Type(C) === "Object" && (C = Get(C, $species), C === null && (C = void 0)), typeof C == "undefined")
-        return ArrayCreate(length);
-      if (!IsConstructor(C))
-        throw new $TypeError("C must be a constructor");
-      return new C(length);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/maxSafeInteger.js
-var require_maxSafeInteger = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/maxSafeInteger.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $Math = GetIntrinsic("%Math%"), $Number = GetIntrinsic("%Number%");
-    module2.exports = $Number.MAX_SAFE_INTEGER || $Math.pow(2, 53) - 1;
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/Call.js
-var require_Call = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/Call.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), callBound = require_callBound(), $TypeError = GetIntrinsic("%TypeError%"), IsArray = require_IsArray2(), $apply = GetIntrinsic("%Reflect.apply%", !0) || callBound("%Function.prototype.apply%");
-    module2.exports = function(F, V) {
-      var argumentsList = arguments.length > 2 ? arguments[2] : [];
-      if (!IsArray(argumentsList))
-        throw new $TypeError("Assertion failed: optional `argumentsList`, if provided, must be a List");
-      return $apply(F, V, argumentsList);
-    };
-  }
-});
-
-// node_modules/gopd/node_modules/has-symbols/shams.js
-var require_shams3 = __commonJS({
-  "node_modules/gopd/node_modules/has-symbols/shams.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function() {
-      if (typeof Symbol != "function" || typeof Object.getOwnPropertySymbols != "function")
-        return !1;
-      if (typeof Symbol.iterator == "symbol")
-        return !0;
-      var obj = {}, sym = Symbol("test"), symObj = Object(sym);
-      if (typeof sym == "string" || Object.prototype.toString.call(sym) !== "[object Symbol]" || Object.prototype.toString.call(symObj) !== "[object Symbol]")
-        return !1;
-      var symVal = 42;
-      obj[sym] = symVal;
-      for (sym in obj)
-        return !1;
-      if (typeof Object.keys == "function" && Object.keys(obj).length !== 0 || typeof Object.getOwnPropertyNames == "function" && Object.getOwnPropertyNames(obj).length !== 0)
-        return !1;
-      var syms = Object.getOwnPropertySymbols(obj);
-      if (syms.length !== 1 || syms[0] !== sym || !Object.prototype.propertyIsEnumerable.call(obj, sym))
-        return !1;
-      if (typeof Object.getOwnPropertyDescriptor == "function") {
-        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
-          return !1;
-      }
-      return !0;
-    };
-  }
-});
-
-// node_modules/gopd/node_modules/has-symbols/index.js
-var require_has_symbols3 = __commonJS({
-  "node_modules/gopd/node_modules/has-symbols/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var origSymbol = typeof Symbol != "undefined" && Symbol, hasSymbolSham = require_shams3();
-    module2.exports = function() {
-      return typeof origSymbol != "function" || typeof Symbol != "function" || typeof origSymbol("foo") != "symbol" || typeof Symbol("bar") != "symbol" ? !1 : hasSymbolSham();
-    };
-  }
-});
-
-// node_modules/gopd/node_modules/get-intrinsic/index.js
-var require_get_intrinsic3 = __commonJS({
-  "node_modules/gopd/node_modules/get-intrinsic/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var undefined2, $SyntaxError = SyntaxError, $Function = Function, $TypeError = TypeError, getEvalledConstructor = function(expressionSyntax) {
-      try {
-        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-      } catch (e) {
-      }
-    }, $gOPD = Object.getOwnPropertyDescriptor;
-    if ($gOPD)
-      try {
-        $gOPD({}, "");
-      } catch (e) {
-        $gOPD = null;
-      }
-    var throwTypeError = function() {
-      throw new $TypeError();
-    }, ThrowTypeError = $gOPD ? function() {
-      try {
-        return arguments.callee, throwTypeError;
-      } catch (calleeThrows) {
-        try {
-          return $gOPD(arguments, "callee").get;
-        } catch (gOPDthrows) {
-          return throwTypeError;
-        }
-      }
-    }() : throwTypeError, hasSymbols = require_has_symbols3()(), getProto = Object.getPrototypeOf || function(x) {
-      return x.__proto__;
-    }, needsEval = {}, TypedArray = typeof Uint8Array == "undefined" ? undefined2 : getProto(Uint8Array), INTRINSICS = {
-      "%AggregateError%": typeof AggregateError == "undefined" ? undefined2 : AggregateError,
-      "%Array%": Array,
-      "%ArrayBuffer%": typeof ArrayBuffer == "undefined" ? undefined2 : ArrayBuffer,
-      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
-      "%AsyncFromSyncIteratorPrototype%": undefined2,
-      "%AsyncFunction%": needsEval,
-      "%AsyncGenerator%": needsEval,
-      "%AsyncGeneratorFunction%": needsEval,
-      "%AsyncIteratorPrototype%": needsEval,
-      "%Atomics%": typeof Atomics == "undefined" ? undefined2 : Atomics,
-      "%BigInt%": typeof BigInt == "undefined" ? undefined2 : BigInt,
-      "%BigInt64Array%": typeof BigInt64Array == "undefined" ? undefined2 : BigInt64Array,
-      "%BigUint64Array%": typeof BigUint64Array == "undefined" ? undefined2 : BigUint64Array,
-      "%Boolean%": Boolean,
-      "%DataView%": typeof DataView == "undefined" ? undefined2 : DataView,
-      "%Date%": Date,
-      "%decodeURI%": decodeURI,
-      "%decodeURIComponent%": decodeURIComponent,
-      "%encodeURI%": encodeURI,
-      "%encodeURIComponent%": encodeURIComponent,
-      "%Error%": Error,
-      "%eval%": eval,
-      // eslint-disable-line no-eval
-      "%EvalError%": EvalError,
-      "%Float32Array%": typeof Float32Array == "undefined" ? undefined2 : Float32Array,
-      "%Float64Array%": typeof Float64Array == "undefined" ? undefined2 : Float64Array,
-      "%FinalizationRegistry%": typeof FinalizationRegistry == "undefined" ? undefined2 : FinalizationRegistry,
-      "%Function%": $Function,
-      "%GeneratorFunction%": needsEval,
-      "%Int8Array%": typeof Int8Array == "undefined" ? undefined2 : Int8Array,
-      "%Int16Array%": typeof Int16Array == "undefined" ? undefined2 : Int16Array,
-      "%Int32Array%": typeof Int32Array == "undefined" ? undefined2 : Int32Array,
-      "%isFinite%": isFinite,
-      "%isNaN%": isNaN,
-      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
-      "%JSON%": typeof JSON == "object" ? JSON : undefined2,
-      "%Map%": typeof Map == "undefined" ? undefined2 : Map,
-      "%MapIteratorPrototype%": typeof Map == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-      "%Math%": Math,
-      "%Number%": Number,
-      "%Object%": Object,
-      "%parseFloat%": parseFloat,
-      "%parseInt%": parseInt,
-      "%Promise%": typeof Promise == "undefined" ? undefined2 : Promise,
-      "%Proxy%": typeof Proxy == "undefined" ? undefined2 : Proxy,
-      "%RangeError%": RangeError,
-      "%ReferenceError%": ReferenceError,
-      "%Reflect%": typeof Reflect == "undefined" ? undefined2 : Reflect,
-      "%RegExp%": RegExp,
-      "%Set%": typeof Set == "undefined" ? undefined2 : Set,
-      "%SetIteratorPrototype%": typeof Set == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-      "%SharedArrayBuffer%": typeof SharedArrayBuffer == "undefined" ? undefined2 : SharedArrayBuffer,
-      "%String%": String,
-      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
-      "%Symbol%": hasSymbols ? Symbol : undefined2,
-      "%SyntaxError%": $SyntaxError,
-      "%ThrowTypeError%": ThrowTypeError,
-      "%TypedArray%": TypedArray,
-      "%TypeError%": $TypeError,
-      "%Uint8Array%": typeof Uint8Array == "undefined" ? undefined2 : Uint8Array,
-      "%Uint8ClampedArray%": typeof Uint8ClampedArray == "undefined" ? undefined2 : Uint8ClampedArray,
-      "%Uint16Array%": typeof Uint16Array == "undefined" ? undefined2 : Uint16Array,
-      "%Uint32Array%": typeof Uint32Array == "undefined" ? undefined2 : Uint32Array,
-      "%URIError%": URIError,
-      "%WeakMap%": typeof WeakMap == "undefined" ? undefined2 : WeakMap,
-      "%WeakRef%": typeof WeakRef == "undefined" ? undefined2 : WeakRef,
-      "%WeakSet%": typeof WeakSet == "undefined" ? undefined2 : WeakSet
-    };
-    try {
-      null.error;
-    } catch (e) {
-      errorProto = getProto(getProto(e)), INTRINSICS["%Error.prototype%"] = errorProto;
-    }
-    var errorProto, doEval = function doEval2(name) {
-      var value;
-      if (name === "%AsyncFunction%")
-        value = getEvalledConstructor("async function () {}");
-      else if (name === "%GeneratorFunction%")
-        value = getEvalledConstructor("function* () {}");
-      else if (name === "%AsyncGeneratorFunction%")
-        value = getEvalledConstructor("async function* () {}");
-      else if (name === "%AsyncGenerator%") {
-        var fn = doEval2("%AsyncGeneratorFunction%");
-        fn && (value = fn.prototype);
-      } else if (name === "%AsyncIteratorPrototype%") {
-        var gen = doEval2("%AsyncGenerator%");
-        gen && (value = getProto(gen.prototype));
-      }
-      return INTRINSICS[name] = value, value;
-    }, LEGACY_ALIASES = {
-      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-      "%ArrayPrototype%": ["Array", "prototype"],
-      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-      "%ArrayProto_values%": ["Array", "prototype", "values"],
-      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-      "%BooleanPrototype%": ["Boolean", "prototype"],
-      "%DataViewPrototype%": ["DataView", "prototype"],
-      "%DatePrototype%": ["Date", "prototype"],
-      "%ErrorPrototype%": ["Error", "prototype"],
-      "%EvalErrorPrototype%": ["EvalError", "prototype"],
-      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-      "%FunctionPrototype%": ["Function", "prototype"],
-      "%Generator%": ["GeneratorFunction", "prototype"],
-      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-      "%JSONParse%": ["JSON", "parse"],
-      "%JSONStringify%": ["JSON", "stringify"],
-      "%MapPrototype%": ["Map", "prototype"],
-      "%NumberPrototype%": ["Number", "prototype"],
-      "%ObjectPrototype%": ["Object", "prototype"],
-      "%ObjProto_toString%": ["Object", "prototype", "toString"],
-      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-      "%PromisePrototype%": ["Promise", "prototype"],
-      "%PromiseProto_then%": ["Promise", "prototype", "then"],
-      "%Promise_all%": ["Promise", "all"],
-      "%Promise_reject%": ["Promise", "reject"],
-      "%Promise_resolve%": ["Promise", "resolve"],
-      "%RangeErrorPrototype%": ["RangeError", "prototype"],
-      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-      "%RegExpPrototype%": ["RegExp", "prototype"],
-      "%SetPrototype%": ["Set", "prototype"],
-      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-      "%StringPrototype%": ["String", "prototype"],
-      "%SymbolPrototype%": ["Symbol", "prototype"],
-      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-      "%TypeErrorPrototype%": ["TypeError", "prototype"],
-      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-      "%URIErrorPrototype%": ["URIError", "prototype"],
-      "%WeakMapPrototype%": ["WeakMap", "prototype"],
-      "%WeakSetPrototype%": ["WeakSet", "prototype"]
-    }, bind = require_function_bind(), hasOwn = require_src(), $concat = bind.call(Function.call, Array.prototype.concat), $spliceApply = bind.call(Function.apply, Array.prototype.splice), $replace = bind.call(Function.call, String.prototype.replace), $strSlice = bind.call(Function.call, String.prototype.slice), $exec = bind.call(Function.call, RegExp.prototype.exec), rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g, reEscapeChar = /\\(\\)?/g, stringToPath = function(string) {
-      var first = $strSlice(string, 0, 1), last = $strSlice(string, -1);
-      if (first === "%" && last !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-      if (last === "%" && first !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-      var result = [];
-      return $replace(string, rePropName, function(match, number, quote, subString) {
-        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-      }), result;
-    }, getBaseIntrinsic = function(name, allowMissing) {
-      var intrinsicName = name, alias;
-      if (hasOwn(LEGACY_ALIASES, intrinsicName) && (alias = LEGACY_ALIASES[intrinsicName], intrinsicName = "%" + alias[0] + "%"), hasOwn(INTRINSICS, intrinsicName)) {
-        var value = INTRINSICS[intrinsicName];
-        if (value === needsEval && (value = doEval(intrinsicName)), typeof value == "undefined" && !allowMissing)
-          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-        return {
-          alias: alias,
-          name: intrinsicName,
-          value: value
-        };
-      }
-      throw new $SyntaxError("intrinsic " + name + " does not exist!");
-    };
-    module2.exports = function(name, allowMissing) {
-      if (typeof name != "string" || name.length === 0)
-        throw new $TypeError("intrinsic name must be a non-empty string");
-      if (arguments.length > 1 && typeof allowMissing != "boolean")
-        throw new $TypeError('"allowMissing" argument must be a boolean');
-      if ($exec(/^%?[^%]*%?$/, name) === null)
-        throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
-      var parts = stringToPath(name), intrinsicBaseName = parts.length > 0 ? parts[0] : "", intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing), intrinsicRealName = intrinsic.name, value = intrinsic.value, skipFurtherCaching = !1, alias = intrinsic.alias;
-      alias && (intrinsicBaseName = alias[0], $spliceApply(parts, $concat([0, 1], alias)));
-      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
-        var part = parts[i], first = $strSlice(part, 0, 1), last = $strSlice(part, -1);
-        if ((first === '"' || first === "'" || first === "`" || last === '"' || last === "'" || last === "`") && first !== last)
-          throw new $SyntaxError("property names with quotes must have matching quotes");
-        if ((part === "constructor" || !isOwn) && (skipFurtherCaching = !0), intrinsicBaseName += "." + part, intrinsicRealName = "%" + intrinsicBaseName + "%", hasOwn(INTRINSICS, intrinsicRealName))
-          value = INTRINSICS[intrinsicRealName];
-        else if (value != null) {
-          if (!(part in value)) {
-            if (!allowMissing)
-              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-            return;
-          }
-          if ($gOPD && i + 1 >= parts.length) {
-            var desc = $gOPD(value, part);
-            isOwn = !!desc, isOwn && "get" in desc && !("originalValue" in desc.get) ? value = desc.get : value = value[part];
-          } else
-            isOwn = hasOwn(value, part), value = value[part];
-          isOwn && !skipFurtherCaching && (INTRINSICS[intrinsicRealName] = value);
-        }
-      }
-      return value;
-    };
-  }
-});
-
-// node_modules/gopd/index.js
-var require_gopd = __commonJS({
-  "node_modules/gopd/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic3(), $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", !0);
-    if ($gOPD)
-      try {
-        $gOPD([], "length");
-      } catch (e) {
-        $gOPD = null;
-      }
-    module2.exports = $gOPD;
-  }
-});
-
-// node_modules/has-tostringtag/shams.js
-var require_shams4 = __commonJS({
-  "node_modules/has-tostringtag/shams.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var hasSymbols = require_shams();
-    module2.exports = function() {
-      return hasSymbols() && !!Symbol.toStringTag;
-    };
-  }
-});
-
-// node_modules/is-regex/index.js
-var require_is_regex = __commonJS({
-  "node_modules/is-regex/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var callBound = require_callBound(), hasToStringTag = require_shams4()(), has, $exec, isRegexMarker, badStringifier;
-    hasToStringTag && (has = callBound("Object.prototype.hasOwnProperty"), $exec = callBound("RegExp.prototype.exec"), isRegexMarker = {}, throwRegexMarker = function() {
-      throw isRegexMarker;
-    }, badStringifier = {
-      toString: throwRegexMarker,
-      valueOf: throwRegexMarker
-    }, typeof Symbol.toPrimitive == "symbol" && (badStringifier[Symbol.toPrimitive] = throwRegexMarker));
-    var throwRegexMarker, $toString = callBound("Object.prototype.toString"), gOPD = Object.getOwnPropertyDescriptor, regexClass = "[object RegExp]";
-    module2.exports = hasToStringTag ? function(value) {
-      if (!value || typeof value != "object")
-        return !1;
-      var descriptor = gOPD(value, "lastIndex"), hasLastIndexDataProperty = descriptor && has(descriptor, "value");
-      if (!hasLastIndexDataProperty)
-        return !1;
-      try {
-        $exec(value, badStringifier);
-      } catch (e) {
-        return e === isRegexMarker;
-      }
-    } : function(value) {
-      return !value || typeof value != "object" && typeof value != "function" ? !1 : $toString(value) === regexClass;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsRegExp.js
-var require_IsRegExp = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsRegExp.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $match = GetIntrinsic("%Symbol.match%", !0), hasRegExpMatcher = require_is_regex(), ToBoolean = require_ToBoolean();
-    module2.exports = function(argument) {
-      if (!argument || typeof argument != "object")
-        return !1;
-      if ($match) {
-        var isRegExp = argument[$match];
-        if (typeof isRegExp != "undefined")
-          return ToBoolean(isRegExp);
-      }
-      return hasRegExpMatcher(argument);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/OrdinaryGetOwnProperty.js
-var require_OrdinaryGetOwnProperty = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/OrdinaryGetOwnProperty.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $gOPD = require_gopd(), $TypeError = GetIntrinsic("%TypeError%"), callBound = require_callBound(), $isEnumerable = callBound("Object.prototype.propertyIsEnumerable"), has = require_src(), IsArray = require_IsArray2(), IsPropertyKey = require_IsPropertyKey(), IsRegExp = require_IsRegExp(), ToPropertyDescriptor = require_ToPropertyDescriptor(), Type = require_Type2();
-    module2.exports = function(O, P) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: O must be an Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: P must be a Property Key");
-      if (has(O, P)) {
-        if (!$gOPD) {
-          var arrayLength = IsArray(O) && P === "length", regexLastIndex = IsRegExp(O) && P === "lastIndex";
-          return {
-            "[[Configurable]]": !(arrayLength || regexLastIndex),
-            "[[Enumerable]]": $isEnumerable(O, P),
-            "[[Value]]": O[P],
-            "[[Writable]]": !0
-          };
-        }
-        return ToPropertyDescriptor($gOPD(O, P));
-      }
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isPrimitive.js
-var require_isPrimitive = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/isPrimitive.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(value) {
-      return value === null || typeof value != "function" && typeof value != "object";
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsExtensible.js
-var require_IsExtensible = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/IsExtensible.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $preventExtensions = GetIntrinsic("%Object.preventExtensions%", !0), $isExtensible = GetIntrinsic("%Object.isExtensible%", !0), isPrimitive = require_isPrimitive();
-    module2.exports = $preventExtensions ? function(obj) {
-      return !isPrimitive(obj) && $isExtensible(obj);
-    } : function(obj) {
-      return !isPrimitive(obj);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/CreateDataProperty.js
-var require_CreateDataProperty = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/CreateDataProperty.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), DefineOwnProperty = require_DefineOwnProperty(), FromPropertyDescriptor = require_FromPropertyDescriptor(), OrdinaryGetOwnProperty = require_OrdinaryGetOwnProperty(), IsDataDescriptor = require_IsDataDescriptor(), IsExtensible = require_IsExtensible(), IsPropertyKey = require_IsPropertyKey(), SameValue = require_SameValue(), Type = require_Type2();
-    module2.exports = function(O, P, V) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: Type(O) is not Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: IsPropertyKey(P) is not true");
-      var oldDesc = OrdinaryGetOwnProperty(O, P), extensible = !oldDesc || IsExtensible(O), nonConfigurable = oldDesc && !oldDesc["[[Configurable]]"];
-      return nonConfigurable || !extensible ? !1 : DefineOwnProperty(IsDataDescriptor, SameValue, FromPropertyDescriptor, O, P, {
-        "[[Configurable]]": !0,
-        "[[Enumerable]]": !0,
-        "[[Value]]": V,
-        "[[Writable]]": !0
-      });
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/CreateDataPropertyOrThrow.js
-var require_CreateDataPropertyOrThrow = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/CreateDataPropertyOrThrow.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), CreateDataProperty = require_CreateDataProperty(), IsPropertyKey = require_IsPropertyKey(), Type = require_Type2();
-    module2.exports = function(O, P, V) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: Type(O) is not Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: IsPropertyKey(P) is not true");
-      var success = CreateDataProperty(O, P, V);
-      if (!success)
-        throw new $TypeError("unable to create data property");
-      return success;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/HasProperty.js
-var require_HasProperty = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/HasProperty.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), IsPropertyKey = require_IsPropertyKey(), Type = require_Type2();
-    module2.exports = function(O, P) {
-      if (Type(O) !== "Object")
-        throw new $TypeError("Assertion failed: `O` must be an Object");
-      if (!IsPropertyKey(P))
-        throw new $TypeError("Assertion failed: `P` must be a Property Key");
-      return P in O;
-    };
-  }
-});
-
-// node_modules/es-to-primitive/helpers/isPrimitive.js
-var require_isPrimitive2 = __commonJS({
-  "node_modules/es-to-primitive/helpers/isPrimitive.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(value) {
-      return value === null || typeof value != "function" && typeof value != "object";
-    };
-  }
-});
-
-// node_modules/is-callable/index.js
-var require_is_callable2 = __commonJS({
-  "node_modules/is-callable/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var fnToStr = Function.prototype.toString, reflectApply = typeof Reflect == "object" && Reflect !== null && Reflect.apply, badArrayLike, isCallableMarker;
-    if (typeof reflectApply == "function" && typeof Object.defineProperty == "function")
-      try {
-        badArrayLike = Object.defineProperty({}, "length", {
-          get: function() {
-            throw isCallableMarker;
-          }
-        }), isCallableMarker = {}, reflectApply(function() {
-          throw 42;
-        }, null, badArrayLike);
-      } catch (_) {
-        _ !== isCallableMarker && (reflectApply = null);
-      }
-    else
-      reflectApply = null;
-    var constructorRegex = /^\s*class\b/, isES6ClassFn = function(value) {
-      try {
-        var fnStr = fnToStr.call(value);
-        return constructorRegex.test(fnStr);
-      } catch (e) {
-        return !1;
-      }
-    }, tryFunctionObject = function(value) {
-      try {
-        return isES6ClassFn(value) ? !1 : (fnToStr.call(value), !0);
-      } catch (e) {
-        return !1;
-      }
-    }, toStr = Object.prototype.toString, fnClass = "[object Function]", genClass = "[object GeneratorFunction]", hasToStringTag = typeof Symbol == "function" && !!Symbol.toStringTag, documentDotAll = typeof document == "object" && typeof document.all == "undefined" && document.all !== void 0 ? document.all : {};
-    module2.exports = reflectApply ? function(value) {
-      if (value === documentDotAll)
-        return !0;
-      if (!value || typeof value != "function" && typeof value != "object")
-        return !1;
-      if (typeof value == "function" && !value.prototype)
-        return !0;
-      try {
-        reflectApply(value, null, badArrayLike);
-      } catch (e) {
-        if (e !== isCallableMarker)
-          return !1;
-      }
-      return !isES6ClassFn(value);
-    } : function(value) {
-      if (value === documentDotAll)
-        return !0;
-      if (!value || typeof value != "function" && typeof value != "object")
-        return !1;
-      if (typeof value == "function" && !value.prototype)
-        return !0;
-      if (hasToStringTag)
-        return tryFunctionObject(value);
-      if (isES6ClassFn(value))
-        return !1;
-      var strClass = toStr.call(value);
-      return strClass === fnClass || strClass === genClass;
-    };
-  }
-});
-
-// node_modules/is-date-object/index.js
-var require_is_date_object = __commonJS({
-  "node_modules/is-date-object/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var getDay = Date.prototype.getDay, tryDateObject = function(value) {
-      try {
-        return getDay.call(value), !0;
-      } catch (e) {
-        return !1;
-      }
-    }, toStr = Object.prototype.toString, dateClass = "[object Date]", hasToStringTag = require_shams4()();
-    module2.exports = function(value) {
-      return typeof value != "object" || value === null ? !1 : hasToStringTag ? tryDateObject(value) : toStr.call(value) === dateClass;
-    };
-  }
-});
-
-// node_modules/is-symbol/index.js
-var require_is_symbol = __commonJS({
-  "node_modules/is-symbol/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var toStr = Object.prototype.toString, hasSymbols = require_has_symbols()();
-    hasSymbols ? (symToStr = Symbol.prototype.toString, symStringRegex = /^Symbol\(.*\)$/, isSymbolObject = function(value) {
-      return typeof value.valueOf() != "symbol" ? !1 : symStringRegex.test(symToStr.call(value));
-    }, module2.exports = function(value) {
-      if (typeof value == "symbol")
-        return !0;
-      if (toStr.call(value) !== "[object Symbol]")
-        return !1;
-      try {
-        return isSymbolObject(value);
-      } catch (e) {
-        return !1;
-      }
-    }) : module2.exports = function(value) {
-      return !1;
-    };
-    var symToStr, symStringRegex, isSymbolObject;
-  }
-});
-
-// node_modules/es-to-primitive/es2015.js
-var require_es2015 = __commonJS({
-  "node_modules/es-to-primitive/es2015.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var hasSymbols = typeof Symbol == "function" && typeof Symbol.iterator == "symbol", isPrimitive = require_isPrimitive2(), isCallable = require_is_callable2(), isDate = require_is_date_object(), isSymbol = require_is_symbol(), ordinaryToPrimitive = function(O, hint) {
-      if (typeof O == "undefined" || O === null)
-        throw new TypeError("Cannot call method on " + O);
-      if (typeof hint != "string" || hint !== "number" && hint !== "string")
-        throw new TypeError('hint must be "string" or "number"');
-      var methodNames = hint === "string" ? ["toString", "valueOf"] : ["valueOf", "toString"], method, result, i;
-      for (i = 0; i < methodNames.length; ++i)
-        if (method = O[methodNames[i]], isCallable(method) && (result = method.call(O), isPrimitive(result)))
-          return result;
-      throw new TypeError("No default value");
-    }, GetMethod = function(O, P) {
-      var func = O[P];
-      if (func !== null && typeof func != "undefined") {
-        if (!isCallable(func))
-          throw new TypeError(func + " returned for property " + P + " of object " + O + " is not a function");
-        return func;
-      }
-    };
-    module2.exports = function(input) {
-      if (isPrimitive(input))
-        return input;
-      var hint = "default";
-      arguments.length > 1 && (arguments[1] === String ? hint = "string" : arguments[1] === Number && (hint = "number"));
-      var exoticToPrim;
-      if (hasSymbols && (Symbol.toPrimitive ? exoticToPrim = GetMethod(input, Symbol.toPrimitive) : isSymbol(input) && (exoticToPrim = Symbol.prototype.valueOf)), typeof exoticToPrim != "undefined") {
-        var result = exoticToPrim.call(input, hint);
-        if (isPrimitive(result))
-          return result;
-        throw new TypeError("unable to convert exotic object to primitive");
-      }
-      return hint === "default" && (isDate(input) || isSymbol(input)) && (hint = "string"), ordinaryToPrimitive(input, hint === "default" ? "number" : hint);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToPrimitive.js
-var require_ToPrimitive = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToPrimitive.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var toPrimitive = require_es2015();
-    module2.exports = function(input) {
-      return arguments.length > 1 ? toPrimitive(input, arguments[1]) : toPrimitive(input);
-    };
-  }
-});
-
-// node_modules/safe-regex-test/node_modules/has-symbols/shams.js
-var require_shams5 = __commonJS({
-  "node_modules/safe-regex-test/node_modules/has-symbols/shams.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function() {
-      if (typeof Symbol != "function" || typeof Object.getOwnPropertySymbols != "function")
-        return !1;
-      if (typeof Symbol.iterator == "symbol")
-        return !0;
-      var obj = {}, sym = Symbol("test"), symObj = Object(sym);
-      if (typeof sym == "string" || Object.prototype.toString.call(sym) !== "[object Symbol]" || Object.prototype.toString.call(symObj) !== "[object Symbol]")
-        return !1;
-      var symVal = 42;
-      obj[sym] = symVal;
-      for (sym in obj)
-        return !1;
-      if (typeof Object.keys == "function" && Object.keys(obj).length !== 0 || typeof Object.getOwnPropertyNames == "function" && Object.getOwnPropertyNames(obj).length !== 0)
-        return !1;
-      var syms = Object.getOwnPropertySymbols(obj);
-      if (syms.length !== 1 || syms[0] !== sym || !Object.prototype.propertyIsEnumerable.call(obj, sym))
-        return !1;
-      if (typeof Object.getOwnPropertyDescriptor == "function") {
-        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
-          return !1;
-      }
-      return !0;
-    };
-  }
-});
-
-// node_modules/safe-regex-test/node_modules/has-symbols/index.js
-var require_has_symbols4 = __commonJS({
-  "node_modules/safe-regex-test/node_modules/has-symbols/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var origSymbol = typeof Symbol != "undefined" && Symbol, hasSymbolSham = require_shams5();
-    module2.exports = function() {
-      return typeof origSymbol != "function" || typeof Symbol != "function" || typeof origSymbol("foo") != "symbol" || typeof Symbol("bar") != "symbol" ? !1 : hasSymbolSham();
-    };
-  }
-});
-
-// node_modules/safe-regex-test/node_modules/get-intrinsic/index.js
-var require_get_intrinsic4 = __commonJS({
-  "node_modules/safe-regex-test/node_modules/get-intrinsic/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var undefined2, $SyntaxError = SyntaxError, $Function = Function, $TypeError = TypeError, getEvalledConstructor = function(expressionSyntax) {
-      try {
-        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-      } catch (e) {
-      }
-    }, $gOPD = Object.getOwnPropertyDescriptor;
-    if ($gOPD)
-      try {
-        $gOPD({}, "");
-      } catch (e) {
-        $gOPD = null;
-      }
-    var throwTypeError = function() {
-      throw new $TypeError();
-    }, ThrowTypeError = $gOPD ? function() {
-      try {
-        return arguments.callee, throwTypeError;
-      } catch (calleeThrows) {
-        try {
-          return $gOPD(arguments, "callee").get;
-        } catch (gOPDthrows) {
-          return throwTypeError;
-        }
-      }
-    }() : throwTypeError, hasSymbols = require_has_symbols4()(), getProto = Object.getPrototypeOf || function(x) {
-      return x.__proto__;
-    }, needsEval = {}, TypedArray = typeof Uint8Array == "undefined" ? undefined2 : getProto(Uint8Array), INTRINSICS = {
-      "%AggregateError%": typeof AggregateError == "undefined" ? undefined2 : AggregateError,
-      "%Array%": Array,
-      "%ArrayBuffer%": typeof ArrayBuffer == "undefined" ? undefined2 : ArrayBuffer,
-      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
-      "%AsyncFromSyncIteratorPrototype%": undefined2,
-      "%AsyncFunction%": needsEval,
-      "%AsyncGenerator%": needsEval,
-      "%AsyncGeneratorFunction%": needsEval,
-      "%AsyncIteratorPrototype%": needsEval,
-      "%Atomics%": typeof Atomics == "undefined" ? undefined2 : Atomics,
-      "%BigInt%": typeof BigInt == "undefined" ? undefined2 : BigInt,
-      "%BigInt64Array%": typeof BigInt64Array == "undefined" ? undefined2 : BigInt64Array,
-      "%BigUint64Array%": typeof BigUint64Array == "undefined" ? undefined2 : BigUint64Array,
-      "%Boolean%": Boolean,
-      "%DataView%": typeof DataView == "undefined" ? undefined2 : DataView,
-      "%Date%": Date,
-      "%decodeURI%": decodeURI,
-      "%decodeURIComponent%": decodeURIComponent,
-      "%encodeURI%": encodeURI,
-      "%encodeURIComponent%": encodeURIComponent,
-      "%Error%": Error,
-      "%eval%": eval,
-      // eslint-disable-line no-eval
-      "%EvalError%": EvalError,
-      "%Float32Array%": typeof Float32Array == "undefined" ? undefined2 : Float32Array,
-      "%Float64Array%": typeof Float64Array == "undefined" ? undefined2 : Float64Array,
-      "%FinalizationRegistry%": typeof FinalizationRegistry == "undefined" ? undefined2 : FinalizationRegistry,
-      "%Function%": $Function,
-      "%GeneratorFunction%": needsEval,
-      "%Int8Array%": typeof Int8Array == "undefined" ? undefined2 : Int8Array,
-      "%Int16Array%": typeof Int16Array == "undefined" ? undefined2 : Int16Array,
-      "%Int32Array%": typeof Int32Array == "undefined" ? undefined2 : Int32Array,
-      "%isFinite%": isFinite,
-      "%isNaN%": isNaN,
-      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
-      "%JSON%": typeof JSON == "object" ? JSON : undefined2,
-      "%Map%": typeof Map == "undefined" ? undefined2 : Map,
-      "%MapIteratorPrototype%": typeof Map == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-      "%Math%": Math,
-      "%Number%": Number,
-      "%Object%": Object,
-      "%parseFloat%": parseFloat,
-      "%parseInt%": parseInt,
-      "%Promise%": typeof Promise == "undefined" ? undefined2 : Promise,
-      "%Proxy%": typeof Proxy == "undefined" ? undefined2 : Proxy,
-      "%RangeError%": RangeError,
-      "%ReferenceError%": ReferenceError,
-      "%Reflect%": typeof Reflect == "undefined" ? undefined2 : Reflect,
-      "%RegExp%": RegExp,
-      "%Set%": typeof Set == "undefined" ? undefined2 : Set,
-      "%SetIteratorPrototype%": typeof Set == "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-      "%SharedArrayBuffer%": typeof SharedArrayBuffer == "undefined" ? undefined2 : SharedArrayBuffer,
-      "%String%": String,
-      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
-      "%Symbol%": hasSymbols ? Symbol : undefined2,
-      "%SyntaxError%": $SyntaxError,
-      "%ThrowTypeError%": ThrowTypeError,
-      "%TypedArray%": TypedArray,
-      "%TypeError%": $TypeError,
-      "%Uint8Array%": typeof Uint8Array == "undefined" ? undefined2 : Uint8Array,
-      "%Uint8ClampedArray%": typeof Uint8ClampedArray == "undefined" ? undefined2 : Uint8ClampedArray,
-      "%Uint16Array%": typeof Uint16Array == "undefined" ? undefined2 : Uint16Array,
-      "%Uint32Array%": typeof Uint32Array == "undefined" ? undefined2 : Uint32Array,
-      "%URIError%": URIError,
-      "%WeakMap%": typeof WeakMap == "undefined" ? undefined2 : WeakMap,
-      "%WeakRef%": typeof WeakRef == "undefined" ? undefined2 : WeakRef,
-      "%WeakSet%": typeof WeakSet == "undefined" ? undefined2 : WeakSet
-    };
-    try {
-      null.error;
-    } catch (e) {
-      errorProto = getProto(getProto(e)), INTRINSICS["%Error.prototype%"] = errorProto;
-    }
-    var errorProto, doEval = function doEval2(name) {
-      var value;
-      if (name === "%AsyncFunction%")
-        value = getEvalledConstructor("async function () {}");
-      else if (name === "%GeneratorFunction%")
-        value = getEvalledConstructor("function* () {}");
-      else if (name === "%AsyncGeneratorFunction%")
-        value = getEvalledConstructor("async function* () {}");
-      else if (name === "%AsyncGenerator%") {
-        var fn = doEval2("%AsyncGeneratorFunction%");
-        fn && (value = fn.prototype);
-      } else if (name === "%AsyncIteratorPrototype%") {
-        var gen = doEval2("%AsyncGenerator%");
-        gen && (value = getProto(gen.prototype));
-      }
-      return INTRINSICS[name] = value, value;
-    }, LEGACY_ALIASES = {
-      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-      "%ArrayPrototype%": ["Array", "prototype"],
-      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-      "%ArrayProto_values%": ["Array", "prototype", "values"],
-      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-      "%BooleanPrototype%": ["Boolean", "prototype"],
-      "%DataViewPrototype%": ["DataView", "prototype"],
-      "%DatePrototype%": ["Date", "prototype"],
-      "%ErrorPrototype%": ["Error", "prototype"],
-      "%EvalErrorPrototype%": ["EvalError", "prototype"],
-      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-      "%FunctionPrototype%": ["Function", "prototype"],
-      "%Generator%": ["GeneratorFunction", "prototype"],
-      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-      "%JSONParse%": ["JSON", "parse"],
-      "%JSONStringify%": ["JSON", "stringify"],
-      "%MapPrototype%": ["Map", "prototype"],
-      "%NumberPrototype%": ["Number", "prototype"],
-      "%ObjectPrototype%": ["Object", "prototype"],
-      "%ObjProto_toString%": ["Object", "prototype", "toString"],
-      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-      "%PromisePrototype%": ["Promise", "prototype"],
-      "%PromiseProto_then%": ["Promise", "prototype", "then"],
-      "%Promise_all%": ["Promise", "all"],
-      "%Promise_reject%": ["Promise", "reject"],
-      "%Promise_resolve%": ["Promise", "resolve"],
-      "%RangeErrorPrototype%": ["RangeError", "prototype"],
-      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-      "%RegExpPrototype%": ["RegExp", "prototype"],
-      "%SetPrototype%": ["Set", "prototype"],
-      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-      "%StringPrototype%": ["String", "prototype"],
-      "%SymbolPrototype%": ["Symbol", "prototype"],
-      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-      "%TypeErrorPrototype%": ["TypeError", "prototype"],
-      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-      "%URIErrorPrototype%": ["URIError", "prototype"],
-      "%WeakMapPrototype%": ["WeakMap", "prototype"],
-      "%WeakSetPrototype%": ["WeakSet", "prototype"]
-    }, bind = require_function_bind(), hasOwn = require_src(), $concat = bind.call(Function.call, Array.prototype.concat), $spliceApply = bind.call(Function.apply, Array.prototype.splice), $replace = bind.call(Function.call, String.prototype.replace), $strSlice = bind.call(Function.call, String.prototype.slice), $exec = bind.call(Function.call, RegExp.prototype.exec), rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g, reEscapeChar = /\\(\\)?/g, stringToPath = function(string) {
-      var first = $strSlice(string, 0, 1), last = $strSlice(string, -1);
-      if (first === "%" && last !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-      if (last === "%" && first !== "%")
-        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-      var result = [];
-      return $replace(string, rePropName, function(match, number, quote, subString) {
-        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-      }), result;
-    }, getBaseIntrinsic = function(name, allowMissing) {
-      var intrinsicName = name, alias;
-      if (hasOwn(LEGACY_ALIASES, intrinsicName) && (alias = LEGACY_ALIASES[intrinsicName], intrinsicName = "%" + alias[0] + "%"), hasOwn(INTRINSICS, intrinsicName)) {
-        var value = INTRINSICS[intrinsicName];
-        if (value === needsEval && (value = doEval(intrinsicName)), typeof value == "undefined" && !allowMissing)
-          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-        return {
-          alias: alias,
-          name: intrinsicName,
-          value: value
-        };
-      }
-      throw new $SyntaxError("intrinsic " + name + " does not exist!");
-    };
-    module2.exports = function(name, allowMissing) {
-      if (typeof name != "string" || name.length === 0)
-        throw new $TypeError("intrinsic name must be a non-empty string");
-      if (arguments.length > 1 && typeof allowMissing != "boolean")
-        throw new $TypeError('"allowMissing" argument must be a boolean');
-      if ($exec(/^%?[^%]*%?$/, name) === null)
-        throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
-      var parts = stringToPath(name), intrinsicBaseName = parts.length > 0 ? parts[0] : "", intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing), intrinsicRealName = intrinsic.name, value = intrinsic.value, skipFurtherCaching = !1, alias = intrinsic.alias;
-      alias && (intrinsicBaseName = alias[0], $spliceApply(parts, $concat([0, 1], alias)));
-      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
-        var part = parts[i], first = $strSlice(part, 0, 1), last = $strSlice(part, -1);
-        if ((first === '"' || first === "'" || first === "`" || last === '"' || last === "'" || last === "`") && first !== last)
-          throw new $SyntaxError("property names with quotes must have matching quotes");
-        if ((part === "constructor" || !isOwn) && (skipFurtherCaching = !0), intrinsicBaseName += "." + part, intrinsicRealName = "%" + intrinsicBaseName + "%", hasOwn(INTRINSICS, intrinsicRealName))
-          value = INTRINSICS[intrinsicRealName];
-        else if (value != null) {
-          if (!(part in value)) {
-            if (!allowMissing)
-              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-            return;
-          }
-          if ($gOPD && i + 1 >= parts.length) {
-            var desc = $gOPD(value, part);
-            isOwn = !!desc, isOwn && "get" in desc && !("originalValue" in desc.get) ? value = desc.get : value = value[part];
-          } else
-            isOwn = hasOwn(value, part), value = value[part];
-          isOwn && !skipFurtherCaching && (INTRINSICS[intrinsicRealName] = value);
-        }
-      }
-      return value;
-    };
-  }
-});
-
-// node_modules/safe-regex-test/index.js
-var require_safe_regex_test = __commonJS({
-  "node_modules/safe-regex-test/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var callBound = require_callBound(), GetIntrinsic = require_get_intrinsic4(), isRegex = require_is_regex(), $exec = callBound("RegExp.prototype.exec"), $TypeError = GetIntrinsic("%TypeError%");
-    module2.exports = function(regex) {
-      if (!isRegex(regex))
-        throw new $TypeError("`regex` must be a RegExp");
-      return function(s) {
-        return $exec(regex, s) !== null;
-      };
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/StringToNumber.js
-var require_StringToNumber = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/StringToNumber.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $Number = GetIntrinsic("%Number%"), $RegExp = GetIntrinsic("%RegExp%"), $TypeError = GetIntrinsic("%TypeError%"), $parseInteger = GetIntrinsic("%parseInt%"), callBound = require_callBound(), regexTester = require_safe_regex_test(), $strSlice = callBound("String.prototype.slice"), isBinary = regexTester(/^0b[01]+$/i), isOctal = regexTester(/^0o[0-7]+$/i), isInvalidHexLiteral = regexTester(/^[-+]0x[0-9a-f]+$/i), nonWS = ["\x85", "\u200B", "\uFFFE"].join(""), nonWSregex = new $RegExp("[" + nonWS + "]", "g"), hasNonWS = regexTester(nonWSregex), ws = ["	\n\v\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003", "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028", "\u2029\uFEFF"].join(""), trimRegex = new RegExp("(^[" + ws + "]+)|([" + ws + "]+$)", "g"), $replace = callBound("String.prototype.replace"), $trim = function(value) {
-      return $replace(value, trimRegex, "");
-    }, Type = require_Type2();
-    module2.exports = function StringToNumber(argument) {
-      if (Type(argument) !== "String")
-        throw new $TypeError("Assertion failed: `argument` is not a String");
-      if (isBinary(argument))
-        return $Number($parseInteger($strSlice(argument, 2), 2));
-      if (isOctal(argument))
-        return $Number($parseInteger($strSlice(argument, 2), 8));
-      if (hasNonWS(argument) || isInvalidHexLiteral(argument))
-        return NaN;
-      var trimmed = $trim(argument);
-      return trimmed !== argument ? StringToNumber(trimmed) : $Number(argument);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToNumber.js
-var require_ToNumber = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToNumber.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), $Number = GetIntrinsic("%Number%"), isPrimitive = require_isPrimitive(), ToPrimitive = require_ToPrimitive(), StringToNumber = require_StringToNumber();
-    module2.exports = function(argument) {
-      var value = isPrimitive(argument) ? argument : ToPrimitive(argument, $Number);
-      if (typeof value == "symbol")
-        throw new $TypeError("Cannot convert a Symbol value to a number");
-      if (typeof value == "bigint")
-        throw new $TypeError("Conversion from 'BigInt' to 'number' is not allowed.");
-      return typeof value == "string" ? StringToNumber(value) : $Number(value);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/helpers/sign.js
-var require_sign = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/helpers/sign.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = function(number) {
-      return number >= 0 ? 1 : -1;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToIntegerOrInfinity.js
-var require_ToIntegerOrInfinity = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToIntegerOrInfinity.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var abs = require_abs(), floor = require_floor(), ToNumber = require_ToNumber(), $isNaN = require_isNaN(), $isFinite = require_isFinite(), $sign = require_sign();
-    module2.exports = function(value) {
-      var number = ToNumber(value);
-      if ($isNaN(number) || number === 0)
-        return 0;
-      if (!$isFinite(number))
-        return number;
-      var integer = floor(abs(number));
-      return integer === 0 ? 0 : $sign(number) * integer;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToLength.js
-var require_ToLength = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToLength.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var MAX_SAFE_INTEGER = require_maxSafeInteger(), ToIntegerOrInfinity = require_ToIntegerOrInfinity();
-    module2.exports = function(argument) {
-      var len = ToIntegerOrInfinity(argument);
-      return len <= 0 ? 0 : len > MAX_SAFE_INTEGER ? MAX_SAFE_INTEGER : len;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/LengthOfArrayLike.js
-var require_LengthOfArrayLike = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/LengthOfArrayLike.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), Get = require_Get(), ToLength = require_ToLength(), Type = require_Type2();
-    module2.exports = function(obj) {
-      if (Type(obj) !== "Object")
-        throw new $TypeError("Assertion failed: `obj` must be an Object");
-      return ToLength(Get(obj, "length"));
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToString.js
-var require_ToString = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToString.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $String = GetIntrinsic("%String%"), $TypeError = GetIntrinsic("%TypeError%");
-    module2.exports = function(argument) {
-      if (typeof argument == "symbol")
-        throw new $TypeError("Cannot convert a Symbol value to a string");
-      return $String(argument);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/FlattenIntoArray.js
-var require_FlattenIntoArray = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/FlattenIntoArray.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%"), MAX_SAFE_INTEGER = require_maxSafeInteger(), Call = require_Call(), CreateDataPropertyOrThrow = require_CreateDataPropertyOrThrow(), Get = require_Get(), HasProperty = require_HasProperty(), IsArray = require_IsArray2(), LengthOfArrayLike = require_LengthOfArrayLike(), ToString = require_ToString();
-    module2.exports = function FlattenIntoArray(target, source, sourceLen, start, depth) {
-      var mapperFunction;
-      arguments.length > 5 && (mapperFunction = arguments[5]);
-      for (var targetIndex = start, sourceIndex = 0; sourceIndex < sourceLen; ) {
-        var P = ToString(sourceIndex), exists2 = HasProperty(source, P);
-        if (exists2 === !0) {
-          var element = Get(source, P);
-          if (typeof mapperFunction != "undefined") {
-            if (arguments.length <= 6)
-              throw new $TypeError("Assertion failed: thisArg is required when mapperFunction is provided");
-            element = Call(mapperFunction, arguments[6], [element, sourceIndex, source]);
-          }
-          var shouldFlatten = !1;
-          if (depth > 0 && (shouldFlatten = IsArray(element)), shouldFlatten) {
-            var elementLen = LengthOfArrayLike(element);
-            targetIndex = FlattenIntoArray(target, element, elementLen, targetIndex, depth - 1);
-          } else {
-            if (targetIndex >= MAX_SAFE_INTEGER)
-              throw new $TypeError("index too large");
-            CreateDataPropertyOrThrow(target, ToString(targetIndex), element), targetIndex += 1;
-          }
-        }
-        sourceIndex += 1;
-      }
-      return targetIndex;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/5/CheckObjectCoercible.js
-var require_CheckObjectCoercible = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/5/CheckObjectCoercible.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $TypeError = GetIntrinsic("%TypeError%");
-    module2.exports = function(value, optMessage) {
-      if (value == null)
-        throw new $TypeError(optMessage || "Cannot call method on " + value);
-      return value;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/RequireObjectCoercible.js
-var require_RequireObjectCoercible = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/RequireObjectCoercible.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    module2.exports = require_CheckObjectCoercible();
-  }
-});
-
-// node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToObject.js
-var require_ToObject = __commonJS({
-  "node_modules/array.prototype.flat/node_modules/es-abstract/2022/ToObject.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var GetIntrinsic = require_get_intrinsic2(), $Object = GetIntrinsic("%Object%"), RequireObjectCoercible = require_RequireObjectCoercible();
-    module2.exports = function(value) {
-      return RequireObjectCoercible(value), $Object(value);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/implementation.js
-var require_implementation3 = __commonJS({
-  "node_modules/array.prototype.flat/implementation.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var ArraySpeciesCreate = require_ArraySpeciesCreate(), FlattenIntoArray = require_FlattenIntoArray(), Get = require_Get(), ToIntegerOrInfinity = require_ToIntegerOrInfinity(), ToLength = require_ToLength(), ToObject = require_ToObject();
-    module2.exports = function() {
-      var O = ToObject(this), sourceLen = ToLength(Get(O, "length")), depthNum = 1;
-      arguments.length > 0 && typeof arguments[0] != "undefined" && (depthNum = ToIntegerOrInfinity(arguments[0]));
-      var A = ArraySpeciesCreate(O, 0);
-      return FlattenIntoArray(A, O, sourceLen, 0, depthNum), A;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/polyfill.js
-var require_polyfill = __commonJS({
-  "node_modules/array.prototype.flat/polyfill.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var implementation = require_implementation3();
-    module2.exports = function() {
-      return Array.prototype.flat || implementation;
-    };
-  }
-});
-
-// node_modules/es-shim-unscopables/index.js
-var require_es_shim_unscopables = __commonJS({
-  "node_modules/es-shim-unscopables/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var has = require_src(), hasUnscopables = typeof Symbol == "function" && typeof Symbol.unscopables == "symbol", map = hasUnscopables && Array.prototype[Symbol.unscopables], $TypeError = TypeError;
-    module2.exports = function(method) {
-      if (typeof method != "string" || !method)
-        throw new $TypeError("method must be a non-empty string");
-      if (!has(Array.prototype, method))
-        throw new $TypeError("method must be on Array.prototype");
-      hasUnscopables && (map[method] = !0);
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/shim.js
-var require_shim = __commonJS({
-  "node_modules/array.prototype.flat/shim.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var define = require_define_properties(), shimUnscopables = require_es_shim_unscopables(), getPolyfill = require_polyfill();
-    module2.exports = function() {
-      var polyfill = getPolyfill();
-      return define(Array.prototype, {
-        flat: polyfill
-      }, {
-        flat: function() {
-          return Array.prototype.flat !== polyfill;
-        }
-      }), shimUnscopables("flat"), polyfill;
-    };
-  }
-});
-
-// node_modules/array.prototype.flat/index.js
-var require_array_prototype = __commonJS({
-  "node_modules/array.prototype.flat/index.js": function(exports, module2) {
-    "use strict";
-    init_kolmafia_polyfill();
-    var define = require_define_properties(), callBind = require_call_bind(), implementation = require_implementation3(), getPolyfill = require_polyfill(), polyfill = getPolyfill(), shim = require_shim(), boundFlat = callBind(polyfill);
-    define(boundFlat, {
-      getPolyfill: getPolyfill,
-      implementation: implementation,
-      shim: shim
-    });
-    module2.exports = boundFlat;
-  }
-});
 
 // src/index.ts
 var src_exports = {};
@@ -3407,6 +429,9 @@ __export(src_exports, {
   findLeprechaunMultiplier: function() {
     return findLeprechaunMultiplier;
   },
+  flat: function() {
+    return flat;
+  },
   get: function() {
     return get;
   },
@@ -3640,22 +665,17 @@ __export(src_exports, {
   }
 });
 module.exports = __toCommonJS(src_exports);
-init_kolmafia_polyfill();
 
 // src/actions/ActionSource.ts
-init_kolmafia_polyfill();
-var import_array_prototype2 = __toESM(require_array_prototype()), import_kolmafia7 = require("kolmafia");
+var import_kolmafia7 = require("kolmafia");
 
 // src/combat.ts
-init_kolmafia_polyfill();
 var import_kolmafia5 = require("kolmafia");
 
 // src/lib.ts
-init_kolmafia_polyfill();
-var import_array_prototype = __toESM(require_array_prototype()), import_kolmafia4 = require("kolmafia");
+var import_kolmafia4 = require("kolmafia");
 
 // src/logger.ts
-init_kolmafia_polyfill();
 var import_kolmafia = require("kolmafia"), _defaultHandlers;
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor))
@@ -3822,11 +842,7 @@ __export(property_exports, {
     return withProperty;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia2 = require("kolmafia");
-
-// src/propertyTyping.ts
-init_kolmafia_polyfill();
 
 // src/propertyTypes.ts
 var propertyTypes_exports = {};
@@ -3859,7 +875,6 @@ __export(propertyTypes_exports, {
     return stringProperties;
   }
 });
-init_kolmafia_polyfill();
 var booleanProperties = ["abortOnChoiceWhenNotInChoice", "addChatCommandLine", "addCreationQueue", "addStatusBarToFrames", "allowCloseableDesktopTabs", "allowNegativeTally", "allowNonMoodBurning", "allowSummonBurning", "autoHighlightOnFocus", "broadcastEvents", "cacheMallSearches", "chatBeep", "chatLinksUseRelay", "compactChessboard", "copyAsHTML", "customizedTabs", "debugBuy", "debugConsequences", "debugFoxtrotRemoval", "debugPathnames", "gapProtection", "gitInstallDependencies", "gitShowCommitMessages", "gitUpdateOnLogin", "greenScreenProtection", "guiUsesOneWindow", "hideServerDebugText", "logAcquiredItems", "logBattleAction", "logBrowserInteractions", "logChatMessages", "logChatRequests", "logCleanedHTML", "logDecoratedResponses", "logFamiliarActions", "logGainMessages", "logReadableHTML", "logPreferenceChange", "logMonsterHealth", "logReverseOrder", "logStatGains", "logStatusEffects", "logStatusOnLogin", "macroDebug", "macroLens", "mementoListActive", "mergeHobopolisChat", "printStackOnAbort", "proxySet", "relayAddSounds", "relayAddsCustomCombat", "relayAddsDiscoHelper", "relayAddsGraphicalCLI", "relayAddsQuickScripts", "relayAddsRestoreLinks", "relayAddsUpArrowLinks", "relayAddsUseLinks", "relayAddsWikiLinks", "relayAllowRemoteAccess", "relayBrowserOnly", "relayCacheUncacheable", "relayFormatsChatText", "relayHidesJunkMallItems", "relayMaintainsEffects", "relayMaintainsHealth", "relayMaintainsMana", "relayOverridesImages", "relayRunsAfterAdventureScript", "relayRunsBeforeBattleScript", "relayRunsBeforePVPScript", "relayScriptButtonFirst", "relayTextualizesEffects", "relayTrimsZapList", "relayUsesInlineLinks", "relayUsesIntegratedChat", "relayWarnOnRecoverFailure", "removeMalignantEffects", "saveSettingsOnSet", "sharePriceData", "showAllRequests", "showExceptionalRequests", "stealthLogin", "svnInstallDependencies", "svnShowCommitMessages", "svnUpdateOnLogin", "switchEquipmentForBuffs", "syncAfterSvnUpdate", "useChatToolbar", "useContactsFrame", "useDevProxyServer", "useDockIconBadge", "useHugglerChannel", "useImageCache", "useLastUserAgent", "useSystemTrayIcon", "useTabbedChatFrame", "useToolbars", "useCachedVolcanoMaps", "useZoneComboBox", "verboseSpeakeasy", "verboseFloundry", "wrapLongLines", "_gitUpdated", "_svnRepoFileFetched", "_svnUpdated", "antagonisticSnowmanKitAvailable", "arcadeGameHints", "armoryUnlocked", "autoForbidIgnoringStores", "autoCraft", "autoQuest", "autoEntangle", "autoGarish", "autoManaRestore", "autoFillMayoMinder", "autoPinkyRing", "autoPlantHardcore", "autoPlantSoftcore", "autoPotionID", "autoRepairBoxServants", "autoSatisfyWithCloset", "autoSatisfyWithCoinmasters", "autoSatisfyWithMall", "autoSatisfyWithNPCs", "autoSatisfyWithStash", "autoSatisfyWithStorage", "autoSetConditions", "autoSteal", "autoTuxedo", "backupCameraReverserEnabled", "badMoonEncounter01", "badMoonEncounter02", "badMoonEncounter03", "badMoonEncounter04", "badMoonEncounter05", "badMoonEncounter06", "badMoonEncounter07", "badMoonEncounter08", "badMoonEncounter09", "badMoonEncounter10", "badMoonEncounter11", "badMoonEncounter12", "badMoonEncounter13", "badMoonEncounter14", "badMoonEncounter15", "badMoonEncounter16", "badMoonEncounter17", "badMoonEncounter18", "badMoonEncounter19", "badMoonEncounter20", "badMoonEncounter21", "badMoonEncounter22", "badMoonEncounter23", "badMoonEncounter24", "badMoonEncounter25", "badMoonEncounter26", "badMoonEncounter27", "badMoonEncounter28", "badMoonEncounter29", "badMoonEncounter30", "badMoonEncounter31", "badMoonEncounter32", "badMoonEncounter33", "badMoonEncounter34", "badMoonEncounter35", "badMoonEncounter36", "badMoonEncounter37", "badMoonEncounter38", "badMoonEncounter39", "badMoonEncounter40", "badMoonEncounter41", "badMoonEncounter42", "badMoonEncounter43", "badMoonEncounter44", "badMoonEncounter45", "badMoonEncounter46", "badMoonEncounter47", "badMoonEncounter48", "barrelShrineUnlocked", "bigBrotherRescued", "blackBartsBootyAvailable", "bondAdv", "bondBeach", "bondBeat", "bondBooze", "bondBridge", "bondDesert", "bondDR", "bondDrunk1", "bondDrunk2", "bondHoney", "bondHP", "bondInit", "bondItem1", "bondItem2", "bondItem3", "bondJetpack", "bondMartiniDelivery", "bondMartiniPlus", "bondMartiniTurn", "bondMeat", "bondMox1", "bondMox2", "bondMPregen", "bondMus1", "bondMus2", "bondMys1", "bondMys2", "bondSpleen", "bondStat", "bondStat2", "bondStealth", "bondStealth2", "bondSymbols", "bondWar", "bondWeapon2", "bondWpn", "booPeakLit", "bootsCharged", "breakfastCompleted", "burrowgrubHiveUsed", "calzoneOfLegendEaten", "canteenUnlocked", "chaosButterflyThrown", "chatbotScriptExecuted", "chateauAvailable", "chatLiterate", "chatServesUpdates", "checkJackassHardcore", "checkJackassSoftcore", "clanAttacksEnabled", "coldAirportAlways", "considerShadowNoodles", "controlRoomUnlock", "concertVisited", "controlPanel1", "controlPanel2", "controlPanel3", "controlPanel4", "controlPanel5", "controlPanel6", "controlPanel7", "controlPanel8", "controlPanel9", "corralUnlocked", "dailyDungeonDone", "dampOldBootPurchased", "daycareOpen", "deepDishOfLegendEaten", "demonSummoned", "dinseyAudienceEngagement", "dinseyGarbagePirate", "dinseyRapidPassEnabled", "dinseyRollercoasterNext", "dinseySafetyProtocolsLoose", "doghouseBoarded", "dontStopForCounters", "drippingHallUnlocked", "drippyShieldUnlocked", "edUsedLash", "eldritchFissureAvailable", "eldritchHorrorAvailable", "essenceOfAnnoyanceAvailable", "essenceOfBearAvailable", "expressCardUsed", "falloutShelterChronoUsed", "falloutShelterCoolingTankUsed", "fireExtinguisherBatHoleUsed", "fireExtinguisherChasmUsed", "fireExtinguisherCyrptUsed", "fireExtinguisherDesertUsed", "fireExtinguisherHaremUsed", "fistTeachingsHaikuDungeon", "fistTeachingsPokerRoom", "fistTeachingsBarroomBrawl", "fistTeachingsConservatory", "fistTeachingsBatHole", "fistTeachingsFunHouse", "fistTeachingsMenagerie", "fistTeachingsSlums", "fistTeachingsFratHouse", "fistTeachingsRoad", "fistTeachingsNinjaSnowmen", "flickeringPixel1", "flickeringPixel2", "flickeringPixel3", "flickeringPixel4", "flickeringPixel5", "flickeringPixel6", "flickeringPixel7", "flickeringPixel8", "frAlways", "frCemetaryUnlocked", "friarsBlessingReceived", "frMountainsUnlocked", "frSwampUnlocked", "frVillageUnlocked", "frWoodUnlocked", "getawayCampsiteUnlocked", "ghostPencil1", "ghostPencil2", "ghostPencil3", "ghostPencil4", "ghostPencil5", "ghostPencil6", "ghostPencil7", "ghostPencil8", "ghostPencil9", "gingerAdvanceClockUnlocked", "gingerBlackmailAccomplished", "gingerbreadCityAvailable", "gingerExtraAdventures", "gingerNegativesDropped", "gingerSewersUnlocked", "gingerSubwayLineUnlocked", "gingerRetailUnlocked", "glitchItemAvailable", "grabCloversHardcore", "grabCloversSoftcore", "guideToSafariAvailable", "guyMadeOfBeesDefeated", "hallowienerDefiledNook", "hallowienerGuanoJunction", "hallowienerKnollGym", "hallowienerMadnessBakery", "hallowienerMiddleChamber", "hallowienerOvergrownLot", "hallowienerSkeletonStore", "hallowienerSmutOrcs", "hallowienerSonofaBeach", "hallowienerVolcoino", "hardcorePVPWarning", "harvestBatteriesHardcore", "harvestBatteriesSoftcore", "hasAutumnaton", "hasBartender", "hasChef", "hasCocktailKit", "hasCosmicBowlingBall", "hasDetectiveSchool", "hasMaydayContract", "hasOven", "hasRange", "hasShaker", "hasSushiMat", "haveBoxingDaydreamHardcore", "haveBoxingDaydreamSoftcore", "hermitHax0red", "holidayHalsBookAvailable", "horseryAvailable", "hotAirportAlways", "implementGlitchItem", "intenseCurrents", "itemBoughtPerAscension637", "itemBoughtPerAscension8266", "itemBoughtPerAscension10790", "itemBoughtPerAscension10794", "itemBoughtPerAscension10795", "itemBoughtPerCharacter6423", "itemBoughtPerCharacter6428", "itemBoughtPerCharacter6429", "kingLiberated", "lastPirateInsult1", "lastPirateInsult2", "lastPirateInsult3", "lastPirateInsult4", "lastPirateInsult5", "lastPirateInsult6", "lastPirateInsult7", "lastPirateInsult8", "lawOfAveragesAvailable", "leafletCompleted", "libraryCardUsed", "lockPicked", "logBastilleBattalionBattles", "loginRecoveryHardcore", "loginRecoverySoftcore", "lovebugsUnlocked", "loveTunnelAvailable", "lowerChamberUnlock", "madnessBakeryAvailable", "makePocketWishesHardcore", "makePocketWishesSoftcore", "manualOfNumberologyAvailable", "mappingMonsters", "mapToAnemoneMinePurchased", "mapToKokomoAvailable", "mapToMadnessReefPurchased", "mapToTheDiveBarPurchased", "mapToTheMarinaraTrenchPurchased", "mapToTheSkateParkPurchased", "maraisBeaverUnlock", "maraisCorpseUnlock", "maraisDarkUnlock", "maraisVillageUnlock", "maraisWildlifeUnlock", "maraisWizardUnlock", "maximizerAlwaysCurrent", "maximizerCreateOnHand", "maximizerCurrentMallPrices", "maximizerFoldables", "maximizerIncludeAll", "maximizerNoAdventures", "middleChamberUnlock", "milkOfMagnesiumActive", "moonTuned", "neverendingPartyAlways", "oasisAvailable", "odeBuffbotCheck", "oilPeakLit", "oscusSodaUsed", "outrageousSombreroUsed", "overgrownLotAvailable", "ownsSpeakeasy", "pathedSummonsHardcore", "pathedSummonsSoftcore", "pizzaOfLegendEaten", "popularTartUnlocked", "potatoAlarmClockUsed", "prAlways", "prayedForGlamour", "prayedForProtection", "prayedForVigor", "primaryLabCheerCoreGrabbed", "pyramidBombUsed", "ROMOfOptimalityAvailable", "rageGlandVented", "readManualHardcore", "readManualSoftcore", "relayShowSpoilers", "relayShowWarnings", "rememberDesktopSize", "restUsingChateau", "restUsingCampAwayTent", "requireBoxServants", "requireSewerTestItems", "safePickpocket", "schoolOfHardKnocksDiplomaAvailable", "scriptCascadingMenus", "serverAddsCustomCombat", "SHAWARMAInitiativeUnlocked", "showForbiddenStores", "showGainsPerUnit", "showIgnoringStorePrices", "showNoSummonOnly", "showTurnFreeOnly", "skeletonStoreAvailable", "sleazeAirportAlways", "snojoAvailable", "sortByEffect", "sortByRoom", "spacegateAlways", "spacegateVaccine1", "spacegateVaccine2", "spacegateVaccine3", "spaceInvaderDefeated", "spelunkyHints", "spiceMelangeUsed", "spookyAirportAlways", "stenchAirportAlways", "stopForFixedWanderer", "stopForUltraRare", "styxPixieVisited", "superconductorDefeated", "suppressInappropriateNags", "suppressPowerPixellation", "suppressMallPriceCacheMessages", "telegraphOfficeAvailable", "telescopeLookedHigh", "timeTowerAvailable", "trackLightsOut", "uneffectWithHotTub", "universalSeasoningActive", "universalSeasoningAvailable", "useBookOfEverySkillHardcore", "useBookOfEverySkillSoftcore", "useCrimboToysHardcore", "useCrimboToysSoftcore", "verboseMaximizer", "visitLoungeHardcore", "visitLoungeSoftcore", "visitRumpusHardcore", "visitRumpusSoftcore", "voteAlways", "wildfireBarrelCaulked", "wildfireDusted", "wildfireFracked", "wildfirePumpGreased", "wildfireSprinkled", "yearbookCameraPending", "youRobotScavenged", "_affirmationCookieEaten", "_affirmationHateUsed", "_airFryerUsed", "_akgyxothUsed", "_alienAnimalMilkUsed", "_alienPlantPodUsed", "_allYearSucker", "_aprilShower", "_armyToddlerCast", "_authorsInkUsed", "_baconMachineUsed", "_bagOfCandy", "_bagOfCandyUsed", "_bagOTricksUsed", "_ballastTurtleUsed", "_ballInACupUsed", "_ballpit", "_barrelPrayer", "_bastilleLastBattleWon", "_beachCombing", "_bendHellUsed", "_blankoutUsed", "_bonersSummoned", "_bookOfEverySkillUsed", "_borrowedTimeUsed", "_bowleggedSwaggerUsed", "_bowlFullOfJellyUsed", "_boxOfHammersUsed", "_brainPreservationFluidUsed", "_brassDreadFlaskUsed", "_cameraUsed", "_canSeekBirds", "_carboLoaded", "_cargoPocketEmptied", "_ceciHatUsed", "_chateauDeskHarvested", "_chateauMonsterFought", "_chronerCrossUsed", "_chronerTriggerUsed", "_chubbyAndPlumpUsed", "_circleDrumUsed", "_clanFortuneBuffUsed", "_claraBellUsed", "_coalPaperweightUsed", "_cocoaDispenserUsed", "_cocktailShakerUsed", "_coldAirportToday", "_coldOne", "_communismUsed", "_confusingLEDClockUsed", "_controlPanelUsed", "_cookbookbatRecipeDrops", "_corruptedStardustUsed", "_cosmicSixPackConjured", "_crappyCameraUsed", "_creepyVoodooDollUsed", "_crimboTraining", "_crimboTree", "_cursedKegUsed", "_cursedMicrowaveUsed", "_dailyDungeonMalwareUsed", "_darkChocolateHeart", "_daycareFights", "_daycareNap", "_daycareSpa", "_daycareToday", "_defectiveTokenChecked", "_defectiveTokenUsed", "_dinseyGarbageDisposed", "_discoKnife", "_distentionPillUsed", "_dnaHybrid", "_docClocksThymeCocktailDrunk", "_drippingHallDoor1", "_drippingHallDoor2", "_drippingHallDoor3", "_drippingHallDoor4", "_drippyCaviarUsed", "_drippyNuggetUsed", "_drippyPilsnerUsed", "_drippyPlumUsed", "_drippyWineUsed", "_eldritchHorrorEvoked", "_eldritchTentacleFought", "_entauntaunedToday", "_envyfishEggUsed", "_essentialTofuUsed", "_etchedHourglassUsed", "_eternalCarBatteryUsed", "_everfullGlassUsed", "_eyeAndATwistUsed", "_fancyChessSetUsed", "_falloutShelterSpaUsed", "_fancyHotDogEaten", "_farmerItemsCollected", "_favoriteBirdVisited", "_firedJokestersGun", "_fireExtinguisherRefilled", "_fireStartingKitUsed", "_fireworksShop", "_fireworksShopHatBought", "_fireworksShopEquipmentBought", "_fireworkUsed", "_fishyPipeUsed", "_floundryItemCreated", "_floundryItemUsed", "_freePillKeeperUsed", "_frToday", "_fudgeSporkUsed", "_garbageItemChanged", "_gingerBiggerAlligators", "_gingerbreadCityToday", "_gingerbreadClockAdvanced", "_gingerbreadClockVisited", "_gingerbreadColumnDestroyed", "_gingerbreadMobHitUsed", "_glennGoldenDiceUsed", "_glitchItemImplemented", "_gnollEyeUsed", "_governmentPerDiemUsed", "_grimBuff", "_guildManualUsed", "_guzzlrQuestAbandoned", "_hardKnocksDiplomaUsed", "_hippyMeatCollected", "_hobbyHorseUsed", "_holidayFunUsed", "_holoWristCrystal", "_hotAirportToday", "_hungerSauceUsed", "_hyperinflatedSealLungUsed", "_iceHotelRoomsRaided", "_iceSculptureUsed", "_incredibleSelfEsteemCast", "_infernoDiscoVisited", "_internetDailyDungeonMalwareBought", "_internetGallonOfMilkBought", "_internetPlusOneBought", "_internetPrintScreenButtonBought", "_internetViralVideoBought", "_interviewIsabella", "_interviewMasquerade", "_interviewVlad", "_inquisitorsUnidentifiableObjectUsed", "_ironicMoustache", "_jackassPlumberGame", "_jarlsCheeseSummoned", "_jarlsCreamSummoned", "_jarlsDoughSummoned", "_jarlsEggsSummoned", "_jarlsFruitSummoned", "_jarlsMeatSummoned", "_jarlsPotatoSummoned", "_jarlsVeggiesSummoned", "_jingleBellUsed", "_jukebox", "_kgbFlywheelCharged", "_kgbLeftDrawerUsed", "_kgbOpened", "_kgbRightDrawerUsed", "_kolConSixPackUsed", "_kolhsCutButNotDried", "_kolhsIsskayLikeAnAshtray", "_kolhsPoeticallyLicenced", "_kolhsSchoolSpirited", "_kudzuSaladEaten", "_lastCombatWon", "_latteBanishUsed", "_latteCopyUsed", "_latteDrinkUsed", "_legendaryBeat", "_licenseToChillUsed", "_lodestoneUsed", "_lookingGlass", "_loveTunnelToday", "_loveTunnelUsed", "_luckyGoldRingVolcoino", "_lunchBreak", "_lupineHormonesUsed", "_lyleFavored", "_madLiquorDrunk", "_madTeaParty", "_mafiaMiddleFingerRingUsed", "_managerialManipulationUsed", "_mansquitoSerumUsed", "_maydayDropped", "_mayoDeviceRented", "_mayoTankSoaked", "_meatballMachineUsed", "_meatifyMatterUsed", "_milkOfMagnesiumUsed", "_mimeArmyShotglassUsed", "_missGravesVermouthDrunk", "_missileLauncherUsed", "_molehillMountainUsed", "_momFoodReceived", "_mrBurnsgerEaten", "_muffinOrderedToday", "_mushroomGardenVisited", "_neverendingPartyToday", "_newYouQuestCompleted", "_olympicSwimmingPool", "_olympicSwimmingPoolItemFound", "_overflowingGiftBasketUsed", "_partyHard", "_pastaAdditive", "_perfectFreezeUsed", "_perfectlyFairCoinUsed", "_petePartyThrown", "_peteRiotIncited", "_photocopyUsed", "_pickyTweezersUsed", "_pingPongGame", "_pirateBellowUsed", "_pirateForkUsed", "_pixelOrbUsed", "_plumbersMushroomStewEaten", "_pneumaticityPotionUsed", "_portableSteamUnitUsed", "_pottedTeaTreeUsed", "_prToday", "_psychoJarFilled", "_psychoJarUsed", "_psychokineticHugUsed", "_rainStickUsed", "_redwoodRainStickUsed", "_requestSandwichSucceeded", "_rhinestonesAcquired", "_seaJellyHarvested", "_setOfJacksUsed", "_sewingKitUsed", "_sexChanged", "_shadowAffinityToday", "_shadowForestLooted", "_shrubDecorated", "_silverDreadFlaskUsed", "_sitCourseCompleted", "_skateBuff1", "_skateBuff2", "_skateBuff3", "_skateBuff4", "_skateBuff5", "_sleazeAirportToday", "_sobrieTeaUsed", "_softwareGlitchTurnReceived", "_spacegateMurderbot", "_spacegateRuins", "_spacegateSpant", "_spacegateToday", "_spacegateVaccine", "_spaghettiBreakfast", "_spaghettiBreakfastEaten", "_spinmasterLatheVisited", "_spinningWheel", "_spookyAirportToday", "_stabonicScrollUsed", "_steelyEyedSquintUsed", "_stenchAirportToday", "_stinkyCheeseBanisherUsed", "_strangeStalagmiteUsed", "_streamsCrossed", "_stuffedPocketwatchUsed", "_styxSprayUsed", "_summonAnnoyanceUsed", "_summonCarrotUsed", "_summonResortPassUsed", "_sweetToothUsed", "_syntheticDogHairPillUsed", "_tacoFlierUsed", "_telegraphOfficeToday", "_templeHiddenPower", "_tempuraAirUsed", "_thesisDelivered", "_timeSpinnerReplicatorUsed", "_toastSummoned", "_tonicDjinn", "_treasuryEliteMeatCollected", "_treasuryHaremMeatCollected", "_trivialAvocationsGame", "_tryptophanDartUsed", "_turtlePowerCast", "_twelveNightEnergyUsed", "_ultraMegaSourBallUsed", "_victorSpoilsUsed", "_villainLairCanLidUsed", "_villainLairColorChoiceUsed", "_villainLairDoorChoiceUsed", "_villainLairFirecrackerUsed", "_villainLairSymbologyChoiceUsed", "_villainLairWebUsed", "_vmaskBanisherUsed", "_voraciTeaUsed", "_volcanoItemRedeemed", "_volcanoSuperduperheatedMetal", "_voteToday", "_VYKEACafeteriaRaided", "_VYKEALoungeRaided", "_walfordQuestStartedToday", "_warbearBankUsed", "_warbearBreakfastMachineUsed", "_warbearGyrocopterUsed", "_warbearSodaMachineUsed", "_wildfireBarrelHarvested", "_witchessBuff", "_workshedItemUsed", "_zombieClover", "_preventScurvy", "lockedItem4637", "lockedItem4638", "lockedItem4639", "lockedItem4646", "lockedItem4647", "unknownRecipe3542", "unknownRecipe3543", "unknownRecipe3544", "unknownRecipe3545", "unknownRecipe3546", "unknownRecipe3547", "unknownRecipe3548", "unknownRecipe3749", "unknownRecipe3751", "unknownRecipe4172", "unknownRecipe4173", "unknownRecipe4174", "unknownRecipe5060", "unknownRecipe5061", "unknownRecipe5062", "unknownRecipe5063", "unknownRecipe5064", "unknownRecipe5066", "unknownRecipe5067", "unknownRecipe5069", "unknownRecipe5070", "unknownRecipe5072", "unknownRecipe5073", "unknownRecipe5670", "unknownRecipe5671", "unknownRecipe6501", "unknownRecipe6564", "unknownRecipe6565", "unknownRecipe6566", "unknownRecipe6567", "unknownRecipe6568", "unknownRecipe6569", "unknownRecipe6570", "unknownRecipe6571", "unknownRecipe6572", "unknownRecipe6573", "unknownRecipe6574", "unknownRecipe6575", "unknownRecipe6576", "unknownRecipe6577", "unknownRecipe6578", "unknownRecipe7752", "unknownRecipe7753", "unknownRecipe7754", "unknownRecipe7755", "unknownRecipe7756", "unknownRecipe7757", "unknownRecipe7758", "unknownRecipe10970", "unknownRecipe10971", "unknownRecipe10972", "unknownRecipe10973", "unknownRecipe10974", "unknownRecipe10975", "unknownRecipe10976", "unknownRecipe10977", "unknownRecipe10978", "unknownRecipe10988", "unknownRecipe10989", "unknownRecipe10990", "unknownRecipe10991", "unknownRecipe10992", "unknownRecipe11000"], numericProperties = ["coinMasterIndex", "dailyDeedsVersion", "defaultDropdown1", "defaultDropdown2", "defaultDropdownSplit", "defaultLimit", "fixedThreadPoolSize", "itemManagerIndex", "lastBuffRequestType", "lastGlobalCounterDay", "lastImageCacheClear", "previousUpdateRevision", "relayDelayForSVN", "relaySkillButtonCount", "scriptButtonPosition", "statusDropdown", "svnThreadPoolSize", "toolbarPosition", "_g9Effect", "8BitBonusTurns", "8BitScore", "addingScrolls", "affirmationCookiesEaten", "aminoAcidsUsed", "antagonisticSnowmanKitCost", "ascensionsToday", "asolDeferredPoints", "asolPointsPigSkinner", "asolPointsCheeseWizard", "asolPointsJazzAgent", "autoAbortThreshold", "autoAntidote", "autoBuyPriceLimit", "autumnatonQuestTurn", "availableCandyCredits", "availableDimes", "availableFunPoints", "availableQuarters", "availableStoreCredits", "availableSwagger", "averageSwagger", "awolMedicine", "awolPointsBeanslinger", "awolPointsCowpuncher", "awolPointsSnakeoiler", "awolDeferredPointsBeanslinger", "awolDeferredPointsCowpuncher", "awolDeferredPointsSnakeoiler", "awolVenom", "bagOTricksCharges", "ballpitBonus", "bankedKarma", "bartenderTurnsUsed", "basementMallPrices", "basementSafetyMargin", "batmanFundsAvailable", "batmanBonusInitialFunds", "batmanTimeLeft", "bearSwagger", "beeCounter", "beGregariousCharges", "beGregariousFightsLeft", "birdformCold", "birdformHot", "birdformRoc", "birdformSleaze", "birdformSpooky", "birdformStench", "blackBartsBootyCost", "blackPuddingsDefeated", "blackForestProgress", "blankOutUsed", "bloodweiserDrunk", "bondPoints", "bondVillainsDefeated", "boneAbacusVictories", "booPeakProgress", "borisPoints", "breakableHandling", "breakableHandling1964", "breakableHandling9691", "breakableHandling9692", "breakableHandling9699", "breathitinCharges", "brodenBacteria", "brodenSprinkles", "buffBotMessageDisposal", "buffBotPhilanthropyType", "buffJimmyIngredients", "burnoutsDefeated", "burrowgrubSummonsRemaining", "camelSpit", "camerasUsed", "campAwayDecoration", "candyWitchTurnsUsed", "candyWitchCandyTotal", "carboLoading", "catBurglarBankHeists", "cellarLayout", "charitableDonations", "chasmBridgeProgress", "chefTurnsUsed", "chessboardsCleared", "chilledToTheBone", "cinderellaMinutesToMidnight", "cinderellaScore", "cocktailSummons", "commerceGhostCombats", "controlPanelOmega", "cornucopiasOpened", "cosmicBowlingBallReturnCombats", "cozyCounter6332", "cozyCounter6333", "cozyCounter6334", "craftingClay", "craftingLeather", "craftingStraw", "crimbo16BeardChakraCleanliness", "crimbo16BootsChakraCleanliness", "crimbo16BungChakraCleanliness", "crimbo16CrimboHatChakraCleanliness", "crimbo16GutsChakraCleanliness", "crimbo16HatChakraCleanliness", "crimbo16JellyChakraCleanliness", "crimbo16LiverChakraCleanliness", "crimbo16NippleChakraCleanliness", "crimbo16NoseChakraCleanliness", "crimbo16ReindeerChakraCleanliness", "crimbo16SackChakraCleanliness", "crimboTrainingSkill", "crimboTreeDays", "cubelingProgress", "currentExtremity", "currentHedgeMazeRoom", "currentMojoFilters", "currentNunneryMeat", "currentPortalEnergy", "cursedMagnifyingGlassCount", "cyrptAlcoveEvilness", "cyrptCrannyEvilness", "cyrptNicheEvilness", "cyrptNookEvilness", "cyrptTotalEvilness", "darkGyfftePoints", "daycareEquipment", "daycareInstructors", "daycareLastScavenge", "daycareToddlers", "dbNemesisSkill1", "dbNemesisSkill2", "dbNemesisSkill3", "desertExploration", "desktopHeight", "desktopWidth", "dinseyFilthLevel", "dinseyFunProgress", "dinseyNastyBearsDefeated", "dinseySocialJusticeIProgress", "dinseySocialJusticeIIProgress", "dinseyTouristsFed", "dinseyToxicMultiplier", "doctorBagQuestLights", "doctorBagUpgrades", "dreadScroll1", "dreadScroll2", "dreadScroll3", "dreadScroll4", "dreadScroll5", "dreadScroll6", "dreadScroll7", "dreadScroll8", "dripAdventuresSinceAscension", "drippingHallAdventuresSinceAscension", "drippingTreesAdventuresSinceAscension", "drippyBatsUnlocked", "drippyJuice", "drippyOrbsClaimed", "drunkenSwagger", "edDefeatAbort", "edPoints", "eldritchTentaclesFought", "electricKoolAidEaten", "elfGratitude", "encountersUntilDMTChoice", "encountersUntilNEPChoice", "encountersUntilSRChoice", "ensorceleeLevel", "entauntaunedColdRes", "essenceOfAnnoyanceCost", "essenceOfBearCost", "extraRolloverAdventures", "falloutShelterLevel", "familiarSweat", "fingernailsClipped", "fistSkillsKnown", "flyeredML", "fossilB", "fossilD", "fossilN", "fossilP", "fossilS", "fossilW", "fratboysDefeated", "frenchGuardTurtlesFreed", "funGuyMansionKills", "garbageChampagneCharge", "garbageFireProgress", "garbageShirtCharge", "garbageTreeCharge", "garlandUpgrades", "gingerDigCount", "gingerLawChoice", "gingerMuscleChoice", "gingerTrainScheduleStudies", "gladiatorBallMovesKnown", "gladiatorBladeMovesKnown", "gladiatorNetMovesKnown", "glitchItemCost", "glitchItemImplementationCount", "glitchItemImplementationLevel", "glitchSwagger", "gloverPoints", "gnasirProgress", "goldenMrAccessories", "gongPath", "gooseDronesRemaining", "goreCollected", "gourdItemCount", "greyYouPoints", "grimoire1Summons", "grimoire2Summons", "grimoire3Summons", "grimstoneCharge", "guardTurtlesFreed", "guideToSafariCost", "guyMadeOfBeesCount", "guzzlrBronzeDeliveries", "guzzlrDeliveryProgress", "guzzlrGoldDeliveries", "guzzlrPlatinumDeliveries", "haciendaLayout", "hallowiener8BitRealm", "hallowienerCoinspiracy", "hareMillisecondsSaved", "hareTurnsUsed", "heavyRainsStartingThunder", "heavyRainsStartingRain", "heavyRainsStartingLightning", "heroDonationBoris", "heroDonationJarlsberg", "heroDonationSneakyPete", "hiddenApartmentProgress", "hiddenBowlingAlleyProgress", "hiddenHospitalProgress", "hiddenOfficeProgress", "hiddenTavernUnlock", "highTopPumped", "hippiesDefeated", "holidayHalsBookCost", "holidaySwagger", "homemadeRobotUpgrades", "homebodylCharges", "hpAutoRecovery", "hpAutoRecoveryTarget", "iceSwagger", "jarlsbergPoints", "jungCharge", "junglePuns", "knownAscensions", "kolhsTotalSchoolSpirited", "lastAnticheeseDay", "lastArcadeAscension", "lastBadMoonReset", "lastBangPotionReset", "lastBattlefieldReset", "lastBeardBuff", "lastBreakfast", "lastCartographyBooPeak", "lastCartographyCastleTop", "lastCartographyDarkNeck", "lastCartographyDefiledNook", "lastCartographyFratHouse", "lastCartographyFratHouseVerge", "lastCartographyGuanoJunction", "lastCartographyHauntedBilliards", "lastCartographyHippyCampVerge", "lastCartographyZeppelinProtesters", "lastCastleGroundUnlock", "lastCastleTopUnlock", "lastCellarReset", "lastChanceThreshold", "lastChasmReset", "lastColosseumRoundWon", "lastCouncilVisit", "lastCounterDay", "lastDesertUnlock", "lastDispensaryOpen", "lastDMTDuplication", "lastDwarfFactoryReset", "lastEVHelmetValue", "lastEVHelmetReset", "lastEmptiedStorage", "lastFilthClearance", "lastGoofballBuy", "lastGuildStoreOpen", "lastGuyMadeOfBeesReset", "lastFratboyCall", "lastFriarCeremonyAscension", "lastFriarElbowNC", "lastFriarHeartNC", "lastFriarNeckNC", "lastHippyCall", "lastIslandUnlock", "lastKeyotronUse", "lastKingLiberation", "lastLightsOutTurn", "lastMushroomPlot", "lastMiningReset", "lastNemesisReset", "lastPaperStripReset", "lastPirateEphemeraReset", "lastPirateInsultReset", "lastPlusSignUnlock", "lastQuartetAscension", "lastQuartetRequest", "lastSecondFloorUnlock", "lastShadowForgeUnlockAdventure", "lastSkateParkReset", "lastStillBeatingSpleen", "lastTavernAscension", "lastTavernSquare", "lastTelescopeReset", "lastTempleAdventures", "lastTempleButtonsUnlock", "lastTempleUnlock", "lastThingWithNoNameDefeated", "lastTowelAscension", "lastTr4pz0rQuest", "lastTrainsetConfiguration", "lastVioletFogMap", "lastVoteMonsterTurn", "lastWartDinseyDefeated", "lastWuTangDefeated", "lastYearbookCameraAscension", "lastZapperWand", "lastZapperWandExplosionDay", "lawOfAveragesCost", "libramSummons", "lightsOutAutomation", "louvreDesiredGoal", "louvreGoal", "lovebugsAridDesert", "lovebugsBeachBuck", "lovebugsBooze", "lovebugsChroner", "lovebugsCoinspiracy", "lovebugsCyrpt", "lovebugsFreddy", "lovebugsFunFunds", "lovebugsHoboNickel", "lovebugsItemDrop", "lovebugsMeat", "lovebugsMeatDrop", "lovebugsMoxie", "lovebugsMuscle", "lovebugsMysticality", "lovebugsOilPeak", "lovebugsOrcChasm", "lovebugsPowder", "lovebugsWalmart", "lttQuestDifficulty", "lttQuestStageCount", "manaBurnSummonThreshold", "manaBurningThreshold", "manaBurningTrigger", "manorDrawerCount", "manualOfNumberologyCost", "mapToKokomoCost", "masksUnlocked", "maximizerMRUSize", "maximizerCombinationLimit", "maximizerEquipmentLevel", "maximizerEquipmentScope", "maximizerMaxPrice", "maximizerPriceLevel", "maxManaBurn", "mayflyExperience", "mayoLevel", "meansuckerPrice", "merkinVocabularyMastery", "miniAdvClass", "miniMartinisDrunk", "moleTunnelLevel", "mothershipProgress", "mpAutoRecovery", "mpAutoRecoveryTarget", "munchiesPillsUsed", "mushroomGardenCropLevel", "nextParanormalActivity", "nextQuantumFamiliarOwnerId", "nextQuantumFamiliarTurn", "noobPoints", "noobDeferredPoints", "noodleSummons", "nsContestants1", "nsContestants2", "nsContestants3", "nuclearAutumnPoints", "numericSwagger", "nunsVisits", "oilPeakProgress", "optimalSwagger", "optimisticCandleProgress", "palindomeDudesDefeated", "parasolUsed", "pendingMapReflections", "pingpongSkill", "pirateSwagger", "plantingDay", "plumberBadgeCost", "plumberCostumeCost", "plumberPoints", "poolSharkCount", "poolSkill", "primaryLabGooIntensity", "prismaticSummons", "procrastinatorLanguageFluency", "promptAboutCrafting", "puzzleChampBonus", "pyramidPosition", "rockinRobinProgress", "ROMOfOptimalityCost", "quantumPoints", "reagentSummons", "reanimatorArms", "reanimatorLegs", "reanimatorSkulls", "reanimatorWeirdParts", "reanimatorWings", "recentLocations", "redSnapperProgress", "relayPort", "relocatePygmyJanitor", "relocatePygmyLawyer", "rumpelstiltskinTurnsUsed", "rumpelstiltskinKidsRescued", "safariSwagger", "sausageGrinderUnits", "schoolOfHardKnocksDiplomaCost", "schoolSwagger", "scrapbookCharges", "scriptMRULength", "seaodesFound", "SeasoningSwagger", "sexChanges", "shadowRiftLastNC", "shadowRiftTotalTurns", "shenInitiationDay", "shockingLickCharges", "singleFamiliarRun", "skillBurn3", "skillBurn90", "skillBurn153", "skillBurn154", "skillBurn155", "skillBurn1019", "skillBurn5017", "skillBurn6014", "skillBurn6015", "skillBurn6016", "skillBurn6020", "skillBurn6021", "skillBurn6022", "skillBurn6023", "skillBurn6024", "skillBurn6026", "skillBurn6028", "skillBurn7323", "skillBurn14008", "skillBurn14028", "skillBurn14038", "skillBurn15011", "skillBurn15028", "skillBurn17005", "skillBurn22034", "skillBurn22035", "skillBurn23301", "skillBurn23302", "skillBurn23303", "skillBurn23304", "skillBurn23305", "skillBurn23306", "skillLevel46", "skillLevel47", "skillLevel48", "skillLevel117", "skillLevel118", "skillLevel121", "skillLevel128", "skillLevel134", "skillLevel144", "skillLevel180", "skillLevel188", "skillLevel7254", "slimelingFullness", "slimelingStacksDropped", "slimelingStacksDue", "smoresEaten", "smutOrcNoncombatProgress", "sneakyPetePoints", "snojoMoxieWins", "snojoMuscleWins", "snojoMysticalityWins", "sourceAgentsDefeated", "sourceEnlightenment", "sourceInterval", "sourcePoints", "sourceTerminalGram", "sourceTerminalPram", "sourceTerminalSpam", "spaceBabyLanguageFluency", "spacePirateLanguageFluency", "spelunkyNextNoncombat", "spelunkySacrifices", "spelunkyWinCount", "spookyPuttyCopiesMade", "statbotUses", "sugarCounter4178", "sugarCounter4179", "sugarCounter4180", "sugarCounter4181", "sugarCounter4182", "sugarCounter4183", "sugarCounter4191", "summonAnnoyanceCost", "sweat", "tacoDanCocktailSauce", "tacoDanFishMeat", "tavernLayout", "telescopeUpgrades", "tempuraSummons", "timeSpinnerMedals", "timesRested", "tomeSummons", "totalCharitableDonations", "trainsetPosition", "turtleBlessingTurns", "twinPeakProgress", "twoCRSPoints", "unicornHornInflation", "universalSeasoningCost", "usable1HWeapons", "usable1xAccs", "usable2HWeapons", "usable3HWeapons", "usableAccessories", "usableHats", "usableOffhands", "usableOther", "usablePants", "usableShirts", "valueOfAdventure", "valueOfInventory", "valueOfStill", "valueOfTome", "vintnerCharge", "vintnerWineLevel", "violetFogGoal", "walfordBucketProgress", "warehouseProgress", "welcomeBackAdv", "whetstonesUsed", "wolfPigsEvicted", "wolfTurnsUsed", "writingDesksDefeated", "xoSkeleltonXProgress", "xoSkeleltonOProgress", "yearbookCameraAscensions", "yearbookCameraUpgrades", "youRobotBody", "youRobotBottom", "youRobotLeft", "youRobotPoints", "youRobotRight", "youRobotTop", "zeppelinProtestors", "zigguratLianas", "zombiePoints", "_absintheDrops", "_abstractionDropsCrown", "_aguaDrops", "_xenomorphCharge", "_ancestralRecallCasts", "_antihangoverBonus", "_astralDrops", "_autumnatonQuests", "_backUpUses", "_badlyRomanticArrows", "_badgerCharge", "_balefulHowlUses", "_banderRunaways", "_bastilleCheese", "_bastilleGames", "_bastilleGameTurn", "_bastilleLastCheese", "_beanCannonUses", "_bearHugs", "_beerLensDrops", "_bellydancerPickpockets", "_benettonsCasts", "_birdsSoughtToday", "_boomBoxFights", "_boomBoxSongsLeft", "_bootStomps", "_boxingGloveArrows", "_brickoEyeSummons", "_brickoFights", "_campAwayCloudBuffs", "_campAwaySmileBuffs", "_candySummons", "_captainHagnkUsed", "_carnieCandyDrops", "_carrotNoseDrops", "_catBurglarCharge", "_catBurglarHeistsComplete", "_cheerleaderSteam", "_chestXRayUsed", "_chipBags", "_chocolateCigarsUsed", "_chocolateCoveredPingPongBallsUsed", "_chocolateSculpturesUsed", "_chocolatesUsed", "_chronolithActivations", "_chronolithNextCost", "_clanFortuneConsultUses", "_clipartSummons", "_cloversPurchased", "_coldMedicineConsults", "_coldMedicineEquipmentTaken", "_companionshipCasts", "_cookbookbatCrafting", "_cosmicBowlingSkillsUsed", "_crimbo21ColdResistance", "_dailySpecialPrice", "_daycareGymScavenges", "_daycareRecruits", "_deckCardsDrawn", "_deluxeKlawSummons", "_demandSandwich", "_detectiveCasesCompleted", "_disavowed", "_dnaPotionsMade", "_donhosCasts", "_dreamJarDrops", "_drunkPygmyBanishes", "_edDefeats", "_edLashCount", "_elronsCasts", "_enamorangs", "_energyCollected", "_expertCornerCutterUsed", "_favorRareSummons", "_feastUsed", "_feelinTheRhythm", "_feelPrideUsed", "_feelExcitementUsed", "_feelHatredUsed", "_feelLonelyUsed", "_feelNervousUsed", "_feelEnvyUsed", "_feelDisappointedUsed", "_feelSuperiorUsed", "_feelLostUsed", "_feelNostalgicUsed", "_feelPeacefulUsed", "_fingertrapArrows", "_fireExtinguisherCharge", "_fragrantHerbsUsed", "_freeBeachWalksUsed", "_frButtonsPressed", "_fudgeWaspFights", "_gapBuffs", "_garbageFireDrops", "_garbageFireDropsCrown", "_genieFightsUsed", "_genieWishesUsed", "_gibbererAdv", "_gibbererCharge", "_gingerbreadCityTurns", "_glarkCableUses", "_glitchMonsterFights", "_gnomeAdv", "_godLobsterFights", "_goldenMoneyCharge", "_gongDrops", "_gothKidCharge", "_gothKidFights", "_greyYouAdventures", "_grimBrotherCharge", "_grimFairyTaleDrops", "_grimFairyTaleDropsCrown", "_grimoireConfiscatorSummons", "_grimoireGeekySummons", "_grimstoneMaskDrops", "_grimstoneMaskDropsCrown", "_grooseCharge", "_grooseDrops", "_grubbyWoolDrops", "_guzzlrDeliveries", "_guzzlrGoldDeliveries", "_guzzlrPlatinumDeliveries", "_hareAdv", "_hareCharge", "_highTopPumps", "_hipsterAdv", "_hoardedCandyDropsCrown", "_hoboUnderlingSummons", "_holoWristDrops", "_holoWristProgress", "_hotAshesDrops", "_hotJellyUses", "_hotTubSoaks", "_humanMuskUses", "_iceballUses", "_inigosCasts", "_jerksHealthMagazinesUsed", "_jiggleCheese", "_jiggleCream", "_jiggleLife", "_jiggleSteak", "_jitbCharge", "_juneCleaverFightsLeft", "_juneCleaverEncounters", "_juneCleaverStench", "_juneCleaverSpooky", "_juneCleaverSleaze", "_juneCleaverHot", "_juneCleaverCold", "_juneCleaverSkips", "_jungDrops", "_kgbClicksUsed", "_kgbDispenserUses", "_kgbTranquilizerDartUses", "_klawSummons", "_kloopCharge", "_kloopDrops", "_kolhsAdventures", "_kolhsSavedByTheBell", "_lastDailyDungeonRoom", "_lastSausageMonsterTurn", "_lastZomboEye", "_latteRefillsUsed", "_leafblowerML", "_legionJackhammerCrafting", "_llamaCharge", "_longConUsed", "_lovebugsBeachBuck", "_lovebugsChroner", "_lovebugsCoinspiracy", "_lovebugsFreddy", "_lovebugsFunFunds", "_lovebugsHoboNickel", "_lovebugsWalmart", "_loveChocolatesUsed", "_lynyrdSnareUses", "_machineTunnelsAdv", "_macrometeoriteUses", "_mafiaThumbRingAdvs", "_mayflowerDrops", "_mayflySummons", "_mediumSiphons", "_meteoriteAdesUsed", "_meteorShowerUses", "_micrometeoriteUses", "_miniMartiniDrops", "_monstersMapped", "_mushroomGardenFights", "_nanorhinoCharge", "_navelRunaways", "_neverendingPartyFreeTurns", "_newYouQuestSharpensDone", "_newYouQuestSharpensToDo", "_nextColdMedicineConsult", "_nextQuantumAlignment", "_nightmareFuelCharges", "_noobSkillCount", "_nuclearStockpileUsed", "_oilExtracted", "_olfactionsUsed", "_optimisticCandleDropsCrown", "_oreDropsCrown", "_otoscopeUsed", "_oysterEggsFound", "_pantsgivingBanish", "_pantsgivingCount", "_pantsgivingCrumbs", "_pantsgivingFullness", "_pasteDrops", "_peteJukeboxFixed", "_peteJumpedShark", "_petePeeledOut", "_pieDrops", "_piePartsCount", "_pixieCharge", "_pocketProfessorLectures", "_poisonArrows", "_pokeGrowFertilizerDrops", "_poolGames", "_powderedGoldDrops", "_powderedMadnessUses", "_powerfulGloveBatteryPowerUsed", "_powerPillDrops", "_powerPillUses", "_precisionCasts", "_radlibSummons", "_raindohCopiesMade", "_rapidPrototypingUsed", "_raveStealCount", "_reflexHammerUsed", "_resolutionAdv", "_resolutionRareSummons", "_riftletAdv", "_robinEggDrops", "_roboDrops", "_rogueProgramCharge", "_romanticFightsLeft", "_saberForceMonsterCount", "_saberForceUses", "_saberMod", "_saltGrainsConsumed", "_sandwormCharge", "_saplingsPlanted", "_sausageFights", "_sausagesEaten", "_sausagesMade", "_sealFigurineUses", "_sealScreeches", "_sealsSummoned", "_shadowBricksUsed", "_shadowRiftCombats", "_shatteringPunchUsed", "_shortOrderCookCharge", "_shrubCharge", "_sloppyDinerBeachBucks", "_smilesOfMrA", "_smithsnessSummons", "_snojoFreeFights", "_snojoParts", "_snokebombUsed", "_snowconeSummons", "_snowglobeDrops", "_snowSuitCount", "_sourceTerminalDigitizeMonsterCount", "_sourceTerminalDigitizeUses", "_sourceTerminalDuplicateUses", "_sourceTerminalEnhanceUses", "_sourceTerminalExtrudes", "_sourceTerminalPortscanUses", "_spaceFurDropsCrown", "_spacegatePlanetIndex", "_spacegateTurnsLeft", "_spaceJellyfishDrops", "_speakeasyDrinksDrunk", "_speakeasyFreeFights", "_spelunkerCharges", "_spelunkingTalesDrops", "_spikolodonSpikeUses", "_spookyJellyUses", "_stackLumpsUses", "_steamCardDrops", "_stickerSummons", "_stinkyCheeseCount", "_stressBallSqueezes", "_sugarSummons", "_sweatOutSomeBoozeUsed", "_taffyRareSummons", "_taffyYellowSummons", "_thanksgettingFoodsEaten", "_thingfinderCasts", "_thinknerdPackageDrops", "_thorsPliersCrafting", "_timeHelmetAdv", "_timeSpinnerMinutesUsed", "_tokenDrops", "_transponderDrops", "_turkeyBlastersUsed", "_turkeyBooze", "_turkeyMuscle", "_turkeyMyst", "_turkeyMoxie", "_unaccompaniedMinerUsed", "_unconsciousCollectiveCharge", "_universalSeasoningsUsed", "_universeCalculated", "_universeImploded", "_usedReplicaBatoomerang", "_vampyreCloakeFormUses", "_villainLairProgress", "_vitachocCapsulesUsed", "_vmaskAdv", "_voidFreeFights", "_volcanoItem1", "_volcanoItem2", "_volcanoItem3", "_volcanoItemCount1", "_volcanoItemCount2", "_volcanoItemCount3", "_voteFreeFights", "_VYKEACompanionLevel", "_warbearAutoAnvilCrafting", "_waxGlobDrops", "_whiteRiceDrops", "_witchessFights", "_xoHugsUsed", "_yellowPixelDropsCrown", "_zapCount", "_zombieSmashPocketsUsed"], monsterProperties = ["beGregariousMonster", "cameraMonster", "chateauMonster", "clumsinessGroveBoss", "crappyCameraMonster", "crudeMonster", "enamorangMonster", "envyfishMonster", "glacierOfJerksBoss", "iceSculptureMonster", "lastCopyableMonster", "longConMonster", "maelstromOfLoversBoss", "makeFriendsMonster", "merkinLockkeyMonster", "motifMonster", "nosyNoseMonster", "olfactedMonster", "photocopyMonster", "rainDohMonster", "romanticTarget", "screencappedMonster", "spookyPuttyMonster", "stenchCursedMonster", "superficiallyInterestedMonster", "waxMonster", "yearbookCameraTarget", "_gallapagosMonster", "_jiggleCreamedMonster", "_latteMonster", "_nanorhinoBanishedMonster", "_newYouQuestMonster", "_relativityMonster", "_saberForceMonster", "_sourceTerminalDigitizeMonster", "_voteMonster"], locationProperties = ["autumnatonQuestLocation", "currentJunkyardLocation", "doctorBagQuestLocation", "ghostLocation", "guzzlrQuestLocation", "nextSpookyravenElizabethRoom", "nextSpookyravenStephenRoom", "sourceOracleTarget", "_floundryBassLocation", "_floundryCarpLocation", "_floundryCodLocation", "_floundryHatchetfishLocation", "_floundryTroutLocation", "_floundryTunaLocation", "_sotParcelLocation"], stringProperties = ["autoLogin", "browserBookmarks", "chatFontSize", "combatHotkey0", "combatHotkey1", "combatHotkey2", "combatHotkey3", "combatHotkey4", "combatHotkey5", "combatHotkey6", "combatHotkey7", "combatHotkey8", "combatHotkey9", "commandLineNamespace", "dailyDeedsOptions", "defaultBorderColor", "displayName", "externalEditor", "getBreakfast", "headerStates", "highlightList", "http.proxyHost", "http.proxyPassword", "http.proxyPort", "http.proxyUser", "https.proxyHost", "https.proxyPassword", "https.proxyPort", "https.proxyUser", "initialDesktop", "initialFrames", "lastRelayUpdate", "lastUserAgent", "lastUsername", "logPreferenceChangeFilter", "loginScript", "loginServerName", "loginWindowLogo", "logoutScript", "previousNotifyList", "previousUpdateVersion", "saveState", "saveStateActive", "scriptList", "swingLookAndFeel", "userAgent", "8BitColor", "afterAdventureScript", "autoOlfact", "autoPutty", "autumnatonUpgrades", "backupCameraMode", "banishedMonsters", "banishingShoutMonsters", "batmanStats", "batmanZone", "batmanUpgrades", "battleAction", "beachHeadsUnlocked", "beforePVPScript", "betweenBattleScript", "boomBoxSong", "breakfastAlways", "breakfastHardcore", "breakfastSoftcore", "buffBotCasting", "buyScript", "cargoPocketsEmptied", "cargoPocketScraps", "chatbotScript", "chatPlayerScript", "choiceAdventureScript", "chosenTrip", "clanFortuneReply1", "clanFortuneReply2", "clanFortuneReply3", "clanFortuneWord1", "clanFortuneWord2", "clanFortuneWord3", "commerceGhostItem", "counterScript", "copperheadClubHazard", "crimbotChassis", "crimbotArm", "crimbotPropulsion", "crystalBallPredictions", "csServicesPerformed", "currentAstralTrip", "currentDistillateMods", "currentEasyBountyItem", "currentHardBountyItem", "currentHippyStore", "currentJunkyardTool", "currentLlamaForm", "currentMood", "currentPVPSeason", "currentPvpVictories", "currentSpecialBountyItem", "currentSITSkill", "customCombatScript", "cyrusAdjectives", "defaultFlowerLossMessage", "defaultFlowerWinMessage", "demonName1", "demonName2", "demonName3", "demonName4", "demonName5", "demonName6", "demonName7", "demonName8", "demonName9", "demonName10", "demonName11", "demonName12", "demonName13", "dinseyGatorStenchDamage", "dinseyRollercoasterStats", "doctorBagQuestItem", "dolphinItem", "duckAreasCleared", "duckAreasSelected", "edPiece", "enamorangMonsterTurn", "ensorcelee", "EVEDirections", "extraCosmeticModifiers", "familiarScript", "forbiddenStores", "gameProBossSpecialPower", "gooseReprocessed", "grimoireSkillsHardcore", "grimoireSkillsSoftcore", "grimstoneMaskPath", "guzzlrQuestClient", "guzzlrQuestBooze", "guzzlrQuestTier", "harvestGardenHardcore", "harvestGardenSoftcore", "hpAutoRecoveryItems", "invalidBuffMessage", "jickSwordModifier", "juneCleaverQueue", "kingLiberatedScript", "lassoTraining", "lastAdventure", "lastBangPotion819", "lastBangPotion820", "lastBangPotion821", "lastBangPotion822", "lastBangPotion823", "lastBangPotion824", "lastBangPotion825", "lastBangPotion826", "lastBangPotion827", "lastChanceBurn", "lastChessboard", "lastCombatEnvironments", "lastDwarfDiceRolls", "lastDwarfDigitRunes", "lastDwarfEquipmentRunes", "lastDwarfFactoryItem118", "lastDwarfFactoryItem119", "lastDwarfFactoryItem120", "lastDwarfFactoryItem360", "lastDwarfFactoryItem361", "lastDwarfFactoryItem362", "lastDwarfFactoryItem363", "lastDwarfFactoryItem364", "lastDwarfFactoryItem365", "lastDwarfFactoryItem910", "lastDwarfFactoryItem3199", "lastDwarfOfficeItem3208", "lastDwarfOfficeItem3209", "lastDwarfOfficeItem3210", "lastDwarfOfficeItem3211", "lastDwarfOfficeItem3212", "lastDwarfOfficeItem3213", "lastDwarfOfficeItem3214", "lastDwarfOreRunes", "lastDwarfHopper1", "lastDwarfHopper2", "lastDwarfHopper3", "lastDwarfHopper4", "lastEncounter", "lastMacroError", "lastMessageId", "lastPaperStrip3144", "lastPaperStrip4138", "lastPaperStrip4139", "lastPaperStrip4140", "lastPaperStrip4141", "lastPaperStrip4142", "lastPaperStrip4143", "lastPaperStrip4144", "lastPirateEphemera", "lastPorkoBoard", "lastPorkoPayouts", "lastPorkoExpected", "lastSlimeVial3885", "lastSlimeVial3886", "lastSlimeVial3887", "lastSlimeVial3888", "lastSlimeVial3889", "lastSlimeVial3890", "lastSlimeVial3891", "lastSlimeVial3892", "lastSlimeVial3893", "lastSlimeVial3894", "lastSlimeVial3895", "lastSlimeVial3896", "latteModifier", "latteUnlocks", "libramSkillsHardcore", "libramSkillsSoftcore", "louvreOverride", "lovePotion", "lttQuestName", "maximizerList", "maximizerMRUList", "mayoInMouth", "mayoMinderSetting", "merkinQuestPath", "mineLayout1", "mineLayout2", "mineLayout3", "mineLayout4", "mineLayout5", "mineLayout6", "mpAutoRecoveryItems", "muffinOnOrder", "nextAdventure", "nextDistillateMods", "nextQuantumFamiliarName", "nextQuantumFamiliarOwner", "nsChallenge2", "nsChallenge3", "nsChallenge4", "nsChallenge5", "nsTowerDoorKeysUsed", "oceanAction", "oceanDestination", "parkaMode", "pastaThrall1", "pastaThrall2", "pastaThrall3", "pastaThrall4", "pastaThrall5", "pastaThrall6", "pastaThrall7", "pastaThrall8", "peteMotorbikeTires", "peteMotorbikeGasTank", "peteMotorbikeHeadlight", "peteMotorbikeCowling", "peteMotorbikeMuffler", "peteMotorbikeSeat", "pieStuffing", "plantingDate", "plantingLength", "plantingScript", "plumberCostumeWorn", "pokefamBoosts", "postAscensionScript", "preAscensionScript", "retroCapeSuperhero", "retroCapeWashingInstructions", "questClumsinessGrove", "questDoctorBag", "questECoBucket", "questESlAudit", "questESlBacteria", "questESlCheeseburger", "questESlCocktail", "questESlDebt", "questESlFish", "questESlMushStash", "questESlSalt", "questESlSprinkles", "questESpEVE", "questESpJunglePun", "questESpGore", "questESpClipper", "questESpFakeMedium", "questESpSerum", "questESpSmokes", "questESpOutOfOrder", "questEStFishTrash", "questEStGiveMeFuel", "questEStNastyBears", "questEStSocialJusticeI", "questEStSocialJusticeII", "questEStSuperLuber", "questEStWorkWithFood", "questEStZippityDooDah", "questEUNewYou", "questF01Primordial", "questF02Hyboria", "questF03Future", "questF04Elves", "questF05Clancy", "questG01Meatcar", "questG02Whitecastle", "questG03Ego", "questG04Nemesis", "questG05Dark", "questG06Delivery", "questG07Myst", "questG08Moxie", "questG09Muscle", "questGlacierOfJerks", "questGuzzlr", "questI01Scapegoat", "questI02Beat", "questL02Larva", "questL03Rat", "questL04Bat", "questL05Goblin", "questL06Friar", "questL07Cyrptic", "questL08Trapper", "questL09Topping", "questL10Garbage", "questL11MacGuffin", "questL11Black", "questL11Business", "questL11Curses", "questL11Desert", "questL11Doctor", "questL11Manor", "questL11Palindome", "questL11Pyramid", "questL11Ron", "questL11Shen", "questL11Spare", "questL11Worship", "questL12War", "questL12HippyFrat", "questL13Final", "questL13Warehouse", "questLTTQuestByWire", "questM01Untinker", "questM02Artist", "questM03Bugbear", "questM05Toot", "questM06Gourd", "questM07Hammer", "questM08Baker", "questM09Rocks", "questM10Azazel", "questM11Postal", "questM12Pirate", "questM13Escape", "questM14Bounty", "questM15Lol", "questM16Temple", "questM17Babies", "questM18Swamp", "questM19Hippy", "questM20Necklace", "questM21Dance", "questM22Shirt", "questM23Meatsmith", "questM24Doc", "questM25Armorer", "questM26Oracle", "questMaelstromOfLovers", "questPAGhost", "questRufus", "questS01OldGuy", "questS02Monkees", "raveCombo1", "raveCombo2", "raveCombo3", "raveCombo4", "raveCombo5", "raveCombo6", "recoveryScript", "relayCounters", "royalty", "rufusDesiredArtifact", "rufusDesiredEntity", "rufusDesiredItems", "rufusQuestTarget", "rufusQuestType", "scriptMRUList", "seahorseName", "shadowLabyrinthGoal", "shadowRiftIngress", "shenQuestItem", "shrubGarland", "shrubGifts", "shrubLights", "shrubTopper", "sideDefeated", "sidequestArenaCompleted", "sidequestFarmCompleted", "sidequestJunkyardCompleted", "sidequestLighthouseCompleted", "sidequestNunsCompleted", "sidequestOrchardCompleted", "skateParkStatus", "snowsuit", "sourceTerminalChips", "sourceTerminalEducate1", "sourceTerminalEducate2", "sourceTerminalEnquiry", "sourceTerminalEducateKnown", "sourceTerminalEnhanceKnown", "sourceTerminalEnquiryKnown", "sourceTerminalExtrudeKnown", "spadingData", "spadingScript", "speakeasyName", "spelunkyStatus", "spelunkyUpgrades", "spookyravenRecipeUsed", "stationaryButton1", "stationaryButton2", "stationaryButton3", "stationaryButton4", "stationaryButton5", "streamCrossDefaultTarget", "sweetSynthesisBlacklist", "telescope1", "telescope2", "telescope3", "telescope4", "telescope5", "testudinalTeachings", "textColors", "thanksMessage", "tomeSkillsHardcore", "tomeSkillsSoftcore", "trackVoteMonster", "trainsetConfiguration", "trapperOre", "umbrellaState", "umdLastObtained", "vintnerWineEffect", "vintnerWineName", "vintnerWineType", "violetFogLayout", "volcanoMaze1", "volcanoMaze2", "volcanoMaze3", "volcanoMaze4", "volcanoMaze5", "walfordBucketItem", "warProgress", "watchedPreferences", "workteaClue", "yourFavoriteBird", "yourFavoriteBirdMods", "youRobotCPUUpgrades", "_bastilleBoosts", "_bastilleChoice1", "_bastilleChoice2", "_bastilleChoice3", "_bastilleCurrentStyles", "_bastilleEnemyCastle", "_bastilleEnemyName", "_bastilleLastBattleResults", "_bastilleLastEncounter", "_bastilleStats", "_beachHeadsUsed", "_beachLayout", "_beachMinutes", "_birdOfTheDay", "_birdOfTheDayMods", "_bittycar", "_campAwaySmileBuffSign", "_cloudTalkMessage", "_cloudTalkSmoker", "_coatOfPaintModifier", "_dailySpecial", "_deckCardsSeen", "_feastedFamiliars", "_floristPlantsUsed", "_frAreasUnlocked", "_frHoursLeft", "_frMonstersKilled", "_horsery", "_horseryCrazyMox", "_horseryCrazyMus", "_horseryCrazyMys", "_horseryCrazyName", "_horseryCurrentName", "_horseryDarkName", "_horseryNormalName", "_horseryPaleName", "_jickJarAvailable", "_jiggleCheesedMonsters", "_lastCombatStarted", "_LastPirateRealmIsland", "_locketMonstersFought", "_mummeryMods", "_mummeryUses", "_newYouQuestSkill", "_noHatModifier", "_pantogramModifier", "_pottedPowerPlant", "_questESp", "_questPartyFair", "_questPartyFairProgress", "_questPartyFairQuest", "_roboDrinks", "_roninStoragePulls", "_sotParcelReturned  false", "_spacegateAnimalLife", "_spacegateCoordinates", "_spacegateGear", "_spacegateHazards", "_spacegateIntelligentLife", "_spacegatePlanetName", "_spacegatePlantLife", "_stolenAccordions", "_tempRelayCounters", "_timeSpinnerFoodAvailable", "_unknownEasyBountyItem", "_unknownHardBountyItem", "_unknownSpecialBountyItem", "_untakenEasyBountyItem", "_untakenHardBountyItem", "_untakenSpecialBountyItem", "_userMods", "_villainLairColor", "_villainLairKey", "_voteLocal1", "_voteLocal2", "_voteLocal3", "_voteLocal4", "_voteMonster1", "_voteMonster2", "_voteModifier", "_VYKEACompanionType", "_VYKEACompanionRune", "_VYKEACompanionName"], numericOrStringProperties = ["statusEngineering", "statusGalley", "statusMedbay", "statusMorgue", "statusNavigation", "statusScienceLab", "statusSonar", "statusSpecialOps", "statusWasteProcessing", "choiceAdventure2", "choiceAdventure3", "choiceAdventure4", "choiceAdventure5", "choiceAdventure6", "choiceAdventure7", "choiceAdventure8", "choiceAdventure9", "choiceAdventure10", "choiceAdventure11", "choiceAdventure12", "choiceAdventure14", "choiceAdventure15", "choiceAdventure16", "choiceAdventure17", "choiceAdventure18", "choiceAdventure19", "choiceAdventure20", "choiceAdventure21", "choiceAdventure22", "choiceAdventure23", "choiceAdventure24", "choiceAdventure25", "choiceAdventure26", "choiceAdventure27", "choiceAdventure28", "choiceAdventure29", "choiceAdventure40", "choiceAdventure41", "choiceAdventure42", "choiceAdventure45", "choiceAdventure46", "choiceAdventure47", "choiceAdventure71", "choiceAdventure72", "choiceAdventure73", "choiceAdventure74", "choiceAdventure75", "choiceAdventure76", "choiceAdventure77", "choiceAdventure86", "choiceAdventure87", "choiceAdventure88", "choiceAdventure89", "choiceAdventure90", "choiceAdventure91", "choiceAdventure105", "choiceAdventure106", "choiceAdventure107", "choiceAdventure108", "choiceAdventure109", "choiceAdventure110", "choiceAdventure111", "choiceAdventure112", "choiceAdventure113", "choiceAdventure114", "choiceAdventure115", "choiceAdventure116", "choiceAdventure117", "choiceAdventure118", "choiceAdventure120", "choiceAdventure123", "choiceAdventure125", "choiceAdventure126", "choiceAdventure127", "choiceAdventure129", "choiceAdventure131", "choiceAdventure132", "choiceAdventure135", "choiceAdventure136", "choiceAdventure137", "choiceAdventure138", "choiceAdventure139", "choiceAdventure140", "choiceAdventure141", "choiceAdventure142", "choiceAdventure143", "choiceAdventure144", "choiceAdventure145", "choiceAdventure146", "choiceAdventure147", "choiceAdventure148", "choiceAdventure149", "choiceAdventure151", "choiceAdventure152", "choiceAdventure153", "choiceAdventure154", "choiceAdventure155", "choiceAdventure156", "choiceAdventure157", "choiceAdventure158", "choiceAdventure159", "choiceAdventure160", "choiceAdventure161", "choiceAdventure162", "choiceAdventure163", "choiceAdventure164", "choiceAdventure165", "choiceAdventure166", "choiceAdventure167", "choiceAdventure168", "choiceAdventure169", "choiceAdventure170", "choiceAdventure171", "choiceAdventure172", "choiceAdventure177", "choiceAdventure178", "choiceAdventure180", "choiceAdventure181", "choiceAdventure182", "choiceAdventure184", "choiceAdventure185", "choiceAdventure186", "choiceAdventure187", "choiceAdventure188", "choiceAdventure189", "choiceAdventure191", "choiceAdventure197", "choiceAdventure198", "choiceAdventure199", "choiceAdventure200", "choiceAdventure201", "choiceAdventure202", "choiceAdventure203", "choiceAdventure204", "choiceAdventure205", "choiceAdventure206", "choiceAdventure207", "choiceAdventure208", "choiceAdventure211", "choiceAdventure212", "choiceAdventure213", "choiceAdventure214", "choiceAdventure215", "choiceAdventure216", "choiceAdventure217", "choiceAdventure218", "choiceAdventure219", "choiceAdventure220", "choiceAdventure221", "choiceAdventure222", "choiceAdventure223", "choiceAdventure224", "choiceAdventure225", "choiceAdventure230", "choiceAdventure272", "choiceAdventure273", "choiceAdventure276", "choiceAdventure277", "choiceAdventure278", "choiceAdventure279", "choiceAdventure280", "choiceAdventure281", "choiceAdventure282", "choiceAdventure283", "choiceAdventure284", "choiceAdventure285", "choiceAdventure286", "choiceAdventure287", "choiceAdventure288", "choiceAdventure289", "choiceAdventure290", "choiceAdventure291", "choiceAdventure292", "choiceAdventure293", "choiceAdventure294", "choiceAdventure295", "choiceAdventure296", "choiceAdventure297", "choiceAdventure298", "choiceAdventure299", "choiceAdventure302", "choiceAdventure303", "choiceAdventure304", "choiceAdventure305", "choiceAdventure306", "choiceAdventure307", "choiceAdventure308", "choiceAdventure309", "choiceAdventure310", "choiceAdventure311", "choiceAdventure317", "choiceAdventure318", "choiceAdventure319", "choiceAdventure320", "choiceAdventure321", "choiceAdventure322", "choiceAdventure326", "choiceAdventure327", "choiceAdventure328", "choiceAdventure329", "choiceAdventure330", "choiceAdventure331", "choiceAdventure332", "choiceAdventure333", "choiceAdventure334", "choiceAdventure335", "choiceAdventure336", "choiceAdventure337", "choiceAdventure338", "choiceAdventure339", "choiceAdventure340", "choiceAdventure341", "choiceAdventure342", "choiceAdventure343", "choiceAdventure344", "choiceAdventure345", "choiceAdventure346", "choiceAdventure347", "choiceAdventure348", "choiceAdventure349", "choiceAdventure350", "choiceAdventure351", "choiceAdventure352", "choiceAdventure353", "choiceAdventure354", "choiceAdventure355", "choiceAdventure356", "choiceAdventure357", "choiceAdventure358", "choiceAdventure360", "choiceAdventure361", "choiceAdventure362", "choiceAdventure363", "choiceAdventure364", "choiceAdventure365", "choiceAdventure366", "choiceAdventure367", "choiceAdventure372", "choiceAdventure376", "choiceAdventure387", "choiceAdventure388", "choiceAdventure389", "choiceAdventure390", "choiceAdventure391", "choiceAdventure392", "choiceAdventure393", "choiceAdventure395", "choiceAdventure396", "choiceAdventure397", "choiceAdventure398", "choiceAdventure399", "choiceAdventure400", "choiceAdventure401", "choiceAdventure402", "choiceAdventure403", "choiceAdventure423", "choiceAdventure424", "choiceAdventure425", "choiceAdventure426", "choiceAdventure427", "choiceAdventure428", "choiceAdventure429", "choiceAdventure430", "choiceAdventure431", "choiceAdventure432", "choiceAdventure433", "choiceAdventure435", "choiceAdventure438", "choiceAdventure439", "choiceAdventure442", "choiceAdventure444", "choiceAdventure445", "choiceAdventure446", "choiceAdventure447", "choiceAdventure448", "choiceAdventure449", "choiceAdventure451", "choiceAdventure452", "choiceAdventure453", "choiceAdventure454", "choiceAdventure455", "choiceAdventure456", "choiceAdventure457", "choiceAdventure458", "choiceAdventure460", "choiceAdventure461", "choiceAdventure462", "choiceAdventure463", "choiceAdventure464", "choiceAdventure465", "choiceAdventure467", "choiceAdventure468", "choiceAdventure469", "choiceAdventure470", "choiceAdventure471", "choiceAdventure472", "choiceAdventure473", "choiceAdventure474", "choiceAdventure475", "choiceAdventure477", "choiceAdventure478", "choiceAdventure480", "choiceAdventure483", "choiceAdventure484", "choiceAdventure485", "choiceAdventure486", "choiceAdventure488", "choiceAdventure489", "choiceAdventure490", "choiceAdventure491", "choiceAdventure496", "choiceAdventure497", "choiceAdventure502", "choiceAdventure503", "choiceAdventure504", "choiceAdventure505", "choiceAdventure506", "choiceAdventure507", "choiceAdventure509", "choiceAdventure510", "choiceAdventure511", "choiceAdventure512", "choiceAdventure513", "choiceAdventure514", "choiceAdventure515", "choiceAdventure517", "choiceAdventure518", "choiceAdventure519", "choiceAdventure521", "choiceAdventure522", "choiceAdventure523", "choiceAdventure527", "choiceAdventure528", "choiceAdventure529", "choiceAdventure530", "choiceAdventure531", "choiceAdventure532", "choiceAdventure533", "choiceAdventure534", "choiceAdventure535", "choiceAdventure536", "choiceAdventure538", "choiceAdventure539", "choiceAdventure542", "choiceAdventure543", "choiceAdventure544", "choiceAdventure546", "choiceAdventure548", "choiceAdventure549", "choiceAdventure550", "choiceAdventure551", "choiceAdventure552", "choiceAdventure553", "choiceAdventure554", "choiceAdventure556", "choiceAdventure557", "choiceAdventure558", "choiceAdventure559", "choiceAdventure560", "choiceAdventure561", "choiceAdventure562", "choiceAdventure563", "choiceAdventure564", "choiceAdventure565", "choiceAdventure566", "choiceAdventure567", "choiceAdventure568", "choiceAdventure569", "choiceAdventure571", "choiceAdventure572", "choiceAdventure573", "choiceAdventure574", "choiceAdventure575", "choiceAdventure576", "choiceAdventure577", "choiceAdventure578", "choiceAdventure579", "choiceAdventure581", "choiceAdventure582", "choiceAdventure583", "choiceAdventure584", "choiceAdventure594", "choiceAdventure595", "choiceAdventure596", "choiceAdventure597", "choiceAdventure598", "choiceAdventure599", "choiceAdventure600", "choiceAdventure603", "choiceAdventure604", "choiceAdventure616", "choiceAdventure634", "choiceAdventure640", "choiceAdventure654", "choiceAdventure655", "choiceAdventure656", "choiceAdventure657", "choiceAdventure658", "choiceAdventure664", "choiceAdventure669", "choiceAdventure670", "choiceAdventure671", "choiceAdventure672", "choiceAdventure673", "choiceAdventure674", "choiceAdventure675", "choiceAdventure676", "choiceAdventure677", "choiceAdventure678", "choiceAdventure679", "choiceAdventure681", "choiceAdventure683", "choiceAdventure684", "choiceAdventure685", "choiceAdventure686", "choiceAdventure687", "choiceAdventure688", "choiceAdventure689", "choiceAdventure690", "choiceAdventure691", "choiceAdventure692", "choiceAdventure693", "choiceAdventure694", "choiceAdventure695", "choiceAdventure696", "choiceAdventure697", "choiceAdventure698", "choiceAdventure700", "choiceAdventure701", "choiceAdventure705", "choiceAdventure706", "choiceAdventure707", "choiceAdventure708", "choiceAdventure709", "choiceAdventure710", "choiceAdventure711", "choiceAdventure712", "choiceAdventure713", "choiceAdventure714", "choiceAdventure715", "choiceAdventure716", "choiceAdventure717", "choiceAdventure721", "choiceAdventure725", "choiceAdventure729", "choiceAdventure733", "choiceAdventure737", "choiceAdventure741", "choiceAdventure745", "choiceAdventure749", "choiceAdventure753", "choiceAdventure771", "choiceAdventure778", "choiceAdventure780", "choiceAdventure781", "choiceAdventure783", "choiceAdventure784", "choiceAdventure785", "choiceAdventure786", "choiceAdventure787", "choiceAdventure788", "choiceAdventure789", "choiceAdventure791", "choiceAdventure793", "choiceAdventure794", "choiceAdventure795", "choiceAdventure796", "choiceAdventure797", "choiceAdventure803", "choiceAdventure805", "choiceAdventure808", "choiceAdventure809", "choiceAdventure813", "choiceAdventure815", "choiceAdventure830", "choiceAdventure832", "choiceAdventure833", "choiceAdventure834", "choiceAdventure835", "choiceAdventure837", "choiceAdventure838", "choiceAdventure839", "choiceAdventure840", "choiceAdventure841", "choiceAdventure842", "choiceAdventure851", "choiceAdventure852", "choiceAdventure853", "choiceAdventure854", "choiceAdventure855", "choiceAdventure856", "choiceAdventure857", "choiceAdventure858", "choiceAdventure866", "choiceAdventure873", "choiceAdventure875", "choiceAdventure876", "choiceAdventure877", "choiceAdventure878", "choiceAdventure879", "choiceAdventure880", "choiceAdventure881", "choiceAdventure882", "choiceAdventure888", "choiceAdventure889", "choiceAdventure918", "choiceAdventure919", "choiceAdventure920", "choiceAdventure921", "choiceAdventure923", "choiceAdventure924", "choiceAdventure925", "choiceAdventure926", "choiceAdventure927", "choiceAdventure928", "choiceAdventure929", "choiceAdventure930", "choiceAdventure931", "choiceAdventure932", "choiceAdventure940", "choiceAdventure941", "choiceAdventure942", "choiceAdventure943", "choiceAdventure944", "choiceAdventure945", "choiceAdventure946", "choiceAdventure950", "choiceAdventure955", "choiceAdventure957", "choiceAdventure958", "choiceAdventure959", "choiceAdventure960", "choiceAdventure961", "choiceAdventure962", "choiceAdventure963", "choiceAdventure964", "choiceAdventure965", "choiceAdventure966", "choiceAdventure970", "choiceAdventure973", "choiceAdventure974", "choiceAdventure975", "choiceAdventure976", "choiceAdventure977", "choiceAdventure979", "choiceAdventure980", "choiceAdventure981", "choiceAdventure982", "choiceAdventure983", "choiceAdventure988", "choiceAdventure989", "choiceAdventure993", "choiceAdventure998", "choiceAdventure1000", "choiceAdventure1003", "choiceAdventure1005", "choiceAdventure1006", "choiceAdventure1007", "choiceAdventure1008", "choiceAdventure1009", "choiceAdventure1010", "choiceAdventure1011", "choiceAdventure1012", "choiceAdventure1013", "choiceAdventure1015", "choiceAdventure1016", "choiceAdventure1017", "choiceAdventure1018", "choiceAdventure1019", "choiceAdventure1020", "choiceAdventure1021", "choiceAdventure1022", "choiceAdventure1023", "choiceAdventure1026", "choiceAdventure1027", "choiceAdventure1028", "choiceAdventure1029", "choiceAdventure1030", "choiceAdventure1031", "choiceAdventure1032", "choiceAdventure1033", "choiceAdventure1034", "choiceAdventure1035", "choiceAdventure1036", "choiceAdventure1037", "choiceAdventure1038", "choiceAdventure1039", "choiceAdventure1040", "choiceAdventure1041", "choiceAdventure1042", "choiceAdventure1044", "choiceAdventure1045", "choiceAdventure1046", "choiceAdventure1048", "choiceAdventure1051", "choiceAdventure1052", "choiceAdventure1053", "choiceAdventure1054", "choiceAdventure1055", "choiceAdventure1056", "choiceAdventure1057", "choiceAdventure1059", "choiceAdventure1060", "choiceAdventure1061", "choiceAdventure1062", "choiceAdventure1065", "choiceAdventure1067", "choiceAdventure1068", "choiceAdventure1069", "choiceAdventure1070", "choiceAdventure1071", "choiceAdventure1073", "choiceAdventure1077", "choiceAdventure1080", "choiceAdventure1081", "choiceAdventure1082", "choiceAdventure1083", "choiceAdventure1084", "choiceAdventure1085", "choiceAdventure1091", "choiceAdventure1094", "choiceAdventure1095", "choiceAdventure1096", "choiceAdventure1097", "choiceAdventure1102", "choiceAdventure1106", "choiceAdventure1107", "choiceAdventure1108", "choiceAdventure1110", "choiceAdventure1114", "choiceAdventure1115", "choiceAdventure1116", "choiceAdventure1118", "choiceAdventure1119", "choiceAdventure1120", "choiceAdventure1121", "choiceAdventure1122", "choiceAdventure1123", "choiceAdventure1171", "choiceAdventure1172", "choiceAdventure1173", "choiceAdventure1174", "choiceAdventure1175", "choiceAdventure1193", "choiceAdventure1195", "choiceAdventure1196", "choiceAdventure1197", "choiceAdventure1198", "choiceAdventure1199", "choiceAdventure1202", "choiceAdventure1203", "choiceAdventure1204", "choiceAdventure1205", "choiceAdventure1206", "choiceAdventure1207", "choiceAdventure1208", "choiceAdventure1209", "choiceAdventure1210", "choiceAdventure1211", "choiceAdventure1212", "choiceAdventure1213", "choiceAdventure1214", "choiceAdventure1215", "choiceAdventure1219", "choiceAdventure1222", "choiceAdventure1223", "choiceAdventure1224", "choiceAdventure1225", "choiceAdventure1226", "choiceAdventure1227", "choiceAdventure1228", "choiceAdventure1229", "choiceAdventure1236", "choiceAdventure1237", "choiceAdventure1238", "choiceAdventure1239", "choiceAdventure1240", "choiceAdventure1241", "choiceAdventure1242", "choiceAdventure1243", "choiceAdventure1244", "choiceAdventure1245", "choiceAdventure1246", "choiceAdventure1247", "choiceAdventure1248", "choiceAdventure1249", "choiceAdventure1250", "choiceAdventure1251", "choiceAdventure1252", "choiceAdventure1253", "choiceAdventure1254", "choiceAdventure1255", "choiceAdventure1256", "choiceAdventure1266", "choiceAdventure1280", "choiceAdventure1281", "choiceAdventure1282", "choiceAdventure1283", "choiceAdventure1284", "choiceAdventure1285", "choiceAdventure1286", "choiceAdventure1287", "choiceAdventure1288", "choiceAdventure1289", "choiceAdventure1290", "choiceAdventure1291", "choiceAdventure1292", "choiceAdventure1293", "choiceAdventure1294", "choiceAdventure1295", "choiceAdventure1296", "choiceAdventure1297", "choiceAdventure1298", "choiceAdventure1299", "choiceAdventure1300", "choiceAdventure1301", "choiceAdventure1302", "choiceAdventure1303", "choiceAdventure1304", "choiceAdventure1305", "choiceAdventure1307", "choiceAdventure1310", "choiceAdventure1312", "choiceAdventure1313", "choiceAdventure1314", "choiceAdventure1315", "choiceAdventure1316", "choiceAdventure1317", "choiceAdventure1318", "choiceAdventure1319", "choiceAdventure1321", "choiceAdventure1322", "choiceAdventure1323", "choiceAdventure1324", "choiceAdventure1325", "choiceAdventure1326", "choiceAdventure1327", "choiceAdventure1328", "choiceAdventure1332", "choiceAdventure1333", "choiceAdventure1335", "choiceAdventure1340", "choiceAdventure1341", "choiceAdventure1345", "choiceAdventure1389", "choiceAdventure1392", "choiceAdventure1397", "choiceAdventure1399", "choiceAdventure1405", "choiceAdventure1411", "choiceAdventure1415", "choiceAdventure1427", "choiceAdventure1428", "choiceAdventure1429", "choiceAdventure1430", "choiceAdventure1431", "choiceAdventure1432", "choiceAdventure1433", "choiceAdventure1434", "choiceAdventure1436", "choiceAdventure1460", "choiceAdventure1461", "choiceAdventure1467", "choiceAdventure1468", "choiceAdventure1469", "choiceAdventure1470", "choiceAdventure1471", "choiceAdventure1472", "choiceAdventure1473", "choiceAdventure1474", "choiceAdventure1475", "choiceAdventure1486", "choiceAdventure1487", "choiceAdventure1488", "choiceAdventure1489", "choiceAdventure1491", "choiceAdventure1494"], familiarProperties = ["commaFamiliar", "nextQuantumFamiliar", "stillsuitFamiliar"], statProperties = ["nsChallenge1", "snojoSetting"], phylumProperties = ["dnaSyringe", "locketPhylum", "redSnapperPhylum"];
 
 // src/propertyTyping.ts
@@ -4252,11 +1267,9 @@ var PropertiesManager = /* @__PURE__ */ function() {
 }();
 
 // src/template-string.ts
-init_kolmafia_polyfill();
 var import_kolmafia3 = require("kolmafia");
 
 // src/utils.ts
-init_kolmafia_polyfill();
 function _createForOfIteratorHelper(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
@@ -4465,6 +1478,20 @@ function makeByXFunction(source) {
     var _options$val, val = undelay(source);
     return "default" in options ? (_options$val = options[val]) !== null && _options$val !== void 0 ? _options$val : options.default : options[val];
   };
+}
+function flat(arr) {
+  var depth = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, flatArray = [], _iterator3 = _createForOfIteratorHelper(arr), _step3;
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
+      var item9 = _step3.value;
+      Array.isArray(item9) && depth > 0 ? flatArray = flatArray.concat(flat(item9, depth - 1)) : flatArray.push(item9);
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+  return flatArray;
 }
 
 // src/template-string.ts
@@ -4782,8 +1809,8 @@ function getWandererChance(wanderer) {
     return 0;
   var counters = get("relayCounters"), re = new RegExp("(\\d+):" + end), matches = counters.match(re);
   if (matches && matches.length === 2) {
-    var window2 = Number.parseInt(matches[1]) - (0, import_kolmafia4.myTurncount)();
-    return 1 / window2;
+    var window = Number.parseInt(matches[1]) - (0, import_kolmafia4.myTurncount)();
+    return 1 / window;
   }
   return 0;
 }
@@ -4921,7 +1948,7 @@ function findFairyMultiplier(familiar6) {
 }
 var holidayWanderers = /* @__PURE__ */ new Map([["El Dia De Los Muertos Borrachos", $monsters(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["Novia Cad\xE1ver, Novio Cad\xE1ver, Padre Cad\xE1ver, Persona Inocente Cad\xE1ver"])))], ["Feast of Boris", $monsters(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["Candied Yam Golem, Malevolent Tofurkey, Possessed Can of Cranberry Sauce, Stuffing Golem"])))], ["Talk Like a Pirate Day", $monsters(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["ambulatory pirate, migratory pirate, peripatetic pirate"])))]]);
 function getTodaysHolidayWanderers() {
-  return (0, import_array_prototype.default)((0, import_kolmafia4.holiday)().split("/").map(function(holiday2) {
+  return flat((0, import_kolmafia4.holiday)().split("/").map(function(holiday2) {
     var _holidayWanderers$get;
     return (_holidayWanderers$get = holidayWanderers.get(holiday2)) !== null && _holidayWanderers$get !== void 0 ? _holidayWanderers$get : [];
   }));
@@ -5902,7 +2929,6 @@ var StrictMacro = /* @__PURE__ */ function(_Macro) {
 }(Macro);
 
 // src/maximize.ts
-init_kolmafia_polyfill();
 var import_kolmafia6 = require("kolmafia");
 var _templateObject36, _templateObject211, _templateObject37, _templateObject42, _templateObject52, _templateObject62, _templateObject72, _templateObject82, _templateObject92, _templateObject102, _templateObject112, _templateObject122, _templateObject132, _templateObject142, _templateObject152, _templateObject162, _templateObject172, _templateObject182, _templateObject192, _templateObject202, _templateObject212, _templateObject222, _templateObject232, _templateObject242, _templateObject252, _templateObject262, _templateObject272, _templateObject282, _templateObject292, _templateObject302, _templateObject312, _templateObject322, _templateObject332, _templateObject342, _templateObject352, _templateObject362, _templateObject372, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject422, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48;
 function _slicedToArray4(arr, i) {
@@ -6628,7 +3654,7 @@ var ActionSource = /* @__PURE__ */ function() {
       var actions = [this].concat(others), constraints = mergeConstraints.apply(void 0, _toConsumableArray4(actions.map(function(action) {
         return action.constraints;
       })));
-      return constraints === null ? null : new ActionSource2(_toConsumableArray4((0, import_array_prototype2.default)(actions.map(function(action) {
+      return constraints === null ? null : new ActionSource2(_toConsumableArray4(flat(actions.map(function(action) {
         return action.source;
       }))), function() {
         return sum(actions, function(action) {
@@ -6696,7 +3722,6 @@ function actionSourcesAvailable(actions) {
 }
 
 // src/actions/FreeKill.ts
-init_kolmafia_polyfill();
 var import_kolmafia9 = require("kolmafia");
 
 // src/resources/2017/AsdonMartin.ts
@@ -6727,7 +3752,6 @@ __export(AsdonMartin_exports, {
     return isFuelItem;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia8 = require("kolmafia");
 var _templateObject49, _templateObject213, _templateObject310, _templateObject410, _templateObject53, _templateObject63, _templateObject73, _templateObject83, _templateObject93, _templateObject103, _templateObject113, _templateObject123, _templateObject133;
 function _slicedToArray5(arr, i) {
@@ -7077,7 +4101,6 @@ function ensureFreeKill(constraints) {
 }
 
 // src/actions/FreeRun.ts
-init_kolmafia_polyfill();
 var import_kolmafia12 = require("kolmafia");
 
 // src/resources/2009/Bandersnatch.ts
@@ -7108,7 +4131,6 @@ __export(Bandersnatch_exports, {
     return prepareRunaway;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia10 = require("kolmafia");
 var _templateObject51, _templateObject216, _templateObject314;
 function _createForOfIteratorHelper6(o, allowArrayLike) {
@@ -7238,7 +4260,6 @@ __export(StompingBoots_exports, {
     return prepareRunaway2;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia11 = require("kolmafia");
 var _templateObject55;
 function _taggedTemplateLiteral7(strings, raw) {
@@ -7486,11 +4507,7 @@ function ensureFreeRun(constraints) {
 }
 
 // src/ascend.ts
-init_kolmafia_polyfill();
 var import_kolmafia50 = require("kolmafia");
-
-// src/resources/index.ts
-init_kolmafia_polyfill();
 
 // src/resources/2008/Stickers.ts
 var Stickers_exports = {};
@@ -7517,7 +4534,6 @@ __export(Stickers_exports, {
     return weapon;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia13 = require("kolmafia");
 var _templateObject59, _templateObject219, _templateObject317, _templateObject415, _templateObject510, _templateObject66, _templateObject76, _templateObject86, _templateObject96, _templateObject106, _templateObject116;
 function _taggedTemplateLiteral9(strings, raw) {
@@ -7602,7 +4618,6 @@ __export(SpookyPutty_exports, {
     return useSpookyPuttySheet;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia14 = require("kolmafia");
 var _templateObject60;
 function _taggedTemplateLiteral10(strings, raw) {
@@ -7643,7 +4658,6 @@ __export(CrownOfThrones_exports, {
     return valueRider;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia15 = require("kolmafia");
 var _templateObject61, _templateObject220, _modifier, _templateObject318, _templateObject416, _modifier2, _templateObject511, _templateObject67, _templateObject77, _templateObject87, _templateObject97, _templateObject107, _templateObject117, _templateObject126, _modifier7, _templateObject136, _templateObject145, _modifier8, _templateObject155, _templateObject165, _modifier9, _templateObject175, _templateObject185, _templateObject195, _templateObject205, _templateObject2110, _templateObject225, _templateObject235, _templateObject245, _templateObject255, _templateObject265, _templateObject275, _templateObject285, _modifier15, _templateObject295, _templateObject305, _templateObject319, _templateObject325, _templateObject335, _templateObject345, _templateObject355, _templateObject365, _templateObject375, _templateObject384, _templateObject394, _templateObject404, _templateObject417, _templateObject425, _templateObject434, _templateObject444, _templateObject454, _templateObject463, _templateObject473, _templateObject483, _templateObject493, _templateObject503, _templateObject513, _modifier26, _templateObject523, _templateObject533, _modifier27, _templateObject543, _templateObject553, _modifier28, _templateObject563, _templateObject573, _templateObject582, _templateObject592, _templateObject602, _templateObject612, _modifier31, _templateObject622, _templateObject632, _modifier32, _templateObject642, _templateObject652, _templateObject662, _templateObject672, _modifier34, _templateObject68, _templateObject69, _modifier35, _templateObject70, _templateObject71, _modifier36, _templateObject722, _templateObject732, _templateObject742, _templateObject752, _templateObject762, _templateObject772, _templateObject78, _templateObject79, _templateObject80, _templateObject81, _templateObject822, _templateObject832, _templateObject842, _templateObject852, _templateObject862, _templateObject872, _templateObject88, _templateObject89, _templateObject90, _templateObject91, _templateObject922, _templateObject932, _templateObject942, _templateObject952, _templateObject962, _templateObject972, _templateObject98, _templateObject99, _templateObject100, _templateObject101, _templateObject1022, _templateObject1032, _templateObject1042, _templateObject1052;
 function _toConsumableArray7(arr) {
@@ -8207,11 +5221,9 @@ __export(ObtuseAngel_exports, {
     return prepareBadlyRomanticArrow;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia16 = require("kolmafia");
 
 // src/Copier.ts
-init_kolmafia_polyfill();
 function _defineProperties7(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
@@ -8288,7 +5300,6 @@ __export(RainDoh_exports, {
     return useRainDohBlackBox;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia17 = require("kolmafia");
 var _templateObject109;
 function _taggedTemplateLiteral13(strings, raw) {
@@ -8329,7 +5340,6 @@ __export(ReagnimatedGnome_exports, {
     return have9;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia18 = require("kolmafia");
 var _templateObject110, _templateObject221, _templateObject320, _templateObject418, _templateObject514, _templateObject610;
 function _taggedTemplateLiteral14(strings, raw) {
@@ -8496,15 +5506,12 @@ __export(Florist_exports, {
     return isFull;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia20 = require("kolmafia");
 
 // src/modifier.ts
-init_kolmafia_polyfill();
 var import_kolmafia19 = require("kolmafia");
 
 // src/modifierTypes.ts
-init_kolmafia_polyfill();
 var booleanModifiers = ["Softcore Only", "Single Equip", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Attacks Can't Miss", "Pirate", "Breakable", "Drops Items", "Drops Meat"], classModifiers = ["Class"], numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Surgeonosity", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Clowniness", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water"], effectModifiers = ["Effect", "Rollover Effect"], monsterModifiers = ["Avatar"], skillModifiers = ["Skill"], statModifiers = ["Plumber Stat"], stringModifiers = ["Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie"];
 
 // src/modifier.ts
@@ -8799,7 +5806,6 @@ __export(CrimboShrub_exports, {
     return have11;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia21 = require("kolmafia");
 var _templateObject111, _templateObject226, _templateObject321, _templateObject419;
 function _taggedTemplateLiteral15(strings, raw) {
@@ -8887,7 +5893,6 @@ __export(DNALab_exports, {
     return tonicsLeft;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia22 = require("kolmafia");
 var _templateObject118, _templateObject227, _templateObject326, _templateObject420, _templateObject515, _templateObject611, _templateObject710, _templateObject810, _templateObject910, _templateObject1010, _templateObject119, _templateObject127, _templateObject137, _templateObject146, _templateObject156, _templateObject166, _templateObject176, _templateObject186, _templateObject196, _templateObject206, _templateObject2111, _templateObject228, _templateObject236, _templateObject246, _templateObject256, _templateObject266, _templateObject276, _templateObject286, _templateObject296, _templateObject306, _templateObject3110, _templateObject327, _templateObject336, _templateObject346, _templateObject356, _templateObject366, _templateObject376, _templateObject385, _templateObject395, _templateObject405, _templateObject4110, _templateObject426, _templateObject435, _templateObject445, _templateObject455, _templateObject464, _templateObject474, _templateObject484, _templateObject494, _templateObject504, _templateObject516, _templateObject524, _templateObject534, _templateObject544, _templateObject554, _templateObject564, _templateObject574, _templateObject583, _templateObject593, _templateObject603, _templateObject613, _templateObject623, _templateObject633, _templateObject643, _templateObject653, _templateObject663, _templateObject673, _templateObject682, _templateObject692, _templateObject702, _templateObject712, _templateObject723, _templateObject733, _templateObject743, _templateObject753, _templateObject763, _templateObject773, _templateObject782, _templateObject792, _templateObject802, _templateObject812, _templateObject823, _templateObject833, _templateObject843, _templateObject853;
 function _slicedToArray6(arr, i) {
@@ -9022,7 +6027,6 @@ __export(WinterGarden_exports, {
     return isUnfinishedIceSculptureUsed;
   }
 });
-init_kolmafia_polyfill();
 var _templateObject120, _templateObject229, _templateObject328, _templateObject421;
 function _taggedTemplateLiteral17(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -9060,7 +6064,6 @@ __export(BarrelShrine_exports, {
     return smashParty;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia23 = require("kolmafia");
 var _templateObject121;
 function _taggedTemplateLiteral18(strings, raw) {
@@ -9124,7 +6127,6 @@ __export(ChateauMantegna_exports, {
     return paintingMonster;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia24 = require("kolmafia");
 function have15() {
   return get("chateauAvailable");
@@ -9189,7 +6191,6 @@ __export(DeckOfEveryCard_exports, {
     return have16;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia25 = require("kolmafia");
 var _templateObject128;
 function _taggedTemplateLiteral19(strings, raw) {
@@ -9263,7 +6264,6 @@ __export(Dinseylandfill_exports, {
     return turnInQuest;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia26 = require("kolmafia");
 var _templateObject129, _templateObject230, _templateObject329, _templateObject427, _templateObject517, _templateObject614, _templateObject711, _templateObject811, _templateObject911, _templateObject1011, _templateObject1110, _templateObject1210, _templateObject138, _templateObject147, _templateObject157, _templateObject167, _templateObject177, _templateObject187, _templateObject197, _templateObject207, _templateObject2112, _templateObject2210, _templateObject237, _templateObject247, _templateObject257, _templateObject267, _templateObject277;
 function _createForOfIteratorHelper7(o, allowArrayLike) {
@@ -9446,7 +6446,6 @@ __export(MayoClinic_exports, {
     return setMayoMinder;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia27 = require("kolmafia");
 var _templateObject130, _templateObject231, _templateObject330, _templateObject428, _templateObject518, _templateObject615, _templateObject713, _templateObject813, _templateObject912, _templateObject1012;
 function _taggedTemplateLiteral21(strings, raw) {
@@ -9568,7 +6567,6 @@ __export(SourceTerminal_exports, {
     return prepareDigitize;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia28 = require("kolmafia");
 var _templateObject131, _templateObject238, _templateObject331, _templateObject429, _templateObject519, _templateObject616, _templateObject714, _templateObject814, _templateObject913, _templateObject1013, _templateObject1111, _templateObject1211, _templateObject139, _templateObject148, _templateObject158, _templateObject168, _templateObject178, _templateObject188, _templateObject198, _templateObject208, _templateObject2113, _templateObject2211, _templateObject239, _templateObject248, _templateObject258, _templateObject268, _templateObject278;
 function _createForOfIteratorHelper8(o, allowArrayLike) {
@@ -9790,7 +6788,6 @@ __export(Witchess_exports, {
     return pieces;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia29 = require("kolmafia");
 var _templateObject140;
 function _taggedTemplateLiteral23(strings, raw) {
@@ -9823,7 +6820,6 @@ __export(MummingTrunk_exports, {
     return currentCostumes;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia30 = require("kolmafia");
 function _createForOfIteratorHelper9(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
@@ -9912,7 +6908,6 @@ __export(Pantogram_exports, {
     return makePantsFromObject;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia31 = require("kolmafia");
 var _templateObject141, _templateObject240, _Alignment, _Element, _templateObject337, _templateObject430, _templateObject520, _templateObject617, _templateObject715, _templateObject815, _templateObject914, _LeftSacrifice, _templateObject1014, _templateObject1112, _templateObject1212, _templateObject1310, _templateObject149, _templateObject159, _templateObject169, _templateObject179, _templateObject189, _MiddleSacrifice, _templateObject199, _templateObject209, _templateObject2114, _templateObject2212, _templateObject2310, _templateObject249, _templateObject259, _templateObject269, _templateObject279, _templateObject287, _RightSacrifice;
 function _slicedToArray7(arr, i) {
@@ -10060,7 +7055,6 @@ __export(Robortender_exports, {
     return minorDrinks;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia32 = require("kolmafia");
 var _templateObject150, _templateObject241, _templateObject338, _templateObject431, _templateObject521, _templateObject618, _templateObject716, _templateObject816, _templateObject915, _templateObject1015, _templateObject1113, _templateObject1213, _templateObject1311, _templateObject1410, _templateObject1510, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject1910, _templateObject2010, _templateObject2115, _templateObject2213, _templateObject2311, _templateObject2410, _templateObject2510, _templateObject2610, _templateObject2710, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject3210, _templateObject339, _templateObject347, _templateObject357, _templateObject367, _templateObject377;
 function _toConsumableArray9(arr) {
@@ -10203,7 +7197,6 @@ __export(Spacegate_exports, {
     return updateStatus;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia33 = require("kolmafia");
 var _templateObject151, _templateObject250, _templateObject340, _templateObject436, _templateObject525;
 function _slicedToArray8(arr, i) {
@@ -10366,7 +7359,6 @@ __export(TunnelOfLove_exports, {
     return isUsed;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia34 = require("kolmafia");
 var _templateObject160, _templateObject251;
 function _taggedTemplateLiteral27(strings, raw) {
@@ -10452,7 +7444,6 @@ __export(LatteLoversMembersMug_exports, {
     return sniffedMonster;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia35 = require("kolmafia");
 var _templateObject161;
 function _taggedTemplateLiteral28(strings, raw) {
@@ -10493,7 +7484,6 @@ __export(SongBoom_exports, {
     return songChangesLeft;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia36 = require("kolmafia");
 var _templateObject170;
 function _taggedTemplateLiteral29(strings, raw) {
@@ -10560,7 +7550,6 @@ __export(BeachComb_exports, {
     return tryHead;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia37 = require("kolmafia");
 var _templateObject171, _templateObject260, _templateObject341, _templateObject437, _templateObject526, _templateObject619, _templateObject717, _templateObject817, _templateObject916, _templateObject1016, _templateObject1114, _templateObject1214, _templateObject1312, _templateObject1411, _templateObject1511, _templateObject1611, _templateObject1711, _templateObject1811, _templateObject1911, _templateObject2011, _templateObject2116;
 function _taggedTemplateLiteral30(strings, raw) {
@@ -10636,7 +7625,6 @@ __export(Snapper_exports, {
     return trackPhylum;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia38 = require("kolmafia");
 function _slicedToArray9(arr, i) {
   return _arrayWithHoles9(arr) || _iterableToArrayLimit9(arr, i) || _unsupportedIterableToArray20(arr, i) || _nonIterableRest9();
@@ -10737,7 +7725,6 @@ __export(Cartography_exports, {
     return skill;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia39 = require("kolmafia");
 var _templateObject180, _templateObject261, _templateObject348;
 function _taggedTemplateLiteral31(strings, raw) {
@@ -10851,7 +7838,6 @@ __export(Guzzlr_exports, {
     return turnsLeftOnQuest;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia40 = require("kolmafia");
 var _templateObject181, _templateObject270, _templateObject349, _templateObject438, _templateObject527, _templateObject620, _templateObject718, _templateObject818, _templateObject917, _templateObject1017, _templateObject1115, _templateObject1215, _templateObject1313;
 function _slicedToArray10(arr, i) {
@@ -11058,7 +8044,6 @@ __export(RetroCape_exports, {
     return tuneToSkill;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia41 = require("kolmafia");
 var _templateObject190, _templateObject271, _templateObject350, _templateObject439, _templateObject528, _templateObject621, _templateObject719, _templateObject819, _templateObject918, _templateObject1018, _templateObject1116, _templateObject1216, _templateObject1314;
 function _toConsumableArray12(arr) {
@@ -11194,7 +8179,6 @@ __export(CrystalBall_exports, {
     return ponder;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia42 = require("kolmafia");
 function _slicedToArray11(arr, i) {
   return _arrayWithHoles11(arr) || _iterableToArrayLimit11(arr, i) || _unsupportedIterableToArray23(arr, i) || _nonIterableRest11();
@@ -11287,7 +8271,6 @@ __export(DaylightShavings_exports, {
     return nextBuff;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia43 = require("kolmafia");
 var _templateObject191, _templateObject280;
 function _taggedTemplateLiteral34(strings, raw) {
@@ -11381,7 +8364,6 @@ __export(AutumnAton_exports, {
     return zoneItems;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia44 = require("kolmafia");
 var _templateObject200, _templateObject281, _templateObject351, _templateObject440, _templateObject529, _templateObject624, _templateObject720, _templateObject820, _templateObject919;
 function _taggedTemplateLiteral35(strings, raw) {
@@ -11540,7 +8522,6 @@ __export(CombatLoversLocket_exports, {
     return unlockedLocketMonsters;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia45 = require("kolmafia");
 var _templateObject201;
 function _slicedToArray12(arr, i) {
@@ -11674,7 +8655,6 @@ __export(GreyGoose_exports, {
     return have36;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia46 = require("kolmafia");
 var _templateObject289, _templateObject290, _templateObject358, _templateObject441;
 function _taggedTemplateLiteral37(strings, raw) {
@@ -11744,7 +8724,6 @@ __export(JuneCleaver_exports, {
     return skipsRemaining;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia47 = require("kolmafia");
 var cleaver = (0, import_kolmafia47.toItem)("June cleaver");
 function have37() {
@@ -11816,7 +8795,6 @@ __export(TrainSet_exports, {
     return setConfiguration;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia48 = require("kolmafia");
 var _templateObject291;
 function _taggedTemplateLiteral38(strings, raw) {
@@ -11901,7 +8879,6 @@ __export(ClosedCircuitPayphone_exports, {
     return rufusTarget;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia49 = require("kolmafia");
 var _templateObject298, _templateObject299, _templateObject359, _templateObject446, _templateObject530, _templateObject625, _templateObject721, _templateObject821, _templateObject920, _templateObject1019, _templateObject1117, _templateObject1217, _templateObject1315, _templateObject1412;
 function _toConsumableArray13(arr) {
@@ -12005,7 +8982,6 @@ function rifts() {
 var byIngress = makeByXFunction(currentIngress);
 
 // src/resources/putty-likes.ts
-init_kolmafia_polyfill();
 function getTotalPuttyLikeCopiesMade() {
   return getSpookyPuttySheetCopiesMade() + getRainDohBlackBoxCopiesMade();
 }
@@ -12036,11 +9012,7 @@ var SpookyPuttySheet = new Copier(function() {
   return useSpookyPuttySheet();
 });
 
-// src/resources/LibramSummon.ts
-init_kolmafia_polyfill();
-
 // src/resources/2007/CandyHearts.ts
-init_kolmafia_polyfill();
 var _templateObject300, _templateObject2100, _templateObject360, _templateObject447, _templateObject531, _templateObject626, _templateObject724;
 function _taggedTemplateLiteral40(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12054,7 +9026,6 @@ function expected() {
 }
 
 // src/resources/2008/DivineFavors.ts
-init_kolmafia_polyfill();
 var _templateObject301, _templateObject2101, _templateObject361, _templateObject448, _templateObject535, _templateObject627, _templateObject725;
 function _taggedTemplateLiteral41(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12069,7 +9040,6 @@ function expected2() {
 }
 
 // src/resources/2009/LoveSongs.ts
-init_kolmafia_polyfill();
 var _templateObject308, _templateObject2102, _templateObject368, _templateObject449, _templateObject536, _templateObject628, _templateObject726;
 function _taggedTemplateLiteral42(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12083,7 +9053,6 @@ function expected3() {
 }
 
 // src/resources/2010/Brickos.ts
-init_kolmafia_polyfill();
 var _templateObject309, _templateObject2103, _templateObject369;
 function _taggedTemplateLiteral43(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12098,7 +9067,6 @@ function expected4() {
 }
 
 // src/resources/2011/Gygaxian.ts
-init_kolmafia_polyfill();
 var _templateObject370, _templateObject2104, _templateObject371, _templateObject450, _templateObject537, _templateObject629, _templateObject727;
 function _taggedTemplateLiteral44(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12112,7 +9080,6 @@ function expected5() {
 }
 
 // src/resources/2012/Resolutions.ts
-init_kolmafia_polyfill();
 var _templateObject378, _templateObject2105, _templateObject379, _templateObject451, _templateObject538, _templateObject630, _templateObject728, _templateObject824, _templateObject921, _templateObject1020;
 function _taggedTemplateLiteral45(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12126,7 +9093,6 @@ function expected6() {
 }
 
 // src/resources/2013/PulledTaffy.ts
-init_kolmafia_polyfill();
 var _templateObject380, _templateObject2106, _templateObject381, _templateObject456, _templateObject539, _templateObject631, _templateObject729, _templateObject825;
 function _taggedTemplateLiteral46(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -12579,7 +9545,6 @@ function prepareAscension() {
 }
 
 // src/Clan.ts
-init_kolmafia_polyfill();
 var import_kolmafia51 = require("kolmafia");
 function _toConsumableArray14(arr) {
   return _arrayWithoutHoles14(arr) || _iterableToArray14(arr) || _unsupportedIterableToArray28(arr) || _nonIterableSpread14();
@@ -13065,11 +10030,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
   }]), Clan2;
 }();
 
-// src/challengePaths/index.ts
-init_kolmafia_polyfill();
-
 // src/challengePaths/2015/CommunityService.ts
-init_kolmafia_polyfill();
 var import_kolmafia52 = require("kolmafia");
 var _templateObject388, _templateObject2108, _templateObject389, _templateObject458, _templateObject541, _templateObject635, _templateObject730, _templateObject826, _templateObject923, _templateObject1021, _templateObject1118, _templateObject1218, _templateObject1316, _templateObject1413, _templateObject1512, _templateObject1612, _templateObject1712, _templateObject1812, _templateObject1912, _templateObject2012, _templateObject2117, _templateObject2214, _templateObject2312, _templateObject2411, _templateObject2511, _templateObject2611, _templateObject2711;
 function _slicedToArray16(arr, i) {
@@ -13366,7 +10327,6 @@ __export(NuclearAutumn_exports, {
     return spa;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia53 = require("kolmafia");
 function coolingTank() {
   (0, import_kolmafia53.visitUrl)("place.php?whichplace=falloutshelter&action=vault8");
@@ -13391,7 +10351,6 @@ __export(counter_exports, {
     return set2;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia54 = require("kolmafia");
 function get3(counter) {
   var value = (0, import_kolmafia54.getCounter)(counter);
@@ -13405,11 +10364,9 @@ function set2(counter, duration) {
 }
 
 // src/diet/index.ts
-init_kolmafia_polyfill();
 var import_kolmafia55 = require("kolmafia");
 
 // src/diet/knapsack.ts
-init_kolmafia_polyfill();
 function _toConsumableArray15(arr) {
   return _arrayWithoutHoles15(arr) || _iterableToArray15(arr) || _unsupportedIterableToArray30(arr) || _nonIterableSpread15();
 }
@@ -14163,7 +11120,6 @@ var DietEntry = /* @__PURE__ */ function() {
 }();
 
 // src/Dungeon.ts
-init_kolmafia_polyfill();
 var import_kolmafia56 = require("kolmafia");
 var _templateObject397, _templateObject2119, _templateObject398;
 function _taggedTemplateLiteral50(strings, raw) {
@@ -14339,7 +11295,6 @@ var Dungeon = /* @__PURE__ */ function() {
 }(), Dreadsylvania = new Dungeon("Dreadsylvania", $items(_templateObject397 || (_templateObject397 = _taggedTemplateLiteral50(["Great Wolf's headband, Great Wolf's right paw, Great Wolf's left paw, Great Wolf's lice, Great Wolf's rocket launcher, Great Wolf's beastly trousers, Drapes-You-Regally, Warms-Your-Tush, Covers-Your-Head, Protects-Your-Junk, Quiets-Your-Steps, Helps-You-Sleep, Mayor Ghost's khakis, Mayor Ghost's cloak, Mayor Ghost's toupee, Mayor Ghost's scissors, Mayor Ghost's sash, Mayor Ghost's gavel, zombie mariachi hat, zombie accordion, zombie mariachi pants, HOA regulation book, HOA zombie eyes, HOA citation pad, Unkillable Skeleton's skullcap, Unkillable Skeleton's shinguards, Unkillable Skeleton's breastplate, Unkillable Skeleton's shield, Unkillable Skeleton's sawsword, Unkillable Skeleton's restless leg, skull capacitor, Thunkula's drinking cap, Drunkula's silky pants, Drunkula's cape, Drunkula's ring of haze, Drunkula's wineglass, Drunkula's bell, bottle of Bloodweiser, bottle of Bloodweiser, bottle of Bloodweiser, bottle of Bloodweiser, electric Kool-Aid, electric Kool-Aid, electric Kool-Aid, electric Kool-Aid, ghost pepper, ghost pepper, ghost pepper, ghost pepper, Gets-You-Drunk, Gets-You-Drunk, Gets-You-Drunk, Gets-You-Drunk, wriggling severed nose, wriggling severed nose, wriggling severed nose, wriggling severed nose, Hunger\u2122 Sauce, Hunger\u2122 Sauce, Hunger\u2122 Sauce, Hunger\u2122 Sauce"]))), "translatemap", "foldmap", 1e6, "dvmap.gif", "foldmap.gif"), Hobopolis = new Dungeon("Hobopolis", $items(_templateObject2119 || (_templateObject2119 = _taggedTemplateLiteral50(["Ol' Scratch's ash can, Ol' Scratch's ol' britches, Ol' Scratch's stovepipe hat, Ol' Scratch's infernal pitchfork, Ol' Scratch's manacles, Ol' Scratch's stove door, Frosty's carrot, Frosty's nailbat, Frosty's old silk hat, Frosty's arm, Frosty's iceball, Frosty's snowball sack, Oscus's dumpster waders, Oscus's pelt, Wand of Oscus, Oscus's flypaper pants, Oscus's garbage can lid, Oscus's neverending soda, Zombo's grievous greaves, Zombo's shield, Zombo's skullcap, Zombo's empty eye, Zombo's shoulder blade, Zombo's skull ring, Chester's bag of candy, Chester's cutoffs, Chester's moustache, Chester's Aquarius medallion, Chester's muscle shirt, Chester's sunglasses, Hodgman's bow tie, Hodgman's porkpie hat, Hodgman's lobsterskin pants, Hodgman's almanac, Hodgman's lucky sock, Hodgman's metal detector, Hodgman's varcolac paw, Hodgman's harmonica, Hodgman's garbage sticker, Hodgman's cane, Hodgman's whackin' stick, Hodgman's disgusting technicolor overcoat, Hodgman's imaginary hamster"]))), "cleansewer", "floodsewer", 1e6, "opengrate.gif", "sewergrate.gif"), SlimeTube = new Dungeon("The Slime Tube", $items(_templateObject398 || (_templateObject398 = _taggedTemplateLiteral50(["slime-soaked brain, slime-soaked hypophysis, slime-soaked sweat gland, squirming Slime larva, caustic slime nodule, caustic slime nodule, hardened slime belt, hardened slime hat, hardened slime pants"]))), "cleanspot", "sealtube", 25e4, "slimehole.gif", "greasespot.gif");
 
 // src/mood.ts
-init_kolmafia_polyfill();
 var import_kolmafia57 = require("kolmafia");
 var _templateObject399, _templateObject2120, _templateObject3100, _templateObject460, _templateObject547, _templateObject637, _templateObject734, _templateObject828, _templateObject925, _templateObject1024;
 function ownKeys6(object, enumerableOnly) {
@@ -14859,7 +11814,6 @@ _defineProperty19(Mood, "defaultOptions", {
 });
 
 // src/since.ts
-init_kolmafia_polyfill();
 var import_kolmafia58 = require("kolmafia");
 function _defineProperties17(target, props) {
   for (var i = 0; i < props.length; i++) {
@@ -14993,7 +11947,6 @@ function sinceKolmafiaVersion(majorVersion, minorVersion) {
 }
 
 // src/Kmail.ts
-init_kolmafia_polyfill();
 var import_kolmafia59 = require("kolmafia");
 function _createForOfIteratorHelper16(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
@@ -15273,7 +12226,6 @@ var Kmail = /* @__PURE__ */ function() {
 }();
 
 // src/Path.ts
-init_kolmafia_polyfill();
 var _templateObject400, _templateObject2121, _templateObject3101, _templateObject461, _templateObject548, _templateObject638, _templateObject735, _templateObject829, _templateObject926, _templateObject1025, _templateObject1120;
 function _taggedTemplateLiteral52(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
@@ -15390,7 +12342,6 @@ __export(console_exports, {
     return warn;
   }
 });
-init_kolmafia_polyfill();
 var import_kolmafia60 = require("kolmafia"), logColor = function(color) {
   return function() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)
@@ -15403,7 +12354,6 @@ var import_kolmafia60 = require("kolmafia"), logColor = function(color) {
 }, log = logColor(), info = logColor("blue"), warn = logColor("red"), error = logColor("red");
 
 // src/session.ts
-init_kolmafia_polyfill();
 var import_kolmafia61 = require("kolmafia");
 var _templateObject401, _templateObject2122, _templateObject3102, _templateObject466, _templateObject549, _templateObject639, _templateObject736, _templateObject830, _templateObject927, _templateObject1026, _templateObject1121, _templateObject1220, _templateObject1318, _templateObject1415, _templateObject1514, _templateObject1614, _templateObject1714, _templateObject1814, _templateObject1914, _templateObject2014, _templateObject2123, _templateObject2216, _templateObject2314, _templateObject2413, _templateObject2513, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011;
 function _classCallCheck20(instance, Constructor) {
@@ -15828,6 +12778,7 @@ var Session = /* @__PURE__ */ function() {
   findActionSource,
   findFairyMultiplier,
   findLeprechaunMultiplier,
+  flat,
   get,
   getActiveEffects,
   getActiveSongs,

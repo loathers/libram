@@ -1,4 +1,5 @@
-import { cliExecute, Monster } from "kolmafia";
+import { cliExecute, Location, Monster } from "kolmafia";
+import { Modifiers } from "../..";
 import * as Counter from "../../counter";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
@@ -26,24 +27,20 @@ export function refillsRemaining(): number {
   return clamp(3 - get("_latteRefillsUsed"), 0, 3);
 }
 
-const UNLOCKABLE_INGREDIENTS = [
-  {
-    ingredient: "ancient spice",
+const UNLOCKABLE_INGREDIENTS = {
+  "ancient spice": {
     modifier: { "Spooky Damage": 50 },
     location: $location`The Mouldering Mansion`,
   },
-  {
-    ingredient: "asp venom",
+  "asp venom": {
     modifier: { "Weapon Damage": 25 },
     location: $location`The Middle Chamber`,
   },
-  {
-    ingredient: "basil",
+  basil: {
     modifier: { "HP Regen Min": 5, "HP Regen Max": 5 },
     location: $location`The Overgrown Lot`,
   },
-  {
-    ingredient: "belgian vanilla",
+  "belgian vanilla": {
     modifier: {
       "Moxie Percent": 20,
       "Mysticality Percent": 20,
@@ -51,278 +48,226 @@ const UNLOCKABLE_INGREDIENTS = [
     },
     location: $location`Whitey's Grove`,
   },
-  {
-    ingredient: "blue chalks",
+  "blue chalks": {
     modifier: { "Cold Damage": 25 },
     location: $location`The Haunted Billiards Room`,
   },
-  {
-    ingredient: "bug-thistle",
+  "bug-thistle": {
     modifier: { Mysticality: 20 },
     location: $location`The Bugbear Pen`,
   },
-  {
-    ingredient: "butternut",
+  butternut: {
     modifier: { "Spell Damage": 10 },
     location: $location`Madness Bakery`,
   },
-  {
-    ingredient: "cajun",
+  cajun: {
     modifier: { "Meat Drop": 40 },
     location: $location`The Black Forest`,
   },
-  {
-    ingredient: "carrot",
+  carrot: {
     modifier: { "Item Drop": 20 },
     location: $location`The Dire Warren`,
   },
-  {
-    ingredient: "carrrdamom",
+  carrrdamom: {
     modifier: { "MP Regen Min": 4, "MP Regen Max": 6 },
     location: $location`Barrrney's Barrr`,
   },
-  {
-    ingredient: "chili seeds",
+  "chili seeds": {
     modifier: { "Hot Resistance": 3 },
     location: $location`The Haunted Kitchen`,
   },
-  {
-    ingredient: "clove",
+  clove: {
     modifier: { "Stench Resistance": 3 },
     location: $location`The Sleazy Back Alley`,
   },
-  {
-    ingredient: "coal",
+  coal: {
     modifier: { "Hot Damage": 25 },
     location: $location`The Haunted Boiler Room`,
   },
-  {
-    ingredient: "cocoa powder",
+  "cocoa powder": {
     modifier: { "Cold Resistance": 3 },
     location: $location`The Icy Peak`,
   },
-  {
-    ingredient: "diet soda",
+  "diet soda": {
     modifier: { Initiative: 50 },
     location: $location`Battlefield (No Uniform)`,
   },
-  {
-    ingredient: "dwarf cream",
+  "dwarf cream": {
     modifier: { Muscle: 30 },
     location: $location`Itznotyerzitz Mine`,
   },
-  {
-    ingredient: "dyspepsi",
+  dyspepsi: {
     modifier: { Initiative: 25 },
     location: $location`Battlefield (Dyspepsi Uniform)`,
   },
-  {
-    ingredient: "filth milk",
+  "filth milk": {
     modifier: { "Damage Reduction": 20 },
     location: $location`The Feeding Chamber`,
   },
-  {
-    ingredient: "fresh grass",
+  "fresh grass": {
     modifier: { Experience: 3 },
     location: $location`The Hidden Park`,
   },
-  {
-    ingredient: "fungus",
+  fungus: {
     modifier: { "Maximum MP": 30 },
     location: $location`The Fungal Nethers`,
   },
-  {
-    ingredient: "grave mold",
+  "grave mold": {
     modifier: { "Spooky Damage": 20 },
     location: $location`The Unquiet Garves`,
   },
-  {
-    ingredient: "greek spice",
+  "greek spice": {
     modifier: { "Sleaze Damage": 25 },
     location: $location`Wartime Frat House`,
   },
-  {
-    ingredient: "grobold rum",
+  "grobold rum": {
     modifier: { "Sleaze Damage": 25 },
     location: $location`The Old Rubee Mine`,
   },
-  {
-    ingredient: "guarna",
+  guarna: {
     modifier: { Adventures: 4 },
     location: $location`The Bat Hole Entrance`,
   },
-  {
-    ingredient: "gunpowder",
+  gunpowder: {
     modifier: { "Weapon Damage": 50 },
     location: $location`1st Floor, Shiawase-Mitsuhama Building`,
   },
-  {
-    ingredient: "health potion",
+  "health potion": {
     modifier: { "HP Regen Min": 10, "HP Regen Max": 20 },
     location: $location`The Daily Dungeon`,
   },
-  {
-    ingredient: "hellion",
+  hellion: {
     modifier: { "PvP Fights": 6 },
     location: $location`The Dark Neck of the Woods`,
   },
-  {
-    ingredient: "hobo spices",
+  "hobo spices": {
     modifier: { "Damage Absorption": 50 },
     location: $location`Hobopolis Town Square`,
   },
-  {
-    ingredient: "hot sausage",
+  "hot sausage": {
     modifier: { "Muscle Percent": 50 },
     location: $location`Cobb's Knob Barracks`,
   },
-  {
-    ingredient: "hot wing",
+  "hot wing": {
     modifier: { "Combat Rate": 10 },
     location: $location`The Dark Heart of the Woods`,
   },
-  {
-    ingredient: "ink",
+  ink: {
     modifier: { "Combat Rate": -10 },
     location: $location`The Haunted Library`,
   },
-  {
-    ingredient: "kombucha",
+  kombucha: {
     modifier: { "Stench Damage": 25 },
     location: $location`Wartime Hippy Camp`,
   },
-  {
-    ingredient: "lihc saliva",
+  "lihc saliva": {
     modifier: { "Spooky Damage": 25 },
     location: $location`The Defiled Niche`,
   },
-  {
-    ingredient: "lizard milk",
+  "lizard milk": {
     modifier: { "MP Regen Min": 5, "MP Regen Max": 15 },
     location: $location`The Arid, Extra-Dry Desert`,
   },
-  {
-    ingredient: "macaroni",
+  macaroni: {
     modifier: { "Maximum HP": 20 },
     location: $location`The Haunted Pantry`,
   },
-  {
-    ingredient: "mega sausage",
+  "mega sausage": {
     modifier: { "Moxie Percent": 50 },
     location: $location`Cobb's Knob Laboratory`,
   },
-  {
-    ingredient: "motor oil",
+  "motor oil": {
     modifier: { "Sleaze Damage": 20 },
     location: $location`The Old Landfill`,
   },
-  {
-    ingredient: "msg",
+  msg: {
     modifier: { "Critical Hit Percent": 15 },
     location: $location`The Briniest Deepests`,
   },
-  {
-    ingredient: "norwhal milk",
+  "norwhal milk": {
     modifier: { "Maximum HP Percent": 200 },
     location: $location`The Ice Hole`,
   },
-  {
-    ingredient: "oil paint",
+  "oil paint": {
     modifier: { "Prismatic Damage": 5 },
     location: $location`The Haunted Gallery`,
   },
-  {
-    ingredient: "paradise milk",
+  "paradise milk": {
     modifier: { Moxie: 20, Muscle: 20, Mysticality: 20 },
     location: $location`The Stately Pleasure Dome`,
   },
-  {
-    ingredient: "rawhide",
+  rawhide: {
     modifier: { "Familiar Weight": 5 },
     location: $location`The Spooky Forest`,
   },
-  {
-    ingredient: "rock salt",
+  "rock salt": {
     modifier: { "Critical Hit Percent": 10 },
     location: $location`The Brinier Deepers`,
   },
-  {
-    ingredient: "salt",
+  salt: {
     modifier: { "Critical Hit Percent": 5 },
     location: $location`The Briny Deeps`,
   },
-  {
-    ingredient: "sandalwood",
+  sandalwood: {
     modifier: { Moxie: 5, Muscle: 5, Mysticality: 5 },
     location: $location`Noob Cave`,
   },
-  {
-    ingredient: "sausage",
+  sausage: {
     modifier: { "Mysticality Percent": 50 },
     location: $location`Cobb's Knob Kitchens`,
   },
-  {
-    ingredient: "space pumpkin",
+  "space pumpkin": {
     modifier: { Moxie: 10, Muscle: 10, Mysticality: 10 },
     location: $location`The Hole in the Sky`,
   },
-  {
-    ingredient: "spaghetti squash",
+  "spaghetti squash": {
     modifier: { "Spell Damage": 10 },
     location: $location`The Copperhead Club`,
   },
-  {
-    ingredient: "teeth",
+  teeth: {
     modifier: { "Spooky Damage": 25, "Weapon Damage": 25 },
     location: $location`The VERY Unquiet Garves`,
   },
-  {
-    ingredient: "vitamin",
+  vitamin: {
     modifier: { "Familiar Experience": 3 },
     location: $location`The Dark Elbow of the Woods`,
   },
-  {
-    ingredient: "white flour",
+  "white flour": {
     modifier: { "Sleaze Resistance": 3 },
     location: $location`The Road to the White Citadel`,
   },
-  {
-    ingredient: "squamous salt",
+  "squamous salt": {
     modifier: { "Spooky Resistance": 3 },
     location: $location`The Caliginous Abyss`,
   },
-] as const;
+} as const;
 
-const FREE_INGREDIENTS = [
-  {
-    ingredient: "pumpkin spice",
+const FREE_INGREDIENTS = {
+  "pumpkin spice": {
     modifier: {
       "Mysticality Experience": 1,
       "Spell Damage": 5,
       "Mysticality Percent": 5,
     },
   },
-  {
-    ingredient: "cinnamon",
+  cinnamon: {
     modifier: {
       "Moxie Experience": 1,
       "Pickpocket Rate": 5,
       "Moxie Percent": 5,
     },
   },
-  {
-    ingredient: "vanilla",
+  vanilla: {
     modifier: {
       "Muscle Experience": 1,
       "Weapon Damage Percent": 5,
       "Muscle Percent": 5,
     },
   },
-] as const;
+} as const;
 
-export type UnlockableIngredient =
-  typeof UNLOCKABLE_INGREDIENTS[number]["ingredient"];
-export type FreeIngredient = typeof FREE_INGREDIENTS[number]["ingredient"];
+export type UnlockableIngredient = keyof typeof UNLOCKABLE_INGREDIENTS;
+export type FreeIngredient = keyof typeof FREE_INGREDIENTS;
 export type Ingredient = UnlockableIngredient | FreeIngredient;
 
 /**
@@ -345,4 +290,28 @@ export function fill(
   if (new Set(ingredients).size < 3) return false;
   if (ingredients.some((i) => !ingredientsUnlocked().includes(i))) return false;
   return cliExecute(`latte refill ${ingredients.join(" ")}`);
+}
+
+function isFree(ingredient: Ingredient): ingredient is FreeIngredient {
+  return ingredient in FREE_INGREDIENTS;
+}
+
+/**
+ * @param ingredient A latte ingredient
+ * @returns An object containing the modifiers associated with that latte ingredient
+ */
+export function modifierOf(ingredient: Ingredient): Modifiers {
+  if (isFree(ingredient)) {
+    return FREE_INGREDIENTS[ingredient].modifier;
+  } else {
+    return UNLOCKABLE_INGREDIENTS[ingredient].modifier;
+  }
+}
+
+/**
+ * @param ingredient A latte ingredient
+ * @returns The location that can be used to unlock said ingredient
+ */
+export function locationOf(ingredient: UnlockableIngredient): Location {
+  return UNLOCKABLE_INGREDIENTS[ingredient].location;
 }

@@ -1,7 +1,9 @@
-import { cliExecute, getCounter, Monster } from "kolmafia";
+import { cliExecute, Monster } from "kolmafia";
+import * as Counter from "../../counter";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item, $location } from "../../template-string";
+import { clamp } from "../../utils";
 
 /**
  * @returns Whether we `have` the latte lovers member's mug
@@ -14,14 +16,14 @@ export function have(): boolean {
  * @returns The current target of `Offer Latte`, assuming the effect is active; otherwise, `null`
  */
 export function sniffedMonster(): Monster | null {
-  return getCounter("Latte Monster") !== -1 ? get("_latteMonster") : null;
+  return Counter.exists("Latte Monster") ? get("_latteMonster") : null;
 }
 
 /**
  * @returns The number of latte refills remaining for the day
  */
 export function refillsRemaining(): number {
-  return 3 - get("_latteRefillsUsed");
+  return clamp(3 - get("_latteRefillsUsed"), 0, 3);
 }
 
 const UNLOCKABLE_INGREDIENTS = [

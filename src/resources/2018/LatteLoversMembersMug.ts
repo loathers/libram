@@ -1,7 +1,7 @@
 import { cliExecute, getProperty, Location, Monster } from "kolmafia";
-import { Modifiers } from "../..";
 import * as Counter from "../../counter";
 import { have as haveItem } from "../../lib";
+import { Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $item, $location } from "../../template-string";
 import { clamp } from "../../utils";

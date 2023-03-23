@@ -1,4 +1,4 @@
-import { cliExecute, getProperty, Location, Monster } from "kolmafia";
+import { cliExecute, getProperty, Monster } from "kolmafia";
 import * as Counter from "../../counter";
 import { have as haveItem } from "../../lib";
 import { Modifiers } from "../../modifier";
@@ -27,7 +27,7 @@ export function refillsRemaining(): number {
   return clamp(3 - get("_latteRefillsUsed"), 0, 3);
 }
 
-const UNLOCKABLE_INGREDIENTS = {
+const INGREDIENTS = {
   ancient: {
     modifier: { "Spooky Damage": 50 },
     location: $location`The Mouldering Mansion`,
@@ -240,15 +240,13 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Spooky Resistance": 3 },
     location: $location`The Caliginous Abyss`,
   },
-} as const;
-
-const FREE_INGREDIENTS = {
   pumpkin: {
     modifier: {
       "Mysticality Experience": 1,
       "Spell Damage": 5,
       "Mysticality Percent": 5,
     },
+    location: null,
   },
   cinnamon: {
     modifier: {
@@ -256,6 +254,7 @@ const FREE_INGREDIENTS = {
       "Pickpocket Rate": 5,
       "Moxie Percent": 5,
     },
+    location: null,
   },
   vanilla: {
     modifier: {
@@ -263,12 +262,11 @@ const FREE_INGREDIENTS = {
       "Weapon Damage Percent": 5,
       "Muscle Percent": 5,
     },
+    location: null,
   },
 } as const;
 
-export type UnlockableIngredient = keyof typeof UNLOCKABLE_INGREDIENTS;
-export type FreeIngredient = keyof typeof FREE_INGREDIENTS;
-export type Ingredient = UnlockableIngredient | FreeIngredient;
+export type Ingredient = keyof typeof INGREDIENTS;
 
 /**
  * @returns An array consisting of the Ingredients you've unlocked so far this ascension
@@ -292,28 +290,22 @@ export function fill(
   return cliExecute(`latte refill ${ingredients.join(" ")}`);
 }
 
-function isFree(ingredient: Ingredient): ingredient is FreeIngredient {
-  return ingredient in FREE_INGREDIENTS;
-}
-
 /**
  * @param ingredient A latte ingredient
  * @returns An object containing the modifiers associated with that latte ingredient
  */
 export function modifierOf(ingredient: Ingredient): Modifiers {
-  if (isFree(ingredient)) {
-    return FREE_INGREDIENTS[ingredient].modifier;
-  } else {
-    return UNLOCKABLE_INGREDIENTS[ingredient].modifier;
-  }
+  return INGREDIENTS[ingredient].modifier;
 }
 
 /**
  * @param ingredient A latte ingredient
- * @returns The location that can be used to unlock said ingredient
+ * @returns The location that can be used to unlock said ingredient; null if the ingredient is free
  */
-export function locationOf(ingredient: UnlockableIngredient): Location {
-  return UNLOCKABLE_INGREDIENTS[ingredient].location;
+export function locationOf<T extends Ingredient>(
+  ingredient: T
+): typeof INGREDIENTS[T]["location"] {
+  return INGREDIENTS[ingredient].location;
 }
 
 /**

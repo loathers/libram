@@ -1,4 +1,4 @@
-import { cliExecute, Location, Monster } from "kolmafia";
+import { cliExecute, getProperty, Location, Monster } from "kolmafia";
 import { Modifiers } from "../..";
 import * as Counter from "../../counter";
 import { have as haveItem } from "../../lib";
@@ -314,4 +314,11 @@ export function modifierOf(ingredient: Ingredient): Modifiers {
  */
 export function locationOf(ingredient: UnlockableIngredient): Location {
   return UNLOCKABLE_INGREDIENTS[ingredient].location;
+}
+
+/**
+ * @returns An array consisting of all Ingredients currently in your latte
+ */
+export function currentIngredients(): Ingredient[] {
+  return getProperty("latteIngredients").split(",") as Ingredient[];
 }

@@ -28,11 +28,11 @@ export function refillsRemaining(): number {
 }
 
 const UNLOCKABLE_INGREDIENTS = {
-  "ancient spice": {
+  ancient: {
     modifier: { "Spooky Damage": 50 },
     location: $location`The Mouldering Mansion`,
   },
-  "asp venom": {
+  asp: {
     modifier: { "Weapon Damage": 25 },
     location: $location`The Middle Chamber`,
   },
@@ -40,7 +40,7 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "HP Regen Min": 5, "HP Regen Max": 5 },
     location: $location`The Overgrown Lot`,
   },
-  "belgian vanilla": {
+  belgian: {
     modifier: {
       "Moxie Percent": 20,
       "Mysticality Percent": 20,
@@ -48,7 +48,7 @@ const UNLOCKABLE_INGREDIENTS = {
     },
     location: $location`Whitey's Grove`,
   },
-  "blue chalks": {
+  chalk: {
     modifier: { "Cold Damage": 25 },
     location: $location`The Haunted Billiards Room`,
   },
@@ -72,7 +72,7 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "MP Regen Min": 4, "MP Regen Max": 6 },
     location: $location`Barrrney's Barrr`,
   },
-  "chili seeds": {
+  chili: {
     modifier: { "Hot Resistance": 3 },
     location: $location`The Haunted Kitchen`,
   },
@@ -84,15 +84,15 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Hot Damage": 25 },
     location: $location`The Haunted Boiler Room`,
   },
-  "cocoa powder": {
+  cocoa: {
     modifier: { "Cold Resistance": 3 },
     location: $location`The Icy Peak`,
   },
-  "diet soda": {
+  diet: {
     modifier: { Initiative: 50 },
     location: $location`Battlefield (No Uniform)`,
   },
-  "dwarf cream": {
+  dwarf: {
     modifier: { Muscle: 30 },
     location: $location`Itznotyerzitz Mine`,
   },
@@ -100,11 +100,11 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { Initiative: 25 },
     location: $location`Battlefield (Dyspepsi Uniform)`,
   },
-  "filth milk": {
+  filth: {
     modifier: { "Damage Reduction": 20 },
     location: $location`The Feeding Chamber`,
   },
-  "fresh grass": {
+  grass: {
     modifier: { Experience: 3 },
     location: $location`The Hidden Park`,
   },
@@ -112,15 +112,15 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Maximum MP": 30 },
     location: $location`The Fungal Nethers`,
   },
-  "grave mold": {
+  mold: {
     modifier: { "Spooky Damage": 20 },
     location: $location`The Unquiet Garves`,
   },
-  "greek spice": {
+  greek: {
     modifier: { "Sleaze Damage": 25 },
     location: $location`Wartime Frat House`,
   },
-  "grobold rum": {
+  grobold: {
     modifier: { "Sleaze Damage": 25 },
     location: $location`The Old Rubee Mine`,
   },
@@ -132,7 +132,7 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Weapon Damage": 50 },
     location: $location`1st Floor, Shiawase-Mitsuhama Building`,
   },
-  "health potion": {
+  healing: {
     modifier: { "HP Regen Min": 10, "HP Regen Max": 20 },
     location: $location`The Daily Dungeon`,
   },
@@ -140,15 +140,15 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "PvP Fights": 6 },
     location: $location`The Dark Neck of the Woods`,
   },
-  "hobo spices": {
+  hobo: {
     modifier: { "Damage Absorption": 50 },
     location: $location`Hobopolis Town Square`,
   },
-  "hot sausage": {
+  greasy: {
     modifier: { "Muscle Percent": 50 },
     location: $location`Cobb's Knob Barracks`,
   },
-  "hot wing": {
+  wing: {
     modifier: { "Combat Rate": 10 },
     location: $location`The Dark Heart of the Woods`,
   },
@@ -160,11 +160,11 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Stench Damage": 25 },
     location: $location`Wartime Hippy Camp`,
   },
-  "lihc saliva": {
+  lihc: {
     modifier: { "Spooky Damage": 25 },
     location: $location`The Defiled Niche`,
   },
-  "lizard milk": {
+  lizard: {
     modifier: { "MP Regen Min": 5, "MP Regen Max": 15 },
     location: $location`The Arid, Extra-Dry Desert`,
   },
@@ -172,11 +172,11 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Maximum HP": 20 },
     location: $location`The Haunted Pantry`,
   },
-  "mega sausage": {
+  mega: {
     modifier: { "Moxie Percent": 50 },
     location: $location`Cobb's Knob Laboratory`,
   },
-  "motor oil": {
+  oil: {
     modifier: { "Sleaze Damage": 20 },
     location: $location`The Old Landfill`,
   },
@@ -184,15 +184,15 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Critical Hit Percent": 15 },
     location: $location`The Briniest Deepests`,
   },
-  "norwhal milk": {
+  norwhal: {
     modifier: { "Maximum HP Percent": 200 },
     location: $location`The Ice Hole`,
   },
-  "oil paint": {
+  paint: {
     modifier: { "Prismatic Damage": 5 },
     location: $location`The Haunted Gallery`,
   },
-  "paradise milk": {
+  paradise: {
     modifier: { Moxie: 20, Muscle: 20, Mysticality: 20 },
     location: $location`The Stately Pleasure Dome`,
   },
@@ -200,7 +200,7 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Familiar Weight": 5 },
     location: $location`The Spooky Forest`,
   },
-  "rock salt": {
+  rock: {
     modifier: { "Critical Hit Percent": 10 },
     location: $location`The Brinier Deepers`,
   },
@@ -216,11 +216,11 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Mysticality Percent": 50 },
     location: $location`Cobb's Knob Kitchens`,
   },
-  "space pumpkin": {
+  space: {
     modifier: { Moxie: 10, Muscle: 10, Mysticality: 10 },
     location: $location`The Hole in the Sky`,
   },
-  "spaghetti squash": {
+  squash: {
     modifier: { "Spell Damage": 10 },
     location: $location`The Copperhead Club`,
   },
@@ -232,18 +232,18 @@ const UNLOCKABLE_INGREDIENTS = {
     modifier: { "Familiar Experience": 3 },
     location: $location`The Dark Elbow of the Woods`,
   },
-  "white flour": {
+  flour: {
     modifier: { "Sleaze Resistance": 3 },
     location: $location`The Road to the White Citadel`,
   },
-  "squamous salt": {
+  squamous: {
     modifier: { "Spooky Resistance": 3 },
     location: $location`The Caliginous Abyss`,
   },
 } as const;
 
 const FREE_INGREDIENTS = {
-  "pumpkin spice": {
+  pumpkin: {
     modifier: {
       "Mysticality Experience": 1,
       "Spell Damage": 5,

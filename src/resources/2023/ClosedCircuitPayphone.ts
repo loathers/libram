@@ -5,10 +5,11 @@ import {
   getMonsters,
   itemDrops,
   canAdventure,
-  use,
   runChoice,
   toItem,
   toMonster,
+  visitUrl,
+  toInt,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get, withChoice } from "../../property";
@@ -129,7 +130,11 @@ export function chooseQuest(
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
   withChoice(1497, "", () => {
-    use(item);
+    visitUrl(
+      `inv_use.php?which=3&whichitem=${toInt(
+        $item`closed-circuit pay phone`
+      )}&pwd`
+    );
     runChoice(
       chooser({
         artifact: toItem(get("rufusDesiredArtifact")),

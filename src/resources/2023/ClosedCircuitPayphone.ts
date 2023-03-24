@@ -8,8 +8,8 @@ import {
   runChoice,
   toItem,
   toMonster,
-  myHash,
   visitUrl,
+  toInt,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get, withChoice } from "../../property";
@@ -130,7 +130,11 @@ export function chooseQuest(
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
   withChoice(1497, "", () => {
-    visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=11169`);
+    visitUrl(
+      `inv_use.php?which=3&whichitem=${toInt(
+        $item`closed-circuit pay phone`
+      )}&pwd`
+    );
     runChoice(
       chooser({
         artifact: toItem(get("rufusDesiredArtifact")),

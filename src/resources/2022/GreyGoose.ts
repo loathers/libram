@@ -21,10 +21,11 @@ export function have(): boolean {
  * @returns Your current expected Grey Goose experience, paying attention to potential experience from the Shorter-Order Cook
  */
 export function currentExperience(): number {
-  return goose.experience ||
-    (have_($familiar`Shorter-Order Cook`) && !get("gooseReprocessed"))
-    ? 81 + (have_($item`blue plate`) ? 19 : 0)
-    : 0;
+  const postAscensionBaseExperience =
+    have_($familiar`Shorter-Order Cook`) && !get("gooseReprocessed")
+      ? 81 + (have_($item`blue plate`) ? 19 : 0)
+      : 0;
+  return goose.experience || postAscensionBaseExperience;
 }
 
 /**

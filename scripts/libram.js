@@ -9079,7 +9079,8 @@ function have36() {
   return have(goose);
 }
 function currentExperience() {
-  return goose.experience || have($familiar(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral37(["Shorter-Order Cook"])))) && !get("gooseReprocessed") ? 81 + (have($item(_templateObject361 || (_templateObject361 = _taggedTemplateLiteral37(["blue plate"])))) ? 19 : 0) : 0;
+  var postAscensionBaseExperience = have($familiar(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral37(["Shorter-Order Cook"])))) && !get("gooseReprocessed") ? 81 + (have($item(_templateObject361 || (_templateObject361 = _taggedTemplateLiteral37(["blue plate"])))) ? 19 : 0) : 0;
+  return goose.experience || postAscensionBaseExperience;
 }
 function currentWeight() {
   return Math.min(Math.floor(Math.sqrt(currentExperience())), 20);

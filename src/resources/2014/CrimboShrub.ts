@@ -1,5 +1,5 @@
-import { toInt, useFamiliar, visitUrl } from "kolmafia";
-import { have as have_ } from "../../lib";
+import { useFamiliar, visitUrl } from "kolmafia";
+import { fakeUse, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 
@@ -111,11 +111,7 @@ export function decorate(
     useFamiliar($familiar`Crimbo Shrub`);
   }
 
-  visitUrl(
-    `inv_use.php?pwd=&which=99&whichitem=${toInt(
-      $item`box of old Crimbo decorations`
-    )}`
-  );
+  fakeUse($item`box of old Crimbo decorations`);
   visitUrl(
     `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`
   );

@@ -10,7 +10,7 @@ import {
   toMonster,
   use,
 } from "kolmafia";
-import { fakeUse, have as have_, questStep } from "../../lib";
+import { directlyUse, have as have_, questStep } from "../../lib";
 import { get, withChoice } from "../../property";
 import { $item, $location } from "../../template-string";
 import { makeByXFunction, maxBy } from "../../utils";
@@ -129,7 +129,7 @@ export function chooseQuest(
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
   withChoice(1497, "", () => {
-    fakeUse(item);
+    directlyUse(item);
     runChoice(
       chooser({
         artifact: toItem(get("rufusDesiredArtifact")),

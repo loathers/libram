@@ -911,6 +911,6 @@ export const byClass = makeByXFunction(() => myClass().toString());
  * @param item The item you want to use
  * @returns The html of the resulting page
  */
-export function fakeUse(item: Item): string {
+export function directlyUse(item: Item): string {
   return visitUrl(`inv_use.php?which=3&whichitem=${toInt(item)}&pwd`);
 }

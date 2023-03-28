@@ -1,5 +1,5 @@
 import { availableAmount, runChoice } from "kolmafia";
-import { fakeUse } from "../../lib";
+import { directlyUse } from "../../lib";
 import { get } from "../../property";
 import { $item, $items } from "../../template-string";
 import { sum } from "../../utils";
@@ -22,7 +22,7 @@ export function smashParty() {
   const total = sum(BARRELS, availableAmount);
   if (total <= 0) return;
 
-  fakeUse($item`little firkin`);
+  directlyUse($item`little firkin`);
 
   for (let i = 0; i < total / 100; i++) {
     runChoice(2);

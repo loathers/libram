@@ -10,7 +10,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { fakeUse } from "../../lib";
+import { directlyUse } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 import { arrayContains } from "../../utils";
@@ -48,7 +48,7 @@ function checkLocations(html: string): Location[] {
   ).map((name) => toLocation(name));
 }
 
-const use = () => fakeUse(item);
+const use = () => directlyUse(item);
 
 /**
  * @returns The current location the autumn-aton is questing in; null if it is not on a quest.

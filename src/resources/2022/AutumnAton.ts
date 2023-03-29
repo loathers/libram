@@ -48,8 +48,6 @@ function checkLocations(html: string): Location[] {
   ).map((name) => toLocation(name));
 }
 
-const use = () => directlyUse(item);
-
 /**
  * @returns The current location the autumn-aton is questing in; null if it is not on a quest.
  */
@@ -70,7 +68,7 @@ export function sendTo(
 ): Location | null {
   if (!available()) return null;
 
-  const pageHtml = use();
+  const pageHtml = directlyUse(item);
 
   if (upgrade && availableChoiceOptions()[1]) runChoice(1);
 
@@ -84,7 +82,7 @@ export function sendTo(
   if (!location) return null;
   if (!locationsAvailable.includes(location)) return null;
 
-  if (!handlingChoice()) use();
+  if (!handlingChoice()) directlyUse(item);
   runChoice(2, `heythereprogrammer=${location.id}`);
   if (handlingChoice()) visitUrl("main.php");
   return location;
@@ -96,7 +94,7 @@ export function sendTo(
  * @returns Whether there were any upgrades to install.
  */
 export function upgrade(): boolean {
-  use();
+  directlyUse(item);
   const canUpgrade = availableChoiceOptions()[1] !== undefined;
   if (canUpgrade) runChoice(1);
   visitUrl("main.php");
@@ -108,7 +106,7 @@ export function upgrade(): boolean {
  */
 export function availableLocations(): Location[] {
   if (!available()) return [];
-  const pageHtml = use();
+  const pageHtml = directlyUse(item);
   visitUrl("main.php");
   return checkLocations(pageHtml);
 }

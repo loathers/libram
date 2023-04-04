@@ -75,7 +75,7 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): boolean {
 /**
  * Uses the genie bottle to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Will not use pocket wishes, use @function pocketWishFor for that instead.
- * @param effect The desired effect to be wished for.
+ * @param target The desired effect to be wished for.
  * @returns A boolean denoting success or failure.
  */
 export function wishFor(target: Effect | Monster | GenieOption): boolean {
@@ -87,7 +87,7 @@ export function wishFor(target: Effect | Monster | GenieOption): boolean {
 /**
  * Uses a pocket wish to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Does not use the genie bottle IotM directly, use @function wishFor for that instead.
- * @param effect The desired effect to be wished for.
+ * @param target The desired effect to be wished for.
  * @returns A boolean denoting success or failure.
  */
 export function pocketWishFor(target: Effect | Monster | GenieOption): boolean {

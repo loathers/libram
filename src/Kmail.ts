@@ -1,5 +1,3 @@
-import "core-js/modules/es.object.entries";
-
 import {
   extractItems,
   extractMeat,
@@ -160,10 +158,10 @@ export default class Kmail {
    * Ignores any ungiftable items.
    *
    * @param to The player name or id to receive the gift
-   * @param note The note on the outside of the gift
+   * @param message Message to send
    * @param items The items to be attached
    * @param meat The quantity of meat to be attached
-   * @param insideNode The note on the inside of the gift
+   * @param insideNote The note on the inside of the gift
    * @returns True if the gift was successfully sent
    */
   static gift(
@@ -212,7 +210,9 @@ export default class Kmail {
   }
 
   /**
-   * Message contents without any HTML from items or meat
+   * Get message contents without any HTML from items or meat
+   *
+   * @returns Cleaned message contents
    */
   get message(): string {
     const match = this.rawMessage.match(/^(.*?)</s);
@@ -244,8 +244,10 @@ export default class Kmail {
   /**
    * Reply to kmail
    *
+   * @param message Message with which to reply
+   * @param items Items to send
+   * @param meat Meat to send
    * @see Kmail.send
-   *
    * @returns True if the kmail was successfully sent
    */
   reply(

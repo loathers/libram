@@ -1,5 +1,8 @@
-import { toItem, toSkill } from "kolmafia";
+import { toItem, toSkill, Item, Skill } from "kolmafia";
 
+/**
+ * @returns List of Skills with non-unique names
+ */
 export function overlappingSkills(): Skill[] {
   const combatSkillNames = Skill.all()
     .filter((skill) => skill.combat)
@@ -11,6 +14,9 @@ export function overlappingSkills(): Skill[] {
     .map(toSkill);
 }
 
+/**
+ * @returns List of Items with non-unique names
+ */
 export function overlappingItems(): Item[] {
   const combatItemNames = Item.all()
     .filter((item) => item.combat)

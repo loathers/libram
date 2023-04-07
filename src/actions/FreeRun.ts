@@ -263,6 +263,7 @@ const freeRunSources: ActionSource[] = [
 
 /**
  * Find an available free run source subject to constraints.
+ *
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Free run source satisfying constraints, or null.
  */
@@ -283,6 +284,7 @@ export function tryFindFreeRun(
 /**
  * Ensure an available free run source subject to constraints.
  * Throws an error if no source can be found.
+ *
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Free run source satisfying constraints.
  */

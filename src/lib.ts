@@ -1,7 +1,4 @@
 /** @module GeneralLibrary */
-import "core-js/modules/es.object.entries";
-import "core-js/features/array/flat";
-
 import {
   appearanceRates,
   autosellPrice,
@@ -32,11 +29,13 @@ import {
   Location,
   mallPrice,
   Monster,
+  myClass,
   myEffects,
   myFamiliar,
   myFullness,
   myInebriety,
   myPath,
+  myPrimestat,
   mySpleenUse,
   myThrall,
   myTurncount,
@@ -47,11 +46,14 @@ import {
   spleenLimit,
   Stat,
   Thrall,
+  toInt,
   toItem,
   toSkill,
   totalTurnsPlayed,
+  visitUrl,
 } from "kolmafia";
 
+import logger from "./logger";
 import { get } from "./property";
 import {
   $class,
@@ -63,12 +65,13 @@ import {
   $skill,
   $stat,
 } from "./template-string";
-import { chunk } from "./utils";
+import { makeByXFunction, chunk, flat } from "./utils";
 
 /**
- * Returns the current maximum Accordion Thief songs the player can have in their head
+ * Determines the current maximum Accordion Thief songs the player can have in their head
  *
  * @category General
+ * @returns Maximum number of songs for player
  */
 export function getSongLimit(): number {
   return (
@@ -79,10 +82,11 @@ export function getSongLimit(): number {
 }
 
 /**
- * Return whether the Skill or Effect provided is an Accordion Thief song
+ * Determine whether the Skill or Effect provided is an Accordion Thief song
  *
  * @category General
  * @param skillOrEffect The Skill or Effect
+ * @returns Whether it's a song
  */
 export function isSong(skillOrEffect: Skill | Effect): boolean {
   if (
@@ -102,6 +106,7 @@ export function isSong(skillOrEffect: Skill | Effect): boolean {
  * List all active Effects
  *
  * @category General
+ * @returns List of Effects
  */
 export function getActiveEffects(): Effect[] {
   return Object.keys(myEffects()).map((e) => Effect.get(e));
@@ -111,6 +116,7 @@ export function getActiveEffects(): Effect[] {
  * List currently active Accordion Thief songs
  *
  * @category General
+ * @returns List of song Effects
  */
 export function getActiveSongs(): Effect[] {
   return getActiveEffects().filter(isSong);
@@ -120,26 +126,29 @@ export function getActiveSongs(): Effect[] {
  * List number of active Accordion Thief songs
  *
  * @category General
+ * @returns Number of songs
  */
 export function getSongCount(): number {
   return getActiveSongs().length;
 }
 
 /**
- * Returns true if the player can remember another Accordion Thief song
+ * Determine whether player can remember another Accordion Thief song
  *
  * @category General
  * @param quantity Number of songs to test the space for
+ * @returns Whether player can remember another song
  */
 export function canRememberSong(quantity = 1): boolean {
   return getSongLimit() - getSongCount() >= quantity;
 }
 
 /**
- * Return the locations in which the given monster can be encountered naturally
+ * Determine the locations in which the given monster can be encountered naturally
  *
  * @category General
  * @param monster Monster to find
+ * @returns Locations for monster
  */
 export function getMonsterLocations(monster: Monster): Location[] {
   return Location.all().filter(
@@ -148,38 +157,42 @@ export function getMonsterLocations(monster: Monster): Location[] {
 }
 
 /**
- * Return the player's remaining liver space
+ * Determine the player's remaining liver space
  *
  * @category General
+ * @returns Remaining liver space
  */
 export function getRemainingLiver(): number {
   return inebrietyLimit() - myInebriety();
 }
 
 /**
- * Return the player's remaining stomach space
+ * Determine the player's remaining stomach space
  *
  * @category General
+ * @returns Remaining stomach space
  */
 export function getRemainingStomach(): number {
   return fullnessLimit() - myFullness();
 }
 
 /**
- * Return the player's remaining spleen space
+ * Determine the player's remaining spleen space
  *
  * @category General
+ * @returns Remaining spleen space
  */
 export function getRemainingSpleen(): number {
   return spleenLimit() - mySpleenUse();
 }
 
 /**
- * Return whether the player "has" any entity which one could feasibly "have".
+ * Determine whether the player "has" any entity which one could feasibly "have".
  *
  * @category General
  * @param thing Thing to check
- * @param quantity Number to check that the player has
+ * @param quantity Minimum quantity the player must have to pass
+ * @returns Whether the player meets the requirements of owning the supplied thing
  */
 export function have(
   thing: Effect | Familiar | Item | Servant | Skill | Thrall,
@@ -214,10 +227,11 @@ export function have(
 }
 
 /**
- * Return whether an item is in the player's campground
+ * Determine whether a given item is in the player's campground
  *
  * @category General
- * @param item The item mafia uses to represent the campground item
+ * @param item The Item KoLmafia uses to represent the campground item
+ * @returns Whether the item is in the campground
  */
 export function haveInCampground(item: Item): boolean {
   return Object.keys(getCampground())
@@ -240,9 +254,13 @@ export enum Wanderer {
 const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 
 /**
- * Return whether the player has the queried counter
+ * Determine whether the player has the specified counter
  *
+ * @param counterName Name of the counter
+ * @param minTurns Minimum turns the counter is set to
+ * @param maxTurns Maximum turns the counter is set to
  * @category General
+ * @returns Whether player has the counter
  */
 export function haveCounter(
   counterName: string,
@@ -253,9 +271,11 @@ export function haveCounter(
 }
 
 /**
- * Return whether the player has the queried wandering counter
+ * Determine whether the player has the specified wanderer's counter
  *
+ * @param wanderer Wanderer to check
  * @category Wanderers
+ * @returns Whether player has the wanderer counter
  */
 export function haveWandererCounter(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
@@ -267,10 +287,11 @@ export function haveWandererCounter(wanderer: Wanderer): boolean {
 }
 
 /**
- * Returns whether the player will encounter a vote wanderer on the next turn,
+ * Determine whether the player will encounter a vote wanderer on the next turn,
  * providing an "I Voted!" sticker is equipped.
  *
  * @category Wanderers
+ * @returns Whether the vote wanderer is due
  */
 export function isVoteWandererNow(): boolean {
   return (
@@ -294,6 +315,7 @@ export function isVoteWandererNow(): boolean {
  *
  * @category Wanderers
  * @param wanderer Wanderer to check
+ * @returns Whether the wanderer is due
  */
 export function isWandererNow(wanderer: Wanderer): boolean {
   if (deterministicWanderers.includes(wanderer)) {
@@ -314,10 +336,11 @@ export function isWandererNow(wanderer: Wanderer): boolean {
 }
 
 /**
- * Returns the float chance the player will encounter a sausage goblin on the
+ * Determines the chance the player will encounter a sausage goblin on the
  * next turn, providing the Kramco Sausage-o-Matic is equipped.
  *
  * @category Wanderers
+ * @returns Chance that the sausage goblin is due (as a number between 0 and 1)
  */
 export function getKramcoWandererChance(): number {
   const fights = get("_sausageFights");
@@ -334,7 +357,7 @@ export function getKramcoWandererChance(): number {
 }
 
 /**
- * Returns the float chance the player will encounter an Artistic Goth Kid or
+ * Determines the chance the player will encounter an Artistic Goth Kid or
  * Mini-Hipster wanderer on the next turn, providing a familiar is equipped.
  *
  * NOTE: You must complete one combat with the Artistic Goth Kid before you
@@ -342,6 +365,7 @@ export function getKramcoWandererChance(): number {
  * Artist Goth Kid is effectively 0% chance to encounter a wanderer.
  *
  * @category Wanderers
+ * @returns Chance that the familiar wanderer is due (as a number between 0 and 1)
  */
 export function getFamiliarWandererChance(): number {
   const totalFights = get("_hipsterAdv");
@@ -353,11 +377,12 @@ export function getFamiliarWandererChance(): number {
 }
 
 /**
- * Returns the float chance the player will encounter the queried wanderer
+ * Determines the chance the player will encounter the specified wanderer
  * on the next turn.
  *
  * @category Wanderers
  * @param wanderer Wanderer to check
+ * @returns Chance that the specified wanderer is due (as a number between 0 and 1)
  */
 export function getWandererChance(wanderer: Wanderer): number {
   if (deterministicWanderers.includes(wanderer)) {
@@ -388,20 +413,22 @@ export function getWandererChance(wanderer: Wanderer): number {
 }
 
 /**
- * Returns true if the player's current familiar is equal to the one supplied
+ * Determines whether the player's current familiar is equal to the one supplied
  *
  * @category General
  * @param familiar Familiar to check
+ * @returns Whether it is the player's current familiar
  */
 export function isCurrentFamiliar(familiar: Familiar): boolean {
   return myFamiliar() === familiar;
 }
 
 /**
- * Returns the fold group (if any) of which the given item is a part
+ * Determines the fold group (if any) of which the given item is a part
  *
  * @category General
  * @param item Item that is part of the required fold group
+ * @returns List of items in the fold group
  */
 export function getFoldGroup(item: Item): Item[] {
   return Object.entries(getRelated(item, "fold"))
@@ -410,10 +437,11 @@ export function getFoldGroup(item: Item): Item[] {
 }
 
 /**
- * Returns the zap group (if any) of which the given item is a part
+ * Determines the zap group (if any) of which the given item is a part
  *
  * @category General
  * @param item Item that is part of the required zap group
+ * @returns List of items in the zap group
  */
 export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
@@ -423,6 +451,7 @@ export function getZapGroup(item: Item): Item[] {
  * Get a map of banished monsters keyed by what banished them
  *
  * @category General
+ * @returns Map of banished monsters
  */
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
   const banishes = chunk(get("banishedMonsters").split(":"), 3);
@@ -458,11 +487,12 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
 }
 
 /**
- * Returns true if the item is usable
+ * Determines whether the item is usable
  *
  * This function will be an ongoing work in progress
  *
  * @param item Item to check
+ * @returns Whether item is usable
  */
 export function canUse(item: Item): boolean {
   const path = myPath();
@@ -492,6 +522,7 @@ export function canUse(item: Item): boolean {
  * Turn KoLmafia `none`s to JavaScript `null`s
  *
  * @param thing Thing that can have a mafia "none" value
+ * @returns The thing specified or `null`
  */
 export function noneToNull<T>(thing: T): T | null {
   if (thing instanceof Effect) {
@@ -510,9 +541,10 @@ export function noneToNull<T>(thing: T): T | null {
 }
 
 /**
- * Return the average value from the sort of range that KoLmafia encodes as a string
+ * Determine the average value from the sort of range that KoLmafia encodes as a string
  *
  * @param range KoLmafia-style range string
+ * @returns Average value fo range
  */
 export function getAverage(range: string): number {
   if (range.indexOf("-") < 0) return Number(range);
@@ -527,11 +559,12 @@ export function getAverage(range: string): number {
 }
 
 /**
- * Return average adventures expected from consuming an item
+ * Deternube tge average adventures expected from consuming an Item
  *
  * If item is not a consumable, will just return "0".
  *
  * @param item Consumable item
+ * @returns Average aventures from consumable
  */
 export function getAverageAdventures(item: Item): number {
   return getAverage(item.adventures);
@@ -542,6 +575,7 @@ export function getAverageAdventures(item: Item): number {
  *
  * @category General
  * @param effect Effect to remove
+ * @returns Success
  */
 export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
@@ -568,9 +602,10 @@ export function getPlayerFromIdOrName(idOrName: number | string): Player {
 }
 
 /**
- * Return the step as a number for a given quest property.
+ * Determine the step as a number for a given quest property.
  *
  * @param questName Name of quest property to check.
+ * @returns Quest step
  */
 export function questStep(questName: string): number {
   const stringStep = get(questName);
@@ -594,9 +629,9 @@ export class EnsureError extends Error {
 
 /**
  * Tries to get an effect using the default method
+ *
  * @param ef effect to try to get
  * @param turns turns to aim for; default of 1
- *
  * @throws {EnsureError} Throws an error if the effect cannot be guaranteed
  */
 export function ensureEffect(ef: Effect, turns = 1): void {
@@ -616,8 +651,10 @@ const valueMap: Map<Item, number> = new Map();
 const MALL_VALUE_MODIFIER = 0.9;
 
 /**
- * Returns the average value--based on mallprice and autosell--of a collection of items
+ * Determiens the average value (based on mallprice and autosell) of a collection of items
+ *
  * @param items items whose value you care about
+ * @returns Average value of items
  */
 export function getSaleValue(...items: Item[]): number {
   return (
@@ -653,10 +690,12 @@ export const Environment = {
 export type EnvironmentType = typeof Environment[keyof typeof Environment];
 
 /**
- * Returns the weight-coefficient of any leprechaunning that this familiar may find itself doing
+ * Determines the weight-coefficient of any leprechaunning that this familiar may find itself doing
  * Assumes the familiar is nude and thus fails for hatrack & pantsrack
  * For the Mutant Cactus Bud, returns the efficacy-multiplier instead
+ *
  * @param familiar The familiar whose leprechaun multiplier you're interested in
+ * @returns Weight-coefficient
  */
 export function findLeprechaunMultiplier(familiar: Familiar): number {
   if (familiar === $familiar`Mutant Cactus Bud`) {
@@ -669,10 +708,12 @@ export function findLeprechaunMultiplier(familiar: Familiar): number {
 }
 
 /**
- * Returns the weight-coefficient of any baby gravy fairying that this familiar may find itself doing
+ * Determines the weight-coefficient of any baby gravy fairying that this familiar may find itself doing
  * Assumes the familiar is nude and thus fails for hatrack & pantsrack
  * For the Mutant Fire Ant, returns the efficacy-multiplier instead
+ *
  * @param familiar The familiar whose fairy multiplier you're interested in
+ * @returns Weight-coefficient
  */
 export function findFairyMultiplier(familiar: Familiar): number {
   if (familiar === $familiar`Mutant Fire Ant`) {
@@ -699,29 +740,50 @@ export const holidayWanderers = new Map<string, Monster[]>([
   ],
 ]);
 
-export function getTodaysHolidayWanderers(): Monster[] {
-  return holiday()
-    .split("/")
-    .map((holiday) => holidayWanderers.get(holiday) ?? [])
-    .flat();
-}
-
 /**
- * Determines & returns whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
+ * Get today's holiday wanderers
+ *
+ * @returns List of holiday wanderer Monsters
  */
-export function canVisitUrl(): boolean {
-  return !(
-    currentRound() ||
-    inMultiFight() ||
-    choiceFollowsFight() ||
-    handlingChoice()
+export function getTodaysHolidayWanderers(): Monster[] {
+  return flat(
+    holiday()
+      .split("/")
+      .map((holiday) => holidayWanderers.get(holiday) ?? [])
   );
 }
 
 /**
+ * Determines whether or not we can safely call visitUrl(), based on whether we're in a fight, multi-fight, choice, etc
+ *
+ * @returns Whether urls can be safely visited
+ */
+export function canVisitUrl(): boolean {
+  if (currentRound()) {
+    logger.debug(`Current round is ${currentRound()}; you're in combat.`);
+    return false;
+  }
+  if (inMultiFight()) {
+    logger.debug("You're in a multifight.");
+    return false;
+  }
+  if (choiceFollowsFight()) {
+    logger.debug("A choice follows this fight.");
+    return false;
+  }
+  if (handlingChoice()) {
+    logger.debug("You're currently in a choice adventure");
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Calculate damage taken from a specific element after factoring in resistance
- * @param baseDamage
- * @param element
+ *
+ * @param baseDamage Base damage
+ * @param element Element
  * @returns damage after factoring in resistances
  */
 export function damageTakenByElement(
@@ -790,6 +852,8 @@ const hedgeTrap3 = new Map([
 ]);
 
 /**
+ * Get information from telescope
+ *
  * @returns An object with all information the telescope gives you about the sorceress's contests and maze
  */
 export function telescope(): {
@@ -807,3 +871,36 @@ export function telescope(): {
     hedge3: hedgeTrap3.get(get("telescope5")),
   };
 }
+
+/**
+ * Visit the desc_x.php page for a given thing
+ *
+ * @param thing Thing to examine
+ * @returns Contents of desc_x.php page
+ */
+export function examine(thing: Item | Familiar | Effect | Skill): string {
+  const url =
+    thing instanceof Item
+      ? `desc_item.php?whichitem=${thing.descid}`
+      : thing instanceof Familiar
+      ? `desc_familiar.php?which=${toInt(thing)}`
+      : thing instanceof Effect
+      ? `desc_effect.php?whicheffect=${thing.descid}`
+      : `desc_skill.php?whichskill=${toInt(thing)}`;
+  return visitUrl(url);
+}
+
+/**
+ * Picks an option based on your primestat
+ *
+ * @param options An object keyed by stat; it must either contain all stats, or have a `default` parameter.
+ * @returns The option corresponding to your primestat.
+ */
+export const byStat = makeByXFunction(() => myPrimestat().toString());
+/**
+ * Picks an option based on your player class
+ *
+ * @param options An object keyed by player class; it must either contain all classes, or have a `default` parameter.
+ * @returns The option corresponding to your player class.
+ */
+export const byClass = makeByXFunction(() => myClass().toString());

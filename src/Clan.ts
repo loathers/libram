@@ -101,8 +101,10 @@ export class Clan {
   }
 
   /**
-   * Join a clan and return its instance
+   * Join a clan
+   *
    * @param clanIdOrName Clan id or name
+   * @returns Instance of joined clan
    */
   static join(clanIdOrName: string | number): Clan {
     let clanId;
@@ -137,9 +139,11 @@ export class Clan {
   }
 
   /**
-   * Execute callback as a member of a clan
-   * and then restore prior membership
+   * Execute callback as a member of a clan and then restore prior membership
+   *
    * @param clanIdOrName Clan id or name
+   * @param callback Actions to carry out while member of specified can
+   * @returns Return value from callback
    */
   static with<T>(
     clanIdOrName: string | number,
@@ -185,7 +189,9 @@ export class Clan {
   }
 
   /**
-   * Return player's current Clan
+   * Get the player's current clan
+   *
+   * @returns Player's clan
    */
   static get(): Clan {
     return new Clan(getClanId(), getClanName());
@@ -193,6 +199,8 @@ export class Clan {
 
   /**
    * Get list of clans to which the player is whitelisted
+   *
+   * @returns List of clans
    */
   static getWhitelisted(): Clan[] {
     const page = visitUrl("clan_signup.php");
@@ -218,17 +226,26 @@ export class Clan {
 
   /**
    * Join clan
+   *
+   * @returns Joined clan
    */
   join(): Clan {
     return Clan.join(this.id);
   }
 
+  /**
+   * Check that this clan is the player's current clan
+   *
+   * @returns Whether this is the current clan
+   */
   check(): boolean {
     return visitUrl("clan_hall.php").includes(`<b>${this.name}</b>`);
   }
 
   /**
-   * Return the monster that is currently in the current clan's fax machine if any
+   * Determine the monster that is currently in the current clan's fax machine if any
+   *
+   * @returns The current fax monster
    */
   getCurrentFax(): Monster | null {
     this._check();
@@ -248,6 +265,8 @@ export class Clan {
 
   /**
    * List available ranks (name, degree and id) from the current clan
+   *
+   * @returns List of ranks
    */
   getRanks(): Rank[] {
     this._check();
@@ -278,9 +297,11 @@ export class Clan {
   /**
    * Add a player to the current clan's whitelist.
    * If the player is already in the whitelist this will change their rank or title.
+   *
    * @param player Player id or name
    * @param rankName Rank to give the player. If not provided they will be given the lowest rank
    * @param title Title to give the player. If not provided, will be blank
+   * @returns Success
    */
   addPlayerToWhitelist(
     player: string | number,
@@ -310,7 +331,9 @@ export class Clan {
 
   /**
    * Remove a player from the current clan's whitelist
+   *
    * @param player Player id or name
+   * @returns Success
    */
   removePlayerFromWhitelist(player: string | number): boolean {
     this._check();
@@ -325,7 +348,9 @@ export class Clan {
   }
 
   /**
-   * Return the amount of meat in the current clan's coffer.
+   * Return the amount of meat in the current clan's coffer
+   *
+   * @returns Amount of meat
    */
   public getMeatInCoffer(): number {
     this._check();
@@ -339,7 +364,9 @@ export class Clan {
 
   /**
    * Add the given amount of meat to the current clan's coffer.
+   *
    * @param amount Amount of meat to put in coffer
+   * @returns Success
    */
   putMeatInCoffer(amount: number): boolean {
     this._check();
@@ -405,6 +432,7 @@ export class Clan {
 
   /**
    * Put items in the stash
+   *
    * @param items Items to put in the stash
    * @returns Items successfully put in the stash
    */

@@ -38,6 +38,7 @@ import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 import * as GreyGoose from "./2022/GreyGoose";
 import * as JuneCleaver from "./2022/JuneCleaver";
 import * as TrainSet from "./2022/TrainSet";
+import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 
 export {
   AutumnAton,
@@ -47,6 +48,7 @@ export {
   BeachComb,
   Cartography,
   ChateauMantegna,
+  ClosedCircuitPayphone,
   CombatLoversLocket,
   ConspiracyIsland,
   CrimboShrub,

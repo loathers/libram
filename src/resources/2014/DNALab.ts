@@ -16,14 +16,14 @@ import { clamp } from "../../utils";
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 
 /**
- * Checks if you have DNA lab in inventory or installed
+ * @returns Whether or not you `have` DNA lab or it's installed
  */
 export function have(): boolean {
   return haveItem(lab) || getWorkshed() === lab;
 }
 
 /**
- * Checks if you have DNA lab installed
+ * @returns Whether the DNA Lab is your currently active workshed
  */
 export function installed(): boolean {
   return getWorkshed() === lab;
@@ -81,7 +81,9 @@ const tonicEffects = Array.from(phylaEffects.values());
 
 /**
  * Tells you whether you are currently hybridized. When passed with an input of any sort, tells you whether you are currently hybridized with that effect.
+ *
  * @param tonic Optional input. When passed, the function returns whether that specific effect is hybridized.
+ * @returns Whether the given tonic is currently hybridized
  */
 export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
   if (!tonic) return installed() && get("_dnaHybrid");
@@ -98,6 +100,7 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
 
 /**
  * Returns the tonic item associated with a particular phylum.
+ *
  * @param phylum The phylum in question.
  * @returns The tonic item associated with that phylum; returns $item.none for $phylum.none.
  */
@@ -108,6 +111,7 @@ export function getTonic(phylum: Phylum): Item {
 
 /**
  * Returns the tonic effect associated with a particular phylum.
+ *
  * @param phylum The phylum in question.
  * @returns The tonic effect associated with that phylum; returns $effect.none for $phylum.none.
  */
@@ -118,6 +122,7 @@ export function getEffect(phylum: Phylum): Effect {
 
 /**
  * Tells you which phylum to hunt down for a given effect or item.
+ *
  * @param dnatype The tonic effect or item in question
  * @returns The Phylum associated with that effect or item; null if an invalid choice
  */
@@ -137,6 +142,7 @@ export function phylumFor(dnatype: Effect | Item): Phylum | null {
 
 /**
  * Hybridize yourself with the current contents of your syringe, if possible.
+ *
  * @returns Whether or not we succeeded
  */
 export function hybridize(): boolean {
@@ -152,6 +158,7 @@ export function hybridize(): boolean {
 
 /**
  * Makes tonics with whatever phylum is currently in your syringe
+ *
  * @param {number} [amount=1] the number of tonics to make
  * @returns Whether we successfully made tonics; returns true if we made as many as we could, regardless of whether that was the number requested
  */
@@ -168,6 +175,7 @@ export function makeTonic(amount: 1 | 2 | 3 = 1): boolean {
 
 /**
  * Tells you how many tonics you can make the rest of the day.
+ *
  * @returns The remaining tonics you can make
  */
 export function tonicsLeft(): number {

@@ -6352,7 +6352,7 @@ var QuestData = /* @__PURE__ */ function() {
   }]), QuestData2;
 }(), kioskUrl = "place.php?whichplace=airport_stench&action=airport3_kiosk", maintUrl = "place.php?whichplace=airport_stench&action=airport3_tunnels", quests = [new QuestData("lube", 1, "Track Maintenance", "Super Luber", "questEStSuperLuber", "", 0, !1, $item(_templateObject129 || (_templateObject129 = _taggedTemplateLiteral20(["lube-shoes"]))), $location(_templateObject230 || (_templateObject230 = _taggedTemplateLiteral20(["Barf Mountain"])))), new QuestData("fuel", 0, "Electrical Maintenance", "Give Me Fuel", "questEStGiveMeFuel", "", 0, !1, $item(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral20(["none"]))), $location(_templateObject427 || (_templateObject427 = _taggedTemplateLiteral20(["The Toxic Teacups"])))), new QuestData("sexism", 2, "Sexism Reduction", "Social Justice Adventurer I", "questEStSocialJusticeI", "dinseySocialJusticeIProgress", 15, !0, $item(_templateObject517 || (_templateObject517 = _taggedTemplateLiteral20(["none"]))), $location(_templateObject614 || (_templateObject614 = _taggedTemplateLiteral20(["Pirates of the Garbage Barges"])))), new QuestData("racism", 3, "Racism Reduction", "Social Justice Adventurer II", "questEStSocialJusticeII", "dinseySocialJusticeIIProgress", 15, !0, $item(_templateObject711 || (_templateObject711 = _taggedTemplateLiteral20(["none"]))), $location(_templateObject811 || (_templateObject811 = _taggedTemplateLiteral20(["Uncle Gator's Country Fun-Time Liquid Waste Sluice"])))), new QuestData("fun", 4, "Compulsory Fun", "Whistling Zippity-Doo-Dah", "questEStZippityDooDah", "dinseyFunProgress", 15, !0, $item(_templateObject911 || (_templateObject911 = _taggedTemplateLiteral20(["Dinsey mascot mask"]))), $location(_templateObject1011 || (_templateObject1011 = _taggedTemplateLiteral20(["The Toxic Teacups"])))), new QuestData("trash", 6, "Waterway Debris Removal", "Teach a Man to Fish Trash", "questEStFishTrash", "dinseyFilthLevel", 0, !0, $item(_templateObject1110 || (_templateObject1110 = _taggedTemplateLiteral20(["trash net"]))), $location(_templateObject1210 || (_templateObject1210 = _taggedTemplateLiteral20(["Pirates of the Garbage Barges"])))), new QuestData("bear", 5, "Bear Removal", "Nasty, Nasty Bears", "questEStNastyBears", "dinseyNastyBearsDefeated", 8, !1, $item(_templateObject138 || (_templateObject138 = _taggedTemplateLiteral20(["none"]))), $location(_templateObject147 || (_templateObject147 = _taggedTemplateLiteral20(["Uncle Gator's Country Fun-Time Liquid Waste Sluice"])))), new QuestData("food", 7, "Guest Sustenance Assurance", "Will Work With Food", "questEStWorkWithFood", "dinseyTouristsFed", 30, !1, $item(_templateObject157 || (_templateObject157 = _taggedTemplateLiteral20(["none"]))), $location(_templateObject167 || (_templateObject167 = _taggedTemplateLiteral20(["Barf Mountain"]))))];
 function disposeGarbage() {
-  !get("_dinseyGarbageDisposed") && have($item(_templateObject177 || (_templateObject177 = _taggedTemplateLiteral20(["bag of park garbage"])))) && ((0, import_kolmafia26.visitUrl)(maintUrl), (0, import_kolmafia26.runChoice)(6));
+  return hasDisposedGarbage() ? !1 : (!hasDisposedGarbage() && have($item(_templateObject177 || (_templateObject177 = _taggedTemplateLiteral20(["bag of park garbage"])))) && ((0, import_kolmafia26.visitUrl)(maintUrl), (0, import_kolmafia26.runChoice)(6)), hasDisposedGarbage());
 }
 function hasQuest() {
   return quests.some(function(q) {
@@ -6373,43 +6373,46 @@ function hasActiveQuest() {
   return hasQuest() && !questComplete();
 }
 function acceptQuest(priority) {
-  var _quests$find$priority, _quests$find, page = (0, import_kolmafia26.visitUrl)(kioskUrl), choice = 6, at = (0, import_kolmafia26.indexOf)(page, "Available Assignments");
-  if (at != -1) {
-    var jobs = [];
-    quests.forEach(function(quest2) {
-      jobs.push(quest2.name);
-    });
-    var priorityNum = typeof priority == "string" ? (_quests$find$priority = (_quests$find = quests.find(function(q) {
-      return q.name === priority;
-    })) === null || _quests$find === void 0 ? void 0 : _quests$find.priority) !== null && _quests$find$priority !== void 0 ? _quests$find$priority : 7 : priority, availableJobs = [], jobChoices = [["none", 999]], _iterator = _createForOfIteratorHelper7(quests), _step;
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-        var quest = _step.value, job = quest.name, jobAt = (0, import_kolmafia26.indexOf)(page, job, at);
-        if (jobAt != -1) {
-          availableJobs.push(quest), jobChoices.push([job, jobAt]);
-          break;
-        }
+  var _quests$find$priority, _quests$find;
+  if (hasQuest())
+    return !1;
+  var page = (0, import_kolmafia26.visitUrl)(kioskUrl), choice = 6, at = (0, import_kolmafia26.indexOf)(page, "Available Assignments");
+  if (at == -1)
+    return !1;
+  var jobs = [];
+  quests.forEach(function(quest2) {
+    jobs.push(quest2.name);
+  });
+  var priorityNum = typeof priority == "string" ? (_quests$find$priority = (_quests$find = quests.find(function(q) {
+    return q.name === priority;
+  })) === null || _quests$find === void 0 ? void 0 : _quests$find.priority) !== null && _quests$find$priority !== void 0 ? _quests$find$priority : 7 : priority, availableJobs = [], jobChoices = [["none", 999]], _iterator = _createForOfIteratorHelper7(quests), _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+      var quest = _step.value, job = quest.name, jobAt = (0, import_kolmafia26.indexOf)(page, job, at);
+      if (jobAt != -1) {
+        availableJobs.push(quest), jobChoices.push([job, jobAt]);
+        break;
       }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
-    var bestJob = availableJobs.sort(function(a, b) {
-      return a.priority - b.priority;
-    })[0], sortedChoices = jobChoices.sort(function(a, b) {
-      return a[1] - b[1];
-    });
-    if (bestJob.priority <= priorityNum)
-      for (var index in sortedChoices) {
-        var jobName = sortedChoices[index][0];
-        if (jobName === bestJob.name) {
-          choice = parseInt(index) + 1;
-          break;
-        }
-      }
-    (0, import_kolmafia26.runChoice)(choice);
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
   }
+  var bestJob = availableJobs.sort(function(a, b) {
+    return a.priority - b.priority;
+  })[0], sortedChoices = jobChoices.sort(function(a, b) {
+    return a[1] - b[1];
+  });
+  if (bestJob.priority <= priorityNum)
+    for (var index in sortedChoices) {
+      var jobName = sortedChoices[index][0];
+      if (jobName === bestJob.name) {
+        choice = parseInt(index) + 1;
+        break;
+      }
+    }
+  return (0, import_kolmafia26.runChoice)(choice), hasQuest();
 }
 function turnInQuest() {
   questComplete() && (activeQuest().name === "racism" && _set("questEStSocialJusticeI", "unstarted"), (0, import_kolmafia26.visitUrl)(kioskUrl), (0, import_kolmafia26.runChoice)(3));
@@ -7154,6 +7157,9 @@ __export(Spacegate_exports, {
   dial: function() {
     return dial;
   },
+  dialRandom: function() {
+    return dialRandom;
+  },
   dialled: function() {
     return dialled;
   },
@@ -7171,6 +7177,9 @@ __export(Spacegate_exports, {
   },
   hazards: function() {
     return hazards;
+  },
+  hostileLife: function() {
+    return hostileLife;
   },
   intelligentLife: function() {
     return intelligentLife;
@@ -7250,13 +7259,13 @@ function _taggedTemplateLiteral26(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 function have23() {
-  return get("spacegateAlways") || get("_spacegateToday");
+  return get("spacegateAlways");
 }
 function updateStatus() {
   (0, import_kolmafia33.visitUrl)("place.php?whichplace=spacegate&action=sg_Terminal");
 }
 function dialled() {
-  return updateStatus(), get("_spacegateCoordinates") !== "";
+  return updateStatus(), get("_spacegateCoordinates") !== "" || get("_spacegateToday");
 }
 function hazards() {
   return get("_spacegateHazards");
@@ -7274,7 +7283,10 @@ function animalLife() {
   return get("_spacegateAnimalLife");
 }
 function intelligentLife() {
-  return get("_spacegateIntelligentLife");
+  return get("_spacegateIntelligentLife").includes("detected");
+}
+function hostileLife() {
+  return get("_spacegateIntelligentLife").includes("hostile");
 }
 function ruins() {
   return get("_spacegateRuins");
@@ -7302,33 +7314,41 @@ function hazardEquipment(hazards2) {
   });
 }
 function getHazardEquipment() {
+  if (!have23())
+    return !1;
   var equipment = hazardEquipment(hazards());
-  equipment.forEach(function(equip2) {
+  return equipment.forEach(function(equip2) {
     var num = (0, import_kolmafia33.toInt)(equip2) - 9404;
     (0, import_kolmafia33.visitUrl)("place.php?whichplace=spacegate&action=sg_requisition"), (0, import_kolmafia33.visitUrl)("choice.php?whichchoice=1233&option=".concat(num));
-  });
+  }), equipment.forEach(function(equip2) {
+    if ((0, import_kolmafia33.availableAmount)(equip2) !== 1)
+      return !1;
+  }), !0;
 }
 function getVaccine(choice) {
-  if (!get("_spacegateVaccine")) {
-    var nums = {
-      Rainbow: 1,
-      "Elemental Resistance": 1,
-      "Broad-Spectrum": 2,
-      Stats: 2,
-      Emotional: 3,
-      "Monster Level": 3
-    }, num = nums[choice];
-    if (!get("spacegateVaccine".concat(num)))
-      throw "You don't appear to have that Vaccine Unlocked!";
-    (0, import_kolmafia33.cliExecute)("spacegate vaccine ".concat(num));
-  }
+  if (get("_spacegateVaccine"))
+    return !1;
+  var nums = {
+    Rainbow: 1,
+    "Elemental Resistance": 1,
+    "Broad-Spectrum": 2,
+    Stats: 2,
+    Emotional: 3,
+    "Monster Level": 3
+  }, num = nums[choice];
+  if (!get("spacegateVaccine".concat(num)))
+    throw "You don't appear to have that Vaccine Unlocked!";
+  return (0, import_kolmafia33.cliExecute)("spacegate vaccine ".concat(num)), get("_spacegateVaccine");
 }
 function dial(address) {
-  if (!(!have23() || dialled())) {
-    if (!address.match("^[[alpha]]+$") || address.length !== 7)
-      throw "Invalid Spacegate Address - must be exactly 7 alphabetic characters";
-    (0, import_kolmafia33.cliExecute)("spacegate destination ".concat(address));
-  }
+  if (!have23() || dialled())
+    return !1;
+  if (!address.match("^[[alpha]]+$") || address.length !== 7)
+    throw "Invalid Spacegate Address - must be exactly 7 alphabetic characters";
+  return (0, import_kolmafia33.cliExecute)("spacegate destination ".concat(address)), dialled() && planetCoords() === address;
+}
+function dialRandom() {
+  return !have23() || dialled() ? !1 : ((0, import_kolmafia33.cliExecute)("spacegate destination random"), dialled());
 }
 
 // src/resources/2017/TunnelOfLove.ts

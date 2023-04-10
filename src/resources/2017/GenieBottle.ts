@@ -89,7 +89,7 @@ function getFlavorText(effect: Effect): string {
       `desc_effect.php?whicheffect=${effect.descid}`,
       /<blockquote>(.+)<\/blockquote>/
     );
-    return flavorText[1];
+    return flavorText;
   } catch (err) {
     if (err instanceof SaladError)
       throw new Error(

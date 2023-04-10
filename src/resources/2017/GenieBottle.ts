@@ -87,7 +87,7 @@ function getFlavorText(effect: Effect): string {
   try {
     return unsalad(
       `desc_effect.php?whicheffect=${effect.descid}`,
-      /<blockquote>(.+)<\/blockquote>/
+      /<blockquote>([\S\s]+)<\/blockquote>/
     );
   } catch (err) {
     if (err instanceof SaladError)
@@ -96,7 +96,7 @@ function getFlavorText(effect: Effect): string {
       );
     else
       throw new Error(
-        `Failed to get description text before wishing by for ${effect}`
+        `Failed to get description text before wishing for ${effect}`
       );
   }
 }

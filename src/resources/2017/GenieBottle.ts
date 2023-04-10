@@ -54,13 +54,13 @@ function unsalad(url: string, filter: RegExp): string {
   if (!text) throw new Error();
   if (!holiday().includes("April Fool's Day")) return text[1];
 
-  const fragments = text[1].split(" ");
+  let fragments = text[1].split(" ");
   for (let i = 0; i < 100; i++) {
     text = visitUrl(url).match(filter);
     if (!text) throw new Error();
     const newFragments = text[1].split(" ");
     if (fragments.length !== newFragments.length) throw new SaladError();
-    fragments.map((word, index) => {
+    fragments = fragments.map((word, index) => {
       const newWord = newFragments[index];
       if (word.match(/salad/i) && !newWord.match(/salad/i)) return newWord;
       else return word;
@@ -85,7 +85,7 @@ function getFlavorText(effect: Effect): string {
       throw new Error(
         `Unable to handle description for ${effect} due to April Fool's Salad.`
       );
-    throw new Error(
+    else throw new Error(
       `Failed to get description text before wishing by for ${effect}`
     );
   }

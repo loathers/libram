@@ -2,6 +2,7 @@ import {
   Effect,
   Item,
   Monster,
+  holiday,
   runChoice,
   runCombat,
   toInt,
@@ -47,15 +48,47 @@ export function canWishForMonster(): boolean {
   return get("_genieFightsUsed") < 3;
 }
 
+class SaladError extends Error {}
+function unsalad(url: string, filter: RegExp): string {
+  let text = visitUrl(url).match(filter);
+  if (!text) throw new Error();
+  if (!holiday().includes("April Fool's Day")) return text[1];
+
+  const fragments = text[1].split(" ");
+  for (let i = 0; i < 100; i++) {
+    text = visitUrl(url).match(filter);
+    if (!text) throw new Error();
+    const newFragments = text[1].split(" ");
+    if (fragments.length !== newFragments.length) throw new SaladError();
+    fragments.map((word, index) => {
+      const newWord = newFragments[index];
+      if (word.match(/salad/i) && !newWord.match(/salad/i)) return newWord;
+      else return word;
+    });
+    if (fragments.every((word) => !word.match(/salad/i))) {
+      return fragments.join(" ");
+    }
+  }
+
+  throw new SaladError();
+}
+
 function getFlavorText(effect: Effect): string {
-  const description = visitUrl(`desc_effect.php?whicheffect=${effect.descid}`);
-  const flavorText = description.match(/<blockquote>(.+)<\/blockquote>/);
-  if (!flavorText || !flavorText[1]) {
+  try {
+    const flavorText = unsalad(
+      `desc_effect.php?whicheffect=${effect.descid}`,
+      /<blockquote>(.+)<\/blockquote>/
+    );
+    return flavorText[1];
+  } catch (err) {
+    if (err instanceof SaladError)
+      throw new Error(
+        `Unable to handle description for ${effect} due to April Fool's Salad.`
+      );
     throw new Error(
-      `Failed to match flavortext before wishing by description for ${effect}`
+      `Failed to get description text before wishing by for ${effect}`
     );
   }
-  return flavorText[1];
 }
 
 function _wish(item: Item, target: Effect | Monster | GenieOption): string {

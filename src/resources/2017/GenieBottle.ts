@@ -44,7 +44,7 @@ function getFlavorText(effect: Effect): string {
   const flavorText = description.match(/<blockquote>(.+)<\/blockquote>/);
   if (!flavorText || !flavorText[1]) {
     throw new Error(
-      `Failed to match flavortext when wishing by description for ${effect}`
+      `Failed to match flavortext before wishing by description for ${effect}`
     );
   }
   return flavorText[1];
@@ -69,12 +69,13 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): boolean {
     return runChoice(1, `wish=${targetPhrase}`) !== "";
   }
 
-  return false;
+  throw new Error(`Unhandled wish ${target}`);
 }
 
 /**
  * Uses the genie bottle to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Will not use pocket wishes, use @function pocketWishFor for that instead.
+ * 
  * @param target The desired effect to be wished for.
  * @returns A boolean denoting success or failure.
  */
@@ -87,6 +88,7 @@ export function wishFor(target: Effect | Monster | GenieOption): boolean {
 /**
  * Uses a pocket wish to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Does not use the genie bottle IotM directly, use @function wishFor for that instead.
+ * 
  * @param target The desired effect to be wished for.
  * @returns A boolean denoting success or failure.
  */

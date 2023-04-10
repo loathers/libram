@@ -85,11 +85,10 @@ function getFlavorText(effect: Effect): string {
   const shortcut = badAprils[effect.name];
   if (shortcut) return shortcut;
   try {
-    const flavorText = unsalad(
+    return unsalad(
       `desc_effect.php?whicheffect=${effect.descid}`,
       /<blockquote>(.+)<\/blockquote>/
     );
-    return flavorText;
   } catch (err) {
     if (err instanceof SaladError)
       throw new Error(
@@ -140,7 +139,7 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): string {
  */
 export function wishFor(
   target: Effect | Monster | GenieOption
-): string | "nobottle" | "nofights" | "nowishes" | "nofights" | "wishfailed" {
+): string | "nobottle" | "nofights" | "nowishes" | "wishfailed" {
   if (!have()) return "nobottle";
   if (target instanceof Monster && !canWishForMonster()) return "nofights";
   if (!canWishFromBottle()) return "nowishes";
@@ -159,7 +158,7 @@ export function wishFor(
  */
 export function pocketWishFor(
   target: Effect | Monster | GenieOption
-): string | "nowishes" | "wishfailed" {
+): string | "nofights" | "nowishes" | "wishfailed" {
   if (target instanceof Monster && !canWishForMonster()) return "nofights";
   if (!_have(pocketWish)) return "nowishes";
   return _wish(pocketWish, target);

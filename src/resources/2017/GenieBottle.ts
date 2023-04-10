@@ -85,9 +85,10 @@ function getFlavorText(effect: Effect): string {
       throw new Error(
         `Unable to handle description for ${effect} due to April Fool's Salad.`
       );
-    else throw new Error(
-      `Failed to get description text before wishing by for ${effect}`
-    );
+    else
+      throw new Error(
+        `Failed to get description text before wishing by for ${effect}`
+      );
   }
 }
 
@@ -101,7 +102,6 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): string {
   }
 
   if (target instanceof Monster) {
-    if (!canWishForMonster()) return "";
     const wishResult = runChoice(1, `wish to fight a ${target}`);
     const match = wishResult.match(/<a href="fight.php">/);
     if (match) {
@@ -122,12 +122,17 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): string {
  * Will not use pocket wishes, use @function pocketWishFor for that instead.
  *
  * @param target The desired effect to be wished for.
- * @returns A string containing the successful page text, "nobottle" if not owned, "nowishes" if 3 genie bottle wishes are already consumed, or "wishfailed" if the genie returned an error.
+ * @returns A string containing the successful page text,
+ * "nobottle" if not owned,
+ * "nofights" if 3 fights are already consumed,
+ * "nowishes" if 3 genie bottle wishes are already consumed,
+ * "wishfailed" if the genie returned an error.
  */
 export function wishFor(
   target: Effect | Monster | GenieOption
-): string | "nobottle" | "nowishes" | "wishfailed" {
+): string | "nobottle" | "nofights" | "nowishes" | "nofights" | "wishfailed" {
   if (!have()) return "nobottle";
+  if (target instanceof Monster && !canWishForMonster()) return "nofights";
   if (!canWishFromBottle()) return "nowishes";
   return _wish(bottle, target);
 }
@@ -137,11 +142,15 @@ export function wishFor(
  * Does not use the genie bottle IotM directly, use @function wishFor for that instead.
  *
  * @param target The desired effect to be wished for.
- * @returns A string containing the successful page text, "nowishes" if no pocket wish in inventory, or "wishfailed" if the genie returned an error.
+ * @returns A string containing the successful page text,
+ * "nofights" if 3 fights are already consumed,
+ * "nowishes" if no pocket wish in inventory,
+ * "wishfailed" if the genie returned an error.
  */
 export function pocketWishFor(
   target: Effect | Monster | GenieOption
 ): string | "nowishes" | "wishfailed" {
+  if (target instanceof Monster && !canWishForMonster()) return "nofights";
   if (!_have(pocketWish)) return "nowishes";
   return _wish(pocketWish, target);
 }

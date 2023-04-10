@@ -1,4 +1,12 @@
-import { Effect, Item, Monster, runChoice, toInt, visitUrl } from "kolmafia";
+import {
+  Effect,
+  Item,
+  Monster,
+  runChoice,
+  runCombat,
+  toInt,
+  visitUrl,
+} from "kolmafia";
 import { have as _have } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -50,24 +58,28 @@ function getFlavorText(effect: Effect): string {
   return flavorText[1];
 }
 
-function _wish(item: Item, target: Effect | Monster | GenieOption): boolean {
+function _wish(item: Item, target: Effect | Monster | GenieOption): string {
   visitUrl(`inv_use.php?whichitem=${toInt(item)}`);
 
   if (target instanceof Effect) {
     const wishResult = runChoice(1, `wish=to be ${getFlavorText(target)}`);
     const match = wishResult.match(/You acquire an effect: <b>([^<]+)<\/b>/);
-    return !!match && match[1] === target.name;
+    return (match && match[1]) || "wishfailed";
   }
 
   if (target instanceof Monster) {
-    if (!canWishForMonster()) return false;
-    return false;
+    if (!canWishForMonster()) return "";
+    const wishResult = runChoice(1, `wish to fight a ${target}`);
+    const match = wishResult.match(/<a href="fight.php">/);
+    if (match) {
+      visitUrl("fight.php");
+      return runCombat();
+    }
+    return "wishfailed";
   }
 
   const targetPhrase = GeniePhrases[target];
-  if (targetPhrase) {
-    return runChoice(1, `wish=${targetPhrase}`) !== "";
-  }
+  if (targetPhrase) return runChoice(1, `wish=${targetPhrase}`);
 
   throw new Error(`Unhandled wish ${target}`);
 }
@@ -75,24 +87,28 @@ function _wish(item: Item, target: Effect | Monster | GenieOption): boolean {
 /**
  * Uses the genie bottle to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Will not use pocket wishes, use @function pocketWishFor for that instead.
- * 
+ *
  * @param target The desired effect to be wished for.
- * @returns A boolean denoting success or failure.
+ * @returns A string containing the successful page text, "nobottle" if not owned, "nowishes" if 3 genie bottle wishes are already consumed, or "wishfailed" if the genie returned an error.
  */
-export function wishFor(target: Effect | Monster | GenieOption): boolean {
-  if (!have()) return false;
-  if (!canWishFromBottle()) return false;
+export function wishFor(
+  target: Effect | Monster | GenieOption
+): string | "nobottle" | "nowishes" | "wishfailed" {
+  if (!have()) return "nobottle";
+  if (!canWishFromBottle()) return "nowishes";
   return _wish(bottle, target);
 }
 
 /**
  * Uses a pocket wish to acquire an effect from description text instead of the effect name. Helpful for ambiguous effect names.
  * Does not use the genie bottle IotM directly, use @function wishFor for that instead.
- * 
+ *
  * @param target The desired effect to be wished for.
- * @returns A boolean denoting success or failure.
+ * @returns A string containing the successful page text, "nowishes" if no pocket wish in inventory, or "wishfailed" if the genie returned an error.
  */
-export function pocketWishFor(target: Effect | Monster | GenieOption): boolean {
-  if (!_have(pocketWish)) return false;
+export function pocketWishFor(
+  target: Effect | Monster | GenieOption
+): string | "nowishes" | "wishfailed" {
+  if (!_have(pocketWish)) return "nowishes";
   return _wish(pocketWish, target);
 }

@@ -74,6 +74,16 @@ function unsalad(url: string, filter: RegExp): string {
 }
 
 function getFlavorText(effect: Effect): string {
+  const badAprils: { [key: string]: string } = {
+    "Oilsphere":
+      "You are surrounded by a glistening sphere of salad oil. It's good for your heart, in that it prevents your heart from being incinerated or frozen.",
+    "Salad Days":
+      "You're chock full of fiber, because the salad you ate was made almost entirely of indigestible plant matter.",
+    "Sea Guts":
+      "Sea guts are like sea legs except internal. Also have I told you about my new sea guts diet? Any time I see guts I eat a healthy salad instead.",
+  };
+  const shortcut = badAprils[effect.name];
+  if(shortcut) return shortcut;
   try {
     const flavorText = unsalad(
       `desc_effect.php?whicheffect=${effect.descid}`,

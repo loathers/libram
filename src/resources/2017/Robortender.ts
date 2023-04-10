@@ -60,6 +60,7 @@ export function dropFrom(target: Monster | Phylum): Item {
 
 /**
  * Determines the probability of getting a robortender drop based on number of drops received
+ *
  * @param dropNumber The number of drops to assume you've already received; defaults to mafia's tracked amount
  * @returns The probability of getting a robort drop
  */

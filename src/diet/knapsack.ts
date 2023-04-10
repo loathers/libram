@@ -7,8 +7,14 @@ class Not<T> {
   }
 }
 
-// Assuming list is already sorted, count adjacent items.
-// Effectively run-length encoding.
+/**
+ * Assuming list is already sorted, count adjacent items.
+ * Effectively run-length encoding.
+ *
+ * @param list List to count
+ * @param isEqual Function that determines item equality
+ * @returns List of 2-tuples relating item to count
+ */
 function aggregate<T>(
   list: T[],
   isEqual?: (x: T, y: T) => boolean
@@ -32,6 +38,7 @@ function aggregate<T>(
 
 /**
  * Solve the knapsack problem.
+ *
  * @param values Array of {[item, value, weight, maximum]} tuples for knapsack parameter.
  * @param capacity Capacity of knapsack.
  * @returns Tuple {[totalValue, items]} of selected items and total value of those items.
@@ -139,11 +146,12 @@ export function knapsack<T>(
 
 /**
  * Find the best solution to a knapsack subproblem.
+ *
  * @param memoizationTable Memoization table for dynamic programming approach.
  * @param values Array of {[item, value, weight, maximum]} tuples for knapsack parameter.
  * @param currentIndex Current index into values array - only add items before this index.
  * @param remainingCapacity Remaining capacity of knapsack.
- * @returns
+ * @returns Tuple of value to item
  */
 function bestSolution<T>(
   memoizationTable: ([number, T[]] | null)[][],

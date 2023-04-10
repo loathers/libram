@@ -7,28 +7,28 @@ import { $familiar } from "../../template-string";
 export const familiar = $familiar`Obtuse Angel`;
 
 /**
- * Returns true if the player has an Obtuse Angel
+ * @returns whether the player has an Obtuse Angel
  */
 export function have(): boolean {
   return _have(familiar);
 }
 
 /**
- * Returns number of badly romantic arrows used
+ * @returns number of badly romantic arrows used today
  */
 export function getBadlyRomanticArrowUses(): number {
   return Math.max(0, get("_badlyRomanticArrows"));
 }
 
 /**
- * Returns true if badly romantic arrow can still be used
+ * @returns whether badly romantic arrow can still be used
  */
 export function haveBadlyRomanticArrowUsesRemaining(): boolean {
   return getBadlyRomanticArrowUses() === 0;
 }
 
 /**
- * Returns true if the player could use badly romantic arrow in theory
+ * @returns whether the player could use badly romantic arrow in theory
  */
 export function couldUseBadlyRomanticArrow(): boolean {
   return have() && haveBadlyRomanticArrowUsesRemaining();
@@ -36,20 +36,22 @@ export function couldUseBadlyRomanticArrow(): boolean {
 
 /**
  * Prepares badly romantic arrow for use
+ *
+ * @returns success
  */
 export function prepareBadlyRomanticArrow(): boolean {
   return useFamiliar(familiar);
 }
 
 /**
- * Returns true if the player can use badly romantic arrow right now
+ * @returns whether the player can use badly romantic arrow right now
  */
 export function canUseBadlyRomanticArrow(): boolean {
   return isCurrentFamiliar(familiar) && haveBadlyRomanticArrowUsesRemaining();
 }
 
 /**
- * Returns the current badly romantic arrow monster target
+ * @returns current badly romantic arrow monster target
  */
 export function getBadlyRomanticArrowMonster(): Monster | null {
   return get("romanticTarget");

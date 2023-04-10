@@ -1,6 +1,3 @@
-import "core-js/modules/es.object.entries";
-import "core-js/modules/es.object.from-entries";
-
 import {
   Bounty,
   Class,
@@ -142,11 +139,6 @@ export const getStat = createMafiaClassPropertyGetter(Stat, toStat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall, toThrall);
 
-/**
- * Returns the value of a mafia property, either built in or custom
- * @param property Name of the property
- * @param _default Default value for the property to take if not set
- */
 export function get(property: BooleanProperty): boolean;
 export function get(property: BooleanProperty, _default: boolean): boolean;
 export function get(property: NumericProperty): number;
@@ -174,6 +166,13 @@ export function get(property: string, _default: Familiar): Familiar | null;
 export function get(property: string, _default: boolean): boolean;
 export function get(property: string, _default: number): number;
 export function get(property: string, _default?: string): string;
+/**
+ * Gets the value of a mafia property, either built in or custom
+ *
+ * @param property Name of the property
+ * @param _default Default value for the property to take if not set
+ * @returns Value of the mafia property
+ */
 export function get(property: string, _default?: unknown): unknown {
   const value = getString(property);
 
@@ -220,11 +219,6 @@ export function get(property: string, _default?: unknown): unknown {
   }
 }
 
-/**
- * Sets the value of a mafia property, either built in or custom
- * @param property Name of the property
- * @param value Value to give the property
- */
 export function set(property: BooleanProperty, value: boolean): void;
 export function set(property: NumericProperty, value: number): void;
 export function set(
@@ -241,7 +235,12 @@ export function set<D extends { toString(): string }>(
   property: string,
   value: D
 ): void;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * Sets the value of a mafia property, either built in or custom
+ *
+ * @param property Name of the property
+ * @param value Value to give the property
+ */
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
@@ -254,54 +253,89 @@ type Properties = Partial<{
   [P in KnownProperty]: unknown;
 }>;
 
+/**
+ * Sets the value of a set of mafia properties
+ *
+ * @param properties Set of properties
+ */
 export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {
     set(prop, value as { toString(): string });
   }
 }
 
-export function withProperties(
+/**
+ * Carries out a callback during which a set of properties will be set as supplied
+ *
+ * @param properties Properties to set during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
+ */
+export function withProperties<T>(
   properties: Properties,
-  callback: () => void
-): void {
+  callback: () => T
+): T {
   const propertiesBackup = Object.fromEntries(
     Object.entries(properties).map(([prop]) => [prop, get(prop)])
   ) as Properties;
   setProperties(properties);
   try {
-    callback();
+    return callback();
   } finally {
     setProperties(propertiesBackup);
   }
 }
 
-export function withProperty<P extends KnownProperty>(
+/**
+ * Carries out a callback during which a property will be set as supplied
+ *
+ * @param property Property to set during callback
+ * @param value Value to set property during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
+ */
+export function withProperty<P extends KnownProperty, T>(
   property: P,
   value: unknown,
-  callback: () => void
-): void {
-  withProperties({ [property]: value }, callback);
+  callback: () => T
+): T {
+  return withProperties({ [property]: value }, callback);
 }
 
-export function withChoices(
+/**
+ * Carries out a callback during which a set of choices will be handled as supplied
+ *
+ * @param choices Choices to set during callback
+ * @param callback Callback to execute with set choices
+ * @returns Return value of the supplied callback
+ */
+export function withChoices<T>(
   choices: { [choice: number]: number | string },
-  callback: () => void
-): void {
+  callback: () => T
+): T {
   const properties = Object.fromEntries(
     Object.entries(choices).map(([choice, option]) => [
       `choiceAdventure${choice}` as NumericOrStringProperty,
       option,
     ])
   );
-  withProperties(properties, callback);
+  return withProperties(properties, callback);
 }
 
-export function withChoice(
+/**
+ * Carries out a callback during which a choice will be handled as supplied
+ *
+ * @param choice Choice to set during callback
+ * @param value How to handle choice during callback
+ * @param callback Callback to execute with set properties
+ * @returns Return value of the supplied callback
+ */
+export function withChoice<T>(
   choice: number,
   value: number | string,
-  callback: () => void
-): void {
-  withChoices({ [choice]: value }, callback);
+  callback: () => T
+): T {
+  return withChoices({ [choice]: value }, callback);
 }
 
 export class PropertiesManager {
@@ -313,6 +347,7 @@ export class PropertiesManager {
 
   /**
    * Sets a collection of properties to the given values, storing the old values.
+   *
    * @param propertiesToSet A Properties object, keyed by property name.
    */
   set(propertiesToSet: Properties): void {
@@ -328,6 +363,7 @@ export class PropertiesManager {
 
   /**
    * Sets a collection of choice adventure properties to the given values, storing the old values.
+   *
    * @param choicesToSet An object keyed by choice adventure number.
    */
   setChoices(choicesToSet: { [choice: number]: number | string }): void {
@@ -343,6 +379,7 @@ export class PropertiesManager {
 
   /**
    * Sets a single choice adventure property to the given value, storing the old value.
+   *
    * @param choiceToSet The number of the choice adventure to set the property for.
    * @param value The value to assign to that choice adventure.
    */
@@ -352,6 +389,7 @@ export class PropertiesManager {
 
   /**
    * Resets the given properties to their original stored value. Does not delete entries from the manager.
+   *
    * @param properties Collection of properties to reset.
    */
   reset(...properties: KnownProperty[]): void {
@@ -372,6 +410,7 @@ export class PropertiesManager {
 
   /**
    * Stops storing the original values of inputted properties.
+   *
    * @param properties Properties for the manager to forget.
    */
   clear(...properties: KnownProperty[]): void {
@@ -391,6 +430,7 @@ export class PropertiesManager {
 
   /**
    * Increases a numeric property to the given value if necessary.
+   *
    * @param property The numeric property we want to potentially raise.
    * @param value The minimum value we want that property to have.
    * @returns Whether we needed to change the property.
@@ -405,6 +445,7 @@ export class PropertiesManager {
 
   /**
    * Decrease a numeric property to the given value if necessary.
+   *
    * @param property The numeric property we want to potentially lower.
    * @param value The maximum value we want that property to have.
    * @returns Whether we needed to change the property.
@@ -419,6 +460,7 @@ export class PropertiesManager {
 
   /**
    * Creates a new PropertiesManager with identical stored values to this one.
+   *
    * @returns A new PropertiesManager, with identical stored values to this one.
    */
   clone(): PropertiesManager {
@@ -429,6 +471,7 @@ export class PropertiesManager {
 
   /**
    * Clamps a numeric property, modulating it up or down to fit within a specified range
+   *
    * @param property The numeric property to clamp
    * @param min The lower bound for what we want the property to be allowed to be.
    * @param max The upper bound for what we want the property to be allowed to be.
@@ -447,6 +490,7 @@ export class PropertiesManager {
 
   /**
    * Determines whether this PropertiesManager has identical stored values to another.
+   *
    * @param other The PropertiesManager to compare to this one.
    * @returns Whether their StoredValues are identical.
    */
@@ -464,6 +508,7 @@ export class PropertiesManager {
 
   /**
    * Merges a PropertiesManager onto this one, letting the input win in the event that both PropertiesManagers have a value stored.
+   *
    * @param other The PropertiesManager to be merged onto this one.
    * @returns A new PropertiesManager with stored values from both its parents.
    */
@@ -475,6 +520,7 @@ export class PropertiesManager {
 
   /**
    * Merges an arbitrary collection of PropertiesManagers, letting the rightmost PropertiesManager win in the event of verlap.
+   *
    * @param mergees The PropertiesManagers to merge together.
    * @returns A PropertiesManager that is just an amalgam of all the constituents.
    */

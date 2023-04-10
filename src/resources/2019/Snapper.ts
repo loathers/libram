@@ -48,6 +48,7 @@ export const itemPhylum = new Map(
 
 /**
  * Return whether you have a Red-Nosed Snapper.
+ *
  * @returns True if you have a Red-Nosed Snapper, false otherwise.
  */
 export function have(): boolean {
@@ -56,6 +57,7 @@ export function have(): boolean {
 
 /**
  * Get the phylum currently being tracked by the snapper.
+ *
  * @returns Tracked phylum, or null if no phylum tracked.
  */
 export function getTrackedPhylum(): Phylum | null {
@@ -64,6 +66,7 @@ export function getTrackedPhylum(): Phylum | null {
 
 /**
  * Set snapper tracking to a certain phylum.
+ *
  * @param phylum Phylum to track.
  */
 export function trackPhylum(phylum: Phylum): void {
@@ -78,6 +81,7 @@ export function trackPhylum(phylum: Phylum): void {
 
 /**
  * Get progress to next snapper drop.
+ *
  * @returns Number of fights completed (out of 11) to reach next drop.
  */
 export function getProgress(): number {

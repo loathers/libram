@@ -2,6 +2,7 @@ import { cliExecute, getCounter, getCounters } from "kolmafia";
 
 /**
  * Returns Infinity for counters that do not exist, and otherwise returns the duration of the counter
+ *
  * @param counter The name of the counter in question
  * @returns Infinity if the counter does not exist; otherwise returns the duration of the counter
  */
@@ -18,6 +19,7 @@ export function get(counter: string): number {
 
 /**
  * The world is everything that is the case. This determines which counters are the case.
+ *
  * @param counter The name of the counter in question
  * @returns True for counters which currently exist; false for those which do not
  */
@@ -29,6 +31,7 @@ export function exists(counter: string): boolean {
 
 /**
  * Creates a manual counter with specified name and duration
+ *
  * @param counter Name of the counter to manually create
  * @param duration Duration of counter to manually set
  * @returns Whether the counter was successfully set

@@ -1,7 +1,8 @@
 import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
+
 import { Macro } from "../combat";
 import { Requirement } from "../maximize";
-import { sum } from "../utils";
+import { sum, flat } from "../utils";
 
 export type FindActionSourceConstraints = {
   /**
@@ -67,6 +68,12 @@ export type ActionConstraints = {
   cost?: () => number;
 };
 
+/**
+ * Merge a set of constraints into one
+ *
+ * @param allConstraints Constraints to mege
+ * @returns Merged constraints
+ */
 function mergeConstraints(
   ...allConstraints: ActionConstraints[]
 ): ActionConstraints | null {
@@ -164,6 +171,7 @@ export class ActionSource {
 
   /**
    * Create a compound action source with merged constraints.
+   *
    * @param others Other actions to have available.
    * @returns Merged constraints, or null if they are inconsistent.
    */
@@ -177,7 +185,7 @@ export class ActionSource {
       return null;
     }
     return new ActionSource(
-      [...actions.map((action) => action.source).flat()],
+      [...flat(actions.map((action) => action.source))],
       () => sum(actions, (action) => action.potential()),
       Macro.step(...actions.map((action) => action.macro)),
       constraints
@@ -186,6 +194,7 @@ export class ActionSource {
 
   /**
    * Perform all preparation necessary to make this action available.
+   *
    * @param otherRequirements Any other equipment requirements.
    * @returns Whether preparation succeeded.
    */
@@ -206,6 +215,7 @@ export class ActionSource {
   /**
    * Perform all preparation necessary to make this action available.
    * Throws an error if preparation fails.
+   *
    * @param otherRequirements Any other equipment requirements.
    */
   ensure(otherRequirements?: Requirement): void {
@@ -215,6 +225,13 @@ export class ActionSource {
   }
 }
 
+/**
+ * See if a supplied action meets a set of constraints
+ *
+ * @param action Action to test
+ * @param constraints Constraints to apply
+ * @returns Whether action meets constraints
+ */
 function filterAction(
   action: ActionSource,
   constraints: FindActionSourceConstraints
@@ -236,6 +253,7 @@ function filterAction(
 
 /**
  * Find an available action source subject to constraints.
+ *
  * @param actions Action source list.
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Available action source satisfying constraints, or null.
@@ -254,6 +272,7 @@ export function findActionSource(
 /**
  * Count available action sources subject to constraints. Note that, if
  * constraints.maximumCost is high enough, this will return Infinity.
+ *
  * @param actions Action source list.
  * @param constraints Preexisting constraints that restrict possible sources.
  * @returns Count of available action sources.

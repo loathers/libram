@@ -6,10 +6,20 @@ import { clamp, Tuple } from "../../utils";
 
 export const item = $item`model train set`;
 
+/**
+ * Determines whether the Model Train Set is your current workshed
+ *
+ * @returns Whether the Model Train Set is your current workshed
+ */
 export function installed(): boolean {
   return getWorkshed() === item;
 }
 
+/**
+ * Determines whether you `have` the model train set (or if it is installed)
+ *
+ * @returns Whether you `have` the model train set or it's installed
+ */
 export function have(): boolean {
   return installed() || have_(item);
 }
@@ -122,20 +132,42 @@ const trainsetEffectsDoubled: Map<Station, Effect> = new Map([
   [Station.PRAWN_SILO, Effect.get("Doubly Craving Prawns")],
 ]);
 
+/**
+ * Returns an effect--if one exists--for a given train station
+ *
+ * @param station The train station to check the effect of
+ * @returns The effect associated with the given station
+ */
 export function effect(station: Station): Effect | null {
   return trainsetEffects.get(station) ?? null;
 }
 
+/**
+ * Returns an effect--if one exists--for a given train station, assuming it's been primed by the coal station
+ *
+ * @param station The train station to check the doubled effect of
+ * @returns The effect associated with given station, under the influence of coal
+ */
 export function doubledEffect(station: Station): Effect | null {
   return trainsetEffectsDoubled.get(station) ?? null;
 }
 
 export type Cycle = Tuple<Station, 8>;
 
+/**
+ * Determines the current configuration of train stations
+ *
+ * @returns An 8-tuple consisting of the stations currently installed in your Model Train Set; this functions even if the Model Train Set isn't your active workshed
+ */
 export function cycle(): Cycle {
   return get("trainsetConfiguration").split(",") as Cycle;
 }
 
+/**
+ * Determines how many turns until you can next configure the Model Train Set
+ *
+ * @returns How many turns until you can next configure the Model Train Set
+ */
 export function nextConfigurable(): number {
   return clamp(
     get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"),
@@ -144,6 +176,11 @@ export function nextConfigurable(): number {
   );
 }
 
+/**
+ * Determines whether you can currently configure your Model Train Set
+ *
+ * @returns Whether you can currently configure your Model Train Set
+ */
 export function canConfigure(): boolean {
   return installed() && !nextConfigurable();
 }
@@ -172,10 +209,22 @@ const pieces: Station[] = [
   Station.ORE_HOPPER,
 ];
 
+/**
+ * Converts a given station to the integer value KoL associates with them
+ *
+ * @param station The station in question
+ * @returns The integer value KoL assigns the train station in question
+ */
 function stationToInt(station: Station): number {
   return pieces.indexOf(station);
 }
 
+/**
+ * Sets your model train station to the given configuration, if able
+ *
+ * @param configuration The cycle to try to set your model train station to
+ * @returns Whether your model train station matches the given configuration
+ */
 export function setConfiguration(configuration: Cycle): boolean {
   if (!canConfigure()) return false;
 
@@ -195,6 +244,11 @@ export function setConfiguration(configuration: Cycle): boolean {
   );
 }
 
+/**
+ * Determines the next station you expect to encounter when the Model Train Station is active
+ *
+ * @returns The next station you expect to encounter when the Model Train Station is active
+ */
 export function next(): Station {
   return cycle()[get("trainsetPosition") % 8];
 }

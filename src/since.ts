@@ -1,5 +1,6 @@
 /**
  * Provides functions for checking KoLmafia's version and revision.
+ *
  * @packageDocumentation
  */
 
@@ -27,6 +28,7 @@ KolmafiaVersionError.prototype.name = "KolmafiaVersionError";
 /**
  * Returns the currently executing script name, suitable for embedding in an
  * error message.
+ *
  * @returns Path of the main script wrapped in single-quotes, or `"This script"`
  *    if the path cannot be determined
  */
@@ -41,11 +43,11 @@ function getScriptName(): string {
  * Otherwise, does nothing.
  *
  * This behaves like the `since rXXX;` statement in ASH.
+ *
  * @param revision Revision number
  * @throws {KolmafiaVersionError}
  *    If KoLmafia's revision number is less than `revision`.
  * @throws {TypeError} If `revision` is not an integer
- *
  * @example
  * ```ts
  * // Throws if KoLmafia revision is less than r20500
@@ -74,6 +76,7 @@ export function sinceKolmafiaRevision(revision: number): void {
  * Otherwise, does nothing.
  *
  * This behaves like the `since X.Y;` statement in ASH.
+ *
  * @param majorVersion Major version number
  * @param minorVersion Minor version number
  * @deprecated Point versions are no longer released by KoLmafia
@@ -82,7 +85,6 @@ export function sinceKolmafiaRevision(revision: number): void {
  *    versions are equal but the minor version is less than `minorVersion`
  * @throws {TypeError}
  *    If either `majorVersion` or `minorVersion` are not integers
- *
  * @example
  * ```ts
  * // Throws if KoLmafia version is less than 20.7

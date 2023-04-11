@@ -904,3 +904,13 @@ export const byStat = makeByXFunction(() => myPrimestat().toString());
  * @returns The option corresponding to your player class.
  */
 export const byClass = makeByXFunction(() => myClass().toString());
+
+/**
+ * Use an item with visitUrl instead of `use`; this is sometimes useful
+ *
+ * @param item The item you want to use
+ * @returns The html of the resulting page
+ */
+export function directlyUse(item: Item): string {
+  return visitUrl(`inv_use.php?which=3&whichitem=${toInt(item)}&pwd`);
+}

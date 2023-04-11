@@ -1,4 +1,3 @@
-/* eslint "jsdoc/require-jsdoc": "warn" */
 import {
   indexOf,
   Item,
@@ -12,10 +11,16 @@ import { getRemainingLiver, have as haveItem } from "../../lib";
 import { get, set } from "../../property";
 import { $item, $location } from "../../template-string";
 
+/**
+ * @returns Whether you permanently own Dinseylandfill
+ */
 export function have(): boolean {
   return get("stenchAirportAlways");
 }
 
+/**
+ * @returns Whether you have access to Dinseylandfill currently
+ */
 export function available(): boolean {
   return have() || get("_stenchAirportToday");
 }
@@ -177,13 +182,25 @@ export const quests = [
   ),
 ];
 
-export function disposeGarbage(): void {
-  if (!get("_dinseyGarbageDisposed") && haveItem($item`bag of park garbage`)) {
+/**
+ * Disposes of a Bag of park garbage in the Maintenance Tunnels for daily funfunds
+ *
+ * @returns Whether you successfully deposited a bag for funfunds
+ */
+export function disposeGarbage(): boolean {
+  if (hasDisposedGarbage()) {
+    return false;
+  }
+  if (!hasDisposedGarbage() && haveItem($item`bag of park garbage`)) {
     visitUrl(maintUrl);
     runChoice(6);
   }
+  return hasDisposedGarbage();
 }
 
+/**
+ * @returns Whether you have a current Dinsey quest
+ */
 export function hasQuest(): boolean {
   return quests.some((q) => q.currentQuest());
 }
@@ -201,25 +218,43 @@ const BLANK_QUEST = new QuestData(
   $location`none`
 );
 
+/**
+ * @returns The QuestData for your current active quest
+ */
 export function activeQuest(): QuestData {
   return quests.find((q) => q.currentQuest()) || BLANK_QUEST;
 }
 
+/**
+ * @returns Whether your quest is ready to hand in
+ */
 export function questComplete(): boolean {
   const quest = activeQuest();
   return quest !== BLANK_QUEST && get(quest.questStateProperty) === "finished";
 }
 
+/**
+ * @returns Whether your quest still has actions needing completion
+ */
 export function hasActiveQuest(): boolean {
   return hasQuest() && !questComplete();
 }
 
-export function acceptQuest(priority: number | string): void {
+/**
+ * Determines the probability of getting a robortender drop based on number of drops received
+ *
+ * @param priority The name or ranked preference of the lowest priority quest you want to accept.
+ * @returns Whether you accepted a quest or not
+ */
+export function acceptQuest(priority: number | string): boolean {
+  if (hasQuest()) {
+    return false;
+  }
   const page: string = visitUrl(kioskUrl);
   let choice = 6;
   const at: number = indexOf(page, "Available Assignments");
   if (at == -1) {
-    return;
+    return false;
   }
 
   const jobs: string[] = [];
@@ -258,8 +293,12 @@ export function acceptQuest(priority: number | string): void {
     }
   }
   runChoice(choice);
+  return hasQuest();
 }
 
+/**
+ * Turns in a completed quest
+ */
 export function turnInQuest(): void {
   if (questComplete()) {
     if (activeQuest().name === "racism")
@@ -279,6 +318,9 @@ export const keyCardsLocations = new Map<Item, Location>([
   ],
 ]);
 
+/**
+ * @returns Whether you currently have access to fighting Wart Dinsey
+ */
 export function canFightWartDinsey(): boolean {
   return (
     Array.from(keyCardsLocations.keys()).every((keycard) =>
@@ -290,14 +332,23 @@ export function canFightWartDinsey(): boolean {
   );
 }
 
+/**
+ * @returns Whether you permanently own Dinseylandfill
+ */
 export function coasterNextTurn(): boolean {
   return get("dinseyRollercoasterNext");
 }
 
+/**
+ * @returns Whether you permanently own Dinseylandfill
+ */
 export function foughtWartDinseyThisLife(): boolean {
   return get("lastWartDinseyDefeated") === myAscensions();
 }
 
+/**
+ * @returns Whether you have disposed of garbage for funfunds today
+ */
 export function hasDisposedGarbage(): boolean {
   return get("_dinseyGarbageDisposed");
 }

@@ -9839,7 +9839,7 @@ var AscendError = /* @__PURE__ */ function(_Error) {
     return _this.cause = cause, _possibleConstructorReturn3(_this);
   }
   return _createClass10(AscendError2);
-}(/* @__PURE__ */ _wrapNativeSuper3(Error)), gardens = ["packet of pumpkin seeds", "Peppermint Pip Packet", "packet of dragon's teeth", "packet of beer seeds", "packet of winter seeds", "packet of thanksgarden seeds", "packet of tall grass seeds", "packet of mushroom spores"], eudorae = ["My Own Pen Pal kit", "GameInformPowerDailyPro subscription card", "Xi Receiver Unit", "New-You Club Membership Form", "Our Daily Candles\u2122 order form"], isGarden = function(x) {
+}(/* @__PURE__ */ _wrapNativeSuper3(Error)), gardens = ["packet of pumpkin seeds", "Peppermint Pip Packet", "packet of dragon's teeth", "packet of beer seeds", "packet of winter seeds", "packet of thanksgarden seeds", "packet of tall grass seeds", "packet of mushroom spores", "packet of rock seeds"], eudorae = ["My Own Pen Pal kit", "GameInformPowerDailyPro subscription card", "Xi Receiver Unit", "New-You Club Membership Form", "Our Daily Candles\u2122 order form"], isGarden = function(x) {
   return arrayContains(x, gardens);
 }, isEudora = function(x) {
   return arrayContains(x, eudorae);

@@ -13,7 +13,7 @@ import {
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { clamp, flat } from "../../utils";
 
 export const item = $item`cursed monkey's paw`;
 
@@ -36,21 +36,22 @@ export function wishes(): number {
  */
 export function wishableItems(): Set<Item> {
   return new Set(
-    ...Location.all()
-      .filter((l) => canAdventure(l))
-      .map((l) =>
-        getMonsters(l)
-          .filter((m) => m.copyable)
-          .map((m) =>
-            itemDropsArray(m)
-              .filter(
-                ({ type, rate, drop }) =>
-                  !drop.quest && (type !== "c" || rate >= 1) // Remove random roll drops
-              )
-              .map(({ drop }) => drop)
-          )
-      )
-      .flat()
+    ...flat(
+      Location.all()
+        .filter((l) => canAdventure(l))
+        .map((l) =>
+          getMonsters(l)
+            .filter((m) => m.copyable)
+            .map((m) =>
+              itemDropsArray(m)
+                .filter(
+                  ({ type, rate, drop }) =>
+                    !drop.quest && (type !== "c" || rate >= 1) // Remove random roll drops
+                )
+                .map(({ drop }) => drop)
+            )
+        )
+    )
   );
 }
 

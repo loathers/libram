@@ -7,6 +7,7 @@ import {
   Effect,
   toEffect,
   monkeyPaw,
+  prepareForAdventure,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
@@ -94,13 +95,24 @@ export function isWishable(wish: Effect | Item): boolean {
 }
 
 /**
- * Wish for a given Item or Effect; this simply wraps kolmafia's `monkeyPaw`.
+ * Wish for a given Item or Effect.
+ * If it's an item, will `prepareForAdventure`; if an item is available in multiple locations this will pick the first one.
  *
  * @param wish The Item or Effect to wish for
  * @returns Whether we succeeded in this endeavor
  */
 export function wishFor(wish: Effect | Item): boolean {
   if (wishes() <= 0) return false;
-  // Overloads are apparently meaningfully different from type unions
-  return wish instanceof Effect ? monkeyPaw(wish) : monkeyPaw(wish);
+
+  if (wish instanceof Effect) return monkeyPaw(wish);
+
+  const locations = Location.all().filter(
+    (l) =>
+      canAdventure(l) &&
+      getMonsters(l).some(
+        (m) => m.copyable && itemDropsArray(m).some(({ drop }) => drop === wish)
+      )
+  );
+  if (locations.length) prepareForAdventure(locations[0]);
+  return monkeyPaw(wish);
 }

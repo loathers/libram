@@ -52,22 +52,30 @@ export function wishableItems(): Set<Item> {
       .flat()
   );
 }
+
+const INVALID_CHARACTERS = /[^a-z\d -]/g;
+
 let _unwishableEffects: Effect[];
 function unwishableEffects(): Effect[] {
+  // This is the set of all names of genie-wishable effects, split into the maximal substrings we can actually submit
   const names = Effect.all()
     .filter((e) => !e.attributes.includes("nohookah"))
     .map((e) => e.name.toLowerCase())
-    .map((n) => ({ name: n, splitName: n.split(RegExp("[.,']", "g")) }));
+    .map((n) => ({ name: n, splitName: n.split(INVALID_CHARACTERS) }));
+
   return names
-    .filter(({ name, splitName }) =>
-      splitName.every((s) =>
-        names.some(
-          (n) => n.name !== name && n.splitName.some((x) => x.includes(s))
+    .filter(
+      ({ name, splitName }) =>
+        // Any effect that doesn't contain an INVALID_CHARACTER is fine
+        splitName.length > 1 &&
+        // To be unwishable, there can't be any substrings that uniquely match a genie-wishable effect
+        splitName.every((s) =>
+          // So we check every maximal substring against every one of our genie-wishable effects, excluding the effect we're currently looking at
+          // if one of the substrings matches a substring associated with another effect, we're screwed.
+          names.some(({ name: n }) => n !== name && n.includes(s))
         )
-      )
     )
-    .map(({ name }) => toEffect(name))
-    .filter((e) => e.toString().toLowerCase().match(RegExp("[,.']")));
+    .map(({ name }) => toEffect(name));
 }
 
 /**

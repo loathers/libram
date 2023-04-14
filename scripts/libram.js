@@ -10641,8 +10641,8 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
         return "already completed";
       var startTime = Date.now(), startTurns = (0, import_kolmafia53.myTurncount)(), additionalTurns;
       try {
-        var _prepare;
-        additionalTurns = (_prepare = prepare()) !== null && _prepare !== void 0 ? _prepare : 0;
+        var result = prepare();
+        additionalTurns = typeof result == "number" ? result : 0;
       } catch (e) {
         return (0, import_kolmafia53.print)("".concat(e), "red"), "failed";
       }

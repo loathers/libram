@@ -60,8 +60,10 @@ function unwishableEffects(): Effect[] {
   // This is the set of all names of genie-wishable effects, split into the maximal substrings we can actually submit
   const names = Effect.all()
     .filter((e) => !e.attributes.includes("nohookah"))
-    .map((e) => e.name.toLowerCase())
-    .map((n) => ({ name: n, splitName: n.split(INVALID_CHARACTERS) }));
+    .map((e) => {
+      const name = e.name.toLowerCase();
+      return { name, splitName: name.split(INVALID_CHARACTERS) };
+    });
 
   return names
     .filter(

@@ -179,7 +179,8 @@ export default class CommunityService {
 
     let additionalTurns: number;
     try {
-      additionalTurns = prepare() ?? 0;
+      const result = prepare();
+      additionalTurns = typeof result === "number" ? result : 0;
     } catch (e) {
       print(`${e}`, "red");
       return "failed";

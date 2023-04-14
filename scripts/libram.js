@@ -1486,7 +1486,7 @@ function makeByXFunction(source) {
   };
 }
 function flat(arr) {
-  var depth = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, flatArray = [], _iterator3 = _createForOfIteratorHelper(arr), _step3;
+  var depth = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1 / 0, flatArray = [], _iterator3 = _createForOfIteratorHelper(arr), _step3;
   try {
     for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
       var item10 = _step3.value;

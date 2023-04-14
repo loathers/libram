@@ -2477,10 +2477,10 @@ eslint-plugin-jsdoc@^40.0.1:
     semver "^7.3.8"
     spdx-expression-parse "^3.0.1"
 
-eslint-plugin-libram@^0.2.29:
-  version "0.2.29"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.29.tgz#7f42cc3e4e985ff4b940c8083f7fbeb3a6416153"
-  integrity sha512-MzHdwIM2lYv5RYTZGKMONmJPrlnhcMPCrPMBtohdZVjjmXWRFLcamaCvAc6oVIq1ZKWwYd6K2//EcqQBGh8kXA==
+eslint-plugin-libram@^0.2.30:
+  version "0.2.30"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.30.tgz#d1f8a0737cee22ac4f0e9859e7578af76b2b614c"
+  integrity sha512-vEvHyG0PPEmw1+Hr2wzo3lm9fq9NBmPivp1sV1BcXba5G6pHyJ2iWVpyCkTe+eDu1oxd9PYQl5UaqM7HhDjk+Q==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"
@@ -3703,10 +3703,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-kolmafia@^5.27260.0:
-  version "5.27260.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27260.0.tgz#71928180ec5fb25b81f6c26585834a6b3a84d0fb"
-  integrity sha512-aG1rsZ++MY8HZk1l9ZkIbTK5NoyB1I6tLP1zDDsv6Dd4wVyqtwYdvy4Aq/Nd64GEOmbEhbeyeVywffLHL8ojqg==
+kolmafia@^5.27321.0:
+  version "5.27321.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27321.0.tgz#49222907829b59bf1f1060beedb11e4343e45d67"
+  integrity sha512-zWXXg85JQv0Iw36wxe6rBslPxQD8QbSzht1V/OujAdpNP1sAC/GfqJrCDO0wO6t7i0AIP+AobswXmUyyqMvtAQ==
 
 leven@^3.1.0:
   version "3.1.0"

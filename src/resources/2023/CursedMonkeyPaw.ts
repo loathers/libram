@@ -8,6 +8,7 @@ import {
   toEffect,
   monkeyPaw,
   prepareForAdventure,
+  cliExecute,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
@@ -123,6 +124,14 @@ export function wishFor(wish: Effect | Item): boolean {
         (m) => m.copyable && itemDropsArray(m).some(({ drop }) => drop === wish)
       )
   );
-  if (locations.length) prepareForAdventure(locations[0]);
-  return monkeyPaw(wish);
+
+  try {
+    if (locations.length) {
+      cliExecute("checkpoint");
+      prepareForAdventure(locations[0]);
+    }
+    return monkeyPaw(wish);
+  } finally {
+    if (locations.length) cliExecute("outfit checkpoint");
+  }
 }

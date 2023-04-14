@@ -328,7 +328,7 @@ export function makeByXFunction<T extends string>(
  * Flattens an array. Basically replacing Array.prototype.flat for which Rhino doesn't yet have an implementation
  *
  * @param arr Array to flatten
- * @param depth Level to flatten
+ * @param depth Number of layers to flatten by; Infinity for a fully flat array
  * @returns Flattened array
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

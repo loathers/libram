@@ -334,7 +334,7 @@ export function makeByXFunction<T extends string>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function flat<A extends any[], D extends number = 1>(
   arr: A,
-  depth = 1
+  depth = Infinity
 ): FlatArray<A, D>[] {
   let flatArray: FlatArray<A, D>[] = [];
   for (const item of arr) {

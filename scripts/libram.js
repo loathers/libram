@@ -9522,7 +9522,7 @@ function wishes() {
   return clamp(5 - get("_monkeyPawWishesUsed"), 0, 5);
 }
 function wishableItems() {
-  return _construct3(Set, _toConsumableArray14(import_kolmafia51.Location.all().filter(function(l) {
+  return _construct3(Set, _toConsumableArray14(flat(import_kolmafia51.Location.all().filter(function(l) {
     return (0, import_kolmafia51.canAdventure)(l);
   }).map(function(l) {
     return (0, import_kolmafia51.getMonsters)(l).filter(function(m) {
@@ -9539,7 +9539,7 @@ function wishableItems() {
         return drop;
       });
     });
-  }).flat()));
+  }))));
 }
 var INVALID_CHARACTERS = /[^a-z\d -]/g, _unwishableEffects;
 function unwishableEffects() {

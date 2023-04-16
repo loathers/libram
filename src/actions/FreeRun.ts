@@ -20,7 +20,7 @@ import { get } from "../property";
 import * as Bandersnatch from "../resources/2009/Bandersnatch";
 import * as StompingBoots from "../resources/2011/StompingBoots";
 import * as AsdonMartin from "../resources/2017/AsdonMartin";
-import { $effect, $item, $items, $skill } from "../template-string";
+import { $effect, $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
@@ -53,7 +53,7 @@ const asdonMartinSource: ActionSource = new ActionSource(
 const freeRunSources: ActionSource[] = [
   // Free limited sources
   new ActionSource(
-    Bandersnatch.familiar,
+    $familiar`Frumious Bandersnatch`,
     () =>
       (have($effect`Ode to Booze`) || getSongCount() < getSongLimit()) &&
       Bandersnatch.couldRunaway()
@@ -66,18 +66,18 @@ const freeRunSources: ActionSource[] = [
         ensureEffect($effect`Ode to Booze`);
         return have($effect`Ode to Booze`);
       },
-      familiar: () => Bandersnatch.familiar,
+      familiar: () => $familiar`Frumious Bandersnatch`,
     }
   ),
 
   new ActionSource(
-    StompingBoots.familiar,
+    $familiar`Pair of Stomping Boots`,
     () =>
       StompingBoots.couldRunaway() ? StompingBoots.getRemainingRunaways() : 0,
     Macro.step("runaway"),
     {
       equipmentRequirements: () => new Requirement(["Familiar Weight"], {}),
-      familiar: () => StompingBoots.familiar,
+      familiar: () => $familiar`Pair of Stomping Boots`,
     }
   ),
 

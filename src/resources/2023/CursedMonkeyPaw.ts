@@ -9,6 +9,7 @@ import {
   monkeyPaw,
   prepareForAdventure,
   cliExecute,
+  Monster,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
@@ -31,22 +32,34 @@ export function wishes(): number {
   return clamp(5 - get("_monkeyPawWishesUsed"), 0, 5);
 }
 
+export type WishableItemsFilters = Partial<{
+  location: (location: Location) => boolean;
+  monster: (monster: Monster) => boolean;
+  drop: (itemDrop: { drop: Item; rate: number; type: string }) => boolean;
+}>;
+
 /**
+ * @param filters An optional object optionally consisting of filtering functions to shrink down the pool of wishable items
+ * @param filters.location A filtering function to remove locations from the pool of wishable targets.
+ * @param filters.monster A filtering function to remove monsters from the pool of wishable targets.
+ * @param filters.drop A filtering function to remove item drops from the pool of wishable targets.
  * @returns A set of all items we expect to be able to wish; this doesn't actually constitute all items
  */
-export function wishableItems(): Set<Item> {
+export function wishableItems(filters: WishableItemsFilters = {}): Set<Item> {
   return new Set(
     flat<Item[][][], 3>(
       Location.all()
-        .filter((l) => canAdventure(l))
+        .filter((l) => canAdventure(l) && (filters.location?.(l) ?? true))
         .map((l) =>
           getMonsters(l)
-            .filter((m) => m.copyable)
+            .filter((m) => m.copyable && (filters.monster?.(m) ?? true))
             .map((m) =>
               itemDropsArray(m)
                 .filter(
                   ({ type, rate, drop }) =>
-                    !drop.quest && (type !== "c" || rate >= 1) // Remove random roll drops
+                    !drop.quest &&
+                    (type !== "c" || rate >= 1) && // Remove random roll drops
+                    (filters.drop?.({ type, rate, drop }) ?? true)
                 )
                 .map(({ drop }) => drop)
             )

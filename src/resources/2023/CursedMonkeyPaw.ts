@@ -36,7 +36,7 @@ export function wishes(): number {
  */
 export function wishableItems(): Set<Item> {
   return new Set(
-    ...flat(
+    flat<Item[][][], 3>(
       Location.all()
         .filter((l) => canAdventure(l))
         .map((l) =>

@@ -293,3 +293,17 @@ export function printModtrace(
 
   print(`Total ${baseModifier}: ${total.toFixed(1)}`, totalColor);
 }
+
+/**
+ * Take the sum of a modifier over an array of Skills, Effects, and Items
+ *
+ * @param modifier A NumericModifier that we want to find the total value of
+ * @param subjects A spread array of Skills, Effects, and Items that we want to find the total value of
+ * @returns The sum of the appropriate modifier for all of the subjects
+ */
+export function getTotalModifier(
+  modifier: NumericModifier,
+  ...subjects: (Skill | Effect | Item)[]
+): number {
+  return sum(subjects, (subject) => get(modifier, subject));
+}

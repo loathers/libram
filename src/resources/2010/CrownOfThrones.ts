@@ -11,7 +11,7 @@ export type FamiliarRider = {
   dropPredicate?: () => boolean;
 };
 
-export const ridingFamiliars: FamiliarRider[] = [
+export const ridingFamiliars: readonly FamiliarRider[] = [
   {
     familiar: $familiar`Puck Man`,
     drops: $items`yellow pixel`,
@@ -328,7 +328,7 @@ export const ridingFamiliars: FamiliarRider[] = [
     drops: $items`hot nuggets`,
     probability: 1,
   },
-];
+] as const;
 
 /**
  * Value a specified familiar Crown rider

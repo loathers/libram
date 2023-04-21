@@ -16,7 +16,7 @@ import { $familiar, $item, $items, $phylum } from "../../template-string";
 /**
  * The Robortender itself
  */
-export const familiar = $familiar`Robortender`;
+const familiar = $familiar`Robortender`;
 
 /**
  * @returns Whether you have the Robortender in your terrarium/available

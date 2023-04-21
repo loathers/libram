@@ -12,7 +12,7 @@ import { get, withChoice } from "../../property";
 import { $item, $items } from "../../template-string";
 import { invertMap, maxBy } from "../../utils";
 
-export const item = $item`Guzzlr tablet`;
+const item = $item`Guzzlr tablet`;
 /**
  * Determines whether you `have` Guzzlr
  *

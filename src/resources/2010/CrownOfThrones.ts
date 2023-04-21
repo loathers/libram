@@ -3,6 +3,7 @@ import { getSaleValue, have } from "../../lib";
 import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
+import { sum } from "../../utils";
 
 export type FamiliarRider = {
   familiar: Familiar;
@@ -365,29 +366,28 @@ type RiderMode = {
 
 const riderModes = new Map<string, RiderMode>();
 
+const DEFAULTS = {
+  modifierValueFunction: () => 0,
+  dropsValueFunction: () => 0,
+  ignoreLimitedDrops: false,
+  excludeCurrentFamiliar: true,
+};
 /**
  * Creates a rider mode for this session
  *
  * @param name Rider mode name
- * @param modifierValueFunction Function to value a familiar itself, often using modifiers,
- * @param dropsValueFunction Function to value the drops of a familiar, which are stored as an `Item[]` or `Map<Item, number>`
- * @param ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
- * @param excludeCurrentFamiliar Whether to exclude the player's current familiar
+ * @param details An object consisting of various settings for the RiderMode:
+ * @param details.modifierValueFunction Function to value a familiar itself, often using modifiers,
+ * @param details.dropsValueFunction Function to value the drops of a familiar, which are stored as an `Item[]` or `Map<Item, number>`
+ * @param details.ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
+ * @param details.excludeCurrentFamiliar Whether to exclude the player's current familiar
  * @returns Map of all rider modes created this session, including the one that was just made
  */
 export function createRiderMode(
   name: string,
-  modifierValueFunction: (familiar: Familiar) => number,
-  dropsValueFunction: (drops: Item[] | Map<Item, number>) => number,
-  ignoreLimitedDrops = false,
-  excludeCurrentFamiliar = true
+  details: Partial<RiderMode>
 ): Map<string, RiderMode> {
-  return riderModes.set(name, {
-    modifierValueFunction,
-    dropsValueFunction,
-    ignoreLimitedDrops,
-    excludeCurrentFamiliar,
-  });
+  return riderModes.set(name, { ...DEFAULTS, ...details });
 }
 
 const riderLists = new Map<string, FamiliarRider[]>();
@@ -453,4 +453,21 @@ export function getModifier(
   familiar: Familiar
 ): number {
   return numericModifier(`Throne:${familiar}`, modifier);
+}
+
+/**
+ * Create a `modifierValueFunction` for a familiar.
+ *
+ * @param modifiers An array consisting of the `NumericModifier`s relevant to your valuation
+ * @param functions An object keyed by `NumericModifier`s whose values are functions that map the the result of a modifier to its corresponding valuation
+ * @returns A function that maps a familiar to the value of its modifiers in the crown of thrones or buddy bjorn.
+ */
+export function createModifierValueFunction<T extends NumericModifier>(
+  modifiers: T[],
+  functions: { [x in T]: (mod: number) => number }
+): (familiar: Familiar) => number {
+  return (familiar: Familiar) =>
+    sum(modifiers, (modifier) =>
+      functions[modifier](getModifier(modifier, familiar))
+    );
 }

@@ -15,7 +15,7 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { arrayContains } from "../../utils";
 
-export const item = Item.get("autumn-aton");
+const item = Item.get("autumn-aton");
 
 /**
  * Is the autumn-aton currently in your inventory, available to deploy?

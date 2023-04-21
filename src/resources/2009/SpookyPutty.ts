@@ -4,7 +4,7 @@ import { getFoldGroup, have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
-export const sheet = $item`Spooky Putty sheet`;
+const sheet = $item`Spooky Putty sheet`;
 
 /**
  * See whether the player has a Spooky Putty item in some form

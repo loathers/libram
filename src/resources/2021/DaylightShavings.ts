@@ -3,7 +3,7 @@ import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $effects, $item } from "../../template-string";
 
-export const helmet = $item`Daylight Shavings Helmet`;
+const helmet = $item`Daylight Shavings Helmet`;
 
 /**
  * Returns whether the player owns an unpackaged Daylight Shavings Helmet, and it's available in either the inventory or other zones as determined by autoSatisfy settings.

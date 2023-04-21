@@ -390,6 +390,14 @@ export function createRiderMode(
   return riderModes.set(name, { ...DEFAULTS, ...details });
 }
 
+/**
+ * @param name The name of the `RiderMode` to check
+ * @returns Whether or not said `RiderMode` exists
+ */
+export function hasRiderMode(name: string): boolean {
+  return riderModes.has(name);
+}
+
 const riderLists = new Map<string, FamiliarRider[]>();
 
 /**

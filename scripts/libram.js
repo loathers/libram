@@ -501,6 +501,9 @@ __export(src_exports, {
   getTodaysHolidayWanderers: function() {
     return getTodaysHolidayWanderers;
   },
+  getTotalModifier: function() {
+    return getTotalModifier;
+  },
   getTotalPuttyLikeCopiesMade: function() {
     return getTotalPuttyLikeCopiesMade;
   },
@@ -5570,6 +5573,13 @@ function mergeModifiers() {
   return modifierss.reduce(function(a, b) {
     return pairwiseMerge(a, b);
   }, {});
+}
+function getTotalModifier(modifier) {
+  for (var _len2 = arguments.length, subjects = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
+    subjects[_key2 - 1] = arguments[_key2];
+  return sum(subjects, function(subject) {
+    return get2(modifier, subject);
+  });
 }
 
 // src/resources/2013/Florist.ts
@@ -13284,6 +13294,7 @@ var Session = /* @__PURE__ */ function() {
   getSongCount,
   getSongLimit,
   getTodaysHolidayWanderers,
+  getTotalModifier,
   getTotalPuttyLikeCopiesMade,
   getWandererChance,
   getZapGroup,

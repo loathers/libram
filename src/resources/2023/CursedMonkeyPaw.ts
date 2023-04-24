@@ -12,6 +12,7 @@ import {
   Monster,
 } from "kolmafia";
 import { have as have_ } from "../../lib";
+import logger from "../../logger";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp, flat } from "../../utils";
@@ -144,7 +145,15 @@ export function wishFor(wish: Effect | Item): boolean {
       cliExecute("checkpoint");
       prepareForAdventure(locations[0]);
     }
-    return monkeyPaw(wish);
+    const result = monkeyPaw(wish);
+    if (!result) {
+      logger.debug(
+        `Failed to monkeyPaw wish for ${wish}; assumed it was available in locations ${locations.join(
+          ", "
+        )}`
+      );
+    }
+    return result;
   } finally {
     if (locations.length) cliExecute("outfit checkpoint");
   }

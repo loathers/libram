@@ -10,6 +10,8 @@ import {
   Effect,
   Element,
   elementalResistance,
+  equip,
+  equippedItem,
   Familiar,
   fullnessLimit,
   getCampground,
@@ -43,6 +45,7 @@ import {
   Path,
   Servant,
   Skill,
+  Slot,
   spleenLimit,
   Stat,
   Thrall,
@@ -913,4 +916,33 @@ export const byClass = makeByXFunction(() => myClass().toString());
  */
 export function directlyUse(item: Item): string {
   return visitUrl(`inv_use.php?which=3&whichitem=${toInt(item)}&pwd`);
+}
+
+/**
+ * Unequip all instances of a given equipped item
+ *
+ * @param item The item in question
+ * @returns Whether we succeeded completely--`false` if we unequip some but not all instances of the item.
+ */
+export function unequip(item: Item): boolean;
+/**
+ * Empty a given slot.
+ *
+ * @param slot The slot in question
+ * @returns Whether we successfully emptied the slot
+ */
+export function unequip(slot: Slot): boolean;
+/**
+ * Empty a slot, or unequip all instances of a given equipped item
+ *
+ * @param thing The slot or item in question
+ * @returns Whether we succeeded completely--`false` if we unequip some but not all instances of the item.
+ */
+export function unequip(thing: Item | Slot): boolean {
+  if (thing instanceof Slot) return equip(thing, $item.none);
+  return (
+    Slot.all()
+      .filter((s) => equippedItem(s) === thing)
+      .filter((s) => !unequip(s)).length === 0
+  );
 }

@@ -940,13 +940,16 @@ export function unequip(slot: Slot): boolean;
  */
 export function unequip(thing: Item | Slot): boolean {
   if (thing instanceof Slot) return equip(thing, $item.none);
-  return (
-    Slot.all().filter((s) => {
-      // Filter the slot out if it doesn't contain the relevant item
-      if (equippedItem(s) === thing) return true;
-      // Filter the slot out if we succeed at unequipping it
-      return !unequip(thing);
-      // This leaves only slots that do contain the item but that we failed to unequip
-    }).length === 0
-  );
+  const failedSlots = Slot.all().filter((s) => {
+    // Filter the slot out if it doesn't contain the relevant item
+    if (equippedItem(s) === thing) return true;
+    // Filter the slot out if we succeed at unequipping it
+    return !unequip(thing);
+    // This leaves only slots that do contain the item but that we failed to unequip
+  });
+  if (failedSlots.length)
+    logger.debug(
+      `Failed to unequip ${thing} from slots ${failedSlots.join(", ")}`
+    );
+  return failedSlots.length === 0;
 }

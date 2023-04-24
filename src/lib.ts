@@ -942,7 +942,9 @@ export function unequip(thing: Item | Slot): boolean {
   if (thing instanceof Slot) return equip(thing, $item.none);
   return (
     Slot.all()
+      // All slots that contain the item
       .filter((s) => equippedItem(s) === thing)
+      // All slots we failed to unequip
       .filter((s) => !unequip(s)).length === 0
   );
 }

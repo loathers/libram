@@ -15,8 +15,7 @@ import { have as _have } from "../../lib";
 import { get } from "../../property";
 import { $skill } from "../../template-string";
 
-export const passive = $skill`Comprehensive Cartography`;
-export const skill = $skill`Map the Monsters`;
+const passive = $skill`Comprehensive Cartography`;
 
 /**
  * Determines whether you `have` the skill Comprehensive Cartography

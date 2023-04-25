@@ -10,7 +10,7 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp } from "../../utils";
 
-export const locket = $item`combat lover's locket`;
+const locket = $item`combat lover's locket`;
 
 /**
  * @returns Whether you `have` the Combat Lover's Locket

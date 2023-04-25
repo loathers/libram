@@ -4,7 +4,7 @@ import { getFoldGroup, have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
-export const box = $item`Rain-Doh black box`;
+const box = $item`Rain-Doh black box`;
 
 /**
  * See whether the player has a Rain-Doh item in some form

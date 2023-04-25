@@ -4,7 +4,7 @@ import { have as _have, isCurrentFamiliar } from "../../lib";
 import { get } from "../../property";
 import { $familiar } from "../../template-string";
 
-export const familiar = $familiar`Obtuse Angel`;
+const familiar = $familiar`Obtuse Angel`;
 
 /**
  * @returns whether the player has an Obtuse Angel

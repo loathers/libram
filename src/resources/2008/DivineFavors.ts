@@ -3,7 +3,7 @@ import { have as _have } from "../../lib";
 import { get } from "../../property";
 import { $item, $skill } from "../../template-string";
 
-export const summonSkill = $skill`Summon Party Favor`;
+const summonSkill = $skill`Summon Party Favor`;
 
 /**
  * @returns true if the player can Summon Party Favors

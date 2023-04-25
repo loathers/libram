@@ -30,7 +30,7 @@ export {
   withChoices,
   withChoice,
 } from "./property";
-export { get as getModifier } from "./modifier";
+export { get as getModifier, getTotalModifier } from "./modifier";
 export { Session } from "./session";
 
 export type { LogLevels } from "./logger";

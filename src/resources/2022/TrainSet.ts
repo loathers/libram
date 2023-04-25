@@ -4,7 +4,7 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp, Tuple } from "../../utils";
 
-export const item = $item`model train set`;
+const item = $item`model train set`;
 
 /**
  * Determines whether the Model Train Set is your current workshed

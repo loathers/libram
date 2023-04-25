@@ -15,7 +15,7 @@ import {
 import { get } from "../../property";
 import { $effect, $familiar, $skill } from "../../template-string";
 
-export const familiar = $familiar`Frumious Bandersnatch`;
+const familiar = $familiar`Frumious Bandersnatch`;
 
 /**
  * Determines whether the player has the Frumious Bandersnatch in their

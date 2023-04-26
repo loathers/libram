@@ -65,6 +65,8 @@ export default class CommunityService {
   private property: string;
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
+  private startTime = 0;
+  private startTurns = 0;
 
   /**
    * Class to store properties of various CS tests.
@@ -120,15 +122,29 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
+  startTimer(): void {
+    this.startTime ||= Date.now();
+    this.startTurns ||= myTurncount();
+  }
+
+  private static taskTimers: Map<string, { time: number; turns: number }> =
+    new Map();
+
+  static startTimer(name: string): void {
+    if (!this.taskTimers.has(name)) {
+      this.taskTimers.set(name, { time: Date.now(), turns: myTurncount() });
+    }
+  }
+
   static logTask(name: string, action: () => number | void) {
-    const startTime = Date.now();
-    const startTurns = myTurncount();
+    this.startTimer(name);
     const estimatedTurns = action() ?? 0;
+    const { time, turns } = this.taskTimers.get(name) ?? { time: 0, turns: 0 };
     CommunityService.log[name] = {
       type: "task",
-      turnCost: myTurncount() - startTurns,
+      turnCost: myTurncount() - turns,
       predictedTurns: estimatedTurns,
-      seconds: (Date.now() - startTime) / 1000,
+      seconds: (Date.now() - time) / 1000,
     };
   }
 
@@ -174,8 +190,7 @@ export default class CommunityService {
   ): "completed" | "failed" | "already completed" {
     if (this.isDone()) return "already completed";
 
-    const startTime = Date.now();
-    const startTurns = myTurncount();
+    this.startTimer();
 
     let additionalTurns: number;
     try {
@@ -200,8 +215,8 @@ export default class CommunityService {
 
     CommunityService.log[this.property] = {
       predictedTurns: prediction + additionalTurns,
-      turnCost: myTurncount() - startTurns,
-      seconds: (Date.now() - startTime) / 1000,
+      turnCost: myTurncount() - this.startTurns,
+      seconds: (Date.now() - this.startTime) / 1000,
       type: "test",
     };
     return "completed";

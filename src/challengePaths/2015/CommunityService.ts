@@ -65,8 +65,7 @@ export default class CommunityService {
   private property: string;
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
-  private startTime = 0;
-  private startTurns = 0;
+  private timer: { turns: number; time: number } | null = null;
 
   /**
    * Class to store properties of various CS tests.
@@ -126,8 +125,7 @@ export default class CommunityService {
    * Start the time & turn counter for the Test in question.
    */
   startTimer(): void {
-    this.startTime ||= Date.now();
-    this.startTurns ||= myTurncount();
+    this.timer ??= { time: Date.now(), turns: myTurncount() };
   }
 
   private static taskTimers: Map<string, { time: number; turns: number }> =
@@ -200,7 +198,10 @@ export default class CommunityService {
   ): "completed" | "failed" | "already completed" {
     if (this.isDone()) return "already completed";
 
-    this.startTimer();
+    const { time, turns } = this.timer ?? {
+      time: Date.now(),
+      turns: myTurncount(),
+    };
 
     let additionalTurns: number;
     try {
@@ -214,10 +215,10 @@ export default class CommunityService {
     const prediction = this.predictor();
 
     const council = visitCouncil();
-    const turns = this._actualCost(council);
-    if (!turns) return "already completed";
+    const turnCost = this._actualCost(council);
+    if (!turnCost) return "already completed";
 
-    if (turns > Math.min(maxTurns, myAdventures())) {
+    if (turnCost > Math.min(maxTurns, myAdventures())) {
       return "failed";
     }
 
@@ -225,8 +226,8 @@ export default class CommunityService {
 
     CommunityService.log[this.property] = {
       predictedTurns: prediction + additionalTurns,
-      turnCost: myTurncount() - this.startTurns,
-      seconds: (Date.now() - this.startTime) / 1000,
+      turnCost: myTurncount() - turns,
+      seconds: (Date.now() - time) / 1000,
       type: "test",
     };
     return "completed";

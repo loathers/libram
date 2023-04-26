@@ -122,6 +122,9 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
+  /**
+   * Start the time & turn counter for the Test in question.
+   */
   startTimer(): void {
     this.startTime ||= Date.now();
     this.startTurns ||= myTurncount();
@@ -130,6 +133,11 @@ export default class CommunityService {
   private static taskTimers: Map<string, { time: number; turns: number }> =
     new Map();
 
+  /**
+   * Start the time & turn counter for the given task
+   *
+   * @param name The name of the task to start the counter of
+   */
   static startTimer(name: string): void {
     if (!this.taskTimers.has(name)) {
       this.taskTimers.set(name, { time: Date.now(), turns: myTurncount() });

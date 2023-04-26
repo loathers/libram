@@ -58,7 +58,11 @@ export function isLocationProperty(property: string): boolean {
   return otherLocations.includes(property) || property.endsWith("Location");
 }
 
-const otherMonsters = ["romanticTarget", "yearbookCameraTarget", "rufusDesiredEntity"];
+const otherMonsters = [
+  "romanticTarget",
+  "yearbookCameraTarget",
+  "rufusDesiredEntity",
+];
 const fakeMonsters = ["trackVoteMonster"];
 /**
  * @param property Property name

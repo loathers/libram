@@ -7,12 +7,11 @@ import {
   canAdventure,
   runChoice,
   toItem,
-  toMonster,
   use,
 } from "kolmafia";
 import { directlyUse, have as have_, questStep } from "../../lib";
 import { get, withChoice } from "../../property";
-import { $item, $location } from "../../template-string";
+import { $item, $location, $monster } from "../../template-string";
 import { makeByXFunction, maxBy } from "../../utils";
 
 export const item = $item`closed-circuit pay phone`;
@@ -133,7 +132,7 @@ export function chooseQuest(
     runChoice(
       chooser({
         artifact: toItem(get("rufusDesiredArtifact")),
-        entity: toMonster(get("rufusDesiredEntity")),
+        entity: get("rufusDesiredEntity") ?? $monster.none,
         items: toItem(get("rufusDesiredItems")),
       })
     );

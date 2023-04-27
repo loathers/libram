@@ -14,7 +14,7 @@ import { get, withChoice } from "../../property";
 import { $item, $location, $monster } from "../../template-string";
 import { makeByXFunction, maxBy } from "../../utils";
 
-export const item = $item`closed-circuit pay phone`;
+const item = $item`closed-circuit pay phone`;
 
 /**
  * @returns Whether we currently have the closed-circuit pay phone

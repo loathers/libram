@@ -14,7 +14,7 @@ import { get } from "../../property";
 import { $effect, $item, $skill } from "../../template-string";
 import { arrayEquals } from "../../utils";
 
-export const item = $item`Source terminal`;
+const item = $item`Source terminal`;
 
 /**
  * @returns Is the terminal currently installed & available in our campground?

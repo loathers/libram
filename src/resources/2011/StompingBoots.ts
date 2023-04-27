@@ -3,7 +3,7 @@ import { have as _have, isCurrentFamiliar } from "../../lib";
 import { get } from "../../property";
 import { $familiar } from "../../template-string";
 
-export const familiar = $familiar`Pair of Stomping Boots`;
+const familiar = $familiar`Pair of Stomping Boots`;
 
 /**
  * @returns whether the player has the Pair of Stomping Boots in their terrarium

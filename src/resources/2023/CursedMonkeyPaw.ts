@@ -15,7 +15,7 @@ import { get } from "../../property";
 import { $item } from "../../template-string";
 import { clamp, flat } from "../../utils";
 
-export const item = $item`cursed monkey's paw`;
+const item = $item`cursed monkey's paw`;
 
 /**
  * @returns Whether or not we currently `have` the cursed monkey's paw

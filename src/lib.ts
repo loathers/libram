@@ -942,7 +942,7 @@ export function unequip(thing: Item | Slot): boolean {
   if (thing instanceof Slot) return equip(thing, $item.none);
   const failedSlots = Slot.all().filter((s) => {
     // Filter the slot out if it doesn't contain the relevant item
-    if (equippedItem(s) === thing) return true;
+    if (equippedItem(s) !== thing) return false;
     // Filter the slot out if we succeed at unequipping it
     return !unequip(thing);
     // This leaves only slots that do contain the item but that we failed to unequip

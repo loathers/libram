@@ -309,21 +309,42 @@ export class Macro {
   /**
    * Add an "abort" step to this macro.
    *
-   * @param warning Message to print upon aborting.
    * @returns {Macro} This object itself.
    */
-  abort(warning?: string): this {
-    return this.step(`abort${warning ? ` "${warning}"` : ""}`);
+  abort(): this {
+    return this.step("abort");
   }
 
   /**
    * Create a new macro with an "abort" step.
    *
-   * @param warning Message to print upon aborting.
    * @returns {Macro} This object itself.
    */
-  static abort<T extends Macro>(this: Constructor<T>, warning?: string): T {
-    return new this().abort(warning);
+  static abort<T extends Macro>(this: Constructor<T>): T {
+    return new this().abort();
+  }
+
+  /**
+   * Adds an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  abortWithWarning(warning: string): this {
+    return this.step(`abort "${warning}"`);
+  }
+
+  /**
+   * Create a new macro with an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  static abortWithWarning<T extends Macro>(
+    this: Constructor<T>,
+    warning: string
+  ): T {
+    return new this().abortWithWarning(warning);
   }
 
   /**

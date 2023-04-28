@@ -2334,6 +2334,25 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * @returns {Macro} This object itself.
      */
   }, {
+    key: "abortWithWarning",
+    value: (
+      /**
+       * Adds an "abort" step to this macro, with a warning message to print
+       *
+       * @param warning The warning message to print
+       * @returns  {Macro} This object itself.
+       */
+      function(warning) {
+        return this.step('abort "'.concat(warning, '"'));
+      }
+    )
+    /**
+     * Create a new macro with an "abort" step to this macro, with a warning message to print
+     *
+     * @param warning The warning message to print
+     * @returns  {Macro} This object itself.
+     */
+  }, {
     key: "runaway",
     value: (
       /**
@@ -2666,6 +2685,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     key: "abort",
     value: function() {
       return new this().abort();
+    }
+  }, {
+    key: "abortWithWarning",
+    value: function(warning) {
+      return new this().abortWithWarning(warning);
     }
   }, {
     key: "runaway",

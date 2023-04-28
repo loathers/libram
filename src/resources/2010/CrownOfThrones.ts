@@ -415,11 +415,12 @@ export function pickRider(mode: string): FamiliarRider | null {
     ignoreLimitedDrops,
     excludeCurrentFamiliar,
   } = modeData;
+
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,
       ridingFamiliars
-        .filter((rider) => have(rider.familiar))
+        .filter(({ familiar }) => have(familiar))
         .sort(
           (a, b) =>
             valueRider(
@@ -437,12 +438,13 @@ export function pickRider(mode: string): FamiliarRider | null {
         )
     );
   }
+
   const list = riderLists.get(mode);
   if (list) {
     const riderToReturn = list.find(
-      (rider) =>
-        (!rider.dropPredicate || rider.dropPredicate()) &&
-        (!excludeCurrentFamiliar || myFamiliar() !== rider.familiar)
+      ({ dropPredicate, familiar }) =>
+        (dropPredicate?.() ?? true) &&
+        (!excludeCurrentFamiliar || myFamiliar() !== familiar)
     );
     return riderToReturn ?? null;
   }

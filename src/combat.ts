@@ -313,7 +313,7 @@ export class Macro {
    * @returns {Macro} This object itself.
    */
   abort(warning?: string): this {
-    return this.step(`abort ${warning}`);
+    return this.step(`abort${warning ? ` "${warning}"` : ""}`);
   }
 
   /**

@@ -325,6 +325,29 @@ export class Macro {
   }
 
   /**
+   * Adds an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  abortWithWarning(warning: string): this {
+    return this.step(`abort "${warning}"`);
+  }
+
+  /**
+   * Create a new macro with an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  static abortWithWarning<T extends Macro>(
+    this: Constructor<T>,
+    warning: string
+  ): T {
+    return new this().abortWithWarning(warning);
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.

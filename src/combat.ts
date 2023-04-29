@@ -134,11 +134,23 @@ export type MacroPredicate =
   | `${RawNumberOrStringMacroPredicate} ${number | string}`
   | NudeMacroPredicate;
 
-export type CompoundMacroPredicate =
-  | MacroPredicate
-  | `${CompoundMacroPredicate} || ${CompoundMacroPredicate}`
-  | `${CompoundMacroPredicate} && ${CompoundMacroPredicate}`
-  | `(${CompoundMacroPredicate})`;
+type Predicate<
+  T extends string,
+  N extends number,
+  R extends unknown[]
+> = R["length"] extends N
+  ? T
+  : Predicate<
+      T | `(${T})` | `${T} || ${T}` | `${T} && ${T}`,
+      N,
+      [unknown, ...R]
+    >;
+
+export type CompoundMacroPredicate<Depth extends number> = Predicate<
+  MacroPredicate,
+  Depth,
+  []
+>;
 
 type PreBALLSPredicate =
   | string

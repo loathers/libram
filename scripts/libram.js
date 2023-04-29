@@ -9452,19 +9452,24 @@ function wishes() {
   return clamp(5 - get("_monkeyPawWishesUsed"), 0, 5);
 }
 function wishableItems() {
+  var filters = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
   return new Set(flat(import_kolmafia51.Location.all().filter(function(l) {
-    return (0, import_kolmafia51.canAdventure)(l);
+    var _filters$location, _filters$location2;
+    return (0, import_kolmafia51.canAdventure)(l) && ((_filters$location = (_filters$location2 = filters.location) === null || _filters$location2 === void 0 ? void 0 : _filters$location2.call(filters, l)) !== null && _filters$location !== void 0 ? _filters$location : !0);
   }).map(function(l) {
     return (0, import_kolmafia51.getMonsters)(l).filter(function(m) {
-      return m.copyable;
+      var _filters$monster, _filters$monster2;
+      return m.copyable && ((_filters$monster = (_filters$monster2 = filters.monster) === null || _filters$monster2 === void 0 ? void 0 : _filters$monster2.call(filters, m)) !== null && _filters$monster !== void 0 ? _filters$monster : !0);
     }).map(function(m) {
-      return (0, import_kolmafia51.itemDropsArray)(m).filter(
-        function(_ref) {
-          var type = _ref.type, rate = _ref.rate, drop = _ref.drop;
-          return !drop.quest && (type !== "c" || rate >= 1);
-        }
-        // Remove random roll drops
-      ).map(function(_ref2) {
+      return (0, import_kolmafia51.itemDropsArray)(m).filter(function(_ref) {
+        var _filters$drop, _filters$drop2, type = _ref.type, rate = _ref.rate, drop = _ref.drop;
+        return !drop.quest && (type !== "c" || rate >= 1) && // Remove random roll drops
+        ((_filters$drop = (_filters$drop2 = filters.drop) === null || _filters$drop2 === void 0 ? void 0 : _filters$drop2.call(filters, {
+          type: type,
+          rate: rate,
+          drop: drop
+        })) !== null && _filters$drop !== void 0 ? _filters$drop : !0);
+      }).map(function(_ref2) {
         var drop = _ref2.drop;
         return drop;
       });
@@ -9524,7 +9529,9 @@ function wishFor(wish) {
     });
   });
   try {
-    return locations.length && ((0, import_kolmafia51.cliExecute)("checkpoint"), (0, import_kolmafia51.prepareForAdventure)(locations[0])), (0, import_kolmafia51.monkeyPaw)(wish);
+    locations.length && ((0, import_kolmafia51.cliExecute)("checkpoint"), (0, import_kolmafia51.prepareForAdventure)(locations[0]));
+    var result = (0, import_kolmafia51.monkeyPaw)(wish);
+    return result || logger_default.debug("Failed to monkeyPaw wish for ".concat(wish, "; assumed it was available in locations ").concat(locations.join(", "))), result;
   } finally {
     locations.length && (0, import_kolmafia51.cliExecute)("outfit checkpoint");
   }

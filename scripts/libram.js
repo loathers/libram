@@ -660,6 +660,9 @@ __export(src_exports, {
   uneffect: function() {
     return uneffect;
   },
+  unequip: function() {
+    return unequip;
+  },
   withChoice: function() {
     return withChoice;
   },
@@ -1992,6 +1995,14 @@ var byStat = makeByXFunction(function() {
 });
 function directlyUse(item10) {
   return (0, import_kolmafia4.visitUrl)("inv_use.php?which=3&whichitem=".concat((0, import_kolmafia4.toInt)(item10), "&pwd"));
+}
+function unequip(thing) {
+  if (thing instanceof import_kolmafia4.Slot)
+    return (0, import_kolmafia4.equip)(thing, $item.none);
+  var failedSlots = import_kolmafia4.Slot.all().filter(function(s) {
+    return (0, import_kolmafia4.equippedItem)(s) !== thing ? !1 : !unequip(thing);
+  });
+  return failedSlots.length && logger_default.debug("Failed to unequip ".concat(thing, " from slots ").concat(failedSlots.join(", "))), failedSlots.length === 0;
 }
 
 // src/overlappingNames.ts
@@ -7334,11 +7345,11 @@ function getHazardEquipment() {
   if (!have23())
     return !1;
   var equipment = hazardEquipment(hazards());
-  return equipment.forEach(function(equip2) {
-    var num = (0, import_kolmafia33.toInt)(equip2) - 9404;
+  return equipment.forEach(function(equip3) {
+    var num = (0, import_kolmafia33.toInt)(equip3) - 9404;
     (0, import_kolmafia33.visitUrl)("place.php?whichplace=spacegate&action=sg_requisition"), (0, import_kolmafia33.visitUrl)("choice.php?whichchoice=1233&option=".concat(num));
-  }), equipment.forEach(function(equip2) {
-    if ((0, import_kolmafia33.availableAmount)(equip2) !== 1)
+  }), equipment.forEach(function(equip3) {
+    if ((0, import_kolmafia33.availableAmount)(equip3) !== 1)
       return !1;
   }), !0;
 }
@@ -13372,6 +13383,7 @@ var Session = /* @__PURE__ */ function() {
   tryFindFreeRun,
   undelay,
   uneffect,
+  unequip,
   withChoice,
   withChoices,
   withProperties,

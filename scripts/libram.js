@@ -10669,7 +10669,7 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
   return have($effect(_templateObject734 || (_templateObject734 = _taggedTemplateLiteral49(["Fidoxene"])))) ? 20 : (0, import_kolmafia54.familiarWeight)((0, import_kolmafia54.myFamiliar)());
 }, CommunityService = /* @__PURE__ */ function() {
   function CommunityService2(id, stat, property, predictor, maximizeRequirements) {
-    _classCallCheck12(this, CommunityService2), _defineProperty15(this, "choice", void 0), _defineProperty15(this, "stat", void 0), _defineProperty15(this, "property", void 0), _defineProperty15(this, "predictor", void 0), _defineProperty15(this, "maximizeRequirements", void 0), this.choice = id, this.stat = stat, this.property = property, this.predictor = predictor, this.maximizeRequirements = maximizeRequirements;
+    _classCallCheck12(this, CommunityService2), _defineProperty15(this, "choice", void 0), _defineProperty15(this, "stat", void 0), _defineProperty15(this, "property", void 0), _defineProperty15(this, "predictor", void 0), _defineProperty15(this, "maximizeRequirements", void 0), _defineProperty15(this, "timer", null), this.choice = id, this.stat = stat, this.property = property, this.predictor = predictor, this.maximizeRequirements = maximizeRequirements;
   }
   return _createClass12(CommunityService2, [{
     key: "id",
@@ -10707,6 +10707,18 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
     key: "requirement",
     get: function() {
       return this.maximizeRequirements;
+    }
+    /**
+     * Start the time & turn counter for the Test in question.
+     */
+  }, {
+    key: "startTimer",
+    value: function() {
+      var _this$timer;
+      (_this$timer = this.timer) !== null && _this$timer !== void 0 || (this.timer = {
+        time: Date.now(),
+        turns: (0, import_kolmafia54.myTurncount)()
+      });
     }
   }, {
     key: "isDone",
@@ -10750,21 +10762,24 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
   }, {
     key: "run",
     value: function(prepare) {
-      var maxTurns = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1 / 0;
+      var _this$timer2, maxTurns = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1 / 0;
       if (this.isDone())
         return "already completed";
-      var startTime = Date.now(), startTurns = (0, import_kolmafia54.myTurncount)(), additionalTurns;
+      var _ref = (_this$timer2 = this.timer) !== null && _this$timer2 !== void 0 ? _this$timer2 : {
+        time: Date.now(),
+        turns: (0, import_kolmafia54.myTurncount)()
+      }, time = _ref.time, turns = _ref.turns, additionalTurns;
       try {
         var result = prepare();
         additionalTurns = typeof result == "number" ? result : 0;
       } catch (e) {
         return (0, import_kolmafia54.print)("".concat(e), "red"), "failed";
       }
-      var prediction = this.predictor(), council = visitCouncil(), turns = this._actualCost(council);
-      return turns ? turns > Math.min(maxTurns, (0, import_kolmafia54.myAdventures)()) || !this.do() ? "failed" : (CommunityService2.log[this.property] = {
+      var prediction = this.predictor(), council = visitCouncil(), turnCost = this._actualCost(council);
+      return turnCost ? turnCost > Math.min(maxTurns, (0, import_kolmafia54.myAdventures)()) || !this.do() ? "failed" : (CommunityService2.log[this.property] = {
         predictedTurns: prediction + additionalTurns,
-        turnCost: (0, import_kolmafia54.myTurncount)() - startTurns,
-        seconds: (Date.now() - startTime) / 1e3,
+        turnCost: (0, import_kolmafia54.myTurncount)() - turns,
+        seconds: (Date.now() - time) / 1e3,
         type: "test"
       }, "completed") : "already completed";
     }
@@ -10803,14 +10818,32 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
      * A log of the predicted turns, actual turns, and duration of each CS test performed.
      */
   }], [{
+    key: "startTimer",
+    value: (
+      /**
+       * Start the time & turn counter for the given task
+       *
+       * @param name The name of the task to start the counter of
+       */
+      function(name) {
+        this.taskTimers.has(name) || this.taskTimers.set(name, {
+          time: Date.now(),
+          turns: (0, import_kolmafia54.myTurncount)()
+        });
+      }
+    )
+  }, {
     key: "logTask",
     value: function(name, action) {
-      var _action, startTime = Date.now(), startTurns = (0, import_kolmafia54.myTurncount)(), estimatedTurns = (_action = action()) !== null && _action !== void 0 ? _action : 0;
+      var _action, _this$taskTimers$get, estimatedTurns = (_action = action()) !== null && _action !== void 0 ? _action : 0, _ref2 = (_this$taskTimers$get = this.taskTimers.get(name)) !== null && _this$taskTimers$get !== void 0 ? _this$taskTimers$get : {
+        time: Date.now(),
+        turns: (0, import_kolmafia54.myTurncount)()
+      }, time = _ref2.time, turns = _ref2.turns;
       CommunityService2.log[name] = {
         type: "task",
-        turnCost: (0, import_kolmafia54.myTurncount)() - startTurns,
+        turnCost: (0, import_kolmafia54.myTurncount)() - turns,
         predictedTurns: estimatedTurns,
-        seconds: (Date.now() - startTime) / 1e3
+        seconds: (Date.now() - time) / 1e3
       };
     }
   }, {
@@ -10826,8 +10859,8 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
           var _logEntries$_i = _slicedToArray16(_logEntries[_i], 2), testName = _logEntries$_i[0], testEntry = _logEntries$_i[1], type = testEntry.type, predictedTurns = testEntry.predictedTurns, turnCost = testEntry.turnCost, seconds = testEntry.seconds;
           type === "test" ? ((0, import_kolmafia54.print)("We predicted the ".concat(testName, " test would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour), (0, import_kolmafia54.print)("".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour)) : (predictedTurns === 0 && turnCost === 0 || (0, import_kolmafia54.print)("We predicted the task ".concat(testName, " would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour), (0, import_kolmafia54.print)("The task ".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour));
         }
-        var totalTime = sum(logEntries, function(_ref) {
-          var _ref2 = _slicedToArray16(_ref, 2), testEntry2 = _ref2[1];
+        var totalTime = sum(logEntries, function(_ref3) {
+          var _ref4 = _slicedToArray16(_ref3, 2), testEntry2 = _ref4[1];
           return testEntry2.seconds;
         });
         (0, import_kolmafia54.print)("All together, you have spent ".concat(totalTime.toFixed(1), " seconds during this Community Service run"), colour);
@@ -10836,6 +10869,7 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject401 || (_templateOb
     // Below, we have the tests themselves.
   }]), CommunityService2;
 }();
+_defineProperty15(CommunityService, "taskTimers", /* @__PURE__ */ new Map());
 _defineProperty15(CommunityService, "log", {});
 _defineProperty15(CommunityService, "HP", new CommunityService(1, "HP", "Donate Blood", function() {
   return 60 - Math.floor(((0, import_kolmafia54.myMaxhp)() - (0, import_kolmafia54.myBuffedstat)($stat(_templateObject828 || (_templateObject828 = _taggedTemplateLiteral49(["muscle"])))) - 3) / 30);

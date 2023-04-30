@@ -141,7 +141,7 @@ type Predicate<
 > = R["length"] extends N
   ? T
   : Predicate<
-      T | `(${T})` | `${T} || ${T}` | `${T} && ${T}`,
+      T | `!(${T})` | `(${T})` | `${T} || ${T}` | `${T} && ${T}`,
       N,
       [unknown, ...R]
     >;

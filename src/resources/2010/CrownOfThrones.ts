@@ -1,5 +1,5 @@
 import { Familiar, Item, myFamiliar, numericModifier } from "kolmafia";
-import { getSaleValue, have } from "../../lib";
+import { have } from "../../lib";
 import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
@@ -158,9 +158,7 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
   },
   {
     familiar: $familiar`Stocking Mimic`,
-    drops: getSaleValue(
-      ...$items`Angry Farmer candy, Cold Hots candy, Rock Pops, Tasty Fun Good rice candy, Wint-O-Fresh mint`
-    ),
+    drops: $items`Angry Farmer candy, Cold Hots candy, Rock Pops, Tasty Fun Good rice candy, Wint-O-Fresh mint`,
     probability: 0.3,
   },
   {

@@ -71,7 +71,8 @@ const createPluralConstant =
       );
       if (match) {
         print(
-          `${match[0]}; if you're certain that ${Type} exists and is spelled correctly, please update KoLMafia`
+          `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
+          "red"
         );
       } else {
         print(message);

@@ -1,4 +1,5 @@
 import {
+  abort,
   Bounty,
   Class,
   Coinmaster,
@@ -11,6 +12,7 @@ import {
   Monster,
   Path,
   Phylum,
+  print,
   Servant,
   Skill,
   Slot,
@@ -38,7 +40,12 @@ const createSingleConstant = <T extends MafiaClass>(
   ) => {
     const input = concatTemplateString(literals, ...placeholders);
     type I = InstanceType<typeof Type>;
-    return Type.get<I>(input);
+    try {
+      return Type.get<I>(input);
+    } catch (error) {
+      print(`${error}; you should probably update KoLmafia!`, "red");
+    }
+    abort();
   };
   tagFunction.none = Type.none as T;
   return tagFunction;
@@ -55,7 +62,12 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(splitByCommasWithEscapes(input));
+    try {
+      return Type.get<I>(splitByCommasWithEscapes(input));
+    } catch (error) {
+      print(`${error}; you should probably update KoLmafia!`, "red");
+    }
+    abort();
   };
 
 /**

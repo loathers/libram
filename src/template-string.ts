@@ -65,7 +65,17 @@ const createPluralConstant =
     try {
       return Type.get<I>(splitByCommasWithEscapes(input));
     } catch (error) {
-      print(`${error}; you should probably update KoLmafia!`, "red");
+      const message = `${error}`;
+      const match = message.match(
+        RegExp(`Bad ${Type.name.toString()} value: (.*)`, "i")
+      );
+      if (match) {
+        print(
+          `${match[0]}; if you're certain that ${Type} exists and is spelled correctly, please update KoLMafia`
+        );
+      } else {
+        print(message);
+      }
     }
     abort();
   };

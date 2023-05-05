@@ -43,7 +43,18 @@ const createSingleConstant = <T extends MafiaClass>(
     try {
       return Type.get<I>(input);
     } catch (error) {
-      print(`${error}; you should probably update KoLmafia!`, "red");
+      const message = `${error}`;
+      const match = message.match(
+        RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
+      );
+      if (match) {
+        print(
+          `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
+          "red"
+        );
+      } else {
+        print(message);
+      }
     }
     abort();
   };

@@ -31,6 +31,24 @@ const concatTemplateString = (
     ""
   );
 
+const handleTypeGetError = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T),
+  error: unknown
+) => {
+  const message = `${error}`;
+  const match = message.match(
+    RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
+  );
+  if (match) {
+    print(
+      `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
+      "red"
+    );
+  } else {
+    print(message);
+  }
+};
+
 const createSingleConstant = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T)
 ) => {
@@ -43,18 +61,7 @@ const createSingleConstant = <T extends MafiaClass>(
     try {
       return Type.get<I>(input);
     } catch (error) {
-      const message = `${error}`;
-      const match = message.match(
-        RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
-      );
-      if (match) {
-        print(
-          `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
-          "red"
-        );
-      } else {
-        print(message);
-      }
+      handleTypeGetError(Type, error);
     }
     abort();
   };
@@ -76,18 +83,7 @@ const createPluralConstant =
     try {
       return Type.get<I>(splitByCommasWithEscapes(input));
     } catch (error) {
-      const message = `${error}`;
-      const match = message.match(
-        RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
-      );
-      if (match) {
-        print(
-          `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
-          "red"
-        );
-      } else {
-        print(message);
-      }
+      handleTypeGetError(Type, error);
     }
     abort();
   };

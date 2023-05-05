@@ -44,9 +44,13 @@ const createSingleConstant = <T extends MafiaClass>(
   return tagFunction;
 };
 
-const createPluralConstant =
-  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
-  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+const createPluralConstant = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T)
+) => {
+  const tagFunction = (
+    literals: TemplateStringsArray,
+    ...placeholders: string[]
+  ) => {
     const input = concatTemplateString(literals, ...placeholders);
 
     type I = InstanceType<typeof Type>;
@@ -57,6 +61,9 @@ const createPluralConstant =
 
     return Type.get<I>(splitByCommasWithEscapes(input));
   };
+  tagFunction.all = () => Type.all() as T[];
+  return tagFunction;
+};
 
 /**
  * A Bounty specified by name.

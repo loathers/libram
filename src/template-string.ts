@@ -67,7 +67,7 @@ const createPluralConstant =
     } catch (error) {
       const message = `${error}`;
       const match = message.match(
-        RegExp(`Bad ${Type.name.toString()} value: (.*)`, "i")
+        RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
       );
       if (match) {
         print(

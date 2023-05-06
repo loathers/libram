@@ -1,4 +1,5 @@
 import {
+  abort,
   Bounty,
   Class,
   Coinmaster,
@@ -11,6 +12,7 @@ import {
   Monster,
   Path,
   Phylum,
+  print,
   Servant,
   Skill,
   Slot,
@@ -29,6 +31,24 @@ const concatTemplateString = (
     ""
   );
 
+const handleTypeGetError = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T),
+  error: unknown
+) => {
+  const message = `${error}`;
+  const match = message.match(
+    RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
+  );
+  if (match) {
+    print(
+      `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
+      "red"
+    );
+  } else {
+    print(message);
+  }
+};
+
 const createSingleConstant = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T)
 ) => {
@@ -38,7 +58,12 @@ const createSingleConstant = <T extends MafiaClass>(
   ) => {
     const input = concatTemplateString(literals, ...placeholders);
     type I = InstanceType<typeof Type>;
-    return Type.get<I>(input);
+    try {
+      return Type.get<I>(input);
+    } catch (error) {
+      handleTypeGetError(Type, error);
+    }
+    abort();
   };
   tagFunction.none = Type.none as T;
   return tagFunction;
@@ -55,7 +80,12 @@ const createPluralConstant =
       return Type.all<I>();
     }
 
-    return Type.get<I>(splitByCommasWithEscapes(input));
+    try {
+      return Type.get<I>(splitByCommasWithEscapes(input));
+    } catch (error) {
+      handleTypeGetError(Type, error);
+    }
+    abort();
   };
 
 /**

@@ -39,6 +39,7 @@ import * as GreyGoose from "./2022/GreyGoose";
 import * as JuneCleaver from "./2022/JuneCleaver";
 import * as TrainSet from "./2022/TrainSet";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
+import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
 
 export {
   AutumnAton,
@@ -54,6 +55,7 @@ export {
   CrimboShrub,
   CrownOfThrones,
   CrystalBall,
+  CursedMonkeyPaw,
   DaylightShavings,
   DeckOfEveryCard,
   Dinseylandfill,

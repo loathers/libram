@@ -4,7 +4,7 @@ import { Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $item, $skill } from "../../template-string";
 
-export const item = $item`unwrapped knock-off retro superhero cape`;
+const item = $item`unwrapped knock-off retro superhero cape`;
 /**
  * Determines whether you have() the Retro Cape.
  *

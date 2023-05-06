@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.7.15",
+  "version": "0.8.0",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn run build:tsc && yarn run build:bundled",
+    "build": "yarn run updateOverlappingItemSkillNames && yarn run build:tsc && yarn run build:bundled",
     "build:tsc": "tsc",
     "build:bundled": "node build.mjs",
     "clean": "rm -rf dist",
@@ -17,7 +17,8 @@
     "format": "yarn run prettier --write .",
     "lint": "yarn run eslint src tools --ext .ts && yarn run prettier --check .",
     "prepublishOnly": "yarn run build",
-    "updateProps": "yarn run ts-node ./tools/parseDefaultProperties.ts"
+    "updateProps": "yarn run ts-node ./tools/parseDefaultProperties.ts",
+    "updateOverlappingItemSkillNames": "yarn run ts-node ./tools/parseItemSkillNames.ts"
   },
   "files": [
     "dist/**/*.js",
@@ -45,11 +46,11 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.2.3",
     "eslint-plugin-jsdoc": "^40.0.1",
-    "eslint-plugin-libram": "^0.2.29",
+    "eslint-plugin-libram": "^0.2.30",
     "husky": "^4.3.6",
     "java-parser": "^1.4.0",
     "jest": "^27.1.0",
-    "kolmafia": "^5.27260.0",
+    "kolmafia": "^5.27321.0",
     "lint-staged": ">=10",
     "node-fetch": "^2.6.1",
     "prettier": "^2.1.2",

@@ -1,630 +1,399 @@
-import { Familiar, Item, myFamiliar } from "kolmafia";
-import { getSaleValue, have } from "../../lib";
-import { Modifiers } from "../../modifier";
+import { Familiar, Item, myFamiliar, numericModifier } from "kolmafia";
+import { have } from "../../lib";
+import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 import { $familiar, $item, $items } from "../../template-string";
+import { sum } from "../../utils";
 
 export type FamiliarRider = {
   familiar: Familiar;
-  meatVal: () => number;
+  drops: number | Item[] | Map<Item, number>;
   probability: number;
-  modifier: Modifiers;
   dropPredicate?: () => boolean;
 };
 
-export const ridingFamiliars: FamiliarRider[] = [
+export const ridingFamiliars: readonly FamiliarRider[] = [
   {
     familiar: $familiar`Puck Man`,
-    meatVal: () => getSaleValue($item`yellow pixel`),
+    drops: $items`yellow pixel`,
     probability: 0.25,
-    modifier: {
-      ["Muscle"]: 10,
-      ["Mysticality"]: 10,
-      ["Moxie"]: 10,
-    },
     dropPredicate: () => get("_yellowPixelDropsCrown") < 25,
   },
   {
     familiar: $familiar`Ms. Puck Man`,
-    meatVal: () => getSaleValue($item`yellow pixel`),
+    drops: $items`yellow pixel`,
     probability: 0.25,
-    modifier: {
-      ["Muscle"]: 10,
-      ["Mysticality"]: 10,
-      ["Moxie"]: 10,
-    },
     dropPredicate: () => get("_yellowPixelDropsCrown") < 25,
   },
   {
     familiar: $familiar`Grimstone Golem`,
-    meatVal: () => getSaleValue($item`grimstone mask`),
+    drops: $items`grimstone mask`,
     probability: 0.5,
-    modifier: {
-      ["Combat Rate"]: -5,
-    },
     dropPredicate: () => get("_grimstoneMaskDropsCrown") < 1,
   },
   {
     familiar: $familiar`Knob Goblin Organ Grinder`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Happy Medium`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Garbage Fire`,
-    meatVal: () => getSaleValue($item`burning newspaper`),
+    drops: $items`burning newspaper`,
     probability: 0.5,
-    modifier: {
-      ["Hot Spell Damage"]: 25,
-    },
     dropPredicate: () => get("_garbageFireDropsCrown") < 3,
   },
   {
     familiar: $familiar`Machine Elf`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`abstraction: sensation, abstraction: thought, abstraction: action, abstraction: category, abstraction: perception, abstraction: purpose`
-      ),
+    drops: $items`abstraction: sensation, abstraction: thought, abstraction: action, abstraction: category, abstraction: perception, abstraction: purpose`,
     probability: 0.2,
-    modifier: {
-      ["Muscle"]: 7,
-      ["Mysticality"]: 7,
-      ["Moxie"]: 7,
-    },
     dropPredicate: () => get("_abstractionDropsCrown") < 25,
   },
   {
     familiar: $familiar`Trick-or-Treating Tot`,
-    meatVal: () => getSaleValue($item`hoarded candy wad`),
+    drops: $items`hoarded candy wad`,
     probability: 0.5,
-    modifier: {
-      ["Muscle"]: 10,
-      ["Mysticality"]: 10,
-      ["Moxie"]: 10,
-    },
     dropPredicate: () => get("_hoardedCandyDropsCrown") < 3,
   },
   {
     familiar: $familiar`Warbear Drone`,
-    meatVal: () => getSaleValue($item`warbear whosit`),
+    drops: $items`warbear whosit`,
     probability: 1 / 4.5,
-    modifier: {
-      ["Maximum HP"]: 15,
-      ["Maximum MP"]: 15,
-    },
   },
   {
     familiar: $familiar`Li'l Xenomorph`,
-    meatVal: () => getSaleValue($item`lunar isotope`),
+    drops: $items`lunar isotope`,
     probability: 0.05,
-    modifier: {
-      ["Item Drop"]: 15,
-    },
   },
   {
     familiar: $familiar`Pottery Barn Owl`,
-    meatVal: () => getSaleValue($item`volcanic ash`),
+    drops: $items`volcanic ash`,
     probability: 0.1,
-    modifier: { ["Hot Damage"]: 10 },
   },
   {
     familiar: $familiar`Grim Brother`,
-    meatVal: () => getSaleValue($item`grim fairy tale`),
+    drops: $items`grim fairy tale`,
     probability: 1,
-    modifier: { ["Combat Rate"]: 5 },
     dropPredicate: () => get("_grimFairyTaleDropsCrown") < 2,
   },
   {
     familiar: $familiar`Optimistic Candle`,
-    meatVal: () => getSaleValue($item`glob of melted wax`),
+    drops: $items`glob of melted wax`,
     probability: 1,
     dropPredicate: () => get("_optimisticCandleDropsCrown") < 3,
-    modifier: {
-      ["Item Drop"]: 15,
-    },
   },
   {
     familiar: $familiar`Adventurous Spelunker`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`teflon ore, velcro ore, vinyl ore, cardboard ore, styrofoam ore, bubblewrap ore`
-      ),
+    drops: $items`teflon ore, velcro ore, vinyl ore, cardboard ore, styrofoam ore, bubblewrap ore`,
     probability: 1,
     dropPredicate: () => get("_oreDropsCrown") < 6,
-    modifier: {
-      ["Item Drop"]: 15,
-    },
   },
   {
     familiar: $familiar`Twitching Space Critter`,
-    meatVal: () => getSaleValue($item`space beast fur`),
+    drops: $items`space beast fur`,
     probability: 1,
-    modifier: {
-      ["Hot Resistance"]: 2,
-      ["Cold Resistance"]: 2,
-      ["Spooky Resistance"]: 2,
-      ["Sleaze Resistance"]: 2,
-      ["Stench Resistance"]: 2,
-    },
     dropPredicate: () => get("_spaceFurDropsCrown") < 1,
   },
   {
     familiar: $familiar`Party Mouse`,
-    meatVal: (slow = false) => {
-      if (!slow) return 50;
-      // Party mouse is virtually never going to be worthwhile and this causes so many useless mall hits it isn't funny.
-      return getSaleValue(
-        ...Item.all().filter(
-          (booze) =>
-            ["decent", "good"].includes(booze.quality) &&
-            booze.inebriety > 0 &&
-            booze.tradeable &&
-            booze.discardable &&
-            !$items`glass of "milk", cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy`.includes(
-              booze
-            )
-        )
-      );
-    },
+    drops: 50,
     probability: 0.05,
-    modifier: {
-      ["Booze Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Yule Hound`,
-    meatVal: () => getSaleValue($item`candy cane`),
+    drops: $items`candy cane`,
     probability: 1,
-    modifier: { ["Candy Drop"]: 20 },
   },
   {
     familiar: $familiar`Gluttonous Green Ghost`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`bean burrito, enchanted bean burrito, jumping bean burrito`
-      ),
+    drops: $items`bean burrito, enchanted bean burrito, jumping bean burrito`,
     probability: 1,
-    modifier: { ["Food Drop"]: 15 },
   },
   {
     familiar: $familiar`Reassembled Blackbird`,
-    meatVal: () => getSaleValue($item`blackberry`),
+    drops: $items`blackberry`,
     probability: 1,
-    modifier: {
-      ["Item Drop"]: 10,
-    },
   },
   {
     familiar: $familiar`Reconstituted Crow`,
-    meatVal: () => getSaleValue($item`blackberry`),
+    drops: $items`blackberry`,
     probability: 1,
-    modifier: {
-      ["Item Drop"]: 10,
-    },
   },
   {
     familiar: $familiar`Hunchbacked Minion`,
-    meatVal: () =>
-      0.02 * getSaleValue($item`disembodied brain`) +
-      0.98 * getSaleValue($item`skeleton bone`),
+    drops: new Map([
+      [$item`disembodied brain`, 0.02],
+      [$item`skeleton bone`, 0.98],
+    ]),
     probability: 1,
-    modifier: { ["Muscle Experience"]: 2 },
   },
   {
     familiar: $familiar`Reanimated Reanimator`,
-    meatVal: () => getSaleValue(...$items`hot wing, broken skull`),
+    drops: $items`hot wing, broken skull`,
     probability: 1,
-    modifier: { ["Mysticality Experience"]: 2 },
   },
   {
     familiar: $familiar`Attention-Deficit Demon`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`chorizo brownies, white chocolate and tomato pizza, carob chunk noodles`
-      ),
+    drops: $items`chorizo brownies, white chocolate and tomato pizza, carob chunk noodles`,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Piano Cat`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`beertini, papaya slung, salty slug, tomato daiquiri`
-      ),
+    drops: $items`beertini, papaya slung, salty slug, tomato daiquiri`,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Golden Monkey`,
-    meatVal: () => getSaleValue($item`gold nuggets`),
+    drops: $items`gold nuggets`,
     probability: 0.5,
-    modifier: {
-      ["Meat Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Robot Reindeer`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
-      ),
+    drops: $items`candy cane, eggnog, fruitcake, gingerbread bugbear`,
     probability: 0.3,
-    modifier: {
-      ["Muscle"]: 10,
-      ["Mysticality"]: 10,
-      ["Moxie"]: 10,
-    },
   },
   {
     familiar: $familiar`Stocking Mimic`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`Angry Farmer candy, Cold Hots candy, Rock Pops, Tasty Fun Good rice candy, Wint-O-Fresh mint`
-      ),
+    drops: $items`Angry Farmer candy, Cold Hots candy, Rock Pops, Tasty Fun Good rice candy, Wint-O-Fresh mint`,
     probability: 0.3,
-    modifier: {
-      ["Muscle"]: 10,
-      ["Mysticality"]: 10,
-      ["Moxie"]: 10,
-    },
   },
   {
     familiar: $familiar`BRICKO chick`,
-    meatVal: () => getSaleValue($item`BRICKO brick`),
+    drops: $items`BRICKO brick`,
     probability: 1,
-    modifier: {
-      ["Muscle Percent"]: 10,
-      ["Mysticality Percent"]: 10,
-      ["Moxie Percent"]: 10,
-    },
   },
   {
     familiar: $familiar`Cotton Candy Carnie`,
-    meatVal: () => getSaleValue($item`cotton candy pinch`),
+    drops: $items`cotton candy pinch`,
     probability: 1,
-    modifier: { ["Initiative"]: 20 },
   },
   {
     familiar: $familiar`Untamed Turtle`,
-    meatVal: () =>
-      getSaleValue(...$items`snailmail bits, turtlemail bits, turtle wax`),
+    drops: $items`snailmail bits, turtlemail bits, turtle wax`,
     probability: 0.35,
-    modifier: { ["Initiative"]: 20 },
   },
   {
     familiar: $familiar`Astral Badger`,
-    meatVal: () =>
-      2 *
-      getSaleValue(...$items`spooky mushroom, Knob mushroom, Knoll mushroom`),
+    drops: $items`spooky mushroom, Knob mushroom, Knoll mushroom`,
     probability: 1,
-    modifier: { ["Maximum HP"]: 10, ["Maximum MP"]: 10 },
   },
   {
     familiar: $familiar`Green Pixie`,
-    meatVal: () => getSaleValue($item`bottle of tequila`),
+    drops: $items`bottle of tequila`,
     probability: 0.2,
-    modifier: { ["Maximum HP"]: 10, ["Maximum MP"]: 10 },
   },
   {
     familiar: $familiar`Angry Goat`,
-    meatVal: () => getSaleValue($item`goat cheese pizza`),
+    drops: $items`goat cheese pizza`,
     probability: 1,
-    modifier: { ["Muscle Percent"]: 15 },
   },
   {
     familiar: $familiar`Adorable Seal Larva`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`stench nuggets, spooky nuggets, hot nuggets, cold nuggets, sleaze nuggets`
-      ),
+    drops: $items`stench nuggets, spooky nuggets, hot nuggets, cold nuggets, sleaze nuggets`,
     probability: 0.35,
-    modifier: {
-      ["HP Regen Min"]: 2,
-      ["MP Regen Min"]: 2,
-      ["HP Regen Max"]: 8,
-      ["MP Regen Max"]: 8,
-    },
   },
   {
     familiar: $familiar`Ancient Yuletide Troll`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
-      ),
+    drops: $items`candy cane, eggnog, fruitcake, gingerbread bugbear`,
     probability: 0.3,
-    modifier: {
-      ["HP Regen Min"]: 2,
-      ["MP Regen Min"]: 2,
-      ["HP Regen Max"]: 8,
-      ["MP Regen Max"]: 8,
-    },
   },
   {
     familiar: $familiar`Sweet Nutcracker`,
-    meatVal: () =>
-      getSaleValue(
-        ...$items`candy cane, eggnog, fruitcake, gingerbread bugbear`
-      ),
+    drops: $items`candy cane, eggnog, fruitcake, gingerbread bugbear`,
     probability: 0.3,
-    modifier: {
-      ["HP Regen Min"]: 2,
-      ["MP Regen Min"]: 2,
-      ["HP Regen Max"]: 8,
-      ["MP Regen Max"]: 8,
-    },
   },
   {
     familiar: $familiar`Casagnova Gnome`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Coffee Pixie`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Dancing Frog`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Grouper Groupie`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Hand Turkey`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Hippo Ballerina`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Jitterbug`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Leprechaun`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Obtuse Angel`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Psychedelic Bear`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Robortender`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 20,
-    },
   },
   {
     familiar: $familiar`Ghost of Crimbo Commerce`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Meat Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Hobo Monkey`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Meat Drop"]: 25,
-    },
   },
   {
     familiar: $familiar`Rockin' Robin`,
-    meatVal: () => 60,
+    drops: 60,
     probability: 1,
-    modifier: {
-      ["Item Drop"]: 15,
-    },
   },
   {
     familiar: $familiar`Feral Kobold`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Item Drop"]: 15,
-    },
   },
   {
     familiar: $familiar`Oily Woim`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Item Drop"]: 10,
-    },
   },
   {
     familiar: $familiar`Cat Burglar`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Item Drop"]: 10,
-    },
   },
   {
     familiar: $familiar`Misshapen Animal Skeleton`,
-    meatVal: () => 30,
+    drops: 30,
     probability: 1,
-    modifier: {
-      ["Familiar Weight"]: 5,
-    },
   },
   {
     familiar: $familiar`Gelatinous Cubeling`,
-    meatVal: () => 0,
+    drops: 0,
     probability: 0,
-    modifier: {
-      ["Familiar Weight"]: 5,
-    },
   },
   {
     familiar: $familiar`Frozen Gravy Fairy`,
-    // drops a cold nugget every combat, 5 of which can be used to make a cold wad
-    meatVal: () =>
-      Math.max(
-        0.2 * getSaleValue($item`cold wad`),
-        getSaleValue($item`cold nuggets`)
-      ),
+    drops: $items`cold nuggets`,
     probability: 1,
-    modifier: { ["Cold Damage"]: 20 },
   },
   {
     familiar: $familiar`Stinky Gravy Fairy`,
-    // drops a stench nugget every combat, 5 of which can be used to make a stench wad
-    meatVal: () =>
-      Math.max(
-        0.2 * getSaleValue($item`stench wad`),
-        getSaleValue($item`stench nuggets`)
-      ),
+    drops: $items`stench nuggets`,
     probability: 1,
-    modifier: { ["Stench Damage"]: 20 },
   },
   {
     familiar: $familiar`Sleazy Gravy Fairy`,
-    // drops a sleaze nugget every combat, 5 of which can be used to make a sleaze wad
-    meatVal: () =>
-      Math.max(
-        0.2 * getSaleValue($item`sleaze wad`),
-        getSaleValue($item`sleaze nuggets`)
-      ),
+    drops: $items`sleaze nuggets`,
     probability: 1,
-    modifier: { ["Sleaze Damage"]: 20 },
   },
   {
     familiar: $familiar`Spooky Gravy Fairy`,
-    // drops a spooky nugget every combat, 5 of which can be used to make a spooky wad
-    meatVal: () =>
-      Math.max(
-        0.2 * getSaleValue($item`spooky wad`),
-        getSaleValue($item`spooky nuggets`)
-      ),
+    drops: $items`spooky nuggets`,
     probability: 1,
-    modifier: { ["Spooky Damage"]: 20 },
   },
   {
     familiar: $familiar`Flaming Gravy Fairy`,
     // drops a hot nugget every combat, 5 of which can be used to make a hot wad
-    meatVal: () =>
-      Math.max(
-        0.2 * getSaleValue($item`hot wad`),
-        getSaleValue($item`hot nuggets`)
-      ),
+    drops: $items`hot nuggets`,
     probability: 1,
-    modifier: { ["Hot Damage"]: 20 },
   },
-];
+] as const;
 
 /**
  * Value a specified familiar Crown rider
  *
  * @param rider Familiar to value
- * @param modifierValueFunction Value of the extra modifiers the familiar provides
+ * @param modifierValueFunction Value of the extra modifiers the familiar provides,
+ * @param dropsValueFunction Value to assign the drops of the familiar gives
  * @param ignoreLimitedDrops Whether to ignore drops that are daily or otherwise limited
  * @returns Rider value (in meat)
  */
 export function valueRider(
   rider: FamiliarRider,
-  modifierValueFunction: (modifiers: Modifiers) => number,
+  modifierValueFunction: (familiar: Familiar) => number,
+  dropsValueFunction: (drops: Item[] | Map<Item, number>) => number,
   ignoreLimitedDrops = false
 ): number {
   const dropValue =
     !rider.dropPredicate || (rider.dropPredicate() && !ignoreLimitedDrops)
-      ? rider.probability * rider.meatVal()
+      ? rider.probability *
+        (typeof rider.drops === "number"
+          ? rider.drops
+          : dropsValueFunction(rider.drops))
       : 0;
-  const modifierValue = modifierValueFunction(rider.modifier);
+  const modifierValue = modifierValueFunction(rider.familiar);
   return dropValue + modifierValue;
 }
 
 type RiderMode = {
-  modifierValueFunction: (modifiers: Modifiers) => number;
+  modifierValueFunction: (familiar: Familiar) => number;
+  dropsValueFunction: (drops: Item[] | Map<Item, number>) => number;
   ignoreLimitedDrops: boolean;
   excludeCurrentFamiliar: boolean;
 };
 
 const riderModes = new Map<string, RiderMode>();
 
+const DEFAULTS = {
+  modifierValueFunction: () => 0,
+  dropsValueFunction: () => 0,
+  ignoreLimitedDrops: false,
+  excludeCurrentFamiliar: true,
+};
 /**
  * Creates a rider mode for this session
  *
  * @param name Rider mode name
- * @param modifierValueFunction Function to value modifiers of a rider
- * @param ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
- * @param excludeCurrentFamiliar Whether to exclude the player's current familiar
+ * @param details An object consisting of various settings for the RiderMode:
+ * @param details.modifierValueFunction Function to value a familiar itself, often using modifiers,
+ * @param details.dropsValueFunction Function to value the drops of a familiar, which are stored as an `Item[]` or `Map<Item, number>`
+ * @param details.ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
+ * @param details.excludeCurrentFamiliar Whether to exclude the player's current familiar
  * @returns Map of all rider modes created this session, including the one that was just made
  */
 export function createRiderMode(
   name: string,
-  modifierValueFunction: (modifiers: Modifiers) => number,
-  ignoreLimitedDrops = false,
-  excludeCurrentFamiliar = true
+  details: Partial<RiderMode>
 ): Map<string, RiderMode> {
-  return riderModes.set(name, {
-    modifierValueFunction: modifierValueFunction,
-    ignoreLimitedDrops: ignoreLimitedDrops,
-    excludeCurrentFamiliar: excludeCurrentFamiliar,
-  });
+  return riderModes.set(name, { ...DEFAULTS, ...details });
+}
+
+/**
+ * @param name The name of the `RiderMode` to check
+ * @returns Whether or not said `RiderMode` exists
+ */
+export function hasRiderMode(name: string): boolean {
+  return riderModes.has(name);
 }
 
 const riderLists = new Map<string, FamiliarRider[]>();
@@ -638,28 +407,75 @@ const riderLists = new Map<string, FamiliarRider[]>();
 export function pickRider(mode: string): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;
-  const { modifierValueFunction, ignoreLimitedDrops, excludeCurrentFamiliar } =
-    modeData;
+  const {
+    modifierValueFunction,
+    dropsValueFunction,
+    ignoreLimitedDrops,
+    excludeCurrentFamiliar,
+  } = modeData;
+
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,
       ridingFamiliars
-        .filter((rider) => have(rider.familiar))
+        .filter(({ familiar }) => have(familiar))
         .sort(
           (a, b) =>
-            valueRider(b, modifierValueFunction, ignoreLimitedDrops) -
-            valueRider(a, modifierValueFunction, ignoreLimitedDrops)
+            valueRider(
+              b,
+              modifierValueFunction,
+              dropsValueFunction,
+              ignoreLimitedDrops
+            ) -
+            valueRider(
+              a,
+              modifierValueFunction,
+              dropsValueFunction,
+              ignoreLimitedDrops
+            )
         )
     );
   }
+
   const list = riderLists.get(mode);
   if (list) {
     const riderToReturn = list.find(
-      (rider) =>
-        (!rider.dropPredicate || rider.dropPredicate()) &&
-        (!excludeCurrentFamiliar || myFamiliar() !== rider.familiar)
+      ({ dropPredicate, familiar }) =>
+        (dropPredicate?.() ?? true) &&
+        (!excludeCurrentFamiliar || myFamiliar() !== familiar)
     );
     return riderToReturn ?? null;
   }
   return null;
+}
+
+/**
+ * Find the associated NumericModifier for a given familiar when enthroned or bjornified
+ *
+ * @param modifier The NumericModifier in question
+ * @param familiar The Familiar in question
+ * @returns The value of the given numeric modifier for the Crown of Thrones (or buddy bjorn) when the given familiar is encromulated
+ */
+export function getModifier(
+  modifier: NumericModifier,
+  familiar: Familiar
+): number {
+  return numericModifier(`Throne:${familiar}`, modifier);
+}
+
+/**
+ * Create a `modifierValueFunction` for a familiar.
+ *
+ * @param modifiers An array consisting of the `NumericModifier`s relevant to your valuation
+ * @param functions An object keyed by `NumericModifier`s whose values are functions that map the the result of a modifier to its corresponding valuation
+ * @returns A function that maps a familiar to the value of its modifiers in the crown of thrones or buddy bjorn.
+ */
+export function createModifierValueFunction<T extends NumericModifier>(
+  modifiers: T[],
+  functions: { [x in T]: (mod: number) => number }
+): (familiar: Familiar) => number {
+  return (familiar: Familiar) =>
+    sum(modifiers, (modifier) =>
+      functions[modifier](getModifier(modifier, familiar))
+    );
 }

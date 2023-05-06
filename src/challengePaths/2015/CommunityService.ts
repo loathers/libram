@@ -56,8 +56,21 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
-const baseWeight = (): number =>
-  have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
+function baseWeight(): number {
+  const expWeight = familiarWeight(myFamiliar());
+  let commaWeight = 0;
+  if (
+    myFamiliar() === $familiar`Comma Chameleon` &&
+    get("commaFamiliar") === $familiar`Homemade Robot`
+  ) {
+    commaWeight = 6 + 11 * get("homemadeRobotUpgrades"); // Comma gets the bonus "base" weight from homemade robot upgrades (when dressed as it) up to 100lb, plus a bonus 5lbs from being equipped
+  }
+  let pillWeight = 0;
+  if (have($effect`Fidoxene`)) {
+    pillWeight = 20;
+  }
+  return Math.max(expWeight, commaWeight, pillWeight);
+}
 
 export default class CommunityService {
   private choice: number;
@@ -65,6 +78,7 @@ export default class CommunityService {
   private property: string;
   private predictor: () => number;
   private maximizeRequirements: Requirement | null;
+  private timer: { turns: number; time: number } | null = null;
 
   /**
    * Class to store properties of various CS tests.
@@ -120,15 +134,38 @@ export default class CommunityService {
     return this.maximizeRequirements;
   }
 
+  /**
+   * Start the time & turn counter for the Test in question.
+   */
+  startTimer(): void {
+    this.timer ??= { time: Date.now(), turns: myTurncount() };
+  }
+
+  private static taskTimers: Map<string, { time: number; turns: number }> =
+    new Map();
+
+  /**
+   * Start the time & turn counter for the given task
+   *
+   * @param name The name of the task to start the counter of
+   */
+  static startTimer(name: string): void {
+    if (!this.taskTimers.has(name)) {
+      this.taskTimers.set(name, { time: Date.now(), turns: myTurncount() });
+    }
+  }
+
   static logTask(name: string, action: () => number | void) {
-    const startTime = Date.now();
-    const startTurns = myTurncount();
     const estimatedTurns = action() ?? 0;
+    const { time, turns } = this.taskTimers.get(name) ?? {
+      time: Date.now(),
+      turns: myTurncount(),
+    };
     CommunityService.log[name] = {
       type: "task",
-      turnCost: myTurncount() - startTurns,
+      turnCost: myTurncount() - turns,
       predictedTurns: estimatedTurns,
-      seconds: (Date.now() - startTime) / 1000,
+      seconds: (Date.now() - time) / 1000,
     };
   }
 
@@ -174,12 +211,15 @@ export default class CommunityService {
   ): "completed" | "failed" | "already completed" {
     if (this.isDone()) return "already completed";
 
-    const startTime = Date.now();
-    const startTurns = myTurncount();
+    const { time, turns } = this.timer ?? {
+      time: Date.now(),
+      turns: myTurncount(),
+    };
 
     let additionalTurns: number;
     try {
-      additionalTurns = prepare() ?? 0;
+      const result = prepare();
+      additionalTurns = typeof result === "number" ? result : 0;
     } catch (e) {
       print(`${e}`, "red");
       return "failed";
@@ -188,10 +228,10 @@ export default class CommunityService {
     const prediction = this.predictor();
 
     const council = visitCouncil();
-    const turns = this._actualCost(council);
-    if (!turns) return "already completed";
+    const turnCost = this._actualCost(council);
+    if (!turnCost) return "already completed";
 
-    if (turns > Math.min(maxTurns, myAdventures())) {
+    if (turnCost > Math.min(maxTurns, myAdventures())) {
       return "failed";
     }
 
@@ -199,8 +239,8 @@ export default class CommunityService {
 
     CommunityService.log[this.property] = {
       predictedTurns: prediction + additionalTurns,
-      turnCost: myTurncount() - startTurns,
-      seconds: (Date.now() - startTime) / 1000,
+      turnCost: myTurncount() - turns,
+      seconds: (Date.now() - time) / 1000,
       type: "test",
     };
     return "completed";

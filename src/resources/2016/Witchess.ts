@@ -10,7 +10,7 @@ import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
-export const item = $item`Witchess Set`;
+const item = $item`Witchess Set`;
 /**
  * @returns Is the Witchess installed and available in our campground?
  */

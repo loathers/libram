@@ -19,8 +19,11 @@ import {
   xpath,
 } from "kolmafia";
 import { getTodaysHolidayWanderers } from "./lib";
+import {
+  overlappingItemNames,
+  overlappingSkillNames,
+} from "./overlappingNames";
 import { get, set } from "./property";
-import { $items, $skills } from "./template-string";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -60,11 +63,6 @@ function itemOrNameToItem(itemOrName: ItemOrName) {
   return typeof itemOrName === "string" ? Item.get(itemOrName) : itemOrName;
 }
 
-// The list of all combat items whose name is a strict substring of another combat item
-const substringCombatItems = $items`spider web, really sticky spider web, dictionary, NG, Cloaca-Cola, yo-yo, top, ball, kite, yo, red potion, blue potion, bowling ball, adder, red button, pile of sand, mushroom, deluxe mushroom`;
-// The list of all combat skills whose name is a strict substring of another combat skill
-const substringCombatSkills = $skills`Shoot, Thrust-Smack, Headbutt, Toss, Sing, Disarm, LIGHT, BURN, Extract, Meteor Shower, Snipe, Cleave, Boil, Slice, Rainbow`;
-
 /**
  * Create a string of the item or items provided that is compatible with BALLS syntax and is non-ambiguous
  *
@@ -78,7 +76,7 @@ function itemOrItemsBallsMacroName(
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
     const item = itemOrNameToItem(itemOrItems);
-    return !substringCombatItems.includes(item)
+    return !overlappingItemNames.includes(item.name)
       ? item.name
       : toInt(item).toString();
   }
@@ -135,7 +133,7 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
   return skill.name.match(/^[A-Za-z ]+$/) &&
-    !substringCombatSkills.includes(skill)
+    !overlappingSkillNames.includes(skill.name)
     ? skill.name
     : toInt(skill);
 }
@@ -324,6 +322,29 @@ export class Macro {
    */
   static abort<T extends Macro>(this: Constructor<T>): T {
     return new this().abort();
+  }
+
+  /**
+   * Adds an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  abortWithWarning(warning: string): this {
+    return this.step(`abort "${warning}"`);
+  }
+
+  /**
+   * Create a new macro with an "abort" step to this macro, with a warning message to print
+   *
+   * @param warning The warning message to print
+   * @returns  {Macro} This object itself.
+   */
+  static abortWithWarning<T extends Macro>(
+    this: Constructor<T>,
+    warning: string
+  ): T {
+    return new this().abortWithWarning(warning);
   }
 
   /**

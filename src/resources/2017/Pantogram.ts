@@ -1,5 +1,5 @@
 import { Item, toInt, visitUrl } from "kolmafia";
-import { have as haveItem } from "../../lib";
+import { directlyUse, have as haveItem } from "../../lib";
 import { $item } from "../../template-string";
 
 const pantogram = $item`portable pantogram`;
@@ -209,7 +209,7 @@ export function makePants(
 
   const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
 
-  visitUrl("inv_use.php?pwd&whichitem=9573");
+  directlyUse(pantogram);
   visitUrl(url);
   return haveItem(pants);
 }

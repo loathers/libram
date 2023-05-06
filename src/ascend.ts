@@ -76,6 +76,7 @@ const gardens = [
   "packet of thanksgarden seeds",
   "packet of tall grass seeds",
   "packet of mushroom spores",
+  "packet of rock seeds",
 ] as const;
 type Garden = typeof gardens[number];
 

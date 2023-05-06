@@ -7,16 +7,14 @@ import {
   canAdventure,
   runChoice,
   toItem,
-  toMonster,
-  visitUrl,
-  toInt,
+  use,
 } from "kolmafia";
-import { have as have_ } from "../../lib";
+import { directlyUse, have as have_, questStep } from "../../lib";
 import { get, withChoice } from "../../property";
-import { $item, $location } from "../../template-string";
+import { $item, $location, $monster } from "../../template-string";
 import { makeByXFunction, maxBy } from "../../utils";
 
-export const item = $item`closed-circuit pay phone`;
+const item = $item`closed-circuit pay phone`;
 
 /**
  * @returns Whether we currently have the closed-circuit pay phone
@@ -130,15 +128,11 @@ export function chooseQuest(
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
   withChoice(1497, "", () => {
-    visitUrl(
-      `inv_use.php?which=3&whichitem=${toInt(
-        $item`closed-circuit pay phone`
-      )}&pwd`
-    );
+    directlyUse(item);
     runChoice(
       chooser({
         artifact: toItem(get("rufusDesiredArtifact")),
-        entity: toMonster(get("rufusDesiredEntity")),
+        entity: get("rufusDesiredEntity") ?? $monster.none,
         items: toItem(get("rufusDesiredItems")),
       })
     );
@@ -161,3 +155,16 @@ export function rifts(): Location[] {
  * @returns The option corresponding to your current shadow rift ingress.
  */
 export const byIngress = makeByXFunction(currentIngress);
+
+/**
+ * Submit your Rufus quest
+ *
+ * @returns Whether we successfully submitted your Rufus quest
+ */
+export function submitQuest(): boolean {
+  if (questStep("questRufus") === 1) {
+    withChoice(1498, 1, () => use(item));
+    return questStep("questRufus") === -1;
+  }
+  return false;
+}

@@ -4,7 +4,7 @@ import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
 import { $familiar, $item, $skill } from "../../template-string";
 
-export const goose = $familiar`Grey Goose`;
+const goose = $familiar`Grey Goose`;
 
 /**
  * Determines whether you `have` the Grey Goose

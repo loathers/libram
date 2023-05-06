@@ -56,7 +56,7 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
-const baseWeight = (): number => {
+function baseWeight(): number {
   const expWeight = familiarWeight(myFamiliar());
   let commaWeight = 0;
   if (
@@ -70,7 +70,7 @@ const baseWeight = (): number => {
     pillWeight = 20;
   }
   return Math.max(expWeight, commaWeight, pillWeight);
-};
+}
 
 export default class CommunityService {
   private choice: number;

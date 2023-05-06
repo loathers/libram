@@ -56,16 +56,21 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
-const baseWeight = (): number =>
-  myFamiliar() === $familiar`Comma Chameleon` &&
-  get("commaFamiliar") === $familiar`Homemade Robot`
-    ? Math.max(
-        1 + 11 * get("homemadeRobotUpgrades"),
-        familiarWeight(myFamiliar())
-      )
-    : have($effect`Fidoxene`)
-    ? 20
-    : familiarWeight(myFamiliar());
+const baseWeight = (): number => {
+  const expWeight = familiarWeight(myFamiliar());
+  let commaWeight = 0;
+  if (
+    myFamiliar() === $familiar`Comma Chameleon` &&
+    get("commaFamiliar") === $familiar`Homemade Robot`
+  ) {
+    commaWeight = 6 + 11 * get("homemadeRobotUpgrades"); // Comma gets the bonus "base" weight from homemade robot upgrades (when dressed as it) up to 100lb, plus a bonus 5lbs from being equipped
+  }
+  let pillWeight = 0;
+  if (have($effect`Fidoxene`)) {
+    pillWeight = 20;
+  }
+  return Math.max(expWeight, commaWeight, pillWeight);
+};
 
 export default class CommunityService {
   private choice: number;

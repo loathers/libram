@@ -8,6 +8,15 @@ export * from "./diet";
 export * from "./Dungeon";
 export * from "./lib";
 export * from "./maximize";
+export {
+  numericModifiers,
+  statModifiers,
+  booleanModifiers,
+  classModifiers,
+  monsterModifiers,
+  effectModifiers,
+  skillModifiers,
+} from "./modifierTypes";
 export * from "./mood";
 export * from "./propertyTyping";
 export * from "./resources";
@@ -35,3 +44,12 @@ export { Session } from "./session";
 
 export type { LogLevels } from "./logger";
 export type { Modifiers } from "./modifier";
+export type {
+  NumericModifier,
+  StringModifier,
+  ClassModifier,
+  StatModifier,
+  BooleanModifier,
+  EffectModifier,
+  SkillModifier,
+} from "./modifierTypes";

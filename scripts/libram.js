@@ -1514,12 +1514,20 @@ var concatTemplateString = function(literals) {
     var _placeholders$i;
     return acc + literal + ((_placeholders$i = placeholders[i]) !== null && _placeholders$i !== void 0 ? _placeholders$i : "");
   }, "");
+}, handleTypeGetError = function(Type, error2) {
+  var message = "".concat(error2), match = message.match(RegExp("Bad ".concat(Type.name.toLowerCase(), " value: (.*)")));
+  match ? (0, import_kolmafia3.print)("".concat(match[0], "; if you're certain that this ").concat(Type, " exists and is spelled correctly, please update KoLMafia"), "red") : (0, import_kolmafia3.print)(message);
 }, createSingleConstant = function(Type) {
   var tagFunction = function(literals) {
     for (var _len2 = arguments.length, placeholders = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
       placeholders[_key2 - 1] = arguments[_key2];
     var input = concatTemplateString.apply(void 0, [literals].concat(placeholders));
-    return Type.get(input);
+    try {
+      return Type.get(input);
+    } catch (error2) {
+      handleTypeGetError(Type, error2);
+    }
+    (0, import_kolmafia3.abort)();
   };
   return tagFunction.none = Type.none, tagFunction;
 }, createPluralConstant = function(Type) {
@@ -1527,7 +1535,14 @@ var concatTemplateString = function(literals) {
     for (var _len3 = arguments.length, placeholders = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
       placeholders[_key3 - 1] = arguments[_key3];
     var input = concatTemplateString.apply(void 0, [literals].concat(placeholders));
-    return input === "" ? Type.all() : Type.get(splitByCommasWithEscapes(input));
+    if (input === "")
+      return Type.all();
+    try {
+      return Type.get(splitByCommasWithEscapes(input));
+    } catch (error2) {
+      handleTypeGetError(Type, error2);
+    }
+    (0, import_kolmafia3.abort)();
   };
 }, $bounty = createSingleConstant(import_kolmafia3.Bounty), $bounties = createPluralConstant(import_kolmafia3.Bounty), $class = createSingleConstant(import_kolmafia3.Class), $classes = createPluralConstant(import_kolmafia3.Class), $coinmaster = createSingleConstant(import_kolmafia3.Coinmaster), $coinmasters = createPluralConstant(import_kolmafia3.Coinmaster), $effect = createSingleConstant(import_kolmafia3.Effect), $effects = createPluralConstant(import_kolmafia3.Effect), $element = createSingleConstant(import_kolmafia3.Element), $elements = createPluralConstant(import_kolmafia3.Element), $familiar = createSingleConstant(import_kolmafia3.Familiar), $familiars = createPluralConstant(import_kolmafia3.Familiar), $item = createSingleConstant(import_kolmafia3.Item), $items = createPluralConstant(import_kolmafia3.Item), $location = createSingleConstant(import_kolmafia3.Location), $locations = createPluralConstant(import_kolmafia3.Location), $monster = createSingleConstant(import_kolmafia3.Monster), $monsters = createPluralConstant(import_kolmafia3.Monster), $phylum = createSingleConstant(import_kolmafia3.Phylum), $phyla = createPluralConstant(import_kolmafia3.Phylum), $servant = createSingleConstant(import_kolmafia3.Servant), $servants = createPluralConstant(import_kolmafia3.Servant), $skill = createSingleConstant(import_kolmafia3.Skill), $skills = createPluralConstant(import_kolmafia3.Skill), $slot = createSingleConstant(import_kolmafia3.Slot), $slots = createPluralConstant(import_kolmafia3.Slot), $stat = createSingleConstant(import_kolmafia3.Stat), $stats = createPluralConstant(import_kolmafia3.Stat), $thrall = createSingleConstant(import_kolmafia3.Thrall), $thralls = createPluralConstant(import_kolmafia3.Thrall), $path = createSingleConstant(import_kolmafia3.Path), $paths = createPluralConstant(import_kolmafia3.Path);
 

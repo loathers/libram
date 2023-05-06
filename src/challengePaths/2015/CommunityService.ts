@@ -57,7 +57,15 @@ const statCommunityServicePredictor = (stat: Stat) => {
 const visitCouncil = () => visitUrl("council.php");
 
 const baseWeight = (): number =>
-  have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
+  myFamiliar() === $familiar`Comma Chameleon` &&
+  get("commaFamiliar") === $familiar`Homemade Robot`
+    ? Math.max(
+        1 + 11 * get("homemadeRobotUpgrades"),
+        familiarWeight(myFamiliar())
+      )
+    : have($effect`Fidoxene`)
+    ? 20
+    : familiarWeight(myFamiliar());
 
 export default class CommunityService {
   private choice: number;

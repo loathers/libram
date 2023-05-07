@@ -21,11 +21,11 @@ export function currentCinch(): number {
 }
 
 /**
- * @param restNumber The rest number to evaluate
+ * @param currentRests The rest number to evaluate
  * @returns The amount of cinch restored by the given rest
  */
-export function cinchRestoredBy(restNumber = get("_cinchoRests")) {
-  return clamp(55 - restNumber * 5, 5, 30);
+export function cinchRestoredBy(currentRests = get("_cinchoRests")) {
+  return clamp(50 - currentRests * 5, 5, 30);
 }
 
 /**

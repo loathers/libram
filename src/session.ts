@@ -7,6 +7,11 @@ import {
   mySessionItems,
   mySessionMeat,
   toItem,
+  getCloset,
+  getDisplay,
+  getStorage,
+  myClosetMeat,
+  myStorageMeat,
 } from "kolmafia";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
@@ -67,10 +72,17 @@ function mySessionItemsWrapper(): Map<Item, number> {
   ]);
 
   const inventory = new Map<Item, number>();
-  for (const [itemStr, quantity] of Object.entries(mySessionItems())) {
-    const item = toItem(itemStr);
-    const mappedItem = itemMappings.get(item) ?? item;
-    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+  for (const inventoryFunc of [
+    mySessionItems,
+    getCloset,
+    getDisplay,
+    getStorage,
+  ]) {
+    for (const [itemStr, quantity] of Object.entries(inventoryFunc())) {
+      const item = toItem(itemStr);
+      const mappedItem = itemMappings.get(item) ?? item;
+      inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+    }
   }
   return inventory;
 }
@@ -285,6 +297,9 @@ export class Session {
   }
 
   static current(): Session {
-    return new Session(mySessionMeat(), mySessionItemsWrapper());
+    return new Session(
+      sum([mySessionMeat, myClosetMeat, myStorageMeat], (f) => f()),
+      mySessionItemsWrapper()
+    );
   }
 }

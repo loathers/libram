@@ -12775,7 +12775,7 @@ var import_kolmafia61 = require("kolmafia"), logColor = function(color) {
 
 // src/session.ts
 var import_kolmafia62 = require("kolmafia");
-var _templateObject478, _templateObject2125, _templateObject3106, _templateObject479, _templateObject556, _templateObject645, _templateObject738, _templateObject834, _templateObject929, _templateObject1027, _templateObject1123, _templateObject1221, _templateObject1320, _templateObject1417, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1915, _templateObject2015, _templateObject2126, _templateObject2217, _templateObject2315, _templateObject2414, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2812, _templateObject2912, _templateObject3011;
+var _templateObject478, _templateObject2125, _templateObject3106, _templateObject479, _templateObject556, _templateObject645, _templateObject738, _templateObject834, _templateObject929, _templateObject1027, _templateObject1123, _templateObject1221, _templateObject1320, _templateObject1417, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1915, _templateObject2015, _templateObject2126, _templateObject2217, _templateObject2315, _templateObject2414, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2812, _templateObject2912, _templateObject3011, _templateObject3114;
 function _classCallCheck20(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
@@ -12900,14 +12900,21 @@ function mySessionItemsWrapper() {
       var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray20(_Object$entries[_i2], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1], _item = (0, import_kolmafia62.toItem)(itemStr), mappedItem = (_itemMappings$get = itemMappings.get(_item)) !== null && _itemMappings$get !== void 0 ? _itemMappings$get : _item;
       inventory.set(mappedItem, quantity + ((_inventory$get = inventory.get(mappedItem)) !== null && _inventory$get !== void 0 ? _inventory$get : 0));
     }
+  for (var _i3 = 0, _Object$entries2 = Object.entries((0, import_kolmafia62.getCampground)()); _i3 < _Object$entries2.length; _i3++) {
+    var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray20(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1], _item2 = (0, import_kolmafia62.toItem)(_itemStr);
+    if (_item2 !== $item(_templateObject3114 || (_templateObject3114 = _taggedTemplateLiteral54(["big rock"])))) {
+      var _mappedItem = (_itemMappings$get2 = itemMappings.get(_item2)) !== null && _itemMappings$get2 !== void 0 ? _itemMappings$get2 : _item2;
+      inventory.set(_mappedItem, _quantity + ((_inventory$get2 = inventory.get(_mappedItem)) !== null && _inventory$get2 !== void 0 ? _inventory$get2 : 0));
+    }
+  }
   return inventory;
 }
 function inventoryOperation(a, b, op) {
   var difference = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper17(new Set([].concat(_toConsumableArray18(a.keys()), _toConsumableArray18(b.keys())))), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var _a$get, _b$get, _item2 = _step.value;
-      difference.set(_item2, op((_a$get = a.get(_item2)) !== null && _a$get !== void 0 ? _a$get : 0, (_b$get = b.get(_item2)) !== null && _b$get !== void 0 ? _b$get : 0));
+      var _a$get, _b$get, _item3 = _step.value;
+      difference.set(_item3, op((_a$get = a.get(_item3)) !== null && _a$get !== void 0 ? _a$get : 0, (_b$get = b.get(_item3)) !== null && _b$get !== void 0 ? _b$get : 0));
     }
   } catch (err) {
     _iterator.e(err);

@@ -7,6 +7,7 @@ import {
   mySessionItems,
   mySessionMeat,
   toItem,
+  getCampground,
 } from "kolmafia";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
@@ -69,6 +70,13 @@ function mySessionItemsWrapper(): Map<Item, number> {
   const inventory = new Map<Item, number>();
   for (const [itemStr, quantity] of Object.entries(mySessionItems())) {
     const item = toItem(itemStr);
+    const mappedItem = itemMappings.get(item) ?? item;
+    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+  }
+
+  for (const [itemStr, quantity] of Object.entries(getCampground())) {
+    const item = toItem(itemStr);
+    if (item === $item`big rock`) continue; // Used to represent an empty house slot
     const mappedItem = itemMappings.get(item) ?? item;
     inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
   }

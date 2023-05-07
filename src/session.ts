@@ -7,6 +7,7 @@ import {
   mySessionItems,
   mySessionMeat,
   toItem,
+  getCampground,
   getCloset,
   getDisplay,
   getStorage,
@@ -83,6 +84,13 @@ function mySessionItemsWrapper(): Map<Item, number> {
       const mappedItem = itemMappings.get(item) ?? item;
       inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
     }
+  }
+
+  for (const [itemStr, quantity] of Object.entries(getCampground())) {
+    const item = toItem(itemStr);
+    if (item === $item`big rock`) continue; // Used to represent an empty house slot
+    const mappedItem = itemMappings.get(item) ?? item;
+    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
   }
   return inventory;
 }

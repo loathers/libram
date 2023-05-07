@@ -10,6 +10,8 @@ import {
   getCloset,
   getDisplay,
   getStorage,
+  myClosetMeat,
+  myStorageMeat,
 } from "kolmafia";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
@@ -295,6 +297,9 @@ export class Session {
   }
 
   static current(): Session {
-    return new Session(mySessionMeat(), mySessionItemsWrapper());
+    return new Session(
+      sum([mySessionMeat, myClosetMeat, myStorageMeat], (f) => f()),
+      mySessionItemsWrapper()
+    );
   }
 }

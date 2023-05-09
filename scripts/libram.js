@@ -7827,6 +7827,9 @@ function dropProgress() {
 // src/resources/2019/BeachComb.ts
 var BeachComb_exports = {};
 __export(BeachComb_exports, {
+  available: function() {
+    return available2;
+  },
   canComb: function() {
     return canComb;
   },
@@ -7863,6 +7866,9 @@ function _taggedTemplateLiteral29(strings, raw) {
 function have27() {
   return have(import_kolmafia38.Item.get("Beach Comb"));
 }
+function available2() {
+  return have27() || have(import_kolmafia38.Item.get("driftwood beach comb"));
+}
 var headBuffs = [$effect(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral29(["Hot-Headed"]))), $effect(_templateObject260 || (_templateObject260 = _taggedTemplateLiteral29(["Cold as Nice"]))), $effect(_templateObject349 || (_templateObject349 = _taggedTemplateLiteral29(["A Brush with Grossness"]))), $effect(_templateObject439 || (_templateObject439 = _taggedTemplateLiteral29(["Does It Have a Skull In There??"]))), $effect(_templateObject528 || (_templateObject528 = _taggedTemplateLiteral29(["Oiled, Slick"]))), $effect(_templateObject621 || (_templateObject621 = _taggedTemplateLiteral29(["Lack of Body-Building"]))), $effect(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral29(["We're All Made of Starfish"]))), $effect(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral29(["Pomp & Circumsands"]))), $effect(_templateObject917 || (_templateObject917 = _taggedTemplateLiteral29(["Resting Beach Face"]))), $effect(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral29(["Do I Know You From Somewhere?"]))), $effect(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral29(["You Learned Something Maybe!"])))], head = {
   HOT: $effect(_templateObject1214 || (_templateObject1214 = _taggedTemplateLiteral29(["Hot-Headed"]))),
   COLD: $effect(_templateObject1313 || (_templateObject1313 = _taggedTemplateLiteral29(["Cold as Nice"]))),
@@ -7883,12 +7889,12 @@ function canComb(tile) {
   return tile.row > tideLevel();
 }
 function freeCombs() {
-  return have27() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
+  return available2() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
 }
 function comb() {
   for (var _len = arguments.length, tiles = new Array(_len), _key = 0; _key < _len; _key++)
     tiles[_key] = arguments[_key];
-  if (!(!have27() || !tiles.length)) {
+  if (!(!available2() || !tiles.length)) {
     for (var _i = 0, _tiles = tiles; _i < _tiles.length; _i++) {
       var tile = _tiles[_i];
       if (canComb(tile)) {
@@ -8606,7 +8612,7 @@ function buffsUntil(buff) {
 var AutumnAton_exports = {};
 __export(AutumnAton_exports, {
   available: function() {
-    return available2;
+    return available3;
   },
   availableLocations: function() {
     return availableLocations;
@@ -8657,11 +8663,11 @@ function _taggedTemplateLiteral34(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 var item6 = import_kolmafia45.Item.get("autumn-aton");
-function available2() {
+function available3() {
   return (0, import_kolmafia45.availableAmount)(item6) > 0;
 }
 function have34() {
-  return get("hasAutumnaton") || available2();
+  return get("hasAutumnaton") || available3();
 }
 function checkLocations(html) {
   return (0, import_kolmafia45.xpath)(html, '//select[@name="heythereprogrammer"]//option[position()>1]/text()').map(function(name) {
@@ -8673,7 +8679,7 @@ function currentlyIn() {
 }
 function sendTo(target) {
   var upgrade2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
-  if (!available2())
+  if (!available3())
     return null;
   var pageHtml = directlyUse(item6);
   upgrade2 && (0, import_kolmafia45.availableChoiceOptions)()[1] && (0, import_kolmafia45.runChoice)(1);
@@ -8688,7 +8694,7 @@ function upgrade() {
   return canUpgrade && (0, import_kolmafia45.runChoice)(1), (0, import_kolmafia45.visitUrl)("main.php"), canUpgrade;
 }
 function availableLocations() {
-  if (!available2())
+  if (!available3())
     return [];
   var pageHtml = directlyUse(item6);
   return (0, import_kolmafia45.visitUrl)("main.php"), checkLocations(pageHtml);

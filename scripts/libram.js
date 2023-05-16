@@ -1515,8 +1515,8 @@ var concatTemplateString = function(literals) {
     return acc + literal + ((_placeholders$i = placeholders[i]) !== null && _placeholders$i !== void 0 ? _placeholders$i : "");
   }, "");
 }, handleTypeGetError = function(Type, error2) {
-  var message = "".concat(error2), match = message.match(RegExp("Bad ".concat(Type.name.toLowerCase(), " value: (.*)")));
-  match ? (0, import_kolmafia3.print)("".concat(match[0], "; if you're certain that this ").concat(Type, " exists and is spelled correctly, please update KoLMafia"), "red") : (0, import_kolmafia3.print)(message);
+  var message = "".concat(error2), match = message.match(RegExp("Bad ".concat(Type.name.toLowerCase(), " value: .*")));
+  match ? (0, import_kolmafia3.print)("".concat(match[0], "; if you're certain that this ").concat(Type.name, " exists and is spelled correctly, please update KoLMafia"), "red") : (0, import_kolmafia3.print)(message);
 }, createSingleConstant = function(Type) {
   var tagFunction = function(literals) {
     for (var _len2 = arguments.length, placeholders = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)

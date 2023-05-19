@@ -219,36 +219,34 @@ export function get(property: string, _default?: unknown): unknown {
   }
 }
 
-export function set(property: BooleanProperty, value: boolean): string;
-export function set(property: NumericProperty, value: number): string;
+export function set(property: BooleanProperty, value: boolean): void;
+export function set(property: NumericProperty, value: number): void;
 export function set(
   property: NumericOrStringProperty,
   value: number | string
-): string;
-export function set(property: StringProperty, value: string): string;
-export function set(property: LocationProperty, value: Location): string;
-export function set(property: MonsterProperty, value: Monster): string;
-export function set(property: FamiliarProperty, value: Familiar): string;
-export function set(property: StatProperty, value: Stat): string;
-export function set(property: PhylumProperty, value: Phylum): string;
+): void;
+export function set(property: StringProperty, value: string): void;
+export function set(property: LocationProperty, value: Location): void;
+export function set(property: MonsterProperty, value: Monster): void;
+export function set(property: FamiliarProperty, value: Familiar): void;
+export function set(property: StatProperty, value: Stat): void;
+export function set(property: PhylumProperty, value: Phylum): void;
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
-): string;
+): void;
 /**
  * Sets the value of a mafia property, either built in or custom
  *
  * @param property Name of the property
  * @param value Value to give the property
- * @returns Value set as a string
  */
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
-): string {
+): void {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
-  return stringValue;
 }
 
 type Properties = Partial<{
@@ -259,13 +257,11 @@ type Properties = Partial<{
  * Sets the value of a set of mafia properties
  *
  * @param properties Set of properties
- * @returns Properties set
  */
-export function setProperties(properties: Properties): Properties {
+export function setProperties(properties: Properties): void {
   for (const [prop, value] of Object.entries(properties)) {
     set(prop, value as { toString(): string });
   }
-  return properties;
 }
 
 /**

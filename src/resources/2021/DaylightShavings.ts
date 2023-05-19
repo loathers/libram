@@ -3,10 +3,11 @@ import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $effects, $item } from "../../template-string";
 
-export const helmet = $item`Daylight Shavings Helmet`;
+const helmet = $item`Daylight Shavings Helmet`;
 
 /**
  * Returns whether the player owns an unpackaged Daylight Shavings Helmet, and it's available in either the inventory or other zones as determined by autoSatisfy settings.
+ *
  * @returns whether we have the Daylight Shavings Helmet.
  */
 export function have(): boolean {
@@ -17,6 +18,7 @@ export const buffs = $effects`Spectacle Moustache, Toiletbrush Moustache, Barbel
 
 /**
  * Tells you whether you currently have a beardbuff active. Warning: because of spaghetti, this does not determine buff eligibility.
+ *
  * @returns Whether you currently have a beardbuff active
  */
 export function hasBuff(): boolean {
@@ -25,6 +27,7 @@ export function hasBuff(): boolean {
 
 /**
  * Checks to see if there are any beardbuffs you have more than 1 turn of, determining whether you are eligible to receive a buff post-combat.
+ *
  * @returns Whether you current are able to get a buff from the Daylight Shaving Helmet.
  */
 export function buffAvailable(): boolean {
@@ -32,6 +35,7 @@ export function buffAvailable(): boolean {
 }
 /**
  * Calculates and returns the cycle of buffs that the hat should cycle through.
+ *
  * @param playerclass The class to generate a cycle for
  * @returns An ordered array consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
  */
@@ -49,6 +53,7 @@ export function buffCycle(playerclass = myClass()): Effect[] {
 
 /**
  * Returns the next buff we expect to get from the shaving hat.
+ *
  * @returns The next buff we expect to get from the shaving hat.
  */
 export function nextBuff(): Effect {
@@ -64,6 +69,7 @@ export function nextBuff(): Effect {
 
 /**
  * Returns the number of buffs we expect it'll take to get to a given buff. Returns 1 for the next buff, 2 for the one after that, and so on. Returns 11 for the most recent buff.
+ *
  * @param buff The shaving buff in question
  * @returns The number of buffs we expect it'll take to get to the inputted buff; null if said buff is not granted by the shaving hat.
  */

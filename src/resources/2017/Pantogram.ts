@@ -1,14 +1,20 @@
 import { Item, toInt, visitUrl } from "kolmafia";
-import { have as haveItem } from "../../lib";
+import { directlyUse, have as haveItem } from "../../lib";
 import { $item } from "../../template-string";
 
 const pantogram = $item`portable pantogram`;
 const pants = $item`pantogram pants`;
 
+/**
+ * @returns Do we `have` the Pantogram itself?
+ */
 export function have(): boolean {
   return haveItem(pantogram);
 }
 
+/**
+ * @returns Do we `have` pantogram pants?
+ */
 export function havePants(): boolean {
   return haveItem(pants);
 }
@@ -45,6 +51,12 @@ const LeftSacrifice = {
 
 type PantogramSacrificeL = keyof typeof LeftSacrifice;
 
+/**
+ * Internal function used for `makePants`
+ *
+ * @param mod Modifier to get from our Left sacrifice
+ * @returns Item-tuple to use in our URL string
+ */
 function getLeftSacPair(mod: PantogramSacrificeL): [Item | number, number] {
   return LeftSacrifice[mod] as [Item | number, number];
 }
@@ -65,6 +77,12 @@ const MiddleSacrifice = {
 
 type PantogramSacrificeM = keyof typeof MiddleSacrifice;
 
+/**
+ * Internal function used for `makePants`
+ *
+ * @param mod Modifier to get from our Middle sacrifice
+ * @returns Item-tuple to use in our URL string
+ */
 function getMiddleSacPair(mod: PantogramSacrificeM): [Item | number, number] {
   return MiddleSacrifice[mod] as [Item | number, number];
 }
@@ -85,6 +103,12 @@ const RightSacrifice = {
 
 type PantogramSacrificeR = keyof typeof RightSacrifice;
 
+/**
+ * Internal function used for `makePants`
+ *
+ * @param mod Modifier to get from our Right sacrifice
+ * @returns Item-tuple to use in our URL string
+ */
 function getRightSacPair(mod: PantogramSacrificeR): [Item | number, number] {
   return RightSacrifice[mod] as [Item | number, number];
 }
@@ -99,6 +123,7 @@ type Pants = {
 
 /**
  * Finds the item requirements for a particular pair of pants.
+ *
  * @param modifiers An object consisting of the modifiers you want on your pants. For modifiers repeated across a particular sacrifice, use a tuple of that modifier and its value.
  * @returns A map of the items you need to make these pants and the quantities needed.
  */
@@ -131,6 +156,12 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
   return returnValue;
 }
 
+/**
+ * Internal function used in `makePants`
+ *
+ * @param pair Tuple consisting of an item or number and another number
+ * @returns URL parameter associated with the tuple
+ */
 function sacrificePairToURL(pair: [number | Item, number]): string {
   const [rawSacrifice, quantity] = pair;
   const sacrifice =
@@ -140,6 +171,7 @@ function sacrificePairToURL(pair: [number | Item, number]): string {
 
 /**
  * Makes a pair of pants with the given modifiers
+ *
  * @param alignment The stat you'd like your pants to improve. Moxie, Mysticality, or Muscle
  * @param element The element you'd like your pants to provide resistance for
  * @param leftSac The modifier you'd like to get from your leftmost sacrifice in Pantagramming.
@@ -177,13 +209,14 @@ export function makePants(
 
   const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
 
-  visitUrl("inv_use.php?pwd&whichitem=9573");
+  directlyUse(pantogram);
   visitUrl(url);
   return haveItem(pants);
 }
 
 /**
  * Creates a pair of pants from a Pants object.
+ *
  * @param pants An object consisting of the modifiers you'd like the pants to give you.
  * @returns Whether or not you successfully created a pair of pants. False if you don't own the pantogram or if you already have pantogram pants.
  */

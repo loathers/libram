@@ -1,4 +1,5 @@
 import {
+  abort,
   Bounty,
   Class,
   Coinmaster,
@@ -9,7 +10,9 @@ import {
   Location,
   MafiaClass,
   Monster,
+  Path,
   Phylum,
+  print,
   Servant,
   Skill,
   Slot,
@@ -17,36 +20,73 @@ import {
   Thrall,
 } from "kolmafia";
 
+import { splitByCommasWithEscapes } from "./utils";
+
 const concatTemplateString = (
   literals: TemplateStringsArray,
   ...placeholders: string[]
 ) =>
-  literals.reduce(
-    (acc, literal, i) => acc + literal + (placeholders[i] || ""),
+  literals.raw.reduce(
+    (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
     ""
   );
 
+const handleTypeGetError = <T extends MafiaClass>(
+  Type: typeof MafiaClass & (new () => T),
+  error: unknown
+) => {
+  const message = `${error}`;
+  const match = message.match(
+    RegExp(`Bad ${Type.name.toLowerCase()} value: .*`)
+  );
+  if (match) {
+    print(
+      `${match[0]}; if you're certain that this ${Type.name} exists and is spelled correctly, please update KoLMafia`,
+      "red"
+    );
+  } else {
+    print(message);
+  }
+};
+
 const createSingleConstant = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T)
-) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
-  const input = concatTemplateString(literals, ...placeholders);
-  type I = InstanceType<typeof Type>;
-  return Type.get<I>(input);
+) => {
+  const tagFunction = (
+    literals: TemplateStringsArray,
+    ...placeholders: string[]
+  ) => {
+    const input = concatTemplateString(literals, ...placeholders);
+    type I = InstanceType<typeof Type>;
+    try {
+      return Type.get<I>(input);
+    } catch (error) {
+      handleTypeGetError(Type, error);
+    }
+    abort();
+  };
+  tagFunction.none = Type.none as T;
+  return tagFunction;
 };
 
-const createPluralConstant = <T extends MafiaClass>(
-  Type: typeof MafiaClass & (new () => T)
-) => (literals: TemplateStringsArray, ...placeholders: string[]) => {
-  const input = concatTemplateString(literals, ...placeholders);
+const createPluralConstant =
+  <T extends MafiaClass>(Type: typeof MafiaClass & (new () => T)) =>
+  (literals: TemplateStringsArray, ...placeholders: string[]) => {
+    const input = concatTemplateString(literals, ...placeholders);
 
-  type I = InstanceType<typeof Type>;
+    type I = InstanceType<typeof Type>;
 
-  if (input === "") {
-    return Type.all<I>();
-  }
+    if (input === "") {
+      return Type.all<I>();
+    }
 
-  return Type.get<I>(input.split(/\s*,\s*/));
-};
+    try {
+      return Type.get<I>(splitByCommasWithEscapes(input));
+    } catch (error) {
+      handleTypeGetError(Type, error);
+    }
+    abort();
+  };
 
 /**
  * A Bounty specified by name.
@@ -272,3 +312,18 @@ export const $thrall = createSingleConstant(Thrall);
  * @category In-game constant
  */
 export const $thralls = createPluralConstant(Thrall);
+
+/**
+ * A Path specified by name.
+ *
+ * @category In-game constant
+ */
+export const $path = createSingleConstant(Path);
+
+/**
+ * A list of Paths specified by a comma-separated list of names.
+ * For a list of all possible Paths, leave the template string blank.
+ *
+ * @category In-game constant
+ */
+export const $paths = createPluralConstant(Path);

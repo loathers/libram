@@ -23,7 +23,7 @@ import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { sum, sumNumbers } from "../utils";
+import { sum } from "../utils";
 import { knapsack } from "./knapsack";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
@@ -45,14 +45,21 @@ function isMonday() {
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
-// TODO: Include Salty Mouth and potentially other modifiers.
+/**
+ * Expected adventures from an item given a specified state
+ *
+ * @todo Include Salty Mouth and potentially other modifiers.
+ * @param item Item to consider
+ * @param modifiers Consumption modifiers to consider
+ * @returns Adventures expected
+ */
 function expectedAdventures(
   item: Item,
   modifiers: ConsumptionModifiers
 ): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
-    .split(/[-–—]/)
+    .split(/[-]/)
     .map((s) => parseInt(s));
   const max = recordedMax ?? min;
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
@@ -61,6 +68,7 @@ function expectedAdventures(
     (itemType(item) === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
+  const seasoningAdventures = max - min <= 1 ? 1 : 0.5;
   const garish =
     modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
   const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");
@@ -81,7 +89,8 @@ function expectedAdventures(
         adventures += 2;
       }
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
-      if (itemType(item) === "food" && modifiers.seasoning) adventures++;
+      if (itemType(item) === "food" && modifiers.seasoning)
+        adventures += seasoningAdventures;
       return adventures;
     }) / interpolated.length
   );
@@ -96,6 +105,7 @@ type MenuItemOptions<T> = {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+  useRetrievePrice?: boolean;
 };
 
 export class MenuItem<T> {
@@ -108,6 +118,9 @@ export class MenuItem<T> {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+
+  static defaultPriceFunction: (item: Item) => number = (item: Item) =>
+    npcPrice(item) > 0 ? npcPrice(item) : mallPrice(item);
 
   static defaultOptions<T>(): Map<Item, MenuItemOptions<T>> {
     return new Map([
@@ -168,7 +181,9 @@ export class MenuItem<T> {
 
   /**
    * Construct a new menu item, possibly with extra properties. Items in MenuItem.defaultOptions have intelligent defaults.
+   *
    * @param item Item to add to menu.
+   * @param options Options for this menu item
    * @param options.organ Designate item as belonging to a specific organ.
    * @param options.size Override item organ size. Necessary for any non-food/booze/spleen item.
    * @param options.maximum Maximum uses remaining today, or "auto" to check dailyusesleft Mafia property.
@@ -224,10 +239,7 @@ export class MenuItem<T> {
   }
 
   price(): number {
-    return (
-      this.priceOverride ??
-      (npcPrice(this.item) > 0 ? npcPrice(this.item) : mallPrice(this.item))
-    );
+    return this.priceOverride ?? MenuItem.defaultPriceFunction?.(this.item);
   }
 }
 
@@ -235,6 +247,10 @@ const organs = ["food", "booze", "spleen item"] as const;
 type Organ = typeof organs[number];
 type OrganSize = [Organ, number];
 
+/**
+ * @param x Name of thing that might be an organ
+ * @returns Whether the string supplied is the name of an organ
+ */
 function isOrgan(x: string): x is Organ {
   return (organs as readonly string[]).includes(x);
 }
@@ -307,6 +323,7 @@ class DietPlanner<T> {
 
   /**
    * Determine the value of consuming a menu item with any profitable helpers.
+   *
    * @param menuItem Menu item to check.
    * @returns Value for consuming that menu item.
    */
@@ -316,6 +333,7 @@ class DietPlanner<T> {
 
   /**
    * Determine which helpers will be used with a menu item and its resulting value.
+   *
    * @param menuItem Menu item to check.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair [array of helpers and base menu item, value].
@@ -325,13 +343,6 @@ class DietPlanner<T> {
     overrideModifiers: Partial<ConsumptionModifiers>
   ): RawDietEntry<T> {
     const helpers = [];
-    if (
-      this.seasoning &&
-      itemType(menuItem.item) === "food" &&
-      this.mpa > mallPrice($item`Special Seasoning`)
-    ) {
-      helpers.push(this.seasoning);
-    }
     if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
       const mayo = menuItem.mayo
         ? this.mayoLookup.get(menuItem.mayo)
@@ -353,6 +364,23 @@ class DietPlanner<T> {
       tuxedoShirt: have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
       ...overrideModifiers,
     };
+
+    if (
+      this.seasoning &&
+      itemType(menuItem.item) === "food" &&
+      this.mpa *
+        (expectedAdventures(menuItem.item, {
+          ...defaultModifiers,
+          seasoning: true,
+        }) -
+          expectedAdventures(menuItem.item, {
+            ...defaultModifiers,
+            seasoning: false,
+          })) >
+        mallPrice($item`Special Seasoning`)
+    ) {
+      helpers.push(this.seasoning);
+    }
 
     const forkMug =
       itemType(menuItem.item) === "food"
@@ -377,11 +405,12 @@ class DietPlanner<T> {
       forkMugPrice +
       (menuItem.additionalValue ?? 0);
 
-    const valueSpleen = $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-      menuItem.item
-    )
-      ? 5 * this.spleenValue
-      : 0;
+    const valueSpleen =
+      $items`jar of fermented pickle juice, extra-greasy slider`.includes(
+        menuItem.item
+      )
+        ? 5 * this.spleenValue
+        : 0;
 
     return forkMug && valueForkMug > valueRaw
       ? [[...helpers, forkMug, menuItem], valueForkMug + valueSpleen]
@@ -390,6 +419,8 @@ class DietPlanner<T> {
 
   /**
    * Plan an individual organ.
+   *
+   * @param organ Organ to plan
    * @param capacity Organ capacity.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -416,6 +447,7 @@ class DietPlanner<T> {
 
   /**
    * Plan organs.
+   *
    * @param organCapacities Organ capacities.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
    * @returns Pair of [value, menu items and quantities].
@@ -436,6 +468,7 @@ class DietPlanner<T> {
   /**
    * Plan organs, retrying with and without each trial item. Runtime is
    * proportional to 2 ^ trialItems.length.
+   *
    * @param organCapacities Organ capacities.
    * @param trialItems Items to rerun solver with and without.
    * @param overrideModifiers Overrides for consumption modifiers, if any.
@@ -500,7 +533,7 @@ class DietPlanner<T> {
 
     return valueWithout > valueWith + value
       ? [valueWithout, planWithout]
-      : [valueWith, [...planWith, [helpersAndItem, 1]]];
+      : [valueWith + value, [...planWith, [helpersAndItem, 1]]];
   }
 }
 
@@ -560,6 +593,7 @@ const interactingItems: [Item | Effect, OrganSize[]][] = [
 
 /**
  * Plan out an optimal diet using a knapsack algorithm.
+ *
  * @param mpa Meat per adventure value.
  * @param menu Array of MenuItems to consider for diet purposes.
  * @param organCapacities Optional override of each organ's capacity.
@@ -720,9 +754,7 @@ class DietEntry<T> {
     const gross =
       mpa * this.expectedAdventures(diet) +
       this.quantity *
-        sumNumbers(
-          this.menuItems.map((menuItem) => menuItem.additionalValue ?? 0)
-        );
+        sum(this.menuItems, (menuItem) => menuItem.additionalValue ?? 0);
     if (method === "gross") {
       return gross;
     } else {
@@ -731,10 +763,7 @@ class DietEntry<T> {
   }
 
   expectedPrice(): number {
-    return (
-      this.quantity *
-      sumNumbers(this.menuItems.map((menuItem) => menuItem.price()))
-    );
+    return this.quantity * sum(this.menuItems, (menuItem) => menuItem.price());
   }
 }
 interface OrganCapacity {
@@ -787,23 +816,17 @@ export class Diet<T> {
   }
 
   expectedAdventures(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedAdventures(this))
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedAdventures(this));
   }
 
   expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) =>
-        dietEntry.expectedValue(mpa, this, method)
-      )
+    return sum(this.entries, (dietEntry) =>
+      dietEntry.expectedValue(mpa, this, method)
     );
   }
 
   expectedPrice(): number {
-    return sumNumbers(
-      this.entries.map((dietEntry) => dietEntry.expectedPrice())
-    );
+    return sum(this.entries, (dietEntry) => dietEntry.expectedPrice());
   }
 
   copy(): Diet<T> {

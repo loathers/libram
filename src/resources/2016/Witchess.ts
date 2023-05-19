@@ -10,11 +10,17 @@ import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
-export const item = $item`Witchess Set`;
+const item = $item`Witchess Set`;
+/**
+ * @returns Is the Witchess installed and available in our campground?
+ */
 export function have(): boolean {
   return haveInCampground(item);
 }
 
+/**
+ * @returns How many Witchess fights have we done so far today?
+ */
 export function fightsDone(): number {
   return get("_witchessFights");
 }
@@ -29,6 +35,12 @@ export const pieces = Monster.get([
   "Witchess Witch",
   "Witchess Ox",
 ]);
+/**
+ * Fight a Witchess piece of your choice
+ *
+ * @param piece The piece to fight
+ * @returns The value of `runCombat()`, which is the page html of the final round
+ */
 export function fightPiece(piece: Monster): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (

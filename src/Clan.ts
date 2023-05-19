@@ -31,46 +31,13 @@ export interface Rank {
   id: number;
 }
 
-export class ClanError extends Error {
-  reason?: Error;
-  constructor(message: string, reason?: Error) {
-    super(message);
-    this.reason = reason;
-    Object.setPrototypeOf(this, ClanError.prototype);
-  }
-}
-
-// It would be fantastic to have this function properly typed
-// But until someone can work out how to do it, it gets the
-// comment blocks of shame
-/* eslint-disable */
-function validate<T extends Function>(
-  target: any,
-  propertyName: string,
-  descriptor: TypedPropertyDescriptor<T>
-) {
-  if (!descriptor?.value) return;
-
-  const method = descriptor.value;
-
-  // @ts-ignore
-  descriptor.value = function (...args: any[]) {
-    // @ts-ignore
-    if (this.id !== getClanId()) {
-      throw new Error("You are no longer a member of this clan");
-    }
-
-    return method.apply(this, args);
-  };
-}
-/* eslint-enable */
-
 const clanIdCache: { [clanName: string]: number } = {};
 
 const toPlayerId = (player: string | number) =>
   typeof player === "string" ? getPlayerId(player) : player;
 
-const LOG_FAX_PATTERN = /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
+const LOG_FAX_PATTERN =
+  /(\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}(?:AM|PM): )<a [^>]+>([^<]+)<\/a>(?: faxed in a (?<monster>.*?))<br>/;
 const WHITELIST_DEGREE_PATTERN = /(?<name>.*?) \(°(?<degree>\d+)\)/;
 
 export class Clan {
@@ -134,8 +101,10 @@ export class Clan {
   }
 
   /**
-   * Join a clan and return its instance
+   * Join a clan
+   *
    * @param clanIdOrName Clan id or name
+   * @returns Instance of joined clan
    */
   static join(clanIdOrName: string | number): Clan {
     let clanId;
@@ -170,9 +139,11 @@ export class Clan {
   }
 
   /**
-   * Execute callback as a member of a clan
-   * and then restore prior membership
+   * Execute callback as a member of a clan and then restore prior membership
+   *
    * @param clanIdOrName Clan id or name
+   * @param callback Actions to carry out while member of specified can
+   * @returns Return value from callback
    */
   static with<T>(
     clanIdOrName: string | number,
@@ -218,7 +189,9 @@ export class Clan {
   }
 
   /**
-   * Return player's current Clan
+   * Get the player's current clan
+   *
+   * @returns Player's clan
    */
   static get(): Clan {
     return new Clan(getClanId(), getClanName());
@@ -226,6 +199,8 @@ export class Clan {
 
   /**
    * Get list of clans to which the player is whitelisted
+   *
+   * @returns List of clans
    */
   static getWhitelisted(): Clan[] {
     const page = visitUrl("clan_signup.php");
@@ -243,22 +218,38 @@ export class Clan {
     this.name = name;
   }
 
-  /**
-   * Join clan
-   */
-  join(): Clan {
-    return Clan._join(this.id);
+  private _check() {
+    if (this.id !== getClanId()) {
+      throw new Error("You are no longer a member of this clan");
+    }
   }
 
+  /**
+   * Join clan
+   *
+   * @returns Joined clan
+   */
+  join(): Clan {
+    return Clan.join(this.id);
+  }
+
+  /**
+   * Check that this clan is the player's current clan
+   *
+   * @returns Whether this is the current clan
+   */
   check(): boolean {
     return visitUrl("clan_hall.php").includes(`<b>${this.name}</b>`);
   }
 
   /**
-   * Return the monster that is currently in the current clan's fax machine if any
+   * Determine the monster that is currently in the current clan's fax machine if any
+   *
+   * @returns The current fax monster
    */
-  @validate
   getCurrentFax(): Monster | null {
+    this._check();
+
     const logs = visitUrl("clan_log.php");
 
     const lastFax = logs.match(LOG_FAX_PATTERN);
@@ -274,9 +265,12 @@ export class Clan {
 
   /**
    * List available ranks (name, degree and id) from the current clan
+   *
+   * @returns List of ranks
    */
-  @validate
   getRanks(): Rank[] {
+    this._check();
+
     const page = visitUrl("clan_whitelist.php");
 
     return xpath(page, '//select[@name="level"]//option')
@@ -303,16 +297,19 @@ export class Clan {
   /**
    * Add a player to the current clan's whitelist.
    * If the player is already in the whitelist this will change their rank or title.
+   *
    * @param player Player id or name
    * @param rankName Rank to give the player. If not provided they will be given the lowest rank
    * @param title Title to give the player. If not provided, will be blank
+   * @returns Success
    */
-  @validate
   addPlayerToWhitelist(
     player: string | number,
     rankName?: string,
     title = ""
   ): boolean {
+    this._check();
+
     const playerId = toPlayerId(player);
 
     const ranks = this.getRanks();
@@ -334,10 +331,13 @@ export class Clan {
 
   /**
    * Remove a player from the current clan's whitelist
+   *
    * @param player Player id or name
+   * @returns Success
    */
-  @validate
   removePlayerFromWhitelist(player: string | number): boolean {
+    this._check();
+
     const playerId = toPlayerId(player);
 
     const result = visitUrl(
@@ -348,10 +348,13 @@ export class Clan {
   }
 
   /**
-   * Return the amount of meat in the current clan's coffer.
+   * Return the amount of meat in the current clan's coffer
+   *
+   * @returns Amount of meat
    */
-  @validate
   public getMeatInCoffer(): number {
+    this._check();
+
     const page = visitUrl("clan_stash.php");
     const [, meat] = page.match(
       /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./
@@ -361,10 +364,13 @@ export class Clan {
 
   /**
    * Add the given amount of meat to the current clan's coffer.
+   *
    * @param amount Amount of meat to put in coffer
+   * @returns Success
    */
-  @validate
   putMeatInCoffer(amount: number): boolean {
+    this._check();
+
     const result = visitUrl(
       `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
     );
@@ -381,8 +387,9 @@ export class Clan {
    */
   take(items: Item[]): Item[];
   take(items: Map<Item, number>): Map<Item, number>;
-  @validate
   take(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    this._check();
+
     const map = arrayToCountedMap(items);
 
     map.forEach((quantity, item) => {
@@ -425,13 +432,15 @@ export class Clan {
 
   /**
    * Put items in the stash
+   *
    * @param items Items to put in the stash
    * @returns Items successfully put in the stash
    */
   put(items: Item[]): Item[];
   put(items: Map<Item, number>): Map<Item, number>;
-  @validate
   put(items: Item[] | Map<Item, number>): Item[] | Map<Item, number> {
+    this._check();
+
     const map = arrayToCountedMap(items);
 
     if (!this.check())
@@ -459,11 +468,12 @@ export class Clan {
     items: Map<Item, number>,
     callback: (borrowedItems: Map<Item, number>) => T
   ): T;
-  @validate
   withStash<T>(
     items: Item[] | Map<Item, number>,
     callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any
   ): T {
+    this._check();
+
     const map = arrayToCountedMap(items);
     return Clan._withStash(
       () => this.take(map),

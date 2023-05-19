@@ -2,9 +2,9 @@ import { Item } from "kolmafia";
 import { have as _have } from "../../lib";
 import { $item, $skill } from "../../template-string";
 
-export const summonSkill = $skill`Summon Love Song`;
+const summonSkill = $skill`Summon Love Song`;
 const libramChance = 1.0 / 6;
-const libramExpected = new Map<Item, number>([
+const libramExpected = new Map([
   [$item`love song of disturbing obsession`, libramChance],
   [$item`love song of icy revenge`, libramChance],
   [$item`love song of naughty innuendo`, libramChance],

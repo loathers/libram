@@ -5,8 +5,18 @@ export * from "./challengePaths";
 export * from "./combat";
 export * as Counter from "./counter";
 export * from "./diet";
+export * from "./Dungeon";
 export * from "./lib";
 export * from "./maximize";
+export {
+  numericModifiers,
+  statModifiers,
+  booleanModifiers,
+  classModifiers,
+  monsterModifiers,
+  effectModifiers,
+  skillModifiers,
+} from "./modifierTypes";
 export * from "./mood";
 export * from "./propertyTyping";
 export * from "./resources";
@@ -14,7 +24,7 @@ export * from "./since";
 export * from "./template-string";
 export { default as Kmail } from "./Kmail";
 export * from "./Path";
-export { default as logger, LogLevel } from "./logger";
+export { default as logger } from "./logger";
 export * as console from "./console";
 export * as property from "./property";
 export * as propertyTypes from "./propertyTypes";
@@ -29,10 +39,17 @@ export {
   withChoices,
   withChoice,
 } from "./property";
-export { get as getModifier } from "./modifier";
-export { Modifiers } from "./modifier";
+export { get as getModifier, getTotalModifier } from "./modifier";
 export { Session } from "./session";
 
-export * as Dreadsylvania from "./dungeons/Dreadsylvania";
-export * as Hobopolis from "./dungeons/Hobopolis";
-export * as SlimeTube from "./dungeons/SlimeTube";
+export type { LogLevels } from "./logger";
+export type { Modifiers } from "./modifier";
+export type {
+  NumericModifier,
+  StringModifier,
+  ClassModifier,
+  StatModifier,
+  BooleanModifier,
+  EffectModifier,
+  SkillModifier,
+} from "./modifierTypes";

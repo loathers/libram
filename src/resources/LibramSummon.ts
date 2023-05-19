@@ -1,41 +1,31 @@
 import { Skill, Item } from "kolmafia";
-import maxBy from "lodash/maxBy";
 import { getSaleValue } from "../lib";
-import { sumNumbers } from "../utils";
+import { $skill } from "../template-string";
+import { sum, maxBy } from "../utils";
 import {
   expected as candyHeartsExpected,
   have as candyHeartsHave,
-  summonSkill as candyHeartsSkill,
 } from "./2007/CandyHearts";
 import {
   expected as divineFavorsExpected,
   have as divineFavorsHave,
-  summonSkill as divineFavorsSkill,
 } from "./2008/DivineFavors";
 import {
   expected as loveSongsExpected,
   have as loveSongsHave,
-  summonSkill as loveSongsSkill,
 } from "./2009/LoveSongs";
 import {
   expected as brickosExpected,
   have as brickosHave,
-  summonSkill as brickosSkill,
 } from "./2010/Brickos";
-import {
-  expected as diceExpected,
-  have as diceHave,
-  summonSkill as diceSkill,
-} from "./2011/Gygaxian";
+import { expected as diceExpected, have as diceHave } from "./2011/Gygaxian";
 import {
   expected as resolutionsExpected,
   have as resolutionsHave,
-  summonSkill as resolutionsSkill,
 } from "./2012/Resolutions";
 import {
   expected as taffyExpected,
   have as taffyHave,
-  summonSkill as taffySkill,
 } from "./2013/PulledTaffy";
 
 /**
@@ -45,19 +35,19 @@ import {
  */
 export function expectedLibramSummon(summonSkill: Skill): Map<Item, number> {
   switch (summonSkill) {
-    case candyHeartsSkill:
+    case $skill`Summon Candy Heart`:
       return candyHeartsExpected();
-    case divineFavorsSkill:
+    case $skill`Summon Party Favor`:
       return divineFavorsExpected();
-    case loveSongsSkill:
+    case $skill`Summon Love Song`:
       return loveSongsExpected();
-    case brickosSkill:
+    case $skill`Summon BRICKOs`:
       return brickosExpected();
-    case diceSkill:
+    case $skill`Summon Dice`:
       return diceExpected();
-    case resolutionsSkill:
+    case $skill`Summon Resolutions`:
       return resolutionsExpected();
-    case taffySkill:
+    case $skill`Summon Taffy`:
       return taffyExpected();
   }
   return new Map<Item, number>();
@@ -70,35 +60,42 @@ export function expectedLibramSummon(summonSkill: Skill): Map<Item, number> {
 export function possibleLibramSummons(): Map<Skill, Map<Item, number>> {
   const results = new Map<Skill, Map<Item, number>>();
   if (candyHeartsHave()) {
-    results.set(candyHeartsSkill, candyHeartsExpected());
+    results.set($skill`Summon Candy Heart`, candyHeartsExpected());
   }
   if (divineFavorsHave()) {
-    results.set(divineFavorsSkill, divineFavorsExpected());
+    results.set($skill`Summon Party Favor`, divineFavorsExpected());
   }
   if (loveSongsHave()) {
-    results.set(loveSongsSkill, loveSongsExpected());
+    results.set($skill`Summon Love Song`, loveSongsExpected());
   }
   if (brickosHave()) {
-    results.set(brickosSkill, brickosExpected());
+    results.set($skill`Summon BRICKOs`, brickosExpected());
   }
   if (diceHave()) {
-    results.set(diceSkill, diceExpected());
+    results.set($skill`Summon Dice`, diceExpected());
   }
   if (resolutionsHave()) {
-    results.set(resolutionsSkill, resolutionsExpected());
+    results.set($skill`Summon Resolutions`, resolutionsExpected());
   }
   if (taffyHave()) {
-    results.set(taffySkill, taffyExpected());
+    results.set($skill`Summon Taffy`, taffyExpected());
   }
   return results;
 }
 
+/**
+ * Determines the best libram to cast, based on expected meat value in mall
+ *
+ * @returns The best libram to cast, based on expected meat value in mall
+ */
 export function bestLibramToCast(): Skill | null {
-  return (maxBy(Array.from(possibleLibramSummons().entries()), ([, itemMap]) =>
-    sumNumbers(
-      Array.from(itemMap.entries()).map(
-        ([item, weight]) => weight * getSaleValue(item)
-      )
+  const arr = Array.from(possibleLibramSummons().entries());
+  if (!arr.length) return null;
+
+  return maxBy(arr, ([, itemMap]) =>
+    sum(
+      Array.from(itemMap.entries()),
+      ([item, weight]) => weight * getSaleValue(item)
     )
-  ) ?? [null])[0];
+  )[0];
 }

@@ -366,6 +366,9 @@ __export(src_exports, {
   bestLibramToCast: function() {
     return bestLibramToCast;
   },
+  booleanModifiers: function() {
+    return booleanModifiers;
+  },
   byClass: function() {
     return byClass;
   },
@@ -386,6 +389,9 @@ __export(src_exports, {
   },
   clamp: function() {
     return clamp;
+  },
+  classModifiers: function() {
+    return classModifiers;
   },
   clearMaximizerCache: function() {
     return clearMaximizerCache;
@@ -410,6 +416,9 @@ __export(src_exports, {
   },
   directlyUse: function() {
     return directlyUse;
+  },
+  effectModifiers: function() {
+    return effectModifiers;
   },
   ensureEffect: function() {
     return ensureEffect;
@@ -591,11 +600,17 @@ __export(src_exports, {
   modeableState: function() {
     return modeableState;
   },
+  monsterModifiers: function() {
+    return monsterModifiers;
+  },
   noneToNull: function() {
     return noneToNull;
   },
   notNull: function() {
     return notNull;
+  },
+  numericModifiers: function() {
+    return numericModifiers;
   },
   parseNumber: function() {
     return parseNumber;
@@ -636,8 +651,14 @@ __export(src_exports, {
   sinceKolmafiaVersion: function() {
     return sinceKolmafiaVersion;
   },
+  skillModifiers: function() {
+    return skillModifiers;
+  },
   splitByCommasWithEscapes: function() {
     return splitByCommasWithEscapes;
+  },
+  statModifiers: function() {
+    return statModifiers;
   },
   sum: function() {
     return sum;
@@ -13188,6 +13209,7 @@ var Session = /* @__PURE__ */ function() {
   arrayToCountedMap,
   ascend,
   bestLibramToCast,
+  booleanModifiers,
   byClass,
   byStat,
   canRememberSong,
@@ -13195,6 +13217,7 @@ var Session = /* @__PURE__ */ function() {
   canVisitUrl,
   chunk,
   clamp,
+  classModifiers,
   clearMaximizerCache,
   console,
   couldUseRainDohBlackBox,
@@ -13203,6 +13226,7 @@ var Session = /* @__PURE__ */ function() {
   countedMapToString,
   damageTakenByElement,
   directlyUse,
+  effectModifiers,
   ensureEffect,
   ensureFreeKill,
   ensureFreeRun,
@@ -13263,8 +13287,10 @@ var Session = /* @__PURE__ */ function() {
   mergeMaximizeOptions,
   modeableItems,
   modeableState,
+  monsterModifiers,
   noneToNull,
   notNull,
+  numericModifiers,
   parseNumber,
   permedSkills,
   possibleLibramSummons,
@@ -13278,7 +13304,9 @@ var Session = /* @__PURE__ */ function() {
   setProperties,
   sinceKolmafiaRevision,
   sinceKolmafiaVersion,
+  skillModifiers,
   splitByCommasWithEscapes,
+  statModifiers,
   sum,
   sumNumbers,
   telescope,

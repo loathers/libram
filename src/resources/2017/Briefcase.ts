@@ -23,7 +23,11 @@ function getPage(): string {
 }
 
 function act(action: string): string {
-  return visitUrl(`place.php?whichplace=kgb&action=kgb_${action}`, false, false);
+  return visitUrl(
+    `place.php?whichplace=kgb&action=kgb_${action}`,
+    false,
+    false
+  );
 }
 
 /**
@@ -56,8 +60,11 @@ type Dials = [...DialsSide, ...DialsSide];
  */
 export function getDials(page = getPage()): Dials {
   return [...page.matchAll(/action=kgb_dial(\d)>.*?char(\d|a).gif/g)]
-    .map(([, dial, value]) => [Number(dial) - 1, value === "a" ? 10 : Number(value)] as const)
-    .sort(([a,], [b,]) => a - b)
+    .map(
+      ([, dial, value]) =>
+        [Number(dial) - 1, value === "a" ? 10 : Number(value)] as const
+    )
+    .sort(([a], [b]) => a - b)
     .map(([, value]) => value) as Dials;
 }
 
@@ -67,7 +74,7 @@ function getDialsSide(left: boolean, page = getPage()): DialsSide {
 
 /**
  * Sets the dials on the KGB to a given state
- * 
+ *
  * @param dials Desired dial state
  */
 export function setDials(...dials: Dials): void {
@@ -91,22 +98,37 @@ function setDialsSide(left: boolean, ...dials: DialsSide): void {
  * Lights
  */
 type LightState = "on" | "blinking" | "off";
-type Lights = [LightState, LightState, LightState, LightState, LightState, LightState];
+type Lights = [
+  LightState,
+  LightState,
+  LightState,
+  LightState,
+  LightState,
+  LightState
+];
 type MastermindLights = [LightState, LightState, LightState];
 type Mastermind = [solid: number, blinking: number];
 
-export function getLightSet(id: "light", page: string): Lights
-export function getLightSet(id: "mastermind", page: string): MastermindLights
+export function getLightSet(id: "light", page: string): Lights;
+export function getLightSet(id: "mastermind", page: string): MastermindLights;
 /**
  * @param id Type of lights to read
  * @param page Page content to read, else it will read the page itself
  * @returns State of the lights requested
  */
-export function getLightSet(id: "light" | "mastermind", page = getPage()): Lights | MastermindLights {
-  const regex = new RegExp(`id=kgb_${id}(\\d) .*?/light_(on|blinking|off).gif`, 'g');
+export function getLightSet(
+  id: "light" | "mastermind",
+  page = getPage()
+): Lights | MastermindLights {
+  const regex = new RegExp(
+    `id=kgb_${id}(\\d) .*?/light_(on|blinking|off).gif`,
+    "g"
+  );
   return [...page.matchAll(regex)]
-    .map(([, light, value]) => [Number(light) - 1, value as LightState] as const)
-    .sort(([a,], [b,]) => a - b)
+    .map(
+      ([, light, value]) => [Number(light) - 1, value as LightState] as const
+    )
+    .sort(([a], [b]) => a - b)
     .map(([, value]) => value) as Lights | MastermindLights;
 }
 
@@ -124,7 +146,10 @@ export function getLights(page = getPage()): Lights {
  */
 export function getMastermind(page = getPage()): Mastermind {
   const lights = getLightSet("mastermind", page);
-  return [lights.filter(l => l === "on").length, lights.filter(l => l === "blinking").length];
+  return [
+    lights.filter((l) => l === "on").length,
+    lights.filter((l) => l === "blinking").length,
+  ];
 }
 
 const ALL_POSSIBILITIES = (function getAllPossibilities() {
@@ -151,19 +176,27 @@ const ALL_SCORES = (function getAllScores() {
 
 function calculateScore(answer: DialsSide, guess: DialsSide): Mastermind {
   const solid = answer.reduce((acc, a, i) => acc + (guess[i] === a ? 1 : 0), 0);
-  const blink = answer.reduce((acc, a) => acc + (guess.includes(a) ? 1 : 0), -solid);
+  const blink = answer.reduce(
+    (acc, a) => acc + (guess.includes(a) ? 1 : 0),
+    -solid
+  );
   return [solid, blink];
 }
 
-function eliminate(guess: DialsSide, score: Mastermind, possibilities = ALL_POSSIBILITIES) {
-  return possibilities
-    .filter(poss => isEqual(calculateScore(poss, guess), score));
+function eliminate(
+  guess: DialsSide,
+  score: Mastermind,
+  possibilities = ALL_POSSIBILITIES
+) {
+  return possibilities.filter((poss) =>
+    isEqual(calculateScore(poss, guess), score)
+  );
 }
 
 /**
  * Minimax function as described by Donald Knuth
  * http://www.cs.uni.edu/~wallingf/teaching/cs3530/resources/knuth-mastermind.pdf
- * 
+ *
  * @param possibilities The set of possibilities to test
  * @returns Guess that minimizes the maximum number of remaining possiblities
  */
@@ -172,7 +205,12 @@ function minimax(possibilities: DialsSide[]): DialsSide {
   let minimaxValue = possibilities.length;
 
   for (const guess of possibilities) {
-    const maxRemainingPossibilites = Math.max(...ALL_SCORES.map((score) => possibilities.length - eliminate(guess, score, possibilities).length));
+    const maxRemainingPossibilites = Math.max(
+      ...ALL_SCORES.map(
+        (score) =>
+          possibilities.length - eliminate(guess, score, possibilities).length
+      )
+    );
     if (maxRemainingPossibilites < minimaxValue) {
       minimaxValue = maxRemainingPossibilites;
       bestGuess = guess;
@@ -184,7 +222,7 @@ function minimax(possibilities: DialsSide[]): DialsSide {
 
 /**
  * Solve the mastermind puzzle on the Briefcase
- * 
+ *
  * @param left True if aim is to solve the left side, else solve the right side
  */
 export function solveMastermind(left: boolean): void {
@@ -194,11 +232,19 @@ export function solveMastermind(left: boolean): void {
   let score = getMastermind(page);
   let possibilities = undefined;
 
-  while(score[0] < 3) {
-    logger.debug(`[KGB] ${guess.join(",")} on the ${left ? "left" : "right"} has ${score[0]} on and ${score[1]} flashing`)
+  while (score[0] < 3) {
+    logger.debug(
+      `[KGB] ${guess.join(",")} on the ${left ? "left" : "right"} has ${
+        score[0]
+      } on and ${score[1]} flashing`
+    );
     possibilities = eliminate(guess, score, possibilities);
     guess = minimax(possibilities);
-    logger.debug(`[KGB] Guessing ${guess.join(",")} on the ${left ? "left" : "right"} (from ${possibilities.length} possibilities)`);
+    logger.debug(
+      `[KGB] Guessing ${guess.join(",")} on the ${
+        left ? "left" : "right"
+      } (from ${possibilities.length} possibilities)`
+    );
     setDialsSide(left, ...guess);
     score = getMastermind(pressActuator(left));
   }
@@ -211,9 +257,15 @@ export function solveLight1(): void {
   const page = getPage();
   const lights = getLights(page);
   switch (lights[1]) {
-    case "on": return;
-    case "blinking": pressRightActuator(); return;
-    case "off": pressLeftActuator(); pressRightActuator(); return;
+    case "on":
+      return;
+    case "blinking":
+      pressRightActuator();
+      return;
+    case "off":
+      pressLeftActuator();
+      pressRightActuator();
+      return;
   }
 }
 
@@ -254,18 +306,18 @@ export function setHandle(up: boolean): string {
 
 /**
  * Press an actuator
- * 
+ *
  * @param left True to press the left actuator, else the right
  * @returns Page content after actuator is pressed
  */
 export function pressActuator(left: boolean): string {
   logger.debug(`[KGB] Pressed ${left ? "left" : "right"} actuator`);
-  return act(`actuator${left? 1 : 2}`);
+  return act(`actuator${left ? 1 : 2}`);
 }
 
 /**
  * Press the left actuator
- * 
+ *
  * @returns Page content after actuator is pressed
  */
 export function pressLeftActuator(): string {
@@ -274,7 +326,7 @@ export function pressLeftActuator(): string {
 
 /**
  * Press the right actuator
- * 
+ *
  * @returns Page content after actuator is pressed
  */
 export function pressRightActuator(): string {
@@ -295,7 +347,7 @@ export function crankUnlocked(page = getPage()): boolean {
 
 /**
  * Use the crank
- * 
+ *
  * @param level Level to which the crank should be charged
  */
 export function useCrank(level = 1): void {
@@ -314,7 +366,7 @@ export function useCrank(level = 1): void {
 
 /**
  * Unlock the crank
- * 
+ *
  * @returns Whether the crank was successfully unlocked
  */
 export function unlockCrank(): boolean {
@@ -328,7 +380,7 @@ export function unlockCrank(): boolean {
 
 /**
  * Charge the flywheel
- * 
+ *
  * @returns Whether the flywheel was successfully charged
  */
 export function chargeFlywheel(): boolean {
@@ -349,7 +401,7 @@ export function antennaeUnlocked(page = getPage()): number {
 
 /**
  * Unlock the antennae
- * 
+ *
  * @returns Whether the antennae were unlocked successfully
  */
 export function unlockAntennae(): boolean {
@@ -360,7 +412,7 @@ export function unlockAntennae(): boolean {
 
 /**
  * Fully charge the antennae
- * 
+ *
  * @returns Always true
  */
 export function chargeAntennae(): boolean {
@@ -405,10 +457,12 @@ export function unlockButtons(): boolean {
 export function pressButton(button: number, times = 1): string {
   unlockButtons();
   let result = "";
-  Array(times).fill(0).forEach(() => {
-    result = act(`button${button}`);
-    logger.debug(`[KGB] Pressed button ${button}`);
-  });
+  Array(times)
+    .fill(0)
+    .forEach(() => {
+      result = act(`button${button}`);
+      logger.debug(`[KGB] Pressed button ${button}`);
+    });
   return result;
 }
 
@@ -434,20 +488,20 @@ export function rightDrawerOpened(page = getPage()): boolean {
 
 /**
  * Open the left drawer
- * 
+ *
  * @returns Whether the left drawer was successfully opened
  */
 export function openLeftDrawer(): boolean {
   if (leftDrawerOpened()) return true;
   solveLight1();
-  setDials(2,2,2,0,0,0);
+  setDials(2, 2, 2, 0, 0, 0);
   pressLeftActuator();
   return leftDrawerOpened();
 }
 
 /**
  * Open the right drawer
- * 
+ *
  * @returns Whether the right drawer was successfully opened
  */
 export function openRightDrawer(): boolean {
@@ -460,7 +514,7 @@ export function openRightDrawer(): boolean {
 
 /**
  * Loot the left drawer
- * 
+ *
  * @returns Contents of the final page
  */
 export function lootLeftDrawer(): string {
@@ -470,7 +524,7 @@ export function lootLeftDrawer(): string {
 
 /**
  * Loot the right drawer
- * 
+ *
  * @returns Contents of the final page
  */
 export function lootRightDrawer(): string {
@@ -492,7 +546,7 @@ export function dispenserUnlocked(page = getPage()): boolean {
 
 /**
  * Unlock the martini dispenser
- * 
+ *
  * @returns Whether the martini dispenser was successfully unlocked
  */
 export function unlockDispenser(): boolean {
@@ -506,7 +560,7 @@ export function unlockDispenser(): boolean {
 
 /**
  * Unlock the martini dispenser
- * 
+ *
  * @returns Contents of the final page
  */
 export function useDispenser(): string {
@@ -542,7 +596,8 @@ export enum Enchantment {
 const EnchantmentModifiers = {
   [Enchantment.WeaponDamage]: "Weapon Damage Percent: 25",
   [Enchantment.CriticalHit]: "Critical Hit Percent: 10",
-  [Enchantment.PrismaticDamage]: "Hot Damage: 5, Cold Damage: 5, Spooky Damage: 5, Stench Damage: 5, Sleaze Damage: 5",
+  [Enchantment.PrismaticDamage]:
+    "Hot Damage: 5, Cold Damage: 5, Spooky Damage: 5, Stench Damage: 5, Sleaze Damage: 5",
   [Enchantment.SpellDamage]: "Spell Damage Percent: 50",
   [Enchantment.Initiative]: "Initiative: 25",
   [Enchantment.SleazeRes]: "Sleaze Resistance: 5",
@@ -551,7 +606,8 @@ const EnchantmentModifiers = {
   [Enchantment.ColdRes]: "Cold Resistance: 5",
   [Enchantment.HotRes]: "Hot Resistance: 5",
   [Enchantment.DamageAbsorption]: "Damage Absorption: 100",
-  [Enchantment.Regen]: "HP Regen Min: 5, HP Regen Max: 10, MP Regen Min: 5, MP Regen Max: 10",
+  [Enchantment.Regen]:
+    "HP Regen Min: 5, HP Regen Max: 10, MP Regen Min: 5, MP Regen Max: 10",
   [Enchantment.ManaCost]: "Mana Cost: -3",
   [Enchantment.MonsterLevel]: "Monster Level: 25",
   [Enchantment.CombatRate]: "Combat Rate: 5",
@@ -559,10 +615,15 @@ const EnchantmentModifiers = {
   [Enchantment.PvPFights]: "PvP Fights: 5",
   [Enchantment.Adventures]: "Adventures: 5",
   [Enchantment.None]: "__libram_placeholder__",
-}
+};
 
 const slots = [
-  [Enchantment.WeaponDamage, Enchantment.CriticalHit, Enchantment.PrismaticDamage, Enchantment.SpellDamage],
+  [
+    Enchantment.WeaponDamage,
+    Enchantment.CriticalHit,
+    Enchantment.PrismaticDamage,
+    Enchantment.SpellDamage,
+  ],
   [
     Enchantment.Initiative,
     Enchantment.SleazeRes,
@@ -603,20 +664,26 @@ export function getEnchantment(slot: number): Enchantment {
 }
 
 /**
- * 
+ *
  * @param enchantment Enchantment to apply to KGB
  * @returns Whether that enhantment was successfully applied
  */
 export function setEnchantment(enchantment: Enchantment): boolean {
-  const slot = slots.findIndex((slotEnchantments) => slotEnchantments.includes(enchantment));
+  const slot = slots.findIndex((slotEnchantments) =>
+    slotEnchantments.includes(enchantment)
+  );
   const current = getEnchantment(slot);
   if (current === enchantment) return true;
-  const route = findRoute(slots[slot].length, slots[slot].indexOf(current), slots[slot].indexOf(enchantment));
+  const route = findRoute(
+    slots[slot].length,
+    slots[slot].indexOf(current),
+    slots[slot].indexOf(enchantment)
+  );
   const clicks = Math.abs(route);
   if (clicks > clicksRemaining()) {
     return false;
   }
-  const button = (slot * 2) + (route < 0 ? 1 : 2);
+  const button = slot * 2 + (route < 0 ? 1 : 2);
   setHandle(false);
   pressButton(button, clicks);
   return enchantment === getEnchantment(slot);
@@ -635,7 +702,10 @@ type TabOrder = Tabs;
 export function getTabs(page = getPage()): Tabs {
   return [...page.matchAll(/action=kgb_tab(\d)>.*?tab(1|2).gif/g)]
     .map(([, tab, value]) => [Number(tab) - 1, Number(value)] as const)
-    .reduce((acc, [tab, value]) => { acc[tab] = value; return acc }, Array(6).fill(0) as Tabs);
+    .reduce((acc, [tab, value]) => {
+      acc[tab] = value;
+      return acc;
+    }, Array(6).fill(0) as Tabs);
 }
 
 /**
@@ -649,7 +719,7 @@ export function pullTab(tab: number): string {
 
 /**
  * Tabs denote a number but the position of each ternary unit is randomized, so this will read those tabs into a decimal digit based on the order provided
- * 
+ *
  * @param order Order to consider the tabs when calculating their value
  * @param tabs Tabs values to consider, else get the current value
  * @returns Calculated value of tabs based on given order
@@ -657,17 +727,19 @@ export function pullTab(tab: number): string {
 export function getTabValue(order: TabOrder, tabs = getTabs()): number {
   return tabs
     .map((t, i) => [i, t])
-    .sort(([ia,], [ib,]) => order[ib] - order[ia])
-    .reduce((acc, [, t], i) => acc += t*(3**i), 0);
+    .sort(([ia], [ib]) => order[ib] - order[ia])
+    .reduce((acc, [, t], i) => (acc += t * 3 ** i), 0);
 }
 
 /**
  * Determine the correct order for the current tabs
- * 
+ *
  * @deprecated Not actually deprecated, just doesn't work yet!
  */
 export function decodeTabs(): void {
-  abort("This function is not yet complete, mostly because the trivial solution makes Gausie's computer blow up");
+  abort(
+    "This function is not yet complete, mostly because the trivial solution makes Gausie's computer blow up"
+  );
   unlockButtons();
   setHandle(true);
 }

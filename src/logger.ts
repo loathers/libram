@@ -40,7 +40,7 @@ type LogLevel = keyof typeof defaultHandlers;
 type LogFunction<T extends LogLevel> = typeof defaultHandlers[T];
 
 class Logger {
-  debugMode = false
+  debugMode = false;
   handlers = defaultHandlers;
   private static currentLevel = LogLevels.ERROR;
 

@@ -52,7 +52,7 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
  * @returns Random item from array
  */
 export function random<T>(array: T[]): T {
-  return array[Math.floor((Math.random() * array.length))];
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 /**

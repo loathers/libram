@@ -21,6 +21,15 @@ export function have(): boolean {
   return have_(Item.get("Beach Comb"));
 }
 
+/**
+ * Determines whether we `have` the beach comb or the driftwood beach comb
+ *
+ * @returns Whether we `have` either the beach comb or the driftwood beach comb
+ */
+export function available(): boolean {
+  return have() || have_(Item.get("driftwood beach comb"));
+}
+
 export const headBuffs = [
   $effect`Hot-Headed`,
   $effect`Cold as Nice`,
@@ -78,7 +87,7 @@ export function canComb(tile: BeachTile): boolean {
  * @returns The number of free combs we have available for today
  */
 export function freeCombs(): number {
-  return have() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
+  return available() ? clamp(11 - get("_freeBeachWalksUsed"), 0, 11) : 0;
 }
 
 /**
@@ -87,7 +96,7 @@ export function freeCombs(): number {
  * @param tiles The tiles to comb
  */
 export function comb(...tiles: BeachTile[]): void {
-  if (!have() || !tiles.length) return;
+  if (!available() || !tiles.length) return;
 
   for (const tile of tiles) {
     if (canComb(tile)) {

@@ -187,7 +187,9 @@ function eliminate(
   score: Mastermind,
   possibilities = ALL_POSSIBILITIES
 ) {
-  return possibilities.filter((poss) => calculateScore(poss, guess).join(",") === score.join(","));
+  return possibilities.filter(
+    (poss) => calculateScore(poss, guess).join(",") === score.join(",")
+  );
 }
 
 /**

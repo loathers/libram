@@ -1,5 +1,4 @@
 import { abort, stringModifier, visitUrl } from "kolmafia";
-import isEqual from "lodash/isEqual";
 
 import { have as haveItem } from "../../lib";
 import logger from "../../logger";
@@ -188,9 +187,7 @@ function eliminate(
   score: Mastermind,
   possibilities = ALL_POSSIBILITIES
 ) {
-  return possibilities.filter((poss) =>
-    isEqual(calculateScore(poss, guess), score)
-  );
+  return possibilities.filter((poss) => calculateScore(poss, guess).join(",") === score.join(","));
 }
 
 /**

@@ -37,11 +37,11 @@ const handleTypeGetError = <T extends MafiaClass>(
 ) => {
   const message = `${error}`;
   const match = message.match(
-    RegExp(`Bad ${Type.name.toLowerCase()} value: (.*)`)
+    RegExp(`Bad ${Type.name.toLowerCase()} value: .*`)
   );
   if (match) {
     print(
-      `${match[0]}; if you're certain that this ${Type} exists and is spelled correctly, please update KoLMafia`,
+      `${match[0]}; if you're certain that this ${Type.name} exists and is spelled correctly, please update KoLMafia`,
       "red"
     );
   } else {

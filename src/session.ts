@@ -70,6 +70,7 @@ function mySessionItemsWrapper(): Map<Item, number> {
       $item`earthenware muffin tin`,
       $items`blueberry muffin, bran muffin, chocolate chip muffin`
     ),
+    ...manyToOne($item`ChibiBuddy™ (on)`, $items`ChibiBuddy™ (off)`),
   ]);
 
   const inventory = new Map<Item, number>();

@@ -25,7 +25,7 @@ import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import { setEqual } from "./utils";
 
 function toMaximizerName({ name, id }: Item): string {
-  return name.match(/;|\d/) ? `¶${id}` : name;
+  return name.match(/;/) ? `¶${id}` : name;
 }
 
 export type MaximizeOptions = {
@@ -561,15 +561,15 @@ export function maximizeCached(
   const objective = [
     ...new Set([
       ...objectives.sort(),
-      ...forceEquip.map((item) => `equip ${toMaximizerName(item)}`).sort(),
-      ...preventEquip.map((item) => `-equip ${toMaximizerName(item)}`).sort(),
+      ...forceEquip.map((item) => `"equip ${toMaximizerName(item)}"`).sort(),
+      ...preventEquip.map((item) => `-"equip ${toMaximizerName(item)}"`).sort(),
       ...onlySlot.map((slot) => `${slot}`).sort(),
       ...preventSlot.map((slot) => `-${slot}`).sort(),
       ...Array.from(bonusEquip.entries())
         .filter(([, bonus]) => bonus !== 0)
         .map(
           ([item, bonus]) =>
-            `${Math.round(bonus * 100) / 100} bonus ${toMaximizerName(item)}`
+            `${Math.round(bonus * 100) / 100} "bonus ${toMaximizerName(item)}"`
         )
         .sort(),
     ]),

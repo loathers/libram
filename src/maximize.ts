@@ -25,7 +25,7 @@ import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
 import { setEqual } from "./utils";
 
 function toMaximizerName({ name, id }: Item): string {
-  return name.match(/;/) ? `¶${id}` : name;
+  return name.includes(";") ? `¶${id}` : name;
 }
 
 export type MaximizeOptions = {

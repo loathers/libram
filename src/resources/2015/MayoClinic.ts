@@ -1,4 +1,4 @@
-import { buy, getWorkshed, Item, retrieveItem, toInt, use } from "kolmafia";
+import { buy, getWorkshed, Item, retrieveItem, use } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import logger from "../../logger";
 import { get, withChoice } from "../../property";
@@ -45,7 +45,7 @@ export function setMayoMinder(mayo: Item, quantity = 1): boolean {
   retrieveItem(quantity, mayo);
   if (!haveItem($item`Mayo Minder™`)) buy($item`Mayo Minder™`);
   if (get("mayoMinderSetting") !== mayo.name) {
-    withChoice(1076, toInt(mayo) - 8260, () => use($item`Mayo Minder™`));
+    withChoice(1076, mayo.id - 8260, () => use($item`Mayo Minder™`));
   }
   return get("mayoMinderSetting") === mayo.name;
 }

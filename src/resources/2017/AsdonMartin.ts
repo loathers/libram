@@ -15,7 +15,6 @@ import {
   mallPrice,
   mallPrices,
   retrieveItem,
-  toInt,
   visitUrl,
 } from "kolmafia";
 import { getAverageAdventures, have as haveItem } from "../../lib";
@@ -186,9 +185,7 @@ function getBestFuels(): Item[] {
  */
 export function insertFuel(it: Item, quantity = 1): boolean {
   const result = visitUrl(
-    `campground.php?action=fuelconvertor&pwd&qty=${quantity}&iid=${toInt(
-      it
-    )}&go=Convert%21`
+    `campground.php?action=fuelconvertor&pwd&qty=${quantity}&iid=${it.id}&go=Convert%21`
   );
   return result.includes("The display updates with a");
 }

@@ -1,4 +1,4 @@
-import { toInt, myClass } from "kolmafia";
+import { myClass } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
@@ -54,7 +54,7 @@ export function expectedDrones(weight = currentWeight()): number {
  * @returns In Grey You, returns the fullstats you'll gain from goose levelling; outside Grey You, returns substats
  */
 export function expectedExperience(weight = currentWeight()): number {
-  return Math.pow(Math.max(weight - 5, 0), toInt(myClass()) === 27 ? 2 : 3);
+  return Math.pow(Math.max(weight - 5, 0), myClass().id === 27 ? 2 : 3);
 }
 
 /**

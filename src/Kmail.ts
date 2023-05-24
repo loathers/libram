@@ -3,7 +3,6 @@ import {
   extractMeat,
   isGiftable,
   Item,
-  toInt,
   visitUrl,
 } from "kolmafia";
 import { arrayToCountedMap, chunk } from "./utils";
@@ -96,7 +95,7 @@ export default class Kmail {
           ? []
           : c.map(
               ([item, quantity], index) =>
-                `whichitem${index + 1}=${toInt(item)}&howmany${
+                `whichitem${index + 1}=${item.id}&howmany${
                   index + 1
                 }=${quantity}`
             );

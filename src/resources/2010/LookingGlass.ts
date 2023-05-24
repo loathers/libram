@@ -4,7 +4,6 @@ import {
   Effect,
   haveEffect,
   Item,
-  toInt,
   toSlot,
 } from "kolmafia";
 
@@ -40,14 +39,11 @@ function validTeaPartyHat(item: Item, characters: number): boolean {
  * @returns The number of characters required to get an effect
  */
 export function findTeaPartyHatLength(effect: Effect): number {
-  const effectId = toInt(effect);
-  if (
-    effectId < toInt(firstTeaPartyEffect) ||
-    effectId > toInt(lastTeaPartyEffect)
-  ) {
+  const effectId = effect.id;
+  if (effectId < firstTeaPartyEffect.id || effectId > lastTeaPartyEffect.id) {
     throw new Error(`Invalid Mad Tea Party effect ${effect}`);
   }
-  return Math.floor(effectId - toInt(firstTeaPartyEffect) + 5);
+  return Math.floor(effectId - firstTeaPartyEffect.id + 5);
 }
 
 /**

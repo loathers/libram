@@ -5,7 +5,6 @@ import {
   getCampground,
   Item,
   Path,
-  toInt,
   use,
   visitUrl,
   xpath,
@@ -288,10 +287,10 @@ export function ascend(
   visitUrl("afterlife.php?action=pearlygates");
 
   if (consumable) {
-    visitUrl(`afterlife.php?action=buydeli&whichitem=${toInt(consumable)}`);
+    visitUrl(`afterlife.php?action=buydeli&whichitem=${consumable.id}`);
   }
 
-  if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt(pet)}`);
+  if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${pet.id}`);
 
   if (permOptions) {
     const currentPerms = permedSkills();
@@ -310,17 +309,13 @@ export function ascend(
         karma -= expectedKarma;
         const permText =
           prospectivePermLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
-        visitUrl(`afterlife.php?action=${permText}&whichskill=${toInt(skill)}`);
+        visitUrl(`afterlife.php?action=${permText}&whichskill=${skill.id}`);
       }
     }
   }
 
   visitUrl(
-    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${toInt(
-      playerClass
-    )}&whichpath=${
-      path.id
-    }&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
+    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
     true
   );
 }

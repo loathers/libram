@@ -9186,19 +9186,19 @@ function have39() {
   return have(cincho);
 }
 function currentCinch() {
-  return clamp(100 - get("_cinchUsed"), 0, 100);
+  return have39() ? clamp(100 - get("_cinchUsed"), 0, 100) : 0;
 }
 function cinchRestoredBy() {
   var currentRests = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : get("_cinchoRests");
-  return clamp(50 - currentRests * 5, 5, 30);
+  return have39() ? clamp(50 - currentRests * 5, 5, 30) : 0;
 }
 function totalAvailableCinch() {
   var remainingRests = Math.max(0, (0, import_kolmafia50.totalFreeRests)() - get("timesRested"));
-  return currentCinch() + sum(new Array(remainingRests).fill(null).map(function(_, i) {
+  return have39() ? currentCinch() + sum(new Array(remainingRests).fill(null).map(function(_, i) {
     return i + get("_cinchoRests");
   }), function(restNumber) {
     return cinchRestoredBy(restNumber);
-  });
+  }) : 0;
 }
 var skills2 = {
   SaltAndLime: $skill(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral38(["Cincho: Dispense Salt and Lime"]))),

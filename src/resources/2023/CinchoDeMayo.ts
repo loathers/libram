@@ -17,7 +17,7 @@ export function have(): boolean {
  * @returns Your current cinch
  */
 export function currentCinch(): number {
-  return clamp(100 - get("_cinchUsed"), 0, 100);
+  return have() ? clamp(100 - get("_cinchUsed"), 0, 100) : 0;
 }
 
 /**
@@ -25,7 +25,7 @@ export function currentCinch(): number {
  * @returns The amount of cinch restored by the given rest
  */
 export function cinchRestoredBy(currentRests = get("_cinchoRests")) {
-  return clamp(50 - currentRests * 5, 5, 30);
+  return have() ? clamp(50 - currentRests * 5, 5, 30) : 0;
 }
 
 /**
@@ -34,15 +34,15 @@ export function cinchRestoredBy(currentRests = get("_cinchoRests")) {
 export function totalAvailableCinch(): number {
   const remainingRests = Math.max(0, totalFreeRests() - get("timesRested"));
 
-  return (
-    currentCinch() +
-    sum(
-      new Array(remainingRests)
-        .fill(null)
-        .map((_, i) => i + get("_cinchoRests")),
-      (restNumber) => cinchRestoredBy(restNumber)
-    )
-  );
+  return have()
+    ? currentCinch() +
+        sum(
+          new Array(remainingRests)
+            .fill(null)
+            .map((_, i) => i + get("_cinchoRests")),
+          (restNumber) => cinchRestoredBy(restNumber)
+        )
+    : 0;
 }
 
 export const skills = {

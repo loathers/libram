@@ -46,7 +46,7 @@ export function getBuffsToday() {
  * @returns Whether player has acquired all their buffs today from gazing at the stars
  */
 export function canGaze() {
-  return getBuffsToday() >= 4;
+  return getBuffsToday() < 4;
 }
 
 /**

@@ -18,6 +18,7 @@ import * as MayoClinic from "./2015/MayoClinic";
 import * as SourceTerminal from "./2016/SourceTerminal";
 import * as Witchess from "./2016/Witchess";
 import * as AsdonMartin from "./2017/AsdonMartin";
+import * as Briefcase from "./2017/Briefcase";
 import * as MummingTrunk from "./2017/MummingTrunk";
 import * as Pantogram from "./2017/Pantogram";
 import * as Robortender from "./2017/Robortender";
@@ -47,6 +48,7 @@ export {
   Bandersnatch,
   BarrelShrine,
   BeachComb,
+  Briefcase,
   Cartography,
   ChateauMantegna,
   CinchoDeMayo,

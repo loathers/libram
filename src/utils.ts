@@ -48,6 +48,14 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
 }
 
 /**
+ * @param array Array to select from
+ * @returns Random item from array
+ */
+export function random<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+/**
  * Count distinct values in an array
  *
  * @param array Array of values
@@ -345,4 +353,18 @@ export function flat<A extends any[], D extends number = 1>(
     }
   }
   return flatArray;
+}
+
+/**
+ * @param str String to match
+ * @param pattern Pattern to find in string
+ * @returns Matches
+ */
+export function matchAll(str: string, pattern: RegExp) {
+  const matches = [];
+  let match;
+  while ((match = pattern.exec(str)) !== null) {
+    matches.push(match);
+  }
+  return matches;
 }

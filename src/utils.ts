@@ -346,3 +346,11 @@ export function flat<A extends any[], D extends number = 1>(
   }
   return flatArray;
 }
+
+/**
+ * @param array Array to select from
+ * @returns Random item from array
+ */
+export function random<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}

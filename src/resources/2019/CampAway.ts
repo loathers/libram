@@ -67,7 +67,7 @@ export function getGazeBuff(daycountToCheck = daycount()) {
   const effectName = [];
 
   if (buffSign === mySign()) effectName.push("Big");
-  effectName.push("Smile of the ", buffSign);
+  effectName.push("Smile of the", buffSign);
 
   return Effect.get(effectName.join(" "));
 }

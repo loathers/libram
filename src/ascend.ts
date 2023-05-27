@@ -124,16 +124,19 @@ export class AscensionPrepError extends Error {
 }
 
 type MoonSign =
+  | "Mongoose"
+  | "Wallaby"
+  | "Vole"
+  | "Platypus"
+  | "Opossum"
+  | "Narmot"
+  | "Wombat"
+  | "Blender"
+  | "Packrat";
+
+type InputMoonSign =
   | number
-  | "mongoose"
-  | "wallaby"
-  | "vole"
-  | "platypus"
-  | "opossum"
-  | "marmot"
-  | "wombat"
-  | "blender"
-  | "packrat"
+  | Lowercase<MoonSign>
   | "degrassi"
   | "degrassi knoll"
   | "friendly degrassi knoll"
@@ -146,28 +149,10 @@ type MoonSign =
   | "gnomish gnomads camp";
 
 /**
- * Determine the id of the appropriate moon sign.
- *
- * @param moon Either a moon sign or the desired unlocked zone name
- * @param playerClass Class, required for working out a moon sign based on the desired zone
- * @returns Moon sign id
+ * @param moon Moon sign name
+ * @returns Moon sign id else 0
  */
-function toMoonId(moon: MoonSign, playerClass: Class): number {
-  if (typeof moon === "number") return moon;
-
-  const offset = () => {
-    switch (playerClass.primestat) {
-      case $stat`Muscle`:
-        return 0;
-      case $stat`Mysticality`:
-        return 1;
-      case $stat`Moxie`:
-        return 2;
-      default:
-        throw new AscendError(`unknown prime stat for ${playerClass}`);
-    }
-  };
-
+export function signNameToId(moon: MoonSign) {
   switch (moon.toLowerCase()) {
     case "mongoose":
       return 1;
@@ -187,6 +172,65 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
       return 8;
     case "packrat":
       return 9;
+  }
+  return 0;
+}
+
+/**
+ * @param id Moon sign id
+ * @returns Name of moon sign else "None"
+ */
+export function signIdToName(id: number) {
+  switch (id) {
+    case 1:
+      return "Mongoose";
+    case 2:
+      return "Wallaby";
+    case 3:
+      return "Vole";
+    case 4:
+      return "Platypus";
+    case 5:
+      return "Opossum";
+    case 6:
+      return "Marmot";
+    case 7:
+      return "Wombat";
+    case 8:
+      return "Blender";
+    case 9:
+      return "Packrat";
+  }
+  return "None";
+}
+
+/**
+ * Determine the id of the appropriate moon sign.
+ *
+ * @param moon Either a moon sign or the desired unlocked zone name
+ * @param playerClass Class, required for working out a moon sign based on the desired zone
+ * @returns Moon sign id
+ */
+function inputToMoonId(moon: InputMoonSign, playerClass: Class): number {
+  if (typeof moon === "number") return moon;
+
+  const offset = () => {
+    switch (playerClass.primestat) {
+      case $stat`Muscle`:
+        return 0;
+      case $stat`Mysticality`:
+        return 1;
+      case $stat`Moxie`:
+        return 2;
+      default:
+        throw new AscendError(`unknown prime stat for ${playerClass}`);
+    }
+  };
+
+  const fromNormalInput = signNameToId(moon as MoonSign);
+  if (fromNormalInput >= 0) return fromNormalInput;
+
+  switch (moon.toLowerCase()) {
     case "degrassi":
     case "degrassi knoll":
     case "friendly degrassi knoll":
@@ -238,7 +282,7 @@ export function ascend(
   path: Path,
   playerClass: Class,
   lifestyle: Lifestyle,
-  moon: MoonSign,
+  moon: InputMoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined,
   permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
@@ -248,7 +292,7 @@ export function ascend(
   }
   if (path.id < 0) throw new AscendError(path);
 
-  const moonId = toMoonId(moon, playerClass);
+  const moonId = inputToMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
   if (
     consumable &&

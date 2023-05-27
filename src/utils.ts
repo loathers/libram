@@ -354,3 +354,17 @@ export function flat<A extends any[], D extends number = 1>(
   }
   return flatArray;
 }
+
+/**
+ * @param str String to match
+ * @param pattern Pattern to find in string
+ * @returns Matches
+ */
+export function matchAll(str: string, pattern: RegExp) {
+  const matches = [];
+  let match;
+  while ((match = pattern.exec(str)) !== null) {
+    matches.push(match);
+  }
+  return matches;
+}

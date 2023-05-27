@@ -1,9 +1,10 @@
-import { abort, stringModifier, visitUrl } from "kolmafia";
+import { stringModifier, visitUrl } from "kolmafia";
 
 import { have as haveItem } from "../../lib";
 import logger from "../../logger";
 import { get } from "../../property";
 import { $item } from "../../template-string";
+import { flat, matchAll } from "../../utils";
 
 const briefcase = $item`Kremlin's Greatest Briefcase`;
 
@@ -58,7 +59,7 @@ type Dials = [...DialsSide, ...DialsSide];
  * @returns The six digits representing all of the dials
  */
 export function getDials(page = getPage()): Dials {
-  return [...page.matchAll(/action=kgb_dial(\d)>.*?char(\d|a).gif/g)]
+  return matchAll(page, /action=kgb_dial(\d)>.*?char(\d|a).gif/g)
     .map(
       ([, dial, value]) =>
         [Number(dial) - 1, value === "a" ? 10 : Number(value)] as const
@@ -123,7 +124,7 @@ export function getLightSet(
     `id=kgb_${id}(\\d) .*?/light_(on|blinking|off).gif`,
     "g"
   );
-  return [...page.matchAll(regex)]
+  return matchAll(page, regex)
     .map(
       ([, light, value]) => [Number(light) - 1, value as LightState] as const
     )
@@ -453,7 +454,7 @@ export function unlockButtons(): boolean {
  * @param times Times to press it
  * @returns The contents of the final page
  */
-export function pressButton(button: number, times = 1): string {
+export function pressButton(button: number, times = 1): string | null {
   unlockButtons();
   let result = "";
   Array(times)
@@ -462,6 +463,9 @@ export function pressButton(button: number, times = 1): string {
       result = act(`button${button}`);
       logger.debug(`[KGB] Pressed button ${button}`);
     });
+
+  if (result.includes("Maybe it's out of... clicks?")) return null;
+
   return result;
 }
 
@@ -693,13 +697,14 @@ export function setEnchantment(enchantment: Enchantment): boolean {
  */
 type Tabs = [number, number, number, number, number, number];
 type TabOrder = Tabs;
+const isTabOrder = (order: number[]): order is TabOrder => order.length === 6;
 
 /**
  * @param page Page content to read, else it will read the page itself
  * @returns State of tabs
  */
 export function getTabs(page = getPage()): Tabs {
-  return [...page.matchAll(/action=kgb_tab(\d)>.*?tab(1|2).gif/g)]
+  return matchAll(page, /action=kgb_tab(\d)>.*?tab(1|2).gif/g)
     .map(([, tab, value]) => [Number(tab) - 1, Number(value)] as const)
     .reduce((acc, [tab, value]) => {
       acc[tab] = value;
@@ -730,15 +735,144 @@ export function getTabValue(order: TabOrder, tabs = getTabs()): number {
     .reduce((acc, [, t], i) => (acc += t * 3 ** i), 0);
 }
 
+function getPossibleTabOrders(current: number[] = []): TabOrder[] {
+  if (isTabOrder(current)) return [current];
+
+  return Array(6)
+    .fill(0)
+    .map((_, i) => i)
+    .filter((i) => !current.includes(i))
+    .reduce(
+      (acc, i) => [...acc, ...getPossibleTabOrders([...current, i])],
+      [] as TabOrder[]
+    );
+}
+
+function getPossibleButtonOrders() {
+  // There are 720 possible tab orders, no need to recalculate each time
+  return Array(6)
+    .fill(0)
+    .map(() =>
+      Array(6)
+        .fill(0)
+        .map(() => Array(720).fill(true))
+    ) as boolean[][][];
+}
+
+const BUTTON_INCREMENTS = [-100, -10, -1, 1, 10, 100];
+
+/**
+ * Unlock tabs
+ *
+ * @returns Contents of the final page
+ */
+export function unlockTabs(): string {
+  unlockButtons();
+  return setHandle(true);
+}
+
+function simulateButtonPressOnTabs(
+  tabOrder: TabOrder,
+  tabState: Tabs,
+  increment: number
+) {
+  const orderedTernary = tabOrder.map((i) => tabState[i]).join("");
+  const newValue = Math.max(0, parseInt(orderedTernary, 3) + increment);
+  const orderedResult = newValue
+    .toString(3)
+    .padStart(6, "0")
+    .split("")
+    .map((d) => Number(d));
+  return tabOrder.map((i) => orderedResult[i]) as Tabs;
+}
+
+function calculateValidTabOrders(
+  possibleTabOrders: TabOrder[],
+  possibleButtonOrders: boolean[][][]
+) {
+  return [...possibleTabOrders.entries()]
+    .filter(([tabOrderId]) => {
+      return possibleButtonOrders.some((possibleIncrements) =>
+        possibleIncrements.some(
+          (possibleIncrement) => possibleIncrement[tabOrderId]
+        )
+      );
+    })
+    .map(([, tabOrder]) => tabOrder);
+}
+
 /**
  * Determine the correct order for the current tabs
  *
  * @deprecated Not actually deprecated, just doesn't work yet!
  */
 export function decodeTabs(): void {
-  abort(
-    "This function is not yet complete, mostly because the trivial solution makes Gausie's computer blow up"
-  );
-  unlockButtons();
-  setHandle(true);
+  const page = unlockTabs();
+
+  const possibleTabOrders = getPossibleTabOrders();
+  const possibleButtonOrders = getPossibleButtonOrders();
+
+  const confirmedButtonOrder = Array(6).fill(false);
+
+  let tabState = getTabs(page);
+  let buttonsPressed = 0;
+  let validTabOrders = possibleTabOrders;
+
+  while (validTabOrders.length > 1) {
+    // Walk up and down the buttons finding ones that haven't been identified
+    let buttonPressed = -1;
+    while (buttonPressed < 0 || confirmedButtonOrder[buttonPressed] === true) {
+      buttonPressed = 5 - Math.abs((buttonsPressed++ % 10) - 5);
+    }
+
+    const result = pressButton(buttonPressed + 1);
+
+    if (!result) {
+      logger.debug(`[KGB] Ran out of clicks`);
+      return;
+    }
+
+    const actualNextTabState = getTabs(result);
+    const comparableNextTabState = actualNextTabState.join("");
+
+    logger.debug(`[KGB] B${buttonPressed + 1}: ${comparableNextTabState}`);
+
+    for (const [
+      incrementId,
+      possibleIncrement,
+    ] of BUTTON_INCREMENTS.entries()) {
+      for (const [
+        tabOrderId,
+        possibleTabOrder,
+      ] of possibleTabOrders.entries()) {
+        if (!possibleButtonOrders[buttonPressed][incrementId][tabOrderId])
+          continue;
+        const expectedStateIfThisIsTrue = simulateButtonPressOnTabs(
+          possibleTabOrder,
+          tabState,
+          possibleIncrement
+        );
+        possibleButtonOrders[buttonPressed][incrementId][tabOrderId] =
+          comparableNextTabState === expectedStateIfThisIsTrue.join("");
+      }
+    }
+
+    const trues = flat(possibleButtonOrders[buttonPressed]).filter(
+      (i) => i === true
+    );
+
+    if (trues.length === 1) {
+      confirmedButtonOrder[buttonPressed] = true;
+    }
+
+    tabState = actualNextTabState;
+
+    validTabOrders = calculateValidTabOrders(
+      possibleTabOrders,
+      possibleButtonOrders
+    );
+    logger.debug(`[KGB] ${validTabOrders.length} valid tab orders`);
+  }
+
+  console.log(validTabOrders[0]);
 }

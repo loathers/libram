@@ -13,6 +13,7 @@ import {
   setAutoAttack,
   Skill,
   Stat,
+  StatType,
   toInt,
   urlEncode,
   visitUrl,
@@ -97,6 +98,59 @@ function itemOrItemsBallsMacroPredicate(
     return `hascombatitem ${itemOrItems}`;
   }
 }
+
+type RawNumberMacroPredicate =
+  | "times"
+  | "hpbelow"
+  | "hppercentbelow"
+  | "mpbelow"
+  | "mppercentbelow"
+  | "didcritical"
+  | "beenhit"
+  | "missed"
+  | "familiarattacked"
+  | "gotjump"
+  | "pastround"
+  | "monsterhpabove"
+  | "monsterhpbelow"
+  | "snarfblat";
+type RawStringMacroPredicate = "match" | "monstername" | "happymediumglow";
+type RawNumberOrStringMacroPredicate =
+  | "haseffect"
+  | "hascombatitem"
+  | "monsterid"
+  | "hasskill";
+type NudeMacroPredicate =
+  | "sealclubber"
+  | "turtletamer"
+  | "pastamancer"
+  | "sauceror"
+  | "discobandit"
+  | "accordionthief"
+  | `${Lowercase<StatType>}class`;
+export type MacroPredicate =
+  | `${RawNumberMacroPredicate} ${number}`
+  | `${RawStringMacroPredicate} ${string}`
+  | `${RawNumberOrStringMacroPredicate} ${number | string}`
+  | NudeMacroPredicate;
+
+type Predicate<
+  T extends string,
+  N extends number,
+  R extends unknown[]
+> = R["length"] extends N
+  ? T
+  : Predicate<
+      T | `!(${T})` | `(${T})` | `${T} || ${T}` | `${T} && ${T}`,
+      N,
+      [unknown, ...R]
+    >;
+
+export type CompoundMacroPredicate<Depth extends number> = Predicate<
+  MacroPredicate,
+  Depth,
+  []
+>;
 
 type PreBALLSPredicate =
   | string

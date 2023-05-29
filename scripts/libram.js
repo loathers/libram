@@ -2027,7 +2027,7 @@ function telescope() {
   };
 }
 function examine(thing) {
-  var url = thing instanceof import_kolmafia4.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia4.Familiar ? "desc_familiar.php?which=".concat((0, import_kolmafia4.toInt)(thing)) : thing instanceof import_kolmafia4.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat((0, import_kolmafia4.toInt)(thing));
+  var url = thing instanceof import_kolmafia4.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia4.Familiar ? "desc_familiar.php?which=".concat(thing.id) : thing instanceof import_kolmafia4.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat(thing.id);
   return (0, import_kolmafia4.visitUrl)(url);
 }
 var byStat = makeByXFunction(function() {
@@ -2036,7 +2036,7 @@ var byStat = makeByXFunction(function() {
   return (0, import_kolmafia4.myClass)().toString();
 });
 function directlyUse(item10) {
-  return (0, import_kolmafia4.visitUrl)("inv_use.php?which=3&whichitem=".concat((0, import_kolmafia4.toInt)(item10), "&pwd"));
+  return (0, import_kolmafia4.visitUrl)("inv_use.php?which=3&whichitem=".concat(item10.id, "&pwd"));
 }
 function unequip(thing) {
   if (thing instanceof import_kolmafia4.Slot)
@@ -2241,7 +2241,7 @@ function itemOrItemsBallsMacroName(itemOrItems) {
   if (Array.isArray(itemOrItems))
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   var item10 = itemOrNameToItem(itemOrItems);
-  return overlappingItemNames.includes(item10.name) ? (0, import_kolmafia5.toInt)(item10).toString() : item10.name;
+  return overlappingItemNames.includes(item10.name) ? item10.id.toFixed(0) : item10.name;
 }
 function itemOrItemsBallsMacroPredicate(itemOrItems) {
   return Array.isArray(itemOrItems) ? itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItems);
@@ -2251,7 +2251,7 @@ function skillOrNameToSkill(skillOrName) {
 }
 function skillBallsMacroName(skillOrName) {
   var skill = skillOrNameToSkill(skillOrName);
-  return skill.name.match(/^[A-Za-z ]+$/) && !overlappingSkillNames.includes(skill.name) ? skill.name : (0, import_kolmafia5.toInt)(skill);
+  return skill.name.match(/^[A-Za-z ]+$/) && !overlappingSkillNames.includes(skill.name) ? skill.name : skill.id;
 }
 var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   _inherits2(InvalidMacroError2, _Error);
@@ -2760,7 +2760,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
           return "monsterid ".concat(mon.id);
         }).join(" || "), ballsCondition = "(".concat(ballsCondition, ")");
       else if (condition instanceof import_kolmafia5.Effect)
-        ballsCondition = "haseffect ".concat((0, import_kolmafia5.toInt)(condition));
+        ballsCondition = "haseffect ".concat(condition.id);
       else if (condition instanceof import_kolmafia5.Skill)
         ballsCondition = "hasskill ".concat(skillBallsMacroName(condition));
       else if (condition instanceof import_kolmafia5.Item) {
@@ -2773,7 +2773,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
           throw new InvalidMacroError("Location ".concat(condition, " cannot be made a valid BALLS predicate (it has no location id)"));
         ballsCondition = "snarfblat ".concat(snarfblat);
       } else if (condition instanceof import_kolmafia5.Class) {
-        if ((0, import_kolmafia5.toInt)(condition) > 6)
+        if (condition.id > 6)
           throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
         ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
       } else
@@ -3183,6 +3183,10 @@ function _arrayLikeToArray5(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
+function toMaximizerName(_ref) {
+  var name = _ref.name, id = _ref.id;
+  return name.includes(";") ? "\xB6".concat(id) : name;
+}
 function mergeMaximizeOptions(defaultOptions, addendums) {
   var _addendums$updateOnFa, _addendums$updateOnCa, _addendums$useOutfitC, _addendums$forceEquip, _addendums$preventEqu, _addendums$bonusEquip, _addendums$onlySlot, _addendums$preventSlo, _addendums$forceUpdat, _addendums$modes;
   return {
@@ -3379,14 +3383,14 @@ function verifyCached(entry) {
       var slotGroup = _step4.value, desiredSlots = slotGroup.map(function(slot) {
         var _entry$equipment$get;
         return [slot, (_entry$equipment$get = entry.equipment.get(slot)) !== null && _entry$equipment$get !== void 0 ? _entry$equipment$get : null];
-      }).filter(function(_ref) {
-        var _ref2 = _slicedToArray4(_ref, 2), item10 = _ref2[1];
+      }).filter(function(_ref2) {
+        var _ref3 = _slicedToArray4(_ref2, 2), item10 = _ref3[1];
         return item10 !== null;
-      }), desiredSet = desiredSlots.map(function(_ref3) {
-        var _ref4 = _slicedToArray4(_ref3, 2), item10 = _ref4[1];
+      }), desiredSet = desiredSlots.map(function(_ref4) {
+        var _ref5 = _slicedToArray4(_ref4, 2), item10 = _ref5[1];
         return item10;
-      }), equippedSet = desiredSlots.map(function(_ref5) {
-        var _ref6 = _slicedToArray4(_ref5, 1), slot = _ref6[0];
+      }), equippedSet = desiredSlots.map(function(_ref6) {
+        var _ref7 = _slicedToArray4(_ref6, 1), slot = _ref7[0];
         return (0, import_kolmafia6.equippedItem)(slot);
       });
       setEqual(desiredSet, equippedSet) || (warn2 && logger_default.warning("Failed to apply cached ".concat(desiredSet.join(", "), " in ").concat(slotGroup.join(", "), ".")), success = !1);
@@ -3446,19 +3450,19 @@ function saveCached(cacheKey, options) {
 }
 function maximizeCached(objectives) {
   var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options), forceEquip = fullOptions.forceEquip, preventEquip = fullOptions.preventEquip, bonusEquip = fullOptions.bonusEquip, onlySlot = fullOptions.onlySlot, preventSlot = fullOptions.preventSlot, forceUpdate = fullOptions.forceUpdate, objective = _toConsumableArray3(new Set([].concat(_toConsumableArray3(objectives.sort()), _toConsumableArray3(forceEquip.map(function(item10) {
-    return "equip ".concat(item10);
+    return '"equip '.concat(toMaximizerName(item10), '"');
   }).sort()), _toConsumableArray3(preventEquip.map(function(item10) {
-    return "-equip ".concat(item10);
+    return '-"equip '.concat(toMaximizerName(item10), '"');
   }).sort()), _toConsumableArray3(onlySlot.map(function(slot) {
     return "".concat(slot);
   }).sort()), _toConsumableArray3(preventSlot.map(function(slot) {
     return "-".concat(slot);
-  }).sort()), _toConsumableArray3(Array.from(bonusEquip.entries()).filter(function(_ref7) {
-    var _ref8 = _slicedToArray4(_ref7, 2), bonus = _ref8[1];
+  }).sort()), _toConsumableArray3(Array.from(bonusEquip.entries()).filter(function(_ref8) {
+    var _ref9 = _slicedToArray4(_ref8, 2), bonus = _ref9[1];
     return bonus !== 0;
-  }).map(function(_ref9) {
-    var _ref10 = _slicedToArray4(_ref9, 2), item10 = _ref10[0], bonus = _ref10[1];
-    return "".concat(Math.round(bonus * 100) / 100, " bonus ").concat(item10);
+  }).map(function(_ref10) {
+    var _ref11 = _slicedToArray4(_ref10, 2), item10 = _ref11[0], bonus = _ref11[1];
+    return "".concat(Math.round(bonus * 100) / 100, ' "bonus ').concat(toMaximizerName(item10), '"');
   }).sort())))).join(", "), untouchedSlots = cachedSlots.filter(function(slot) {
     return preventSlot.includes(slot) || onlySlot.length > 0 && !onlySlot.includes(slot);
   }), cacheKey = [objective].concat(_toConsumableArray3(untouchedSlots.map(function(slot) {
@@ -3974,7 +3978,7 @@ function getBestFuels() {
   return candidates;
 }
 function insertFuel(it) {
-  var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, result = (0, import_kolmafia8.visitUrl)("campground.php?action=fuelconvertor&pwd&qty=".concat(quantity, "&iid=").concat((0, import_kolmafia8.toInt)(it), "&go=Convert%21"));
+  var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, result = (0, import_kolmafia8.visitUrl)("campground.php?action=fuelconvertor&pwd&qty=".concat(quantity, "&iid=").concat(it.id, "&go=Convert%21"));
   return result.includes("The display updates with a");
 }
 function fillTo(targetUnits) {
@@ -4642,10 +4646,7 @@ var weapons = {
   crossbow: $item(_templateObject106 || (_templateObject106 = _taggedTemplateLiteral8(["scratch 'n' sniff crossbow"])))
 };
 function makeSword(sticker) {
-  if (!weapon()) {
-    var id = (0, import_kolmafia13.toInt)(stickers[sticker]);
-    (0, import_kolmafia13.visitUrl)("bedazzle.php?action=juststick&sticker=".concat(id, "&pwd"));
-  }
+  weapon() || (0, import_kolmafia13.visitUrl)("bedazzle.php?action=juststick&sticker=".concat(stickers[sticker].id, "&pwd"));
 }
 function foldWeapon(mode) {
   var currentWep = weapon();
@@ -4671,7 +4672,7 @@ function setStickers() {
     var sticker = options[i];
     if (sticker) {
       var item10 = stickers[sticker];
-      start[i] !== item10 && ((0, import_kolmafia13.visitUrl)("bedazzle.php?action=peel&slot=".concat(i + 1, "&pwd")), (0, import_kolmafia13.visitUrl)("bedazzle.php?action=stick&slot=".concat(i + 1, "&sticker=").concat((0, import_kolmafia13.toInt)(item10), "&pwd")));
+      start[i] !== item10 && ((0, import_kolmafia13.visitUrl)("bedazzle.php?action=peel&slot=".concat(i + 1, "&pwd")), (0, import_kolmafia13.visitUrl)("bedazzle.php?action=stick&slot=".concat(i + 1, "&sticker=").concat(item10.id, "&pwd")));
     }
   }
   return currentStickers();
@@ -6378,7 +6379,7 @@ function have18() {
 }
 function setMayoMinder(mayo) {
   var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
-  return (0, import_kolmafia27.getWorkshed)() !== $item(_templateObject713 || (_templateObject713 = _taggedTemplateLiteral20(["portable Mayo Clinic"]))) ? !1 : Object.values(Mayo).includes(mayo) ? get("mayoInMouth") && get("mayoInMouth") !== mayo.name ? (logger_default.error("Currently have incorrect mayo in mouth"), !1) : ((0, import_kolmafia27.retrieveItem)(quantity, mayo), have($item(_templateObject813 || (_templateObject813 = _taggedTemplateLiteral20(["Mayo Minder\u2122"])))) || (0, import_kolmafia27.buy)($item(_templateObject912 || (_templateObject912 = _taggedTemplateLiteral20(["Mayo Minder\u2122"])))), get("mayoMinderSetting") !== mayo.name && withChoice(1076, (0, import_kolmafia27.toInt)(mayo) - 8260, function() {
+  return (0, import_kolmafia27.getWorkshed)() !== $item(_templateObject713 || (_templateObject713 = _taggedTemplateLiteral20(["portable Mayo Clinic"]))) ? !1 : Object.values(Mayo).includes(mayo) ? get("mayoInMouth") && get("mayoInMouth") !== mayo.name ? (logger_default.error("Currently have incorrect mayo in mouth"), !1) : ((0, import_kolmafia27.retrieveItem)(quantity, mayo), have($item(_templateObject813 || (_templateObject813 = _taggedTemplateLiteral20(["Mayo Minder\u2122"])))) || (0, import_kolmafia27.buy)($item(_templateObject912 || (_templateObject912 = _taggedTemplateLiteral20(["Mayo Minder\u2122"])))), get("mayoMinderSetting") !== mayo.name && withChoice(1076, mayo.id - 8260, function() {
     return (0, import_kolmafia27.use)($item(_templateObject1012 || (_templateObject1012 = _taggedTemplateLiteral20(["Mayo Minder\u2122"]))));
   }), get("mayoMinderSetting") === mayo.name) : (logger_default.error("Invalid mayo selected"), !1);
 }
@@ -6715,7 +6716,7 @@ function fightPiece(piece) {
     throw new Error("Failed to open Witchess.");
   if (!(0, import_kolmafia29.runChoice)(1).includes("whichchoice=1182"))
     throw new Error("Failed to visit shrink ray.");
-  if (!(0, import_kolmafia29.visitUrl)("choice.php?option=1&pwd=".concat((0, import_kolmafia29.myHash)(), "&whichchoice=1182&piece=").concat((0, import_kolmafia29.toInt)(piece)), !1).includes(piece.name))
+  if (!(0, import_kolmafia29.visitUrl)("choice.php?option=1&pwd=".concat((0, import_kolmafia29.myHash)(), "&whichchoice=1182&piece=").concat(piece.id), !1).includes(piece.name))
     throw new Error("Failed to start fight.");
   return (0, import_kolmafia29.runCombat)();
 }
@@ -6906,7 +6907,7 @@ function findRequirements(modifiers) {
   return returnValue;
 }
 function sacrificePairToURL(pair) {
-  var _pair = _slicedToArray7(pair, 2), rawSacrifice = _pair[0], quantity = _pair[1], sacrifice = rawSacrifice instanceof import_kolmafia31.Item ? (0, import_kolmafia31.toInt)(rawSacrifice) : rawSacrifice;
+  var _pair = _slicedToArray7(pair, 2), rawSacrifice = _pair[0], quantity = _pair[1], sacrifice = rawSacrifice instanceof import_kolmafia31.Item ? rawSacrifice.id : rawSacrifice;
   return "".concat(sacrifice, ",").concat(quantity);
 }
 function makePants(alignment, element, leftSac, middleSac, rightSac) {
@@ -7046,7 +7047,7 @@ function feed(beverage) {
   if (currentDrinks().length >= 5 || !drinks.includes(beverage) || !(0, import_kolmafia32.itemAmount)(beverage) || !have22())
     return !1;
   var priorFamiliar = (0, import_kolmafia32.myFamiliar)();
-  return (0, import_kolmafia32.useFamiliar)(familiar4), (0, import_kolmafia32.visitUrl)("inventory.php?action=robooze&which=1&whichitem=".concat((0, import_kolmafia32.toInt)(beverage))), (0, import_kolmafia32.useFamiliar)(priorFamiliar), currentDrinks().includes(beverage);
+  return (0, import_kolmafia32.useFamiliar)(familiar4), (0, import_kolmafia32.visitUrl)("inventory.php?action=robooze&which=1&whichitem=".concat(beverage.id)), (0, import_kolmafia32.useFamiliar)(priorFamiliar), currentDrinks().includes(beverage);
 }
 
 // src/resources/2017/Spacegate.ts
@@ -7219,7 +7220,7 @@ function getHazardEquipment() {
     return !1;
   var equipment = hazardEquipment(hazards());
   return equipment.forEach(function(equip3) {
-    var num = (0, import_kolmafia33.toInt)(equip3) - 9404;
+    var num = equip3.id - 9404;
     (0, import_kolmafia33.visitUrl)("place.php?whichplace=spacegate&action=sg_requisition"), (0, import_kolmafia33.visitUrl)("choice.php?whichchoice=1233&option=".concat(num));
   }), equipment.forEach(function(equip3) {
     if ((0, import_kolmafia33.availableAmount)(equip3) !== 1)
@@ -8616,9 +8617,9 @@ function buffAvailable() {
 }
 function buffCycle() {
   var playerclass = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia44.myClass)();
-  if ((0, import_kolmafia44.toInt)(playerclass) <= 0)
+  if (playerclass.id <= 0)
     return [];
-  for (var returnValue = [], id = (0, import_kolmafia44.toInt)(playerclass), seed = id > 6 ? id % 6 + 1 : id, i = 1; i < 12; i++) {
+  for (var returnValue = [], id = playerclass.id, seed = id > 6 ? id % 6 + 1 : id, i = 1; i < 12; i++) {
     var index = i * seed % 11;
     returnValue.push(buffs[index]);
   }
@@ -8988,7 +8989,7 @@ function expectedDrones() {
 }
 function expectedExperience() {
   var weight = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : currentWeight();
-  return Math.pow(Math.max(weight - 5, 0), (0, import_kolmafia47.toInt)((0, import_kolmafia47.myClass)()) === 27 ? 2 : 3);
+  return Math.pow(Math.max(weight - 5, 0), (0, import_kolmafia47.myClass)().id === 27 ? 2 : 3);
 }
 function expectedMeat() {
   var weight = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : currentWeight();
@@ -9978,7 +9979,7 @@ function ascend(path, playerClass, lifestyle, moon) {
     throw new AscendError(illegalSkill);
   if (isInValhalla() || (0, import_kolmafia53.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on"), !isInValhalla())
     throw new AscendError();
-  if ((0, import_kolmafia53.visitUrl)("afterlife.php?action=pearlygates"), consumable && (0, import_kolmafia53.visitUrl)("afterlife.php?action=buydeli&whichitem=".concat((0, import_kolmafia53.toInt)(consumable))), pet && (0, import_kolmafia53.visitUrl)("afterlife.php?action=buyarmory&whichitem=".concat((0, import_kolmafia53.toInt)(pet))), permOptions) {
+  if ((0, import_kolmafia53.visitUrl)("afterlife.php?action=pearlygates"), consumable && (0, import_kolmafia53.visitUrl)("afterlife.php?action=buydeli&whichitem=".concat(consumable.id)), pet && (0, import_kolmafia53.visitUrl)("afterlife.php?action=buyarmory&whichitem=".concat(pet.id)), permOptions) {
     var currentPerms = permedSkills(), karma = get("bankedKarma"), _iterator = _createForOfIteratorHelper10(permOptions.permSkills.entries()), _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done; ) {
@@ -9992,7 +9993,7 @@ function ascend(path, playerClass, lifestyle, moon) {
           }
           karma -= expectedKarma;
           var permText = prospectivePermLevel === Lifestyle.hardcore ? "hcperm" : "scperm";
-          (0, import_kolmafia53.visitUrl)("afterlife.php?action=".concat(permText, "&whichskill=").concat((0, import_kolmafia53.toInt)(skill)));
+          (0, import_kolmafia53.visitUrl)("afterlife.php?action=".concat(permText, "&whichskill=").concat(skill.id));
         }
       }
     } catch (err) {
@@ -10001,7 +10002,7 @@ function ascend(path, playerClass, lifestyle, moon) {
       _iterator.f();
     }
   }
-  (0, import_kolmafia53.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=".concat(moonId, "&gender=2&whichclass=").concat((0, import_kolmafia53.toInt)(playerClass), "&whichpath=").concat(path.id, "&asctype=").concat(lifestyle, "&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd"), !0);
+  (0, import_kolmafia53.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=".concat(moonId, "&gender=2&whichclass=").concat(playerClass.id, "&whichpath=").concat(path.id, "&asctype=").concat(lifestyle, "&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd"), !0);
 }
 function prepareAscension() {
   var _throwOnFail, _ref3 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, garden = _ref3.garden, eudora = _ref3.eudora, chateau = _ref3.chateau, throwOnFail = _ref3.throwOnFail;
@@ -12667,7 +12668,7 @@ var Kmail = /* @__PURE__ */ function() {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var c = _step.value, _itemsQuery = c === null ? [] : c.map(function(_ref5, index) {
             var _ref6 = _slicedToArray19(_ref5, 2), item10 = _ref6[0], quantity = _ref6[1];
-            return "whichitem".concat(index + 1, "=").concat((0, import_kolmafia61.toInt)(item10), "&howmany").concat(index + 1, "=").concat(quantity);
+            return "whichitem".concat(index + 1, "=").concat(item10.id, "&howmany").concat(index + 1, "=").concat(quantity);
           }), r = (0, import_kolmafia61.visitUrl)(constructUrl(m, _itemsQuery.join("&"), _itemsQuery.length));
           if (r.includes("That player cannot receive Meat or items"))
             return Kmail2.gift(to, message, items, meat);

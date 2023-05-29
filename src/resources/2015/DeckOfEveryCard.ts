@@ -11,7 +11,7 @@ export function have(): boolean {
   return have_($item`Deck of Every Card`);
 }
 
-const cards = [
+export const cards = [
   "X of Clubs",
   "X of Diamonds",
   "X of Hearts",
@@ -84,7 +84,7 @@ const cards = [
   "Unstable Portal",
 ] as const;
 
-type Card = typeof cards[number];
+export type Card = typeof cards[number];
 
 /**
  * @returns The number of cards we've drawn so far today--remember, cheating counts as 5

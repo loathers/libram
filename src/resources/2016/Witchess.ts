@@ -1,11 +1,4 @@
-import {
-  Monster,
-  myHash,
-  runChoice,
-  runCombat,
-  toInt,
-  visitUrl,
-} from "kolmafia";
+import { Monster, myHash, runChoice, runCombat, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
@@ -55,9 +48,7 @@ export function fightPiece(piece: Monster): string {
   }
   if (
     !visitUrl(
-      `choice.php?option=1&pwd=${myHash()}&whichchoice=1182&piece=${toInt(
-        piece
-      )}`,
+      `choice.php?option=1&pwd=${myHash()}&whichchoice=1182&piece=${piece.id}`,
       false
     ).includes(piece.name)
   ) {

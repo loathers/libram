@@ -4,7 +4,6 @@ import {
   haveSkill,
   Item,
   retrieveItem,
-  toInt,
   visitUrl,
 } from "kolmafia";
 import { $item, $items, $skill, $slots } from "../../template-string";
@@ -50,9 +49,7 @@ const weapons = {
  */
 export function makeSword(sticker: Sticker): void {
   if (weapon()) return;
-
-  const id = toInt(stickers[sticker]);
-  visitUrl(`bedazzle.php?action=juststick&sticker=${id}&pwd`);
+  visitUrl(`bedazzle.php?action=juststick&sticker=${stickers[sticker].id}&pwd`);
 }
 
 /**
@@ -104,9 +101,7 @@ export function setStickers(
     const item = stickers[sticker];
     if (start[i] === item) continue;
     visitUrl(`bedazzle.php?action=peel&slot=${i + 1}&pwd`);
-    visitUrl(
-      `bedazzle.php?action=stick&slot=${i + 1}&sticker=${toInt(item)}&pwd`
-    );
+    visitUrl(`bedazzle.php?action=stick&slot=${i + 1}&sticker=${item.id}&pwd`);
   }
 
   return currentStickers();

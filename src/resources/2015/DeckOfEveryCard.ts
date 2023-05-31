@@ -11,7 +11,7 @@ export function have(): boolean {
   return have_($item`Deck of Every Card`);
 }
 
-const cards_ = [
+export const cards = Object.freeze([
   "X of Clubs",
   "X of Diamonds",
   "X of Hearts",
@@ -82,16 +82,9 @@ const cards_ = [
   "Slimer Trading Card",
   "XIII - Death",
   "Unstable Portal",
-] as const;
+] as const);
 
-export type Card = typeof cards_[number];
-
-/**
- * @returns An array consisting of every card in the deck
- */
-export function cards(): Card[] {
-  return [...cards_];
-}
+export type Card = typeof cards[number];
 
 /**
  * @returns The number of cards we've drawn so far today--remember, cheating counts as 5

@@ -123,16 +123,19 @@ export class AscensionPrepError extends Error {
   }
 }
 
-type MoonSign =
-  | "Mongoose"
-  | "Wallaby"
-  | "Vole"
-  | "Platypus"
-  | "Opossum"
-  | "Narmot"
-  | "Wombat"
-  | "Blender"
-  | "Packrat";
+const MoonSigns = [
+  "Mongoose",
+  "Wallaby",
+  "Vole",
+  "Platypus",
+  "Opossum",
+  "Marmot",
+  "Wombat",
+  "Blender",
+  "Packrat",
+] as const;
+
+type MoonSign = typeof MoonSigns[number];
 
 type InputMoonSign =
   | number
@@ -153,27 +156,7 @@ type InputMoonSign =
  * @returns Moon sign id else 0
  */
 export function signNameToId(moon: MoonSign) {
-  switch (moon.toLowerCase()) {
-    case "mongoose":
-      return 1;
-    case "wallaby":
-      return 2;
-    case "vole":
-      return 3;
-    case "platypus":
-      return 4;
-    case "opossum":
-      return 5;
-    case "marmot":
-      return 6;
-    case "wombat":
-      return 7;
-    case "blender":
-      return 8;
-    case "packrat":
-      return 9;
-  }
-  return 0;
+  return MoonSigns.indexOf(moon) + 1;
 }
 
 /**
@@ -181,27 +164,7 @@ export function signNameToId(moon: MoonSign) {
  * @returns Name of moon sign else "None"
  */
 export function signIdToName(id: number) {
-  switch (id) {
-    case 1:
-      return "Mongoose";
-    case 2:
-      return "Wallaby";
-    case 3:
-      return "Vole";
-    case 4:
-      return "Platypus";
-    case 5:
-      return "Opossum";
-    case 6:
-      return "Marmot";
-    case 7:
-      return "Wombat";
-    case 8:
-      return "Blender";
-    case 9:
-      return "Packrat";
-  }
-  return "None";
+  return MoonSigns[id - 1] || "None";
 }
 
 /**

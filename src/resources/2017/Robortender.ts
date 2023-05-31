@@ -5,7 +5,6 @@ import {
   Monster,
   myFamiliar,
   Phylum,
-  toInt,
   toItem,
   useFamiliar,
   visitUrl,
@@ -97,7 +96,7 @@ export function feed(beverage: Item): boolean {
   if (!have()) return false;
   const priorFamiliar = myFamiliar();
   useFamiliar(familiar); // must equip Robortender to feed it
-  visitUrl(`inventory.php?action=robooze&which=1&whichitem=${toInt(beverage)}`);
+  visitUrl(`inventory.php?action=robooze&which=1&whichitem=${beverage.id}`);
   useFamiliar(priorFamiliar);
   return currentDrinks().includes(beverage);
 }

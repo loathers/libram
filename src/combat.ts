@@ -13,7 +13,6 @@ import {
   setAutoAttack,
   Skill,
   Stat,
-  toInt,
   urlEncode,
   visitUrl,
   xpath,
@@ -78,7 +77,7 @@ function itemOrItemsBallsMacroName(
     const item = itemOrNameToItem(itemOrItems);
     return !overlappingItemNames.includes(item.name)
       ? item.name
-      : toInt(item).toString();
+      : item.id.toFixed(0);
   }
 }
 
@@ -135,7 +134,7 @@ function skillBallsMacroName(skillOrName: SkillOrName) {
   return skill.name.match(/^[A-Za-z ]+$/) &&
     !overlappingSkillNames.includes(skill.name)
     ? skill.name
-    : toInt(skill);
+    : skill.id;
 }
 
 type Constructor<T> = { new (): T };
@@ -375,7 +374,7 @@ export class Macro {
         .join(" || ");
       ballsCondition = `(${ballsCondition})`;
     } else if (condition instanceof Effect) {
-      ballsCondition = `haseffect ${toInt(condition)}`;
+      ballsCondition = `haseffect ${condition.id}`;
     } else if (condition instanceof Skill) {
       ballsCondition = `hasskill ${skillBallsMacroName(condition)}`;
     } else if (condition instanceof Item) {
@@ -397,7 +396,7 @@ export class Macro {
 
       ballsCondition = `snarfblat ${snarfblat}`;
     } else if (condition instanceof Class) {
-      if (toInt(condition) > 6) {
+      if (condition.id > 6) {
         throw new InvalidMacroError(
           `Class ${condition} cannot be made a valid BALLS predicate (it is not a standard class)`
         );

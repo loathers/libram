@@ -49,7 +49,6 @@ import {
   spleenLimit,
   Stat,
   Thrall,
-  toInt,
   toItem,
   toSkill,
   totalTurnsPlayed,
@@ -886,10 +885,10 @@ export function examine(thing: Item | Familiar | Effect | Skill): string {
     thing instanceof Item
       ? `desc_item.php?whichitem=${thing.descid}`
       : thing instanceof Familiar
-      ? `desc_familiar.php?which=${toInt(thing)}`
+      ? `desc_familiar.php?which=${thing.id}`
       : thing instanceof Effect
       ? `desc_effect.php?whicheffect=${thing.descid}`
-      : `desc_skill.php?whichskill=${toInt(thing)}`;
+      : `desc_skill.php?whichskill=${thing.id}`;
   return visitUrl(url);
 }
 
@@ -915,7 +914,7 @@ export const byClass = makeByXFunction(() => myClass().toString());
  * @returns The html of the resulting page
  */
 export function directlyUse(item: Item): string {
-  return visitUrl(`inv_use.php?which=3&whichitem=${toInt(item)}&pwd`);
+  return visitUrl(`inv_use.php?which=3&whichitem=${item.id}&pwd`);
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Effect, myClass, toEffect, toInt } from "kolmafia";
+import { Effect, myClass, toEffect } from "kolmafia";
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $effects, $item } from "../../template-string";
@@ -40,9 +40,9 @@ export function buffAvailable(): boolean {
  * @returns An ordered array consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
  */
 export function buffCycle(playerclass = myClass()): Effect[] {
-  if (toInt(playerclass) <= 0) return [];
+  if (playerclass.id <= 0) return [];
   const returnValue: Effect[] = [];
-  const id = toInt(playerclass);
+  const id = playerclass.id;
   const seed = id > 6 ? (id % 6) + 1 : id;
   for (let i = 1; i < 12; i++) {
     const index = (i * seed) % 11;

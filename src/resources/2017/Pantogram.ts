@@ -1,4 +1,4 @@
-import { Item, toInt, visitUrl } from "kolmafia";
+import { Item, visitUrl } from "kolmafia";
 import { directlyUse, have as haveItem } from "../../lib";
 import { $item } from "../../template-string";
 
@@ -165,7 +165,7 @@ export function findRequirements(modifiers: Partial<Pants>): Map<Item, number> {
 function sacrificePairToURL(pair: [number | Item, number]): string {
   const [rawSacrifice, quantity] = pair;
   const sacrifice =
-    rawSacrifice instanceof Item ? toInt(rawSacrifice) : rawSacrifice;
+    rawSacrifice instanceof Item ? rawSacrifice.id : rawSacrifice;
   return `${sacrifice},${quantity}`;
 }
 

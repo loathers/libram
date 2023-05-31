@@ -1,4 +1,4 @@
-import { availableAmount, cliExecute, Item, toInt, visitUrl } from "kolmafia";
+import { availableAmount, cliExecute, Item, visitUrl } from "kolmafia";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
@@ -123,7 +123,7 @@ export function getHazardEquipment(): boolean {
   const equipment = hazardEquipment(hazards());
 
   equipment.forEach((equip) => {
-    const num = toInt(equip) - 9404; //Equipment items are 9405 - 9409,
+    const num = equip.id - 9404; //Equipment items are 9405 - 9409,
     visitUrl("place.php?whichplace=spacegate&action=sg_requisition");
     visitUrl(`choice.php?whichchoice=1233&option=${num}`);
   });

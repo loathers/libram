@@ -16,7 +16,7 @@ import {
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 import { $item, $items, $stat } from "./template-string";
-import { arrayContains } from "./utils";
+import { arrayContains, tc } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -190,7 +190,7 @@ function inputToMoonId(moon: InputMoonSign, playerClass: Class): number {
     }
   };
 
-  const fromNormalInput = signNameToId(moon as MoonSign);
+  const fromNormalInput = signNameToId(tc(moon) as MoonSign);
   if (fromNormalInput >= 0) return fromNormalInput;
 
   switch (moon.toLowerCase()) {

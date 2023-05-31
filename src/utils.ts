@@ -354,3 +354,11 @@ export function flat<A extends any[], D extends number = 1>(
 export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
+
+/**
+ * Title cases a single word
+ *
+ * @param word Word to transform
+ * @returns Word in title case
+ */
+export const tc = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);

@@ -361,4 +361,5 @@ export function random<T>(array: T[]): T {
  * @param word Word to transform
  * @returns Word in title case
  */
-export const tc = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+export const tc = (word: string) =>
+  word.charAt(0).toUpperCase() + word.slice(1);

@@ -155,7 +155,7 @@ type InputMoonSign =
  * @param moon Moon sign name
  * @returns Moon sign id else 0
  */
-export function signNameToId(moon: MoonSign) {
+export function signNameToId(moon: MoonSign): number {
   return MoonSigns.indexOf(moon) + 1;
 }
 
@@ -163,7 +163,7 @@ export function signNameToId(moon: MoonSign) {
  * @param id Moon sign id
  * @returns Name of moon sign else "None"
  */
-export function signIdToName(id: number) {
+export function signIdToName(id: number): MoonSign | "None" {
   return MoonSigns[id - 1] || "None";
 }
 

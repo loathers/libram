@@ -17,42 +17,42 @@ import { random } from "../../utils";
  *
  * @returns Whether we `have` the campsite
  */
-export function have() {
+export function have(): boolean {
   return get("getawayCampsiteUnlocked");
 }
 
 /**
  * @returns Number of cloud buffs acquired today
  */
-export function getCloudBuffsToday() {
+export function getCloudBuffsToday(): number {
   return get("_campAwayCloudBuffs");
 }
 
 /**
  * @returns Number of cloud buffs acquired today
  */
-export function getSmileBuffsToday() {
+export function getSmileBuffsToday(): number {
   return get("_campAwaySmileBuffs");
 }
 
 /**
  * @returns Number of buffs acquired today from gazing at the stars
  */
-export function getBuffsToday() {
+export function getBuffsToday(): number {
   return getCloudBuffsToday() + getSmileBuffsToday();
 }
 
 /**
  * @returns Whether player has acquired all their buffs today from gazing at the stars
  */
-export function canGaze() {
+export function canGaze(): boolean {
   return getBuffsToday() < 4;
 }
 
 /**
  * Gaze at the stars
  */
-export function gaze() {
+export function gaze(): void {
   if (!canGaze()) return;
   visitUrl("place.php?whichplace=campaway&action=campaway_sky");
 }
@@ -61,7 +61,7 @@ export function gaze() {
  * @param daycountToCheck Daycount to check, defaults to today
  * @returns The buff that the user will get if they gaze on the supplied daycount
  */
-export function getGazeBuff(daycountToCheck = daycount()) {
+export function getGazeBuff(daycountToCheck = daycount()): Effect {
   const buffSign = signIdToName(((daycountToCheck + myPath().id) % 9) + 1);
 
   const effectName = [];
@@ -78,7 +78,7 @@ export function getGazeBuff(daycountToCheck = daycount()) {
  * @param messages Array of messages to blow
  * @param times Number of times to blow smoke
  */
-export function blowSmoke(messages: string[], times = 1) {
+export function blowSmoke(messages: string[], times = 1): void {
   const smoke = $item`campfire smoke`;
   retrieveItem(smoke, times);
 

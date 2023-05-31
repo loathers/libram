@@ -16,7 +16,7 @@ import {
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 import { $item, $items, $stat } from "./template-string";
-import { arrayContains } from "./utils";
+import { arrayContains, tc } from "./utils";
 
 export enum Lifestyle {
   casual = 1,
@@ -123,17 +123,23 @@ export class AscensionPrepError extends Error {
   }
 }
 
-type MoonSign =
+const MoonSigns = [
+  "Mongoose",
+  "Wallaby",
+  "Vole",
+  "Platypus",
+  "Opossum",
+  "Marmot",
+  "Wombat",
+  "Blender",
+  "Packrat",
+] as const;
+
+type MoonSign = typeof MoonSigns[number];
+
+type InputMoonSign =
   | number
-  | "mongoose"
-  | "wallaby"
-  | "vole"
-  | "platypus"
-  | "opossum"
-  | "marmot"
-  | "wombat"
-  | "blender"
-  | "packrat"
+  | Lowercase<MoonSign>
   | "degrassi"
   | "degrassi knoll"
   | "friendly degrassi knoll"
@@ -146,13 +152,29 @@ type MoonSign =
   | "gnomish gnomads camp";
 
 /**
+ * @param moon Moon sign name
+ * @returns Moon sign id else 0
+ */
+export function signNameToId(moon: MoonSign): number {
+  return MoonSigns.indexOf(moon) + 1;
+}
+
+/**
+ * @param id Moon sign id
+ * @returns Name of moon sign else "None"
+ */
+export function signIdToName(id: number): MoonSign | "None" {
+  return MoonSigns[id - 1] || "None";
+}
+
+/**
  * Determine the id of the appropriate moon sign.
  *
  * @param moon Either a moon sign or the desired unlocked zone name
  * @param playerClass Class, required for working out a moon sign based on the desired zone
  * @returns Moon sign id
  */
-function toMoonId(moon: MoonSign, playerClass: Class): number {
+function inputToMoonId(moon: InputMoonSign, playerClass: Class): number {
   if (typeof moon === "number") return moon;
 
   const offset = () => {
@@ -168,25 +190,10 @@ function toMoonId(moon: MoonSign, playerClass: Class): number {
     }
   };
 
+  const fromNormalInput = signNameToId(tc(moon) as MoonSign);
+  if (fromNormalInput >= 0) return fromNormalInput;
+
   switch (moon.toLowerCase()) {
-    case "mongoose":
-      return 1;
-    case "wallaby":
-      return 2;
-    case "vole":
-      return 3;
-    case "platypus":
-      return 4;
-    case "opossum":
-      return 5;
-    case "marmot":
-      return 6;
-    case "wombat":
-      return 7;
-    case "blender":
-      return 8;
-    case "packrat":
-      return 9;
     case "degrassi":
     case "degrassi knoll":
     case "friendly degrassi knoll":
@@ -238,7 +245,7 @@ export function ascend(
   path: Path,
   playerClass: Class,
   lifestyle: Lifestyle,
-  moon: MoonSign,
+  moon: InputMoonSign,
   consumable: Item | undefined = $item`astral six-pack`,
   pet: Item | undefined = undefined,
   permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
@@ -248,7 +255,7 @@ export function ascend(
   }
   if (path.id < 0) throw new AscendError(path);
 
-  const moonId = toMoonId(moon, playerClass);
+  const moonId = inputToMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
   if (
     consumable &&

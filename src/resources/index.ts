@@ -26,6 +26,7 @@ import * as TunnelOfLove from "./2017/TunnelOfLove";
 import * as Latte from "./2018/LatteLoversMembersMug";
 import * as SongBoom from "./2018/SongBoom";
 import * as BeachComb from "./2019/BeachComb";
+import * as CampAway from "./2019/CampAway";
 import * as Snapper from "./2019/Snapper";
 import * as Cartography from "./2020/Cartography";
 import * as Guzzlr from "./2020/Guzzlr";
@@ -47,6 +48,7 @@ export {
   Bandersnatch,
   BarrelShrine,
   BeachComb,
+  CampAway,
   Cartography,
   ChateauMantegna,
   CinchoDeMayo,

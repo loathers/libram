@@ -6104,6 +6104,9 @@ function changeNightstand(nightstand) {
 // src/resources/2015/DeckOfEveryCard.ts
 var DeckOfEveryCard_exports = {};
 __export(DeckOfEveryCard_exports, {
+  cards: function() {
+    return cards;
+  },
   cheatCard: function() {
     return cheatCard;
   },
@@ -6131,6 +6134,7 @@ function _taggedTemplateLiteral18(strings, raw) {
 function have16() {
   return have($item(_templateObject120 || (_templateObject120 = _taggedTemplateLiteral18(["Deck of Every Card"]))));
 }
+var cards = Object.freeze(["X of Clubs", "X of Diamonds", "X of Hearts", "X of Spades", "X of Papayas", "X of Kumquats", "X of Salads", "X of Cups", "X of Coins", "X of Swords", "X of Wands", "XVI - The Tower", "Professor Plum", "Spare Tire", "Extra Tank", "Sheep", "Year of Plenty", "Mine", "Laboratory", "Plains", "Swamp", "Mountain", "Forest", "Island", "Lead Pipe", "Rope", "Wrench", "Candlestick", "Knife", "Revolver", "Gift Card", "1952 Mickey Mantle", "XXI - The World", "III - The Empress", "VI - The Lovers", "Healing Salve", "Dark Ritual", "Lightning Bolt", "Giant Growth", "Ancestral Recall", "XI - Strength", "I - The Magician", "0 - The Fool", "X - The Wheel of Fortune", "The Race Card", "Green Card", "IV - The Emperor", "IX - The Hermit", "Werewolf", "The Hive", "XVII - The Star", "VII - The Chariot", "XV - The Devil", "V - The Hierophant", "Fire Elemental", "Christmas Card", "Go Fish", "Goblin Sapper", "II - The High Priestess", "XIV - Temperance", "XVIII - The Moon", "Hunky Fireman Card", "Aquarius Horoscope", "XII - The Hanged Man", "Suit Warehouse Discount Card", "Pirate Birthday Card", "Plantable Greeting Card", "Slimer Trading Card", "XIII - Death", "Unstable Portal"]);
 function getCardsDrawn() {
   return clamp(get("_deckCardsDrawn"), 0, 15);
 }

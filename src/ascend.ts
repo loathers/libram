@@ -191,7 +191,7 @@ function inputToMoonId(moon: InputMoonSign, playerClass: Class): number {
   };
 
   const fromNormalInput = signNameToId(tc(moon) as MoonSign);
-  if (fromNormalInput >= 0) return fromNormalInput;
+  if (fromNormalInput > 0) return fromNormalInput;
 
   switch (moon.toLowerCase()) {
     case "degrassi":

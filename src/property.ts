@@ -219,34 +219,80 @@ export function get(property: string, _default?: unknown): unknown {
   }
 }
 
-export function set(property: BooleanProperty, value: boolean): void;
-export function set(property: NumericProperty, value: number): void;
-export function set(
+export function set(property: BooleanProperty, value: boolean): boolean;
+export function set(property: NumericProperty, value: number): number;
+export function set<T extends number | string>(
   property: NumericOrStringProperty,
-  value: number | string
-): void;
-export function set(property: StringProperty, value: string): void;
-export function set(property: LocationProperty, value: Location): void;
-export function set(property: MonsterProperty, value: Monster): void;
-export function set(property: FamiliarProperty, value: Familiar): void;
-export function set(property: StatProperty, value: Stat): void;
-export function set(property: PhylumProperty, value: Phylum): void;
+  value: T
+): T;
+export function set(property: StringProperty, value: string): string;
+export function set(property: LocationProperty, value: Location): Location;
+export function set(property: MonsterProperty, value: Monster): Monster;
+export function set(property: FamiliarProperty, value: Familiar): Familiar;
+export function set(property: StatProperty, value: Stat): Stat;
+export function set(property: PhylumProperty, value: Phylum): Phylum;
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
-): void;
+): D;
 /**
  * Sets the value of a mafia property, either built in or custom
  *
  * @param property Name of the property
  * @param value Value to give the property
+ * @returns Value that was set
  */
 export function set<D extends { toString(): string }>(
   property: string,
   value: D
-): void {
+): D {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
+  return value;
+}
+
+/**
+ * Increment a property
+ *
+ * @param property Numeric property to increment
+ * @param delta Number by which to increment
+ * @param max Maximum value to set
+ * @returns New value
+ */
+export function increment(
+  property: NumericProperty,
+  delta = 1,
+  max = Infinity
+) {
+  const value = get(property);
+
+  if (!isNumericProperty(property)) return value;
+
+  const nextValue = Math.min(max, value + delta);
+
+  return set(property, nextValue);
+}
+
+/**
+ * Decrement a property
+ *
+ * @param property Numeric property to decrement
+ * @param delta Number by which to decrement
+ * @param min Maximum value to set
+ * @returns New value
+ */
+export function decrement(
+  property: NumericProperty,
+  delta = 1,
+  min = Infinity
+) {
+  const value = get(property);
+
+  if (!isNumericProperty(property)) return value;
+
+  const nextValue = Math.max(min, value - delta);
+
+  return set(property, nextValue);
 }
 
 type Properties = Partial<{

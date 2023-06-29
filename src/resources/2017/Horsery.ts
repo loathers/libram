@@ -23,6 +23,8 @@ export function current(): Horse | null {
  * @returns Whether, at the end of all things, that is your horse
  */
 export function changeHorse(horse: Horse): boolean {
+  if (horse === current()) return true;
+  if (!have()) return false;
   cliExecute(`horsery ${horse}`);
   return current() === horse;
 }

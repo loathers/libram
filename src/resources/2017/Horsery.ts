@@ -31,8 +31,11 @@ export function changeHorse(horse: Horse): boolean {
  * @returns a `Modifiers` object consisting of the crazy horse's stats today
  */
 export function crazyHorseStats(): Modifiers {
-  if (!get("_horseryCrazyName"))
+  if (!have()) return {};
+
+  if (!get("_horseryCrazyName")) {
     visitUrl("place.php?whichplace=town_right&action=town_horsery");
+  }
 
   return {
     "Mysticality Percent": Number(get("_horseryCrazyMys")),

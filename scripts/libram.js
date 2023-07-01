@@ -817,6 +817,9 @@ __export(property_exports, {
   PropertiesManager: function() {
     return PropertiesManager;
   },
+  decrement: function() {
+    return decrement;
+  },
   get: function() {
     return get;
   },
@@ -876,6 +879,9 @@ __export(property_exports, {
   },
   getThrall: function() {
     return getThrall;
+  },
+  increment: function() {
+    return increment;
   },
   set: function() {
     return _set;
@@ -1095,7 +1101,21 @@ function get(property, _default) {
 }
 function _set(property, value) {
   var stringValue = value === null ? "" : value.toString();
-  (0, import_kolmafia2.setProperty)(property, stringValue);
+  return (0, import_kolmafia2.setProperty)(property, stringValue), value;
+}
+function increment(property) {
+  var delta = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, max = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : 1 / 0, value = get(property);
+  if (!isNumericProperty(property))
+    return value;
+  var nextValue = Math.min(max, value + delta);
+  return _set(property, nextValue);
+}
+function decrement(property) {
+  var delta = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, min = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : 1 / 0, value = get(property);
+  if (!isNumericProperty(property))
+    return value;
+  var nextValue = Math.max(min, value - delta);
+  return _set(property, nextValue);
 }
 function setProperties(properties) {
   for (var _i = 0, _Object$entries = Object.entries(properties); _i < _Object$entries.length; _i++) {
@@ -7412,7 +7432,17 @@ function extraChoice(extra) {
   }
 }
 function fightAll(equipment, effect2, extra) {
-  _set("choiceAdventure1222", 1), _set("choiceAdventure1223", 1), _set("choiceAdventure1224", equipmentChoice(equipment)), _set("choiceAdventure1225", 1), _set("choiceAdventure1226", effectChoice(effect2)), _set("choiceAdventure1227", 1), _set("choiceAdventure1228", extraChoice(extra)), (0, import_kolmafia35.adv1)($location(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral26(["The Tunnel of L.O.V.E."]))), 0, "");
+  withChoices({
+    1222: 1,
+    1223: 1,
+    1224: equipmentChoice(equipment),
+    1225: 1,
+    1226: effectChoice(effect2),
+    1227: 1,
+    1228: extraChoice(extra)
+  }, function() {
+    (0, import_kolmafia35.adv1)($location(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral26(["The Tunnel of L.O.V.E."]))), 0, "");
+  });
 }
 
 // src/resources/2018/LatteLoversMembersMug.ts

@@ -332,7 +332,7 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
 const FULL_RIDING_LIST = [
   ...ridingFamiliars,
   ...Familiar.all()
-    .filter((f) => ridingFamiliars.some(({ familiar }) => familiar === f))
+    .filter((f) => !ridingFamiliars.some(({ familiar }) => familiar === f))
     .map((familiar) => ({ familiar, drops: 0, probability: 1 })),
 ] as const;
 

@@ -9,6 +9,7 @@ import {
   Item,
   Location,
   MafiaClass,
+  Modifier,
   Monster,
   Path,
   Phylum,
@@ -214,6 +215,20 @@ export const $location = createSingleConstant(Location);
  * @category In-game constant
  */
 export const $locations = createPluralConstant(Location);
+
+/**
+ * A Modifier specified by name.
+ *
+ * @category In-game constant
+ */
+export const $modifier = createSingleConstant(Modifier);
+/**
+ * A list of Modifiers specified by a comma-separated list of names.
+ * For a list of all possible Modifiers, leave the template string blank.
+ *
+ * @category In-game constant
+ */
+export const $modifiers = createPluralConstant(Modifier);
 
 /**
  * A Monster specified by name.

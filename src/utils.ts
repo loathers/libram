@@ -286,18 +286,28 @@ export function arrayEquals<T>(
  */
 // The square brackets here are used to prevent type distribution; don't worry about it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Delayed<T> = [T] extends [(...args: any) => any]
+export type Delayed<T, S extends any[] = never[]> = [T] extends [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (...args: any) => any
+]
   ? never
-  : T | (() => T);
+  : T | ((...args: S) => T);
 
 /**
- * Used to collapse a Delayed<T> object into an entity of type "T" as represented by the object.
+ * Used to collapse a Delayed<T, S> object into an entity of type "T" as represented by the object.
  *
- * @param delayedObject Object of type Delayed<T> that represents either a value of type T or a function returning a value of type T.
+ * @param delayedObject Object of type Delayed<T, S> that represents either a value of type T or a function returning a value of type T.
+ * @param args The arguments to pass to the delay function
  * @returns The return value of the function, if delayedObject is a function. Otherwise, this returns the original element.
  */
-export function undelay<T>(delayedObject: Delayed<T>): T {
-  return typeof delayedObject === "function" ? delayedObject() : delayedObject;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function undelay<T, S extends any[] = never[]>(
+  delayedObject: Delayed<T, S>,
+  ...args: S
+): T {
+  return typeof delayedObject === "function"
+    ? delayedObject(...args)
+    : delayedObject;
 }
 
 /**

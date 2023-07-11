@@ -24,6 +24,9 @@
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
+  "dependencies": {
+    "html-entities": "^2.4.0"
+  },
   "devDependencies": {
     "@babel/compat-data": "^7.17.0",
     "@babel/core": "^7.17.2",

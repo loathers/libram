@@ -1,7 +1,7 @@
 import { adv1, Monster } from "kolmafia";
 import { Copier } from "../../Copier";
 import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib";
-import { get, set } from "../../property";
+import { get, withChoices } from "../../property";
 import { $item, $location } from "../../template-string";
 
 /**
@@ -139,12 +139,18 @@ export function fightAll(
   effect: LOVEffect,
   extra: LOVExtra
 ): void {
-  set("choiceAdventure1222", 1); // Entrance
-  set("choiceAdventure1223", 1); // Fight LOV Enforcer
-  set("choiceAdventure1224", equipmentChoice(equipment));
-  set("choiceAdventure1225", 1); // Fight LOV Engineer
-  set("choiceAdventure1226", effectChoice(effect));
-  set("choiceAdventure1227", 1); // Fight LOV Equivocator
-  set("choiceAdventure1228", extraChoice(extra));
-  adv1($location`The Tunnel of L.O.V.E.`, 0, "");
+  withChoices(
+    {
+      1222: 1,
+      1223: 1,
+      1224: equipmentChoice(equipment),
+      1225: 1,
+      1226: effectChoice(effect),
+      1227: 1,
+      1228: extraChoice(extra),
+    },
+    () => {
+      adv1($location`The Tunnel of L.O.V.E.`, 0, "");
+    }
+  );
 }

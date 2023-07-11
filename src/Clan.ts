@@ -25,7 +25,6 @@ import {
   notNull,
   parseNumber,
 } from "./utils";
-import { encode } from "punycode";
 
 export interface Rank {
   name: string;

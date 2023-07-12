@@ -143,11 +143,13 @@ export default class CommunityService {
   }
 
   static logTask(name: string, action: () => number | void) {
-    const estimatedTurns = action() ?? 0;
     const { time, turns } = this.taskTimers.get(name) ?? {
       time: Date.now(),
       turns: myTurncount(),
     };
+
+    const estimatedTurns = action() ?? 0;
+
     CommunityService.log[name] = {
       type: "task",
       turnCost: myTurncount() - turns,

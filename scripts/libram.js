@@ -6180,7 +6180,9 @@ function arrayEquals(left, right) {
   });
 }
 function undelay(delayedObject) {
-  return typeof delayedObject == "function" ? delayedObject() : delayedObject;
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key2 = 1; _key2 < _len; _key2++)
+    args[_key2 - 1] = arguments[_key2];
+  return typeof delayedObject == "function" ? delayedObject.apply(void 0, args) : delayedObject;
 }
 function makeByXFunction(source) {
   return function(options) {

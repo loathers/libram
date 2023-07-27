@@ -15622,10 +15622,10 @@ var thralls = /* @__PURE__ */ new Map([[$stat(_templateObject407 || (_templateOb
   }, {
     key: "logTask",
     value: function(name, action) {
-      var _action, _this$taskTimers$get, estimatedTurns = (_action = action()) !== null && _action !== void 0 ? _action : 0, _ref2 = (_this$taskTimers$get = this.taskTimers.get(name)) !== null && _this$taskTimers$get !== void 0 ? _this$taskTimers$get : {
+      var _this$taskTimers$get, _action, _ref2 = (_this$taskTimers$get = this.taskTimers.get(name)) !== null && _this$taskTimers$get !== void 0 ? _this$taskTimers$get : {
         time: Date.now(),
         turns: (0, import_kolmafia57.myTurncount)()
-      }, time = _ref2.time, turns = _ref2.turns;
+      }, time = _ref2.time, turns = _ref2.turns, estimatedTurns = (_action = action()) !== null && _action !== void 0 ? _action : 0;
       CommunityService2.log[name] = {
         type: "task",
         turnCost: (0, import_kolmafia57.myTurncount)() - turns,

@@ -20,7 +20,7 @@ type RawKmail = {
 export default class Kmail {
   readonly id: number;
   readonly date: Date;
-  readonly type: "normal";
+  readonly type: "normal" | "giftshop";
   readonly senderId: number;
   readonly senderName: string;
   readonly rawMessage: string;

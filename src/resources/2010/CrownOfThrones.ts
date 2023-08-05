@@ -329,6 +329,13 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
   },
 ] as const;
 
+const FULL_RIDING_LIST = [
+  ...ridingFamiliars,
+  ...Familiar.all()
+    .filter((f) => !ridingFamiliars.some(({ familiar }) => familiar === f))
+    .map((familiar) => ({ familiar, drops: 0, probability: 1 })),
+] as const;
+
 /**
  * Value a specified familiar Crown rider
  *
@@ -417,23 +424,21 @@ export function pickRider(mode: string): FamiliarRider | null {
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,
-      ridingFamiliars
-        .filter(({ familiar }) => have(familiar))
-        .sort(
-          (a, b) =>
-            valueRider(
-              b,
-              modifierValueFunction,
-              dropsValueFunction,
-              ignoreLimitedDrops
-            ) -
-            valueRider(
-              a,
-              modifierValueFunction,
-              dropsValueFunction,
-              ignoreLimitedDrops
-            )
-        )
+      FULL_RIDING_LIST.filter(({ familiar }) => have(familiar)).sort(
+        (a, b) =>
+          valueRider(
+            b,
+            modifierValueFunction,
+            dropsValueFunction,
+            ignoreLimitedDrops
+          ) -
+          valueRider(
+            a,
+            modifierValueFunction,
+            dropsValueFunction,
+            ignoreLimitedDrops
+          )
+      )
     );
   }
 

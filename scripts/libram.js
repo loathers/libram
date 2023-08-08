@@ -11501,7 +11501,8 @@ function have21() {
   return get("horseryAvailable");
 }
 function current() {
-  return get("_horsery") || null;
+  var horse = get("_horsery");
+  return horse ? horse.split(" ")[0] : null;
 }
 function changeHorse(horse) {
   return horse === current() ? !0 : have21() ? ((0, import_kolmafia30.cliExecute)("horsery ".concat(horse)), current() === horse) : !1;

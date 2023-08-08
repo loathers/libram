@@ -15,7 +15,8 @@ export type Horse = "pale" | "dark" | "normal" | "crazy";
  * @returns Your current horse; `null` if you are horseless
  */
 export function current(): Horse | null {
-  return (get("_horsery") || null) as Horse | null;
+  const horse = get("_horsery");
+  return (horse ? horse.split(" ")[0] : null) as Horse | null;
 }
 
 /**

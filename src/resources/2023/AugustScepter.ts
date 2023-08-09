@@ -1,7 +1,8 @@
 import { Skill, todayToString } from "kolmafia";
 import { have as have_ } from "../../lib";
-import { $item, $skills } from "../../template-string";
 import { get } from "../../property";
+import { $item, $skills } from "../../template-string";
+
 
 /**
  * @returns Whether you `have` the august scepter

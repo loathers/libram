@@ -1,6 +1,7 @@
 import { Skill, todayToString } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { $item, $skills } from "../../template-string";
+import { get } from "../../property";
 
 /**
  * @returns Whether you `have` the august scepter
@@ -26,13 +27,13 @@ export function todaysSkill(): Skill {
  * @param skillNum the Day of the skill you wish to check
  * @returns Whether we have cast this skill yet today
  */
-export function getAugustCast(skillNum: int): boolean {
-  return get(`_aug${skillNum}Cast`);
+export function getAugustCast(skillNum: number): boolean {
+  return get(`_aug${skillNum}Cast`, false);
 }
 
 /**
  * @returns whether you have cast Today's august scepter skill
  */
 export function getTodayCast(): boolean {
-  return get("_augTodayCast");
+  return get("_augTodayCast", false);
 }

@@ -3,7 +3,6 @@ import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $item, $skills } from "../../template-string";
 
-
 /**
  * @returns Whether you `have` the august scepter
  */

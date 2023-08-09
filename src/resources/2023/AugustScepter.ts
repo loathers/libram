@@ -20,5 +20,5 @@ const today = () => Number(todayToString()) % 100;
  * @returns Today's august scepter skill
  */
 export function todaysSkill(): Skill {
-  return SKILLS[1 + today()];
+  return SKILLS[today() - 1];
 }

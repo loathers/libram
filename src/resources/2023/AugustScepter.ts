@@ -21,3 +21,18 @@ const today = () => Number(todayToString()) % 100;
 export function todaysSkill(): Skill {
   return SKILLS[today() - 1];
 }
+
+/**
+ * @param skillNum the Day of the skill you wish to check
+ * @returns Whether we have cast this skill yet today
+ */
+export function getAugustCast(skillNum: int): boolean {
+  return get(`_aug${skillNum}Cast`);
+}
+
+/**
+ * @returns whether you have cast Today's august scepter skill
+ */
+export function getTodayCast(): boolean {
+  return get("_augTodayCast");
+}

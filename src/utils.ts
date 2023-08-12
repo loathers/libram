@@ -373,3 +373,16 @@ export function random<T>(array: T[]): T {
  */
 export const tc = (word: string) =>
   word.charAt(0).toUpperCase() + word.slice(1);
+
+type Enumerate<
+  N extends number,
+  A extends number[] = []
+> = A["length"] extends N ? A[number] : Enumerate<N, [...A, A["length"]]>;
+
+/**
+ * Integers on the interval [A, B).
+ */
+export type Range<A extends number, B extends number> = Exclude<
+  Enumerate<B>,
+  Enumerate<A>
+>;

@@ -1,4 +1,4 @@
-import { Skill, todayToString } from "kolmafia";
+import { Skill, todayToString, toSkill } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $item, $skills } from "../../template-string";
@@ -21,7 +21,7 @@ const today = () => Number(todayToString()) % 100;
  * @returns Today's august scepter skill
  */
 export function todaysSkill(): Skill {
-  return SKILLS[today() - 1];
+  return toSkill((today() + 7451).toFixed(0));
 }
 
 /**

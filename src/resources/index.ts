@@ -40,11 +40,13 @@ import * as CombatLoversLocket from "./2022/CombatLoversLocket";
 import * as GreyGoose from "./2022/GreyGoose";
 import * as JuneCleaver from "./2022/JuneCleaver";
 import * as TrainSet from "./2022/TrainSet";
+import * as AugustScepter from "./2023/AugustScepter";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
 
 export {
+  AugustScepter,
   AutumnAton,
   AsdonMartin,
   Bandersnatch,

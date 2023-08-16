@@ -7,6 +7,7 @@ import * as StompingBoots from "./2011/StompingBoots";
 import * as RainDoh from "./2012/RainDoh";
 import * as ReagnimatedGnome from "./2012/ReagnimatedGnome";
 import * as FloristFriar from "./2013/Florist";
+import * as JungMan from "./2013/JungMan";
 import * as CrimboShrub from "./2014/CrimboShrub";
 import * as DNALab from "./2014/DNALab";
 import * as WinterGarden from "./2014/WinterGarden";
@@ -70,6 +71,7 @@ export {
   Guzzlr,
   Horsery,
   JuneCleaver,
+  JungMan,
   Latte,
   MayoClinic,
   MummingTrunk,

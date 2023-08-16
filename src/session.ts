@@ -21,9 +21,10 @@ import { sum } from "./utils";
 /**
  * Return a mapping of the session items, mapping foldable items to a single of their forms
  *
+ * @param sessionOnly should closet, DC, and storage be ignored for the session calculation
  * @returns the item session results, with foldables mapped to a single of their folding forms
  */
-function mySessionItemsWrapper(): Map<Item, number> {
+function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
   const manyToOne = (primary: Item, mapped: Item[]): [Item, Item][] =>
     mapped.map((target: Item) => [target, primary]);
 
@@ -74,12 +75,10 @@ function mySessionItemsWrapper(): Map<Item, number> {
   ]);
 
   const inventory = new Map<Item, number>();
-  for (const inventoryFunc of [
-    mySessionItems,
-    getCloset,
-    getDisplay,
-    getStorage,
-  ]) {
+  const invLocations = sessionOnly
+    ? [mySessionItems]
+    : [mySessionItems, getCloset, getDisplay, getStorage];
+  for (const inventoryFunc of invLocations) {
     for (const [itemStr, quantity] of Object.entries(inventoryFunc())) {
       const item = toItem(itemStr);
       const mappedItem = itemMappings.get(item) ?? item;
@@ -305,10 +304,19 @@ export class Session {
     }
   }
 
-  static current(): Session {
+  /**
+   * Return the meat and items for the current session
+   *
+   * @param sessionOnly should closet, DC, and storage be ignored for the session calculation
+   * @returns current session
+   */
+  static current(sessionOnly = false): Session {
+    const meat = sessionOnly
+      ? [mySessionMeat]
+      : [mySessionMeat, myClosetMeat, myStorageMeat];
     return new Session(
-      sum([mySessionMeat, myClosetMeat, myStorageMeat], (f) => f()),
-      mySessionItemsWrapper()
+      sum(meat, (f) => f()),
+      mySessionItemsWrapper(sessionOnly)
     );
   }
 }

@@ -4,6 +4,7 @@ import {
   cliExecute,
   getClanId,
   getClanName,
+  getClanRumpus,
   getPlayerId,
   Item,
   Monster,
@@ -31,6 +32,31 @@ export interface Rank {
   degree: number;
   id: number;
 }
+
+export const rumpusFurniture = [
+  "Girls of Loathing Calendar",
+  "Boys of Loathing Calendar ",
+  "Infuriating Painting",
+  "Exotic Hanging Meat Orchid",
+  "Collection of Arcane Tomes and Whatnot",
+  "Collection of Sports Memorabilia",
+  "Collection of Self-Help Books",
+  "Soda Machine",
+  "Jukebox",
+  `Mr. Klaw "Skill" Crane Game`,
+  "Old-Timey Radio",
+  "Potted Meat Bush",
+  "Inspirational Desk Calendar",
+  "Wrestling Mat",
+  "Tan-U-Lots Tanning Bed",
+  "Comfy Sofa",
+  "Hobo-Flex Workout System",
+  "Snack Machine",
+  "Potted Meat Tree",
+  "Awesome Ball Pit",
+] as const;
+
+export type Rumpus = typeof rumpusFurniture[number];
 
 const clanIdCache: { [clanName: string]: number } = {};
 
@@ -481,5 +507,16 @@ export class Clan {
       (borrowed) => this.put(borrowed),
       callback
     );
+  }
+
+  /**
+   * Determine whether a given item is in the player's clans Rumpus Room
+   *
+   * @category General
+   * @param item The name of the clan Rumpus Room item
+   * @returns Whether the item is in the campground
+   */
+  haveInRumpus(item: Rumpus): boolean {
+    return Object.keys(getClanRumpus()).includes(item);
   }
 }

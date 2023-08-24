@@ -38,3 +38,14 @@ export function getAugustCast(skillNum: Range<1, 32>): boolean {
 export function getTodayCast(): boolean {
   return get("_augTodayCast");
 }
+
+/**
+ * @param skillNum the Day of the skill you wish to check
+ * @returns Whether we can cast this skill
+ */
+export function canCast(skillNum: Range<1, 32>): boolean {
+  return (
+    !get(`_aug${skillNum}Cast`) &&
+    ((today() === skillNum && !getTodayCast()) || get(`_augSkillsCast`) < 5)
+  );
+}

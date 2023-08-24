@@ -50,6 +50,7 @@ export function getTodayCast(): boolean {
  */
 export function canCast(skillNum: Range<1, 32>): boolean {
   return (
+    have() &&
     !get(`_aug${skillNum}Cast`) &&
     ((today() === skillNum && !getTodayCast()) || get(`_augSkillsCast`) < 5)
   );

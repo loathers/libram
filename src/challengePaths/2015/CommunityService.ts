@@ -29,6 +29,7 @@ import {
   $familiar,
   $item,
   $items,
+  $path,
   $slot,
   $stat,
   $thrall,
@@ -512,4 +513,5 @@ export default class CommunityService {
     visitCouncil();
     visitUrl("choice.php?whichchoice=1089&option=30");
   };
+  static path = $path`Community Service`;
 }

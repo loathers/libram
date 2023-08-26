@@ -1,4 +1,5 @@
 import { visitUrl } from "kolmafia";
+import { $path } from "../../template-string";
 
 /**
  * Visits the Cooling Tank on level 8 of the Fallout shelter to gain 300 rads
@@ -20,3 +21,5 @@ export function spa(): void {
 export function chronoLab(): void {
   visitUrl("place.php?whichplace=falloutshelter&action=vault5");
 }
+
+export const path = $path`Nuclear Autumn`;

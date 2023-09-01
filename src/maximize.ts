@@ -20,8 +20,16 @@ import {
   outfit,
   Slot,
 } from "kolmafia";
+import { have } from "./lib";
 import logger from "./logger";
-import { $familiar, $item, $slot, $slots, $stats } from "./template-string";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $slot,
+  $slots,
+  $stats,
+} from "./template-string";
 import { setEqual } from "./utils";
 
 function toMaximizerName({ name, id }: Item): string {
@@ -586,6 +594,7 @@ export function maximizeCached(
     ...untouchedSlots
       .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
       .sort(),
+    have($effect`Offhand Remarkable`),
   ].join("; ");
 
   const cacheEntry = checkCache(cacheKey, fullOptions);

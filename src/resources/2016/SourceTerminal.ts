@@ -238,7 +238,7 @@ export function couldDigitize(): boolean {
 }
 
 /**
- * Sets Digitize to be one of our skilsl if it currently isn't
+ * Sets Digitize to be one of our skills if it currently isn't
  *
  * @returns Whether we expect that Digitize is one of our active skills now
  */

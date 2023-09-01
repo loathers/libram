@@ -10,7 +10,7 @@ import {
 } from "kolmafia";
 import { have } from "../../lib";
 import { withChoice } from "../../property";
-import { $path, $skill } from "../../template-string";
+import { $monster, $path, $skill } from "../../template-string";
 
 /**
  * Cast Rain Man and fight the target monster
@@ -43,7 +43,11 @@ export function canRainMan(target: Monster): boolean {
   }
 
   const page = withChoice(970, 2, () =>
-    visitUrl("runskillz.php?pwd&action=Skillz&whichskill=16011&quantity=1")
+    visitUrl(
+      `runskillz.php?pwd&action=Skillz&whichskill=${
+        $skill`Rain Man`.id
+      }&quantity=1`
+    )
   );
   return page.indexOf(`<option value=${target.id}>`) > 0;
 }
@@ -51,16 +55,18 @@ export function canRainMan(target: Monster): boolean {
 export const RAIN_MONSTER_WINDOW_BEGIN = "Rain Monster window begin";
 export const RAIN_MONSTER_WINDOW_END = "Rain Monster window end";
 
-export const wanderers = Monster.get([
-  "giant isopod",
-  "gourmet gourami",
-  "freshwater bonefish",
-  "alley catfish",
-  "piranhadon",
-  "giant tardigrade",
-  "aquaconda",
-  "storm cow",
-]);
+export const wanderers = Object.freeze(
+  Monster.get([
+    "giant isopod",
+    "gourmet gourami",
+    "freshwater bonefish",
+    "alley catfish",
+    "piranhadon",
+    "giant tardigrade",
+    "aquaconda",
+    "storm cow",
+  ])
+);
 
 /**
  * Calculate the expected wandering monster based on current water level
@@ -82,13 +88,13 @@ export function expectedWanderer(location: Location): Monster {
   if (waterLevel > 1 && waterLevel < 6) {
     return wanderers[waterLevel - 1];
   } else if (waterLevel === 6 && location.environment === "underground") {
-    return wanderers[5]; // giant tardigrade
+    return $monster`giant tardigrade`;
   } else if (waterLevel === 6 && location.environment === "indoor") {
-    return wanderers[6]; // aquaconda
+    return $monster`aquaconda`;
   } else if (waterLevel === 6 && location.environment === "outdoor") {
-    return wanderers[7]; // storm cow
+    return $monster`storm cow`;
   } else {
-    return wanderers[0]; // giant isopod
+    return $monster`giant isopod`;
   }
 }
 

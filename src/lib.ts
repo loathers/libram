@@ -958,9 +958,8 @@ export function unequip(thing: Item | Slot): boolean {
  * @returns a Date object corresponding to the current in-game day, at midnight
  */
 export function gameDay(): Date {
-  const today = Number(todayToString());
-  const day = today % 100;
-  const month = ((today - day) / 100) % 100;
-  const year = ((today - day) / 100 - month) / 100;
+  const [, year, month, day] = (
+    todayToString().match(/(\d{4})(\d{2})(\d{2})/) ?? []
+  ).map(Number);
   return new Date(year, month - 1, day, 0, 0, 0);
 }

@@ -1,6 +1,5 @@
 import { Skill, toSkill } from "kolmafia";
-import { gameDay } from "../..";
-import { have as have_ } from "../../lib";
+import { gameDay, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $item, $skills } from "../../template-string";
 import { Range } from "../../utils";

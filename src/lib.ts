@@ -49,6 +49,7 @@ import {
   spleenLimit,
   Stat,
   Thrall,
+  todayToString,
   toItem,
   toSkill,
   totalTurnsPlayed,
@@ -951,4 +952,15 @@ export function unequip(thing: Item | Slot): boolean {
       `Failed to unequip ${thing} from slots ${failedSlots.join(", ")}`
     );
   return failedSlots.length === 0;
+}
+
+/**
+ * @returns a Date object corresponding to the current in-game day, at midnight
+ */
+export function gameDay(): Date {
+  const today = Number(todayToString());
+  const day = today % 100;
+  const month = ((today - day) / 100) % 100;
+  const year = ((today - day) / 100 - month) / 100;
+  return new Date(year, month - 1, day, 0, 0, 0);
 }

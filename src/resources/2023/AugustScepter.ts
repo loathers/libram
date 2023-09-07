@@ -1,5 +1,5 @@
-import { Skill, todayToString, toSkill } from "kolmafia";
-import { have as have_ } from "../../lib";
+import { Skill, toSkill } from "kolmafia";
+import { gameDay, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $item, $skills } from "../../template-string";
 import { Range } from "../../utils";
@@ -16,17 +16,10 @@ export const SKILLS = Object.freeze(
 );
 
 /**
- * @returns the date number
- */
-export function today(): number {
-  return Number(todayToString()) % 100;
-}
-
-/**
  * @returns Today's august scepter skill
  */
 export function todaysSkill(): Skill {
-  return toSkill((today() + 7451).toFixed(0));
+  return toSkill((gameDay().getDate() + 7451).toFixed(0));
 }
 
 /**
@@ -52,6 +45,6 @@ export function canCast(skillNum: Range<1, 32>): boolean {
   return (
     have() &&
     !get(`_aug${skillNum}Cast`) &&
-    ((today() === skillNum && !getTodayCast()) || get(`_augSkillsCast`) < 5)
+    ((gameDay().getDate() === skillNum && !getTodayCast()) || get(`_augSkillsCast`) < 5)
   );
 }

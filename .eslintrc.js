@@ -29,6 +29,8 @@ module.exports = {
     "jsdoc/require-param-type": 0,
     "jsdoc/require-returns-type": 0,
     "jsdoc/require-property-type": 0,
+    "jsdoc/tag-lines": 0,
+    "jsdoc/no-defaults": 0,
     "jsdoc/check-tag-names": [
       "error",
       {

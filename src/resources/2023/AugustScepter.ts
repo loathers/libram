@@ -45,6 +45,7 @@ export function canCast(skillNum: Range<1, 32>): boolean {
   return (
     have() &&
     !get(`_aug${skillNum}Cast`) &&
-    ((gameDay().getDate() === skillNum && !getTodayCast()) || get(`_augSkillsCast`) < 5)
+    ((gameDay().getDate() === skillNum && !getTodayCast()) ||
+      get(`_augSkillsCast`) < 5)
   );
 }

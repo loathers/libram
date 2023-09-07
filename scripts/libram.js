@@ -14169,6 +14169,9 @@ __export(AugustScepter_exports, {
   SKILLS: function() {
     return SKILLS;
   },
+  canCast: function() {
+    return canCast;
+  },
   getAugustCast: function() {
     return getAugustCast;
   },
@@ -14200,6 +14203,9 @@ function getAugustCast(skillNum) {
 }
 function getTodayCast() {
   return get("_augTodayCast");
+}
+function canCast(skillNum) {
+  return have42() && !get("_aug".concat(skillNum, "Cast")) && (gameDay().getDate() === skillNum && !getTodayCast() || get("_augSkillsCast") < 5);
 }
 
 // src/resources/2023/CinchoDeMayo.ts

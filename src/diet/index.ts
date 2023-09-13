@@ -498,6 +498,15 @@ class DietPlanner<T> {
       if (current !== undefined) {
         organCapacitiesWithMap.set(organ, current - size);
       }
+      else {
+        // We are not tracking the status of this organ. Currently, it means that we are overfull, and the last thing we should try is to shove more stuff into it
+        // Solves the problem with the diet offering to eat toasted brie after exiting smol with 20/15 fullness
+        return this.planOrgansWithTrials(
+          organCapacities,
+          trialItems.slice(1),
+          overrideModifiers
+        );
+      }
     }
     const organCapacitiesWith = [...organCapacitiesWithMap];
 

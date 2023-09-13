@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "JavaScript helper library for KoLmafia",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,8 @@
     "dist/**/*.d.ts"
   ],
   "dependencies": {
-    "html-entities": "^2.4.0"
+    "html-entities": "^2.4.0",
+    "mersenne-twister": "^1.1.0"
   },
   "devDependencies": {
     "@babel/compat-data": "^7.17.0",
@@ -37,6 +38,7 @@
     "@tsconfig/node16": "^1.0.2",
     "@types/jest": "^27.0.1",
     "@types/lodash-es": "^4.17.4",
+    "@types/mersenne-twister": "^1.1.3",
     "@types/node": "^16.11.11",
     "@types/node-fetch": "^2.5.7",
     "@typescript-eslint/eslint-plugin": "^5.5.0",

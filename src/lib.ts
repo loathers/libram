@@ -462,28 +462,30 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
   const result = new Map<Item | Skill, Monster>();
 
   for (const [foe, banisher] of banishes) {
-    if (foe === undefined || banisher === undefined) break;
+    if (foe === undefined || banisher === undefined) continue;
     // toItem doesn"t error if the item doesn"t exist, so we have to use that.
-    const banisherItem = toItem(banisher);
-    if (banisher.toLowerCase() === "saber force") {
-      result.set($skill`Use the Force`, Monster.get(foe));
-    } else if (banisher.toLowerCase() === "nanorhino") {
-      result.set($skill`Unleash Nanites`, Monster.get(foe));
-    } else if (
-      [
-        Item.none,
-        Item.get(`training scroll:  Snokebomb`),
-        Item.get(`tomayohawk-style reflex hammer`),
-        null,
-      ].includes(banisherItem)
-    ) {
-      if (Skill.get(banisher) === $skill.none) {
+    const monster = Monster.get(foe);
+    switch (banisher.toLowerCase()) {
+      case "saber force":
+        result.set($skill`Use the Force`, monster);
         break;
-      } else {
-        result.set(Skill.get(banisher), Monster.get(foe));
+      case "nanorhino":
+        result.set($skill`Unleash Nanites`, monster);
+        break;
+      default: {
+        const item = toItem(banisher);
+        if (
+          $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(
+            item
+          )
+        ) {
+          const skill = toSkill(banisher);
+          if (skill === Skill.none) continue;
+          result.set(skill, monster);
+        } else {
+          result.set(item, monster);
+        }
       }
-    } else {
-      result.set(banisherItem, Monster.get(foe));
     }
   }
   return result;

@@ -16549,7 +16549,9 @@ var DietPlanner = /* @__PURE__ */ function() {
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var _step$value = _slicedToArray19(_step.value, 2), organ = _step$value[0], size = _step$value[1], current2 = organCapacitiesWithMap.get(organ);
-          current2 !== void 0 && organCapacitiesWithMap.set(organ, current2 - size);
+          if (current2 === void 0)
+            return this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers);
+          organCapacitiesWithMap.set(organ, current2 - size);
         }
       } catch (err) {
         _iterator.e(err);

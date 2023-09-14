@@ -495,9 +495,17 @@ class DietPlanner<T> {
     const organCapacitiesWithMap = new Map(organCapacities);
     for (const [organ, size] of organSizes) {
       const current = organCapacitiesWithMap.get(organ);
-      if (current !== undefined) {
-        organCapacitiesWithMap.set(organ, current - size);
+      if (current === undefined) {
+        // Organs with no capacity are excluded from the organCapacities map, so this item excluded from the trial.
+        // Solves the problem with the diet offering to eat toasted brie after exiting Shrunken Adventurer with 20/15 fullness.
+        return this.planOrgansWithTrials(
+          organCapacities,
+          trialItems.slice(1),
+          overrideModifiers
+        );
       }
+
+      organCapacitiesWithMap.set(organ, current - size);
     }
     const organCapacitiesWith = [...organCapacitiesWithMap];
 

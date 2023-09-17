@@ -176,6 +176,15 @@ export class MenuItem<T> {
         { maximum: get("_docClocksThymeCocktailDrunk") ? 0 : 1 },
       ],
       [$item`Mr. Burnsger`, { maximum: get("_mrBurnsgerEaten") ? 0 : 1 }],
+      [
+        $item`Calzone of Legend`,
+        { maximum: get("calzoneOfLegendEaten") ? 0 : 1 },
+      ],
+      [
+        $item`Deep Dish of Legend`,
+        { maximum: get("deepDishOfLegendEaten") ? 0 : 1 },
+      ],
+      [$item`Pizza of Legend`, { maximum: get("pizzaOfLegendEaten") ? 0 : 1 }],
     ] as [Item, MenuItemOptions<T>][]);
   }
 

@@ -450,6 +450,7 @@ export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
 }
 
+const INVALID_ITEM_BANISHES = $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`;
 /**
  * Get a map of banished monsters keyed by what banished them
  *
@@ -474,11 +475,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
         break;
       default: {
         const item = toItem(banisher);
-        if (
-          $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(
-            item
-          )
-        ) {
+        if (INVALID_ITEM_BANISHES.includes(item)) {
           const skill = toSkill(banisher);
           if (skill === Skill.none) continue;
           result.set(skill, monster);

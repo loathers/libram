@@ -13,6 +13,7 @@ import {
   getStorage,
   myClosetMeat,
   myStorageMeat,
+  totalTurnsPlayed,
 } from "kolmafia";
 import { getFoldGroup } from "./lib";
 import { $item, $items } from "./template-string";
@@ -159,15 +160,22 @@ interface ItemResult {
 export class Session {
   meat: number;
   items: Map<Item, number>;
+  totalTurns: number;
   /**
    * Construct a new session
    *
    * @param meat the amount of meat associated with this session
    * @param items the items associated with this session
+   * @param totalTurns the number of turns associated with this session
    */
-  private constructor(meat: number, items: Map<Item, number>) {
+  private constructor(
+    meat: number,
+    items: Map<Item, number>,
+    totalTurns: number
+  ) {
     this.meat = meat;
     this.items = items;
+    this.totalTurns = totalTurns;
   }
 
   /**
@@ -216,7 +224,8 @@ export class Session {
         this.items,
         other.items,
         (a: number, b: number) => a - b
-      )
+      ),
+      this.totalTurns - other.totalTurns
     );
   }
   /**
@@ -244,7 +253,8 @@ export class Session {
         this.items,
         other.items,
         (a: number, b: number) => a + b
-      )
+      ),
+      this.totalTurns + other.totalTurns
     );
   }
 
@@ -275,6 +285,7 @@ export class Session {
     const val = {
       meat: this.meat,
       items: Object.fromEntries(this.items),
+      totalTurns: this.totalTurns,
     };
     bufferToFile(JSON.stringify(val), Session.getFilepath(filename));
   }
@@ -292,15 +303,20 @@ export class Session {
       const val: {
         meat: number;
         items: { [item: string]: number };
+        totalTurns?: number;
       } = JSON.parse(fileValue);
 
       const parsedItems: [Item, number][] = Object.entries(val.items).map(
         ([itemStr, quantity]) => [toItem(itemStr), quantity]
       );
-      return new Session(val.meat, new Map<Item, number>(parsedItems));
+      return new Session(
+        val.meat,
+        new Map<Item, number>(parsedItems),
+        val.totalTurns ?? 0
+      );
     } else {
       // if the file does not exist, return an empty session
-      return new Session(0, new Map<Item, number>());
+      return new Session(0, new Map<Item, number>(), 0);
     }
   }
 
@@ -316,7 +332,8 @@ export class Session {
       : [mySessionMeat, myClosetMeat, myStorageMeat];
     return new Session(
       sum(meat, (f) => f()),
-      mySessionItemsWrapper(sessionOnly)
+      mySessionItemsWrapper(sessionOnly),
+      totalTurnsPlayed()
     );
   }
 }

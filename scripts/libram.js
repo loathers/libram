@@ -18148,8 +18148,8 @@ function inventoryOperation(a, b, op) {
   }));
 }
 var Session = /* @__PURE__ */ function() {
-  function Session2(meat, items) {
-    _classCallCheck20(this, Session2), _defineProperty23(this, "meat", void 0), _defineProperty23(this, "items", void 0), this.meat = meat, this.items = items;
+  function Session2(meat, items, totalTurns) {
+    _classCallCheck20(this, Session2), _defineProperty23(this, "meat", void 0), _defineProperty23(this, "items", void 0), _defineProperty23(this, "totalTurns", void 0), this.meat = meat, this.items = items, this.totalTurns = totalTurns;
   }
   return _createClass20(Session2, [{
     key: "register",
@@ -18197,7 +18197,7 @@ var Session = /* @__PURE__ */ function() {
     value: function(other) {
       return new Session2(this.meat - other.meat, inventoryOperation(this.items, other.items, function(a, b) {
         return a - b;
-      }));
+      }), this.totalTurns - other.totalTurns);
     }
     /**
      * Subtract the contents of snasphot b from session a, removing any items that have a resulting quantity of 0
@@ -18219,7 +18219,7 @@ var Session = /* @__PURE__ */ function() {
       function(other) {
         return new Session2(this.meat + other.meat, inventoryOperation(this.items, other.items, function(a, b) {
           return a + b;
-        }));
+        }), this.totalTurns + other.totalTurns);
       }
     )
     /**
@@ -18239,7 +18239,8 @@ var Session = /* @__PURE__ */ function() {
       function(filename) {
         var val = {
           meat: this.meat,
-          items: Object.fromEntries(this.items)
+          items: Object.fromEntries(this.items),
+          totalTurns: this.totalTurns
         };
         (0, import_kolmafia68.bufferToFile)(JSON.stringify(val), Session2.getFilepath(filename));
       }
@@ -18274,13 +18275,13 @@ var Session = /* @__PURE__ */ function() {
     value: function(filename) {
       var fileValue = (0, import_kolmafia68.fileToBuffer)(Session2.getFilepath(filename));
       if (fileValue.length > 0) {
-        var val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref3) {
+        var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref3) {
           var _ref4 = _slicedToArray21(_ref3, 2), itemStr = _ref4[0], quantity = _ref4[1];
           return [(0, import_kolmafia68.toItem)(itemStr), quantity];
         });
-        return new Session2(val.meat, new Map(parsedItems));
+        return new Session2(val.meat, new Map(parsedItems), (_val$totalTurns = val.totalTurns) !== null && _val$totalTurns !== void 0 ? _val$totalTurns : 0);
       } else
-        return new Session2(0, /* @__PURE__ */ new Map());
+        return new Session2(0, /* @__PURE__ */ new Map(), 0);
     }
     /**
      * Return the meat and items for the current session
@@ -18294,7 +18295,7 @@ var Session = /* @__PURE__ */ function() {
       var sessionOnly = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : !1, meat = sessionOnly ? [import_kolmafia68.mySessionMeat] : [import_kolmafia68.mySessionMeat, import_kolmafia68.myClosetMeat, import_kolmafia68.myStorageMeat];
       return new Session2(sum(meat, function(f) {
         return f();
-      }), mySessionItemsWrapper(sessionOnly));
+      }), mySessionItemsWrapper(sessionOnly), (0, import_kolmafia68.totalTurnsPlayed)());
     }
   }]), Session2;
 }();

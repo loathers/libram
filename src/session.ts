@@ -147,6 +147,7 @@ interface ItemResult {
   items: number;
   total: number;
   itemDetails: ItemDetail[];
+  turns: number;
 }
 
 /**
@@ -201,13 +202,14 @@ export class Session {
   value(itemValue: (item: Item) => number): ItemResult {
     // TODO: add garbo specific pricing (sugar equipment for synth, etc.)
 
+    const turns = this.totalTurns;
     const meat = Math.floor(this.meat);
     const itemDetails = [...this.items.entries()].map(([item, quantity]) => {
       return { item, quantity, value: itemValue(item) * quantity };
     });
     const items = Math.floor(sum(itemDetails, "value"));
 
-    return { meat, items, total: meat + items, itemDetails };
+    return { meat, items, total: meat + items, itemDetails, turns };
   }
 
   /**

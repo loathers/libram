@@ -358,7 +358,7 @@ export class Session {
 
   /**
    * @param result The output of Session.value to use when computing MPA
-   * @param identifyOutlier a function to identify outlier items to exclude
+   * @param isOutlier a function to identify outlier items to exclude
    * @param excludeValue optional values to exclude when calculating mpa
    * @param excludeValue.meat optional meat value to remove from the session results when calculating mpa
    * @param excludeValue.item optional item value to remove from the session results when calculating mpa
@@ -366,11 +366,11 @@ export class Session {
    */
   static computeMPA(
     result: ItemResult,
-    identifyOutlier: (item: ItemDetail) => boolean,
+    isOutlier: (item: ItemDetail) => boolean,
     excludeValue: { meat?: number; item?: number } = {}
   ): MeatPerAdventureAnalysis {
     const meatValue = result.meat - (excludeValue.meat ?? 0);
-    const outlierItems = result.itemDetails.filter(identifyOutlier);
+    const outlierItems = result.itemDetails.filter(isOutlier);
     const outliersValue = sum(outlierItems, (detail) => detail.value);
     const itemValue = result.items - outliersValue - (excludeValue.item ?? 0);
     const { turns } = result;

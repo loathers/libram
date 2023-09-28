@@ -60,6 +60,7 @@ import logger from "./logger";
 import { get } from "./property";
 import {
   $class,
+  $effect,
   $element,
   $familiar,
   $item,
@@ -962,4 +963,88 @@ export function gameDay(): Date {
     todayToString().match(/(\d{4})(\d{2})(\d{2})/) ?? []
   ).map(Number);
   return new Date(year, month - 1, day, 0, 0, 0);
+}
+
+/**
+ * @param [type="all"] the type of crafting to check for free crafts
+ * @returns the number of free crafts available of that type
+ */
+export function freeCrafts(
+  type: "food" | "smith" | "booze" | "all" = "all"
+): number {
+  const effectCrafts = (effect: Effect) => Math.floor(haveEffect(effect) / 5);
+
+  const all =
+    (have($skill`Rapid Prototyping`) ? 5 - get("_rapidPrototypingUsed") : 0) +
+    (have($skill`Expert Corner-Cutter`)
+      ? 5 - get("_expertCornerCutterUsed")
+      : 0) +
+    effectCrafts($effect`Inigo's Incantation of Inspiration`) +
+    effectCrafts($effect`Craft Tea`) +
+    // eslint-disable-next-line libram/verify-constants
+    effectCrafts($effect`Cooking Concentrate`);
+  const food = type === "food" ? 5 - get("_cookbookbatCrafting") : 0;
+  const smith = type === "smith" ? 5 - get("_thorsPliersCrafting") : 0;
+  const booze = 0; // currently there is no booze specific free crafting skill
+  return all + food + smith + booze;
+}
+
+export const realmTypes = [
+  "spooky",
+  "stench",
+  "hot",
+  "cold",
+  "sleaze",
+  "fantasy",
+  "pirate",
+] as const;
+export type RealmType = typeof realmTypes[number];
+/**
+ * @param identifier which realm to check for
+ * @returns if that realm is available
+ */
+export function realmAvailable(identifier: RealmType): boolean {
+  if (identifier === "fantasy") {
+    return get(`_frToday`) || get(`frAlways`);
+  } else if (identifier === "pirate") {
+    return get(`_prToday`) || get(`prAlways`);
+  }
+  return get(`_${identifier}AirportToday`) || get(`${identifier}AirportAlways`);
+}
+
+/**
+ * Compute the currently available Lucky Gold Ring Currencies
+ * @param realm the realm type to consider
+ * @returns The currency for the given zone
+ */
+export function realmCurrency(realm: RealmType): Item | undefined {
+  switch (realm) {
+    case "sleaze":
+      return $item`Beach Buck`;
+    case "spooky":
+      return $item`Coinspiracy`;
+    case "stench":
+      return $item`FunFunds™`;
+    case "cold":
+      return $item`Wal-Mart gift certificate`;
+    case "hot":
+      return $item`Volcoino`;
+    case "fantasy":
+      return $item`Rubee™`;
+  }
+}
+
+/**
+ * Compute which Lucky Gold Ring currencies are currently available
+ * @returns a list of currently available currencies
+ */
+export function lgrCurrencies(): Item[] {
+  return realmTypes
+    .filter(
+      (realm) =>
+        realmAvailable(realm) &&
+        !(realm === "hot" && get("_luckyGoldRingVolcoino"))
+    )
+    .map(realmCurrency)
+    .filter((i) => !!i) as Item[];
 }

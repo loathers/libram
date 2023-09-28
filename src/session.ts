@@ -128,7 +128,7 @@ function inventoryOperation(
  * @member value the numeric value of the full quantity of items (to get value of each item, do value / quantity) (can be negative)
  * @member quantity the number of items for this detail
  */
-interface ItemDetail {
+export interface ItemDetail {
   item: Item;
   value: number;
   quantity: number;
@@ -143,7 +143,7 @@ interface ItemDetail {
  * @member itemDetails a list of the detailed accounting for each item in this session
  * @member turns the number of turns associated with this session
  */
-interface ItemResult {
+export interface ItemResult {
   meat: number;
   items: number;
   total: number;
@@ -151,7 +151,7 @@ interface ItemResult {
   turns: number;
 }
 
-interface MeatPerAdventureAnalysis {
+export interface MeatPerAdventureAnalysis {
   mpa: {
     effective: number;
     meat: number;
@@ -357,20 +357,31 @@ export class Session {
   }
 
   /**
-   * @param result The output of Session.value to use when computing MPA
-   * @param isOutlier a function to identify outlier items to exclude
-   * @param excludeValue optional values to exclude when calculating mpa
-   * @param excludeValue.meat optional meat value to remove from the session results when calculating mpa
-   * @param excludeValue.item optional item value to remove from the session results when calculating mpa
+   * @param baseline the base session to use when computing MPA
+   * @param full the full session to use when computing MPA
+   * @param options options for computing MPA
+   * @param options.value a function to compute the meat value of a given item
+   * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+   * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+   * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+   * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
    * @returns an analysis of the effective MPA for the given session
    */
   static computeMPA(
-    result: ItemResult,
-    isOutlier: (item: ItemDetail) => boolean,
-    excludeValue: { meat?: number; item?: number } = {}
+    baseline: Session,
+    full: Session,
+    options: {
+      value: (item: Item) => number;
+      isOutlier?: (item: ItemDetail) => boolean;
+      excludeValue?: { meat?: number; item?: number };
+    }
   ): MeatPerAdventureAnalysis {
+    const value = options.value;
+    const excludeValue = options.excludeValue ?? { meat: 0, item: 0 };
+    const isOutlier = options.isOutlier;
+    const result = full.diff(baseline).value(value);
     const meatValue = result.meat - (excludeValue.meat ?? 0);
-    const outlierItems = result.itemDetails.filter(isOutlier);
+    const outlierItems = isOutlier ? result.itemDetails.filter(isOutlier) : [];
     const outliersValue = sum(outlierItems, (detail) => detail.value);
     const itemValue = result.items - outliersValue - (excludeValue.item ?? 0);
     const { turns } = result;
@@ -393,22 +404,23 @@ export class Session {
     };
   }
   /**
-   * @param itemValue a function to calculate the meat value of a given item
-   * @param identifyOutlier a function to identify outlier items to exclude
-   * @param excludeValue optional values to exclude when calculating mpa
-   * @param excludeValue.meat optional meat value to remove from the session results when calculating mpa
-   * @param excludeValue.item optional item value to remove from the session results when calculating mpa
+   * @param other the session to diff against this session when computing MPA
+   * @param options options for computing MPA
+   * @param options.value a function to compute the meat value of a given item
+   * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+   * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+   * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+   * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
    * @returns an analysis of the effective MPA for the given session
    */
   computeMPA(
-    itemValue: (item: Item) => number,
-    identifyOutlier: (item: ItemDetail) => boolean,
-    excludeValue: { meat?: number; item?: number } = {}
+    other: Session,
+    options: {
+      value: (item: Item) => number;
+      isOutlier?: (item: ItemDetail) => boolean;
+      excludeValue?: { meat?: number; item?: number };
+    }
   ): MeatPerAdventureAnalysis {
-    return Session.computeMPA(
-      this.value(itemValue),
-      identifyOutlier,
-      excludeValue
-    );
+    return Session.computeMPA(this, other, options);
   }
 }

@@ -128,7 +128,7 @@ function inventoryOperation(
  * @member value the numeric value of the full quantity of items (to get value of each item, do value / quantity) (can be negative)
  * @member quantity the number of items for this detail
  */
-interface ItemDetail {
+export interface ItemDetail {
   item: Item;
   value: number;
   quantity: number;
@@ -141,14 +141,32 @@ interface ItemDetail {
  * @member items the value of the items in this session in meat
  * @member total sum of meat and items
  * @member itemDetails a list of the detailed accounting for each item in this session
+ * @member turns the number of turns associated with this session
  */
-interface ItemResult {
+export interface ItemResult {
   meat: number;
   items: number;
   total: number;
   itemDetails: ItemDetail[];
+  turns: number;
 }
 
+export interface MeatPerAdventureAnalysis {
+  mpa: {
+    effective: number;
+    meat: number;
+    items: number;
+    total: number;
+  };
+  values: {
+    effective: number;
+    meat: number;
+    items: number;
+    total: number;
+  };
+  outlierItems: ItemDetail[];
+  turns: number;
+}
 /**
  * A wrapper around tracking items and meat gained from this session
  * Smartly handles foldables being added/removed based on their state
@@ -201,13 +219,14 @@ export class Session {
   value(itemValue: (item: Item) => number): ItemResult {
     // TODO: add garbo specific pricing (sugar equipment for synth, etc.)
 
+    const turns = this.totalTurns;
     const meat = Math.floor(this.meat);
     const itemDetails = [...this.items.entries()].map(([item, quantity]) => {
       return { item, quantity, value: itemValue(item) * quantity };
     });
     const items = Math.floor(sum(itemDetails, "value"));
 
-    return { meat, items, total: meat + items, itemDetails };
+    return { meat, items, total: meat + items, itemDetails, turns };
   }
 
   /**
@@ -335,5 +354,73 @@ export class Session {
       mySessionItemsWrapper(sessionOnly),
       totalTurnsPlayed()
     );
+  }
+
+  /**
+   * @param baseline the base session to use when computing MPA
+   * @param full the full session to use when computing MPA
+   * @param options options for computing MPA
+   * @param options.value a function to compute the meat value of a given item
+   * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+   * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+   * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+   * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
+   * @returns an analysis of the effective MPA for the given session
+   */
+  static computeMPA(
+    baseline: Session,
+    full: Session,
+    options: {
+      value: (item: Item) => number;
+      isOutlier?: (item: ItemDetail) => boolean;
+      excludeValue?: { meat?: number; item?: number };
+    }
+  ): MeatPerAdventureAnalysis {
+    const value = options.value;
+    const excludeValue = options.excludeValue ?? { meat: 0, item: 0 };
+    const isOutlier = options.isOutlier;
+    const result = full.diff(baseline).value(value);
+    const meatValue = result.meat - (excludeValue.meat ?? 0);
+    const outlierItems = isOutlier ? result.itemDetails.filter(isOutlier) : [];
+    const outliersValue = sum(outlierItems, (detail) => detail.value);
+    const itemValue = result.items - outliersValue - (excludeValue.item ?? 0);
+    const { turns } = result;
+
+    return {
+      mpa: {
+        effective: (meatValue + itemValue) / turns,
+        total: (meatValue + itemValue + outliersValue) / turns,
+        meat: meatValue / turns,
+        items: itemValue / turns,
+      },
+      values: {
+        effective: meatValue + itemValue,
+        total: meatValue + itemValue + outliersValue,
+        meat: meatValue,
+        items: itemValue,
+      },
+      outlierItems: outlierItems,
+      turns: turns,
+    };
+  }
+  /**
+   * @param other the session to diff against this session when computing MPA
+   * @param options options for computing MPA
+   * @param options.value a function to compute the meat value of a given item
+   * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+   * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+   * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+   * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
+   * @returns an analysis of the effective MPA for the given session
+   */
+  computeMPA(
+    other: Session,
+    options: {
+      value: (item: Item) => number;
+      isOutlier?: (item: ItemDetail) => boolean;
+      excludeValue?: { meat?: number; item?: number };
+    }
+  ): MeatPerAdventureAnalysis {
+    return Session.computeMPA(this, other, options);
   }
 }

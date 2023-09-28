@@ -18219,7 +18219,7 @@ var Session = /* @__PURE__ */ function() {
   }, {
     key: "value",
     value: function(itemValue) {
-      var meat = Math.floor(this.meat), itemDetails = _toConsumableArray19(this.items.entries()).map(function(_ref) {
+      var turns = this.totalTurns, meat = Math.floor(this.meat), itemDetails = _toConsumableArray19(this.items.entries()).map(function(_ref) {
         var _ref2 = _slicedToArray21(_ref, 2), item10 = _ref2[0], quantity = _ref2[1];
         return {
           item: item10,
@@ -18231,7 +18231,8 @@ var Session = /* @__PURE__ */ function() {
         meat: meat,
         items: items,
         total: meat + items,
-        itemDetails: itemDetails
+        itemDetails: itemDetails,
+        turns: turns
       };
     }
     /**
@@ -18300,6 +18301,23 @@ var Session = /* @__PURE__ */ function() {
      * @param filename The file from which to import
      * @returns the session represented by the file
      */
+  }, {
+    key: "computeMPA",
+    value: (
+      /**
+       * @param other the session to diff against this session when computing MPA
+       * @param options options for computing MPA
+       * @param options.value a function to compute the meat value of a given item
+       * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+       * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+       * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+       * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
+       * @returns an analysis of the effective MPA for the given session
+       */
+      function(other, options) {
+        return Session2.computeMPA(this, other, options);
+      }
+    )
   }], [{
     key: "diff",
     value: function(a, b) {
@@ -18345,6 +18363,43 @@ var Session = /* @__PURE__ */ function() {
       return new Session2(sum(meat, function(f) {
         return f();
       }), mySessionItemsWrapper(sessionOnly), (0, import_kolmafia68.totalTurnsPlayed)());
+    }
+    /**
+     * @param baseline the base session to use when computing MPA
+     * @param full the full session to use when computing MPA
+     * @param options options for computing MPA
+     * @param options.value a function to compute the meat value of a given item
+     * @param options.isOutlier a function to compute if an item is considered an outlier. By default, no items are outliers
+     * @param options.excludeValue meat values to exclude when calculating specific portions of the MPA
+     * @param options.excludeValue.meat how much meat to exclude when calculating the meat portion of MPA
+     * @param options.excludeValue.item how much meat to exclude when calculating hte item portion of MPA
+     * @returns an analysis of the effective MPA for the given session
+     */
+  }, {
+    key: "computeMPA",
+    value: function(baseline, full, options) {
+      var _options$excludeValue, _excludeValue$meat, _excludeValue$item, value = options.value, excludeValue = (_options$excludeValue = options.excludeValue) !== null && _options$excludeValue !== void 0 ? _options$excludeValue : {
+        meat: 0,
+        item: 0
+      }, isOutlier = options.isOutlier, result = full.diff(baseline).value(value), meatValue = result.meat - ((_excludeValue$meat = excludeValue.meat) !== null && _excludeValue$meat !== void 0 ? _excludeValue$meat : 0), outlierItems = isOutlier ? result.itemDetails.filter(isOutlier) : [], outliersValue = sum(outlierItems, function(detail) {
+        return detail.value;
+      }), itemValue = result.items - outliersValue - ((_excludeValue$item = excludeValue.item) !== null && _excludeValue$item !== void 0 ? _excludeValue$item : 0), turns = result.turns;
+      return {
+        mpa: {
+          effective: (meatValue + itemValue) / turns,
+          total: (meatValue + itemValue + outliersValue) / turns,
+          meat: meatValue / turns,
+          items: itemValue / turns
+        },
+        values: {
+          effective: meatValue + itemValue,
+          total: meatValue + itemValue + outliersValue,
+          meat: meatValue,
+          items: itemValue
+        },
+        outlierItems: outlierItems,
+        turns: turns
+      };
     }
   }]), Session2;
 }();

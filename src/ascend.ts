@@ -236,19 +236,19 @@ function isInValhalla(): boolean {
 /**
  * Hops the gash, perming no skills by default
  *
- * @param inputValues Configuration for the ascension
- * @param inputValues.path path of choice, as a Path object--these exist as properties of Paths
- * @param inputValues.playerClass Your class of choice for this ascension
- * @param inputValues.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
- * @param inputValues.kolGender An entry from the KolGender enum: 1 for male, 2 for female (sorry that it's limited to those). Defaults to 2 or the corresponding value for defaultGenderOverride pref (which should be 'male' or 'female')
- * @param inputValues.moon Your moon sign as a string, or the zone you're looking for as a string
- * @param inputValues.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
- * @param inputValues.pet From the astral pet store.
- * @param inputValues.permOptions Options for perming during a player's stay in Valhalla
- * @param inputValues.permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
- * @param inputValues.permOptions.neverAbort Whether the ascension should abort on failure
+ * @param options Configuration for the ascension
+ * @param options.path path of choice, as a Path object--these exist as properties of Paths
+ * @param options.playerClass Your class of choice for this ascension
+ * @param options.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
+ * @param options.kolGender An entry from the KolGender enum: 1 for male, 2 for female (sorry that it's limited to those). Defaults to 2 or the corresponding value for defaultGenderOverride pref (which should be 'male' or 'female')
+ * @param options.moon Your moon sign as a string, or the zone you're looking for as a string
+ * @param options.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
+ * @param options.pet From the astral pet store.
+ * @param options.permOptions Options for perming during a player's stay in Valhalla
+ * @param options.permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param options.permOptions.neverAbort Whether the ascension should abort on failure
  */
-export function ascend(inputValues: {
+export function ascend(options: {
   path: Path;
   playerClass: Class;
   lifestyle: Lifestyle;
@@ -258,7 +258,7 @@ export function ascend(inputValues: {
   pet?: Item;
   permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean };
 }): void {
-  const DEFAULT_VALUES = {
+  const DEFAULT_OPTIONS = {
     kolGender:
       get("defaultGenderOverride", "female") === "male"
         ? KolGender.male
@@ -275,7 +275,7 @@ export function ascend(inputValues: {
     consumable,
     pet,
     permOptions,
-  } = { ...DEFAULT_VALUES, ...inputValues };
+  } = { ...DEFAULT_OPTIONS, ...options };
 
   if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);
@@ -286,8 +286,7 @@ export function ascend(inputValues: {
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
 
   if (
-    consumable !== $item`none` &&
-    !$items`astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
+    !$items`none, astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
       consumable
     )
   ) {
@@ -295,8 +294,7 @@ export function ascend(inputValues: {
   }
 
   if (
-    pet !== $item`none` &&
-    !$items`astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral trousers, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
+    !$items`none, astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral trousers, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
       pet
     )
   ) {

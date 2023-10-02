@@ -235,6 +235,7 @@ function isInValhalla(): boolean {
  * @param params.path path of choice, as a Path object--these exist as properties of Paths
  * @param params.playerClass Your class of choice for this ascension
  * @param params.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
+ * @param params.kolGender Unfortunately limited to male or female (as strings). Defaults to female, or the value of the defaultGenderOverride preference, if it is set.
  * @param params.moon Your moon sign as a string, or the zone you're looking for as a string
  * @param params.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
  * @param params.pet From the astral pet store.
@@ -246,6 +247,7 @@ export function ascend({
   path,
   playerClass,
   lifestyle,
+  kolGender,
   moon,
   consumable,
   pet,
@@ -254,6 +256,7 @@ export function ascend({
   path: Path;
   playerClass: Class;
   lifestyle: Lifestyle;
+  kolGender?: "male" | "female";
   moon: InputMoonSign;
   consumable?: Item;
   pet?: Item;
@@ -334,8 +337,13 @@ export function ascend({
     }
   }
 
+  kolGender =
+    kolGender ??
+    (get("kolGenderOverride", "female") === "male" ? "male" : "female");
+  const kolGenderId = kolGender === "male" ? "1" : "2";
+
   visitUrl(
-    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=2&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
+    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=${kolGenderId}&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
     true
   );
 }

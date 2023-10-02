@@ -25,6 +25,11 @@ export enum Lifestyle {
   hardcore = 3,
 }
 
+export enum KolGender {
+  male = 1,
+  female = 2,
+}
+
 /**
  * Get a mapping of permed skills to the extent to which they're permed.
  *
@@ -231,37 +236,47 @@ function isInValhalla(): boolean {
 /**
  * Hops the gash, perming no skills by default
  *
- * @param params Configuration for the ascension
- * @param params.path path of choice, as a Path object--these exist as properties of Paths
- * @param params.playerClass Your class of choice for this ascension
- * @param params.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
- * @param params.kolGender Unfortunately limited to male or female (as strings). Defaults to female, or the value of the defaultGenderOverride preference, if it is set.
- * @param params.moon Your moon sign as a string, or the zone you're looking for as a string
- * @param params.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
- * @param params.pet From the astral pet store.
- * @param params.permOptions Options for perming during a player's stay in Valhalla
- * @param params.permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
- * @param params.permOptions.neverAbort Whether the ascension should abort on failure
+ * @param inputValues Configuration for the ascension
+ * @param inputValues.path path of choice, as a Path object--these exist as properties of Paths
+ * @param inputValues.playerClass Your class of choice for this ascension
+ * @param inputValues.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
+ * @param inputValues.kolGender An entry from the KolGender enum: 1 for male, 2 for female (sorry that it's limited to those). Defaults to 2 or the corresponding value for defaultGenderOverride pref (which should be 'male' or 'female')
+ * @param inputValues.moon Your moon sign as a string, or the zone you're looking for as a string
+ * @param inputValues.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
+ * @param inputValues.pet From the astral pet store.
+ * @param inputValues.permOptions Options for perming during a player's stay in Valhalla
+ * @param inputValues.permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param inputValues.permOptions.neverAbort Whether the ascension should abort on failure
  */
-export function ascend({
-  path,
-  playerClass,
-  lifestyle,
-  kolGender,
-  moon,
-  consumable,
-  pet,
-  permOptions,
-}: {
+export function ascend(inputValues: {
   path: Path;
   playerClass: Class;
   lifestyle: Lifestyle;
-  kolGender?: "male" | "female";
+  kolGender?: KolGender;
   moon: InputMoonSign;
   consumable?: Item;
   pet?: Item;
   permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean };
 }): void {
+  const DEFAULT_VALUES = {
+    kolGender:
+      get("defaultGenderOverride", "female") === "male"
+        ? KolGender.male
+        : KolGender.female,
+    consumable: $item`astral six-pack`,
+    pet: $item`none`,
+  };
+  const {
+    path,
+    playerClass,
+    lifestyle,
+    kolGender,
+    moon,
+    consumable,
+    pet,
+    permOptions,
+  } = { ...DEFAULT_VALUES, ...inputValues };
+
   if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);
   }
@@ -270,12 +285,9 @@ export function ascend({
   const moonId = inputToMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
 
-  if (consumable === undefined) {
-    consumable = $item`astral six-pack`;
-  }
   if (
-    consumable &&
-    !$items`none, astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
+    consumable !== $item`none` &&
+    !$items`astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
       consumable
     )
   ) {
@@ -283,7 +295,7 @@ export function ascend({
   }
 
   if (
-    pet &&
+    pet !== $item`none` &&
     !$items`astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral trousers, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
       pet
     )
@@ -313,7 +325,9 @@ export function ascend({
     visitUrl(`afterlife.php?action=buydeli&whichitem=${consumable.id}`);
   }
 
-  if (pet) visitUrl(`afterlife.php?action=buyarmory&whichitem=${pet.id}`);
+  if (pet !== $item`none`) {
+    visitUrl(`afterlife.php?action=buyarmory&whichitem=${pet.id}`);
+  }
 
   if (permOptions) {
     const currentPerms = permedSkills();
@@ -337,13 +351,8 @@ export function ascend({
     }
   }
 
-  kolGender =
-    kolGender ??
-    (get("kolGenderOverride", "female") === "male" ? "male" : "female");
-  const kolGenderId = kolGender === "male" ? "1" : "2";
-
   visitUrl(
-    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=${kolGenderId}&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
+    `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=${kolGender}&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
     true
   );
 }

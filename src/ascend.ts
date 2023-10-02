@@ -229,27 +229,36 @@ function isInValhalla(): boolean {
 }
 
 /**
- * Hops the gash, perming no skills
+ * Hops the gash, perming no skills by default
  *
- * @param path path of choice, as a Path object--these exist as properties of Paths
- * @param playerClass Your class of choice for this ascension
- * @param lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
- * @param moon Your moon sign as a string, or the zone you're looking for as a string
- * @param consumable From the astral deli. Pick the container item, not the product.
- * @param pet From the astral pet store.
- * @param permOptions Options for perming during a player's stay in Valhalla
- * @param permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
- * @param permOptions.neverAbort Whether the ascension shouold abort on failure
+ * @param params Configuration for the ascension
+ * @param params.path path of choice, as a Path object--these exist as properties of Paths
+ * @param params.playerClass Your class of choice for this ascension
+ * @param params.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
+ * @param params.moon Your moon sign as a string, or the zone you're looking for as a string
+ * @param params.consumable From the astral deli. Pick the container item, not the product. Defaults to astral six-pack, provide $item`none` for nothing.
+ * @param params.pet From the astral pet store.
+ * @param params.permOptions Options for perming during a player's stay in Valhalla
+ * @param params.permOptions.permSkills A Map<Skill, Lifestyle> of skills you'd like to perm, ordered by priority.
+ * @param params.permOptions.neverAbort Whether the ascension should abort on failure
  */
-export function ascend(
-  path: Path,
-  playerClass: Class,
-  lifestyle: Lifestyle,
-  moon: InputMoonSign,
-  consumable: Item | undefined = $item`astral six-pack`,
-  pet: Item | undefined = undefined,
-  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean }
-): void {
+export function ascend({
+  path,
+  playerClass,
+  lifestyle,
+  moon,
+  consumable,
+  pet,
+  permOptions,
+}: {
+  path: Path;
+  playerClass: Class;
+  lifestyle: Lifestyle;
+  moon: InputMoonSign;
+  consumable?: Item;
+  pet?: Item;
+  permOptions?: { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean };
+}): void {
   if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);
   }
@@ -257,9 +266,13 @@ export function ascend(
 
   const moonId = inputToMoonId(moon, playerClass);
   if (moonId < 1 || moonId > 9) throw new Error(`Invalid moon ${moon}`);
+
+  if (consumable === undefined) {
+    consumable = $item`astral six-pack`;
+  }
   if (
     consumable &&
-    !$items`astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
+    !$items`none, astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
       consumable
     )
   ) {
@@ -293,7 +306,7 @@ export function ascend(
 
   visitUrl("afterlife.php?action=pearlygates");
 
-  if (consumable) {
+  if (consumable !== $item`none`) {
     visitUrl(`afterlife.php?action=buydeli&whichitem=${consumable.id}`);
   }
 

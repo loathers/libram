@@ -17368,8 +17368,8 @@ var MoodElement = /* @__PURE__ */ function() {
       }
       var remainingDifference = ensureTurns - (0, import_kolmafia65.haveEffect)(effect2);
       if (remainingDifference > 0) {
-        var price2 = Math.floor(this.maxPricePerTurn * remainingDifference);
-        price2 <= (0, import_kolmafia65.mallPrice)(this.potion) && ((0, import_kolmafia65.availableAmount)(this.potion) || (0, import_kolmafia65.buy)(1, this.potion, price2)) && (0, import_kolmafia65.use)(1, this.potion);
+        var maxPrice = Math.floor(this.maxPricePerTurn * remainingDifference);
+        (0, import_kolmafia65.mallPrice)(this.potion) <= maxPrice && ((0, import_kolmafia65.availableAmount)(this.potion) || (0, import_kolmafia65.buy)(1, this.potion, maxPrice)) && (0, import_kolmafia65.use)(1, this.potion);
       }
       return (0, import_kolmafia65.haveEffect)(effect2) >= ensureTurns;
     }

@@ -2,6 +2,7 @@ import * as Stickers from "./2008/Stickers";
 import * as Bandersnatch from "./2009/Bandersnatch";
 import * as SpookyPutty from "./2009/SpookyPutty";
 import * as CrownOfThrones from "./2010/CrownOfThrones";
+import * as LookingGlass from "./2010/LookingGlass";
 import * as ObtuseAngel from "./2011/ObtuseAngel";
 import * as StompingBoots from "./2011/StompingBoots";
 import * as RainDoh from "./2012/RainDoh";
@@ -73,6 +74,7 @@ export {
   JuneCleaver,
   JungMan,
   Latte,
+  LookingGlass,
   MayoClinic,
   MummingTrunk,
   ObtuseAngel,

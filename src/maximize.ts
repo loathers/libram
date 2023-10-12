@@ -12,11 +12,13 @@ import {
   haveEquipped,
   isWearingOutfit,
   Item,
+  Location,
   maximize,
   myBasestat,
   myBjornedFamiliar,
   myEnthronedFamiliar,
   myFamiliar,
+  myLocation,
   outfit,
   Slot,
 } from "kolmafia";
@@ -39,6 +41,7 @@ function toMaximizerName({ name, id }: Item): string {
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;
   updateOnCanEquipChanged: boolean;
+  updateOnLocationChange: boolean;
   useOutfitCaching: boolean;
   forceEquip: Item[];
   preventEquip: Item[];
@@ -67,6 +70,9 @@ export function mergeMaximizeOptions(
     updateOnCanEquipChanged:
       addendums.updateOnCanEquipChanged ??
       defaultOptions.updateOnCanEquipChanged,
+
+    updateOnLocationChange:
+      addendums.updateOnLocationChange ?? defaultOptions.updateOnLocationChange,
 
     useOutfitCaching:
       addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
@@ -102,6 +108,7 @@ export function mergeMaximizeOptions(
 const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
+  updateOnLocationChange: false,
   useOutfitCaching: true,
   forceEquip: [],
   preventEquip: [],
@@ -117,6 +124,7 @@ const defaultMaximizeOptions: MaximizeOptions = {
  * @param options Default options for each maximizer run.
  * @param options.updateOnFamiliarChange Re-run the maximizer if familiar has changed. Default true.
  * @param options.updateOnCanEquipChanged Re-run the maximizer if stats have changed what can be equipped. Default true.
+ * @param options.updateOnLocationChange Re-run the maximizer if location has changed. Default false.
  * @param options.forceEquip Equipment to force-equip ("equip X").
  * @param options.preventEquip Equipment to prevent equipping ("-equip X").
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
@@ -195,6 +203,7 @@ class CacheEntry {
   equipment: Map<Slot, Item>;
   rider: Map<Item, Familiar>;
   familiar: Familiar;
+  location: Location;
   canEquipItemCount: number;
   modes: Modes;
 
@@ -202,12 +211,14 @@ class CacheEntry {
     equipment: Map<Slot, Item>,
     rider: Map<Item, Familiar>,
     familiar: Familiar,
+    location: Location,
     canEquipItemCount: number,
     modes: Modes
   ) {
     this.equipment = equipment;
     this.rider = rider;
     this.familiar = familiar;
+    this.location = location;
     this.canEquipItemCount = canEquipItemCount;
     this.modes = modes;
   }
@@ -335,6 +346,13 @@ function checkCache(
   ) {
     logger.warning(
       "Equipment found in maximize cache but equippable item list is out of date."
+    );
+    return null;
+  }
+
+  if (options.updateOnLocationChange && myLocation() !== entry.location) {
+    logger.warning(
+      "Equipment found in maximize cache but familiar is different."
     );
     return null;
   }
@@ -519,6 +537,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     equipment,
     rider,
     myFamiliar(),
+    myLocation(),
     canEquipItemCount(),
     { ...getCurrentModes(), ...options.modes }
   );

@@ -352,7 +352,7 @@ function checkCache(
 
   if (options.updateOnLocationChange && myLocation() !== entry.location) {
     logger.warning(
-      "Equipment found in maximize cache but familiar is different."
+      "Equipment found in maximize cache but location is different."
     );
     return null;
   }

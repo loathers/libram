@@ -6,6 +6,8 @@ import {
   availableAmount,
   Item,
   visitUrl,
+  myTotalTurnsSpent,
+  totalTurnsPlayed,
 } from "kolmafia";
 import { logger } from "../..";
 import { canVisitUrl } from "../../lib";
@@ -29,6 +31,8 @@ const parsedProp = () =>
         [toLocation(location), toMonster(monster)] as [Location, Monster]
     );
 
+const getLastPondered = () => `${myTotalTurnsSpent()};${totalTurnsPlayed()}`;
+let lastPondered = "";
 /**
  * Ponders your orb (if it is able to do so safely) and then returns a Map keyed by location consisting of extant predictions
  *
@@ -36,11 +40,14 @@ const parsedProp = () =>
  */
 export function ponder(): Map<Location, Monster> {
   if (!have()) return new Map();
-  if (canVisitUrl()) {
-    logger.debug("Now pondering Crystal Ball.");
-    visitUrl("inventory.php?ponder=1", false);
-  } else {
-    logger.debug("Failed to ponder Crystall Ball.");
+  if (lastPondered !== getLastPondered()) {
+    if (canVisitUrl()) {
+      logger.debug("Now pondering Crystal Ball.");
+      visitUrl("inventory.php?ponder=1", false);
+      lastPondered = getLastPondered();
+    } else {
+      logger.debug("Failed to ponder Crystall Ball.");
+    }
   }
   return new Map(parsedProp());
 }

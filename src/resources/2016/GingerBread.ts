@@ -76,3 +76,16 @@ export function getNoon(location: Location): number {
 export function getMidnight(location: Location): number {
   return MIDNIGHTS.get(location) ?? 0;
 }
+
+/**
+ * @returns Whether or not it is possible for you to fight Judge Fudge today
+ */
+export function canJudgeFudge(): boolean {
+  if (minutesToNoon() >= 0) {
+    return true;
+  }
+  if (minutesToMidnight() >= 0 && get("_gingerbreadColumnDestroyed")) {
+    return true;
+  }
+  return false;
+}

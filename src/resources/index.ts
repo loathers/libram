@@ -17,6 +17,7 @@ import * as ChateauMantegna from "./2015/ChateauMantegna";
 import * as DeckOfEveryCard from "./2015/DeckOfEveryCard";
 import * as Dinseylandfill from "./2015/Dinseylandfill";
 import * as MayoClinic from "./2015/MayoClinic";
+import * as GingerBread from "./2016/GingerBread";
 import * as SourceTerminal from "./2016/SourceTerminal";
 import * as Witchess from "./2016/Witchess";
 import * as AsdonMartin from "./2017/AsdonMartin";
@@ -94,6 +95,7 @@ export {
   TunnelOfLove,
   WinterGarden,
   Witchess,
+  GingerBread,
 };
 
 export * from "./putty-likes";

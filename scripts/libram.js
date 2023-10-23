@@ -13680,7 +13680,7 @@ var parsedProp = function() {
     return [(0, import_kolmafia47.toLocation)(location), (0, import_kolmafia47.toMonster)(monster)];
   });
 }, getLastPondered = function() {
-  return "".concat((0, import_kolmafia47.myTotalTurnsSpent)(), ";").concat((0, import_kolmafia47.totalTurnsPlayed)());
+  return "".concat((0, import_kolmafia47.myTotalTurnsSpent)(), ";").concat((0, import_kolmafia47.totalTurnsPlayed)(), ";").concat(get("lastAdventure"));
 }, lastPondered = "";
 function ponder() {
   return have35() ? (lastPondered !== getLastPondered() && (canVisitUrl() ? (logger_default.debug("Now pondering Crystal Ball."), (0, import_kolmafia47.visitUrl)("inventory.php?ponder=1", !1), lastPondered = getLastPondered()) : logger_default.debug("Failed to ponder Crystall Ball.")), new Map(parsedProp())) : /* @__PURE__ */ new Map();

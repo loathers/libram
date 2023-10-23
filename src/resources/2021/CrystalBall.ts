@@ -31,7 +31,8 @@ const parsedProp = () =>
         [toLocation(location), toMonster(monster)] as [Location, Monster]
     );
 
-const getLastPondered = () => `${myTotalTurnsSpent()};${totalTurnsPlayed()}`;
+const getLastPondered = () =>
+  `${myTotalTurnsSpent()};${totalTurnsPlayed()};${get("lastAdventure")}`;
 let lastPondered = "";
 /**
  * Ponders your orb (if it is able to do so safely) and then returns a Map keyed by location consisting of extant predictions

@@ -1,4 +1,5 @@
 import {
+  Effect,
   equippedItem,
   familiarWeight,
   getPower,
@@ -19,9 +20,9 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
+import { NumericModifier } from "../..";
 import { have } from "../../lib";
 import { Requirement } from "../../maximize";
-import { get as getModifier } from "../../modifier";
 import { get } from "../../property";
 import { MummingTrunk } from "../../resources";
 import {
@@ -60,11 +61,22 @@ const visitCouncil = () => visitUrl("council.php");
 const baseWeight = (): number =>
   have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
 
+function hypotheticalModifier(
+  modifier: NumericModifier,
+  ...effects: Effect[]
+): number {
+  const newEffects = effects.filter((e) => !have(e));
+  return (
+    numericModifier(modifier) +
+    sum(newEffects, (effect) => numericModifier(effect, modifier))
+  );
+}
+
 export default class CommunityService {
   private choice: number;
   private stat: string;
   private property: string;
-  private predictor: () => number;
+  private predictor: (...effects: Effect[]) => number;
   private maximizeRequirements: Requirement | null;
   private timer: { turns: number; time: number } | null = null;
 
@@ -81,7 +93,7 @@ export default class CommunityService {
     id: number,
     stat: string,
     property: string,
-    predictor: () => number,
+    predictor: (...effects: Effect[]) => number,
     maximizeRequirements: Requirement
   ) {
     this.choice = id;
@@ -358,7 +370,17 @@ export default class CommunityService {
     5,
     "Familiar Weight",
     "Breed More Collies",
-    () => 60 - Math.floor((baseWeight() + weightAdjustment()) / 5),
+    (...effects) =>
+      60 -
+      Math.floor(
+        (baseWeight() +
+          weightAdjustment() +
+          sum(
+            effects.filter((e) => !have(e)),
+            (effect) => numericModifier(effect, "Familiar Weight")
+          )) /
+          5
+      ),
     new Requirement(["Familiar Weight"], {})
   );
 
@@ -366,7 +388,7 @@ export default class CommunityService {
     6,
     "Weapon Damage",
     "Reduce Gazelle Population",
-    () => {
+    (...effects) => {
       const weaponPower = getPower(equippedItem($slot`weapon`));
       const offhandPower =
         toSlot(equippedItem($slot`off-hand`)) === $slot`weapon`
@@ -385,13 +407,16 @@ export default class CommunityService {
         60 -
         Math.floor(
           (multiplier *
-            (getModifier("Weapon Damage") -
+            (hypotheticalModifier("Weapon Damage", ...effects) -
               0.15 * (weaponPower + offhandPower + familiarPower))) /
             50 +
             0.001
         ) -
         Math.floor(
-          (multiplier * getModifier("Weapon Damage Percent")) / 50 + 0.001
+          (multiplier *
+            hypotheticalModifier("Weapon Damage Percent", ...effects)) /
+            50 +
+            0.001
         )
       );
     },
@@ -402,7 +427,7 @@ export default class CommunityService {
     7,
     "Spell Damage",
     "Make Sausage",
-    () => {
+    (...effects) => {
       const dragonfishDamage =
         myFamiliar() === $familiar`Magic Dragonfish`
           ? numericModifier(
@@ -416,9 +441,14 @@ export default class CommunityService {
       // We add 0.001 because the floor function sometimes introduces weird rounding errors
       return (
         60 -
-        Math.floor(getModifier("Spell Damage") / 50 + 0.001) -
         Math.floor(
-          (getModifier("Spell Damage Percent") - dragonfishDamage) / 50 + 0.001
+          hypotheticalModifier("Spell Damage", ...effects) / 50 + 0.001
+        ) -
+        Math.floor(
+          (hypotheticalModifier("Spell Damage Percent", ...effects) -
+            dragonfishDamage) /
+            50 +
+            0.001
         )
       );
     },
@@ -429,8 +459,9 @@ export default class CommunityService {
     8,
     "Non-Combat",
     "Be a Living Statue",
-    () => {
-      const noncombatRate = -1 * getModifier("Combat Rate");
+    (...effects) => {
+      const noncombatRate =
+        -1 * hypotheticalModifier("Combat Rate", ...effects);
       const unsoftcappedRate =
         noncombatRate > 25 ? 25 + (noncombatRate - 25) * 5 : noncombatRate;
       return 60 - 3 * Math.floor(unsoftcappedRate / 5);
@@ -442,7 +473,7 @@ export default class CommunityService {
     9,
     "Item Drop",
     "Make Margaritas",
-    () => {
+    (...effects) => {
       const mummingCostume = MummingTrunk.currentCostumes().get(myFamiliar());
       const mummingBuff =
         mummingCostume && mummingCostume[0] === "Item Drop"
@@ -479,13 +510,17 @@ export default class CommunityService {
         60 -
         Math.floor(
           (multiplier *
-            (getModifier("Item Drop") -
+            (hypotheticalModifier("Item Drop", ...effects) -
               familiarItemDrop -
               numericModifier(myThrall(), "Item Drop"))) /
             30 +
             0.001
         ) -
-        Math.floor((getModifier("Booze Drop") - familiarBoozeDrop) / 15 + 0.001)
+        Math.floor(
+          (hypotheticalModifier("Booze Drop", ...effects) - familiarBoozeDrop) /
+            15 +
+            0.001
+        )
       );
     },
     new Requirement(["Item Drop", "2 Booze Drop"], {
@@ -497,7 +532,7 @@ export default class CommunityService {
     10,
     "Hot Resistance",
     "Clean Steam Tunnels",
-    () => 60 - getModifier("Hot Resistance"),
+    (...effects) => 60 - hypotheticalModifier("Hot Resistance", ...effects),
     new Requirement(["Hot Resistance"], {})
   );
 

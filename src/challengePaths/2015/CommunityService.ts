@@ -35,7 +35,7 @@ import {
   $stat,
   $thrall,
 } from "../../template-string";
-import { sum } from "../../utils";
+import { clamp, sum } from "../../utils";
 
 const thralls = new Map<Stat, Thrall>([
   [$stat`muscle`, $thrall`Elbow Macaroni`],
@@ -284,7 +284,9 @@ export default class CommunityService {
    * @returns The number of turns we expect to save if we start using those effects
    */
   turnsSavedBy(...effects: Effect[]): number {
-    return this.prediction - this.predictor(...effects);
+    const currentTurns = clamp(this.prediction, 1, 60);
+    const newTurns = clamp(this.predictor(...effects), 1, 60);
+    return currentTurns - newTurns;
   }
 
   /**

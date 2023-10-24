@@ -69,6 +69,7 @@ export {
   Dinseylandfill,
   DNALab,
   FloristFriar,
+  GingerBread,
   GreyGoose,
   Guzzlr,
   Horsery,
@@ -95,7 +96,6 @@ export {
   TunnelOfLove,
   WinterGarden,
   Witchess,
-  GingerBread,
 };
 
 export * from "./putty-likes";

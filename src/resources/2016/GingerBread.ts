@@ -73,7 +73,7 @@ export function getNoonChoiceId(location: Location): number {
  * @param location The location in question
  * @returns The id of the Midnight choice adventure at that location; 0 if inapplicable
  */
-export function getMidnight(location: Location): number {
+export function getMidnightChoiceId(location: Location): number {
   return MIDNIGHTS.get(location) ?? 0;
 }
 

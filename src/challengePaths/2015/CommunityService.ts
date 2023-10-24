@@ -383,13 +383,7 @@ export default class CommunityService {
     (...effects) =>
       60 -
       Math.floor(
-        (baseWeight() +
-          weightAdjustment() +
-          sum(
-            effects.filter((e) => !have(e)),
-            (effect) => numericModifier(effect, "Familiar Weight")
-          )) /
-          5
+        (baseWeight() + hypotheticalModifier("Familiar Weight", ...effects)) / 5
       ),
     new Requirement(["Familiar Weight"], {})
   );
@@ -474,7 +468,26 @@ export default class CommunityService {
         -1 * hypotheticalModifier("Combat Rate", ...effects);
       const unsoftcappedRate =
         noncombatRate > 25 ? 25 + (noncombatRate - 25) * 5 : noncombatRate;
-      return 60 - 3 * Math.floor(unsoftcappedRate / 5);
+      const currentFamiliarModifier =
+        -1 *
+        numericModifier(
+          myFamiliar(),
+          "Combat Rate",
+          familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
+          equippedItem($slot`familiar`)
+        );
+      const newFamiliarModifier =
+        -1 *
+        numericModifier(
+          myFamiliar(),
+          "Combat Rate",
+          familiarWeight(myFamiliar()) +
+            hypotheticalModifier("Combat Rate", ...effects),
+          equippedItem($slot`familiar`)
+        );
+      const adjustedRate =
+        unsoftcappedRate - currentFamiliarModifier + newFamiliarModifier;
+      return 60 - 3 * Math.floor(adjustedRate / 5);
     },
     new Requirement(["-combat"], {})
   );
@@ -542,7 +555,27 @@ export default class CommunityService {
     10,
     "Hot Resistance",
     "Clean Steam Tunnels",
-    (...effects) => 60 - hypotheticalModifier("Hot Resistance", ...effects),
+    (...effects) => {
+      const currentFamiliarModifier = numericModifier(
+        myFamiliar(),
+        "Hot Resistance",
+        familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
+        equippedItem($slot`familiar`)
+      );
+      const newFamiliarModifier = numericModifier(
+        myFamiliar(),
+        "Hot Resistance",
+        familiarWeight(myFamiliar()) +
+          hypotheticalModifier("Familiar Weight", ...effects),
+        equippedItem($slot`familiar`)
+      );
+      return (
+        60 -
+        (hypotheticalModifier("Hot Resistance", ...effects) -
+          currentFamiliarModifier +
+          newFamiliarModifier)
+      );
+    },
     new Requirement(["Hot Resistance"], {})
   );
 

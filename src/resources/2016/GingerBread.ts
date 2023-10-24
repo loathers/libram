@@ -65,7 +65,7 @@ const MIDNIGHTS = new Map([
  * @param location The location in question
  * @returns The id of the Noon choice adventure at that location; 0 if inapplicable
  */
-export function getNoon(location: Location): number {
+export function getNoonChoiceId(location: Location): number {
   return NOONS.get(location) ?? 0;
 }
 

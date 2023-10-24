@@ -279,6 +279,10 @@ export default class CommunityService {
     return this._actualCost(visitCouncil());
   }
 
+  /**
+   * @param effects A spread array of Effects to consider
+   * @returns The number of turns we expect to save if we start using those effects
+   */
   turnsSavedBy(...effects: Effect[]): number {
     return this.prediction - this.predictor(...effects);
   }

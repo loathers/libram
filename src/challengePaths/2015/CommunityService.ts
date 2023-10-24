@@ -279,6 +279,10 @@ export default class CommunityService {
     return this._actualCost(visitCouncil());
   }
 
+  turnsSavedBy(...effects: Effect[]): number {
+    return this.prediction - this.predictor(...effects);
+  }
+
   /**
    * A log of the predicted turns, actual turns, and duration of each CS test performed.
    */

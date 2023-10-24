@@ -20,9 +20,9 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { NumericModifier } from "../..";
 import { have } from "../../lib";
 import { Requirement } from "../../maximize";
+import { NumericModifier } from "../../modifierTypes";
 import { get } from "../../property";
 import { MummingTrunk } from "../../resources";
 import {

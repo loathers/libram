@@ -46,6 +46,7 @@ function visitLeaves() {
  */
 export function burnLeaves(leaves: number): boolean {
   if (leaves > numberOfLeaves()) {
+    visitLeaves();
     visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
     return true;
   }
@@ -64,6 +65,8 @@ export function canBurnFor(th: Monster | Item): boolean {
  * Checks whether you can, then jumps into the fire
  */
 export function jumpInFire(): void {
-  if (get("_leavesJumped", false))
+  if (get("_leavesJumped", false)){
+    visitLeaves();
     visitUrl("choice.php?pwd&whichchoice=1510&option=2");
+  }
 }

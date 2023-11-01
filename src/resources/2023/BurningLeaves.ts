@@ -51,7 +51,7 @@ export function burnLeaves(leaves: number): boolean{
  * @param th determines which thing (Monster or Item) we want to burn leaves for
  * @returns The whether we can acquire the item or fight the monster in question
  */
-export function canBurnFor(th: Thing): boolean {
+export function canBurnFor(th: Monster | Item): boolean {
   return numberOfLeaves() > specialLeaves.get(th);
 }
 

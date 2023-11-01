@@ -5,9 +5,7 @@ import { get } from "../../property";
 
 const item = $item`A Guide to Burning Leaves`;
 
-type Thing = Item | Monster;
-
-export const specialLeaves: Map<Thing, number> = new Map([
+export const specialLeaves: Map<Item | Monster, number> = new Map([
   [$monster`flaming leaflet`, 11],
   [$item`autumnic bomb`, 37],
   [$item`impromptu torch`, 42],

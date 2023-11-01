@@ -6,21 +6,21 @@ const item = $item`A Guide to Burning Leaves`;
 
 type Thing = Item | Monster;
 
-export const specialLeaves: Map<number, Thing> = new Map([
-  [11, $monster`flaming leaflet`],
-  [37, $item`autumnic bomb`],
-  [42, $item`impromptu torch`],
-  [43, $item`flaming fig leaf`],
-  [44, $item`smoldering drape`],
-  [50, $item`distilled resin`],
-  [66, $item`autumnal aegis`],
-  [69, $item`lit leaf lasso`],
-  [74, $item`forest canopy bed`],
-  [99, $item`autumnic balm`],
-  [111, $monster`flaming monstera`],
-  [222, $item`day shortener`],
-  [666, $monster`leaviathan`],
-  [1111, $item`coping juice`],
+export const specialLeaves: Map<Thing, number> = new Map([
+  [$monster`flaming leaflet`, 11],
+  [$item`autumnic bomb`, 37],
+  [$item`impromptu torch`, 42],
+  [$item`flaming fig leaf`, 43],
+  [$item`smoldering drape`, 44],
+  [$item`distilled resin`, 50],
+  [$item`autumnal aegis`, 66],
+  [$item`lit leaf lasso`, 69],
+  [$item`forest canopy bed`, 74],
+  [$item`autumnic balm`, 99],
+  [$monster`flaming monstera`, 111],
+  [$item`day shortener`, 222],
+  [$monster`leaviathan`, 666],
+  [$item`coping juice`, 1111],
 ]);
 
 /**
@@ -44,4 +44,8 @@ export function burnLeaves(leaves: number): void {
   if (leaves > numberOfLeaves()) {
     visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
   }
+}
+
+export function canBurnFor(th: Thing): boolean {
+  return numberOfLeaves() > specialLeaves.get(th);
 }

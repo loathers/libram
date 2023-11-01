@@ -46,7 +46,7 @@ import * as AugustScepter from "./2023/AugustScepter";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
-import * as GuidetoBurningLeaves from "./2023/GuidetoBurningLeaves";
+import * as GuidetoBurningLeaves from "./2023/BurningLeaves";
 
 export {
   AugustScepter,

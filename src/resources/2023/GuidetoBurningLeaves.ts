@@ -4,8 +4,10 @@ import { $item, $monster } from "../../template-string";
 
 const item = $item`A Guide to Burning Leaves`;
 
-export const specialLeaves: Map<Number, Item> = new Map([
-  //[11, $monster`flaming leaflet`],
+type Thing = Item | Monster;
+
+export const specialLeaves: Map<number, Thing> = new Map([
+  [11, $monster`flaming leaflet`],
   [37, $item`autumnic bomb`],
   [42, $item`impromptu torch`],
   [43, $item`flaming fig leaf`],
@@ -15,9 +17,9 @@ export const specialLeaves: Map<Number, Item> = new Map([
   [69, $item`lit leaf lasso`],
   [74, $item`forest canopy bed`],
   [99, $item`autumnic balm`],
-  //[111, $monster`flaming monstera`],
+  [111, $monster`flaming monstera`],
   [222, $item`day shortener`],
-  //[666, $monster`leaviathan`],
+  [666, $monster`leaviathan`],
   [1111, $item`coping juice`],
 ]);
 

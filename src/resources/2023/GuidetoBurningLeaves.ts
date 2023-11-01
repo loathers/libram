@@ -1,12 +1,6 @@
-import {
-  Item,
-  Monster,
-  itemAmount,
-  visitUrl,
-} from "kolmafia";
+import { Item, Monster, itemAmount, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { $item, $monster } from "../../template-string";
-
 
 const item = $item`A Guide to Burning Leaves`;
 
@@ -24,15 +18,15 @@ export const specialLeaves: Map<Number, Item> = new Map([
   //[111, $monster`flaming monstera`],
   [222, $item`day shortener`],
   //[666, $monster`leaviathan`],
-  [1111, $item`coping juice`]
+  [1111, $item`coping juice`],
 ]);
 
 /**
  * @returns Whether or not we currently `have` the GuidetoBurningLeaves
  */
 export function have(): boolean {
-    return haveInCampground(item);
-  }
+  return haveInCampground(item);
+}
 
 /**
  * @returns The number of leaves we have remaining
@@ -45,7 +39,7 @@ export function numberOfLeaves(): number {
  * Burns the desired number of leaves
  */
 export function burnLeaves(leaves: number): void {
-    if(leaves > numberOfLeaves()){
-        visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
-    }
+  if (leaves > numberOfLeaves()) {
+    visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
+  }
 }

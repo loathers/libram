@@ -1,12 +1,31 @@
 import {
+  Item,
+  Monster,
   itemAmount,
   visitUrl,
 } from "kolmafia";
 import { haveInCampground } from "../../lib";
-import { $item } from "../../template-string";
+import { $item, $monster } from "../../template-string";
 
 
 const item = $item`A Guide to Burning Leaves`;
+
+export const specialLeaves: Map<Number, Item> = new Map([
+  //[11, $monster`flaming leaflet`],
+  [37, $item`autumnic bomb`],
+  [42, $item`impromptu torch`],
+  [43, $item`flaming fig leaf`],
+  [44, $item`smoldering drape`],
+  [50, $item`distilled resin`],
+  [66, $item`autumnal aegis`],
+  [69, $item`lit leaf lasso`],
+  [74, $item`forest canopy bed`],
+  [99, $item`autumnic balm`],
+  //[111, $monster`flaming monstera`],
+  [222, $item`day shortener`],
+  //[666, $monster`leaviathan`],
+  [1111, $item`coping juice`]
+]);
 
 /**
  * @returns Whether or not we currently `have` the GuidetoBurningLeaves

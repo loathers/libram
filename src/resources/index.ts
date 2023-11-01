@@ -46,6 +46,7 @@ import * as AugustScepter from "./2023/AugustScepter";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
+import * as GuidetoBurningLeaves from "./2023/GuidetoBurningLeaves";
 
 export {
   AugustScepter,
@@ -71,6 +72,7 @@ export {
   FloristFriar,
   GingerBread,
   GreyGoose,
+  GuidetoBurningLeaves,
   Guzzlr,
   Horsery,
   JuneCleaver,

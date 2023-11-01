@@ -1,6 +1,7 @@
 import { Item, Monster, itemAmount, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { $item, $monster } from "../../template-string";
+import { get } from "../../property";
 
 const item = $item`A Guide to Burning Leaves`;
 
@@ -38,7 +39,7 @@ export function numberOfLeaves(): number {
 }
 
 /**
- * Burns the desired number of leaves
+ * @param leaves Burns the desired number of leaves
  */
 export function burnLeaves(leaves: number): void {
   if (leaves > numberOfLeaves()) {
@@ -47,8 +48,17 @@ export function burnLeaves(leaves: number): void {
 }
 
 /**
+ * @param th determines which thing (Monster or Item) we want to burn leaves for
  * @returns The whether we can acquire the item or fight the monster in question
  */
 export function canBurnFor(th: Thing): boolean {
   return numberOfLeaves() > specialLeaves.get(th);
+}
+
+/**
+ * Checks whether you can, then jumps into the fire
+ */
+export function jumpInFire(): void {
+  if (get("_leavesJumped", false))
+    visitUrl("choice.php?pwd&whichchoice=1510&option=2");
 }

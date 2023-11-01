@@ -36,6 +36,10 @@ export function numberOfLeaves(): number {
   return itemAmount($item`inflammable leaf`);
 }
 
+function visitLeaves() {
+  visitUrl("campground.php?preaction=leaves");
+}
+
 /**
  * @param leaves Burns the desired number of leaves
  * @returns whether we could burn that number of leaves

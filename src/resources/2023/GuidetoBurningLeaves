@@ -1,0 +1,32 @@
+import {
+  itemAmount,
+  visitUrl,
+} from "kolmafia";
+import { haveInCampground } from "../../lib";
+import { $item } from "../../template-string";
+
+
+const item = $item`A Guide to Burning Leaves`;
+
+/**
+ * @returns Whether or not we currently `have` the GuidetoBurningLeaves
+ */
+export function have(): boolean {
+    return haveInCampground(item);
+  }
+
+/**
+ * @returns The number of leaves we have remaining
+ */
+export function numberOfLeaves(): number {
+  return itemAmount($item`inflammable leaf`);
+}
+
+/**
+ * Burns the desired number of leaves
+ */
+export function burnLeaves(leaves: number): void {
+    if(leaves > numberOfLeaves()){
+        visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
+    }
+}

@@ -38,8 +38,9 @@ export function numberOfLeaves(): number {
 
 /**
  * @param leaves Burns the desired number of leaves
+ * @returns whether we could burn that number of leaves
  */
-export function burnLeaves(leaves: number): boolean{
+export function burnLeaves(leaves: number): boolean {
   if (leaves > numberOfLeaves()) {
     visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
     return true;

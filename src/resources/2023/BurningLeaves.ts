@@ -17,6 +17,7 @@ export const burnItem: Map<Item, number> = new Map([
   [$item`autumnic balm`, 99],
   [$item`day shortener`, 222],
   [$item`coping juice`, 1111],
+  [$item`smoldering leafcutter ant egg`, 6666],
   [$item`super-heated leaf`, 11111],
 ]);
 

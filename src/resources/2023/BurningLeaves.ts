@@ -1,12 +1,11 @@
 import { Item, Monster, itemAmount, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
-import { $item, $monster } from "../../template-string";
 import { get } from "../../property";
+import { $item, $monster } from "../../template-string";
 
 const item = $item`A Guide to Burning Leaves`;
 
-export const specialLeaves: Map<Item | Monster, number> = new Map([
-  [$monster`flaming leaflet`, 11],
+export const burnItem: Map<Item, number> = new Map([
   [$item`autumnic bomb`, 37],
   [$item`impromptu torch`, 42],
   [$item`flaming fig leaf`, 43],
@@ -16,10 +15,15 @@ export const specialLeaves: Map<Item | Monster, number> = new Map([
   [$item`lit leaf lasso`, 69],
   [$item`forest canopy bed`, 74],
   [$item`autumnic balm`, 99],
-  [$monster`flaming monstera`, 111],
   [$item`day shortener`, 222],
-  [$monster`leaviathan`, 666],
   [$item`coping juice`, 1111],
+  [$item`super-heated leaf`, 11111],
+]);
+
+export const burnMonster: Map<Monster, number> = new Map([
+  [$monster`flaming leaflet`, 11],
+  [$monster`flaming monstera`, 111],
+  [$monster`leaviathan`, 666],
 ]);
 
 /**
@@ -55,17 +59,31 @@ export function burnLeaves(leaves: number): boolean {
 
 /**
  * @param th determines which thing (Monster or Item) we want to burn leaves for
- * @returns The whether we can acquire the item or fight the monster in question
+ * @returns Whether we can burn for that thing; or burns for that thing
  */
-export function canBurnFor(th: Monster | Item): boolean {
-  return numberOfLeaves() > specialLeaves.get(th);
+export function burnFor(th: Monster | Item): boolean {
+  if (th instanceof Item) {
+    const it = burnItem.get(th);
+    if (numberOfLeaves() > it) {
+      burnLeaves(it);
+      return true;
+    } else return false;
+  }
+  if (th instanceof Monster) {
+    const mo = burnMonster.get(th);
+    if (numberOfLeaves() > mo) {
+      burnLeaves(mo);
+      return true;
+    } else return false;
+  }
+  return false;
 }
 
 /**
  * Checks whether you can, then jumps into the fire
  */
 export function jumpInFire(): void {
-  if (get("_leavesJumped", false)){
+  if (get("_leavesJumped", false)) {
     visitLeaves();
     visitUrl("choice.php?pwd&whichchoice=1510&option=2");
   }

@@ -64,17 +64,17 @@ export function burnLeaves(leaves: number): boolean {
 export function burnFor(th: Monster | Item): boolean {
   if (th instanceof Item) {
     const it = burnItem.get(th);
-    if (numberOfLeaves() > it) {
+    if (it !== undefined && numberOfLeaves() > it) {
       burnLeaves(it);
       return true;
-    } else return false;
+    }
   }
   if (th instanceof Monster) {
     const mo = burnMonster.get(th);
-    if (numberOfLeaves() > mo) {
+    if (mo !== undefined && numberOfLeaves() > mo) {
       burnLeaves(mo);
       return true;
-    } else return false;
+    }
   }
   return false;
 }

@@ -17,7 +17,6 @@ export const burnItem: Map<Item, number> = new Map([
   [$item`autumnic balm`, 99],
   [$item`day shortener`, 222],
   [$item`coping juice`, 1111],
-  [$item`smoldering leafcutter ant egg`, 6666],
   [$item`super-heated leaf`, 11111],
 ]);
 
@@ -43,41 +42,6 @@ export function numberOfLeaves(): number {
 
 function visitLeaves() {
   visitUrl("campground.php?preaction=leaves");
-}
-
-/**
- * @param leaves Burns the desired number of leaves
- * @returns whether we could burn that number of leaves
- */
-export function burnLeaves(leaves: number): boolean {
-  if (leaves > numberOfLeaves()) {
-    visitLeaves();
-    visitUrl(`choice.php?pwd&whichchoice=1510&leaves=${leaves}`);
-    return true;
-  }
-  return false;
-}
-
-/**
- * @param th determines which thing (Monster or Item) we want to burn leaves for
- * @returns Whether we can burn for that thing; or burns for that thing
- */
-export function burnFor(th: Monster | Item): boolean {
-  if (th instanceof Item) {
-    const it = burnItem.get(th);
-    if (it !== undefined && numberOfLeaves() > it) {
-      burnLeaves(it);
-      return true;
-    }
-  }
-  if (th instanceof Monster) {
-    const mo = burnMonster.get(th);
-    if (mo !== undefined && numberOfLeaves() > mo) {
-      burnLeaves(mo);
-      return true;
-    }
-  }
-  return false;
 }
 
 /**

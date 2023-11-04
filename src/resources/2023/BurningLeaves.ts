@@ -45,6 +45,7 @@ export function burnSpecialLeaves(leaves: Item | Monster): boolean {
   const lea = burnFor.get(leaves);
   if (lea !== undefined && lea > numberOfLeaves()) {
     cliExecute(`leaves ${leaves}`);
+    visitUrl("main.php");
     return true;
   }
   return false;
@@ -58,12 +59,13 @@ export function burnLeaves(leaves: number): boolean {
   if (leaves < numberOfLeaves()) return false;
   else {
     cliExecute(`leaves ${leaves}`);
+    visitUrl("main.php");
     return true;
   }
 }
 
 function visitLeaves() {
-  visitUrl("campground.php?preaction=leaves");
+  cliExecute("leaves");
 }
 
 /**

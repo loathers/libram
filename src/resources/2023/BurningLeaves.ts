@@ -1,11 +1,18 @@
-import { Item, Monster, cliExecute, itemAmount, runChoice, visitUrl } from "kolmafia";
+import {
+  Item,
+  Monster,
+  cliExecute,
+  itemAmount,
+  runChoice,
+  visitUrl,
+} from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item, $monster } from "../../template-string";
 
 const item = $item`A Guide to Burning Leaves`;
 
-export const burnFor: Map<Monster | Item, number> = new Map([
+export const burnFor = new Map<Monster | Item, number>([
   [$monster`flaming leaflet`, 11],
   [$item`autumnic bomb`, 37],
   [$item`impromptu torch`, 42],

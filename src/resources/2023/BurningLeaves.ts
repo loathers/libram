@@ -1,4 +1,4 @@
-import { Item, Monster, cliExecute, itemAmount, visitUrl } from "kolmafia";
+import { Item, Monster, cliExecute, itemAmount, runChoice, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item, $monster } from "../../template-string";
@@ -74,6 +74,6 @@ function visitLeaves() {
 export function jumpInFire(): void {
   if (get("_leavesJumped", false)) {
     visitLeaves();
-    visitUrl("choice.php?pwd&whichchoice=1510&option=2");
+    runChoice(2);
   }
 }

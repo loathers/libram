@@ -1,11 +1,4 @@
-import {
-  Item,
-  Monster,
-  cliExecute,
-  itemAmount,
-  runChoice,
-  visitUrl,
-} from "kolmafia";
+import { Item, Monster, cliExecute, itemAmount, runChoice } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item, $monster } from "../../template-string";
@@ -51,9 +44,7 @@ export function numberOfLeaves(): number {
 export function burnSpecialLeaves(leaves: Item | Monster): boolean {
   const lea = burnFor.get(leaves);
   if (lea !== undefined && lea > numberOfLeaves()) {
-    cliExecute(`leaves ${leaves}`);
-    visitUrl("main.php");
-    return true;
+    return cliExecute(`leaves ${leaves}`);
   }
   return false;
 }
@@ -65,9 +56,7 @@ export function burnSpecialLeaves(leaves: Item | Monster): boolean {
 export function burnLeaves(leaves: number): boolean {
   if (leaves < numberOfLeaves()) return false;
   else {
-    cliExecute(`leaves ${leaves}`);
-    visitUrl("main.php");
-    return true;
+    return cliExecute(`leaves ${leaves}`);
   }
 }
 

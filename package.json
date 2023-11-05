@@ -63,7 +63,7 @@
     "typescript": "^4.5.2"
   },
   "peerDependencies": {
-    "kolmafia": "^5.26781.0"
+    "kolmafia": "^5.27668.0"
   },
   "husky": {
     "hooks": {

@@ -2489,13 +2489,13 @@ eslint-plugin-jsdoc@^46.5.0:
     semver "^7.5.4"
     spdx-expression-parse "^3.0.1"
 
-eslint-plugin-libram@^0.2.33:
-  version "0.2.33"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.33.tgz#e6d1108151762857f776c9e95247fbb18b0295d9"
-  integrity sha512-nQEJlxHt7h+a5zG2ZZ9qJxFrY5gQMor3g2dMQrYqDv9E32HsN5OwV3REz4cdS/eJ0GbvQnIqN2/lIHQ5GFNb7g==
+eslint-plugin-libram@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.3.4.tgz#031b6e3229b7bc06225d9c5f636468d05300c05d"
+  integrity sha512-Xi3Q0lQPnbGsGoAEgp5GO/lIXVu9sTOUyzVjv2lrlFHdr3LIU/a+6XiqL93Y093jzGvDHCHgZfqgLq+0FUTCMg==
   dependencies:
-    html-entities "^2.3.2"
-    requireindex "~1.1.0"
+    html-entities "^2.4.0"
+    requireindex "~1.2.0"
 
 eslint-scope@^5.1.1:
   version "5.1.1"
@@ -2911,11 +2911,6 @@ html-encoding-sniffer@^2.0.1:
   integrity sha512-D5JbOMBIR/TVZkubHT+OyT2705QvogUW4IBn6nHd756OwieSF9aDYFj4dv6HHEVGYbHaLETa3WggZYWWMyy3ZQ==
   dependencies:
     whatwg-encoding "^1.0.5"
-
-html-entities@^2.3.2:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.3.3.tgz#117d7626bece327fc8baace8868fa6f5ef856e46"
-  integrity sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==
 
 html-entities@^2.4.0:
   version "2.4.0"
@@ -3734,10 +3729,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-kolmafia@^5.27647.0:
-  version "5.27647.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27647.0.tgz#2dc25d213840bd55627eb5217df18854a6e2d8d6"
-  integrity sha512-oc62x2PBNmmF6xjeizVu3azXZp2mi2L2Fbxu4lAsf1pitldA9a2SI5Dj9M/RalgXXMi5cmNmM9xcwfFgtzikvw==
+kolmafia@^5.27668.0:
+  version "5.27668.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27668.0.tgz#8e22057d6d91d96e8237af028e90d9f60ca1b987"
+  integrity sha512-tOK3LvxqR7yzVgXBjoKNXOGnVtmXTXr4evhZpUMJmk3jaZ6QqWaP1Ws827YzoosBgCfiswp8O1CnuCqlXIhRzQ==
 
 leven@^3.1.0:
   version "3.1.0"
@@ -4341,10 +4336,10 @@ require-from-string@^2.0.2:
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
   integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
 
-requireindex@~1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.1.0.tgz#e5404b81557ef75db6e49c5a72004893fe03e162"
-  integrity sha512-LBnkqsDE7BZKvqylbmn7lTIVdpx4K/QCduRATpO5R+wtPmky/a8pN1bO2D6wXppn1497AJF9mNjqAXr6bdl9jg==
+requireindex@~1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
+  integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"

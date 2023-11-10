@@ -13,6 +13,7 @@ import {
   getPermedSkills,
   toSkill,
 } from "kolmafia";
+import { MoonSign, signNameToId } from "./moonSign";
 import { get } from "./property";
 import { ChateauMantegna } from "./resources";
 import { $item, $items, $stat } from "./template-string";
@@ -128,20 +129,6 @@ export class AscensionPrepError extends Error {
   }
 }
 
-const MoonSigns = [
-  "Mongoose",
-  "Wallaby",
-  "Vole",
-  "Platypus",
-  "Opossum",
-  "Marmot",
-  "Wombat",
-  "Blender",
-  "Packrat",
-] as const;
-
-type MoonSign = typeof MoonSigns[number];
-
 type InputMoonSign =
   | number
   | Lowercase<MoonSign>
@@ -155,22 +142,6 @@ type InputMoonSign =
   | "gnomads"
   | "gnomish"
   | "gnomish gnomads camp";
-
-/**
- * @param moon Moon sign name
- * @returns Moon sign id else 0
- */
-export function signNameToId(moon: MoonSign): number {
-  return MoonSigns.indexOf(moon) + 1;
-}
-
-/**
- * @param id Moon sign id
- * @returns Name of moon sign else "None"
- */
-export function signIdToName(id: number): MoonSign | "None" {
-  return MoonSigns[id - 1] || "None";
-}
 
 /**
  * Determine the id of the appropriate moon sign.

@@ -7,7 +7,7 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { signIdToName } from "../../ascend";
+import { signIdToName } from "../../moonSign";
 import { get, withChoice } from "../../property";
 import { $item } from "../../template-string";
 import { random } from "../../utils";

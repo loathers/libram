@@ -9,8 +9,8 @@ import {
   myTotalTurnsSpent,
   totalTurnsPlayed,
 } from "kolmafia";
-import { logger } from "../..";
 import { canVisitUrl } from "../../lib";
+import logger from "../../logger";
 import { get } from "../../property";
 
 export const orb = Item.get("miniature crystal ball");

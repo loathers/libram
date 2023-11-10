@@ -65,11 +65,17 @@ function visitLeaves() {
 }
 
 /**
- * Checks whether you can, then jumps into the fire
+ * Checks whether you can, then Jumps in the Flames
+ * @returns Whether or not you jumped in the flames
  */
-export function jumpInFire(): void {
-  if (!get("_leavesJumped", false)) {
-    visitLeaves();
-    runChoice(2);
+export function jumpInFire(): boolean {
+  if (get("_leavesJumped")) {
+    return false;
   }
+  if (get("_leavesBurned") === 0) {
+    return false;
+  }
+  visitLeaves();
+  runChoice(2);
+  return get("_leavesJumped");
 }

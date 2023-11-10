@@ -43,10 +43,10 @@ export function numberOfLeaves(): number {
  */
 export function burnSpecialLeaves(leaves: Item | Monster): boolean {
   const lea = burnFor.get(leaves);
-  if (lea !== undefined && lea > numberOfLeaves()) {
-    return cliExecute(`leaves ${leaves}`);
+  if (lea === undefined || lea > numberOfLeaves()) {
+    return false;
   }
-  return false;
+  return cliExecute(`leaves ${leaves}`);
 }
 
 /**
@@ -54,10 +54,10 @@ export function burnSpecialLeaves(leaves: Item | Monster): boolean {
  * @param leaves determines the number of leaves to burn
  */
 export function burnLeaves(leaves: number): boolean {
-  if (leaves < numberOfLeaves()) return false;
-  else {
-    return cliExecute(`leaves ${leaves}`);
+  if (leaves > numberOfLeaves()) {
+    return false;
   }
+  return cliExecute(`leaves ${leaves}`);
 }
 
 function visitLeaves() {

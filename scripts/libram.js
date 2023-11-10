@@ -14436,10 +14436,10 @@ function numberOfLeaves() {
 }
 function burnSpecialLeaves(leaves) {
   var lea = burnFor.get(leaves);
-  return lea !== void 0 && lea > numberOfLeaves() ? (0, import_kolmafia56.cliExecute)("leaves ".concat(leaves)) : !1;
+  return lea === void 0 || lea > numberOfLeaves() ? !1 : (0, import_kolmafia56.cliExecute)("leaves ".concat(leaves));
 }
 function burnLeaves(leaves) {
-  return leaves < numberOfLeaves() ? !1 : (0, import_kolmafia56.cliExecute)("leaves ".concat(leaves));
+  return leaves > numberOfLeaves() ? !1 : (0, import_kolmafia56.cliExecute)("leaves ".concat(leaves));
 }
 function visitLeaves() {
   (0, import_kolmafia56.cliExecute)("leaves");

@@ -68,7 +68,7 @@ function visitLeaves() {
  * Checks whether you can, then jumps into the fire
  */
 export function jumpInFire(): void {
-  if (get("_leavesJumped", false)) {
+  if (!get("_leavesJumped", false)) {
     visitLeaves();
     runChoice(2);
   }

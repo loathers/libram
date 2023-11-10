@@ -9360,6 +9360,16 @@ function ensureFreeRun(constraints) {
 init_kolmafia_polyfill();
 var import_kolmafia60 = require("kolmafia");
 
+// src/moonSign.ts
+init_kolmafia_polyfill();
+var MoonSigns = ["Mongoose", "Wallaby", "Vole", "Platypus", "Opossum", "Marmot", "Wombat", "Blender", "Packrat"];
+function signNameToId(moon) {
+  return MoonSigns.indexOf(moon) + 1;
+}
+function signIdToName(id) {
+  return MoonSigns[id - 1] || "None";
+}
+
 // src/resources/index.ts
 init_kolmafia_polyfill();
 
@@ -15232,13 +15242,7 @@ var AscendError = /* @__PURE__ */ function(_Error) {
     return _classCallCheck10(this, AscensionPrepError2), isGarden(cause) ? (_this2 = _super2.call(this, "Unable to swap garden to ".concat(cause, "; garden is currently ").concat(original, ".")), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)) : isEudora(cause) ? (_this2 = _super2.call(this, "Unable to swap eudora to ".concat(cause, "; eudora is currently ").concat(original, ".")), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)) : isDesk(cause) ? (_this2 = _super2.call(this, "Unable to swap chateau desk to ".concat(cause, "; desk is currently ").concat(original, ".")), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)) : isNightstand(cause) ? (_this2 = _super2.call(this, "Unable to swap chateau nightstand to ".concat(cause, "; nightstand is currently ").concat(original, ".")), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)) : isCeiling(cause) ? (_this2 = _super2.call(this, "Unable to swap chateau ceiling to ".concat(cause, "; ceiling is currently ").concat(original, ".")), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)) : (_this2 = _super2.call(this, cause), _defineProperty14(_assertThisInitialized3(_this2), "cause", void 0)), _this2.cause = cause, _possibleConstructorReturn3(_this2);
   }
   return _createClass10(AscensionPrepError2);
-}(/* @__PURE__ */ _wrapNativeSuper3(Error)), MoonSigns = ["Mongoose", "Wallaby", "Vole", "Platypus", "Opossum", "Marmot", "Wombat", "Blender", "Packrat"];
-function signNameToId(moon) {
-  return MoonSigns.indexOf(moon) + 1;
-}
-function signIdToName(id) {
-  return MoonSigns[id - 1] || "None";
-}
+}(/* @__PURE__ */ _wrapNativeSuper3(Error));
 function inputToMoonId(moon, playerClass) {
   if (typeof moon == "number")
     return moon;

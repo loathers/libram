@@ -129,7 +129,7 @@ export function flowersIn(location: Location): Flower[] {
  * @returns an array of the Flowers we can plant in that location
  */
 export function flowersAvailableFor(
-  location: Location = get("lastAdventure") ?? $location.none
+  location = get("lastAdventure") ?? $location.none
 ): Flower[] {
   return all.filter((flower) => flower.available(location));
 }

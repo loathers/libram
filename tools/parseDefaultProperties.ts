@@ -49,6 +49,8 @@ const otherLocations = [
   "nextSpookyravenElizabethRoom",
   "nextSpookyravenStephenRoom",
   "sourceOracleTarget",
+  "lastAdventure",
+  "nextAdventure",
 ];
 /**
  * @param property Property name

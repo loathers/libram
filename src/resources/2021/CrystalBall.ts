@@ -14,13 +14,14 @@ import logger from "../../logger";
 import { get } from "../../property";
 
 export const orb = Item.get("miniature crystal ball");
+export const replicaOrb = Item.get("replica miniature crystal ball");
 /**
- * Determines whether you `have` the Miniature Crystal Ball
+ * Determines whether you `have` the Miniature Crystal Ball (or replica)
  *
- * @returns Whether you `have` the Miniature Crystal Ball
+ * @returns Whether you `have` the Miniature Crystal Ball (or replica)
  */
 export function have(): boolean {
-  return availableAmount(orb) > 0;
+  return availableAmount(orb) > 0 || availableAmount(replicaOrb) > 0;
 }
 const parsedProp = () =>
   get("crystalBallPredictions")

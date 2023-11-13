@@ -10438,13 +10438,13 @@ var Flower = /* @__PURE__ */ function() {
   return _createClass8(Flower2, [{
     key: "isPlantedHere",
     value: function() {
-      var _Flower$plantNamesInZ, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)(), plantedHere = (_Flower$plantNamesInZ = Flower2.plantNamesInZone(location)) === null || _Flower$plantNamesInZ === void 0 ? void 0 : _Flower$plantNamesInZ.includes(this.name);
+      var _get2, _Flower$plantNamesInZ, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get2 = get("lastAdventure")) !== null && _get2 !== void 0 ? _get2 : $location.none, plantedHere = (_Flower$plantNamesInZ = Flower2.plantNamesInZone(location)) === null || _Flower$plantNamesInZ === void 0 ? void 0 : _Flower$plantNamesInZ.includes(this.name);
       return plantedHere !== void 0 && plantedHere;
     }
   }, {
     key: "available",
     value: function() {
-      var location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)();
+      var _get2, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get2 = get("lastAdventure")) !== null && _get2 !== void 0 ? _get2 : $location.none;
       return this.environment === location.environment && !get("_floristPlantsUsed").includes(this.name) && !this.isPlantedHere(location);
     }
   }, {
@@ -10471,13 +10471,13 @@ var Flower = /* @__PURE__ */ function() {
   }, {
     key: "plantNamesInZone",
     value: function() {
-      var _getFloristPlants$loc, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)();
+      var _get3, _getFloristPlants$loc, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get3 = get("lastAdventure")) !== null && _get3 !== void 0 ? _get3 : $location.none;
       return (_getFloristPlants$loc = (0, import_kolmafia21.getFloristPlants)()[location.toString()]) !== null && _getFloristPlants$loc !== void 0 ? _getFloristPlants$loc : [];
     }
   }, {
     key: "plantsInZone",
     value: function() {
-      var location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)();
+      var _get4, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get4 = get("lastAdventure")) !== null && _get4 !== void 0 ? _get4 : $location.none;
       return this.plantNamesInZone(location).map(function(flowerName) {
         return toFlower(flowerName);
       }).filter(function(flower) {
@@ -10487,7 +10487,7 @@ var Flower = /* @__PURE__ */ function() {
   }, {
     key: "modifiersInZone",
     value: function() {
-      var location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)(), plants = this.plantsInZone(location);
+      var _get5, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get5 = get("lastAdventure")) !== null && _get5 !== void 0 ? _get5 : $location.none, plants = this.plantsInZone(location);
       if (!plants)
         return {};
       var modifiers = plants.map(function(plant) {
@@ -10514,13 +10514,13 @@ function flowersIn(location) {
   }), returnValue;
 }
 function flowersAvailableFor() {
-  var location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)();
+  var _get6, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get6 = get("lastAdventure")) !== null && _get6 !== void 0 ? _get6 : $location.none;
   return all.filter(function(flower) {
     return flower.available(location);
   });
 }
 function isFull() {
-  var location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia21.myLocation)();
+  var _get7, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get7 = get("lastAdventure")) !== null && _get7 !== void 0 ? _get7 : $location.none;
   return flowersIn(location).length === 3;
 }
 var RabidDogwood = new Flower("Rabid Dogwood", 1, "outdoor", {

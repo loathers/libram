@@ -2,13 +2,13 @@ import {
   floristAvailable,
   getFloristPlants,
   Location,
-  myLocation,
   runChoice,
   visitUrl,
 } from "kolmafia";
 import { EnvironmentType } from "../../lib";
 import { mergeModifiers, Modifiers } from "../../modifier";
 import { get } from "../../property";
+import { $location } from "../../template-string";
 type SpecialFlowerAbility = "Delevels Enemy" | "Blocks Attacks" | "Poison";
 
 class Flower {
@@ -36,17 +36,23 @@ class Flower {
     visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
   }
 
-  static plantNamesInZone(location = myLocation()): string[] {
+  static plantNamesInZone(
+    location = get("lastAdventure") ?? $location.none
+  ): string[] {
     return getFloristPlants()[location.toString()] ?? [];
   }
 
-  static plantsInZone(location = myLocation()): Flower[] {
+  static plantsInZone(
+    location = get("lastAdventure") ?? $location.none
+  ): Flower[] {
     return this.plantNamesInZone(location)
       .map((flowerName) => toFlower(flowerName))
       .filter((flower) => flower !== undefined) as Flower[];
   }
 
-  static modifiersInZone(location = myLocation()): Modifiers {
+  static modifiersInZone(
+    location = get("lastAdventure") ?? $location.none
+  ): Modifiers {
     const plants = this.plantsInZone(location);
     if (!plants) return {};
     const modifiers = plants
@@ -55,12 +61,12 @@ class Flower {
     return mergeModifiers(...modifiers);
   }
 
-  isPlantedHere(location = myLocation()): boolean {
+  isPlantedHere(location = get("lastAdventure") ?? $location.none): boolean {
     const plantedHere = Flower.plantNamesInZone(location)?.includes(this.name);
     return plantedHere !== undefined && plantedHere;
   }
 
-  available(location = myLocation()): boolean {
+  available(location = get("lastAdventure") ?? $location.none): boolean {
     return (
       this.environment === (location.environment as EnvironmentType) &&
       !get("_floristPlantsUsed").includes(this.name) &&
@@ -123,7 +129,7 @@ export function flowersIn(location: Location): Flower[] {
  * @returns an array of the Flowers we can plant in that location
  */
 export function flowersAvailableFor(
-  location: Location = myLocation()
+  location = get("lastAdventure") ?? $location.none
 ): Flower[] {
   return all.filter((flower) => flower.available(location));
 }
@@ -132,7 +138,9 @@ export function flowersAvailableFor(
  * @param location The location to check
  * @returns `true` if the location has 3 flowers in it; `false` otherwise
  */
-export function isFull(location = myLocation()): boolean {
+export function isFull(
+  location = get("lastAdventure") ?? $location.none
+): boolean {
   return flowersIn(location).length === 3;
 }
 

@@ -14455,7 +14455,7 @@ function visitLeaves() {
   (0, import_kolmafia56.cliExecute)("leaves");
 }
 function jumpInFire() {
-  get("_leavesJumped", !1) && (visitLeaves(), (0, import_kolmafia56.runChoice)(2));
+  return get("_leavesJumped") || get("_leavesBurned") === 0 ? !1 : (visitLeaves(), (0, import_kolmafia56.runChoice)(2), get("_leavesJumped"));
 }
 
 // src/resources/2023/CinchoDeMayo.ts

@@ -11,6 +11,8 @@ import {
   MafiaClass,
   Monster,
   Phylum,
+  propertyExists,
+  removeProperty,
   Servant,
   setProperty,
   Skill,
@@ -385,6 +387,7 @@ export function withChoice<T>(
 }
 
 export class PropertiesManager {
+  private static EMPTY_PREFERENCE = Symbol();
   private properties: Properties = {};
 
   get storedValues(): Properties {
@@ -400,8 +403,12 @@ export class PropertiesManager {
     for (const [propertyName, propertyValue] of Object.entries(
       propertiesToSet
     )) {
-      if (this.properties[propertyName as KnownProperty] === undefined) {
-        this.properties[propertyName as KnownProperty] = get(propertyName);
+      if (!(propertyName in this.properties)) {
+        this.properties[propertyName as KnownProperty] = propertyExists(
+          propertyName
+        )
+          ? get(propertyName)
+          : PropertiesManager.EMPTY_PREFERENCE;
       }
       set(propertyName, propertyValue as { toString(): string });
     }
@@ -440,9 +447,14 @@ export class PropertiesManager {
    */
   reset(...properties: KnownProperty[]): void {
     for (const property of properties) {
+      if (!(property in this.properties)) continue;
       const value = this.properties[property];
-      if (value) {
+      if (value === PropertiesManager.EMPTY_PREFERENCE) {
+        removeProperty(property);
+      } else if (value) {
         set(property, value as { toString(): string });
+      } else {
+        set(property, "");
       }
     }
   }

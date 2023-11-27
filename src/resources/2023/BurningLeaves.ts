@@ -20,6 +20,7 @@ export const burnFor = new Map<Monster | Item, number>([
   [$item`day shortener`, 222],
   [$monster`leaviathan`, 666],
   [$item`coping juice`, 1111],
+  [$item`smoldering leafcutter ant egg`, 6666],
   [$item`super-heated leaf`, 11111],
 ]);
 

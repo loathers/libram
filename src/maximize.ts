@@ -134,6 +134,7 @@ const modeableCommands = [
   "edpiece",
   "retrocape",
   "parka",
+  "jillcandle",
 ] as const;
 export type Mode = typeof modeableCommands[number];
 export type Modes = Partial<{ [x in Mode]: string }>;
@@ -144,6 +145,7 @@ export const modeableItems = {
   edpiece: $item`The Crown of Ed the Undying`,
   retrocape: $item`unwrapped knock-off retro superhero cape`,
   parka: $item`Jurassic Parka`,
+  jillcandle: $item`LED candle`,
 } as const;
 
 export const modeableState = {
@@ -156,6 +158,7 @@ export const modeableState = {
     " " +
     getProperty("retroCapeWashingInstructions"),
   parka: () => getProperty("parkaMode"),
+  jillcandle: () => getProperty("ledCandleMode"),
 } as const;
 
 /**

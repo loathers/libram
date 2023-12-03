@@ -299,7 +299,7 @@ export function decrement(
 
 type Properties = Partial<{
   [P in KnownProperty]: unknown;
-}>;
+}> & { [x in string]: unknown };
 
 /**
  * Sets the value of a set of mafia properties
@@ -423,7 +423,7 @@ export class PropertiesManager {
     this.set(
       Object.fromEntries(
         Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
-          `choiceAdventure${choiceNumber}` as KnownProperty,
+          `choiceAdventure${choiceNumber}`,
           choiceValue,
         ])
       ) as Properties
@@ -471,7 +471,7 @@ export class PropertiesManager {
    *
    * @param properties Properties for the manager to forget.
    */
-  clear(...properties: KnownProperty[]): void {
+  clear(...properties: (KnownProperty | string)[]): void {
     for (const property of properties) {
       if (this.properties[property]) {
         delete this.properties[property];

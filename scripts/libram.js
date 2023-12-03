@@ -4917,12 +4917,6 @@ __export(src_exports, {
   Pantogram: function() {
     return Pantogram_exports;
   },
-  Path: function() {
-    return Path5;
-  },
-  Paths: function() {
-    return Paths;
-  },
   PropertiesManager: function() {
     return PropertiesManager;
   },
@@ -18349,108 +18343,6 @@ var Kmail = /* @__PURE__ */ function() {
   }]), Kmail2;
 }();
 
-// src/Path.ts
-init_kolmafia_polyfill();
-var _templateObject501, _templateObject2129, _templateObject3118, _templateObject4101, _templateObject560, _templateObject650, _templateObject745, _templateObject838, _templateObject931, _templateObject1027, _templateObject1123;
-function _taggedTemplateLiteral62(strings, raw) {
-  return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-}
-function _defineProperties19(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-function _createClass19(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties19(Constructor.prototype, protoProps), staticProps && _defineProperties19(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
-}
-function _classCallCheck19(instance, Constructor) {
-  if (!(instance instanceof Constructor))
-    throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperty22(obj, key, value) {
-  return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
-}
-var Path5 = /* @__PURE__ */ _createClass19(
-  //here, we define avatar-ness around being its own class
-  //Defined as the lowest inebriety that makes you unable to drink more, just to make it fifteens across the board
-  /**
-   *
-   * @param name Name of path
-   * @param id Path ID
-   * @param hasAllPerms Does the player have immediate access to all permed skills>
-   * @param canUseSkillbooks Does the player have ability to learn skills from skillbooks>
-   * @param hasCampground Does the player have access to the campground?
-   * @param hasTerrarium Does the player have access to terrarium.php
-   * @param stomachSize Maximum fullness achievable at turn 0
-   * @param liverSize The lowest inebriety that makes you unable to drink more
-   * @param spleenSize Maximum spleen achievable at turn 0
-   * @param classes Classes available in this path
-   */
-  function Path6(name, id) {
-    var hasAllPerms = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : !0, canUseSkillbooks = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : !0, hasCampground = arguments.length > 4 && arguments[4] !== void 0 ? arguments[4] : !0, hasTerrarium = arguments.length > 5 && arguments[5] !== void 0 ? arguments[5] : !0, stomachSize = arguments.length > 6 && arguments[6] !== void 0 ? arguments[6] : 15, liverSize = arguments.length > 7 && arguments[7] !== void 0 ? arguments[7] : 15, spleenSize = arguments.length > 8 && arguments[8] !== void 0 ? arguments[8] : 15, classes = arguments.length > 9 && arguments[9] !== void 0 ? arguments[9] : $classes(_templateObject501 || (_templateObject501 = _taggedTemplateLiteral62(["Seal Clubber, Turtle Tamer, Sauceror, Pastamancer, Disco Bandit, Accordion Thief"])));
-    _classCallCheck19(this, Path6), _defineProperty22(this, "name", void 0), _defineProperty22(this, "id", void 0), _defineProperty22(this, "hasAllPerms", void 0), _defineProperty22(this, "canUseSkillbooks", void 0), _defineProperty22(this, "hasCampground", void 0), _defineProperty22(this, "hasTerrarium", void 0), _defineProperty22(this, "stomachSize", void 0), _defineProperty22(this, "liverSize", void 0), _defineProperty22(this, "spleenSize", void 0), _defineProperty22(this, "classes", void 0), this.name = name, this.id = id, this.hasAllPerms = hasAllPerms, this.canUseSkillbooks = canUseSkillbooks, this.hasCampground = hasCampground, this.hasTerrarium = hasTerrarium, this.stomachSize = stomachSize, this.liverSize = liverSize, this.spleenSize = spleenSize, this.classes = classes;
-  }
-), Paths = {
-  Unrestricted: new Path5("Unrestricted", 0),
-  Boozetafarian: new Path5("Boozetafarian", 1, !0, !0, !0, !0, 0),
-  Teetotaler: new Path5("Teetotaler", 2, !0, !0, !0, !0, 15, 0),
-  Oxygenarian: new Path5("Oxygenarian", 3, !0, !0, !0, !0, 0, 0),
-  BeesHateYou: new Path5("Bees Hate You", 4),
-  WayOfTheSurprisingFist: new Path5("Way of the Surprising Fist", 6),
-  Trendy: new Path5("Trendy", 7),
-  AvatarOfBoris: new Path5("Avatar of Boris", 8, !1, !1, !0, !1, 20, 5, 15, $classes(_templateObject2129 || (_templateObject2129 = _taggedTemplateLiteral62(["Avatar of Boris"])))),
-  BugbearInvasion: new Path5("Bugbear Invasion", 9),
-  ZombieSlayer: new Path5("Zombie Slayer", 10, !1, !1, !0, !0, 15, 5, 15, $classes(_templateObject3118 || (_templateObject3118 = _taggedTemplateLiteral62(["Zombie Master"])))),
-  ClassAct: new Path5("Class Act", 11, !1, !1),
-  AvatarofJarlsberg: new Path5("Avatar of Jarlsberg", 12, !1, !1, !0, !1, 10, 10, 15, $classes(_templateObject4101 || (_templateObject4101 = _taggedTemplateLiteral62(["Avatar of Jarlsberg"])))),
-  Big: new Path5("BIG!", 14),
-  KolHs: new Path5("KOLHS", 15),
-  ClassAct2: new Path5("Class Act II: A Class For Pigs", 16, !1),
-  AvatarofSneakyPete: new Path5("Avatar of Sneaky Pete", 17, !1, !1, !0, !1, 5, 20, 15, $classes(_templateObject560 || (_templateObject560 = _taggedTemplateLiteral62(["Avatar of Sneaky Pete"])))),
-  SlowAndSteady: new Path5("Slow and Steady", 18),
-  HeavyRains: new Path5("Heavy Rains", 19),
-  Picky: new Path5("Picky", 21, !1, !1),
-  Standard: new Path5("Standard", 22),
-  ActuallyEdTheUndying: new Path5("Actually Ed the Undying", 23, !1, !1, !1, !1, 0, 0, 5, $classes(_templateObject650 || (_templateObject650 = _taggedTemplateLiteral62(["Ed the Undying"])))),
-  OneCrazyRandomSummer: new Path5("One Crazy Random Summer", 24),
-  CommunityService: new Path5("Community Service", 25),
-  AvatarOfWestOfLoathing: new Path5("Avatar of West of Loathing", 26, !1, !1, !0, !0, 10, 10, 10, $classes(_templateObject745 || (_templateObject745 = _taggedTemplateLiteral62(["Cow Puncher, Snake Oiler, Beanslinger"])))),
-  TheSource: new Path5("The Source", 27),
-  NuclearAutumn: new Path5("Nuclear Autumn", 28, !1, !1, !1, !0, 3, 3, 3),
-  GelatinousNoob: new Path5("Gelatinous Noob", 29, !1, !1, !0, !0, 0, 0, 0, $classes(_templateObject838 || (_templateObject838 = _taggedTemplateLiteral62(["Gelatinous Noob"])))),
-  LicenseToAdventure: new Path5("License to Adventure", 30, !0, !0, !0, !1, 0, 2, 15),
-  //Unsure how to log liver size here
-  LiveAscendRepeat: new Path5("Live. Ascend. Repeat.", 31),
-  PocketFamiliars: new Path5("Pocket Familiars", 32, !1, !1, !0, !1),
-  //This is my opinion on the matter
-  GLover: new Path5("G-Lover", 33),
-  DisguisesDelimit: new Path5("Disguises Delimit", 34),
-  DarkGyffte: new Path5("Dark Gyffte", 35, !1, !1, !0, !1, 5, 5, 15, $classes(_templateObject931 || (_templateObject931 = _taggedTemplateLiteral62(["Vampyre"])))),
-  TwoCrazyRandomSummer: new Path5("Two Crazy Random Summer", 36),
-  KingdomOfExploathing: new Path5("Kingdom of Exploathing", 37),
-  PathOfThePlumber: new Path5("Path of the Plumber", 38, !1, !1, !0, !0, 20, 0, 5, $classes(_templateObject1027 || (_templateObject1027 = _taggedTemplateLiteral62(["Plumber"])))),
-  LowKeySummer: new Path5("Low Key Summer", 39),
-  GreyGoo: new Path5("Grey Goo", 40),
-  YouRobot: new Path5("You, Robot", 41, !1, !1, !1, !0, 0, 0, 0),
-  QuantumTerrarium: new Path5("Quantum Terrarium", 42, !0, !0, !0, !1),
-  Wildfire: new Path5("Wildfire", 43),
-  GreyYou: new Path5(
-    "Grey You",
-    44,
-    !1,
-    !1,
-    !0,
-    !0,
-    0,
-    0,
-    0,
-    // eslint-disable-next-line libram/verify-constants
-    $classes(_templateObject1123 || (_templateObject1123 = _taggedTemplateLiteral62(["Grey Goo"])))
-  ),
-  Journeyman: new Path5("Journeyman", 45, !1, !1)
-};
-
 // src/console.ts
 var console_exports = {};
 __export(console_exports, {
@@ -18482,21 +18374,21 @@ var import_kolmafia71 = require("kolmafia"), logColor = function(color) {
 // src/session.ts
 init_kolmafia_polyfill();
 var import_kolmafia72 = require("kolmafia");
-var _templateObject507, _templateObject2130, _templateObject3119, _templateObject4102, _templateObject561, _templateObject651, _templateObject746, _templateObject839, _templateObject933, _templateObject1028, _templateObject1124, _templateObject1223, _templateObject1322, _templateObject1418, _templateObject1516, _templateObject1616, _templateObject1716, _templateObject1816, _templateObject1915, _templateObject2015, _templateObject2131, _templateObject2217, _templateObject2316, _templateObject2414, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2812, _templateObject2912, _templateObject3012, _templateObject3120, _templateObject3214, _templateObject3313;
-function _classCallCheck20(instance, Constructor) {
+var _templateObject501, _templateObject2129, _templateObject3118, _templateObject4101, _templateObject560, _templateObject650, _templateObject745, _templateObject838, _templateObject931, _templateObject1027, _templateObject1123, _templateObject1223, _templateObject1322, _templateObject1418, _templateObject1516, _templateObject1616, _templateObject1716, _templateObject1816, _templateObject1915, _templateObject2015, _templateObject2130, _templateObject2217, _templateObject2316, _templateObject2414, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2812, _templateObject2912, _templateObject3012, _templateObject3119, _templateObject3214, _templateObject3313;
+function _classCallCheck19(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError("Cannot call a class as a function");
 }
-function _defineProperties20(target, props) {
+function _defineProperties19(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-function _createClass20(Constructor, protoProps, staticProps) {
-  return protoProps && _defineProperties20(Constructor.prototype, protoProps), staticProps && _defineProperties20(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
+function _createClass19(Constructor, protoProps, staticProps) {
+  return protoProps && _defineProperties19(Constructor.prototype, protoProps), staticProps && _defineProperties19(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
-function _defineProperty23(obj, key, value) {
+function _defineProperty22(obj, key, value) {
   return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
 function _createForOfIteratorHelper18(o, allowArrayLike) {
@@ -18561,7 +18453,7 @@ function _arrayWithHoles22(arr) {
   if (Array.isArray(arr))
     return arr;
 }
-function _taggedTemplateLiteral63(strings, raw) {
+function _taggedTemplateLiteral62(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 function _toConsumableArray20(arr) {
@@ -18602,14 +18494,14 @@ function mySessionItemsWrapper() {
     });
   }, foldable = function(item11) {
     return manyToOne(item11, getFoldGroup(item11));
-  }, itemMappings = new Map([].concat(_toConsumableArray20(foldable($item(_templateObject507 || (_templateObject507 = _taggedTemplateLiteral63(["liar's pants"]))))), _toConsumableArray20(foldable($item(_templateObject2130 || (_templateObject2130 = _taggedTemplateLiteral63(["ice pick"]))))), _toConsumableArray20(manyToOne($item(_templateObject3119 || (_templateObject3119 = _taggedTemplateLiteral63(["Spooky Putty sheet"]))), [$item(_templateObject4102 || (_templateObject4102 = _taggedTemplateLiteral63(["Spooky Putty monster"])))].concat(_toConsumableArray20(getFoldGroup($item(_templateObject561 || (_templateObject561 = _taggedTemplateLiteral63(["Spooky Putty sheet"])))))))), _toConsumableArray20(foldable($item(_templateObject651 || (_templateObject651 = _taggedTemplateLiteral63(["stinky cheese sword"]))))), _toConsumableArray20(foldable($item(_templateObject746 || (_templateObject746 = _taggedTemplateLiteral63(["naughty paper shuriken"]))))), _toConsumableArray20(foldable($item(_templateObject839 || (_templateObject839 = _taggedTemplateLiteral63(["Loathing Legion knife"]))))), _toConsumableArray20(foldable($item(_templateObject933 || (_templateObject933 = _taggedTemplateLiteral63(["deceased crimbo tree"]))))), _toConsumableArray20(foldable($item(_templateObject1028 || (_templateObject1028 = _taggedTemplateLiteral63(["makeshift turban"]))))), _toConsumableArray20(foldable($item(_templateObject1124 || (_templateObject1124 = _taggedTemplateLiteral63(["turtle wax shield"]))))), _toConsumableArray20(foldable($item(_templateObject1223 || (_templateObject1223 = _taggedTemplateLiteral63(["metallic foil bow"]))))), _toConsumableArray20(foldable($item(_templateObject1322 || (_templateObject1322 = _taggedTemplateLiteral63(["ironic moustache"]))))), _toConsumableArray20(foldable($item(_templateObject1418 || (_templateObject1418 = _taggedTemplateLiteral63(["bugged balaclava"]))))), _toConsumableArray20(foldable($item(_templateObject1516 || (_templateObject1516 = _taggedTemplateLiteral63(["toggle switch (Bartend)"]))))), _toConsumableArray20(foldable($item(_templateObject1616 || (_templateObject1616 = _taggedTemplateLiteral63(["mushroom cap"]))))), _toConsumableArray20(manyToOne($item(_templateObject1716 || (_templateObject1716 = _taggedTemplateLiteral63(["can of Rain-Doh"]))), $items(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral63(["empty Rain-Doh can"]))))), _toConsumableArray20(manyToOne($item(_templateObject1915 || (_templateObject1915 = _taggedTemplateLiteral63(["meteorite fragment"]))), $items(_templateObject2015 || (_templateObject2015 = _taggedTemplateLiteral63(["meteorite earring, meteorite necklace, meteorite ring"]))))), _toConsumableArray20(manyToOne($item(_templateObject2131 || (_templateObject2131 = _taggedTemplateLiteral63(["Sneaky Pete's leather jacket"]))), $items(_templateObject2217 || (_templateObject2217 = _taggedTemplateLiteral63(["Sneaky Pete's leather jacket (collar popped)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2316 || (_templateObject2316 = _taggedTemplateLiteral63(["Boris's Helm"]))), $items(_templateObject2414 || (_templateObject2414 = _taggedTemplateLiteral63(["Boris's Helm (askew)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2514 || (_templateObject2514 = _taggedTemplateLiteral63(["Jarlsberg's pan"]))), $items(_templateObject2614 || (_templateObject2614 = _taggedTemplateLiteral63(["Jarlsberg's pan (Cosmic portal mode)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2714 || (_templateObject2714 = _taggedTemplateLiteral63(["tiny plastic sword"]))), $items(_templateObject2812 || (_templateObject2812 = _taggedTemplateLiteral63(["grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo"]))))), _toConsumableArray20(manyToOne($item(_templateObject2912 || (_templateObject2912 = _taggedTemplateLiteral63(["earthenware muffin tin"]))), $items(_templateObject3012 || (_templateObject3012 = _taggedTemplateLiteral63(["blueberry muffin, bran muffin, chocolate chip muffin"]))))), _toConsumableArray20(manyToOne($item(_templateObject3120 || (_templateObject3120 = _taggedTemplateLiteral63(["ChibiBuddy\u2122 (on)"]))), $items(_templateObject3214 || (_templateObject3214 = _taggedTemplateLiteral63(["ChibiBuddy\u2122 (off)"]))))))), inventory = /* @__PURE__ */ new Map(), invLocations = sessionOnly ? [import_kolmafia72.mySessionItems] : [import_kolmafia72.mySessionItems, import_kolmafia72.getCloset, import_kolmafia72.getDisplay, import_kolmafia72.getStorage], _i = 0, _invLocations = invLocations; _i < _invLocations.length; _i++)
+  }, itemMappings = new Map([].concat(_toConsumableArray20(foldable($item(_templateObject501 || (_templateObject501 = _taggedTemplateLiteral62(["liar's pants"]))))), _toConsumableArray20(foldable($item(_templateObject2129 || (_templateObject2129 = _taggedTemplateLiteral62(["ice pick"]))))), _toConsumableArray20(manyToOne($item(_templateObject3118 || (_templateObject3118 = _taggedTemplateLiteral62(["Spooky Putty sheet"]))), [$item(_templateObject4101 || (_templateObject4101 = _taggedTemplateLiteral62(["Spooky Putty monster"])))].concat(_toConsumableArray20(getFoldGroup($item(_templateObject560 || (_templateObject560 = _taggedTemplateLiteral62(["Spooky Putty sheet"])))))))), _toConsumableArray20(foldable($item(_templateObject650 || (_templateObject650 = _taggedTemplateLiteral62(["stinky cheese sword"]))))), _toConsumableArray20(foldable($item(_templateObject745 || (_templateObject745 = _taggedTemplateLiteral62(["naughty paper shuriken"]))))), _toConsumableArray20(foldable($item(_templateObject838 || (_templateObject838 = _taggedTemplateLiteral62(["Loathing Legion knife"]))))), _toConsumableArray20(foldable($item(_templateObject931 || (_templateObject931 = _taggedTemplateLiteral62(["deceased crimbo tree"]))))), _toConsumableArray20(foldable($item(_templateObject1027 || (_templateObject1027 = _taggedTemplateLiteral62(["makeshift turban"]))))), _toConsumableArray20(foldable($item(_templateObject1123 || (_templateObject1123 = _taggedTemplateLiteral62(["turtle wax shield"]))))), _toConsumableArray20(foldable($item(_templateObject1223 || (_templateObject1223 = _taggedTemplateLiteral62(["metallic foil bow"]))))), _toConsumableArray20(foldable($item(_templateObject1322 || (_templateObject1322 = _taggedTemplateLiteral62(["ironic moustache"]))))), _toConsumableArray20(foldable($item(_templateObject1418 || (_templateObject1418 = _taggedTemplateLiteral62(["bugged balaclava"]))))), _toConsumableArray20(foldable($item(_templateObject1516 || (_templateObject1516 = _taggedTemplateLiteral62(["toggle switch (Bartend)"]))))), _toConsumableArray20(foldable($item(_templateObject1616 || (_templateObject1616 = _taggedTemplateLiteral62(["mushroom cap"]))))), _toConsumableArray20(manyToOne($item(_templateObject1716 || (_templateObject1716 = _taggedTemplateLiteral62(["can of Rain-Doh"]))), $items(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral62(["empty Rain-Doh can"]))))), _toConsumableArray20(manyToOne($item(_templateObject1915 || (_templateObject1915 = _taggedTemplateLiteral62(["meteorite fragment"]))), $items(_templateObject2015 || (_templateObject2015 = _taggedTemplateLiteral62(["meteorite earring, meteorite necklace, meteorite ring"]))))), _toConsumableArray20(manyToOne($item(_templateObject2130 || (_templateObject2130 = _taggedTemplateLiteral62(["Sneaky Pete's leather jacket"]))), $items(_templateObject2217 || (_templateObject2217 = _taggedTemplateLiteral62(["Sneaky Pete's leather jacket (collar popped)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2316 || (_templateObject2316 = _taggedTemplateLiteral62(["Boris's Helm"]))), $items(_templateObject2414 || (_templateObject2414 = _taggedTemplateLiteral62(["Boris's Helm (askew)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2514 || (_templateObject2514 = _taggedTemplateLiteral62(["Jarlsberg's pan"]))), $items(_templateObject2614 || (_templateObject2614 = _taggedTemplateLiteral62(["Jarlsberg's pan (Cosmic portal mode)"]))))), _toConsumableArray20(manyToOne($item(_templateObject2714 || (_templateObject2714 = _taggedTemplateLiteral62(["tiny plastic sword"]))), $items(_templateObject2812 || (_templateObject2812 = _taggedTemplateLiteral62(["grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo"]))))), _toConsumableArray20(manyToOne($item(_templateObject2912 || (_templateObject2912 = _taggedTemplateLiteral62(["earthenware muffin tin"]))), $items(_templateObject3012 || (_templateObject3012 = _taggedTemplateLiteral62(["blueberry muffin, bran muffin, chocolate chip muffin"]))))), _toConsumableArray20(manyToOne($item(_templateObject3119 || (_templateObject3119 = _taggedTemplateLiteral62(["ChibiBuddy\u2122 (on)"]))), $items(_templateObject3214 || (_templateObject3214 = _taggedTemplateLiteral62(["ChibiBuddy\u2122 (off)"]))))))), inventory = /* @__PURE__ */ new Map(), invLocations = sessionOnly ? [import_kolmafia72.mySessionItems] : [import_kolmafia72.mySessionItems, import_kolmafia72.getCloset, import_kolmafia72.getDisplay, import_kolmafia72.getStorage], _i = 0, _invLocations = invLocations; _i < _invLocations.length; _i++)
     for (var inventoryFunc = _invLocations[_i], _i2 = 0, _Object$entries = Object.entries(inventoryFunc()); _i2 < _Object$entries.length; _i2++) {
       var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray22(_Object$entries[_i2], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1], _item = (0, import_kolmafia72.toItem)(itemStr), mappedItem = (_itemMappings$get = itemMappings.get(_item)) !== null && _itemMappings$get !== void 0 ? _itemMappings$get : _item;
       inventory.set(mappedItem, quantity + ((_inventory$get = inventory.get(mappedItem)) !== null && _inventory$get !== void 0 ? _inventory$get : 0));
     }
   for (var _i3 = 0, _Object$entries2 = Object.entries((0, import_kolmafia72.getCampground)()); _i3 < _Object$entries2.length; _i3++) {
     var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray22(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1], _item2 = (0, import_kolmafia72.toItem)(_itemStr);
-    if (_item2 !== $item(_templateObject3313 || (_templateObject3313 = _taggedTemplateLiteral63(["big rock"])))) {
+    if (_item2 !== $item(_templateObject3313 || (_templateObject3313 = _taggedTemplateLiteral62(["big rock"])))) {
       var _mappedItem = (_itemMappings$get2 = itemMappings.get(_item2)) !== null && _itemMappings$get2 !== void 0 ? _itemMappings$get2 : _item2;
       inventory.set(_mappedItem, _quantity + ((_inventory$get2 = inventory.get(_mappedItem)) !== null && _inventory$get2 !== void 0 ? _inventory$get2 : 0));
     }
@@ -18635,9 +18527,9 @@ function inventoryOperation(a, b, op) {
 }
 var Session = /* @__PURE__ */ function() {
   function Session2(meat, items, totalTurns) {
-    _classCallCheck20(this, Session2), _defineProperty23(this, "meat", void 0), _defineProperty23(this, "items", void 0), _defineProperty23(this, "totalTurns", void 0), this.meat = meat, this.items = items, this.totalTurns = totalTurns;
+    _classCallCheck19(this, Session2), _defineProperty22(this, "meat", void 0), _defineProperty22(this, "items", void 0), _defineProperty22(this, "totalTurns", void 0), this.meat = meat, this.items = items, this.totalTurns = totalTurns;
   }
-  return _createClass20(Session2, [{
+  return _createClass19(Session2, [{
     key: "register",
     value: function(target, quantity) {
       if (target === "meat")
@@ -18935,8 +18827,6 @@ var Session = /* @__PURE__ */ function() {
   ObtuseAngel,
   OscusSoda,
   Pantogram,
-  Path,
-  Paths,
   PropertiesManager,
   RainDoh,
   RainDohBlackBox,

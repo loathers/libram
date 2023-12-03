@@ -387,7 +387,7 @@ export function withChoice<T>(
 }
 
 export class PropertiesManager {
-  private static EMPTY_PREFERENCE = Symbol();
+  private static EMPTY_PREFERENCE = Symbol("empty preference");
   private properties: Properties = {};
 
   get storedValues(): Properties {

@@ -24,7 +24,6 @@ export * from "./resources";
 export * from "./since";
 export * from "./template-string";
 export { default as Kmail } from "./Kmail";
-export * from "./Path";
 export { default as logger } from "./logger";
 export * as console from "./console";
 export * as property from "./property";

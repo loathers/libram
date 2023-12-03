@@ -5,6 +5,7 @@ import {
   Item,
   visitUrl,
 } from "kolmafia";
+import { combineQuery, EMPTY_VALUE, fetchUrl, Query } from "./url";
 import { arrayToCountedMap, chunk } from "./utils";
 
 type RawKmail = {
@@ -56,11 +57,12 @@ export default class Kmail {
    * @returns Number of kmails deleted
    */
   static delete(kmails: Kmail[]): number {
-    const results = visitUrl(
-      `messages.php?the_action=delete&box=Inbox&pwd&${kmails
-        .map((k) => `sel${k.id}=on`)
-        .join("&")}`
-    );
+    const results = fetchUrl("messages.php", [
+      ["the_action", "delete"],
+      ["box", "Inbox"],
+      ["pwd", EMPTY_VALUE],
+      ...kmails.map((k) => [`sel${k.id}`, "on"] as const),
+    ]);
 
     return Number(results.match(/<td>(\d) messages? deleted.<\/td>/)?.[1] ?? 0);
   }
@@ -71,11 +73,10 @@ export default class Kmail {
     items: Map<Item, number> | Item[],
     meat: number,
     chunkSize: number,
-    constructUrl: (
-      meat: number,
-      itemsQuery: string,
-      chunkSize: number
-    ) => string,
+    constructUrl: (args: { meat: number; chunkSize: number }) => {
+      path: string;
+      query: Query;
+    },
     successString: string
   ) {
     let m = meat;
@@ -90,19 +91,20 @@ export default class Kmail {
 
     // Split the items to be sent into chunks of max 11 item types
     for (const c of chunks.length > 0 ? chunks : [null]) {
-      const itemsQuery =
-        c === null
-          ? []
-          : c.map(
-              ([item, quantity], index) =>
-                `whichitem${index + 1}=${item.id}&howmany${
-                  index + 1
-                }=${quantity}`
-            );
+      const itemsQuery: Query = {};
+      if (c !== null) {
+        c.forEach(([item, quantity], i) => {
+          itemsQuery[`whichitem${i + 1}`] = item.id;
+          itemsQuery[`howmany${i + 1}`] = quantity;
+        });
+      }
 
-      const r = visitUrl(
-        constructUrl(m, itemsQuery.join("&"), itemsQuery.length)
-      );
+      const { path, query } = constructUrl({
+        meat: m,
+        chunkSize: c?.length ?? 0,
+      });
+
+      const r = fetchUrl(path, combineQuery(query, itemsQuery));
 
       if (r.includes("That player cannot receive Meat or items")) {
         return Kmail.gift(to, message, items, meat);
@@ -142,10 +144,16 @@ export default class Kmail {
       items,
       meat,
       11,
-      (meat, itemsQuery) =>
-        `sendmessage.php?action=send&pwd&towho=${to}&message=${message}${
-          itemsQuery ? `&${itemsQuery}` : ""
-        }&sendmeat=${meat}`,
+      ({ meat }) => ({
+        path: "sendmessage.php",
+        query: {
+          action: "send",
+          pwd: EMPTY_VALUE,
+          towho: to,
+          message,
+          sendmeat: meat,
+        },
+      }),
       ">Message sent.</"
     );
   }
@@ -170,17 +178,25 @@ export default class Kmail {
     meat = 0,
     insideNote = ""
   ): boolean {
-    const baseUrl = `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=${message}&insidenote=${insideNote}&towho=${to}`;
     return Kmail._genericSend(
       to,
       message,
       items,
       meat,
       3,
-      (m, itemsQuery, chunkSize) =>
-        `${baseUrl}&whichpackage=${chunkSize}${
-          itemsQuery ? `&${itemsQuery}` : ""
-        }&sendmeat=${m}`,
+      ({ meat, chunkSize }) => ({
+        path: `town_sendgift.php`,
+        query: {
+          action: "Yep.",
+          pwd: EMPTY_VALUE,
+          fromwhere: 0,
+          note: message,
+          insidenote: insideNote,
+          towho: to,
+          whichpackage: chunkSize,
+          sendmeat: meat,
+        },
+      }),
       ">Package sent.</"
     );
   }

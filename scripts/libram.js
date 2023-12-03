@@ -5839,7 +5839,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
     value: function(propertiesToSet) {
       for (var _i2 = 0, _Object$entries2 = Object.entries(propertiesToSet); _i2 < _Object$entries2.length; _i2++) {
         var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2), propertyName = _Object$entries2$_i[0], propertyValue = _Object$entries2$_i[1];
-        this.properties[propertyName] === void 0 && (this.properties[propertyName] = get(propertyName)), _set(propertyName, propertyValue);
+        propertyName in this.properties || (this.properties[propertyName] = (0, import_kolmafia2.propertyExists)(propertyName) ? get(propertyName) : PropertiesManager2.EMPTY_PREFERENCE), _set(propertyName, propertyValue);
       }
     }
     /**
@@ -5877,8 +5877,11 @@ var PropertiesManager = /* @__PURE__ */ function() {
       for (var _len = arguments.length, properties = new Array(_len), _key = 0; _key < _len; _key++)
         properties[_key] = arguments[_key];
       for (var _i3 = 0, _properties = properties; _i3 < _properties.length; _i3++) {
-        var _property = _properties[_i3], _value2 = this.properties[_property];
-        _value2 && _set(_property, _value2);
+        var _property = _properties[_i3];
+        if (_property in this.properties) {
+          var _value2 = this.properties[_property];
+          _value2 === PropertiesManager2.EMPTY_PREFERENCE ? (0, import_kolmafia2.removeProperty)(_property) : _value2 ? _set(_property, _value2) : _set(_property, "");
+        }
       }
     }
     /**
@@ -6011,6 +6014,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
     }
   }]), PropertiesManager2;
 }();
+_defineProperty2(PropertiesManager, "EMPTY_PREFERENCE", Symbol("empty preference"));
 
 // src/template-string.ts
 init_kolmafia_polyfill();

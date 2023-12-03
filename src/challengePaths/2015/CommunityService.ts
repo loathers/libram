@@ -466,8 +466,8 @@ export default class CommunityService {
     (...effects) => {
       const noncombatRate =
         -1 * hypotheticalModifier("Combat Rate", ...effects);
-      const unsoftcappedRate =
-        noncombatRate > 25 ? 25 + (noncombatRate - 25) * 5 : noncombatRate;
+      const unsoftcappedRate = (rate: number): number =>
+        rate > 25 ? 25 + (rate - 25) * 5 : rate;
       const currentFamiliarModifier =
         -1 *
         numericModifier(
@@ -482,11 +482,13 @@ export default class CommunityService {
           myFamiliar(),
           "Combat Rate",
           familiarWeight(myFamiliar()) +
-            hypotheticalModifier("Combat Rate", ...effects),
+            hypotheticalModifier("Familiar Weight", ...effects),
           equippedItem($slot`familiar`)
         );
       const adjustedRate =
-        unsoftcappedRate - currentFamiliarModifier + newFamiliarModifier;
+        unsoftcappedRate(noncombatRate) -
+        unsoftcappedRate(currentFamiliarModifier) +
+        unsoftcappedRate(newFamiliarModifier);
       return 60 - 3 * Math.floor(adjustedRate / 5);
     },
     new Requirement(["-combat"], {})

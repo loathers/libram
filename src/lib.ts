@@ -54,6 +54,7 @@ import {
   toSkill,
   totalTurnsPlayed,
   visitUrl,
+  xpath,
 } from "kolmafia";
 
 import logger from "./logger";
@@ -1047,4 +1048,61 @@ export function lgrCurrencies(): Item[] {
     )
     .map(realmCurrency)
     .filter((i) => !!i) as Item[];
+}
+
+const ACCOUNT_COMBAT_FLAGS = [
+  "aabosses",
+  "wowbar",
+  "bothcombatinterf",
+  "compactmanuel",
+  "eternalmrj",
+  "disablelovebugs",
+] as const;
+export type AccountCombatFlag = typeof ACCOUNT_COMBAT_FLAGS[number];
+
+/**
+ * Get the current value of all of your account's combat setting flags
+ * @param flags An array of the flags you want to get, defaults to all of them
+ * @returns An array of objects that contain the flags and their values as booleans
+ */
+export function getCombatFlags(
+  flags: AccountCombatFlag[] = [...ACCOUNT_COMBAT_FLAGS]
+): {
+  flag: AccountCombatFlag;
+  value: boolean;
+}[] {
+  const accountPage = visitUrl("account.php?tab=combat");
+  return flags.map((flag) => ({
+    flag,
+    value:
+      xpath(
+        accountPage,
+        `//*[@id="opt_flag_${flag}"]/label/input[@type='checkbox']@checked`
+      )[0] === "checked",
+  }));
+}
+
+/**
+ * Sets the given combat setting flags on your account
+ *
+ * @param flags A spread array of objects that contain a flag and its desired value; these look like the return value of `getCombatFlags`
+ * @returns the result of the associated `visitUrl` call
+ */
+export function setCombatFlags(
+  ...flags: { flag: AccountCombatFlag; value: boolean }[]
+): string {
+  return visitUrl(
+    `account.php?${
+      ([
+        ...flat(
+          flags.map(({ flag, value }) => [
+            `actions[]=flag_${flag}`,
+            `flag_${flag}=${Number(value)}`,
+          ])
+        ),
+        "action=Update",
+      ].join("&"),
+      true)
+    }`
+  );
 }

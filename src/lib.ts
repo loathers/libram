@@ -1106,3 +1106,22 @@ export function setCombatFlags(
     }`
   );
 }
+
+/**
+ * Perform a given action with certain combat setting flags set, returning them to their initial values if possible
+ *
+ * @param action The action you want to do with the given combat setting flags
+ * @param flags A spread array of objects that contain a combat setting flag and its desired value; these look like the return value of `getCombatFlags`
+ * @returns The result of the action
+ */
+export function withCombatFlags<T>(
+  action: () => T,
+  ...flags: { flag: AccountCombatFlag; value: boolean }[]
+) {
+  const initialValues = getCombatFlags(flags.map(({ flag }) => flag));
+  try {
+    return action();
+  } finally {
+    setCombatFlags(...initialValues);
+  }
+}

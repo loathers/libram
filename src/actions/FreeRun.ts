@@ -1,4 +1,4 @@
-import { retrieveItem } from "kolmafia";
+import { itemAmount, retrieveItem } from "kolmafia";
 
 import { Macro } from "../combat";
 import { ensureEffect, getSongCount, getSongLimit, have } from "../lib";
@@ -84,11 +84,11 @@ const freeRunSources: ActionSource[] = [
     }
   ),
 
-  // (need to check for Everything Looks Green)
+  // Needs support for Everything Looks Green
   /*
   new ActionSource(
     $item`green smoke bomb`,
-    () => Infinity,
+    () => (have($effect`Everything Looks Green`) ? 0 : 1),
     Macro.item($item`green smoke bomb`),
     {
       preparation: () => retrieveItem($item`green smoke bomb`),
@@ -121,16 +121,13 @@ const freeRunSources: ActionSource[] = [
   ),
 
   // limited quest items
-  // need better check for these
-  /*
   ...$items`fish-oil smoke bomb, giant eraser`.map(
     (item) =>
-      new ActionSource(item, () => Infinity, Macro.item(item), {
+      new ActionSource(item, () => itemAmount(item), Macro.item(item), {
         preparation: () => have(item),
         cost: () => 0,
       })
   ),
-  */
 ];
 
 /**

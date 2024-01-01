@@ -122,6 +122,8 @@ const freeRunSources: ActionSource[] = [
   ),
 
   // limited quest items
+  // need better check for these
+  /*
   ...$items`fish-oil smoke bomb, giant eraser`.map(
     (item) =>
       new ActionSource(item, () => Infinity, Macro.item(item), {
@@ -129,6 +131,7 @@ const freeRunSources: ActionSource[] = [
         cost: () => 0,
       })
   ),
+  */
 ];
 
 /**

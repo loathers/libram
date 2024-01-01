@@ -121,12 +121,12 @@ const freeRunSources: ActionSource[] = [
     }
   ),
 
-  // Expensive unlimited sources
+  // limited quest items
   ...$items`fish-oil smoke bomb, giant eraser`.map(
     (item) =>
       new ActionSource(item, () => Infinity, Macro.item(item), {
-        preparation: () => retrieveItem(item),
-        cost: () => ActionSource.defaultPriceFunction(item),
+        preparation: () => have(item),
+        cost: () => 0,
       })
   ),
 ];

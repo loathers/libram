@@ -84,16 +84,15 @@ const freeRunSources: ActionSource[] = [
     }
   ),
 
-  // 90% chance, retrieve 2 to be safe
   // (need to check for Everything Looks Green)
   /*
   new ActionSource(
     $item`green smoke bomb`,
     () => Infinity,
-    Macro.item($item`green smoke bomb`).repeat(),
+    Macro.item($item`green smoke bomb`),
     {
-      preparation: () => retrieveItem($item`green smoke bomb`, 2),
-      cost: () => ActionSource.defaultPriceFunction($item`green smoke bomb`) * 2,
+      preparation: () => retrieveItem($item`green smoke bomb`),
+      cost: () => ActionSource.defaultPriceFunction($item`green smoke bomb`),
     }
   ),
   */

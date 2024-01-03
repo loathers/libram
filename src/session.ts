@@ -118,7 +118,7 @@ function inventoryOperation(
 
   const diffEntries: [Item, number][] = [...difference.entries()];
 
-  return new Map<Item, number>(diffEntries.filter((value) => value[1] !== 0));
+  return new Map<Item, number>(diffEntries.filter(([, value]) => value !== 0));
 }
 
 /**

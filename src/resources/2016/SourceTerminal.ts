@@ -131,7 +131,7 @@ export function educate(skills: Skill | [Skill, Skill]): boolean {
 export function getSkills(): Skill[] {
   return (["sourceTerminalEducate1", "sourceTerminalEducate2"] as const)
     .map((p) => get(p))
-    .filter((s) => s !== "")
+    .filter(Boolean)
     .map((s) => Skill.get(s.slice(0, -4)));
 }
 

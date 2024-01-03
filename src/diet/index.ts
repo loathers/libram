@@ -187,6 +187,28 @@ export class MenuItem<T> {
         { maximum: get("deepDishOfLegendEaten") ? 0 : 1 },
       ],
       [$item`Pizza of Legend`, { maximum: get("pizzaOfLegendEaten") ? 0 : 1 }],
+      [
+        $item`jar of fermented pickle juice`,
+        { maximum: get("_pickleJuiceDrunk") ? 0 : 1 },
+      ],
+      [
+        $item`extra-greasy slider`,
+        { maximum: get("_extraGreasySliderEaten") ? 0 : 1 },
+      ],
+      [$item`voodoo snuff`, { maximum: get("_voodooSnuffUsed") ? 0 : 1 }],
+      [
+        $item`Ol' Scratch's salad fork`,
+        { maximum: get("_saladForkUsed") ? 0 : 1 },
+      ],
+      [$item`Frosty's frosty mug`, { maximum: get("_frostyMugUsed") ? 0 : 1 }],
+      [
+        $item`tin cup of mulligan stew`,
+        { maximum: get("_mulliganStewEaten") ? 0 : 1 },
+      ],
+      [
+        $item`Hodgman's blanket`,
+        { maximum: get("_hodgmansBlanketDrunk") ? 0 : 1 },
+      ],
     ] as [Item, MenuItemOptions<T>][]);
   }
 

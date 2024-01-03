@@ -9,6 +9,7 @@ import { EnvironmentType } from "../../lib";
 import { mergeModifiers, Modifiers } from "../../modifier";
 import { get } from "../../property";
 import { $location } from "../../template-string";
+import { notNull } from "../../utils";
 type SpecialFlowerAbility = "Delevels Enemy" | "Blocks Attacks" | "Poison";
 
 class Flower {
@@ -47,7 +48,7 @@ class Flower {
   ): Flower[] {
     return this.plantNamesInZone(location)
       .map((flowerName) => toFlower(flowerName))
-      .filter((flower) => flower !== undefined) as Flower[];
+      .filter(notNull);
   }
 
   static modifiersInZone(
@@ -106,8 +107,8 @@ export function have(): boolean {
  * @param name The flower name
  * @returns a Flower instance
  */
-function toFlower(name: string): Flower | undefined {
-  return all.find((flower) => name === flower.name);
+function toFlower(name: string): Flower | null {
+  return all.find((flower) => name === flower.name) ?? null;
 }
 
 /**

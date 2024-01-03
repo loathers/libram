@@ -70,7 +70,7 @@ import {
   $skill,
   $stat,
 } from "./template-string";
-import { makeByXFunction, chunk, flat } from "./utils";
+import { makeByXFunction, chunk, flat, notNull } from "./utils";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -1018,7 +1018,7 @@ export function realmAvailable(identifier: RealmType): boolean {
  * @param realm the realm type to consider
  * @returns The currency for the given zone
  */
-export function realmCurrency(realm: RealmType): Item | undefined {
+export function realmCurrency(realm: RealmType): Item | null {
   switch (realm) {
     case "sleaze":
       return $item`Beach Buck`;
@@ -1032,6 +1032,8 @@ export function realmCurrency(realm: RealmType): Item | undefined {
       return $item`Volcoino`;
     case "fantasy":
       return $item`Rubee™`;
+    default:
+      return null;
   }
 }
 
@@ -1047,7 +1049,7 @@ export function lgrCurrencies(): Item[] {
         !(realm === "hot" && get("_luckyGoldRingVolcoino"))
     )
     .map(realmCurrency)
-    .filter((i) => !!i) as Item[];
+    .filter(notNull);
 }
 
 const ACCOUNT_COMBAT_FLAGS = [

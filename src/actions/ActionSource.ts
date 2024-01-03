@@ -79,7 +79,7 @@ function mergeConstraints(
 ): ActionConstraints | null {
   const familiars = allConstraints
     .map((constraints) => constraints.familiar)
-    .filter((familiar) => familiar);
+    .filter(Boolean);
   if (familiars.length > 1) {
     // Inconsistent requirements.
     return null;

@@ -237,6 +237,9 @@ export function ascend(options: {
     consumable: $item`astral six-pack`,
     pet: $item`none`,
   };
+  const prunedOptions = Object.fromEntries(
+    Object.entries(options).filter(([, value]) => value)
+  ) as typeof options;
   const {
     path,
     playerClass,
@@ -246,7 +249,7 @@ export function ascend(options: {
     consumable,
     pet,
     permOptions,
-  } = { ...DEFAULT_OPTIONS, ...options };
+  } = { ...DEFAULT_OPTIONS, ...prunedOptions };
 
   if (playerClass.path !== (path.avatar ? path : Path.none)) {
     throw new AscendError(playerClass);

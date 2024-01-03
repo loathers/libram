@@ -1,4 +1,4 @@
-import { itemAmount, retrieveItem } from "kolmafia";
+import { retrieveItem } from "kolmafia";
 
 import { Macro } from "../combat";
 import { ensureEffect, getSongCount, getSongLimit, have } from "../lib";
@@ -12,6 +12,9 @@ import {
   findActionSource,
   FindActionSourceConstraints,
 } from "./ActionSource";
+
+// eslint-disable-next-line libram/verify-constants
+const EVERYTHING_LOOKS_GREEN = $effect`Everything Looks Green`;
 
 const freeRunSources: ActionSource[] = [
   // Free limited sources
@@ -84,23 +87,20 @@ const freeRunSources: ActionSource[] = [
     }
   ),
 
-  // Needs support for Everything Looks Green
-  /*
   new ActionSource(
     $item`green smoke bomb`,
-    () => (have($effect`Everything Looks Green`) ? 0 : 1),
+    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
     Macro.item($item`green smoke bomb`),
     {
       preparation: () => retrieveItem($item`green smoke bomb`),
       cost: () => ActionSource.defaultPriceFunction($item`green smoke bomb`),
     }
   ),
-  */
 
   // 50% chance, get 5 to be safe
   new ActionSource(
     $item`tattered scrap of paper`,
-    () => Infinity,
+    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
     Macro.item($item`tattered scrap of paper`).repeat(),
     {
       preparation: () => retrieveItem($item`tattered scrap of paper`, 5),
@@ -112,7 +112,7 @@ const freeRunSources: ActionSource[] = [
   // 30% chance, get 10 to be safe
   new ActionSource(
     $item`GOTO`,
-    () => Infinity,
+    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
     Macro.item($item`GOTO`).repeat(),
     {
       preparation: () => retrieveItem($item`GOTO`, 10),
@@ -123,10 +123,15 @@ const freeRunSources: ActionSource[] = [
   // limited quest items
   ...$items`fish-oil smoke bomb, giant eraser`.map(
     (item) =>
-      new ActionSource(item, () => itemAmount(item), Macro.item(item), {
-        preparation: () => have(item),
-        cost: () => 0,
-      })
+      new ActionSource(
+        item,
+        () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
+        Macro.item(item),
+        {
+          preparation: () => have(item),
+          cost: () => 0,
+        }
+      )
   ),
 ];
 

@@ -1058,6 +1058,15 @@ const ACCOUNT_COMBAT_FLAGS = [
   "eternalmrj",
   "disablelovebugs",
 ] as const;
+/**
+ * Different flags you can set on your account for how to handle combat:
+ * aabosses refers to the flag that lets autoattack trigger against special monsters
+ * wowbar refers to the flag to use the Combat Action Bar
+ * bothcombatinterf refers to the flag to use both the CAB
+ * compactmanuel refers to the flag to display monster manuel data horizontally
+ * eternalmrg refers to the flag to enable endless factoid delight
+ * disablelovebugs disables love bugs
+ */
 export type AccountCombatFlag = typeof ACCOUNT_COMBAT_FLAGS[number];
 
 /**

@@ -15289,7 +15289,10 @@ function ascend(options) {
     kolGender: get("defaultGenderOverride", "female") === "male" ? KolGender.male : KolGender.female,
     consumable: $item(_templateObject486 || (_templateObject486 = _taggedTemplateLiteral55(["astral six-pack"]))),
     pet: $item(_templateObject551 || (_templateObject551 = _taggedTemplateLiteral55(["none"])))
-  }, _DEFAULT_OPTIONS$opti = _objectSpread6(_objectSpread6({}, DEFAULT_OPTIONS), options), path3 = _DEFAULT_OPTIONS$opti.path, playerClass = _DEFAULT_OPTIONS$opti.playerClass, lifestyle = _DEFAULT_OPTIONS$opti.lifestyle, kolGender = _DEFAULT_OPTIONS$opti.kolGender, moon = _DEFAULT_OPTIONS$opti.moon, consumable = _DEFAULT_OPTIONS$opti.consumable, pet = _DEFAULT_OPTIONS$opti.pet, permOptions = _DEFAULT_OPTIONS$opti.permOptions;
+  }, prunedOptions = Object.fromEntries(Object.entries(options).filter(function(_ref3) {
+    var _ref4 = _slicedToArray15(_ref3, 2), value = _ref4[1];
+    return value;
+  })), _DEFAULT_OPTIONS$prun = _objectSpread6(_objectSpread6({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
   if (playerClass.path !== (path3.avatar ? path3 : import_kolmafia60.Path.none))
     throw new AscendError(playerClass);
   if (path3.id < 0)
@@ -15334,7 +15337,7 @@ function ascend(options) {
   (0, import_kolmafia60.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=".concat(moonId, "&gender=").concat(kolGender, "&whichclass=").concat(playerClass.id, "&whichpath=").concat(path3.id, "&asctype=").concat(lifestyle, "&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd"), !0);
 }
 function prepareAscension() {
-  var _throwOnFail, _ref3 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, garden = _ref3.garden, eudora = _ref3.eudora, chateau = _ref3.chateau, throwOnFail = _ref3.throwOnFail;
+  var _throwOnFail, _ref5 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, garden = _ref5.garden, eudora = _ref5.eudora, chateau = _ref5.chateau, throwOnFail = _ref5.throwOnFail;
   if (throwOnFail = (_throwOnFail = throwOnFail) !== null && _throwOnFail !== void 0 ? _throwOnFail : !0, garden && !Object.getOwnPropertyNames((0, import_kolmafia60.getCampground)()).includes(garden)) {
     (0, import_kolmafia60.use)(import_kolmafia60.Item.get(garden));
     var gardenName = Object.getOwnPropertyNames((0, import_kolmafia60.getCampground)()).find(isGarden);

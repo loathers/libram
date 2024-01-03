@@ -6816,14 +6816,14 @@ function realmCurrency(realm) {
       return $item(_templateObject44 || (_templateObject44 = _taggedTemplateLiteral(["Volcoino"])));
     case "fantasy":
       return $item(_templateObject45 || (_templateObject45 = _taggedTemplateLiteral(["Rubee\u2122"])));
+    default:
+      return null;
   }
 }
 function lgrCurrencies() {
   return realmTypes.filter(function(realm) {
     return realmAvailable(realm) && !(realm === "hot" && get("_luckyGoldRingVolcoino"));
-  }).map(realmCurrency).filter(function(i) {
-    return !!i;
-  });
+  }).map(realmCurrency).filter(notNull);
 }
 var ACCOUNT_COMBAT_FLAGS = ["aabosses", "wowbar", "bothcombatinterf", "compactmanuel", "eternalmrj", "disablelovebugs"];
 function getCombatFlags() {
@@ -7134,9 +7134,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
         var nextStepsStrings = (_ref = []).concat.apply(_ref, _toConsumableArray3(nextSteps.map(function(x) {
           return x instanceof Macro2 ? x.components : [x];
         })));
-        return (_this$components = this.components).push.apply(_this$components, _toConsumableArray3(nextStepsStrings.filter(function(s) {
-          return s.length > 0;
-        }))), this;
+        return (_this$components = this.components).push.apply(_this$components, _toConsumableArray3(nextStepsStrings.filter(Boolean))), this;
       }
     )
     /**
@@ -8470,9 +8468,7 @@ function mergeConstraints() {
     allConstraints[_key] = arguments[_key];
   var familiars = allConstraints.map(function(constraints) {
     return constraints.familiar;
-  }).filter(function(familiar7) {
-    return familiar7;
-  });
+  }).filter(Boolean);
   return familiars.length > 1 ? null : {
     equipmentRequirements: function() {
       return Requirement.merge(_toConsumableArray5(allConstraints.map(function(constraints) {
@@ -10466,9 +10462,7 @@ var Flower = /* @__PURE__ */ function() {
       var _get4, location = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (_get4 = get("lastAdventure")) !== null && _get4 !== void 0 ? _get4 : $location.none;
       return this.plantNamesInZone(location).map(function(flowerName) {
         return toFlower(flowerName);
-      }).filter(function(flower) {
-        return flower !== void 0;
-      });
+      }).filter(notNull);
     }
   }, {
     key: "modifiersInZone",
@@ -10489,9 +10483,10 @@ function have10() {
   return (0, import_kolmafia21.floristAvailable)();
 }
 function toFlower(name) {
-  return all.find(function(flower) {
+  var _all$find;
+  return (_all$find = all.find(function(flower) {
     return name === flower.name;
-  });
+  })) !== null && _all$find !== void 0 ? _all$find : null;
 }
 function flowersIn(location) {
   var returnValue = [];
@@ -11654,9 +11649,7 @@ function educate(skills3) {
 function getSkills() {
   return ["sourceTerminalEducate1", "sourceTerminalEducate2"].map(function(p) {
     return get(p);
-  }).filter(function(s) {
-    return s !== "";
-  }).map(function(s) {
+  }).filter(Boolean).map(function(s) {
     return import_kolmafia31.Skill.get(s.slice(0, -4));
   });
 }
@@ -18510,8 +18503,9 @@ function inventoryOperation(a, b, op) {
     _iterator.f();
   }
   var diffEntries = _toConsumableArray21(difference.entries());
-  return new Map(diffEntries.filter(function(value) {
-    return value[1] !== 0;
+  return new Map(diffEntries.filter(function(_ref) {
+    var _ref2 = _slicedToArray22(_ref, 2), value = _ref2[1];
+    return value !== 0;
   }));
 }
 var Session = /* @__PURE__ */ function() {
@@ -18537,8 +18531,8 @@ var Session = /* @__PURE__ */ function() {
   }, {
     key: "value",
     value: function(itemValue) {
-      var turns2 = this.totalTurns, meat = Math.floor(this.meat), itemDetails = _toConsumableArray21(this.items.entries()).map(function(_ref) {
-        var _ref2 = _slicedToArray22(_ref, 2), item11 = _ref2[0], quantity = _ref2[1];
+      var turns2 = this.totalTurns, meat = Math.floor(this.meat), itemDetails = _toConsumableArray21(this.items.entries()).map(function(_ref3) {
+        var _ref4 = _slicedToArray22(_ref3, 2), item11 = _ref4[0], quantity = _ref4[1];
         return {
           item: item11,
           quantity: quantity,
@@ -18660,8 +18654,8 @@ var Session = /* @__PURE__ */ function() {
     value: function(filename) {
       var fileValue = (0, import_kolmafia72.fileToBuffer)(Session2.getFilepath(filename));
       if (fileValue.length > 0) {
-        var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref3) {
-          var _ref4 = _slicedToArray22(_ref3, 2), itemStr = _ref4[0], quantity = _ref4[1];
+        var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref5) {
+          var _ref6 = _slicedToArray22(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
           return [(0, import_kolmafia72.toItem)(itemStr), quantity];
         });
         return new Session2(val.meat, new Map(parsedItems), (_val$totalTurns = val.totalTurns) !== null && _val$totalTurns !== void 0 ? _val$totalTurns : 0);

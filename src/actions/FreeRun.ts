@@ -101,12 +101,12 @@ const freeRunSources: ActionSource[] = [
       )
   ),
 
-  // limited quest items
+  // limited quest items (do these trigger everything looks green?)
   ...$items`fish-oil smoke bomb, giant eraser`.map(
     (item) =>
       new ActionSource(
         item,
-        () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
+        () => (!have(item) || have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
         Macro.item(item),
         {
           preparation: () => have(item),

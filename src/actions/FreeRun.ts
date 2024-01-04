@@ -87,51 +87,27 @@ const freeRunSources: ActionSource[] = [
     }
   ),
 
-  new ActionSource(
-    $item`green smoke bomb`,
-    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
-    Macro.item($item`green smoke bomb`),
-    {
-      preparation: () => retrieveItem($item`green smoke bomb`),
-      cost: () => ActionSource.defaultPriceFunction($item`green smoke bomb`),
-    }
-  ),
-
-  // 50% chance, get 5 to be safe
-  new ActionSource(
-    $item`tattered scrap of paper`,
-    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
-    Macro.item($item`tattered scrap of paper`).repeat(),
-    {
-      preparation: () => retrieveItem($item`tattered scrap of paper`, 5),
-      cost: () =>
-        ActionSource.defaultPriceFunction($item`tattered scrap of paper`) * 5,
-    }
-  ),
-
-  // 30% chance, get 10 to be safe
-  new ActionSource(
-    $item`GOTO`,
-    () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
-    Macro.item($item`GOTO`).repeat(),
-    {
-      preparation: () => retrieveItem($item`GOTO`, 10),
-      cost: () => ActionSource.defaultPriceFunction($item`GOTO`) * 10,
-    }
-  ),
-
-  // limited quest items
-  ...$items`fish-oil smoke bomb, giant eraser`.map(
+  // unlimited items that trigger everything looks green
+  ...$items`green smoke bomb, tattered scrap of paper, GOTO, T.U.R.D.S. Key`.map(
     (item) =>
       new ActionSource(
         item,
         () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
         Macro.item(item),
         {
-          preparation: () => have(item),
-          cost: () => 0,
+          preparation: () => retrieveItem(item),
+          cost: () => ActionSource.defaultPriceFunction(item),
         }
       )
+  ),
+
+  // limited quest items
+  ...$items`fish-oil smoke bomb, giant eraser`.map(
+    (item) =>
+      new ActionSource(item, () => (!have(item) ? 0 : 1), Macro.item(item), {
+        preparation: () => have(item),
+        cost: () => 0,
+      })
   ),
 ];
 

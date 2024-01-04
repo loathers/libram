@@ -16473,7 +16473,7 @@ function bestSolution(memoizationTable, values, currentIndex, remainingCapacity)
 }
 
 // src/diet/index.ts
-var _templateObject477, _templateObject2125, _templateObject3106, _templateObject478, _templateObject551, _templateObject645, _templateObject741, _templateObject836, _templateObject929, _templateObject1025, _templateObject1122, _templateObject1222, _templateObject1321, _templateObject1417, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1914, _templateObject2014, _templateObject2126, _templateObject2216, _templateObject2315, _templateObject2413, _templateObject2513, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3115, _templateObject3213, _templateObject3312, _templateObject3410, _templateObject3510, _templateObject3610, _templateObject3710, _templateObject3810, _templateObject3910, _templateObject4010, _templateObject4112, _templateObject4211, _templateObject4311, _templateObject4410, _templateObject4510, _templateObject4610, _templateObject479, _templateObject485, _templateObject495, _templateObject505, _templateObject5111, _templateObject5210, _templateObject5310, _templateObject5410, _templateObject554, _templateObject564, _templateObject574, _templateObject584, _templateObject594, _templateObject604, _templateObject6110, _templateObject6210, _templateObject6310, _templateObject646, _templateObject654;
+var _templateObject477, _templateObject2125, _templateObject3106, _templateObject478, _templateObject551, _templateObject645, _templateObject741, _templateObject836, _templateObject929, _templateObject1025, _templateObject1122, _templateObject1222, _templateObject1321, _templateObject1417, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1914, _templateObject2014, _templateObject2126, _templateObject2216, _templateObject2315, _templateObject2413, _templateObject2513, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3115, _templateObject3213, _templateObject3312, _templateObject3410, _templateObject3510, _templateObject3610, _templateObject3710, _templateObject3810, _templateObject3910, _templateObject4010, _templateObject4112, _templateObject4211, _templateObject4311, _templateObject4410, _templateObject4510, _templateObject4610, _templateObject479, _templateObject485, _templateObject495, _templateObject505, _templateObject5111, _templateObject5210, _templateObject5310, _templateObject5410, _templateObject554, _templateObject564, _templateObject574, _templateObject584, _templateObject594, _templateObject604, _templateObject6110, _templateObject6210, _templateObject6310, _templateObject646, _templateObject654, _templateObject664, _templateObject674, _templateObject684, _templateObject693, _templateObject703, _templateObject7110, _templateObject7210;
 function _createForOfIteratorHelper13(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
@@ -16690,6 +16690,20 @@ var MenuItem = /* @__PURE__ */ function() {
         maximum: get("deepDishOfLegendEaten") ? 0 : 1
       }], [$item(_templateObject1815 || (_templateObject1815 = _taggedTemplateLiteral59(["Pizza of Legend"]))), {
         maximum: get("pizzaOfLegendEaten") ? 0 : 1
+      }], [$item(_templateObject1914 || (_templateObject1914 = _taggedTemplateLiteral59(["jar of fermented pickle juice"]))), {
+        maximum: get("_pickleJuiceDrunk") ? 0 : 1
+      }], [$item(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral59(["extra-greasy slider"]))), {
+        maximum: get("_extraGreasySliderEaten") ? 0 : 1
+      }], [$item(_templateObject2126 || (_templateObject2126 = _taggedTemplateLiteral59(["voodoo snuff"]))), {
+        maximum: get("_voodooSnuffUsed") ? 0 : 1
+      }], [$item(_templateObject2216 || (_templateObject2216 = _taggedTemplateLiteral59(["Ol' Scratch's salad fork"]))), {
+        maximum: get("_saladForkUsed") ? 0 : 1
+      }], [$item(_templateObject2315 || (_templateObject2315 = _taggedTemplateLiteral59(["Frosty's frosty mug"]))), {
+        maximum: get("_frostyMugUsed") ? 0 : 1
+      }], [$item(_templateObject2413 || (_templateObject2413 = _taggedTemplateLiteral59(["tin cup of mulligan stew"]))), {
+        maximum: get("_mulliganStewEaten") ? 0 : 1
+      }], [$item(_templateObject2513 || (_templateObject2513 = _taggedTemplateLiteral59(["Hodgman's blanket"]))), {
+        maximum: get("_hodgmansBlanketDrunk") ? 0 : 1
       }]]);
     }
   }]), MenuItem2;
@@ -16706,13 +16720,13 @@ var DietPlanner = /* @__PURE__ */ function() {
     var _this2 = this;
     var _this = this;
     if (_classCallCheck14(this, DietPlanner2), _defineProperty18(this, "mpa", void 0), _defineProperty18(this, "menu", void 0), _defineProperty18(this, "mayoLookup", void 0), _defineProperty18(this, "fork", void 0), _defineProperty18(this, "mug", void 0), _defineProperty18(this, "seasoning", void 0), _defineProperty18(this, "whetStone", void 0), _defineProperty18(this, "spleenValue", 0), this.mpa = mpa, this.fork = menu.find(function(item11) {
-      return item11.item === $item(_templateObject1914 || (_templateObject1914 = _taggedTemplateLiteral59(["Ol' Scratch's salad fork"])));
+      return item11.item === $item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral59(["Ol' Scratch's salad fork"])));
     }), this.mug = menu.find(function(item11) {
-      return item11.item === $item(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral59(["Frosty's frosty mug"])));
+      return item11.item === $item(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral59(["Frosty's frosty mug"])));
     }), this.seasoning = menu.find(function(item11) {
-      return item11.item === $item(_templateObject2126 || (_templateObject2126 = _taggedTemplateLiteral59(["Special Seasoning"])));
+      return item11.item === $item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral59(["Special Seasoning"])));
     }), this.whetStone = menu.find(function(item11) {
-      return item11.item === $item(_templateObject2216 || (_templateObject2216 = _taggedTemplateLiteral59(["whet stone"])));
+      return item11.item === $item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral59(["whet stone"])));
     }), this.mayoLookup = /* @__PURE__ */ new Map(), installed3())
       for (var _loop = function() {
         var mayo = _arr2[_i2], menuItem = menu.find(function(item11) {
@@ -16765,22 +16779,22 @@ var DietPlanner = /* @__PURE__ */ function() {
         mayoflex: this.mayoLookup.size ? helpers.some(function(item11) {
           return item11.item === Mayo.flex;
         }) : !1,
-        refinedPalate: have($effect(_templateObject2315 || (_templateObject2315 = _taggedTemplateLiteral59(["Refined Palate"])))),
-        garish: have($effect(_templateObject2413 || (_templateObject2413 = _taggedTemplateLiteral59(["Gar-ish"])))),
-        saucemaven: have($skill(_templateObject2513 || (_templateObject2513 = _taggedTemplateLiteral59(["Saucemaven"])))),
-        pinkyRing: have($item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral59(["mafia pinky ring"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral59(["mafia pinky ring"])))),
-        tuxedoShirt: have($item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral59(["tuxedo shirt"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral59(["tuxedo shirt"]))))
+        refinedPalate: have($effect(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral59(["Refined Palate"])))),
+        garish: have($effect(_templateObject3115 || (_templateObject3115 = _taggedTemplateLiteral59(["Gar-ish"])))),
+        saucemaven: have($skill(_templateObject3213 || (_templateObject3213 = _taggedTemplateLiteral59(["Saucemaven"])))),
+        pinkyRing: have($item(_templateObject3312 || (_templateObject3312 = _taggedTemplateLiteral59(["mafia pinky ring"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject3410 || (_templateObject3410 = _taggedTemplateLiteral59(["mafia pinky ring"])))),
+        tuxedoShirt: have($item(_templateObject3510 || (_templateObject3510 = _taggedTemplateLiteral59(["tuxedo shirt"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral59(["tuxedo shirt"]))))
       }, overrideModifiers);
       this.seasoning && (0, import_kolmafia65.itemType)(menuItem.item) === "food" && this.mpa * (_expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
         seasoning: !0
       })) - _expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
         seasoning: !1
-      }))) > (0, import_kolmafia65.mallPrice)($item(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral59(["Special Seasoning"])))) && helpers.push(this.seasoning), this.whetStone && (0, import_kolmafia65.itemType)(menuItem.item) === "food" && this.mpa > (0, import_kolmafia65.mallPrice)($item(_templateObject3115 || (_templateObject3115 = _taggedTemplateLiteral59(["whet stone"])))) && helpers.push(this.whetStone);
+      }))) > (0, import_kolmafia65.mallPrice)($item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral59(["Special Seasoning"])))) && helpers.push(this.seasoning), this.whetStone && (0, import_kolmafia65.itemType)(menuItem.item) === "food" && this.mpa > (0, import_kolmafia65.mallPrice)($item(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral59(["whet stone"])))) && helpers.push(this.whetStone);
       var forkMug = (0, import_kolmafia65.itemType)(menuItem.item) === "food" ? this.fork : (0, import_kolmafia65.itemType)(menuItem.item) === "booze" ? this.mug : null, forkMugPrice = forkMug ? forkMug.price() : 1 / 0, baseCost = menuItem.price() + sum(helpers, function(item11) {
         return item11.price();
       }), valueRaw = _expectedAdventures(menuItem.item, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
         forkMug: !0
-      })) * this.mpa - baseCost - forkMugPrice + ((_menuItem$additionalV2 = menuItem.additionalValue) !== null && _menuItem$additionalV2 !== void 0 ? _menuItem$additionalV2 : 0), valueSpleen = $items(_templateObject3213 || (_templateObject3213 = _taggedTemplateLiteral59(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item) ? 5 * this.spleenValue : 0;
+      })) * this.mpa - baseCost - forkMugPrice + ((_menuItem$additionalV2 = menuItem.additionalValue) !== null && _menuItem$additionalV2 !== void 0 ? _menuItem$additionalV2 : 0), valueSpleen = $items(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral59(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item) ? 5 * this.spleenValue : 0;
       return forkMug && valueForkMug > valueRaw ? [[].concat(helpers, [forkMug, menuItem]), valueForkMug + valueSpleen] : [[].concat(helpers, [menuItem]), valueRaw + valueSpleen];
     }
     /**
@@ -16855,7 +16869,7 @@ var DietPlanner = /* @__PURE__ */ function() {
       } finally {
         _iterator.f();
       }
-      var organCapacitiesWith = _toConsumableArray17(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject3312 || (_templateObject3312 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject3410 || (_templateObject3410 = _taggedTemplateLiteral59(["Refined Palate"]))) || trialItem.item === $item(_templateObject3510 || (_templateObject3510 = _taggedTemplateLiteral59(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral59(["Gar-ish"]))) || trialItem.item === $item(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral59(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray19(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread7(_objectSpread7(_objectSpread7({}, overrideModifiers), isRefinedPalate ? {
+      var organCapacitiesWith = _toConsumableArray17(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral59(["Refined Palate"]))) || trialItem.item === $item(_templateObject4211 || (_templateObject4211 = _taggedTemplateLiteral59(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral59(["Gar-ish"]))) || trialItem.item === $item(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral59(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray19(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread7(_objectSpread7(_objectSpread7({}, overrideModifiers), isRefinedPalate ? {
         refinedPalate: !0
       } : {}), isGarish ? {
         garish: !0
@@ -16863,7 +16877,7 @@ var DietPlanner = /* @__PURE__ */ function() {
       return valueWithout > valueWith + value ? [valueWithout, planWithout] : [valueWith + value, [].concat(_toConsumableArray17(planWith), [[helpersAndItem, 1]])];
     }
   }]), DietPlanner2;
-}(), interactingItems = [[$item(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral59(["spice melange"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral59(["Ultra Mega Sour Ball"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral59(["The Plumber's mushroom stew"]))), [["food", 3], ["booze", -1]]], [$item(_templateObject4211 || (_templateObject4211 = _taggedTemplateLiteral59(["The Mad Liquor"]))), [["food", -1], ["booze", 3]]], [$item(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral59(["Doc Clock's thyme cocktail"]))), [["food", -2], ["booze", 4]]], [$item(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral59(["Mr. Burnsger"]))), [["food", 4], ["booze", -2]]], [$effect(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral59(["Refined Palate"]))), []], [$item(_templateObject4610 || (_templateObject4610 = _taggedTemplateLiteral59(["toasted brie"]))), [["food", 2]]], [$effect(_templateObject479 || (_templateObject479 = _taggedTemplateLiteral59(["Gar-ish"]))), []], [$item(_templateObject485 || (_templateObject485 = _taggedTemplateLiteral59(["potion of the field gar"]))), []]];
+}(), interactingItems = [[$item(_templateObject4610 || (_templateObject4610 = _taggedTemplateLiteral59(["spice melange"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject479 || (_templateObject479 = _taggedTemplateLiteral59(["Ultra Mega Sour Ball"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject485 || (_templateObject485 = _taggedTemplateLiteral59(["The Plumber's mushroom stew"]))), [["food", 3], ["booze", -1]]], [$item(_templateObject495 || (_templateObject495 = _taggedTemplateLiteral59(["The Mad Liquor"]))), [["food", -1], ["booze", 3]]], [$item(_templateObject505 || (_templateObject505 = _taggedTemplateLiteral59(["Doc Clock's thyme cocktail"]))), [["food", -2], ["booze", 4]]], [$item(_templateObject5111 || (_templateObject5111 = _taggedTemplateLiteral59(["Mr. Burnsger"]))), [["food", 4], ["booze", -2]]], [$effect(_templateObject5210 || (_templateObject5210 = _taggedTemplateLiteral59(["Refined Palate"]))), []], [$item(_templateObject5310 || (_templateObject5310 = _taggedTemplateLiteral59(["toasted brie"]))), [["food", 2]]], [$effect(_templateObject5410 || (_templateObject5410 = _taggedTemplateLiteral59(["Gar-ish"]))), []], [$item(_templateObject554 || (_templateObject554 = _taggedTemplateLiteral59(["potion of the field gar"]))), []]];
 function planDiet(mpa, menu) {
   var organCapacities = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : [["food", null], ["booze", null], ["spleen item", null]], resolvedOrganCapacities = organCapacities.map(function(_ref8) {
     var _ref9 = _slicedToArray19(_ref8, 2), organ = _ref9[0], size = _ref9[1];
@@ -16871,7 +16885,7 @@ function planDiet(mpa, menu) {
   }), includedInteractingItems = menu.map(function(menuItem) {
     var interacting = interactingItems.find(function(_ref10) {
       var _ref11 = _slicedToArray19(_ref10, 1), itemOrEffect = _ref11[0];
-      return menuItem.item === itemOrEffect || menuItem.item === $item(_templateObject495 || (_templateObject495 = _taggedTemplateLiteral59(["pocket wish"]))) && menuItem.effect === itemOrEffect;
+      return menuItem.item === itemOrEffect || menuItem.item === $item(_templateObject564 || (_templateObject564 = _taggedTemplateLiteral59(["pocket wish"]))) && menuItem.effect === itemOrEffect;
     });
     if (interacting) {
       var _interacting = _slicedToArray19(interacting, 2), organSizes = _interacting[1];
@@ -16896,7 +16910,7 @@ function planDiet(mpa, menu) {
     var additionalSpleen = sum(planFoodBooze, function(_ref18) {
       var _ref19 = _slicedToArray19(_ref18, 2), items = _ref19[0], number = _ref19[1];
       return items.some(function(menuItem) {
-        return $items(_templateObject505 || (_templateObject505 = _taggedTemplateLiteral59(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item);
+        return $items(_templateObject574 || (_templateObject574 = _taggedTemplateLiteral59(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item);
       }) ? 5 * number : 0;
     }), _spleenCapacity = _slicedToArray19(spleenCapacity, 2), availableSpleen = _spleenCapacity[1], _dietPlanner$planOrga3 = dietPlanner.planOrgan("spleen item", availableSpleen + additionalSpleen), _dietPlanner$planOrga4 = _slicedToArray19(_dietPlanner$planOrga3, 2), planSpleen = _dietPlanner$planOrga4[1];
     return [].concat(_toConsumableArray17(planFoodBooze), _toConsumableArray17(planSpleen));
@@ -16925,11 +16939,11 @@ var DietEntry = /* @__PURE__ */ function() {
           return 0;
         var items = this.menuItems.map(function(m) {
           return m.item;
-        }), targetItem = this.menuItems[this.menuItems.length - 1].item, fork = (0, import_kolmafia65.itemType)(targetItem) === "food" && items.includes($item(_templateObject5111 || (_templateObject5111 = _taggedTemplateLiteral59(["Ol' Scratch's salad fork"])))), mug = (0, import_kolmafia65.itemType)(targetItem) === "booze" && items.includes($item(_templateObject5210 || (_templateObject5210 = _taggedTemplateLiteral59(["Frosty's frosty mug"]))));
+        }), targetItem = this.menuItems[this.menuItems.length - 1].item, fork = (0, import_kolmafia65.itemType)(targetItem) === "food" && items.includes($item(_templateObject584 || (_templateObject584 = _taggedTemplateLiteral59(["Ol' Scratch's salad fork"])))), mug = (0, import_kolmafia65.itemType)(targetItem) === "booze" && items.includes($item(_templateObject594 || (_templateObject594 = _taggedTemplateLiteral59(["Frosty's frosty mug"]))));
         return this.quantity * _expectedAdventures(this.menuItems[this.menuItems.length - 1].item, {
           forkMug: fork || mug,
-          seasoning: items.includes($item(_templateObject5310 || (_templateObject5310 = _taggedTemplateLiteral59(["Special Seasoning"])))),
-          whetStone: items.includes($item(_templateObject5410 || (_templateObject5410 = _taggedTemplateLiteral59(["whet stone"])))),
+          seasoning: items.includes($item(_templateObject604 || (_templateObject604 = _taggedTemplateLiteral59(["Special Seasoning"])))),
+          whetStone: items.includes($item(_templateObject6110 || (_templateObject6110 = _taggedTemplateLiteral59(["whet stone"])))),
           mayoflex: items.includes(Mayo.flex),
           refinedPalate: diet.refinedPalate,
           garish: diet.garish,
@@ -16966,7 +16980,7 @@ var DietEntry = /* @__PURE__ */ function() {
     get: function() {
       return this.entries.some(function(dietEntry) {
         return dietEntry.menuItems.some(function(trialItem) {
-          return trialItem.item === $item(_templateObject554 || (_templateObject554 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject564 || (_templateObject564 = _taggedTemplateLiteral59(["Refined Palate"]))) || trialItem.item === $item(_templateObject574 || (_templateObject574 = _taggedTemplateLiteral59(["toasted brie"])));
+          return trialItem.item === $item(_templateObject6210 || (_templateObject6210 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject6310 || (_templateObject6310 = _taggedTemplateLiteral59(["Refined Palate"]))) || trialItem.item === $item(_templateObject646 || (_templateObject646 = _taggedTemplateLiteral59(["toasted brie"])));
         });
       });
     }
@@ -16975,24 +16989,24 @@ var DietEntry = /* @__PURE__ */ function() {
     get: function() {
       return this.entries.some(function(dietEntry) {
         return dietEntry.menuItems.some(function(trialItem) {
-          return trialItem.item === $item(_templateObject584 || (_templateObject584 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject594 || (_templateObject594 = _taggedTemplateLiteral59(["Gar-ish"]))) || trialItem.item === $item(_templateObject604 || (_templateObject604 = _taggedTemplateLiteral59(["potion of the field gar"])));
+          return trialItem.item === $item(_templateObject654 || (_templateObject654 = _taggedTemplateLiteral59(["pocket wish"]))) && trialItem.effect === $effect(_templateObject664 || (_templateObject664 = _taggedTemplateLiteral59(["Gar-ish"]))) || trialItem.item === $item(_templateObject674 || (_templateObject674 = _taggedTemplateLiteral59(["potion of the field gar"])));
         });
       });
     }
   }, {
     key: "saucemaven",
     get: function() {
-      return have($skill(_templateObject6110 || (_templateObject6110 = _taggedTemplateLiteral59(["Saucemaven"]))));
+      return have($skill(_templateObject684 || (_templateObject684 = _taggedTemplateLiteral59(["Saucemaven"]))));
     }
   }, {
     key: "tuxedoShirt",
     get: function() {
-      return have($item(_templateObject6210 || (_templateObject6210 = _taggedTemplateLiteral59(["tuxedo shirt"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject6310 || (_templateObject6310 = _taggedTemplateLiteral59(["tuxedo shirt"]))));
+      return have($item(_templateObject693 || (_templateObject693 = _taggedTemplateLiteral59(["tuxedo shirt"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject703 || (_templateObject703 = _taggedTemplateLiteral59(["tuxedo shirt"]))));
     }
   }, {
     key: "pinkyRing",
     get: function() {
-      return have($item(_templateObject646 || (_templateObject646 = _taggedTemplateLiteral59(["mafia pinky ring"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject654 || (_templateObject654 = _taggedTemplateLiteral59(["mafia pinky ring"]))));
+      return have($item(_templateObject7110 || (_templateObject7110 = _taggedTemplateLiteral59(["mafia pinky ring"])))) && (0, import_kolmafia65.canEquip)($item(_templateObject7210 || (_templateObject7210 = _taggedTemplateLiteral59(["mafia pinky ring"]))));
     }
   }, {
     key: "expectedAdventures",

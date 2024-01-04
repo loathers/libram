@@ -32,7 +32,6 @@ async function overlappingItems(): Promise<string[]> {
     )
   );
 }
-
 async function overlappingSkills(): Promise<string[]> {
   const response = await nodeFetch(SKILLS_FILE);
   const text = await response.text();
@@ -41,8 +40,8 @@ async function overlappingSkills(): Promise<string[]> {
   const skills: string[] = [];
   for (const line of lines) {
     if (!line || line.startsWith("#") || !line.includes("\t")) continue;
-    const [_id, name, _image, type, _mpCost] = line.split("\t");
-    if (["5", "7", "8"].includes(type)) skills.push(name);
+    const [_id, name, _image, tags, _mpCost] = line.split("\t");
+    if (tags.split(",").includes("combat")) skills.push(name);
   }
 
   return skills.filter((name1) =>

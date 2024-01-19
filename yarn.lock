@@ -2489,10 +2489,10 @@ eslint-plugin-jsdoc@^46.5.0:
     semver "^7.5.4"
     spdx-expression-parse "^3.0.1"
 
-eslint-plugin-libram@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.3.4.tgz#031b6e3229b7bc06225d9c5f636468d05300c05d"
-  integrity sha512-Xi3Q0lQPnbGsGoAEgp5GO/lIXVu9sTOUyzVjv2lrlFHdr3LIU/a+6XiqL93Y093jzGvDHCHgZfqgLq+0FUTCMg==
+eslint-plugin-libram@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.4.1.tgz#83f07b69beda7eb4ef049a0103f46f4167c17a05"
+  integrity sha512-9zO9Y2GYFZNXW2QcLfvAg7lR2BNA8OBCXPLZ2ki2jRz35PZpCfGMv32XEJpmEr1rojNrC9a/CaOHk7bK8jaNRg==
   dependencies:
     html-entities "^2.4.0"
     requireindex "~1.2.0"

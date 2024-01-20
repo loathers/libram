@@ -1,4 +1,12 @@
-import { Monster, runChoice, toMonster, visitUrl, xpath } from "kolmafia";
+import {
+  Monster,
+  runChoice,
+  runCombat,
+  toMonster,
+  visitUrl,
+  xpath,
+} from "kolmafia";
+import { directlyUse } from "../..";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
@@ -68,10 +76,10 @@ export function getReceivableMonsters(): Monster[] {
 export function donate(monster: Monster): boolean {
   if (!canDonate()) return false;
 
-  const selectNumber = canReceive() ? 2 : 1;
-  const page = visitBank();
-  const available = getMonsters(selectNumber, page);
   try {
+    const selectNumber = canReceive() ? 2 : 1;
+    const page = visitBank();
+    const available = getMonsters(selectNumber, page);
     if (!available.includes(monster)) return false;
     return runChoice(1, `mid=${monster.id}`).includes(
       "You donate your egg to science."
@@ -90,9 +98,10 @@ export function donate(monster: Monster): boolean {
 export function receive(monster: Monster): boolean {
   if (!canReceive()) return false;
 
-  const page = visitBank();
-  const available = getMonsters(1, page);
   try {
+    const page = visitBank();
+    const available = getMonsters(1, page);
+
     if (!available.includes(monster)) return false;
     return runChoice(2, `mid=${monster.id}`).includes(
       "Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!"
@@ -100,4 +109,26 @@ export function receive(monster: Monster): boolean {
   } finally {
     visitUrl("main.php");
   }
+}
+
+/**
+ * Differentiate a Mimic egg into a monster, and fight it!
+ *
+ * @param monster The monster to differentiate your egg into
+ * @param combat Any parameters you'd like to pass to `runCombat`
+ * @returns Whether we successfully differentiated our egg
+ */
+export function differentiate(
+  monster: Monster,
+  ...combat: Parameters<typeof runCombat>
+): boolean {
+  const page = directlyUse($item`mimic egg`);
+  const monsters = getMonsters(1, page);
+  if (!monsters.includes(monster)) {
+    visitUrl("main.php");
+    return false;
+  }
+  runChoice(1, `mid=${monster.id}`);
+  runCombat(...combat);
+  return true;
 }

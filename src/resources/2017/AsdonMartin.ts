@@ -31,14 +31,14 @@ enum PriceAge {
  * @returns Whether the Asdon is our current active workshed
  */
 export function installed(): boolean {
-  return getWorkshed() === $item`Asdon Martin keyfob`;
+  return getWorkshed() === $item`Asdon Martin keyfob (on ring)`;
 }
 
 /**
  * @returns `true` if we `have` the Asdon or if it's installed
  */
 export function have(): boolean {
-  return installed() || haveItem($item`Asdon Martin keyfob`);
+  return installed() || haveItem($item`Asdon Martin keyfob (on ring)`);
 }
 
 const fuelSkiplist = $items`cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"`;

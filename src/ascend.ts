@@ -254,9 +254,9 @@ export function ascend(options: {
     throw new AscendError(`Invalid astral pet: ${pet}`);
   }
 
-  const unownedSkills = permOptions
-    ? [...permOptions.permSkills.keys()].filter((skill) => !haveSkill(skill))
-    : [];
+  const unownedSkills = [...(permOptions?.permSkills.keys() ?? [])].filter(
+    (skill) => !haveSkill(skill)
+  );
   if (unownedSkills.length) {
     throw new AscendError(
       `You're trying to perm the following skills, but don't actually have them: ${unownedSkills.join(
@@ -265,9 +265,9 @@ export function ascend(options: {
     );
   }
 
-  const unpermableSkills = permOptions
-    ? [...permOptions.permSkills.keys()].filter((skill) => !skill.permable)
-    : [];
+  const unpermableSkills = [...(permOptions?.permSkills.keys() ?? [])].filter(
+    (skill) => !skill.permable
+  );
   if (unpermableSkills.length) {
     throw new AscendError(
       `You're trying to perm the following skills, but they're unpermable: ${unownedSkills.join(

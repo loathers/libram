@@ -25,9 +25,9 @@ const makeXpath = (selectNumber: number, disabled: boolean): string =>
 
 function getMonsters(selectNumber: number, page: string): Monster[] {
   const total = xpath(page, makeXpath(selectNumber, false));
-  const disabled = xpath(page, makeXpath(selectNumber, true));
+  const disabled = new Set(xpath(page, makeXpath(selectNumber, true)));
   return total
-    .filter((m) => !disabled.includes(m))
+    .filter((m) => !disabled.has(m))
     .map((id) => toMonster(Number(id)));
 }
 
@@ -60,7 +60,7 @@ export function getReceivableMonsters(): Monster[] {
 }
 
 /**
- * Donate an egg to the DLA clinic
+ * Donate an egg to the DNA bank
  *
  * @param monster The monster whose egg you want to donate
  * @returns Whether we succeeded in our endeavor
@@ -82,7 +82,7 @@ export function donate(monster: Monster): boolean {
 }
 
 /**
- * Receive an egg from the DNA clinic
+ * Receive an egg from the DNA bank
  *
  * @param monster The monster whose egg you want to receive
  * @returns Whether we succeeded in our endeavor
@@ -98,6 +98,6 @@ export function receive(monster: Monster): boolean {
       "Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!"
     );
   } finally {
-    visitUrl("main.ph");
+    visitUrl("main.php");
   }
 }

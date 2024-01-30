@@ -23,8 +23,9 @@ export function have(): boolean {
 const visitBank = () =>
   visitUrl("place.php?whichplace=town_right&action=townright_dna", false);
 
-const canDonate = () => have_($item`mimic egg`) && get("_mimicEggsDonated");
-const canReceive = () => familiar.experience >= 100;
+const canDonate = () => have_($item`mimic egg`) && get("_mimicEggsDonated") < 3;
+const canReceive = () =>
+  familiar.experience >= 100 && get("_mimicEggsObtained") < 11;
 
 const makeXpath = (selectNumber: number, disabled: boolean): string =>
   `//select[@name="mid][${selectNumber}]/option[position()>0]${

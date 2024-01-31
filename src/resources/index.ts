@@ -47,6 +47,7 @@ import * as BurningLeaves from "./2023/BurningLeaves";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
+import * as ChestMimic from "./2024/ChestMimic";
 
 export {
   AugustScepter,
@@ -59,6 +60,7 @@ export {
   CampAway,
   Cartography,
   ChateauMantegna,
+  ChestMimic,
   CinchoDeMayo,
   ClosedCircuitPayphone,
   CombatLoversLocket,

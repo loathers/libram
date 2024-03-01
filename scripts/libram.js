@@ -6850,7 +6850,7 @@ function setCombatFlags() {
   return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flat(flags.map(function(_ref9) {
     var flag = _ref9.flag, value = _ref9.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
-  }))), ["action=Update"]).join("&"), !0)));
+  }))), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)

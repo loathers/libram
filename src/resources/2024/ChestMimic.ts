@@ -41,6 +41,18 @@ function getMonsters(selectNumber: number, page: string): Monster[] {
 }
 
 /**
+ * @returns The current mimic XP
+ */
+export function mimicXp(): number {
+  if (!have()) return 0;
+  const regex = RegExp(familiar + " \\((\\d+) exp, \\d+ kills\\)");
+  const famXp = visitUrl("familiar.php").match(regex);
+
+  if (famXp) return parseInt(famXp[1], 10);
+  else return 0;
+}
+
+/**
  * @returns List of monsters available for donation at this time
  */
 export function getDonableMonsters(): Monster[] {

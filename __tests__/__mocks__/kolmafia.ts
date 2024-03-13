@@ -163,6 +163,9 @@ export class Vykea extends MafiaClass {
   static none = {};
 }
 
+export const getPlayerName = jest.fn();
+export const getPlayerId = jest.fn();
+
 export const getProperty = jest.fn();
 
 export const isGiftable = jest.fn();

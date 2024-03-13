@@ -586,6 +586,82 @@ export function uneffect(effect: Effect): boolean {
   return cliExecute(`uneffect ${effect.name}`);
 }
 
+/**
+ * Get the player id from a player name
+ * @param name the name of the player
+ * @param onMissing Pass "throw" or omit to throw an error if the player is not found
+ * @returns the player id, or throws if no such player exists
+ */
+export function getPlayerIdFromName(name: string, onMissing?: "throw"): number;
+/**
+ * Get the player id from a player name (if it exists)
+ * @param name the name of the player
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null
+ * @returns the player id if the player exists, or handles according to onMissing
+ */
+export function getPlayerIdFromName(
+  name: string,
+  onMissing: "throw" | "return-null"
+): number | null;
+/**
+ * Get the player id from a player name (if it exists)
+ * @param name the name of the player
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null
+ * @returns the player id if the player exists, or handles according to onMissing
+ */
+export function getPlayerIdFromName(
+  name: string,
+  onMissing: "throw" | "return-null" = "throw"
+): number | null {
+  const playerId = getPlayerId(name);
+  // KoLmafia returns the input when not found
+  if (playerId === name) {
+    if (onMissing === "throw") {
+      throw new Error(`Player not found: ${name}`);
+    }
+    return null;
+  }
+  return parseInt(playerId);
+}
+
+/**
+ * Get the player id from a player name
+ * @param id the id of the player
+ * @param onMissing Pass "throw" or omit to throw an error if the player is not found
+ * @returns the player id, or throws if no such player exists
+ */
+export function getPlayerNameFromId(id: number, onMissing?: "throw"): string;
+/**
+ * Get the player id from a player name (if it exists)
+ * @param id the id of the player
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null * @returns the player id, or null if no such player exists
+ * @returns the player id if the player exists, or handles according to onMissing
+ */
+export function getPlayerNameFromId(
+  id: number,
+  onMissing: "throw" | "return-null"
+): string | null;
+/**
+ * Get the player id from a player name (if it exists)
+ * @param id the id of the player
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null
+ * @returns the player id if the player exists, or handles according to onMissing
+ */
+export function getPlayerNameFromId(
+  id: number,
+  onMissing: "throw" | "return-null" = "throw"
+): string | null {
+  const playerName = getPlayerName(id);
+  // KoLmafia returns the input when not found
+  if (playerName === id.toString()) {
+    if (onMissing === "throw") {
+      throw new Error(`Player not found: ${playerName}`);
+    }
+    return null;
+  }
+  return playerName;
+}
+
 export type Player = {
   name: string;
   id: number;
@@ -595,15 +671,47 @@ export type Player = {
  * Get both the name and id of a player from either their name or id
  *
  * @param idOrName Id or name of player
+ * @param onMissing Pass "throw" or omit to throw an error if the player is not found
  * @returns Object containing id and name of player
+ * @throws {Error} Throws an error if the player is not found
  */
-export function getPlayerFromIdOrName(idOrName: number | string): Player {
-  const id =
-    typeof idOrName === "number" ? idOrName : parseInt(getPlayerId(idOrName));
-  return {
-    name: getPlayerName(id),
-    id: id,
-  };
+export function getPlayerFromIdOrName(
+  idOrName: number | string,
+  onMissing?: "throw"
+): Player;
+/**
+ * Get both the name and id of a player from either their name or id
+ *
+ * @param idOrName Id or name of player
+ * @param onMissing Pass "return-null" to return null if the player is not found
+ * @returns Object containing id and name of player if it exists, or handles according to onMissing
+ */
+export function getPlayerFromIdOrName(
+  idOrName: number | string,
+  onMissing: "throw" | "return-null"
+): Player | null;
+/**
+ * Get both the name and id of a player from either their name or id
+ *
+ * @param idOrName Id or name of player
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null
+ * @returns Object containing id and name of player if it exists, or handles according to onMissing
+ */
+export function getPlayerFromIdOrName(
+  idOrName: number | string,
+  onMissing: "throw" | "return-null" = "throw"
+): Player | null {
+  if (typeof idOrName === "number") {
+    const name = getPlayerNameFromId(idOrName, onMissing);
+    if (name === null) return null;
+    return { name, id: idOrName };
+  } else {
+    const id = getPlayerIdFromName(idOrName, onMissing);
+    if (id === null) return null;
+    // load from KoLmafia to get the right capitalization
+    const name = getPlayerName(id);
+    return { name, id };
+  }
 }
 
 /**

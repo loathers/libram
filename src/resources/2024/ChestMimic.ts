@@ -6,8 +6,7 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { directlyUse } from "../..";
-import { have as have_ } from "../../lib";
+import { directlyUse, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 

@@ -27,16 +27,14 @@ const canReceive = () =>
   familiar.experience >= 100 && get("_mimicEggsObtained") < 11;
 
 const makeXpath = (selectNumber: number, disabled: boolean): string =>
-  `//select[@name="mid][${selectNumber}]/option[position()>0]${
+  `//select[@name="mid"][${selectNumber}]/option[position()>0]${
     disabled ? "[@disabled]" : ""
   }/@value`;
 
 function getMonsters(selectNumber: number, page: string): Monster[] {
   const total = xpath(page, makeXpath(selectNumber, false));
   const disabled = new Set(xpath(page, makeXpath(selectNumber, true)));
-  return total
-    .filter((m) => !disabled.has(m))
-    .map((id) => toMonster(Number(id)));
+  return total.filter((m) => !disabled.has(m)).map((id) => toMonster(id));
 }
 
 /**

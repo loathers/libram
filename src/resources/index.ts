@@ -48,6 +48,7 @@ import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
 import * as ChestMimic from "./2024/ChestMimic";
+import * as EverfullDartHolster from "./2024/EverfullDarts";
 
 export {
   AugustScepter,
@@ -72,6 +73,7 @@ export {
   DeckOfEveryCard,
   Dinseylandfill,
   DNALab,
+  EverfullDartHolster,
   FloristFriar,
   GingerBread,
   GreyGoose,

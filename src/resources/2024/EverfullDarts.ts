@@ -52,9 +52,8 @@ export function makeChoiceAdventureScript(
     if (choice === 1525) {
       const options = Object.entries(availableChoiceOptions());
       const perkChoices = priority.map((perk) => options.find(([option, text]) => text === perk)?.option);
-      return perkChoices.find(Boolean) || 0
+      return runChoice(perkChoices.find(Boolean) || 0);
     }
-    return getProperty("choiceAdventure" + choice.toFixed(0))
   }`;
   return bufferToFile(script, `${name}.js`);
 }

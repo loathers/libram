@@ -93,7 +93,7 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
     const mappedItem = itemMappings.get(item) ?? item;
     inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
   }
-  return inventory;
+  return new Map([...inventory.entries()].filter(([, quantity]) => quantity));
 }
 
 /**

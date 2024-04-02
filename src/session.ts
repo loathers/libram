@@ -225,7 +225,12 @@ export class Session {
     const turns = this.totalTurns;
     const meat = Math.floor(this.meat);
     const itemDetails = [...this.items.entries()].map(([item, quantity]) => {
-      return { item, quantity, value: itemValue(item) * quantity };
+      return {
+        item,
+        quantity,
+        // only run itemValue if quantity is nonzero
+        value: quantity ? itemValue(item) * quantity : 0,
+      };
     });
     const items = Math.floor(sum(itemDetails, "value"));
 

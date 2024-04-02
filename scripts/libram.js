@@ -6834,7 +6834,7 @@ function lgrCurrencies() {
     return realmAvailable(realm) && !(realm === "hot" && get("_luckyGoldRingVolcoino"));
   }).map(realmCurrency).filter(notNull);
 }
-var ACCOUNT_COMBAT_FLAGS = ["aabosses", "wowbar", "bothcombatinterf", "compactmanuel", "eternalmrj", "disablelovebugs"];
+var ACCOUNT_COMBAT_FLAGS = ["aabosses", "wowbar", "bothcombatinterf", "compactmanuel", "eternalmrj", "disablelovebugs", "boringdarts"];
 function getCombatFlags() {
   var flags = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [].concat(ACCOUNT_COMBAT_FLAGS), accountPage = (0, import_kolmafia4.visitUrl)("account.php?tab=combat");
   return flags.map(function(flag) {
@@ -14943,14 +14943,14 @@ var visitBank = function() {
 }, canReceive = function() {
   return familiar7.experience >= 100 && get("_mimicEggsObtained") < 11;
 }, makeXpath = function(selectNumber, disabled) {
-  return '//select[@name="mid]['.concat(selectNumber, "]/option[position()>0]").concat(disabled ? "[@disabled]" : "", "/@value");
+  return '//select[@name="mid"]['.concat(selectNumber, "]/option[position()>0]").concat(disabled ? "[@disabled]" : "", "/@value");
 };
 function getMonsters3(selectNumber, page) {
   var total = (0, import_kolmafia61.xpath)(page, makeXpath(selectNumber, !1)), disabled = new Set((0, import_kolmafia61.xpath)(page, makeXpath(selectNumber, !0)));
   return total.filter(function(m) {
     return !disabled.has(m);
   }).map(function(id) {
-    return (0, import_kolmafia61.toMonster)(Number(id));
+    return (0, import_kolmafia61.toMonster)(id);
   });
 }
 function getDonableMonsters() {

@@ -5151,6 +5151,12 @@ __export(src_exports, {
   getPlayerFromIdOrName: function() {
     return getPlayerFromIdOrName;
   },
+  getPlayerIdFromName: function() {
+    return getPlayerIdFromName;
+  },
+  getPlayerNameFromId: function() {
+    return getPlayerNameFromId;
+  },
   getRemainingLiver: function() {
     return getRemainingLiver;
   },
@@ -6681,12 +6687,42 @@ function getAverageAdventures(item11) {
 function uneffect(effect2) {
   return (0, import_kolmafia4.cliExecute)("uneffect ".concat(effect2.name));
 }
+function getPlayerIdFromName(name) {
+  var onMissing = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "throw", playerId = (0, import_kolmafia4.getPlayerId)(name);
+  if (playerId === name) {
+    if (onMissing === "throw")
+      throw new Error("Player not found: ".concat(name));
+    return null;
+  }
+  return parseInt(playerId);
+}
+function getPlayerNameFromId(id) {
+  var onMissing = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "throw", playerName = (0, import_kolmafia4.getPlayerName)(id);
+  if (playerName === id.toString()) {
+    if (onMissing === "throw")
+      throw new Error("Player not found: ".concat(playerName));
+    return null;
+  }
+  return playerName;
+}
 function getPlayerFromIdOrName(idOrName) {
-  var id = typeof idOrName == "number" ? idOrName : parseInt((0, import_kolmafia4.getPlayerId)(idOrName));
-  return {
-    name: (0, import_kolmafia4.getPlayerName)(id),
-    id: id
-  };
+  var onMissing = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "throw";
+  if (typeof idOrName == "number") {
+    var _name = getPlayerNameFromId(idOrName, onMissing);
+    return _name === null ? null : {
+      name: _name,
+      id: idOrName
+    };
+  } else {
+    var _id = getPlayerIdFromName(idOrName, onMissing);
+    if (_id === null)
+      return null;
+    var _name2 = (0, import_kolmafia4.getPlayerName)(_id);
+    return {
+      name: _name2,
+      id: _id
+    };
+  }
 }
 function questStep(questName) {
   var stringStep = get(questName);
@@ -19166,6 +19202,8 @@ var Session = /* @__PURE__ */ function() {
   getModifier,
   getMonsterLocations,
   getPlayerFromIdOrName,
+  getPlayerIdFromName,
+  getPlayerNameFromId,
   getRemainingLiver,
   getRemainingSpleen,
   getRemainingStomach,

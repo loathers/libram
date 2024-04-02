@@ -1167,6 +1167,7 @@ const ACCOUNT_COMBAT_FLAGS = [
   "compactmanuel",
   "eternalmrj",
   "disablelovebugs",
+  "boringdarts",
 ] as const;
 /**
  * Different flags you can set on your account for how to handle combat:

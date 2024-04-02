@@ -79,6 +79,17 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
   const invLocations = sessionOnly
     ? [mySessionItems]
     : [mySessionItems, getCloset, getDisplay, getStorage];
+
+  if (!sessionOnly) {
+    for (const [itemStr, quantity] of Object.entries(getCampground())) {
+      if (!quantity) continue;
+      const item = toItem(itemStr);
+      if (item === $item`big rock`) continue; // Used to represent an empty house slot
+      const mappedItem = itemMappings.get(item) ?? item;
+      inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+    }
+  }
+
   for (const inventoryFunc of invLocations) {
     for (const [itemStr, quantity] of Object.entries(inventoryFunc())) {
       if (!quantity) continue;
@@ -89,13 +100,6 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
     }
   }
 
-  for (const [itemStr, quantity] of Object.entries(getCampground())) {
-    if (!quantity) continue;
-    const item = toItem(itemStr);
-    if (item === $item`big rock`) continue; // Used to represent an empty house slot
-    const mappedItem = itemMappings.get(item) ?? item;
-    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
-  }
   return inventory;
 }
 

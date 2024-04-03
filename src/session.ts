@@ -79,20 +79,27 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
   const invLocations = sessionOnly
     ? [mySessionItems]
     : [mySessionItems, getCloset, getDisplay, getStorage];
-  for (const inventoryFunc of invLocations) {
-    for (const [itemStr, quantity] of Object.entries(inventoryFunc())) {
+
+  if (!sessionOnly) {
+    for (const [itemStr, quantity] of Object.entries(getCampground())) {
+      if (!quantity) continue;
       const item = toItem(itemStr);
+      if (item === $item`big rock`) continue; // Used to represent an empty house slot
       const mappedItem = itemMappings.get(item) ?? item;
       inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
     }
   }
 
-  for (const [itemStr, quantity] of Object.entries(getCampground())) {
-    const item = toItem(itemStr);
-    if (item === $item`big rock`) continue; // Used to represent an empty house slot
-    const mappedItem = itemMappings.get(item) ?? item;
-    inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+  for (const inventoryFunc of invLocations) {
+    for (const [itemStr, quantity] of Object.entries(inventoryFunc())) {
+      if (!quantity) continue;
+      const item = toItem(itemStr);
+      const mappedItem = itemMappings.get(item) ?? item;
+      inventory.set(mappedItem, quantity + (inventory.get(mappedItem) ?? 0));
+      if (inventory.get(mappedItem) === 0) inventory.delete(mappedItem);
+    }
   }
+
   return inventory;
 }
 
@@ -222,7 +229,12 @@ export class Session {
     const turns = this.totalTurns;
     const meat = Math.floor(this.meat);
     const itemDetails = [...this.items.entries()].map(([item, quantity]) => {
-      return { item, quantity, value: itemValue(item) * quantity };
+      return {
+        item,
+        quantity,
+        // only run itemValue if quantity is nonzero
+        value: quantity ? itemValue(item) * quantity : 0,
+      };
     });
     const items = Math.floor(sum(itemDetails, "value"));
 

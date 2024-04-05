@@ -1177,6 +1177,7 @@ const ACCOUNT_COMBAT_FLAGS = [
  * compactmanuel refers to the flag to display monster manuel data horizontally
  * eternalmrg refers to the flag to enable endless factoid delight
  * disablelovebugs disables love bugs
+ * boringdarts avoid rendering the dartboard in combat
  */
 export type AccountCombatFlag = typeof ACCOUNT_COMBAT_FLAGS[number];
 

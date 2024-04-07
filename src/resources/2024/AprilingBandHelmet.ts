@@ -71,7 +71,6 @@ function makeConductFunction<
         ? [input.toString(), input]
         : [input, mafiaClass.get(input)];
 
-    instance;
     if (have_(instance)) return true;
     const key = set.indexOf(name as S);
     if (key === -1) return false;

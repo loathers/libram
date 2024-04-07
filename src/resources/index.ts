@@ -47,9 +47,11 @@ import * as BurningLeaves from "./2023/BurningLeaves";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo";
 import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
+import * as AprilingBandHelmet from "./2024/AprilingBandHelmet";
 import * as ChestMimic from "./2024/ChestMimic";
 
 export {
+  AprilingBandHelmet,
   AugustScepter,
   AutumnAton,
   AsdonMartin,

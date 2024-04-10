@@ -67,7 +67,7 @@ function makeConductFunction<
     if (!canDo()) return false;
 
     const [name, instance]: [string, M] =
-      input instanceof MafiaClass
+      typeof input === "object"
         ? [input.toString(), input]
         : [input, mafiaClass.get(input)];
 
@@ -125,7 +125,10 @@ export const changeSong = makeConductFunction<Effect, MarchingSong>(
 export function conduct(
   result: Item | Instrument | Effect | MarchingSong
 ): boolean {
-  if (result instanceof Item || arrayContains(result, INSTRUMENTS)) {
+  if (
+    (typeof result === "object" && result instanceof Item) ||
+    arrayContains(result, INSTRUMENTS)
+  ) {
     return joinSection(result);
   }
   return changeSong(result);
@@ -139,7 +142,8 @@ export function conduct(
  * @returns Whether we successfully played our instrument
  */
 export function play(instrument: Instrument | Item, acquire = false): boolean {
-  const item = instrument instanceof Item ? instrument : Item.get(instrument);
+  const item =
+    typeof instrument === "object" ? instrument : Item.get(instrument);
   if (!(acquire ? joinSection : have_)(item)) return false;
   const currentUsesRemaining = item.dailyusesleft;
   if (currentUsesRemaining <= 0) return false;

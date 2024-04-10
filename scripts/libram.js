@@ -15043,7 +15043,7 @@ var helmet2 = $item(_templateObject390 || (_templateObject390 = _taggedTemplateL
 function have47() {
   return have(helmet2);
 }
-var MARCHING_SONGS = Object.freeze(["Patrol Beat", "Battle Cadence", "Celebration Bop"]), MARCHING_SONG_EFFECTS = Object.freeze(MARCHING_SONGS.map(function(song2) {
+var MARCHING_SONGS = Object.freeze(["Apriling Band Patrol Beat", "Apriling Band Battle Cadence", "Apriling Band Celebration Bop"]), MARCHING_SONG_EFFECTS = Object.freeze(MARCHING_SONGS.map(function(song2) {
   return (0, import_kolmafia61.toEffect)(song2);
 })), INSTRUMENTS = Object.freeze(["Apriling band saxophone", "Apriling band quad tom", "Apriling band tuba", "Apriling band staff", "Apriling band piccolo"]), INSTRUMENT_ITEMS = Object.freeze(INSTRUMENTS.map(function(instrument) {
   return (0, import_kolmafia61.toItem)(instrument);
@@ -15064,11 +15064,11 @@ function makeConductFunction(mafiaClass, canDo, set3, offset) {
     return key === -1 ? !1 : (visitConduct(), (0, import_kolmafia61.runChoice)(key + offset), (0, import_kolmafia61.runChoice)(9), have(instance));
   };
 }
-var joinSection = makeConductFunction(import_kolmafia61.Item, canJoinSection, INSTRUMENTS, 1);
+var joinSection = makeConductFunction(import_kolmafia61.Item, canJoinSection, INSTRUMENTS, 4);
 function canChangeSong() {
   return have47() && get("nextAprilBandTurn") <= (0, import_kolmafia61.totalTurnsPlayed)();
 }
-var changeSong = makeConductFunction(import_kolmafia61.Effect, canChangeSong, MARCHING_SONGS, 4);
+var changeSong = makeConductFunction(import_kolmafia61.Effect, canChangeSong, MARCHING_SONGS, 1);
 function conduct(result) {
   return typeof result == "object" && result instanceof import_kolmafia61.Item || arrayContains(result, INSTRUMENTS) ? joinSection(result) : changeSong(result);
 }

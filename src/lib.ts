@@ -1248,3 +1248,12 @@ export function withCombatFlags<T>(
     setCombatFlags(...initialValues);
   }
 }
+
+/**
+ * Determines whether you currently have an effect intrinsically
+ * @param effect The effect in question
+ * @returns Whether you have that effect as an intrinsic. Alternately you could just have over 2147483647 turns of that effect, but that seems unlikely.
+ */
+export function haveIntrinsic(effect: Effect): boolean {
+  return haveEffect(effect) >= 2147483647;
+}

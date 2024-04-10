@@ -5202,6 +5202,9 @@ __export(src_exports, {
   haveInCampground: function() {
     return haveInCampground;
   },
+  haveIntrinsic: function() {
+    return haveIntrinsic;
+  },
   haveWandererCounter: function() {
     return haveWandererCounter;
   },
@@ -6903,6 +6906,9 @@ function withCombatFlags(action) {
   } finally {
     setCombatFlags.apply(void 0, _toConsumableArray2(initialValues));
   }
+}
+function haveIntrinsic(effect2) {
+  return (0, import_kolmafia4.haveEffect)(effect2) >= 2147483647;
 }
 
 // src/overlappingNames.ts
@@ -19362,6 +19368,7 @@ var Session = /* @__PURE__ */ function() {
   have,
   haveCounter,
   haveInCampground,
+  haveIntrinsic,
   haveWandererCounter,
   holidayWanderers,
   invertMap,

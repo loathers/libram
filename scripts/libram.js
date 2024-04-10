@@ -15051,7 +15051,7 @@ function makeConductFunction(mafiaClass, canDo, set3, offset) {
   return function(input) {
     if (!canDo())
       return !1;
-    var _ref = input instanceof import_kolmafia61.MafiaClass ? [input.toString(), input] : [input, mafiaClass.get(input)], _ref2 = _slicedToArray14(_ref, 2), name = _ref2[0], instance = _ref2[1];
+    var _ref = typeof input == "object" ? [input.toString(), input] : [input, mafiaClass.get(input)], _ref2 = _slicedToArray14(_ref, 2), name = _ref2[0], instance = _ref2[1];
     if (have(instance))
       return !0;
     var key = set3.indexOf(name);
@@ -15064,10 +15064,10 @@ function canChangeSong() {
 }
 var changeSong = makeConductFunction(import_kolmafia61.Effect, canChangeSong, MARCHING_SONGS, 4);
 function conduct(result) {
-  return result instanceof import_kolmafia61.Item || arrayContains(result, INSTRUMENTS) ? joinSection(result) : changeSong(result);
+  return typeof result == "object" && result instanceof import_kolmafia61.Item || arrayContains(result, INSTRUMENTS) ? joinSection(result) : changeSong(result);
 }
 function play(instrument) {
-  var acquire = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1, item11 = instrument instanceof import_kolmafia61.Item ? instrument : import_kolmafia61.Item.get(instrument);
+  var acquire = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1, item11 = typeof instrument == "object" ? instrument : import_kolmafia61.Item.get(instrument);
   if (!(acquire ? joinSection : have)(item11))
     return !1;
   var currentUsesRemaining = item11.dailyusesleft;

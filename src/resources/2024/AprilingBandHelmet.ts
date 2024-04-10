@@ -24,9 +24,9 @@ export function have(): boolean {
 }
 
 export const MARCHING_SONGS = Object.freeze([
-  "Patrol Beat",
-  "Battle Cadence",
-  "Celebration Bop",
+  "Apriling Band Patrol Beat",
+  "Apriling Band Battle Cadence",
+  "Apriling Band Celebration Bop",
 ] as const);
 export type MarchingSong = typeof MARCHING_SONGS[number];
 export const MARCHING_SONG_EFFECTS = Object.freeze(
@@ -92,7 +92,7 @@ export const joinSection = makeConductFunction<Item, Instrument>(
   Item,
   canJoinSection,
   INSTRUMENTS,
-  1
+  4
 );
 
 /**
@@ -113,7 +113,7 @@ export const changeSong = makeConductFunction<Effect, MarchingSong>(
   Effect,
   canChangeSong,
   MARCHING_SONGS,
-  4
+  1
 );
 
 /**

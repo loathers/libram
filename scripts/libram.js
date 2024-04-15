@@ -14970,6 +14970,9 @@ __export(AprilingBandHelmet_exports, {
   canJoinSection: function() {
     return canJoinSection;
   },
+  canPlay: function() {
+    return canPlay;
+  },
   changeSong: function() {
     return changeSong;
   },
@@ -15057,7 +15060,7 @@ function makeConductFunction(mafiaClass, canDo, set3, offset) {
   return function(input) {
     if (!canDo())
       return !1;
-    var _ref = typeof input == "object" ? [input.toString(), input] : [input, mafiaClass.get(input)], _ref2 = _slicedToArray14(_ref, 2), name = _ref2[0], instance = _ref2[1];
+    var _ref = typeof input == "string" ? [input, mafiaClass.get(input)] : [input.name, input], _ref2 = _slicedToArray14(_ref, 2), name = _ref2[0], instance = _ref2[1];
     if (have(instance))
       return !0;
     var key = set3.indexOf(name);
@@ -15070,14 +15073,22 @@ function canChangeSong() {
 }
 var changeSong = makeConductFunction(import_kolmafia61.Effect, canChangeSong, MARCHING_SONGS, 1);
 function conduct(result) {
-  return typeof result == "object" && result instanceof import_kolmafia61.Item || arrayContains(result, INSTRUMENTS) ? joinSection(result) : changeSong(result);
+  return result instanceof import_kolmafia61.Item || arrayContains(result, INSTRUMENTS) ? joinSection(result) : changeSong(result);
 }
 function play(instrument) {
-  var acquire = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1, item11 = typeof instrument == "object" ? instrument : import_kolmafia61.Item.get(instrument);
-  if (!(acquire ? joinSection : have)(item11))
+  var acquire = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1, item11 = instrument instanceof import_kolmafia61.Item ? instrument : import_kolmafia61.Item.get(instrument);
+  if (!canPlay(instrument, acquire))
     return !1;
+  acquire && !have(item11) && joinSection(item11);
   var currentUsesRemaining = item11.dailyusesleft;
-  return currentUsesRemaining <= 0 ? !1 : ((0, import_kolmafia61.visitUrl)("inventory.php?pwd=".concat((0, import_kolmafia61.myHash)(), "&iid=").concat(item11.id, "&action=aprilplay"), !1), item11.dailyusesleft !== currentUsesRemaining);
+  return (0, import_kolmafia61.visitUrl)("inventory.php?pwd=".concat((0, import_kolmafia61.myHash)(), "&iid=").concat(item11.id, "&action=aprilplay"), !1), item11.dailyusesleft !== currentUsesRemaining;
+}
+function canPlay(instrument) {
+  var acquire = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1;
+  if (!have47())
+    return !1;
+  var item11 = instrument instanceof import_kolmafia61.Item ? instrument : import_kolmafia61.Item.get(instrument);
+  return !(!have(item11) && (!acquire || !canJoinSection()) || item11.dailyusesleft <= 0);
 }
 
 // src/resources/2024/ChestMimic.ts

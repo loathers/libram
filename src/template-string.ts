@@ -58,9 +58,8 @@ const createSingleConstant = <T extends MafiaClass>(
     ...placeholders: string[]
   ) => {
     const input = concatTemplateString(literals, ...placeholders);
-    type I = InstanceType<typeof Type>;
     try {
-      return Type.get<I>(input);
+      return Type.get(input);
     } catch (error) {
       handleTypeGetError(Type, error);
     }
@@ -79,20 +78,18 @@ const createPluralConstant = <T extends MafiaClass>(
   ) => {
     const input = concatTemplateString(literals, ...placeholders);
 
-    type I = InstanceType<typeof Type>;
-
     if (input === "") {
-      return Type.all<I>();
+      return Type.all();
     }
 
     try {
-      return Type.get<I>(splitByCommasWithEscapes(input));
+      return Type.get(splitByCommasWithEscapes(input));
     } catch (error) {
       handleTypeGetError(Type, error);
     }
     abort();
   };
-  tagFunction.all = () => Type.all() as T[];
+  tagFunction.all = () => Type.all();
   return tagFunction;
 };
 

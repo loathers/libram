@@ -130,3 +130,25 @@ export function differentiate(
   runCombat(...combat);
   return true;
 }
+
+/**
+ * Differentiate a Mimic egg into a monster, and fight it!
+ *
+ * @param monster The monster to differentiate your egg into
+ * @returns How many of a Monster we can differentiate
+ */
+export function canDifferentiateMonster(monster: Monster): number {
+  if (!have($item`mimic egg`)) return 0;
+  const page = directlyUse($item`mimic egg`);
+  const monsters = getMonsters(1, page);
+  if (!monsters.includes(monster)) {
+    visitUrl("main.php");
+    return 0;
+  }
+  const numMonsterXPath = makeXpath(2, false); // Assuming numMonster is in the second select element
+  const numMonsterValues = xpath(page, numMonsterXPath);
+  const numMonster = numMonsterValues.length; // Assuming numMonster is a count of options in the second select element
+
+  visitUrl("main.php");
+  return numMonster;
+}

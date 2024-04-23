@@ -68,15 +68,19 @@ export function monstersReminisced(): Monster[] {
  * Fight a Monster using the Combat Lover's Locket
  *
  * @param monster The Monster to fight
+ * @param combatParams Any parameters you'd like to pass to `runCombat`
  * @returns false if we are unable to reminisce about this monster. Else, returns whether, at the end of all things, we have reminisced about this monster.
  */
-export function reminisce(monster: Monster): boolean {
+export function reminisce(
+  monster: Monster,
+  ...combatParams: Parameters<typeof runCombat>
+): boolean {
   if (!have() || reminiscesLeft() === 0 || !getLocketMonsters()[monster.name]) {
     return false;
   }
 
   cliExecute(`reminisce ${monster}`);
-  runCombat();
+  runCombat(...combatParams);
   return monstersReminisced().includes(monster);
 }
 

@@ -25,11 +25,14 @@ export function paintingFought(): boolean {
 /**
  * Fights your currently installed painting monster if able
  *
+ * @param combatParams Any parameters you'd like to pass to `runCombat`
  * @returns The result of `runCombat`, which is the page html of the final round of combat
  */
-export function fightPainting(): string {
+export function fightPainting(
+  ...combatParams: Parameters<typeof runCombat>
+): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  return runCombat();
+  return runCombat(...combatParams);
 }
 
 export const desks = [

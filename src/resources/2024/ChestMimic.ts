@@ -138,7 +138,7 @@ export function differentiate(
  * @returns How many of a Monster we can differentiate
  */
 export function canDifferentiateMonster(monster: Monster): number {
-  if (!have($item`mimic egg`)) return 0;
+  if (!have_($item`mimic egg`)) return 0;
   const page = directlyUse($item`mimic egg`);
   const monsters = getMonsters(1, page);
   if (!monsters.includes(monster)) {

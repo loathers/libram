@@ -10,7 +10,7 @@ import {
 import { directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { CombatParams, clamp } from "../../utils";
 
 const familiar = $familiar`Chest Mimic`;
 
@@ -120,7 +120,7 @@ export function receive(monster: Monster): boolean {
  */
 export function differentiate(
   monster: Monster,
-  ...combatParams: Parameters<typeof runCombat>
+  ...combatParams: CombatParams
 ): boolean {
   const page = directlyUse($item`mimic egg`);
   const monsters = getMonsters(1, page);
@@ -129,7 +129,7 @@ export function differentiate(
     return false;
   }
   runChoice(1, `mid=${monster.id}`);
-  runCombat(...combatParams);
+  combatParams.length ? runCombat(...combatParams) : runCombat();
   return true;
 }
 

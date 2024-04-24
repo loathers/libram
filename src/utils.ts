@@ -1,3 +1,5 @@
+import { runCombat } from "kolmafia";
+
 /**
  * Type guard against null value
  *
@@ -386,3 +388,5 @@ export type Range<A extends number, B extends number> = Exclude<
   Enumerate<B>,
   Enumerate<A>
 >;
+
+export type CombatParams = Parameters<typeof runCombat> | [];

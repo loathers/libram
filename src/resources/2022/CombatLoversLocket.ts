@@ -8,7 +8,7 @@ import {
 import { have as haveItem } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { clamp, CombatParams } from "../../utils";
 
 const locket = $item`combat lover's locket`;
 
@@ -73,14 +73,14 @@ export function monstersReminisced(): Monster[] {
  */
 export function reminisce(
   monster: Monster,
-  ...combatParams: Parameters<typeof runCombat>
+  ...combatParams: CombatParams
 ): boolean {
   if (!have() || reminiscesLeft() === 0 || !getLocketMonsters()[monster.name]) {
     return false;
   }
 
   cliExecute(`reminisce ${monster}`);
-  runCombat(...combatParams);
+  combatParams.length ? runCombat(...combatParams) : runCombat();
   return monstersReminisced().includes(monster);
 }
 

@@ -2,6 +2,7 @@ import { Monster, myHash, runChoice, runCombat, visitUrl } from "kolmafia";
 import { haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
+import { CombatParams } from "../../utils";
 
 const item = $item`Witchess Set`;
 /**
@@ -37,7 +38,7 @@ export const pieces = Monster.get([
  */
 export function fightPiece(
   piece: Monster,
-  combatParams: Parameters<typeof runCombat>
+  ...combatParams: CombatParams
 ): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
@@ -58,5 +59,5 @@ export function fightPiece(
   ) {
     throw new Error("Failed to start fight.");
   }
-  return runCombat(...combatParams);
+  return combatParams.length ? runCombat(...combatParams) : runCombat();
 }

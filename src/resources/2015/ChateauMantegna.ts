@@ -1,5 +1,6 @@
 import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
 import { get } from "../../property";
+import { CombatParams } from "../../utils";
 
 /**
  * @returns Whether we own the Chateau Mantegna
@@ -28,11 +29,9 @@ export function paintingFought(): boolean {
  * @param combatParams Any parameters you'd like to pass to `runCombat`
  * @returns The result of `runCombat`, which is the page html of the final round of combat
  */
-export function fightPainting(
-  ...combatParams: Parameters<typeof runCombat>
-): string {
+export function fightPainting(...combatParams: CombatParams): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  return runCombat(...combatParams);
+  return combatParams.length ? runCombat(...combatParams) : runCombat();
 }
 
 export const desks = [

@@ -136,7 +136,7 @@ export function differentiate(
 /**
  * Check how many of a monster is available to differentiate into
  *
- * @param monster The monster to differentiate your egg into
+ * @param monster The monster to differentiate your egg into; may behave weirdly with name collisions
  * @returns How many of a Monster we can differentiate
  */
 export function differentiableQuantity(monster: Monster): number {

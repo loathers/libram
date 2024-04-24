@@ -139,7 +139,7 @@ export function differentiate(
  */
 export function canDifferentiateMonster(monster: Monster): number {
   if (!have_($item`mimic egg`)) return 0;
-  const regex = new RegExp(`${monster.name}\\s*\\((\\d+)\\)`, "i");
+  const regex = new RegExp(`${monster.name}\\s*(?:\\((\\d+)\\))?`, "i");
   const page = visitUrl(`desc_item.php?whichitem=646626465`, false, true);
   const match = page.match(regex);
   if (!match) {

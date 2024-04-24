@@ -132,7 +132,7 @@ export function differentiate(
 }
 
 /**
- * Differentiate a Mimic egg into a monster, and fight it!
+ * Check how many of a monster is available to differentiate into
  *
  * @param monster The monster to differentiate your egg into
  * @returns How many of a Monster we can differentiate

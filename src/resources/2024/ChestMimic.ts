@@ -1,14 +1,16 @@
 import {
   Monster,
+  availableAmount,
   runChoice,
   runCombat,
   toMonster,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { directlyUse, have as have_ } from "../../lib";
+import { directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
+import { clamp } from "../../utils";
 
 const familiar = $familiar`Chest Mimic`;
 
@@ -137,15 +139,11 @@ export function differentiate(
  * @param monster The monster to differentiate your egg into
  * @returns How many of a Monster we can differentiate
  */
-export function canDifferentiateMonster(monster: Monster): number {
+export function differentiableQuantity(monster: Monster): number {
   if (!have_($item`mimic egg`)) return 0;
   const regex = new RegExp(`${monster.name}\\s*(?:\\((\\d+)\\))?`, "i");
-  const page = visitUrl(`desc_item.php?whichitem=646626465`, false, true);
+  const page = examine($item`mimic egg`);
   const match = page.match(regex);
-  if (!match) {
-    visitUrl("main.php");
-    return 0;
-  }
-  visitUrl("main.php");
-  return parseInt(match[1]) || 1;
+  if (!match) return 0;
+  return clamp(parseInt(match[1]), 0, availableAmount($item`mimic egg`)) || 1;
 }

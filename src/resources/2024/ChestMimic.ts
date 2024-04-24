@@ -147,5 +147,5 @@ export function canDifferentiateMonster(monster: Monster): number {
     return 0;
   }
   visitUrl("main.php");
-  return parseInt(match[1]);
+  return parseInt(match[1]) || 1;
 }

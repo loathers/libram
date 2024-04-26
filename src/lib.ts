@@ -976,13 +976,15 @@ export function telescope(): {
   hedge2?: Element;
   hedge3?: Element;
 } {
-  return {
-    statContest: telescopeStats.get(get("telescope1")),
-    elementContest: telescopeElements.get(get("telescope2")),
-    hedge1: hedgeTrap1.get(get("telescope3")),
-    hedge2: hedgeTrap2.get(get("telescope4")),
-    hedge3: hedgeTrap3.get(get("telescope5")),
-  };
+  return Object.fromEntries(
+    Object.entries({
+      statContest: telescopeStats.get(get("telescope1")),
+      elementContest: telescopeElements.get(get("telescope2")),
+      hedge1: hedgeTrap1.get(get("telescope3")),
+      hedge2: hedgeTrap2.get(get("telescope4")),
+      hedge3: hedgeTrap3.get(get("telescope5")),
+    } as const).filter(([, value]) => value)
+  );
 }
 
 /**

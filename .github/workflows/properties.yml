@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: corepack enable
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --immutable
 
       - name: Build the code
         run: yarn build

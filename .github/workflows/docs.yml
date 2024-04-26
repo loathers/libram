@@ -15,9 +15,11 @@ jobs:
       - name: Check out
         uses: actions/checkout@v1
 
+      - run: corepack enable
+
       - name: Generate static docs
         run: |
-          yarn
+          yarn install --immutable
           yarn run docs
 
       - name: Deploy

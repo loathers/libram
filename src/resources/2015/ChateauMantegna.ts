@@ -1,6 +1,6 @@
-import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
+import { buy, getChateau, Item, Monster, visitUrl } from "kolmafia";
+import { CombatParams, runCombatSpread } from "../../lib";
 import { get } from "../../property";
-import { CombatParams } from "../../utils";
 
 /**
  * @returns Whether we own the Chateau Mantegna
@@ -31,7 +31,7 @@ export function paintingFought(): boolean {
  */
 export function fightPainting(...combatParams: CombatParams): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  return combatParams.length ? runCombat(...combatParams) : runCombat();
+  return runCombatSpread(...combatParams);
 }
 
 export const desks = [

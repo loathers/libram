@@ -1,14 +1,8 @@
-import {
-  cliExecute,
-  getLocketMonsters,
-  Monster,
-  runCombat,
-  toMonster,
-} from "kolmafia";
-import { have as haveItem } from "../../lib";
+import { cliExecute, getLocketMonsters, Monster, toMonster } from "kolmafia";
+import { CombatParams, have as haveItem, runCombatSpread } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
-import { clamp, CombatParams } from "../../utils";
+import { clamp } from "../../utils";
 
 const locket = $item`combat lover's locket`;
 
@@ -80,7 +74,7 @@ export function reminisce(
   }
 
   cliExecute(`reminisce ${monster}`);
-  combatParams.length ? runCombat(...combatParams) : runCombat();
+  runCombatSpread(...combatParams);
   return monstersReminisced().includes(monster);
 }
 

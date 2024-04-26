@@ -1,16 +1,21 @@
 import {
-  Monster,
   availableAmount,
+  Monster,
   runChoice,
-  runCombat,
   toMonster,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { directlyUse, examine, have as have_ } from "../../lib";
+import { clamp } from "lodash-es";
+import {
+  CombatParams,
+  directlyUse,
+  examine,
+  have as have_,
+  runCombatSpread,
+} from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
-import { CombatParams, clamp } from "../../utils";
 
 const familiar = $familiar`Chest Mimic`;
 
@@ -129,7 +134,7 @@ export function differentiate(
     return false;
   }
   runChoice(1, `mid=${monster.id}`);
-  combatParams.length ? runCombat(...combatParams) : runCombat();
+  runCombatSpread(...combatParams);
   return true;
 }
 

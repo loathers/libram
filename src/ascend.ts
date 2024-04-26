@@ -187,7 +187,7 @@ function isInValhalla(): boolean {
  * Hops the gash, perming no skills by default
  *
  * @param options Configuration for the ascension
- * @param options.path path of choice, as a Path object--these exist as properties of Paths
+ * @param options.path Your path of choice for this ascension
  * @param options.playerClass Your class of choice for this ascension
  * @param options.lifestyle 1 for casual, 2 for softcore, 3 for hardcore. Alternately, use the Lifestyle enum
  * @param options.kolGender An entry from the KolGender enum: 1 for male, 2 for female (sorry that it's limited to those). Defaults to 2 or the corresponding value for defaultGenderOverride pref (which should be 'male' or 'female')

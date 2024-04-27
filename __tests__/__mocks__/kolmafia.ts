@@ -1,3 +1,4 @@
+import { decode as decodeEntities } from "html-entities";
 import { jest } from "@jest/globals";
 
 import type RuntimeLibrary from "kolmafia";
@@ -108,12 +109,16 @@ class Item extends MafiaClass {
 
   static all = jest.fn(() => Item.knownInstances);
 
+  static _findByPlural(plural: string) {
+    return Item.knownInstances.find((i) => i.plural === plural);
+  }
+
   static none = new Item("", -1, "");
 
   constructor(
     readonly name: string,
     readonly id: number = ++Item.mockId,
-    readonly plural: string = `Multiple ${name}`
+    public plural: string = `Multiple ${name}`
   ) {
     super(name);
   }
@@ -286,6 +291,26 @@ kolmafia.printHtml.mockImplementation((msg) =>
   console.log(`[kolmafia.printHtml] ${msg}`)
 );
 
+kolmafia.extractItems.mockImplementation((s) => {
+  const items: Record<string, number> = {};
+
+  for (const match of s.matchAll(/You acquire an item: <b>([^<]+)<\/b>/g)) {
+    const name = decodeEntities(match[1]);
+    items[name] = (items[name] ?? 0) + 1;
+  }
+  for (const match of s.matchAll(/You acquire <b>(\d+) ([^<]+)<\/b>/g)) {
+    const count = parseInt(match[1], 10);
+    const plural = decodeEntities(match[2]);
+    const item = Item._findByPlural(plural) ?? (Item.get(plural) as Item);
+    const name = item.name;
+    items[name] = (items[name] ?? 0) + count;
+  }
+  return items;
+});
+kolmafia.extractMeat.mockImplementation((s) => {
+  const match = /You gain (\d+) Meat/.exec(s);
+  return match ? parseInt(match[1], 10) : 0;
+});
 kolmafia.getMonsters.mockImplementation(() => []);
 kolmafia.nowToString.mockImplementation(() => new Date().toISOString());
 kolmafia.toInt.mockImplementation((value) => parseInt(value as any, 10));

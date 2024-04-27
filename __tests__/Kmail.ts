@@ -372,7 +372,7 @@ describe("message parsing", () => {
           "<center><table><tr><td><img src=\"https://d2uyhvukfffg5a.cloudfront.net/adventureimages/1335.gif\" width=100 height=100></td><td valign=center>r0535 R R3d<br>5ug4r i5 5w337<br>If U'd b3 m1n3<br>I'd f33l pr377y 1337.</td></tr></table></center>This is a valentine's message with &lt;b&gt;fake html&lt;/b&gt;\r\n\r\n",
       },
       expectedMessage:
-        "This is a valentine's message with &lt;b&gt;fake html&lt;/b&gt;\r\n\r\n",
+        "This is a valentine's message with <b>fake html</b>\r\n\r\n",
       expectedMeat: 0,
     },
   ])(
@@ -396,11 +396,9 @@ describe("message parsing", () => {
           'This is an outside note with &lt;fake&gt;&lt;/html&gt;<center><table class="item" style="float: none" rel="id=1167&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/plainbrown.gif" alt="plain brown wrapper" title="plain brown wrapper" class=hand onClick=\'descitem(546961999)\' ></td><td valign=center class=effect>You acquire an item: <b>plain brown wrapper</b></td></tr></table></center><p>Inside Note:<p>This is an inside note with &lt;b&gt;fake&lt;/b&gt;&lt;/html&gt;<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 11 Meat.</td></tr></table></center><center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=1&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire an item: <b>&quot;DRINK ME&quot; potion</b></td></tr></table></center>',
       },
       expectedMessage:
-        "This is an outside note with &lt;fake&gt;&lt;/html&gt;\n\nInside Note:\nThis is an inside note with &lt;b&gt;fake&lt;/b&gt;&lt;/html&gt;",
-      expectedOutsideNote:
-        "This is an outside note with &lt;fake&gt;&lt;/html&gt;",
-      expectedInsideNote:
-        "This is an inside note with &lt;b&gt;fake&lt;/b&gt;&lt;/html&gt;",
+        "This is an outside note with <fake></html>\n\nInside Note:\nThis is an inside note with <b>fake</b></html>",
+      expectedOutsideNote: "This is an outside note with <fake></html>",
+      expectedInsideNote: "This is an inside note with <b>fake</b></html>",
       expectedItems: new Map([
         [$item`plain brown wrapper`, 1],
         [$item`"DRINK ME" potion`, 1],
@@ -417,10 +415,8 @@ describe("message parsing", () => {
         message:
           'This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=1168&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/lessthan3.gif" alt="less-than-three-shaped box" title="less-than-three-shaped box" class=hand onClick=\'descitem(938194457)\' ></td><td valign=center class=effect>You acquire an item: <b>less-than-three-shaped box</b></td></tr></table></center>',
       },
-      expectedMessage:
-        "This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.",
-      expectedOutsideNote:
-        "This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.",
+      expectedMessage: "This is an outside note with <b>fake html</b>.",
+      expectedOutsideNote: "This is an outside note with <b>fake html</b>.",
       expectedInsideNote: null,
       expectedItems: new Map([[$item`less-than-three-shaped box`, 1]]),
       expectedOutsideItems: new Map([[$item`less-than-three-shaped box`, 1]]),
@@ -436,11 +432,9 @@ describe("message parsing", () => {
           'This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=1168&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/lessthan3.gif" alt="less-than-three-shaped box" title="less-than-three-shaped box" class=hand onClick=\'descitem(938194457)\' ></td><td valign=center class=effect>You acquire an item: <b>less-than-three-shaped box</b></td></tr></table></center><p>Inside Note:<p>This is an inside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=11&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire <b>11 bottles of &quot;DRINK ME&quot; potion</b><br>(That\'s ridiculous.  It\'s not even funny.)</td></tr></table></center><center><table class="item" style="float: none" rel="id=1907&s=65&q=0&d=1&g=0&t=1&n=1&m=0&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/8ball.gif" alt="8-ball" title="8-ball" class=hand onClick=\'descitem(631597539)\' ></td><td valign=center class=effect>You acquire an item: <b>8-ball</b></td></tr></table></center>',
       },
       expectedMessage:
-        "This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.\n\nInside Note:\nThis is an inside note with &lt;b&gt;fake html&lt;/b&gt;.",
-      expectedOutsideNote:
-        "This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.",
-      expectedInsideNote:
-        "This is an inside note with &lt;b&gt;fake html&lt;/b&gt;.",
+        "This is an outside note with <b>fake html</b>.\n\nInside Note:\nThis is an inside note with <b>fake html</b>.",
+      expectedOutsideNote: "This is an outside note with <b>fake html</b>.",
+      expectedInsideNote: "This is an inside note with <b>fake html</b>.",
       expectedItems: new Map([
         [$item`less-than-three-shaped box`, 1],
         [$item`"DRINK ME" potion`, 11],

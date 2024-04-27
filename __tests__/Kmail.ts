@@ -208,6 +208,30 @@ describe("message parsing", () => {
     localtime: "04/25/24 09:11:44 PM",
   };
 
+  it("should parse the same time from azunixtime and localtime", () => {
+    mocked(visitUrl).mockReturnValueOnce(
+      JSON.stringify([
+        { ...baseMessage, type: "normal", message: "Hello, world!" },
+      ])
+    );
+
+    const kmails = Kmail.inbox();
+    expect(kmails).toHaveLength(1);
+    expect(
+      kmails[0].date
+        .toLocaleString("en-US", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        })
+        .replace(/, /g, " ")
+    ).toEqual(baseMessage.localtime);
+  });
+
   it.each([
     {
       input: {

@@ -617,6 +617,22 @@ export function maximizeCached(
   return result;
 }
 
+function mergeOptionalOptions<T extends keyof MaximizeOptions>(
+  optionsA: Partial<MaximizeOptions>,
+  optionsB: Partial<MaximizeOptions>,
+  ...keys: T[]
+): Partial<{ [key in T]: MaximizeOptions[key] }> {
+  return keys.reduce(
+    (current, key) => ({
+      ...current,
+      ...((optionsA[key] || optionsB[key]) === undefined
+        ? {}
+        : { [key]: optionsA[key] || optionsB[key] }),
+    }),
+    {}
+  );
+}
+
 export class Requirement {
   #maximizeParameters: string[];
   #maximizeOptions: Partial<MaximizeOptions>;
@@ -646,20 +662,24 @@ export class Requirement {
    * Merges two requirements, concanating relevant arrays. Typically used in static form.
    *
    * @param other Requirement to merge with.
+   * @returns A new merged Requirement
    */
-
   merge(other: Requirement): Requirement {
     const optionsA = this.maximizeOptions;
     const optionsB = other.maximizeOptions;
+
+    const optionalBooleans = mergeOptionalOptions(
+      optionsA,
+      optionsB,
+      "updateOnFamiliarChange",
+      "updateOnCanEquipChanged",
+      "forceUpdate"
+    );
+
     return new Requirement(
       [...this.maximizeParameters, ...other.maximizeParameters],
       {
-        updateOnFamiliarChange:
-          optionsA.updateOnFamiliarChange ||
-          other.maximizeOptions.updateOnFamiliarChange,
-        updateOnCanEquipChanged:
-          optionsA.updateOnCanEquipChanged ||
-          other.maximizeOptions.updateOnCanEquipChanged,
+        ...optionalBooleans,
         forceEquip: [
           ...(optionsA.forceEquip ?? []),
           ...(other.maximizeOptions.forceEquip ?? []),
@@ -677,8 +697,6 @@ export class Requirement {
           ...(optionsA.preventSlot ?? []),
           ...(optionsB.preventSlot ?? []),
         ],
-
-        forceUpdate: optionsA.forceUpdate || optionsB.forceUpdate,
       }
     );
   }

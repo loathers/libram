@@ -16,7 +16,7 @@
     "format": "yarn run prettier --write .",
     "lint": "yarn run eslint src tools --ext .ts && yarn run prettier --check .",
     "test": "yarn run jest",
-    "prepublishOnly": "yarn run build",
+    "prepack": "yarn run build",
     "updateProps": "yarn run ts-node ./tools/parseDefaultProperties.ts",
     "updateOverlappingItemSkillNames": "yarn run ts-node ./tools/parseItemSkillNames.ts"
   },

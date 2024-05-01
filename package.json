@@ -7,7 +7,6 @@
   "repository": "https://github.com/loathers/libram",
   "author": "Samuel Gaus <sam@gaus.co.uk>",
   "license": "MIT",
-  "private": false,
   "scripts": {
     "build": "yarn run updateOverlappingItemSkillNames && yarn run build:tsc && yarn run build:bundled",
     "build:tsc": "tsc",
@@ -73,5 +72,6 @@
   "lint-staged": {
     "src/**/*.{ts,js}": "prettier --write"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "packageManager": "yarn@4.1.1"
 }

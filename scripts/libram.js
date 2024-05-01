@@ -6813,13 +6813,16 @@ function damageTakenByElement(baseDamage, element) {
 }
 var telescopeStats = /* @__PURE__ */ new Map([["standing around flexing their muscles and using grip exercisers", $stat(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["Muscle"])))], ["sitting around playing chess and solving complicated-looking logic puzzles", $stat(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["Mysticality"])))], ["all wearing sunglasses and dancing", $stat(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["Moxie"])))]]), telescopeElements = /* @__PURE__ */ new Map([["people, all of whom appear to be on fire", $element(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["hot"])))], ["people, surrounded by a cloud of eldritch mist", $element(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["spooky"])))], ["greasy-looking people furtively skulking around", $element(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["sleaze"])))], ["people, surrounded by garbage and clouds of flies", $element(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["stench"])))], ["people, clustered around a group of igloos", $element(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap1 = /* @__PURE__ */ new Map([["smoldering bushes on the outskirts of a hedge maze", $element(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["hot"])))], ["creepy-looking black bushes on the outskirts of a hedge maze", $element(_templateObject21 || (_templateObject21 = _taggedTemplateLiteral(["spooky"])))], ["purplish, greasy-looking hedges", $element(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral(["sleaze"])))], ["nasty-looking, dripping green bushes on the outskirts of a hedge maze", $element(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral(["stench"])))], ["frost-rimed bushes on the outskirts of a hedge maze", $element(_templateObject24 || (_templateObject24 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap2 = /* @__PURE__ */ new Map([["smoke rising from deeper within the maze", $element(_templateObject25 || (_templateObject25 = _taggedTemplateLiteral(["hot"])))], ["a miasma of eldritch vapors rising from deeper within the maze", $element(_templateObject26 || (_templateObject26 = _taggedTemplateLiteral(["spooky"])))], ["a greasy purple cloud hanging over the center of the maze", $element(_templateObject27 || (_templateObject27 = _taggedTemplateLiteral(["sleaze"])))], ["a cloud of green gas hovering over the maze", $element(_templateObject28 || (_templateObject28 = _taggedTemplateLiteral(["stench"])))], ["wintry mists rising from deeper within the maze", $element(_templateObject29 || (_templateObject29 = _taggedTemplateLiteral(["cold"])))]]), hedgeTrap3 = /* @__PURE__ */ new Map([["with lava slowly oozing out of it", $element(_templateObject30 || (_templateObject30 = _taggedTemplateLiteral(["hot"])))], ["surrounded by creepy black mist", $element(_templateObject31 || (_templateObject31 = _taggedTemplateLiteral(["spooky"])))], ["that occasionally vomits out a greasy ball of hair", $element(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral(["sleaze"])))], ["disgorging a really surprising amount of sewage", $element(_templateObject33 || (_templateObject33 = _taggedTemplateLiteral(["stench"])))], ["occasionally disgorging a bunch of ice cubes", $element(_templateObject34 || (_templateObject34 = _taggedTemplateLiteral(["cold"])))]]);
 function telescope() {
-  return {
+  return Object.fromEntries(Object.entries({
     statContest: telescopeStats.get(get("telescope1")),
     elementContest: telescopeElements.get(get("telescope2")),
     hedge1: hedgeTrap1.get(get("telescope3")),
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5"))
-  };
+  }).filter(function(_ref9) {
+    var _ref10 = _slicedToArray3(_ref9, 2), value = _ref10[1];
+    return value;
+  }));
 }
 function examine(thing) {
   var url = thing instanceof import_kolmafia4.Item ? "desc_item.php?whichitem=".concat(thing.descid) : thing instanceof import_kolmafia4.Familiar ? "desc_familiar.php?which=".concat(thing.id) : thing instanceof import_kolmafia4.Effect ? "desc_effect.php?whicheffect=".concat(thing.descid) : "desc_skill.php?whichskill=".concat(thing.id);
@@ -6892,16 +6895,16 @@ function getCombatFlags() {
 function setCombatFlags() {
   for (var _len2 = arguments.length, flags = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     flags[_key2] = arguments[_key2];
-  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flat(flags.map(function(_ref9) {
-    var flag = _ref9.flag, value = _ref9.value;
+  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flat(flags.map(function(_ref11) {
+    var flag = _ref11.flag, value = _ref11.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
   }))), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
     flags[_key3 - 1] = arguments[_key3];
-  var initialValues = getCombatFlags(flags.map(function(_ref10) {
-    var flag = _ref10.flag;
+  var initialValues = getCombatFlags(flags.map(function(_ref12) {
+    var flag = _ref12.flag;
     return flag;
   }));
   try {
@@ -6914,8 +6917,8 @@ function haveIntrinsic(effect2) {
   return (0, import_kolmafia4.haveEffect)(effect2) >= 2147483647;
 }
 function extractItems(text) {
-  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref11) {
-    var _ref12 = _slicedToArray3(_ref11, 2), itemName = _ref12[0], quantity = _ref12[1];
+  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref13) {
+    var _ref14 = _slicedToArray3(_ref13, 2), itemName = _ref14[0], quantity = _ref14[1];
     return [import_kolmafia4.Item.get(itemName), quantity];
   }));
 }
@@ -8128,8 +8131,8 @@ function getCurrentModes() {
   var modes = {}, _iterator = _createForOfIteratorHelper4(modeableCommands), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var key = _step.value;
-      (0, import_kolmafia6.haveEquipped)(modeableItems[key]) && (modes[key] = modeableState[key]());
+      var _key = _step.value;
+      (0, import_kolmafia6.haveEquipped)(modeableItems[_key]) && (modes[_key] = modeableState[_key]());
     }
   } catch (err) {
     _iterator.e(err);
@@ -8355,6 +8358,13 @@ function maximizeCached(objectives) {
   var result = (0, import_kolmafia6.maximize)(objective, !1);
   return saveCached(cacheKey, fullOptions), result;
 }
+function mergeOptionalOptions(optionsA, optionsB) {
+  for (var _len = arguments.length, keys = new Array(_len > 2 ? _len - 2 : 0), _key2 = 2; _key2 < _len; _key2++)
+    keys[_key2 - 2] = arguments[_key2];
+  return keys.reduce(function(current2, key) {
+    return _objectSpread2(_objectSpread2({}, current2), (optionsA[key] || optionsB[key]) === void 0 ? {} : _defineProperty4({}, key, optionsA[key] || optionsB[key]));
+  }, {});
+}
 var _maximizeParameters = /* @__PURE__ */ new WeakMap(), _maximizeOptions = /* @__PURE__ */ new WeakMap(), Requirement = /* @__PURE__ */ function() {
   function Requirement2(maximizeParameters, maximizeOptions) {
     _classCallCheck5(this, Requirement2), _classPrivateFieldInitSpec(this, _maximizeParameters, {
@@ -8379,14 +8389,13 @@ var _maximizeParameters = /* @__PURE__ */ new WeakMap(), _maximizeOptions = /* @
      * Merges two requirements, concanating relevant arrays. Typically used in static form.
      *
      * @param other Requirement to merge with.
+     * @returns A new merged Requirement
      */
   }, {
     key: "merge",
     value: function(other) {
-      var _optionsA$forceEquip, _other$maximizeOption, _optionsA$preventEqui, _other$maximizeOption3, _optionsA$bonusEquip$, _optionsA$bonusEquip, _optionsB$bonusEquip$, _optionsB$bonusEquip, _optionsA$onlySlot, _optionsB$onlySlot, _optionsA$preventSlot, _optionsB$preventSlot, optionsA = this.maximizeOptions, optionsB = other.maximizeOptions;
-      return new Requirement2([].concat(_toConsumableArray4(this.maximizeParameters), _toConsumableArray4(other.maximizeParameters)), {
-        updateOnFamiliarChange: optionsA.updateOnFamiliarChange || other.maximizeOptions.updateOnFamiliarChange,
-        updateOnCanEquipChanged: optionsA.updateOnCanEquipChanged || other.maximizeOptions.updateOnCanEquipChanged,
+      var _optionsA$forceEquip, _other$maximizeOption, _optionsA$preventEqui, _other$maximizeOption3, _optionsA$bonusEquip$, _optionsA$bonusEquip, _optionsB$bonusEquip$, _optionsB$bonusEquip, _optionsA$onlySlot, _optionsB$onlySlot, _optionsA$preventSlot, _optionsB$preventSlot, optionsA = this.maximizeOptions, optionsB = other.maximizeOptions, optionalBooleans = mergeOptionalOptions(optionsA, optionsB, "updateOnFamiliarChange", "updateOnCanEquipChanged", "forceUpdate");
+      return new Requirement2([].concat(_toConsumableArray4(this.maximizeParameters), _toConsumableArray4(other.maximizeParameters)), _objectSpread2(_objectSpread2({}, optionalBooleans), {}, {
         forceEquip: [].concat(_toConsumableArray4((_optionsA$forceEquip = optionsA.forceEquip) !== null && _optionsA$forceEquip !== void 0 ? _optionsA$forceEquip : []), _toConsumableArray4((_other$maximizeOption = other.maximizeOptions.forceEquip) !== null && _other$maximizeOption !== void 0 ? _other$maximizeOption : [])).filter(function(x) {
           var _other$maximizeOption2;
           return !((_other$maximizeOption2 = other.maximizeOptions.preventEquip) !== null && _other$maximizeOption2 !== void 0 && _other$maximizeOption2.includes(x));
@@ -8397,9 +8406,8 @@ var _maximizeParameters = /* @__PURE__ */ new WeakMap(), _maximizeOptions = /* @
         }),
         bonusEquip: new Map([].concat(_toConsumableArray4((_optionsA$bonusEquip$ = (_optionsA$bonusEquip = optionsA.bonusEquip) === null || _optionsA$bonusEquip === void 0 ? void 0 : _optionsA$bonusEquip.entries()) !== null && _optionsA$bonusEquip$ !== void 0 ? _optionsA$bonusEquip$ : []), _toConsumableArray4((_optionsB$bonusEquip$ = (_optionsB$bonusEquip = optionsB.bonusEquip) === null || _optionsB$bonusEquip === void 0 ? void 0 : _optionsB$bonusEquip.entries()) !== null && _optionsB$bonusEquip$ !== void 0 ? _optionsB$bonusEquip$ : []))),
         onlySlot: [].concat(_toConsumableArray4((_optionsA$onlySlot = optionsA.onlySlot) !== null && _optionsA$onlySlot !== void 0 ? _optionsA$onlySlot : []), _toConsumableArray4((_optionsB$onlySlot = optionsB.onlySlot) !== null && _optionsB$onlySlot !== void 0 ? _optionsB$onlySlot : [])),
-        preventSlot: [].concat(_toConsumableArray4((_optionsA$preventSlot = optionsA.preventSlot) !== null && _optionsA$preventSlot !== void 0 ? _optionsA$preventSlot : []), _toConsumableArray4((_optionsB$preventSlot = optionsB.preventSlot) !== null && _optionsB$preventSlot !== void 0 ? _optionsB$preventSlot : [])),
-        forceUpdate: optionsA.forceUpdate || optionsB.forceUpdate
-      });
+        preventSlot: [].concat(_toConsumableArray4((_optionsA$preventSlot = optionsA.preventSlot) !== null && _optionsA$preventSlot !== void 0 ? _optionsA$preventSlot : []), _toConsumableArray4((_optionsB$preventSlot = optionsB.preventSlot) !== null && _optionsB$preventSlot !== void 0 ? _optionsB$preventSlot : []))
+      }));
     }
     /**
      * Merges a set of requirements together, starting with an empty requirement.
@@ -8434,8 +8442,8 @@ var _maximizeParameters = /* @__PURE__ */ new WeakMap(), _maximizeOptions = /* @
   }, {
     key: "maximize",
     value: function() {
-      for (var _len = arguments.length, requirements = new Array(_len), _key = 0; _key < _len; _key++)
-        requirements[_key] = arguments[_key];
+      for (var _len2 = arguments.length, requirements = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++)
+        requirements[_key3] = arguments[_key3];
       Requirement2.merge(requirements).maximize();
     }
   }]), Requirement2;
@@ -8459,9 +8467,6 @@ function _defineProperties6(target, props) {
 }
 function _createClass6(Constructor, protoProps, staticProps) {
   return protoProps && _defineProperties6(Constructor.prototype, protoProps), staticProps && _defineProperties6(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
-}
-function _defineProperty5(obj, key, value) {
-  return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
 function _createForOfIteratorHelper5(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
@@ -8526,13 +8531,42 @@ function _arrayLikeToArray6(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
+function ownKeys3(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread3(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    i % 2 ? ownKeys3(Object(source), !0).forEach(function(key) {
+      _defineProperty5(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys3(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty5(obj, key, value) {
+  return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
+}
 function mergeConstraints() {
   for (var _len = arguments.length, allConstraints = new Array(_len), _key = 0; _key < _len; _key++)
     allConstraints[_key] = arguments[_key];
   var familiars = allConstraints.map(function(constraints) {
     return constraints.familiar;
   }).filter(Boolean);
-  return familiars.length > 1 ? null : {
+  if (familiars.length > 1)
+    return null;
+  var familiar8 = familiars.find(function(familiar9) {
+    return familiar9;
+  });
+  return _objectSpread3(_objectSpread3({
     equipmentRequirements: function() {
       return Requirement.merge(_toConsumableArray5(allConstraints.map(function(constraints) {
         var _constraints$equipmen, _constraints$equipmen2;
@@ -8552,17 +8586,17 @@ function mergeConstraints() {
         _iterator.f();
       }
       return success;
-    },
-    familiar: familiars.find(function(familiar8) {
-      return familiar8;
-    }),
+    }
+  }, familiar8 ? {
+    familiar: familiar8
+  } : {}), {}, {
     cost: function() {
       return sum(allConstraints, function(constraints) {
         var _constraints$cost, _constraints$cost2;
         return (_constraints$cost = (_constraints$cost2 = constraints.cost) === null || _constraints$cost2 === void 0 ? void 0 : _constraints$cost2.call(constraints)) !== null && _constraints$cost !== void 0 ? _constraints$cost : 0;
       });
     }
-  };
+  });
 }
 var ActionSource = /* @__PURE__ */ function() {
   function ActionSource2(source, potential, macro) {
@@ -9719,7 +9753,7 @@ __export(CrownOfThrones_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia16 = require("kolmafia");
 var _templateObject69, _templateObject221, _templateObject320, _templateObject418, _templateObject512, _templateObject610, _templateObject78, _templateObject88, _templateObject98, _templateObject108, _templateObject118, _templateObject127, _templateObject137, _templateObject146, _templateObject156, _templateObject166, _templateObject176, _templateObject186, _templateObject196, _templateObject206, _templateObject2110, _templateObject225, _templateObject235, _templateObject245, _templateObject255, _templateObject265, _templateObject275, _templateObject285, _templateObject295, _templateObject305, _templateObject3110, _templateObject325, _templateObject335, _templateObject345, _templateObject355, _templateObject365, _templateObject375, _templateObject385, _templateObject395, _templateObject405, _templateObject419, _templateObject425, _templateObject435, _templateObject445, _templateObject454, _templateObject463, _templateObject473, _templateObject482, _templateObject492, _templateObject502, _templateObject513, _templateObject522, _templateObject532, _templateObject542, _templateObject552, _templateObject562, _templateObject572, _templateObject582, _templateObject592, _templateObject602, _templateObject612, _templateObject622, _templateObject632, _templateObject642, _templateObject652, _templateObject662, _templateObject672, _templateObject682, _templateObject692, _templateObject70, _templateObject71, _templateObject722, _templateObject732, _templateObject742, _templateObject752, _templateObject762, _templateObject772, _templateObject782, _templateObject79, _templateObject80, _templateObject81, _templateObject822, _templateObject832, _templateObject842, _templateObject852, _templateObject862, _templateObject872, _templateObject882, _templateObject89, _templateObject90, _templateObject91, _templateObject922, _templateObject932, _templateObject942, _templateObject952, _templateObject962, _templateObject972, _templateObject982, _templateObject99;
-function ownKeys3(object, enumerableOnly) {
+function ownKeys4(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -9729,12 +9763,12 @@ function ownKeys3(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread3(target) {
+function _objectSpread4(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys3(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys4(Object(source), !0).forEach(function(key) {
       _defineProperty6(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys3(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys4(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -10075,7 +10109,7 @@ var riderModes = /* @__PURE__ */ new Map(), DEFAULTS = {
   excludeCurrentFamiliar: !0
 };
 function createRiderMode(name, details) {
-  return riderModes.set(name, _objectSpread3(_objectSpread3({}, DEFAULTS), details));
+  return riderModes.set(name, _objectSpread4(_objectSpread4({}, DEFAULTS), details));
 }
 function hasRiderMode(name) {
   return riderModes.has(name);
@@ -10499,7 +10533,7 @@ init_kolmafia_polyfill();
 var booleanModifiers = ["Softcore Only", "Single Equip", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Attacks Can't Miss", "Pirate", "Breakable", "Drops Items", "Drops Meat"], classModifiers = ["Class"], numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Surgeonosity", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Clowniness", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water"], effectModifiers = ["Effect", "Rollover Effect"], monsterModifiers = ["Avatar"], skillModifiers = ["Skill"], statModifiers = ["Plumber Stat"], stringModifiers = ["Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie"];
 
 // src/modifier.ts
-function ownKeys4(object, enumerableOnly) {
+function ownKeys5(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -10509,12 +10543,12 @@ function ownKeys4(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread4(target) {
+function _objectSpread5(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys4(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys5(Object(source), !0).forEach(function(key) {
       _defineProperty8(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys4(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys5(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -10542,7 +10576,7 @@ function get2(name, subject) {
     return (0, import_kolmafia21.statModifier)(subject, name);
 }
 function pairwiseMerge(modifiers1, modifiers2) {
-  var returnValue = _objectSpread4(_objectSpread4({}, modifiers1), modifiers2);
+  var returnValue = _objectSpread5(_objectSpread5({}, modifiers1), modifiers2);
   for (var modifier in modifiers1)
     if (Array.from(Object.values(modifiers2)).includes(modifier)) {
       if (arrayContains(modifier, numericModifiers)) {
@@ -13787,7 +13821,7 @@ function _arrayLikeToArray24(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function ownKeys5(object, enumerableOnly) {
+function ownKeys6(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -13797,12 +13831,12 @@ function ownKeys5(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread5(target) {
+function _objectSpread6(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys5(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys6(Object(source), !0).forEach(function(key) {
       _defineProperty13(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys5(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys6(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -13866,7 +13900,7 @@ function set2(hero, mode) {
 }
 function getModifier2() {
   var _modeMap$get, hero = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : currentHero(), mode = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : currentMode();
-  return _objectSpread5(_objectSpread5({}, Heroes[hero]), (_modeMap$get = modeMap.get([hero, mode])) !== null && _modeMap$get !== void 0 ? _modeMap$get : {});
+  return _objectSpread6(_objectSpread6({}, Heroes[hero]), (_modeMap$get = modeMap.get([hero, mode])) !== null && _modeMap$get !== void 0 ? _modeMap$get : {});
 }
 var skills = /* @__PURE__ */ new Map([[$skill(_templateObject824 || (_templateObject824 = _taggedTemplateLiteral37(["Smooch of the Daywalker"]))), ["vampire", "kiss"]], [$skill(_templateObject920 || (_templateObject920 = _taggedTemplateLiteral37(["Slay the Dead"]))), ["vampire", "kill"]], [$skill(_templateObject1019 || (_templateObject1019 = _taggedTemplateLiteral37(["Unleash the Devil's Kiss"]))), ["heck", "kiss"]], [$skill(_templateObject1118 || (_templateObject1118 = _taggedTemplateLiteral37(["Deploy Robo-Handcuffs"]))), ["robot", "hold"]], [$skill(_templateObject1217 || (_templateObject1217 = _taggedTemplateLiteral37(["Blow a Robo-Kiss"]))), ["robot", "kiss"]], [$skill(_templateObject1316 || (_templateObject1316 = _taggedTemplateLiteral37(["Precision Shot"]))), ["robot", "kill"]]]);
 function tuneToSkill(skill) {
@@ -15470,7 +15504,7 @@ function _arrayWithoutHoles16(arr) {
   if (Array.isArray(arr))
     return _arrayLikeToArray30(arr);
 }
-function ownKeys6(object, enumerableOnly) {
+function ownKeys7(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -15480,12 +15514,12 @@ function ownKeys6(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread6(target) {
+function _objectSpread7(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys6(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys7(Object(source), !0).forEach(function(key) {
       _defineProperty14(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys6(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys7(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -15724,7 +15758,7 @@ function ascend(options) {
   }, prunedOptions = Object.fromEntries(Object.entries(options).filter(function(_ref3) {
     var _ref4 = _slicedToArray16(_ref3, 2), value = _ref4[1];
     return value;
-  })), _DEFAULT_OPTIONS$prun = _objectSpread6(_objectSpread6({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
+  })), _DEFAULT_OPTIONS$prun = _objectSpread7(_objectSpread7({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
   if (playerClass.path !== (path3.avatar ? path3 : import_kolmafia63.Path.none))
     throw new AscendError("Invalid class ".concat(playerClass, " for this path!"));
   if (path3.id < 0)
@@ -16966,7 +17000,7 @@ function _createForOfIteratorHelper13(o, allowArrayLike) {
     }
   } };
 }
-function ownKeys7(object, enumerableOnly) {
+function ownKeys8(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -16976,12 +17010,12 @@ function ownKeys7(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread7(target) {
+function _objectSpread8(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys7(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys8(Object(source), !0).forEach(function(key) {
       _defineProperty18(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys7(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys8(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -17088,10 +17122,12 @@ var MenuItem = /* @__PURE__ */ function() {
   function MenuItem2(item11) {
     var _MenuItem$defaultOpti, options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     _classCallCheck14(this, MenuItem2), _defineProperty18(this, "item", void 0), _defineProperty18(this, "organ", void 0), _defineProperty18(this, "size", void 0), _defineProperty18(this, "maximum", void 0), _defineProperty18(this, "additionalValue", void 0), _defineProperty18(this, "effect", void 0), _defineProperty18(this, "priceOverride", void 0), _defineProperty18(this, "mayo", void 0), _defineProperty18(this, "data", void 0);
-    var _options = _objectSpread7(_objectSpread7({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item11)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
-    this.item = item11, this.maximum = maximum === "auto" ? item11.dailyusesleft : maximum, this.additionalValue = additionalValue, this.effect = effect2, this.priceOverride = priceOverride, this.mayo = mayo, this.data = data;
+    var _options = _objectSpread8(_objectSpread8({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item11)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
+    this.item = item11;
+    var maximum_ = maximum === "auto" ? item11.dailyusesleft : maximum;
+    maximum_ && (this.maximum = maximum_), additionalValue && (this.additionalValue = additionalValue), effect2 && (this.effect = effect2), priceOverride && (this.priceOverride = priceOverride), mayo && (this.mayo = mayo), data && (this.data = data);
     var typ = (0, import_kolmafia68.itemType)(this.item);
-    this.organ = organ != null ? organ : isOrgan(typ) ? typ : void 0, this.size = size != null ? size : this.organ === "food" ? this.item.fullness : this.organ === "booze" ? this.item.inebriety : this.organ === "spleen item" ? this.item.spleen : 0;
+    organ ? this.organ = organ : isOrgan(typ) && (this.organ = typ), this.size = size != null ? size : this.organ === "food" ? this.item.fullness : this.organ === "booze" ? this.item.inebriety : this.organ === "spleen item" ? this.item.spleen : 0;
   }
   return _createClass14(MenuItem2, [{
     key: "equals",
@@ -17179,15 +17215,23 @@ var DietPlanner = /* @__PURE__ */ function() {
   function DietPlanner2(mpa, menu) {
     var _this2 = this;
     var _this = this;
-    if (_classCallCheck14(this, DietPlanner2), _defineProperty18(this, "mpa", void 0), _defineProperty18(this, "menu", void 0), _defineProperty18(this, "mayoLookup", void 0), _defineProperty18(this, "fork", void 0), _defineProperty18(this, "mug", void 0), _defineProperty18(this, "seasoning", void 0), _defineProperty18(this, "whetStone", void 0), _defineProperty18(this, "spleenValue", 0), this.mpa = mpa, this.fork = menu.find(function(item11) {
+    _classCallCheck14(this, DietPlanner2), _defineProperty18(this, "mpa", void 0), _defineProperty18(this, "menu", void 0), _defineProperty18(this, "mayoLookup", void 0), _defineProperty18(this, "fork", void 0), _defineProperty18(this, "mug", void 0), _defineProperty18(this, "seasoning", void 0), _defineProperty18(this, "whetStone", void 0), _defineProperty18(this, "spleenValue", 0), this.mpa = mpa;
+    var fork = menu.find(function(item11) {
       return item11.item === $item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral62(["Ol' Scratch's salad fork"])));
-    }), this.mug = menu.find(function(item11) {
+    });
+    fork && (this.fork = fork);
+    var mug = menu.find(function(item11) {
       return item11.item === $item(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral62(["Frosty's frosty mug"])));
-    }), this.seasoning = menu.find(function(item11) {
+    });
+    mug && (this.mug = mug);
+    var seasoning = menu.find(function(item11) {
       return item11.item === $item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral62(["Special Seasoning"])));
-    }), this.whetStone = menu.find(function(item11) {
+    });
+    seasoning && (this.seasoning = seasoning);
+    var whetStone = menu.find(function(item11) {
       return item11.item === $item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral62(["whet stone"])));
-    }), this.mayoLookup = /* @__PURE__ */ new Map(), installed3())
+    });
+    if (whetStone && (this.whetStone = whetStone), this.mayoLookup = /* @__PURE__ */ new Map(), installed3())
       for (var _loop = function() {
         var mayo = _arr2[_i2], menuItem = menu.find(function(item11) {
           return item11.item === mayo;
@@ -17232,7 +17276,7 @@ var DietPlanner = /* @__PURE__ */ function() {
         var mayo = menuItem.mayo ? this.mayoLookup.get(menuItem.mayo) : this.mayoLookup.get(Mayo.flex);
         mayo && helpers.push(mayo);
       }
-      var defaultModifiers = _objectSpread7({
+      var defaultModifiers = _objectSpread8({
         forkMug: !1,
         seasoning: this.seasoning ? helpers.includes(this.seasoning) : !1,
         whetStone: this.whetStone ? helpers.includes(this.whetStone) : !1,
@@ -17245,14 +17289,14 @@ var DietPlanner = /* @__PURE__ */ function() {
         pinkyRing: have($item(_templateObject3312 || (_templateObject3312 = _taggedTemplateLiteral62(["mafia pinky ring"])))) && (0, import_kolmafia68.canEquip)($item(_templateObject3411 || (_templateObject3411 = _taggedTemplateLiteral62(["mafia pinky ring"])))),
         tuxedoShirt: have($item(_templateObject3510 || (_templateObject3510 = _taggedTemplateLiteral62(["tuxedo shirt"])))) && (0, import_kolmafia68.canEquip)($item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral62(["tuxedo shirt"]))))
       }, overrideModifiers);
-      this.seasoning && (0, import_kolmafia68.itemType)(menuItem.item) === "food" && this.mpa * (_expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
+      this.seasoning && (0, import_kolmafia68.itemType)(menuItem.item) === "food" && this.mpa * (_expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
         seasoning: !0
-      })) - _expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
+      })) - _expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
         seasoning: !1
       }))) > (0, import_kolmafia68.mallPrice)($item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral62(["Special Seasoning"])))) && helpers.push(this.seasoning), this.whetStone && (0, import_kolmafia68.itemType)(menuItem.item) === "food" && this.mpa > (0, import_kolmafia68.mallPrice)($item(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral62(["whet stone"])))) && helpers.push(this.whetStone);
       var forkMug = (0, import_kolmafia68.itemType)(menuItem.item) === "food" ? this.fork : (0, import_kolmafia68.itemType)(menuItem.item) === "booze" ? this.mug : null, forkMugPrice = forkMug ? forkMug.price() : 1 / 0, baseCost = menuItem.price() + sum(helpers, function(item11) {
         return item11.price();
-      }), valueRaw = _expectedAdventures(menuItem.item, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem.item, _objectSpread7(_objectSpread7({}, defaultModifiers), {}, {
+      }), valueRaw = _expectedAdventures(menuItem.item, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
         forkMug: !0
       })) * this.mpa - baseCost - forkMugPrice + ((_menuItem$additionalV2 = menuItem.additionalValue) !== null && _menuItem$additionalV2 !== void 0 ? _menuItem$additionalV2 : 0), valueSpleen = $items(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral62(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item) ? 5 * this.spleenValue : 0;
       return forkMug && valueForkMug > valueRaw ? [[].concat(helpers, [forkMug, menuItem]), valueForkMug + valueSpleen] : [[].concat(helpers, [menuItem]), valueRaw + valueSpleen];
@@ -17329,7 +17373,7 @@ var DietPlanner = /* @__PURE__ */ function() {
       } finally {
         _iterator.f();
       }
-      var organCapacitiesWith = _toConsumableArray19(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral62(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral62(["Refined Palate"]))) || trialItem.item === $item(_templateObject4211 || (_templateObject4211 = _taggedTemplateLiteral62(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral62(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral62(["Gar-ish"]))) || trialItem.item === $item(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral62(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray20(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread7(_objectSpread7(_objectSpread7({}, overrideModifiers), isRefinedPalate ? {
+      var organCapacitiesWith = _toConsumableArray19(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral62(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral62(["Refined Palate"]))) || trialItem.item === $item(_templateObject4211 || (_templateObject4211 = _taggedTemplateLiteral62(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral62(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral62(["Gar-ish"]))) || trialItem.item === $item(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral62(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray20(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread8(_objectSpread8(_objectSpread8({}, overrideModifiers), isRefinedPalate ? {
         refinedPalate: !0
       } : {}), isGarish ? {
         garish: !0
@@ -17699,7 +17743,7 @@ var Dungeon = /* @__PURE__ */ function() {
 init_kolmafia_polyfill();
 var import_kolmafia70 = require("kolmafia");
 var _templateObject498, _templateObject2130, _templateObject3119, _templateObject499, _templateObject556, _templateObject648, _templateObject744, _templateObject837, _templateObject930, _templateObject1026;
-function ownKeys8(object, enumerableOnly) {
+function ownKeys9(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -17709,12 +17753,12 @@ function ownKeys8(object, enumerableOnly) {
   }
   return keys;
 }
-function _objectSpread8(target) {
+function _objectSpread9(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    i % 2 ? ownKeys8(Object(source), !0).forEach(function(key) {
+    i % 2 ? ownKeys9(Object(source), !0).forEach(function(key) {
       _defineProperty20(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys8(Object(source)).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys9(Object(source)).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -18080,7 +18124,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), Mood = /* @__PURE__ */ function() {
   function Mood2() {
     var options = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    _classCallCheck16(this, Mood2), _defineProperty20(this, "options", void 0), _defineProperty20(this, "elements", []), this.options = _objectSpread8(_objectSpread8({}, Mood2.defaultOptions), options);
+    _classCallCheck16(this, Mood2), _defineProperty20(this, "options", void 0), _defineProperty20(this, "elements", []), this.options = _objectSpread9(_objectSpread9({}, Mood2.defaultOptions), options);
   }
   return _createClass16(Mood2, [{
     key: "availableMp",
@@ -18203,7 +18247,7 @@ var MoodElement = /* @__PURE__ */ function() {
        * @param options Default options for new Mood instances.
        */
       function(options) {
-        Mood2.defaultOptions = _objectSpread8(_objectSpread8({}, Mood2.defaultOptions), options);
+        Mood2.defaultOptions = _objectSpread9(_objectSpread9({}, Mood2.defaultOptions), options);
       }
     )
   }]), Mood2;

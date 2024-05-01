@@ -227,6 +227,7 @@ describe("message parsing", () => {
           minute: "2-digit",
           second: "2-digit",
           hour12: true,
+          timeZone: "Europe/Berlin",
         })
         .replace(/, /g, " ")
     ).toEqual(baseMessage.localtime);

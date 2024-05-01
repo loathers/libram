@@ -2,18 +2,13 @@ import {
   availableAmount,
   Monster,
   runChoice,
+  runCombat,
   toMonster,
   visitUrl,
   xpath,
 } from "kolmafia";
 import { clamp } from "lodash-es";
-import {
-  CombatParams,
-  directlyUse,
-  examine,
-  have as have_,
-  runCombatSpread,
-} from "../../lib";
+import { CombatParams, directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 
@@ -134,7 +129,7 @@ export function differentiate(
     return false;
   }
   runChoice(1, `mid=${monster.id}`);
-  runCombatSpread(...combatParams);
+  runCombat(...combatParams);
   return true;
 }
 

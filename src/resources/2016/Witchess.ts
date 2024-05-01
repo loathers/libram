@@ -1,5 +1,5 @@
-import { Monster, myHash, runChoice, visitUrl } from "kolmafia";
-import { CombatParams, haveInCampground, runCombatSpread } from "../../lib";
+import { Monster, myHash, runChoice, runCombat, visitUrl } from "kolmafia";
+import { CombatParams, haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
@@ -58,5 +58,5 @@ export function fightPiece(
   ) {
     throw new Error("Failed to start fight.");
   }
-  return runCombatSpread(...combatParams);
+  return runCombat(...combatParams);
 }

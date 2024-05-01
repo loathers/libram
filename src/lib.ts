@@ -1279,13 +1279,4 @@ export function extractItems(text: string): Map<Item, number> {
   );
 }
 
-export type CombatParams = Parameters<typeof runCombat> | [];
-/**
- * The same as `runCombat`, but with some special typing to let us spread its overloaded arg.
- * @param {...CombatParams} combatParams One of the valid input signatures of `runCombat`.
- * @returns The same as `runCombat`.
- */
-export function runCombatSpread(...combatParams: CombatParams): string {
-  // .length acts as a type guard, preventing us from trying to spread a non-tuple
-  return combatParams.length ? runCombat(...combatParams) : runCombat();
-}
+export type CombatParams = Parameters<typeof runCombat>;

@@ -1,5 +1,5 @@
-import { buy, getChateau, Item, Monster, visitUrl } from "kolmafia";
-import { CombatParams, runCombatSpread } from "../../lib";
+import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
+import { CombatParams } from "../../lib";
 import { get } from "../../property";
 
 /**
@@ -31,7 +31,7 @@ export function paintingFought(): boolean {
  */
 export function fightPainting(...combatParams: CombatParams): string {
   visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-  return runCombatSpread(...combatParams);
+  return runCombat(...combatParams);
 }
 
 export const desks = [

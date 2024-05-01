@@ -11,7 +11,8 @@
     "experimentalDecorators": true,
     "outDir": "dist",
     "stripInternal": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src/"],
   "typedocOptions": {

@@ -240,8 +240,7 @@ export class MenuItem<T> {
       ...(MenuItem.defaultOptions<T>().get(item) ?? {}),
     };
     this.item = item;
-    const maximum_ = maximum === "auto" ? item.dailyusesleft : maximum;
-    if (maximum_) this.maximum = maximum_;
+    this.maximum = (maximum === "auto" ? item.dailyusesleft : maximum) ?? this.maximum
     if (additionalValue) this.additionalValue = additionalValue;
     if (effect) this.effect = effect;
     if (priceOverride) this.priceOverride = priceOverride;

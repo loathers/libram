@@ -5091,6 +5091,9 @@ __export(src_exports, {
   expectedLibramSummon: function() {
     return expectedLibramSummon;
   },
+  extractItems: function() {
+    return extractItems;
+  },
   findActionSource: function() {
     return findActionSource;
   },
@@ -6909,6 +6912,12 @@ function withCombatFlags(action) {
 }
 function haveIntrinsic(effect2) {
   return (0, import_kolmafia4.haveEffect)(effect2) >= 2147483647;
+}
+function extractItems(text) {
+  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref11) {
+    var _ref12 = _slicedToArray3(_ref11, 2), itemName = _ref12[0], quantity = _ref12[1];
+    return [import_kolmafia4.Item.get(itemName), quantity];
+  }));
 }
 
 // src/overlappingNames.ts
@@ -18342,7 +18351,7 @@ function sinceKolmafiaVersion(majorVersion, minorVersion) {
 
 // src/Kmail.ts
 init_kolmafia_polyfill();
-var import_kolmafia73 = require("kolmafia");
+var import_html_entities2 = __toESM(require_lib()), import_kolmafia73 = require("kolmafia");
 
 // src/url.ts
 init_kolmafia_polyfill();
@@ -18589,14 +18598,42 @@ function _defineProperty21(obj, key, value) {
 }
 var Kmail = /* @__PURE__ */ function() {
   function Kmail2(rawKmail) {
-    _classCallCheck18(this, Kmail2), _defineProperty21(this, "id", void 0), _defineProperty21(this, "date", void 0), _defineProperty21(this, "type", void 0), _defineProperty21(this, "senderId", void 0), _defineProperty21(this, "senderName", void 0), _defineProperty21(this, "rawMessage", void 0);
-    var date = new Date(rawKmail.localtime);
-    date.setFullYear(date.getFullYear() + 100), this.id = Number(rawKmail.id), this.date = date, this.type = rawKmail.type, this.senderId = Number(rawKmail.fromid), this.senderName = rawKmail.fromname, this.rawMessage = rawKmail.message;
+    _classCallCheck18(this, Kmail2), _defineProperty21(this, "id", void 0), _defineProperty21(this, "date", void 0), _defineProperty21(this, "type", void 0), _defineProperty21(this, "senderId", void 0), _defineProperty21(this, "senderName", void 0), _defineProperty21(this, "rawMessage", void 0), _defineProperty21(this, "_parsedMessageParts", void 0), this.id = Number(rawKmail.id), this.date = new Date(Number(rawKmail.azunixtime) * 1e3), this.type = rawKmail.type, this.senderId = Number(rawKmail.fromid), this.senderName = rawKmail.fromname, this.rawMessage = rawKmail.message;
   }
   return _createClass18(Kmail2, [{
     key: "delete",
     value: function() {
       return Kmail2.delete([this]) === 1;
+    }
+  }, {
+    key: "_messageParts",
+    get: function() {
+      var _this$_parsedMessageP;
+      return (_this$_parsedMessageP = this._parsedMessageParts) !== null && _this$_parsedMessageP !== void 0 ? _this$_parsedMessageP : this._parsedMessageParts = this._parseMessageParts();
+    }
+  }, {
+    key: "_parseMessageParts",
+    value: function() {
+      var text = this.rawMessage, insideText;
+      if (this.type === "normal") {
+        if (text.startsWith("<center>")) {
+          var endIdx = text.indexOf("</center>");
+          text = text.slice(endIdx + 9);
+        }
+      } else if (this.type === "giftshop") {
+        var _text$split = text.split("<p>Inside Note:<p>"), _text$split2 = _slicedToArray22(_text$split, 2);
+        text = _text$split2[0], insideText = _text$split2[1];
+      }
+      var split = function(s) {
+        var idx = s.indexOf("<");
+        return idx === -1 ? [s] : [s.slice(0, idx), s.slice(idx)];
+      }, _split = split(text), _split2 = _slicedToArray22(_split, 2), outsideNote = _split2[0], _split2$ = _split2[1], outsideAttachments = _split2$ === void 0 ? null : _split2$, _ref = insideText !== void 0 ? split(insideText) : [], _ref2 = _slicedToArray22(_ref, 2), _ref2$ = _ref2[0], insideNote = _ref2$ === void 0 ? null : _ref2$, _ref2$2 = _ref2[1], insideAttachments = _ref2$2 === void 0 ? null : _ref2$2;
+      return {
+        outsideNote: (0, import_html_entities2.decode)(outsideNote),
+        outsideAttachments: outsideAttachments,
+        insideNote: insideNote && (0, import_html_entities2.decode)(insideNote),
+        insideAttachments: insideAttachments
+      };
     }
     /**
      * Get message contents without any HTML from items or meat
@@ -18606,8 +18643,29 @@ var Kmail = /* @__PURE__ */ function() {
   }, {
     key: "message",
     get: function() {
-      var match = this.rawMessage.match(/^([\s\S]*?)</);
-      return match ? match[1] : this.rawMessage;
+      var _this$_messageParts = this._messageParts, outsideNote = _this$_messageParts.outsideNote, insideNote = _this$_messageParts.insideNote;
+      return insideNote !== null ? "".concat(outsideNote, "\n\nInside Note:\n").concat(insideNote) : outsideNote;
+    }
+    /**
+     * Get the note on the outside of the gift. If the kmail is not a gift,
+     * this will be the entire message.
+     *
+     * @returns Note on the outside of the gift, or the entire message for non-gifts
+     */
+  }, {
+    key: "outsideNote",
+    get: function() {
+      return this._messageParts.outsideNote;
+    }
+    /**
+     * Get the note on the inside of the gift
+     *
+     * @returns Note on the inside of the gift
+     */
+  }, {
+    key: "insideNote",
+    get: function() {
+      return this._messageParts.insideNote;
     }
     /**
      * Get items attached to the kmail
@@ -18617,10 +18675,31 @@ var Kmail = /* @__PURE__ */ function() {
   }, {
     key: "items",
     value: function() {
-      return new Map(Object.entries((0, import_kolmafia73.extractItems)(this.rawMessage)).map(function(_ref) {
-        var _ref2 = _slicedToArray22(_ref, 2), itemName = _ref2[0], quantity = _ref2[1];
-        return [import_kolmafia73.Item.get(itemName), quantity];
-      }));
+      var _this$_messageParts2 = this._messageParts, outsideAttachments = _this$_messageParts2.outsideAttachments, insideAttachments = _this$_messageParts2.insideAttachments;
+      return extractItems("".concat(outsideAttachments).concat(insideAttachments));
+    }
+    /**
+     * Get items attached to the outside of the gift, which should be
+     * just the gift wrapper for giftshop items, and all items for normal kmails
+     *
+     * @returns Map of items attached to the kmail and their quantities
+     */
+  }, {
+    key: "outsideItems",
+    value: function() {
+      var outsideAttachments = this._messageParts.outsideAttachments;
+      return outsideAttachments ? extractItems(outsideAttachments) : /* @__PURE__ */ new Map();
+    }
+    /**
+     * Get items attached to the inside of the gift
+     *
+     * @returns Map of items attached to the kmail and their quantities
+     */
+  }, {
+    key: "insideItems",
+    value: function() {
+      var insideAttachments = this._messageParts.insideAttachments;
+      return insideAttachments ? extractItems(insideAttachments) : /* @__PURE__ */ new Map();
     }
     /**
      * Get meat attached to the kmail
@@ -18630,7 +18709,8 @@ var Kmail = /* @__PURE__ */ function() {
   }, {
     key: "meat",
     value: function() {
-      return (0, import_kolmafia73.extractMeat)(this.rawMessage);
+      var _this$_messageParts3 = this._messageParts, outsideAttachments = _this$_messageParts3.outsideAttachments, insideAttachments = _this$_messageParts3.insideAttachments;
+      return !outsideAttachments && !insideAttachments ? 0 : (0, import_kolmafia73.extractMeat)("".concat(outsideAttachments).concat(insideAttachments));
     }
     /**
      * Reply to kmail
@@ -19342,6 +19422,7 @@ var Session = /* @__PURE__ */ function() {
   ensureFreeRun,
   examine,
   expectedLibramSummon,
+  extractItems,
   findActionSource,
   findFairyMultiplier,
   findLeprechaunMultiplier,

@@ -98,17 +98,17 @@ function expectedAdventures(
   );
 }
 
-type MenuItemOptions<T> = {
-  organ?: Organ;
-  size?: number;
-  maximum?: number | "auto";
-  additionalValue?: number;
-  effect?: Effect;
-  priceOverride?: number;
-  mayo?: Item;
-  data?: T;
-  useRetrievePrice?: boolean;
-};
+type MenuItemOptions<T> = Partial<{
+  organ: Organ;
+  size: number;
+  maximum: number | "auto";
+  additionalValue: number;
+  effect: Effect;
+  priceOverride: number;
+  mayo: Item;
+  data: T;
+  useRetrievePrice: boolean;
+}>;
 
 export class MenuItem<T> {
   item: Item;
@@ -240,15 +240,17 @@ export class MenuItem<T> {
       ...(MenuItem.defaultOptions<T>().get(item) ?? {}),
     };
     this.item = item;
-    this.maximum = maximum === "auto" ? item.dailyusesleft : maximum;
-    this.additionalValue = additionalValue;
-    this.effect = effect;
-    this.priceOverride = priceOverride;
-    this.mayo = mayo;
-    this.data = data;
+    const maximum_ = maximum === "auto" ? item.dailyusesleft : maximum;
+    if (maximum_) this.maximum = maximum_;
+    if (additionalValue) this.additionalValue = additionalValue;
+    if (effect) this.effect = effect;
+    if (priceOverride) this.priceOverride = priceOverride;
+    if (mayo) this.mayo = mayo;
+    if (data) this.data = data;
 
     const typ = itemType(this.item);
-    this.organ = organ ?? (isOrgan(typ) ? typ : undefined);
+    if (organ) this.organ = organ;
+    else if (isOrgan(typ)) this.organ = typ;
     this.size =
       size ??
       (this.organ === "food"
@@ -300,14 +302,18 @@ class DietPlanner<T> {
 
   constructor(mpa: number, menu: MenuItem<T>[]) {
     this.mpa = mpa;
-    this.fork = menu.find(
+    const fork = menu.find(
       (item) => item.item === $item`Ol' Scratch's salad fork`
     );
-    this.mug = menu.find((item) => item.item === $item`Frosty's frosty mug`);
-    this.seasoning = menu.find(
+    if (fork) this.fork = fork;
+    const mug = menu.find((item) => item.item === $item`Frosty's frosty mug`);
+    if (mug) this.mug = mug;
+    const seasoning = menu.find(
       (item) => item.item === $item`Special Seasoning`
     );
-    this.whetStone = menu.find((item) => item.item === $item`whet stone`);
+    if (seasoning) this.seasoning = seasoning;
+    const whetStone = menu.find((item) => item.item === $item`whet stone`);
+    if (whetStone) this.whetStone = whetStone;
     this.mayoLookup = new Map<Item, MenuItem<T>>();
     if (mayoInstalled()) {
       for (const mayo of [Mayo.flex, Mayo.zapine]) {

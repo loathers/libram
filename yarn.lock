@@ -5270,10 +5270,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.27901.0":
-  version: 5.27907.0
-  resolution: "kolmafia@npm:5.27907.0"
-  checksum: 10c0/637ce6743b7968e29178e06073eb0ca5dfbfd4a07b7c974028ba6ec72dc480ca08346937a9af390e614c78582f32c66ac4929f8b489888a4ad747d9656fe66a1
+"kolmafia@npm:^5.27916.0":
+  version: 5.27916.0
+  resolution: "kolmafia@npm:5.27916.0"
+  checksum: 10c0/64501c8c2a4fc9b8042e4102b5c83c68c8b8e8073d9e81ba4ff479dde2a49c4d7357da8da816464c9f09afc859b54567700bca860f1650b8a0b71bf0323e7d1e
   languageName: node
   linkType: hard
 
@@ -5334,7 +5334,7 @@ __metadata:
     husky: "npm:^4.3.6"
     java-parser: "npm:^1.4.0"
     jest: "npm:^27.1.0"
-    kolmafia: "npm:^5.27901.0"
+    kolmafia: "npm:^5.27916.0"
     lint-staged: "npm:>=10"
     node-fetch: "npm:^2.6.1"
     prettier: "npm:^2.1.2"

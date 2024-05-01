@@ -36,9 +36,22 @@ jobs:
       - name: Build
         run: yarn run build
 
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.node-version }}
+      - name: Install modules
+        run: yarn install --immutable
+      - name: Run tests
+        run: yarn run test
+
   push:
     runs-on: ubuntu-latest
-    needs: [lint, testBuild]
+    needs: [lint, testBuild, tests]
     if: github.ref == 'refs/heads/main'
 
     steps:

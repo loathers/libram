@@ -1,6 +1,5 @@
 import { isGiftable, Item, visitUrl } from "kolmafia";
 import { $item, Kmail } from "../src";
-
 import mocked = jest.mocked;
 
 jest.mock("kolmafia");
@@ -195,4 +194,298 @@ describe(Kmail.gift, () => {
       true
     );
   });
+});
+
+describe("message parsing", () => {
+  // we need the correct plural for the extractItems mock to work
+  ($item`"DRINK ME" potion` as any).plural = `bottles of "DRINK ME" potion`;
+
+  const baseMessage = {
+    id: "11",
+    fromid: "1852283",
+    fromname: "StuBorn",
+    azunixtime: "1714072304",
+    localtime: "04/25/24 09:11:44 PM",
+  };
+
+  it("should parse the same time from azunixtime and localtime", () => {
+    mocked(visitUrl).mockReturnValueOnce(
+      JSON.stringify([
+        { ...baseMessage, type: "normal", message: "Hello, world!" },
+      ])
+    );
+
+    const kmails = Kmail.inbox();
+    expect(kmails).toHaveLength(1);
+    expect(
+      kmails[0].date
+        .toLocaleString("en-US", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        })
+        .replace(/, /g, " ")
+    ).toEqual(baseMessage.localtime);
+  });
+
+  it.each([
+    {
+      input: {
+        // fake meat gain in message
+        ...baseMessage,
+        type: "normal",
+        message: "You gain 11 Meat.",
+      },
+      expectedMeat: 0,
+    },
+    {
+      input: {
+        // fake meat gain in message with different suffix
+        ...baseMessage,
+        type: "normal",
+        message: "You gain 11 Meatballs",
+      },
+      expectedMeat: 0,
+    },
+    {
+      input: {
+        // fake html of meat gain in message
+        ...baseMessage,
+        type: "normal",
+        message:
+          "&lt;center&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif&quot; height=30 width=30 alt=&quot;Meat&quot;&gt;&lt;/td&gt;&lt;td valign=center&gt;You gain 11 Meat.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/center&gt;",
+      },
+      expectedMeat: 0,
+    },
+    {
+      input: {
+        // fake meat gain in message while actually sending less real meat
+        ...baseMessage,
+        type: "normal",
+        message:
+          'You gain 11 Meat.<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 1 Meat.</td></tr></table></center>',
+      },
+      expectedMeat: 1,
+    },
+    {
+      input: {
+        // fake meat gain in outside message of gift (unopened)
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'You gain 11 Meat.<center><table class="item" style="float: none" rel="id=1167&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/plainbrown.gif" alt="plain brown wrapper" title="plain brown wrapper" class=hand onClick=\'descitem(546961999)\' ></td><td valign=center class=effect>You acquire an item: <b>plain brown wrapper</b></td></tr></table></center>',
+      },
+      expectedMeat: 0,
+    },
+    {
+      input: {
+        // fake meat gain in outside and inside message of gift while actually sending less real meat
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'You gain 11 Meat.<center><table class="item" style="float: none" rel="id=1167&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/plainbrown.gif" alt="plain brown wrapper" title="plain brown wrapper" class=hand onClick=\'descitem(546961999)\' ></td><td valign=center class=effect>You acquire an item: <b>plain brown wrapper</b></td></tr></table></center><p>Inside Note:<p>You gain 11 Meat.<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 1 Meat.</td></tr></table></center>',
+      },
+      expectedMeat: 1,
+    },
+    {
+      input: {
+        // fake meat gain in message with valentine
+        ...baseMessage,
+        type: "normal",
+        message:
+          '<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/adventureimages/1335.gif" width=100 height=100></td><td valign=center>r0535 R R3d<br>5ug4r i5 5w337<br>If U\'d b3 m1n3<br>I\'d f33l pr377y 1337.</td></tr></table></center>You gain 11 Meat.<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 1 Meat.</td></tr></table></center>',
+      },
+      expectedMeat: 1,
+    },
+    {
+      input: {
+        // fake meat gain in message with valentine while actually sending less real meat
+        ...baseMessage,
+        type: "normal",
+        message:
+          "<center><table><tr><td><img src=\"https://d2uyhvukfffg5a.cloudfront.net/adventureimages/1335.gif\" width=100 height=100></td><td valign=center>r0535 R R3d<br>5ug4r i5 5w337<br>If U'd b3 m1n3<br>I'd f33l pr377y 1337.</td></tr></table></center>You gain 11 Meat.",
+      },
+      expectedMeat: 0,
+    },
+  ] as const)(
+    "should not be fooled with fake meat gains",
+    ({ input, expectedMeat }) => {
+      mocked(visitUrl).mockReturnValueOnce(JSON.stringify([input]));
+
+      const kmails = Kmail.inbox();
+      expect(kmails).toHaveLength(1);
+      expect(kmails[0].message).toMatch("You gain 11 Meat");
+      expect(kmails[0].meat()).toEqual(expectedMeat);
+    }
+  );
+
+  it.each([
+    {
+      input: {
+        ...baseMessage,
+        type: "normal",
+        message:
+          'You acquire an item: &lt;b&gt;Mr. Accessory&lt;/b&gt;<center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=1&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire an item: <b>&quot;DRINK ME&quot; potion</b></td></tr></table></center>',
+      },
+      expectedItems: new Map([[$item`"DRINK ME" potion`, 1]]),
+    },
+    {
+      input: {
+        ...baseMessage,
+        type: "normal",
+        message:
+          'You acquire an item: &lt;b&gt;Mr. Accessory&lt;/b&gt;\r\n<center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=11&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire <b>11 bottles of &quot;DRINK ME&quot; potion</b><br>(That\'s ridiculous.  It\'s not even funny.)</td></tr></table></center>',
+      },
+      expectedItems: new Map([[$item`"DRINK ME" potion`, 11]]),
+    },
+  ])(
+    "should not be fooled by fake item gains in a message",
+    ({ input, expectedItems }) => {
+      mocked(visitUrl).mockReturnValueOnce(JSON.stringify([input]));
+
+      const kmails = Kmail.inbox();
+      expect(kmails).toHaveLength(1);
+      expect(kmails[0].items()).toEqual(expectedItems);
+    }
+  );
+
+  it.each([
+    {
+      input: {
+        ...baseMessage,
+        type: "normal",
+        message:
+          '<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/adventureimages/smiley.gif" width=100 height=100></td><td valign=center>You zerg rush\'d my heart<br>Your love gets me high<br>Come give me a kiss<br>You\'re oh em gee KAWAIIIIIIII!!11!!11!!!?!!?!</td></tr></table></center>This is a message<center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=1&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire an item: <b>&quot;DRINK ME&quot; potion</b></td></tr></table></center><center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 11 Meat.</td></tr></table></center>',
+      },
+      expectedMessage: "This is a message",
+      expectedMeat: 11,
+    },
+    {
+      input: {
+        ...baseMessage,
+        type: "normal",
+        message:
+          "<center><table><tr><td><img src=\"https://d2uyhvukfffg5a.cloudfront.net/adventureimages/1335.gif\" width=100 height=100></td><td valign=center>r0535 R R3d<br>5ug4r i5 5w337<br>If U'd b3 m1n3<br>I'd f33l pr377y 1337.</td></tr></table></center>This is a valentine's message with &lt;b&gt;fake html&lt;/b&gt;\r\n\r\n",
+      },
+      expectedMessage:
+        "This is a valentine's message with <b>fake html</b>\r\n\r\n",
+      expectedMeat: 0,
+    },
+  ])(
+    "should strip off valentine messages",
+    ({ input, expectedMessage, expectedMeat }) => {
+      mocked(visitUrl).mockReturnValueOnce(JSON.stringify([input]));
+
+      const kmails = Kmail.inbox();
+      expect(kmails).toHaveLength(1);
+      expect(kmails[0].message).toEqual(expectedMessage);
+      expect(kmails[0].meat()).toEqual(expectedMeat);
+    }
+  );
+
+  it.each([
+    {
+      input: {
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'This is an outside note with &lt;fake&gt;&lt;/html&gt;<center><table class="item" style="float: none" rel="id=1167&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/plainbrown.gif" alt="plain brown wrapper" title="plain brown wrapper" class=hand onClick=\'descitem(546961999)\' ></td><td valign=center class=effect>You acquire an item: <b>plain brown wrapper</b></td></tr></table></center><p>Inside Note:<p>This is an inside note with &lt;b&gt;fake&lt;/b&gt;&lt;/html&gt;<center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 11 Meat.</td></tr></table></center><center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=1&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire an item: <b>&quot;DRINK ME&quot; potion</b></td></tr></table></center>',
+      },
+      expectedMessage:
+        "This is an outside note with <fake></html>\n\nInside Note:\nThis is an inside note with <b>fake</b></html>",
+      expectedOutsideNote: "This is an outside note with <fake></html>",
+      expectedInsideNote: "This is an inside note with <b>fake</b></html>",
+      expectedItems: new Map([
+        [$item`plain brown wrapper`, 1],
+        [$item`"DRINK ME" potion`, 1],
+      ]),
+      expectedOutsideItems: new Map([[$item`plain brown wrapper`, 1]]),
+      expectedInsideItems: new Map([[$item`"DRINK ME" potion`, 1]]),
+      expectedMeat: 11,
+    },
+    {
+      // unopened
+      input: {
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=1168&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/lessthan3.gif" alt="less-than-three-shaped box" title="less-than-three-shaped box" class=hand onClick=\'descitem(938194457)\' ></td><td valign=center class=effect>You acquire an item: <b>less-than-three-shaped box</b></td></tr></table></center>',
+      },
+      expectedMessage: "This is an outside note with <b>fake html</b>.",
+      expectedOutsideNote: "This is an outside note with <b>fake html</b>.",
+      expectedInsideNote: null,
+      expectedItems: new Map([[$item`less-than-three-shaped box`, 1]]),
+      expectedOutsideItems: new Map([[$item`less-than-three-shaped box`, 1]]),
+      expectedInsideItems: new Map(),
+      expectedMeat: 0,
+    },
+    {
+      // opened
+      input: {
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'This is an outside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=1168&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/lessthan3.gif" alt="less-than-three-shaped box" title="less-than-three-shaped box" class=hand onClick=\'descitem(938194457)\' ></td><td valign=center class=effect>You acquire an item: <b>less-than-three-shaped box</b></td></tr></table></center><p>Inside Note:<p>This is an inside note with &lt;b&gt;fake html&lt;/b&gt;.<center><table class="item" style="float: none" rel="id=4508&s=0&q=0&d=0&g=0&t=1&n=11&m=1&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/drinkme.gif" alt="&quot;DRINK ME&quot; potion" title="&quot;DRINK ME&quot; potion" class=hand onClick=\'descitem(830929931)\' ></td><td valign=center class=effect>You acquire <b>11 bottles of &quot;DRINK ME&quot; potion</b><br>(That\'s ridiculous.  It\'s not even funny.)</td></tr></table></center><center><table class="item" style="float: none" rel="id=1907&s=65&q=0&d=1&g=0&t=1&n=1&m=0&p=0&u=u"><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/8ball.gif" alt="8-ball" title="8-ball" class=hand onClick=\'descitem(631597539)\' ></td><td valign=center class=effect>You acquire an item: <b>8-ball</b></td></tr></table></center>',
+      },
+      expectedMessage:
+        "This is an outside note with <b>fake html</b>.\n\nInside Note:\nThis is an inside note with <b>fake html</b>.",
+      expectedOutsideNote: "This is an outside note with <b>fake html</b>.",
+      expectedInsideNote: "This is an inside note with <b>fake html</b>.",
+      expectedItems: new Map([
+        [$item`less-than-three-shaped box`, 1],
+        [$item`"DRINK ME" potion`, 11],
+        [$item`8-ball`, 1],
+      ]),
+      expectedOutsideItems: new Map([[$item`less-than-three-shaped box`, 1]]),
+      expectedInsideItems: new Map([
+        [$item`"DRINK ME" potion`, 11],
+        [$item`8-ball`, 1],
+      ]),
+      expectedMeat: 0,
+    },
+    {
+      input: {
+        ...baseMessage,
+        type: "giftshop",
+        message:
+          'This is a gift with an empty inside note<center><table class="item" style="float: none" rel="id=1167&s=0&q=0&d=0&g=1&t=0&n=1&m=0&p=0&u=."><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/plainbrown.gif" alt="plain brown wrapper" title="plain brown wrapper" class=hand onClick=\'descitem(546961999)\' ></td><td valign=center class=effect>You acquire an item: <b>plain brown wrapper</b></td></tr></table></center><p>Inside Note:<p><center><table><tr><td><img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/meat.gif" height=30 width=30 alt="Meat"></td><td valign=center>You gain 1 Meat.</td></tr></table></center>',
+      },
+      expectedMessage:
+        "This is a gift with an empty inside note\n\nInside Note:\n",
+      expectedOutsideNote: "This is a gift with an empty inside note",
+      expectedInsideNote: "",
+      expectedItems: new Map([[$item`plain brown wrapper`, 1]]),
+      expectedOutsideItems: new Map([[$item`plain brown wrapper`, 1]]),
+      expectedInsideItems: new Map(),
+      expectedMeat: 1,
+    },
+  ] as const)(
+    "should correctly parse outside and inside of gift message",
+    ({
+      input,
+      expectedMessage,
+      expectedOutsideNote,
+      expectedInsideNote,
+      expectedItems,
+      expectedOutsideItems,
+      expectedInsideItems,
+      expectedMeat,
+    }) => {
+      mocked(visitUrl).mockReturnValueOnce(JSON.stringify([input]));
+
+      const kmails = Kmail.inbox();
+      expect(kmails).toHaveLength(1);
+      expect(kmails[0].message).toEqual(expectedMessage);
+      expect(kmails[0].outsideNote).toEqual(expectedOutsideNote);
+      expect(kmails[0].insideNote).toEqual(expectedInsideNote);
+      expect(kmails[0].items()).toEqual(expectedItems);
+      expect(kmails[0].outsideItems()).toEqual(expectedOutsideItems);
+      expect(kmails[0].insideItems()).toEqual(expectedInsideItems);
+      expect(kmails[0].meat()).toEqual(expectedMeat);
+    }
+  );
 });

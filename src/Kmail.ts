@@ -1,10 +1,6 @@
-import {
-  extractItems,
-  extractMeat,
-  isGiftable,
-  Item,
-  visitUrl,
-} from "kolmafia";
+import { decode as decodeEntities } from "html-entities";
+import { extractMeat, isGiftable, Item, visitUrl } from "kolmafia";
+import { extractItems } from "./lib";
 import { combineQuery, EMPTY_VALUE, fetchUrl, Query } from "./url";
 import { arrayToCountedMap, chunk } from "./utils";
 
@@ -25,6 +21,15 @@ export default class Kmail {
   readonly senderId: number;
   readonly senderName: string;
   readonly rawMessage: string;
+
+  private _parsedMessageParts:
+    | {
+        outsideNote: string;
+        outsideAttachments: string | null;
+        insideNote: string | null;
+        insideAttachments: string | null;
+      }
+    | undefined;
 
   /**
    * Parses a kmail from KoL's native format
@@ -202,13 +207,8 @@ export default class Kmail {
   }
 
   private constructor(rawKmail: RawKmail) {
-    const date = new Date(rawKmail.localtime);
-    // Date come from KoL formatted with YY and so will be parsed 19YY, which is wrong.
-    // We can safely add 100 because if 19YY was a leap year, 20YY will be too!
-    date.setFullYear(date.getFullYear() + 100);
-
     this.id = Number(rawKmail.id);
-    this.date = date;
+    this.date = new Date(Number(rawKmail.azunixtime) * 1000);
     this.type = rawKmail.type as Kmail["type"];
     this.senderId = Number(rawKmail.fromid);
     this.senderName = rawKmail.fromname;
@@ -224,14 +224,69 @@ export default class Kmail {
     return Kmail.delete([this]) === 1;
   }
 
+  private get _messageParts() {
+    return (this._parsedMessageParts ??= this._parseMessageParts());
+  }
+
+  private _parseMessageParts() {
+    let text = this.rawMessage;
+    let insideText: string | undefined;
+    if (this.type === "normal") {
+      // strip potential valentine
+      if (text.startsWith("<center>")) {
+        const endIdx = text.indexOf("</center>");
+        text = text.slice(endIdx + 9);
+      }
+    } else if (this.type === "giftshop") {
+      [text, insideText] = text.split("<p>Inside Note:<p>");
+    }
+    const split = (s: string) => {
+      const idx = s.indexOf("<");
+      if (idx === -1) return [s];
+      return [s.slice(0, idx), s.slice(idx)];
+    };
+    const [outsideNote, outsideAttachments = null] = split(text);
+    const [insideNote = null, insideAttachments = null] =
+      insideText !== undefined ? split(insideText) : [];
+
+    return {
+      outsideNote: decodeEntities(outsideNote),
+      outsideAttachments,
+      insideNote: insideNote && decodeEntities(insideNote),
+      insideAttachments,
+    };
+  }
+
   /**
    * Get message contents without any HTML from items or meat
    *
    * @returns Cleaned message contents
    */
   get message(): string {
-    const match = this.rawMessage.match(/^(.*?)</s);
-    return match ? match[1] : this.rawMessage;
+    const { outsideNote, insideNote } = this._messageParts;
+    if (insideNote !== null) {
+      return `${outsideNote}\n\nInside Note:\n${insideNote}`;
+    }
+    return outsideNote;
+  }
+
+  /**
+   * Get the note on the outside of the gift. If the kmail is not a gift,
+   * this will be the entire message.
+   *
+   * @returns Note on the outside of the gift, or the entire message for non-gifts
+   */
+  get outsideNote(): string {
+    return this._messageParts.outsideNote;
+  }
+
+  /**
+   * Get the note on the inside of the gift
+   *
+   * @returns Note on the inside of the gift
+   */
+  get insideNote(): string | null {
+    return this._messageParts.insideNote;
   }
 
   /**
@@ -240,11 +295,31 @@ export default class Kmail {
    * @returns Map of items attached to the kmail and their quantities
    */
   items(): Map<Item, number> {
-    return new Map(
-      Object.entries(extractItems(this.rawMessage)).map(
-        ([itemName, quantity]) => [Item.get(itemName), quantity] as const
-      )
-    );
+    const { outsideAttachments, insideAttachments } = this._messageParts;
+    return extractItems(`${outsideAttachments}${insideAttachments}`);
+  }
+
+  /**
+   * Get items attached to the outside of the gift, which should be
+   * just the gift wrapper for giftshop items, and all items for normal kmails
+   *
+   * @returns Map of items attached to the kmail and their quantities
+   */
+  outsideItems(): Map<Item, number> {
+    const { outsideAttachments } = this._messageParts;
+    if (!outsideAttachments) return new Map();
+    return extractItems(outsideAttachments);
+  }
+
+  /**
+   * Get items attached to the inside of the gift
+   *
+   * @returns Map of items attached to the kmail and their quantities
+   */
+  insideItems(): Map<Item, number> {
+    const { insideAttachments } = this._messageParts;
+    if (!insideAttachments) return new Map();
+    return extractItems(insideAttachments);
   }
 
   /**
@@ -253,7 +328,9 @@ export default class Kmail {
    * @returns Meat attached to the kmail
    */
   meat(): number {
-    return extractMeat(this.rawMessage);
+    const { outsideAttachments, insideAttachments } = this._messageParts;
+    if (!outsideAttachments && !insideAttachments) return 0;
+    return extractMeat(`${outsideAttachments}${insideAttachments}`);
   }
 
   /**

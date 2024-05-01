@@ -84,6 +84,8 @@ function mergeConstraints(
     // Inconsistent requirements.
     return null;
   }
+
+  const familiar = familiars.find((familiar) => familiar);
   return {
     equipmentRequirements: () =>
       Requirement.merge([
@@ -100,7 +102,7 @@ function mergeConstraints(
       }
       return success;
     },
-    familiar: familiars.find((familiar) => familiar),
+    ...(familiar ? { familiar } : {}),
     cost: () => sum(allConstraints, (constraints) => constraints.cost?.() ?? 0),
   };
 }

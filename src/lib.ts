@@ -12,6 +12,7 @@ import {
   elementalResistance,
   equip,
   equippedItem,
+  extractItems as kolmafiaExtractItems,
   Familiar,
   fullnessLimit,
   getCampground,
@@ -976,13 +977,15 @@ export function telescope(): {
   hedge2?: Element;
   hedge3?: Element;
 } {
-  return {
-    statContest: telescopeStats.get(get("telescope1")),
-    elementContest: telescopeElements.get(get("telescope2")),
-    hedge1: hedgeTrap1.get(get("telescope3")),
-    hedge2: hedgeTrap2.get(get("telescope4")),
-    hedge3: hedgeTrap3.get(get("telescope5")),
-  };
+  return Object.fromEntries(
+    Object.entries({
+      statContest: telescopeStats.get(get("telescope1")),
+      elementContest: telescopeElements.get(get("telescope2")),
+      hedge1: hedgeTrap1.get(get("telescope3")),
+      hedge2: hedgeTrap2.get(get("telescope4")),
+      hedge3: hedgeTrap3.get(get("telescope5")),
+    } as const).filter(([, value]) => value)
+  );
 }
 
 /**
@@ -1256,4 +1259,21 @@ export function withCombatFlags<T>(
  */
 export function haveIntrinsic(effect: Effect): boolean {
   return haveEffect(effect) >= 2147483647;
+}
+
+/**
+ * Extracts a map of gained items from a string, for example from the result
+ * of a combat.
+ *
+ * NOTE: Make sure you trust the source of that text.
+ *
+ * @param text The text to extract items from
+ * @returns A map of items and their quantities
+ */
+export function extractItems(text: string): Map<Item, number> {
+  return new Map(
+    Object.entries(kolmafiaExtractItems(text)).map(
+      ([itemName, quantity]) => [Item.get(itemName), quantity] as const
+    )
+  );
 }

@@ -13987,8 +13987,10 @@ function have35() {
   return (0, import_kolmafia49.availableAmount)(orb) > 0;
 }
 var parsedProp = function() {
-  return get("crystalBallPredictions").split("|").map(function(element) {
+  return get("crystalBallPredictions").split("|").filter(Boolean).map(function(element) {
     return element.split(":");
+  }).filter(function(tuple) {
+    return tuple.length === 3;
   }).map(function(_ref) {
     var _ref2 = _slicedToArray12(_ref, 3), location = _ref2[1], monster = _ref2[2];
     return [(0, import_kolmafia49.toLocation)(location), (0, import_kolmafia49.toMonster)(monster)];

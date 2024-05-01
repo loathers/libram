@@ -6,7 +6,7 @@ import { Requirement } from "../maximize";
 import { get } from "../property";
 import * as Bandersnatch from "../resources/2009/Bandersnatch";
 import * as StompingBoots from "../resources/2011/StompingBoots";
-import { $effect, $familiar, $item, $items } from "../template-string";
+import { $effect, $familiar, $item, $items, $skill } from "../template-string";
 import {
   ActionSource,
   findActionSource,
@@ -17,6 +17,16 @@ import {
 const EVERYTHING_LOOKS_GREEN = $effect`Everything Looks Green`;
 
 const freeRunSources: ActionSource[] = [
+  // Free unlimited source
+  new ActionSource(
+    $item`spring shoes`,
+    () => (have(EVERYTHING_LOOKS_GREEN) ? 1 : 0),
+    Macro.skill($skill`Spring Away`),
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: $items`spring shoes` }),
+    }
+  ),
   // Free limited sources
   new ActionSource(
     $familiar`Frumious Bandersnatch`,

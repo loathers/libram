@@ -1,5 +1,5 @@
 import { Monster, myHash, runChoice, runCombat, visitUrl } from "kolmafia";
-import { haveInCampground } from "../../lib";
+import { CombatParams, haveInCampground } from "../../lib";
 import { get } from "../../property";
 import { $item } from "../../template-string";
 
@@ -32,9 +32,13 @@ export const pieces = Monster.get([
  * Fight a Witchess piece of your choice
  *
  * @param piece The piece to fight
+ * @param combatParams Any parameters you'd like to pass to `runCombat`
  * @returns The value of `runCombat()`, which is the page html of the final round
  */
-export function fightPiece(piece: Monster): string {
+export function fightPiece(
+  piece: Monster,
+  ...combatParams: CombatParams
+): string {
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
@@ -54,5 +58,5 @@ export function fightPiece(piece: Monster): string {
   ) {
     throw new Error("Failed to start fight.");
   }
-  return runCombat();
+  return runCombat(...combatParams);
 }

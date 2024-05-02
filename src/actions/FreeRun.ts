@@ -13,14 +13,14 @@ import {
   FindActionSourceConstraints,
 } from "./ActionSource";
 
-// eslint-disable-next-line libram/verify-constants
-const EVERYTHING_LOOKS_GREEN = $effect`Everything Looks Green`;
+const everythingLooksGreen = () =>
+  have($effect`Everything Looks Green`) ? 0 : 1;
 
 const freeRunSources: ActionSource[] = [
   // Free unlimited source
   new ActionSource(
     $item`spring shoes`,
-    () => (have(EVERYTHING_LOOKS_GREEN) ? 1 : 0),
+    everythingLooksGreen,
     Macro.skill($skill`Spring Away`),
     {
       equipmentRequirements: () =>
@@ -100,15 +100,10 @@ const freeRunSources: ActionSource[] = [
   // unlimited items that trigger everything looks green
   ...$items`green smoke bomb, tattered scrap of paper, GOTO, T.U.R.D.S. Key`.map(
     (item) =>
-      new ActionSource(
-        item,
-        () => (have(EVERYTHING_LOOKS_GREEN) ? 0 : 1),
-        Macro.item(item),
-        {
-          preparation: () => retrieveItem(item),
-          cost: () => ActionSource.defaultPriceFunction(item),
-        }
-      )
+      new ActionSource(item, everythingLooksGreen, Macro.item(item), {
+        preparation: () => retrieveItem(item),
+        cost: () => ActionSource.defaultPriceFunction(item),
+      })
   ),
 
   // limited quest items

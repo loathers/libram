@@ -9497,11 +9497,11 @@ function _arrayLikeToArray11(arr, len) {
 function _taggedTemplateLiteral8(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var EVERYTHING_LOOKS_GREEN = $effect(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral8(["Everything Looks Green"]))), freeRunSources = [
+var everythingLooksGreen = function() {
+  return have($effect(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral8(["Everything Looks Green"])))) ? 0 : 1;
+}, freeRunSources = [
   // Free unlimited source
-  new ActionSource($item(_templateObject218 || (_templateObject218 = _taggedTemplateLiteral8(["spring shoes"]))), function() {
-    return have(EVERYTHING_LOOKS_GREEN) ? 1 : 0;
-  }, Macro.skill($skill(_templateObject318 || (_templateObject318 = _taggedTemplateLiteral8(["Spring Away"])))), {
+  new ActionSource($item(_templateObject218 || (_templateObject218 = _taggedTemplateLiteral8(["spring shoes"]))), everythingLooksGreen, Macro.skill($skill(_templateObject318 || (_templateObject318 = _taggedTemplateLiteral8(["Spring Away"])))), {
     equipmentRequirements: function() {
       return new Requirement([], {
         forceEquip: $items(_templateObject416 || (_templateObject416 = _taggedTemplateLiteral8(["spring shoes"])))
@@ -9562,9 +9562,7 @@ var EVERYTHING_LOOKS_GREEN = $effect(_templateObject60 || (_templateObject60 = _
     // Breaks after 10 successful runaways.
   })
 ].concat(_toConsumableArray8($items(_templateObject235 || (_templateObject235 = _taggedTemplateLiteral8(["green smoke bomb, tattered scrap of paper, GOTO, T.U.R.D.S. Key"]))).map(function(item11) {
-  return new ActionSource(item11, function() {
-    return have(EVERYTHING_LOOKS_GREEN) ? 0 : 1;
-  }, Macro.item(item11), {
+  return new ActionSource(item11, everythingLooksGreen, Macro.item(item11), {
     preparation: function() {
       return (0, import_kolmafia13.retrieveItem)(item11);
     },

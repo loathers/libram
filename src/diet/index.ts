@@ -23,7 +23,7 @@ import { get as getModifier } from "../modifier";
 import { get } from "../property";
 import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
 import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { sum } from "../utils";
+import { notNullish, sum } from "../utils";
 import { knapsack } from "./knapsack";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
@@ -240,17 +240,21 @@ export class MenuItem<T> {
       ...(MenuItem.defaultOptions<T>().get(item) ?? {}),
     };
     this.item = item;
-    const maximum_ = maximum === "auto" ? item.dailyusesleft : maximum;
-    if (maximum_) this.maximum = maximum_;
-    if (additionalValue) this.additionalValue = additionalValue;
-    if (effect) this.effect = effect;
-    if (priceOverride) this.priceOverride = priceOverride;
-    if (mayo) this.mayo = mayo;
-    if (data) this.data = data;
 
-    const typ = itemType(this.item);
-    if (organ) this.organ = organ;
-    else if (isOrgan(typ)) this.organ = typ;
+    if (notNullish(maximum))
+      this.maximum = maximum === "auto" ? item.dailyusesleft : maximum;
+    if (notNullish(additionalValue)) this.additionalValue = additionalValue;
+    if (notNullish(effect)) this.effect = effect;
+    if (notNullish(priceOverride)) this.priceOverride = priceOverride;
+    if (notNullish(mayo)) this.mayo = mayo;
+    if (notNullish(data)) this.data = data;
+    if (notNullish(organ)) {
+      this.organ = organ;
+    } else {
+      const typ = itemType(this.item);
+      if (isOrgan(typ)) this.organ = typ;
+    }
+
     this.size =
       size ??
       (this.organ === "food"

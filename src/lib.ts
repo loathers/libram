@@ -44,6 +44,7 @@ import {
   myTurncount,
   numericModifier,
   Path,
+  runCombat,
   Servant,
   Skill,
   Slot,
@@ -1277,3 +1278,5 @@ export function extractItems(text: string): Map<Item, number> {
     )
   );
 }
+
+export type CombatParams = Parameters<typeof runCombat>;

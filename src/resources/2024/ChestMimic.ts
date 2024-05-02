@@ -1,13 +1,13 @@
 import {
-  Monster,
   availableAmount,
+  Monster,
   runChoice,
   runCombat,
   toMonster,
   visitUrl,
   xpath,
 } from "kolmafia";
-import { directlyUse, examine, have as have_ } from "../../lib";
+import { CombatParams, directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
 import { clamp } from "../../utils";
@@ -115,12 +115,12 @@ export function receive(monster: Monster): boolean {
  * Differentiate a Mimic egg into a monster, and fight it!
  *
  * @param monster The monster to differentiate your egg into
- * @param combat Any parameters you'd like to pass to `runCombat`
+ * @param combatParams Any parameters you'd like to pass to `runCombat`
  * @returns Whether we successfully differentiated our egg
  */
 export function differentiate(
   monster: Monster,
-  ...combat: Parameters<typeof runCombat>
+  ...combatParams: CombatParams
 ): boolean {
   const page = directlyUse($item`mimic egg`);
   const monsters = getMonsters(1, page);
@@ -129,7 +129,7 @@ export function differentiate(
     return false;
   }
   runChoice(1, `mid=${monster.id}`);
-  runCombat(...combat);
+  runCombat(...combatParams);
   return true;
 }
 

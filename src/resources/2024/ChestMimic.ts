@@ -141,9 +141,12 @@ export function differentiate(
  */
 export function differentiableQuantity(monster: Monster): number {
   if (!have_($item`mimic egg`)) return 0;
-  const regex = new RegExp(`${monster.name}\\s*(?:\\((\\d+)\\))?`);
+  const regex = new RegExp(
+    `<!-- monsterid: ${monster.id}-->(?:\\s\\((\\d+)\\))?`
+  );
   const page = examine($item`mimic egg`);
   const match = page.match(regex);
   if (!match) return 0;
-  return clamp(parseInt(match[1]), 0, availableAmount($item`mimic egg`)) || 1;
+  if (!match[1]) return 1;
+  return clamp(Number(match[1]), 1, availableAmount($item`mimic egg`));
 }

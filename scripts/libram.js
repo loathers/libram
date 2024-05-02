@@ -11277,7 +11277,7 @@ function paintingFought() {
   return get("_chateauMonsterFought");
 }
 function fightPainting() {
-  return (0, import_kolmafia27.visitUrl)("place.php?whichplace=chateau&action=chateau_painting", !1), (0, import_kolmafia27.runCombat)();
+  return (0, import_kolmafia27.visitUrl)("place.php?whichplace=chateau&action=chateau_painting", !1), import_kolmafia27.runCombat.apply(void 0, arguments);
 }
 var desks = ["fancy stationery set", "Swiss piggy bank", "continental juice bar"], ceilings = ["antler chandelier", "ceiling fan", "artificial skylight"], nightstands = ["foreign language tapes", "bowl of potpourri", "electric muscle stimulator"];
 function getDesk() {
@@ -12021,7 +12021,9 @@ function fightPiece(piece) {
     throw new Error("Failed to visit shrink ray.");
   if (!(0, import_kolmafia33.visitUrl)("choice.php?option=1&pwd=".concat((0, import_kolmafia33.myHash)(), "&whichchoice=1182&piece=").concat(piece.id), !1).includes(piece.name))
     throw new Error("Failed to start fight.");
-  return (0, import_kolmafia33.runCombat)();
+  for (var _len = arguments.length, combatParams = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
+    combatParams[_key - 1] = arguments[_key];
+  return import_kolmafia33.runCombat.apply(void 0, combatParams);
 }
 
 // src/resources/2017/Horsery.ts
@@ -14357,7 +14359,12 @@ function monstersReminisced() {
   });
 }
 function reminisce(monster) {
-  return !have38() || reminiscesLeft() === 0 || !(0, import_kolmafia52.getLocketMonsters)()[monster.name] ? !1 : ((0, import_kolmafia52.cliExecute)("reminisce ".concat(monster)), (0, import_kolmafia52.runCombat)(), monstersReminisced().includes(monster));
+  if (!have38() || reminiscesLeft() === 0 || !(0, import_kolmafia52.getLocketMonsters)()[monster.name])
+    return !1;
+  (0, import_kolmafia52.cliExecute)("reminisce ".concat(monster));
+  for (var _len = arguments.length, combatParams = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
+    combatParams[_key - 1] = arguments[_key];
+  return import_kolmafia52.runCombat.apply(void 0, combatParams), monstersReminisced().includes(monster);
 }
 function findMonster(criteria) {
   var value = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : function() {
@@ -15244,9 +15251,9 @@ function differentiate(monster) {
   if (!monsters.includes(monster))
     return (0, import_kolmafia62.visitUrl)("main.php"), !1;
   (0, import_kolmafia62.runChoice)(1, "mid=".concat(monster.id));
-  for (var _len = arguments.length, combat = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
-    combat[_key - 1] = arguments[_key];
-  return import_kolmafia62.runCombat.apply(void 0, combat), !0;
+  for (var _len = arguments.length, combatParams = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
+    combatParams[_key - 1] = arguments[_key];
+  return import_kolmafia62.runCombat.apply(void 0, combatParams), !0;
 }
 function differentiableQuantity(monster) {
   if (!have($item(_templateObject467 || (_templateObject467 = _taggedTemplateLiteral49(["mimic egg"])))))

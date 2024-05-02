@@ -15262,8 +15262,8 @@ function differentiate(monster) {
 function differentiableQuantity(monster) {
   if (!have($item(_templateObject467 || (_templateObject467 = _taggedTemplateLiteral49(["mimic egg"])))))
     return 0;
-  var regex = new RegExp("".concat(monster.name, "\\s*(?:\\((\\d+)\\))?")), page = examine($item(_templateObject540 || (_templateObject540 = _taggedTemplateLiteral49(["mimic egg"])))), match = page.match(regex);
-  return match ? clamp(parseInt(match[1]), 0, (0, import_kolmafia62.availableAmount)($item(_templateObject634 || (_templateObject634 = _taggedTemplateLiteral49(["mimic egg"]))))) || 1 : 0;
+  var regex = new RegExp("<!-- monsterid: ".concat(monster.id, "-->(?:\\s\\((\\d+)\\))?")), page = examine($item(_templateObject540 || (_templateObject540 = _taggedTemplateLiteral49(["mimic egg"])))), match = page.match(regex);
+  return match ? match[1] ? clamp(Number(match[1]), 1, (0, import_kolmafia62.availableAmount)($item(_templateObject634 || (_templateObject634 = _taggedTemplateLiteral49(["mimic egg"]))))) : 1 : 0;
 }
 
 // src/resources/putty-likes.ts

@@ -5289,6 +5289,9 @@ __export(src_exports, {
   notNull: function() {
     return notNull;
   },
+  notNullish: function() {
+    return notNullish;
+  },
   numericModifiers: function() {
     return numericModifiers;
   },
@@ -6144,6 +6147,9 @@ function _arrayLikeToArray2(arr, len) {
 }
 function notNull(value) {
   return value !== null;
+}
+function notNullish(value) {
+  return notNull(value) && value !== void 0;
 }
 function parseNumber(n) {
   return Number.parseInt(n.replace(/,/g, ""));
@@ -17151,11 +17157,13 @@ var MenuItem = /* @__PURE__ */ function() {
     var _MenuItem$defaultOpti, options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     _classCallCheck14(this, MenuItem2), _defineProperty18(this, "item", void 0), _defineProperty18(this, "organ", void 0), _defineProperty18(this, "size", void 0), _defineProperty18(this, "maximum", void 0), _defineProperty18(this, "additionalValue", void 0), _defineProperty18(this, "effect", void 0), _defineProperty18(this, "priceOverride", void 0), _defineProperty18(this, "mayo", void 0), _defineProperty18(this, "data", void 0);
     var _options = _objectSpread8(_objectSpread8({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item11)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
-    this.item = item11;
-    var maximum_ = maximum === "auto" ? item11.dailyusesleft : maximum;
-    maximum_ && (this.maximum = maximum_), additionalValue && (this.additionalValue = additionalValue), effect2 && (this.effect = effect2), priceOverride && (this.priceOverride = priceOverride), mayo && (this.mayo = mayo), data && (this.data = data);
-    var typ = (0, import_kolmafia68.itemType)(this.item);
-    organ ? this.organ = organ : isOrgan(typ) && (this.organ = typ), this.size = size != null ? size : this.organ === "food" ? this.item.fullness : this.organ === "booze" ? this.item.inebriety : this.organ === "spleen item" ? this.item.spleen : 0;
+    if (this.item = item11, notNullish(maximum) && (this.maximum = maximum === "auto" ? item11.dailyusesleft : maximum), notNullish(additionalValue) && (this.additionalValue = additionalValue), notNullish(effect2) && (this.effect = effect2), notNullish(priceOverride) && (this.priceOverride = priceOverride), notNullish(mayo) && (this.mayo = mayo), notNullish(data) && (this.data = data), notNullish(organ))
+      this.organ = organ;
+    else {
+      var typ = (0, import_kolmafia68.itemType)(this.item);
+      isOrgan(typ) && (this.organ = typ);
+    }
+    this.size = size != null ? size : this.organ === "food" ? this.item.fullness : this.organ === "booze" ? this.item.inebriety : this.organ === "spleen item" ? this.item.spleen : 0;
   }
   return _createClass14(MenuItem2, [{
     key: "equals",
@@ -19560,6 +19568,7 @@ var Session = /* @__PURE__ */ function() {
   monsterModifiers,
   noneToNull,
   notNull,
+  notNullish,
   numericModifiers,
   parseNumber,
   permedSkills,

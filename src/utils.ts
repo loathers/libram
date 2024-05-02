@@ -1,11 +1,21 @@
 /**
  * Type guard against null value
  *
- * @param value Value that can be null
- * @returns Whether the value is not null or... not
+ * @param value Value that could be null
+ * @returns Confirmation that the value is not null
  */
 export function notNull<T>(value: T | null): value is T {
   return value !== null;
+}
+
+/**
+ * Type guard against nullish value
+ *
+ * @param value Value that could be null or undefined
+ * @returns Confirmation that the value is not null nor undefined
+ */
+export function notNullish<T>(value: T | null | undefined): value is T {
+  return notNull(value) && value !== undefined;
 }
 
 /**

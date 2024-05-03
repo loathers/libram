@@ -1,5 +1,5 @@
 import {
-  availableAmount,
+  itemAmount,
   Monster,
   runChoice,
   runCombat,
@@ -10,7 +10,6 @@ import {
 import { CombatParams, directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
-import { clamp } from "../../utils";
 
 const familiar = $familiar`Chest Mimic`;
 
@@ -136,17 +135,14 @@ export function differentiate(
 /**
  * Check how many of a monster is available to differentiate into
  *
- * @param monster The monster to differentiate your egg into; may behave weirdly with name collisions
+ * @param monster The monster to differentiate your egg into
  * @returns How many of a Monster we can differentiate
  */
 export function differentiableQuantity(monster: Monster): number {
   if (!have_($item`mimic egg`)) return 0;
-  const regex = new RegExp(
-    `<!-- monsterid: ${monster.id}-->(?:\\s\\((\\d+)\\))?`
-  );
+  const regex = new RegExp(`<!-- monsterid:${monster.id} --> \\((\\d+)\\)`);
   const page = examine($item`mimic egg`);
   const match = page.match(regex);
-  if (!match) return 0;
-  if (!match[1]) return 1;
-  return clamp(Number(match[1]), 1, availableAmount($item`mimic egg`));
+  if (!match?.[1]) return 0;
+  return Math.min(Number(match[1]), itemAmount($item`mimic egg`));
 }

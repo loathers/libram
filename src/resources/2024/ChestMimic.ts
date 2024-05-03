@@ -145,5 +145,5 @@ export function differentiableQuantity(monster: Monster): number {
   const page = examine($item`mimic egg`);
   const match = page.match(regex);
   if (!match?.[1]) return 0;
-  return clamp(Number(match[1]), 1, availableAmount($item`mimic egg`));
+  return Math.min(Number(match[1]), itemAmount($item`mimic egg`));
 }

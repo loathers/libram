@@ -1,5 +1,5 @@
 import {
-  availableAmount,
+  itemAmount,
   Monster,
   runChoice,
   runCombat,
@@ -10,7 +10,6 @@ import {
 import { CombatParams, directlyUse, examine, have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $familiar, $item } from "../../template-string";
-import { clamp } from "../../utils";
 
 const familiar = $familiar`Chest Mimic`;
 

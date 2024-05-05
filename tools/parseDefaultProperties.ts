@@ -1,7 +1,7 @@
 /// <reference types="kolmafia" />
 import { writeFile } from "fs/promises";
 import path from "path";
-import difference from "lodash/difference";
+import { difference } from "lodash";
 import nodeFetch from "node-fetch";
 
 const PROPS_FILE =

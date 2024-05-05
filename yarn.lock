@@ -2281,6 +2281,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tsconfig/node20@npm:^20.1.4":
+  version: 20.1.4
+  resolution: "@tsconfig/node20@npm:20.1.4"
+  checksum: 10c0/239cd6abaceaaffc758e7a9dd3748ec1acfdabd6de28a9a16a3824c21f17ad69a16184870298460345d2fb6f3663d092c21d5b764bef669a179658b4a7eac739
+  languageName: node
+  linkType: hard
+
 "@types/babel__core@npm:^7.1.14":
   version: 7.1.18
   resolution: "@types/babel__core@npm:7.1.18"
@@ -5444,7 +5451,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.15.0"
     "@babel/preset-env": "npm:^7.16.11"
     "@babel/preset-typescript": "npm:^7.15.0"
-    "@tsconfig/node16": "npm:^1.0.2"
+    "@tsconfig/node20": "npm:^20.1.4"
     "@types/jest": "npm:^29.5.12"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^16.11.11"

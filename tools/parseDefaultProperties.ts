@@ -1,8 +1,11 @@
 /// <reference types="kolmafia" />
 import { writeFile } from "fs/promises";
 import path from "path";
-import { difference } from "lodash";
+import url from "url";
+import { difference } from "lodash-es";
 import nodeFetch from "node-fetch";
+
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const PROPS_FILE =
   "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";

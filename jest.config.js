@@ -9,4 +9,4 @@ if (process.env.GITHUB_RUN_ID) {
   config.reporters = [["github-actions", { silent: false }], "summary"];
 }
 
-module.exports = config;
+export default config;

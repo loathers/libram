@@ -1,6 +1,9 @@
 import { writeFile } from "fs/promises";
 import path from "path";
+import url from "url";
 import nodeFetch from "node-fetch";
+
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const SKILLS_FILE =
   "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/classskills.txt";

@@ -50,18 +50,18 @@ var kolmafia, console, init_kolmafia_polyfill = __esm({
 
 // node_modules/html-entities/lib/named-references.js
 var require_named_references = __commonJS({
-  "node_modules/html-entities/lib/named-references.js": function(exports) {
+  "node_modules/html-entities/lib/named-references.js": function(exports2) {
     "use strict";
     init_kolmafia_polyfill();
-    Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports2, "__esModule", {
       value: !0
     });
-    exports.bodyRegExps = {
+    exports2.bodyRegExps = {
       xml: /&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,
       html4: /&notin;|&(?:nbsp|iexcl|cent|pound|curren|yen|brvbar|sect|uml|copy|ordf|laquo|not|shy|reg|macr|deg|plusmn|sup2|sup3|acute|micro|para|middot|cedil|sup1|ordm|raquo|frac14|frac12|frac34|iquest|Agrave|Aacute|Acirc|Atilde|Auml|Aring|AElig|Ccedil|Egrave|Eacute|Ecirc|Euml|Igrave|Iacute|Icirc|Iuml|ETH|Ntilde|Ograve|Oacute|Ocirc|Otilde|Ouml|times|Oslash|Ugrave|Uacute|Ucirc|Uuml|Yacute|THORN|szlig|agrave|aacute|acirc|atilde|auml|aring|aelig|ccedil|egrave|eacute|ecirc|euml|igrave|iacute|icirc|iuml|eth|ntilde|ograve|oacute|ocirc|otilde|ouml|divide|oslash|ugrave|uacute|ucirc|uuml|yacute|thorn|yuml|quot|amp|lt|gt|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,
       html5: /&centerdot;|&copysr;|&divideontimes;|&gtcc;|&gtcir;|&gtdot;|&gtlPar;|&gtquest;|&gtrapprox;|&gtrarr;|&gtrdot;|&gtreqless;|&gtreqqless;|&gtrless;|&gtrsim;|&ltcc;|&ltcir;|&ltdot;|&lthree;|&ltimes;|&ltlarr;|&ltquest;|&ltrPar;|&ltri;|&ltrie;|&ltrif;|&notin;|&notinE;|&notindot;|&notinva;|&notinvb;|&notinvc;|&notni;|&notniva;|&notnivb;|&notnivc;|&parallel;|&timesb;|&timesbar;|&timesd;|&(?:AElig|AMP|Aacute|Acirc|Agrave|Aring|Atilde|Auml|COPY|Ccedil|ETH|Eacute|Ecirc|Egrave|Euml|GT|Iacute|Icirc|Igrave|Iuml|LT|Ntilde|Oacute|Ocirc|Ograve|Oslash|Otilde|Ouml|QUOT|REG|THORN|Uacute|Ucirc|Ugrave|Uuml|Yacute|aacute|acirc|acute|aelig|agrave|amp|aring|atilde|auml|brvbar|ccedil|cedil|cent|copy|curren|deg|divide|eacute|ecirc|egrave|eth|euml|frac12|frac14|frac34|gt|iacute|icirc|iexcl|igrave|iquest|iuml|laquo|lt|macr|micro|middot|nbsp|not|ntilde|oacute|ocirc|ograve|ordf|ordm|oslash|otilde|ouml|para|plusmn|pound|quot|raquo|reg|sect|shy|sup1|sup2|sup3|szlig|thorn|times|uacute|ucirc|ugrave|uml|uuml|yacute|yen|yuml|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g
     };
-    exports.namedReferences = {
+    exports2.namedReferences = {
       xml: {
         entities: {
           "&lt;": "<",
@@ -4444,13 +4444,13 @@ var require_named_references = __commonJS({
 
 // node_modules/html-entities/lib/numeric-unicode-map.js
 var require_numeric_unicode_map = __commonJS({
-  "node_modules/html-entities/lib/numeric-unicode-map.js": function(exports) {
+  "node_modules/html-entities/lib/numeric-unicode-map.js": function(exports2) {
     "use strict";
     init_kolmafia_polyfill();
-    Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports2, "__esModule", {
       value: !0
     });
-    exports.numericUnicodeMap = {
+    exports2.numericUnicodeMap = {
       0: 65533,
       128: 8364,
       130: 8218,
@@ -4485,31 +4485,31 @@ var require_numeric_unicode_map = __commonJS({
 
 // node_modules/html-entities/lib/surrogate-pairs.js
 var require_surrogate_pairs = __commonJS({
-  "node_modules/html-entities/lib/surrogate-pairs.js": function(exports) {
+  "node_modules/html-entities/lib/surrogate-pairs.js": function(exports2) {
     "use strict";
     init_kolmafia_polyfill();
-    Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports2, "__esModule", {
       value: !0
     });
-    exports.fromCodePoint = String.fromCodePoint || function(astralCodePoint) {
+    exports2.fromCodePoint = String.fromCodePoint || function(astralCodePoint) {
       return String.fromCharCode(Math.floor((astralCodePoint - 65536) / 1024) + 55296, (astralCodePoint - 65536) % 1024 + 56320);
     };
-    exports.getCodePoint = String.prototype.codePointAt ? function(input, position) {
+    exports2.getCodePoint = String.prototype.codePointAt ? function(input, position) {
       return input.codePointAt(position);
     } : function(input, position) {
       return (input.charCodeAt(position) - 55296) * 1024 + input.charCodeAt(position + 1) - 56320 + 65536;
     };
-    exports.highSurrogateFrom = 55296;
-    exports.highSurrogateTo = 56319;
+    exports2.highSurrogateFrom = 55296;
+    exports2.highSurrogateTo = 56319;
   }
 });
 
 // node_modules/html-entities/lib/index.js
 var require_lib = __commonJS({
-  "node_modules/html-entities/lib/index.js": function(exports) {
+  "node_modules/html-entities/lib/index.js": function(exports2) {
     "use strict";
     init_kolmafia_polyfill();
-    var __assign = exports && exports.__assign || function() {
+    var __assign = exports2 && exports2.__assign || function() {
       return __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
           s = arguments[i];
@@ -4519,7 +4519,7 @@ var require_lib = __commonJS({
         return t;
       }, __assign.apply(this, arguments);
     };
-    Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports2, "__esModule", {
       value: !0
     });
     var named_references_1 = require_named_references(), numeric_unicode_map_1 = require_numeric_unicode_map(), surrogate_pairs_1 = require_surrogate_pairs(), allNamedReferences = __assign(__assign({}, named_references_1.namedReferences), {
@@ -4559,7 +4559,7 @@ var require_lib = __commonJS({
         _c = text;
       return _c;
     }
-    exports.encode = encode;
+    exports2.encode = encode;
     var defaultDecodeOptions = {
       scope: "body",
       level: "all"
@@ -4597,7 +4597,7 @@ var require_lib = __commonJS({
       }
       return _b;
     }
-    exports.decodeEntity = decodeEntity;
+    exports2.decodeEntity = decodeEntity;
     function decode(text, _a) {
       var decodeSecondChar_1 = _a === void 0 ? defaultDecodeOptions : _a, decodeCode_1 = decodeSecondChar_1.level, level = decodeCode_1 === void 0 ? "all" : decodeCode_1, _b = decodeSecondChar_1.scope, scope = _b === void 0 ? level === "xml" ? "strict" : "body" : _b;
       if (!text)
@@ -4631,7 +4631,7 @@ var require_lib = __commonJS({
         replaceResult_1 = text;
       return replaceResult_1;
     }
-    exports.decode = decode;
+    exports2.decode = decode;
   }
 });
 
@@ -5731,7 +5731,7 @@ function _arrayLikeToArray(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -6053,7 +6053,7 @@ var import_kolmafia3 = require("kolmafia");
 // src/utils.ts
 init_kolmafia_polyfill();
 function _createForOfIteratorHelper(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray2(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -6091,7 +6091,7 @@ function _nonIterableRest2() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit2(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -6132,7 +6132,7 @@ function _unsupportedIterableToArray2(o, minLen) {
   }
 }
 function _iterableToArray(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles(arr) {
@@ -6339,7 +6339,7 @@ function _nonIterableSpread2() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray2(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles2(arr) {
@@ -6395,7 +6395,7 @@ function _wrapNativeSuper(Class4) {
       return Class5;
     if (typeof Class5 != "function")
       throw new TypeError("Super expression must either be null or a function");
-    if (typeof _cache != "undefined") {
+    if (typeof _cache < "u") {
       if (_cache.has(Class5))
         return _cache.get(Class5);
       _cache.set(Class5, Wrapper);
@@ -6415,7 +6415,7 @@ function _construct(Parent, args, Class4) {
   }, _construct.apply(null, arguments);
 }
 function _isNativeReflectConstruct() {
-  if (typeof Reflect == "undefined" || !Reflect.construct || Reflect.construct.sham)
+  if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham)
     return !1;
   if (typeof Proxy == "function")
     return !0;
@@ -6440,7 +6440,7 @@ function _getPrototypeOf(o) {
   }, _getPrototypeOf(o);
 }
 function _createForOfIteratorHelper2(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray3(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -6495,7 +6495,7 @@ function _arrayLikeToArray3(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit3(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -6935,7 +6935,7 @@ var overlappingItemNames = ["spider web", "really sticky spider web", "dictionar
 
 // src/combat.ts
 function _get() {
-  return typeof Reflect != "undefined" && Reflect.get ? _get = Reflect.get : _get = function(target, property, receiver) {
+  return typeof Reflect < "u" && Reflect.get ? _get = Reflect.get : _get = function(target, property, receiver) {
     var base = _superPropBase(target, property);
     if (base) {
       var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -6949,7 +6949,7 @@ function _superPropBase(object, property) {
   return object;
 }
 function _createForOfIteratorHelper3(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray4(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -6998,7 +6998,7 @@ function _unsupportedIterableToArray4(o, minLen) {
   }
 }
 function _iterableToArray3(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles3(arr) {
@@ -7063,7 +7063,7 @@ function _wrapNativeSuper2(Class4) {
       return Class5;
     if (typeof Class5 != "function")
       throw new TypeError("Super expression must either be null or a function");
-    if (typeof _cache != "undefined") {
+    if (typeof _cache < "u") {
       if (_cache.has(Class5))
         return _cache.get(Class5);
       _cache.set(Class5, Wrapper);
@@ -7083,7 +7083,7 @@ function _construct2(Parent, args, Class4) {
   }, _construct2.apply(null, arguments);
 }
 function _isNativeReflectConstruct2() {
-  if (typeof Reflect == "undefined" || !Reflect.construct || Reflect.construct.sham)
+  if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham)
     return !1;
   if (typeof Proxy == "function")
     return !0;
@@ -7907,7 +7907,7 @@ function _nonIterableRest4() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit4(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -7976,7 +7976,7 @@ function _classCallCheck5(instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
 }
 function _createForOfIteratorHelper4(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray5(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -8052,7 +8052,7 @@ function _unsupportedIterableToArray5(o, minLen) {
   }
 }
 function _iterableToArray4(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles4(arr) {
@@ -8475,7 +8475,7 @@ function _createClass6(Constructor, protoProps, staticProps) {
   return protoProps && _defineProperties6(Constructor.prototype, protoProps), staticProps && _defineProperties6(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
 function _createForOfIteratorHelper5(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray6(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -8524,7 +8524,7 @@ function _unsupportedIterableToArray6(o, minLen) {
   }
 }
 function _iterableToArray5(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles5(arr) {
@@ -8786,7 +8786,7 @@ function _arrayLikeToArray7(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit5(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -8974,7 +8974,7 @@ function _unsupportedIterableToArray8(o, minLen) {
   }
 }
 function _iterableToArray6(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles6(arr) {
@@ -9142,7 +9142,7 @@ function _unsupportedIterableToArray9(o, minLen) {
   }
 }
 function _iterableToArray7(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles7(arr) {
@@ -9306,7 +9306,7 @@ init_kolmafia_polyfill();
 var import_kolmafia11 = require("kolmafia");
 var _templateObject58, _templateObject217, _templateObject317;
 function _createForOfIteratorHelper6(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray10(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -9481,7 +9481,7 @@ function _unsupportedIterableToArray11(o, minLen) {
   }
 }
 function _iterableToArray8(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles8(arr) {
@@ -9809,7 +9809,7 @@ function _unsupportedIterableToArray12(o, minLen) {
   }
 }
 function _iterableToArray9(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles9(arr) {
@@ -10638,7 +10638,7 @@ function _unsupportedIterableToArray13(o, minLen) {
   }
 }
 function _iterableToArray10(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles10(arr) {
@@ -10880,7 +10880,7 @@ function _arrayLikeToArray14(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit6(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -11059,7 +11059,7 @@ function _arrayLikeToArray15(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit7(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -11416,7 +11416,7 @@ init_kolmafia_polyfill();
 var import_kolmafia29 = require("kolmafia");
 var _templateObject131, _templateObject239, _templateObject331, _templateObject431, _templateObject519, _templateObject616, _templateObject713, _templateObject813, _templateObject911, _templateObject1011, _templateObject1111, _templateObject1210, _templateObject139, _templateObject148, _templateObject158, _templateObject168, _templateObject178, _templateObject188, _templateObject198, _templateObject208, _templateObject2112, _templateObject2211, _templateObject2310, _templateObject248, _templateObject257, _templateObject267, _templateObject277;
 function _createForOfIteratorHelper7(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray16(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -11789,7 +11789,7 @@ init_kolmafia_polyfill();
 var import_kolmafia32 = require("kolmafia");
 var _templateObject149, _templateObject249, _templateObject339, _templateObject439, _templateObject524, _templateObject619, _templateObject716, _templateObject816, _templateObject914, _templateObject1013, _templateObject1112, _templateObject1211, _templateObject1310, _templateObject1410, _templateObject159, _templateObject169, _templateObject179, _templateObject189, _templateObject199, _templateObject209, _templateObject2113, _templateObject2212, _templateObject2311, _templateObject2410, _templateObject258, _templateObject268, _templateObject278;
 function _createForOfIteratorHelper8(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray17(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -12076,7 +12076,7 @@ __export(MummingTrunk_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia35 = require("kolmafia");
 function _createForOfIteratorHelper9(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray18(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -12189,7 +12189,7 @@ function _arrayLikeToArray19(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit8(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -12328,7 +12328,7 @@ function _unsupportedIterableToArray20(o, minLen) {
   }
 }
 function _iterableToArray11(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles11(arr) {
@@ -12483,7 +12483,7 @@ function _arrayLikeToArray21(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit9(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -13402,7 +13402,7 @@ function _nonIterableRest10() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit10(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -13443,7 +13443,7 @@ function _unsupportedIterableToArray22(o, minLen) {
   }
 }
 function _iterableToArray12(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles12(arr) {
@@ -13609,7 +13609,7 @@ function _nonIterableRest11() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit11(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -13650,7 +13650,7 @@ function _unsupportedIterableToArray23(o, minLen) {
   }
 }
 function _iterableToArray13(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles13(arr) {
@@ -13824,7 +13824,7 @@ function _unsupportedIterableToArray24(o, minLen) {
   }
 }
 function _iterableToArray14(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles14(arr) {
@@ -13965,7 +13965,7 @@ function _arrayLikeToArray25(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit12(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -14304,7 +14304,7 @@ function _arrayLikeToArray26(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit13(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -14806,7 +14806,7 @@ function _unsupportedIterableToArray27(o, minLen) {
   }
 }
 function _iterableToArray15(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles15(arr) {
@@ -15082,7 +15082,7 @@ function _arrayLikeToArray28(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit14(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -15428,7 +15428,7 @@ function _arrayLikeToArray29(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit15(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -15491,7 +15491,7 @@ function bestLibramToCast() {
 // src/ascend.ts
 var _templateObject486, _templateObject2123, _templateObject3108, _templateObject487, _templateObject550, _templateObject644, _templateObject738, _templateObject831, _templateObject927;
 function _createForOfIteratorHelper10(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray30(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -15529,7 +15529,7 @@ function _nonIterableSpread16() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray16(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles16(arr) {
@@ -15612,7 +15612,7 @@ function _wrapNativeSuper3(Class4) {
       return Class5;
     if (typeof Class5 != "function")
       throw new TypeError("Super expression must either be null or a function");
-    if (typeof _cache != "undefined") {
+    if (typeof _cache < "u") {
       if (_cache.has(Class5))
         return _cache.get(Class5);
       _cache.set(Class5, Wrapper);
@@ -15632,7 +15632,7 @@ function _construct3(Parent, args, Class4) {
   }, _construct3.apply(null, arguments);
 }
 function _isNativeReflectConstruct3() {
-  if (typeof Reflect == "undefined" || !Reflect.construct || Reflect.construct.sham)
+  if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham)
     return !1;
   if (typeof Proxy == "function")
     return !0;
@@ -15680,7 +15680,7 @@ function _arrayLikeToArray30(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit16(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -15873,7 +15873,7 @@ function prepareAscension() {
 
 // src/Clan.ts
 init_kolmafia_polyfill();
-var import_html_entities = __toESM(require_lib()), import_kolmafia64 = require("kolmafia");
+var import_html_entities = __toESM(require_lib(), 1), import_kolmafia64 = require("kolmafia");
 function _toConsumableArray17(arr) {
   return _arrayWithoutHoles17(arr) || _iterableToArray17(arr) || _unsupportedIterableToArray31(arr) || _nonIterableSpread17();
 }
@@ -15881,7 +15881,7 @@ function _nonIterableSpread17() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray17(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles17(arr) {
@@ -15889,7 +15889,7 @@ function _arrayWithoutHoles17(arr) {
     return _arrayLikeToArray31(arr);
 }
 function _createForOfIteratorHelper11(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray31(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -15944,7 +15944,7 @@ function _arrayLikeToArray31(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit17(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -16443,7 +16443,7 @@ function _arrayLikeToArray32(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit18(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -16814,7 +16814,7 @@ function _nonIterableSpread18() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray18(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles18(arr) {
@@ -16828,7 +16828,7 @@ function _nonIterableRest19() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit19(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -16852,7 +16852,7 @@ function _arrayWithHoles19(arr) {
     return arr;
 }
 function _createForOfIteratorHelper12(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray33(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -17001,7 +17001,7 @@ function bestSolution(memoizationTable, values, currentIndex, remainingCapacity)
 // src/diet/index.ts
 var _templateObject496, _templateObject2127, _templateObject3116, _templateObject497, _templateObject555, _templateObject647, _templateObject741, _templateObject836, _templateObject929, _templateObject1025, _templateObject1123, _templateObject1222, _templateObject1321, _templateObject1419, _templateObject1516, _templateObject1616, _templateObject1716, _templateObject1816, _templateObject1915, _templateObject2015, _templateObject2128, _templateObject2217, _templateObject2316, _templateObject2415, _templateObject2513, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3117, _templateObject3214, _templateObject3312, _templateObject3411, _templateObject3510, _templateObject3610, _templateObject3710, _templateObject3810, _templateObject3910, _templateObject4010, _templateObject4112, _templateObject4211, _templateObject4311, _templateObject4410, _templateObject4510, _templateObject4610, _templateObject4710, _templateObject4810, _templateObject498, _templateObject505, _templateObject5111, _templateObject5210, _templateObject5310, _templateObject5410, _templateObject556, _templateObject564, _templateObject574, _templateObject584, _templateObject594, _templateObject604, _templateObject6110, _templateObject6210, _templateObject6310, _templateObject648, _templateObject654, _templateObject664, _templateObject674, _templateObject684, _templateObject694, _templateObject703, _templateObject7110, _templateObject7210;
 function _createForOfIteratorHelper13(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray34(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -17076,7 +17076,7 @@ function _nonIterableSpread19() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray19(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles19(arr) {
@@ -17107,7 +17107,7 @@ function _arrayLikeToArray34(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit20(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -17605,7 +17605,7 @@ function _taggedTemplateLiteral63(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 function _createForOfIteratorHelper14(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray35(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -17654,7 +17654,7 @@ function _unsupportedIterableToArray35(o, minLen) {
   }
 }
 function _iterableToArray20(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles20(arr) {
@@ -17799,7 +17799,7 @@ function _objectSpread9(target) {
   return target;
 }
 function _createForOfIteratorHelper15(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray36(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -17885,7 +17885,7 @@ function _assertThisInitialized4(self) {
   return self;
 }
 function _isNativeReflectConstruct4() {
-  if (typeof Reflect == "undefined" || !Reflect.construct || Reflect.construct.sham)
+  if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham)
     return !1;
   if (typeof Proxy == "function")
     return !0;
@@ -18345,7 +18345,7 @@ function _wrapNativeSuper4(Class4) {
       return Class5;
     if (typeof Class5 != "function")
       throw new TypeError("Super expression must either be null or a function");
-    if (typeof _cache != "undefined") {
+    if (typeof _cache < "u") {
       if (_cache.has(Class5))
         return _cache.get(Class5);
       _cache.set(Class5, Wrapper);
@@ -18365,7 +18365,7 @@ function _construct4(Parent, args, Class4) {
   }, _construct4.apply(null, arguments);
 }
 function _isNativeReflectConstruct5() {
-  if (typeof Reflect == "undefined" || !Reflect.construct || Reflect.construct.sham)
+  if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham)
     return !1;
   if (typeof Proxy == "function")
     return !0;
@@ -18429,7 +18429,7 @@ function sinceKolmafiaVersion(majorVersion, minorVersion) {
 
 // src/Kmail.ts
 init_kolmafia_polyfill();
-var import_html_entities2 = __toESM(require_lib()), import_kolmafia73 = require("kolmafia");
+var import_html_entities2 = __toESM(require_lib(), 1), import_kolmafia73 = require("kolmafia");
 
 // src/url.ts
 init_kolmafia_polyfill();
@@ -18441,7 +18441,7 @@ function _nonIterableSpread21() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray21(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles21(arr) {
@@ -18455,7 +18455,7 @@ function _nonIterableRest21() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit21(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -18479,7 +18479,7 @@ function _arrayWithHoles21(arr) {
     return arr;
 }
 function _createForOfIteratorHelper16(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray37(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -18566,7 +18566,7 @@ function combineQuery() {
 
 // src/Kmail.ts
 function _createForOfIteratorHelper17(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray38(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -18604,7 +18604,7 @@ function _nonIterableSpread22() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray22(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles22(arr) {
@@ -18635,7 +18635,7 @@ function _arrayLikeToArray38(arr, len) {
   return arr2;
 }
 function _iterableToArrayLimit22(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -18997,7 +18997,7 @@ function _defineProperty22(obj, key, value) {
   return key in obj ? Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }) : obj[key] = value, obj;
 }
 function _createForOfIteratorHelper18(o, allowArrayLike) {
-  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  var it = typeof Symbol < "u" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
     if (Array.isArray(o) || (it = _unsupportedIterableToArray39(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
@@ -19035,7 +19035,7 @@ function _nonIterableRest23() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArrayLimit23(arr, i) {
-  var _i = arr == null ? null : typeof Symbol != "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  var _i = arr == null ? null : typeof Symbol < "u" && arr[Symbol.iterator] || arr["@@iterator"];
   if (_i != null) {
     var _arr = [], _n = !0, _d = !1, _s, _e;
     try {
@@ -19079,7 +19079,7 @@ function _unsupportedIterableToArray39(o, minLen) {
   }
 }
 function _iterableToArray23(iter) {
-  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+  if (typeof Symbol < "u" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
     return Array.from(iter);
 }
 function _arrayWithoutHoles23(arr) {

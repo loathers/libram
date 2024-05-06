@@ -49,6 +49,7 @@ import * as ClosedCircuitPayphone from "./2023/ClosedCircuitPayphone";
 import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw";
 import * as AprilingBandHelmet from "./2024/AprilingBandHelmet";
 import * as ChestMimic from "./2024/ChestMimic";
+import * as MayamCalendar from "./2024/MayamCalendar";
 
 export {
   AprilingBandHelmet,
@@ -83,6 +84,7 @@ export {
   JungMan,
   Latte,
   LookingGlass,
+  MayamCalendar,
   MayoClinic,
   MummingTrunk,
   ObtuseAngel,

@@ -2,6 +2,7 @@ import { cliExecute, Effect, Item } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $effect, $item } from "../../template-string";
+import { arrayContains } from "../../utils";
 
 export const RINGS = Object.freeze([
   ["yam1", "sword", "eye", "chair", "fur", "vessel"],
@@ -55,6 +56,13 @@ export function remainingUses(): number {
   return RINGS[3].filter((symbol) => available(symbol)).length;
 }
 
+const toCombination = (
+  combination: Combination | [CombinationString]
+): Combination =>
+  combination.length === 1
+    ? (combination[0].split(" ") as Combination)
+    : combination;
+
 /**
  * Enter a combination in the Mayam calendar
  * @param combination The combination to submit, either as a single string or as a series of symbols
@@ -63,11 +71,7 @@ export function remainingUses(): number {
 export function submit(
   ...combination: Combination | [CombinationString]
 ): boolean {
-  if (
-    combination.length === 1
-      ? available(...(combination[0].split(" ") as Combination))
-      : available(...combination)
-  ) {
+  if (!available(...toCombination(combination))) {
     return false;
   }
   return cliExecute(`mayam ring ${combination.join(" ")}`);
@@ -108,4 +112,23 @@ export function resonanceFor(target: Item | Effect): Combination | null {
 export function resonanceAvailable(target: Item | Effect): boolean {
   const resonance = resonanceFor(target);
   return !!resonance && available(...resonance);
+}
+
+/**
+ * Determine what Item or Effect results from a particular resonance
+ *
+ * @param combination The combination to check, either as a single string or a series of symbols
+ * @returns The Item or Effect of the resonance, if it is indeed a resonance; `null` otherwise
+ */
+export function getResonanceResult(
+  ...combination: Combination | [CombinationString]
+): Item | Effect | null {
+  const combinationString =
+    combination.length === 1
+      ? combination[0]
+      : (combination.join(" ") as CombinationString);
+
+  return combinationString in RESONANCES
+    ? RESONANCES[combinationString as keyof typeof RESONANCES]
+    : null;
 }

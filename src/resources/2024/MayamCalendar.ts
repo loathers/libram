@@ -34,7 +34,7 @@ export function available(symbol: MayamSymbol): boolean;
 /**
  * Determine whether a certain Mayam combination is available for use today
  *
- * @param {...MayamSymbol[]} combination The combination to check
+ * @param {...Combination} combination The combination to check
  * @returns Whether or not the given combination is available for use
  */
 export function available(...combination: Combination): boolean;

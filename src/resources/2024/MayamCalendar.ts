@@ -99,3 +99,13 @@ export function resonanceFor(target: Item | Effect): Combination | null {
       .split(" ") as Combination) ?? null
   );
 }
+
+/**
+ * Determines whether an item can be obtained via resonance at this moment
+ * @param target The target Item or Effect for your resonance
+ * @returns Whether or not you can currently use that resonance
+ */
+export function resonanceAvailable(target: Item | Effect): boolean {
+  const resonance = resonanceFor(target);
+  return !!resonance && available(...resonance);
+}

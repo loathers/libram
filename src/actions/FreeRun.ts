@@ -22,7 +22,7 @@ const freeRunSources: ActionSource[] = [
   // Free unlimited source
   new ActionSource(
     $item`spring shoes`,
-    everythingLooksGreen(),
+    everythingLooksGreen(() => have($item`spring shoes`)),
     Macro.skill($skill`Spring Away`),
     {
       equipmentRequirements: () =>

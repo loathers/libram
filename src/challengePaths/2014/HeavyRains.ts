@@ -19,7 +19,7 @@ import { $monster, $path, $skill } from "../../template-string";
 export function rainMan(target: Monster): void {
   if (canRainMan(target)) {
     withChoice(970, `1&whichmonster=${target.id}`, () =>
-      useSkill($skill`Rain Man`)
+      useSkill($skill`Rain Man`),
     );
   }
 }
@@ -46,8 +46,8 @@ export function canRainMan(target: Monster): boolean {
     visitUrl(
       `runskillz.php?pwd&action=Skillz&whichskill=${
         $skill`Rain Man`.id
-      }&quantity=1`
-    )
+      }&quantity=1`,
+    ),
   );
   return page.indexOf(`<option value=${target.id}>`) > 0;
 }
@@ -65,7 +65,7 @@ export const wanderers = Object.freeze(
     "giant tardigrade",
     "aquaconda",
     "storm cow",
-  ])
+  ]),
 );
 
 /**
@@ -79,8 +79,8 @@ export function expectedWanderer(location: Location): Monster {
     location.environment === "underground"
       ? 4
       : location.environment === "indoor"
-      ? 2
-      : 1; // location.environment === "unknown" || "outdoors"
+        ? 2
+        : 1; // location.environment === "unknown" || "outdoors"
   const waterLevel =
     numericModifier(Modifier.get("Water Level")) +
     difficultyWaterLevel +

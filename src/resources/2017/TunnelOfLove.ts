@@ -54,7 +54,7 @@ export const LovEnamorang = new Copier(
   () => couldUseLoveEnamorang(),
   null,
   () => couldUseLoveEnamorang(),
-  () => getLovEnamorangMonster()
+  () => getLovEnamorangMonster(),
 );
 
 type LOVEquipment = "LOV Eardigan" | "LOV Epaulettes" | "LOV Earring";
@@ -137,7 +137,7 @@ function extraChoice(extra: LOVExtra) {
 export function fightAll(
   equipment: LOVEquipment,
   effect: LOVEffect,
-  extra: LOVExtra
+  extra: LOVExtra,
 ): void {
   withChoices(
     {
@@ -151,6 +151,6 @@ export function fightAll(
     },
     () => {
       adv1($location`The Tunnel of L.O.V.E.`, 0, "");
-    }
+    },
   );
 }

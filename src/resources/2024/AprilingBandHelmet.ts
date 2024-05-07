@@ -28,9 +28,9 @@ export const MARCHING_SONGS = Object.freeze([
   "Apriling Band Battle Cadence",
   "Apriling Band Celebration Bop",
 ] as const);
-export type MarchingSong = typeof MARCHING_SONGS[number];
+export type MarchingSong = (typeof MARCHING_SONGS)[number];
 export const MARCHING_SONG_EFFECTS = Object.freeze(
-  MARCHING_SONGS.map((song) => toEffect(song))
+  MARCHING_SONGS.map((song) => toEffect(song)),
 );
 
 export const INSTRUMENTS = Object.freeze([
@@ -40,9 +40,9 @@ export const INSTRUMENTS = Object.freeze([
   "Apriling band staff",
   "Apriling band piccolo",
 ] as const);
-export type Instrument = typeof INSTRUMENTS[number];
+export type Instrument = (typeof INSTRUMENTS)[number];
 export const INSTRUMENT_ITEMS = Object.freeze(
-  INSTRUMENTS.map((instrument) => toItem(instrument))
+  INSTRUMENTS.map((instrument) => toItem(instrument)),
 );
 
 const visitConduct = () => visitUrl("inventory.php?pwd&action=apriling");
@@ -56,12 +56,12 @@ export function canJoinSection(): boolean {
 
 function makeConductFunction<
   M extends MafiaClass & (Effect | Item),
-  S extends string
+  S extends string,
 >(
   mafiaClass: typeof MafiaClass & (new () => M),
   canDo: () => boolean,
   set: readonly S[],
-  offset: number
+  offset: number,
 ) {
   return (input: S | M): boolean => {
     if (!canDo()) return false;
@@ -92,7 +92,7 @@ export const joinSection = makeConductFunction<Item, Instrument>(
   Item,
   canJoinSection,
   INSTRUMENTS,
-  4
+  4,
 );
 
 /**
@@ -113,7 +113,7 @@ export const changeSong = makeConductFunction<Effect, MarchingSong>(
   Effect,
   canChangeSong,
   MARCHING_SONGS,
-  1
+  1,
 );
 
 /**
@@ -123,7 +123,7 @@ export const changeSong = makeConductFunction<Effect, MarchingSong>(
  * @returns Whether we successfully completed the task
  */
 export function conduct(
-  result: Item | Instrument | Effect | MarchingSong
+  result: Item | Instrument | Effect | MarchingSong,
 ): boolean {
   if (result instanceof Item || arrayContains(result, INSTRUMENTS)) {
     return joinSection(result);
@@ -145,7 +145,7 @@ export function play(instrument: Instrument | Item, acquire = false): boolean {
   const currentUsesRemaining = item.dailyusesleft;
   visitUrl(
     `inventory.php?pwd=${myHash()}&iid=${item.id}&action=aprilplay`,
-    false
+    false,
   );
   return item.dailyusesleft !== currentUsesRemaining;
 }
@@ -158,7 +158,7 @@ export function play(instrument: Instrument | Item, acquire = false): boolean {
  */
 export function canPlay(
   instrument: Instrument | Item,
-  acquire = false
+  acquire = false,
 ): boolean {
   if (!have()) return false;
   const item = instrument instanceof Item ? instrument : Item.get(instrument);

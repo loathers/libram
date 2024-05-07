@@ -42,7 +42,7 @@ export function fightPiece(
   if (!pieces.includes(piece)) throw new Error("That is not a valid piece.");
   if (
     !visitUrl("campground.php?action=witchess").includes(
-      "whichchoice value=1181"
+      "whichchoice value=1181",
     )
   ) {
     throw new Error("Failed to open Witchess.");
@@ -53,7 +53,7 @@ export function fightPiece(
   if (
     !visitUrl(
       `choice.php?option=1&pwd=${myHash()}&whichchoice=1182&piece=${piece.id}`,
-      false
+      false,
     ).includes(piece.name)
   ) {
     throw new Error("Failed to start fight.");

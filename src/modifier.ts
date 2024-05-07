@@ -44,19 +44,19 @@ import { arrayContains, sum } from "./utils";
 
 export function get(
   name: BooleanModifier,
-  subject?: string | Item | Effect
+  subject?: string | Item | Effect,
 ): boolean;
 export function get(name: ClassModifier, subject: string | Item): Class;
 export function get(name: EffectModifier, subject: string | Item): Effect;
 export function get(name: MonsterModifier, subject: Effect): Monster;
 export function get(
   name: NumericModifier,
-  subject?: string | Item | Effect | Skill | Familiar
+  subject?: string | Item | Effect | Skill | Familiar,
 ): number;
 export function get(name: SkillModifier, subject: string | Item): Skill;
 export function get(
   name: StringModifier,
-  subject?: string | Effect | Item
+  subject?: string | Effect | Item,
 ): string;
 export function get(name: StatModifier, subject: Effect): Stat;
 /**
@@ -76,7 +76,7 @@ export function get(
     | SkillModifier
     | StringModifier
     | StatModifier,
-  subject?: string | Item | Effect | Skill | Familiar
+  subject?: string | Item | Effect | Skill | Familiar,
 ): unknown {
   if (arrayContains(name, booleanModifiers)) {
     return subject === undefined
@@ -120,20 +120,20 @@ export function get(
 export type ModifierValue<T> = T extends BooleanModifier
   ? boolean
   : T extends ClassModifier
-  ? Class
-  : T extends EffectModifier
-  ? Effect
-  : T extends MonsterModifier
-  ? Monster
-  : T extends NumericModifier
-  ? number
-  : T extends SkillModifier
-  ? Skill
-  : T extends StatModifier
-  ? Stat
-  : T extends StringModifier
-  ? string
-  : string;
+    ? Class
+    : T extends EffectModifier
+      ? Effect
+      : T extends MonsterModifier
+        ? Monster
+        : T extends NumericModifier
+          ? number
+          : T extends SkillModifier
+            ? Skill
+            : T extends StatModifier
+              ? Stat
+              : T extends StringModifier
+                ? string
+                : string;
 
 export type Modifiers = Partial<{
   [T in
@@ -195,7 +195,7 @@ export function printModtrace(
   inputModifiers: string | string[], // the user's list of modifiers to look up
   baseModifier?: string,
   componentColor = "purple",
-  totalColor = "blue"
+  totalColor = "blue",
 ): void {
   if (typeof inputModifiers === "string")
     return printModtrace([inputModifiers], inputModifiers);
@@ -204,32 +204,32 @@ export function printModtrace(
     return inputModifiers
       .filter(
         (mod1) =>
-          !inputModifiers.some((mod2) => mod2 !== mod1 && mod1.includes(mod2))
+          !inputModifiers.some((mod2) => mod2 !== mod1 && mod1.includes(mod2)),
       )
       .forEach((baseMod) =>
         printModtrace(
           inputModifiers.filter((mod) => mod.includes(baseMod)),
-          baseMod
-        )
+          baseMod,
+        ),
       );
   }
 
   const htmlOutput = cliExecuteOutput(`modtrace ${baseModifier}`);
   // The list of matched modifiers that mafia returns
   const modtraceModifiers = Array.from(
-    htmlOutput.match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? []
+    htmlOutput.match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? [],
   )
     .map((s) => s.slice(1, -5))
     .slice(2);
 
   if (
     !modtraceModifiers.some(
-      (modifier) => modifier.toLowerCase() === baseModifier.toLowerCase()
+      (modifier) => modifier.toLowerCase() === baseModifier.toLowerCase(),
     )
   ) {
     return print(
       `Could not find exact string match of ${baseModifier} in ${inputModifiers.toString()}`,
-      "red"
+      "red",
     );
   }
 
@@ -242,10 +242,10 @@ export function printModtrace(
         })()
       : 0;
   const modifierVals = new Map(
-    modtraceModifiers.map((modifier) => [modifier, initialVal])
+    modtraceModifiers.map((modifier) => [modifier, initialVal]),
   ); // Maps modifier name to its value
   const lowerCaseModifiers = inputModifiers.map((modifier) =>
-    modifier.toLowerCase()
+    modifier.toLowerCase(),
   );
 
   Array.from(htmlOutput.match(RegExp(/<tr>(.*?)<\/tr>/g)) ?? [])
@@ -255,7 +255,7 @@ export function printModtrace(
       const rowArr = Array.from(
         s
           .replace(RegExp(/><\/td>/g), ">0</td>")
-          .match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? []
+          .match(RegExp(/(>)(.*?)(<\/td>)/g)) ?? [],
       ).map((s) => s.slice(1, -5));
       const rowName = rowArr[1];
       rowArr
@@ -265,7 +265,7 @@ export function printModtrace(
           const val = parseFloat(e);
           modifierVals.set(
             modtraceModifiers[idx],
-            (modifierVals.get(modtraceModifiers[idx]) ?? 0) + val
+            (modifierVals.get(modtraceModifiers[idx]) ?? 0) + val,
           );
           if (
             val !== 0 &&

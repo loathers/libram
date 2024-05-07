@@ -17,7 +17,7 @@ class Not<T> {
  */
 function aggregate<T>(
   list: T[],
-  isEqual?: (x: T, y: T) => boolean
+  isEqual?: (x: T, y: T) => boolean,
 ): [T, number][] {
   const aggregatedList = [];
   for (const item of list) {
@@ -45,7 +45,7 @@ function aggregate<T>(
  */
 export function knapsack<T>(
   values: [T, number, number, number?][],
-  capacity: number
+  capacity: number,
 ): [number, [T, number][]] {
   if (!Number.isFinite(capacity)) {
     throw new Error("Invalid capacity.");
@@ -60,11 +60,11 @@ export function knapsack<T>(
         T | Not<T>,
         number,
         number,
-        number?
-      ]
+        number?,
+      ],
   );
   const capacityAdjustment = sum(values, ([, , weight, maximum]) =>
-    weight < 0 && maximum !== undefined ? -weight * maximum : 0
+    weight < 0 && maximum !== undefined ? -weight * maximum : 0,
   );
   const adjustedCapacity = capacity + capacityAdjustment;
 
@@ -82,7 +82,7 @@ export function knapsack<T>(
         throw new Error(
           `Invalid weight ${weight} for ${
             thing instanceof Not ? `not ${thing.thing}` : thing
-          }`
+          }`,
         );
       }
       const maxQuantity = Math.floor(maximum ?? adjustedCapacity / weight);
@@ -90,7 +90,7 @@ export function knapsack<T>(
         throw new Error(
           `Invalid max quantity ${maxQuantity} for ${
             thing instanceof Not ? `not ${thing.thing}` : thing
-          }`
+          }`,
         );
       }
       return new Array<[T | Not<T>, number, number]>(maxQuantity).fill([
@@ -98,11 +98,11 @@ export function knapsack<T>(
         value,
         weight,
       ]);
-    })
+    }),
   );
 
   const memoizationTable: ([number, (T | Not<T>)[]] | null)[][] = new Array(
-    values01.length
+    values01.length,
   );
   for (let i = 0; i < values01.length; i++) {
     memoizationTable[i] = new Array(adjustedCapacity).fill(null);
@@ -112,7 +112,7 @@ export function knapsack<T>(
     memoizationTable,
     values01,
     values01.length - 1,
-    adjustedCapacity
+    adjustedCapacity,
   );
 
   // Still need to replace Not<T>s with right quantity of T's.
@@ -121,7 +121,7 @@ export function knapsack<T>(
 
   let valueAdjustment = 0;
   const solution: [T, number][] = aggregatedSolution.filter(
-    ([thingOrNot]) => !(thingOrNot instanceof Not)
+    ([thingOrNot]) => !(thingOrNot instanceof Not),
   ) as [T, number][];
   for (const [thingOrNot, value, , maximum] of valuesSorted) {
     if (thingOrNot instanceof Not) {
@@ -131,7 +131,7 @@ export function knapsack<T>(
       }
       if (notCount > maximum) {
         throw new Error(
-          `Somehow picked ${notCount} more than the maximum ${notCount} for item ${thingOrNot.thing}.`
+          `Somehow picked ${notCount} more than the maximum ${notCount} for item ${thingOrNot.thing}.`,
         );
       }
       if (notCount < maximum) {
@@ -157,7 +157,7 @@ function bestSolution<T>(
   memoizationTable: ([number, T[]] | null)[][],
   values: [T, number, number][],
   currentIndex: number,
-  remainingCapacity: number
+  remainingCapacity: number,
 ): [number, T[]] {
   // If we've used all our capacity, this solution is no good.
   if (remainingCapacity < 0) return [-Infinity, []];
@@ -171,14 +171,14 @@ function bestSolution<T>(
     memoizationTable,
     values,
     currentIndex - 1,
-    remainingCapacity - weight
+    remainingCapacity - weight,
   );
   const valueInclude = valueIncludeRest + value;
   const [valueExclude, itemsExclude] = bestSolution(
     memoizationTable,
     values,
     currentIndex - 1,
-    remainingCapacity
+    remainingCapacity,
   );
 
   // Pick the better of the two options between including/excluding.

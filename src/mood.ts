@@ -92,7 +92,7 @@ export class MagicalSausages extends MpSource {
     if (mpSpaceAvailable < 700) return;
     const maxSausages = Math.min(
       this.usesRemaining(),
-      Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 999))
+      Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 999)),
     );
     retrieveItem(maxSausages, $item`magical sausage`);
     eat(maxSausages, $item`magical sausage`);
@@ -158,7 +158,7 @@ class SkillMoodElement extends MoodElement {
 
     let oldRemainingCasts = -1;
     let remainingCasts = Math.ceil(
-      (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill)
+      (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
     );
     while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
       let maxCasts;
@@ -171,7 +171,7 @@ class SkillMoodElement extends MoodElement {
         if (maxCasts < remainingCasts) {
           const bestMp = Math.min(
             remainingCasts * mpCost(this.skill),
-            myMaxmp()
+            myMaxmp(),
           );
           mood.moreMp(bestMp);
           maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
@@ -181,7 +181,7 @@ class SkillMoodElement extends MoodElement {
       useSkill(casts, this.skill);
       oldRemainingCasts = remainingCasts;
       remainingCasts = Math.ceil(
-        (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill)
+        (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
       );
     }
     return haveEffect(effect) > ensureTurns;
@@ -214,7 +214,7 @@ class PotionMoodElement extends MoodElement {
       buy(
         quantityToBuy,
         this.potion,
-        Math.floor(this.maxPricePerTurn * turnsPerUse)
+        Math.floor(this.maxPricePerTurn * turnsPerUse),
       );
       const quantityToUse = clamp(uses, 0, availableAmount(this.potion));
       use(quantityToUse, this.potion);
@@ -246,18 +246,18 @@ class GenieMoodElement extends MoodElement {
   execute(mood: Mood, ensureTurns: number): boolean {
     if (haveEffect(this.effect) >= ensureTurns) return true;
     const neededWishes = Math.ceil(
-      (haveEffect(this.effect) - ensureTurns) / 20
+      (haveEffect(this.effect) - ensureTurns) / 20,
     );
     const wishesToBuy = clamp(
       neededWishes - availableAmount($item`pocket wish`),
       0,
-      20
+      20,
     );
     buy(wishesToBuy, $item`pocket wish`, 50000);
     let wishesToUse = clamp(
       neededWishes,
       0,
-      availableAmount($item`pocket wish`)
+      availableAmount($item`pocket wish`),
     );
     for (; wishesToUse > 0; wishesToUse--) {
       cliExecute(`genie effect ${this.effect.name}`);
@@ -344,7 +344,7 @@ export class Mood {
     return this.options.useNativeRestores
       ? Infinity
       : sum(this.options.mpSources, (mpSource: MpSource) =>
-          mpSource.availableMpMin()
+          mpSource.availableMpMin(),
         ) + Math.max(myMp() - this.options.reserveMp, 0);
   }
 
@@ -438,7 +438,7 @@ export class Mood {
   execute(ensureTurns = 1): boolean {
     const availableMp = this.availableMp();
     const totalMpPerTurn = sum(this.elements, (element: MoodElement) =>
-      element.mpCostPerTurn()
+      element.mpCostPerTurn(),
     );
     const potentialTurns = Math.floor(availableMp / totalMpPerTurn);
     let completeSuccess = true;

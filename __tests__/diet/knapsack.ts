@@ -11,7 +11,7 @@ describe("knapsack", () => {
         ["A", 1, 1],
         ["B", 3, 2],
       ],
-      4
+      4,
     );
 
     expect(sortValues(items)).toEqual([["B", 2]]);
@@ -26,7 +26,7 @@ describe("knapsack", () => {
         ["B", 10, 3],
         ["C", 8, 2],
       ],
-      7
+      7,
     );
 
     expect(sortValues(items)).toEqual([
@@ -42,7 +42,7 @@ describe("knapsack", () => {
         ["A", 2, 2],
         ["B", 2, 4],
       ],
-      5
+      5,
     );
 
     expect(sortValues(items)).toEqual([["A", 2]]);
@@ -55,7 +55,7 @@ describe("knapsack", () => {
         ["A", 10, 1, 1],
         ["B", 1, 2],
       ],
-      5
+      5,
     );
 
     expect(sortValues(items)).toEqual([
@@ -71,7 +71,7 @@ describe("knapsack", () => {
         ["A", 10, 1, 0],
         ["B", 1, 2],
       ],
-      4
+      4,
     );
 
     expect(sortValues(items)).toEqual([["B", 2]]);
@@ -84,7 +84,7 @@ describe("knapsack", () => {
         ["A", 1, 1],
         ["B", 0, -1, 1],
       ],
-      2
+      2,
     );
 
     expect(sortValues(items)).toEqual([
@@ -100,7 +100,7 @@ describe("knapsack", () => {
         ["A", 2, 1],
         ["B", -1, -1, 1],
       ],
-      2
+      2,
     );
 
     expect(sortValues(items)).toEqual([

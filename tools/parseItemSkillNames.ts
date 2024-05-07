@@ -12,7 +12,7 @@ const ITEMS_FILE =
 
 const OVERLAPPING_NAMES_FILE = path.join(
   __dirname,
-  "../src/overlappingNames.ts"
+  "../src/overlappingNames.ts",
 );
 
 async function overlappingItems(): Promise<string[]> {
@@ -31,8 +31,8 @@ async function overlappingItems(): Promise<string[]> {
   return items.filter((name1) =>
     items.some(
       (name2) =>
-        name2 !== name1 && name2.toLowerCase().includes(name1.toLowerCase())
-    )
+        name2 !== name1 && name2.toLowerCase().includes(name1.toLowerCase()),
+    ),
   );
 }
 async function overlappingSkills(): Promise<string[]> {
@@ -50,8 +50,8 @@ async function overlappingSkills(): Promise<string[]> {
   return skills.filter((name1) =>
     skills.some(
       (name2) =>
-        name2 !== name1 && name2.toLowerCase().includes(name1.toLowerCase())
-    )
+        name2 !== name1 && name2.toLowerCase().includes(name1.toLowerCase()),
+    ),
   );
 }
 

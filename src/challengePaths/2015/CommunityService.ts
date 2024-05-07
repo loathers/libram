@@ -51,8 +51,8 @@ const statCommunityServicePredictor = (stat: Stat) => {
           myBasestat(
             thralls.get(stat) === myThrall() && !have($effect`Expert Oiliness`)
               ? $stat`mysticality`
-              : stat
-          ))
+              : stat,
+          )),
     );
 };
 
@@ -94,7 +94,7 @@ export default class CommunityService {
     stat: string,
     property: string,
     predictor: (...effects: Effect[]) => number,
-    maximizeRequirements: Requirement
+    maximizeRequirements: Requirement,
   ) {
     this.choice = id;
     this.stat = stat;
@@ -209,7 +209,7 @@ export default class CommunityService {
    */
   run(
     prepare: () => void | number,
-    maxTurns = Infinity
+    maxTurns = Infinity,
   ): "completed" | "failed" | "already completed" {
     if (this.isDone()) return "already completed";
 
@@ -250,7 +250,7 @@ export default class CommunityService {
 
   private _verifyIsDone(councilText: string): boolean {
     return !councilText.includes(
-      `<input type=hidden name=option value=${this.choice}>`
+      `<input type=hidden name=option value=${this.choice}>`,
     );
   }
 
@@ -265,7 +265,7 @@ export default class CommunityService {
 
   private _actualCost(councilText: string): number {
     const match = councilText.match(
-      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`
+      `<input type=hidden name=option value=${this.id}>.*?Perform Service \\((\\d+) Adventures\\)`,
     );
     return match ? parseInt(match[1]) : 0;
   }
@@ -315,7 +315,7 @@ export default class CommunityService {
           `We predicted the ${testName} test would take ${predictedTurns} turns, ${
             predictedTurns === turnCost ? "and" : "but"
           } it took ${turnCost} turns.`,
-          colour
+          colour,
         );
         print(`${testName} took ${seconds.toFixed(1)} seconds.`, colour);
       } else {
@@ -324,21 +324,21 @@ export default class CommunityService {
             `We predicted the task ${testName} would take ${predictedTurns} turns, ${
               predictedTurns === turnCost ? "and" : "but"
             } it took ${turnCost} turns.`,
-            colour
+            colour,
           );
         }
         print(
           `The task ${testName} took ${seconds.toFixed(1)} seconds.`,
-          colour
+          colour,
         );
       }
     }
     const totalTime = sum(logEntries, ([, testEntry]) => testEntry.seconds);
     print(
       `All together, you have spent ${totalTime.toFixed(
-        1
+        1,
       )} seconds during this Community Service run`,
-      colour
+      colour,
     );
   }
 
@@ -349,7 +349,7 @@ export default class CommunityService {
     "HP",
     "Donate Blood",
     () => 60 - Math.floor((myMaxhp() - myBuffedstat($stat`muscle`) - 3) / 30),
-    new Requirement(["HP"], {})
+    new Requirement(["HP"], {}),
   );
 
   static Muscle = new CommunityService(
@@ -357,7 +357,7 @@ export default class CommunityService {
     "Muscle",
     "Feed The Children",
     statCommunityServicePredictor($stat`Muscle`),
-    new Requirement(["Muscle"], {})
+    new Requirement(["Muscle"], {}),
   );
 
   static Mysticality = new CommunityService(
@@ -365,7 +365,7 @@ export default class CommunityService {
     "Mysticality",
     "Build Playground Mazes",
     statCommunityServicePredictor($stat`Mysticality`),
-    new Requirement(["Mysticality"], {})
+    new Requirement(["Mysticality"], {}),
   );
 
   static Moxie = new CommunityService(
@@ -373,7 +373,7 @@ export default class CommunityService {
     "Moxie",
     "Feed Conspirators",
     statCommunityServicePredictor($stat`Moxie`),
-    new Requirement(["Moxie"], {})
+    new Requirement(["Moxie"], {}),
   );
 
   static FamiliarWeight = new CommunityService(
@@ -383,9 +383,10 @@ export default class CommunityService {
     (...effects) =>
       60 -
       Math.floor(
-        (baseWeight() + hypotheticalModifier("Familiar Weight", ...effects)) / 5
+        (baseWeight() + hypotheticalModifier("Familiar Weight", ...effects)) /
+          5,
       ),
-    new Requirement(["Familiar Weight"], {})
+    new Requirement(["Familiar Weight"], {}),
   );
 
   static WeaponDamage = new CommunityService(
@@ -414,17 +415,17 @@ export default class CommunityService {
             (hypotheticalModifier("Weapon Damage", ...effects) -
               0.15 * (weaponPower + offhandPower + familiarPower))) /
             50 +
-            0.001
+            0.001,
         ) -
         Math.floor(
           (multiplier *
             hypotheticalModifier("Weapon Damage Percent", ...effects)) /
             50 +
-            0.001
+            0.001,
         )
       );
     },
-    new Requirement(["Weapon Damage", "Weapon Damage Percent"], {})
+    new Requirement(["Weapon Damage", "Weapon Damage Percent"], {}),
   );
 
   static SpellDamage = new CommunityService(
@@ -438,7 +439,7 @@ export default class CommunityService {
               $familiar`Magic Dragonfish`,
               "Spell Damage Percent",
               baseWeight() + weightAdjustment(),
-              $item.none
+              $item.none,
             )
           : 0;
 
@@ -446,17 +447,17 @@ export default class CommunityService {
       return (
         60 -
         Math.floor(
-          hypotheticalModifier("Spell Damage", ...effects) / 50 + 0.001
+          hypotheticalModifier("Spell Damage", ...effects) / 50 + 0.001,
         ) -
         Math.floor(
           (hypotheticalModifier("Spell Damage Percent", ...effects) -
             dragonfishDamage) /
             50 +
-            0.001
+            0.001,
         )
       );
     },
-    new Requirement(["Spell Damage", "Spell Damage Percent"], {})
+    new Requirement(["Spell Damage", "Spell Damage Percent"], {}),
   );
 
   static Noncombat = new CommunityService(
@@ -474,7 +475,7 @@ export default class CommunityService {
           myFamiliar(),
           "Combat Rate",
           familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
-          equippedItem($slot`familiar`)
+          equippedItem($slot`familiar`),
         );
       const newFamiliarModifier =
         -1 *
@@ -483,7 +484,7 @@ export default class CommunityService {
           "Combat Rate",
           familiarWeight(myFamiliar()) +
             hypotheticalModifier("Familiar Weight", ...effects),
-          equippedItem($slot`familiar`)
+          equippedItem($slot`familiar`),
         );
       const adjustedRate =
         unsoftcappedRate(noncombatRate) -
@@ -491,7 +492,7 @@ export default class CommunityService {
         unsoftcappedRate(newFamiliarModifier);
       return 60 - 3 * Math.floor(adjustedRate / 5);
     },
-    new Requirement(["-combat"], {})
+    new Requirement(["-combat"], {}),
   );
 
   static BoozeDrop = new CommunityService(
@@ -510,7 +511,7 @@ export default class CommunityService {
           myFamiliar(),
           "Item Drop",
           baseWeight() + weightAdjustment(),
-          equippedItem($slot`familiar`)
+          equippedItem($slot`familiar`),
         ) +
         mummingBuff -
         numericModifier(equippedItem($slot`familiar`), "Item Drop");
@@ -520,7 +521,7 @@ export default class CommunityService {
           myFamiliar(),
           "Booze Drop",
           baseWeight() + weightAdjustment(),
-          equippedItem($slot`familiar`)
+          equippedItem($slot`familiar`),
         ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 
       // Champagne doubling does NOT count for CS, so we undouble
@@ -539,18 +540,18 @@ export default class CommunityService {
               familiarItemDrop -
               numericModifier(myThrall(), "Item Drop"))) /
             30 +
-            0.001
+            0.001,
         ) -
         Math.floor(
           (hypotheticalModifier("Booze Drop", ...effects) - familiarBoozeDrop) /
             15 +
-            0.001
+            0.001,
         )
       );
     },
     new Requirement(["Item Drop", "2 Booze Drop"], {
       preventEquip: $items`broken champagne bottle`,
-    })
+    }),
   );
 
   static HotRes = new CommunityService(
@@ -562,14 +563,14 @@ export default class CommunityService {
         myFamiliar(),
         "Hot Resistance",
         familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
-        equippedItem($slot`familiar`)
+        equippedItem($slot`familiar`),
       );
       const newFamiliarModifier = numericModifier(
         myFamiliar(),
         "Hot Resistance",
         familiarWeight(myFamiliar()) +
           hypotheticalModifier("Familiar Weight", ...effects),
-        equippedItem($slot`familiar`)
+        equippedItem($slot`familiar`),
       );
       return (
         60 -
@@ -578,7 +579,7 @@ export default class CommunityService {
           newFamiliarModifier)
       );
     },
-    new Requirement(["Hot Resistance"], {})
+    new Requirement(["Hot Resistance"], {}),
   );
 
   static CoilWire = new CommunityService(
@@ -586,7 +587,7 @@ export default class CommunityService {
     "Coil Wire",
     "Coil Wire",
     () => 60,
-    new Requirement([], {})
+    new Requirement([], {}),
   );
 
   static donate = () => {

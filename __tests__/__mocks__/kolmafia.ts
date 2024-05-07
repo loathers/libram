@@ -10,7 +10,7 @@ type N = number | string | (number | string)[];
 
 function mockOneOrMany<
   Ctor extends new (name: string) => T,
-  T extends MafiaClass
+  T extends MafiaClass,
 >(ctor: Ctor, n: N, knownInstances: T[]): T | T[] {
   function mockOne(name: number | string): T {
     // to make mocking easier, we'll just tread ids as names
@@ -40,7 +40,7 @@ class Bounty extends MafiaClass {
   private static knownInstances: Bounty[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Bounty, n, Bounty.knownInstances)
+    mockOneOrMany(Bounty, n, Bounty.knownInstances),
   );
 
   static all = jest.fn(() => Bounty.knownInstances);
@@ -60,7 +60,7 @@ class Coinmaster extends MafiaClass {
   private static knownInstances: Coinmaster[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Coinmaster, n, Coinmaster.knownInstances)
+    mockOneOrMany(Coinmaster, n, Coinmaster.knownInstances),
   );
 
   static all = jest.fn(() => Coinmaster.knownInstances);
@@ -71,7 +71,7 @@ class Effect extends MafiaClass {
   private static knownInstances: Effect[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Effect, n, Effect.knownInstances)
+    mockOneOrMany(Effect, n, Effect.knownInstances),
   );
 
   static all = jest.fn(() => Effect.knownInstances);
@@ -82,7 +82,7 @@ class Element extends MafiaClass {
   private static knownInstances: Element[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Element, n, Element.knownInstances)
+    mockOneOrMany(Element, n, Element.knownInstances),
   );
 
   static all = jest.fn(() => Element.knownInstances);
@@ -93,7 +93,7 @@ class Familiar extends MafiaClass {
   private static knownInstances: Familiar[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Familiar, n, Familiar.knownInstances)
+    mockOneOrMany(Familiar, n, Familiar.knownInstances),
   );
 
   static all = jest.fn(() => Familiar.knownInstances);
@@ -118,7 +118,7 @@ class Item extends MafiaClass {
   constructor(
     readonly name: string,
     readonly id: number = ++Item.mockId,
-    public plural: string = `Multiple ${name}`
+    public plural: string = `Multiple ${name}`,
   ) {
     super(name);
   }
@@ -128,7 +128,7 @@ class Location extends MafiaClass {
   private static knownInstances: Location[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Location, n, Location.knownInstances)
+    mockOneOrMany(Location, n, Location.knownInstances),
   );
 
   static all = jest.fn(() => Location.knownInstances);
@@ -139,7 +139,7 @@ class Modifier extends MafiaClass {
   private static knownInstances: Modifier[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Modifier, n, Modifier.knownInstances)
+    mockOneOrMany(Modifier, n, Modifier.knownInstances),
   );
 
   static all = jest.fn(() => Modifier.knownInstances);
@@ -150,7 +150,7 @@ class Monster extends MafiaClass {
   private static knownInstances: Monster[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Monster, n, Monster.knownInstances)
+    mockOneOrMany(Monster, n, Monster.knownInstances),
   );
 
   static all = jest.fn(() => Monster.knownInstances);
@@ -170,7 +170,7 @@ class Phylum extends MafiaClass {
   private static knownInstances: Phylum[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Phylum, n, Phylum.knownInstances)
+    mockOneOrMany(Phylum, n, Phylum.knownInstances),
   );
 
   static all = jest.fn(() => Phylum.knownInstances);
@@ -181,7 +181,7 @@ class Servant extends MafiaClass {
   private static knownInstances: Servant[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Servant, n, Servant.knownInstances)
+    mockOneOrMany(Servant, n, Servant.knownInstances),
   );
 
   static all = jest.fn(() => Servant.knownInstances);
@@ -219,7 +219,7 @@ class Thrall extends MafiaClass {
   private static knownInstances: Thrall[] = [];
 
   static get = jest.fn((n: N) =>
-    mockOneOrMany(Thrall, n, Thrall.knownInstances)
+    mockOneOrMany(Thrall, n, Thrall.knownInstances),
   );
 
   static all = jest.fn(() => Thrall.knownInstances);
@@ -282,13 +282,13 @@ for (const [key, value] of Object.entries(actualKolmafia)) {
 const kolmafia = kolmafiaMocks as Mocked<Kolmafia>;
 
 kolmafia.logprint.mockImplementation((msg) =>
-  console.log(`[kolmafia.logprint] ${msg}`)
+  console.log(`[kolmafia.logprint] ${msg}`),
 );
 kolmafia.print.mockImplementation((msg?) =>
-  console.log(`[kolmafia.print] ${msg}`)
+  console.log(`[kolmafia.print] ${msg}`),
 );
 kolmafia.printHtml.mockImplementation((msg) =>
-  console.log(`[kolmafia.printHtml] ${msg}`)
+  console.log(`[kolmafia.printHtml] ${msg}`),
 );
 
 kolmafia.extractItems.mockImplementation((s) => {
@@ -321,7 +321,7 @@ const mockProperties = new Map<string, string>();
 export const clearMockProperties = () => mockProperties.clear();
 kolmafia.getProperty.mockImplementation((key) => mockProperties.get(key) ?? "");
 kolmafia.setProperty.mockImplementation((key, value) =>
-  mockProperties.set(key, value)
+  mockProperties.set(key, value),
 );
 
 module.exports = kolmafia;

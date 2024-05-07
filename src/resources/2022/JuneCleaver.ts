@@ -19,7 +19,7 @@ export function have(): boolean {
  * @returns The number of cleaver-combats it takes to get a particular encounter number--this is agnostic of your current fights.
  */
 export function getInterval(
-  encounters = get("_juneCleaverEncounters")
+  encounters = get("_juneCleaverEncounters"),
 ): number {
   return [1, 6, 10, 12, 15, 20][encounters] ?? 30;
 }
@@ -31,7 +31,7 @@ export function getInterval(
  * @returns The number of cleaver-combats it would take to get a particular encounter after skipping.
  */
 export function getSkippedInterval(
-  encounters = get("_juneCleaverEncounters")
+  encounters = get("_juneCleaverEncounters"),
 ): number {
   return [1, 2, 3, 3, 4, 5][encounters] ?? 8;
 }
@@ -43,7 +43,7 @@ export function getSkippedInterval(
  * @returns The bonus damage your cleaver currently gives for a given element.
  */
 export function damage(
-  element: "Hot" | "Stench" | "Sleaze" | "Spooky" | "Cold"
+  element: "Hot" | "Stench" | "Sleaze" | "Spooky" | "Cold",
 ): number {
   return get(`_juneCleaver${element}`);
 }
@@ -66,11 +66,11 @@ export const choices = [
  *
  * @returns An array consisting of the cleaver choice adventures currently in the queue.
  */
-export function queue(): typeof choices[number][] {
+export function queue(): (typeof choices)[number][] {
   return get("juneCleaverQueue")
     .split(",")
     .filter((x) => x.trim().length > 0)
-    .map((x) => parseInt(x)) as typeof choices[number][];
+    .map((x) => parseInt(x)) as (typeof choices)[number][];
 }
 
 /**
@@ -78,7 +78,7 @@ export function queue(): typeof choices[number][] {
  *
  * @returns An array consisting of the cleaver choice adventures not currently in the queue.
  */
-export function choicesAvailable(): typeof choices[number][] {
+export function choicesAvailable(): (typeof choices)[number][] {
   const currentQueue = queue();
   return choices.filter((choice) => !currentQueue.includes(choice));
 }

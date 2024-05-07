@@ -265,7 +265,7 @@ export const Digitize = new Copier(
   () => couldDigitize(),
   () => prepareDigitize(),
   () => canDigitize(),
-  () => getDigitizeMonster()
+  () => getDigitizeMonster(),
 );
 
 /**

@@ -60,12 +60,12 @@ export function wishableItems(filters: WishableItemsFilters = {}): Set<Item> {
                   ({ type, rate, drop }) =>
                     !drop.quest &&
                     (type !== "c" || rate >= 1) && // Remove random roll drops
-                    (filters.drop?.({ type, rate, drop }) ?? true)
+                    (filters.drop?.({ type, rate, drop }) ?? true),
                 )
-                .map(({ drop }) => drop)
-            )
-        )
-    )
+                .map(({ drop }) => drop),
+            ),
+        ),
+    ),
   );
 }
 
@@ -90,8 +90,8 @@ function unwishableEffects(): Effect[] {
         splitName.every((s) =>
           // So we check every maximal substring against every one of our genie-wishable effects, excluding the effect we're currently looking at
           // if one of the substrings matches a substring associated with another effect, we're screwed.
-          names.some(({ name: n }) => n !== name && n.includes(s))
-        )
+          names.some(({ name: n }) => n !== name && n.includes(s)),
+        ),
     )
     .map(({ name }) => toEffect(name));
 }
@@ -136,8 +136,9 @@ export function wishFor(wish: Effect | Item): boolean {
     (l) =>
       canAdventure(l) &&
       getMonsters(l).some(
-        (m) => m.copyable && itemDropsArray(m).some(({ drop }) => drop === wish)
-      )
+        (m) =>
+          m.copyable && itemDropsArray(m).some(({ drop }) => drop === wish),
+      ),
   );
 
   try {
@@ -149,8 +150,8 @@ export function wishFor(wish: Effect | Item): boolean {
     if (!result) {
       logger.debug(
         `Failed to monkeyPaw wish for ${wish}; assumed it was available in locations ${locations.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       );
     }
     return result;

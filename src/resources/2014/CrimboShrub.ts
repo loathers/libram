@@ -78,7 +78,7 @@ function isDecoratedWith(
   topper: ShrubTopper,
   lights: ShrubLights,
   garland: ShrubGarland,
-  gifts: ShrubGifts
+  gifts: ShrubGifts,
 ): boolean {
   const decorations = [
     get("shrubTopper"),
@@ -102,7 +102,7 @@ export function decorate(
   topper: ShrubTopper,
   lights: ShrubLights,
   garland: ShrubGarland,
-  gifts: ShrubGifts
+  gifts: ShrubGifts,
 ): boolean {
   if (!have()) return false;
   if (get("_shrubDecorated"))
@@ -113,7 +113,7 @@ export function decorate(
 
   directlyUse($item`box of old Crimbo decorations`);
   visitUrl(
-    `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`
+    `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`,
   );
 
   return isDecoratedWith(topper, lights, garland, gifts);

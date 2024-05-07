@@ -37,7 +37,7 @@ export function minutesToNoon(): number {
 }
 
 export const LOCATIONS = Object.freeze(
-  $locations`Gingerbread Civic Center, Gingerbread Train Station, Gingerbread Industrial Zone, Gingerbread Upscale Retail District, Gingerbread Sewers`
+  $locations`Gingerbread Civic Center, Gingerbread Train Station, Gingerbread Industrial Zone, Gingerbread Upscale Retail District, Gingerbread Sewers`,
 );
 
 /**

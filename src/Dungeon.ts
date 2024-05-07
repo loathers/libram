@@ -39,7 +39,7 @@ export class Dungeon {
     closeAction: string,
     openCost: number,
     openImage: string,
-    closedImage: string
+    closedImage: string,
   ) {
     this.name_ = name_;
     this.loot = loot;
@@ -53,15 +53,15 @@ export class Dungeon {
   distribute(
     idOrname_: number | string,
     loot: Item | Item[] | Map<Item, number> = this.loot,
-    distributeAllOfAGivenItem = !(loot instanceof Map)
+    distributeAllOfAGivenItem = !(loot instanceof Map),
   ) {
     const player = getPlayerFromIdOrName(idOrname_);
     const lootList =
       loot instanceof Map
         ? countedMapToArray(loot)
         : Array.isArray(loot)
-        ? loot
-        : [loot];
+          ? loot
+          : [loot];
     const badLoot = lootList.find((lootItem) => !this.loot.includes(lootItem));
     if (badLoot) {
       throw new Error(`${badLoot} is not a valid piece of dungeon loot`);
@@ -69,18 +69,18 @@ export class Dungeon {
     const pageText = visitUrl("clan_basement.php");
     if (!pageText.match(new RegExp(player.name, "i"))) {
       throw new Error(
-        `${player.name} cannot be distributed loot from ${getClanName()}`
+        `${player.name} cannot be distributed loot from ${getClanName()}`,
       );
     }
     const itemname_s = xpath(pageText, "//tr/td[2]/b/text()");
     const whichLoots = xpath(
       pageText,
-      '//form[@action="clan_basement.php"]//input[@type="hidden"][@name_="whichloot"]/@value'
+      '//form[@action="clan_basement.php"]//input[@type="hidden"][@name_="whichloot"]/@value',
     );
     itemname_s.forEach((itemname_, index) => {
       if (lootList.includes(toItem(itemname_))) {
         visitUrl(
-          `clan_basement.php?whichloot=${whichLoots[index]}&recipient=${player.id}`
+          `clan_basement.php?whichloot=${whichLoots[index]}&recipient=${player.id}`,
         );
         if (!distributeAllOfAGivenItem)
           lootList.splice(lootList.indexOf(toItem(itemname_)));
@@ -134,7 +134,7 @@ export class Dungeon {
     for (const lootItem of this.loot) {
       result.set(
         lootItem,
-        pageText.match(new RegExp(lootItem.name, "g"))?.length ?? 0
+        pageText.match(new RegExp(lootItem.name, "g"))?.length ?? 0,
       );
     }
     return result;
@@ -148,7 +148,7 @@ export const Dreadsylvania = new Dungeon(
   "foldmap",
   1000000,
   "dvmap.gif",
-  "foldmap.gif"
+  "foldmap.gif",
 );
 
 export const Hobopolis = new Dungeon(
@@ -158,7 +158,7 @@ export const Hobopolis = new Dungeon(
   "floodsewer",
   1000000,
   "opengrate.gif",
-  "sewergrate.gif"
+  "sewergrate.gif",
 );
 
 export const SlimeTube = new Dungeon(
@@ -168,5 +168,5 @@ export const SlimeTube = new Dungeon(
   "sealtube",
   250000,
   "slimehole.gif",
-  "greasespot.gif"
+  "greasespot.gif",
 );

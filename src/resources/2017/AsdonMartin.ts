@@ -99,7 +99,7 @@ function inventoryItems(): Item[] {
     .filter(
       (item) =>
         haveItem(item) &&
-        [100, autosellPrice(item)].includes(price(item, PriceAge.RECENT))
+        [100, autosellPrice(item)].includes(price(item, PriceAge.RECENT)),
     );
 }
 
@@ -145,7 +145,7 @@ function getBestFuels(): Item[] {
   allFuel.sort((x, y) => keyHistorical(x) - keyHistorical(y));
   const bestUnitCost = keyHistorical(allFuel[0]);
   const firstBadIndex = allFuel.findIndex(
-    (item) => keyHistorical(item) > 5 * bestUnitCost
+    (item) => keyHistorical(item) > 5 * bestUnitCost,
   );
   const potentialFuel =
     firstBadIndex > 0 ? allFuel.slice(0, firstBadIndex) : allFuel;
@@ -169,7 +169,7 @@ function getBestFuels(): Item[] {
   if (calculateFuelUnitCost(candidates[0], PriceAge.TODAY) > 100) {
     throw new Error(
       "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
-        "This means something went wrong."
+        "This means something went wrong.",
     );
   }
 
@@ -185,7 +185,7 @@ function getBestFuels(): Item[] {
  */
 export function insertFuel(it: Item, quantity = 1): boolean {
   const result = visitUrl(
-    `campground.php?action=fuelconvertor&pwd&qty=${quantity}&iid=${it.id}&go=Convert%21`
+    `campground.php?action=fuelconvertor&pwd&qty=${quantity}&iid=${it.id}&go=Convert%21`,
   );
   return result.includes("The display updates with a");
 }
@@ -212,7 +212,7 @@ export function fillTo(targetUnits: number): boolean {
       const efficiencyOfSecondBest =
         mallPrice(secondBest) / getAverageAdventures(secondBest);
       ceiling = Math.ceil(
-        efficiencyOfSecondBest * getAverageAdventures(bestFuel)
+        efficiencyOfSecondBest * getAverageAdventures(bestFuel),
       );
     }
 
@@ -234,7 +234,7 @@ function fillWithBestInventoryItem(targetUnits: number): boolean {
   const options = inventoryItems().sort(
     (a, b) =>
       getAverageAdventures(b) / autosellPrice(b) -
-      getAverageAdventures(a) / autosellPrice(a)
+      getAverageAdventures(a) / autosellPrice(a),
   );
   if (options.length === 0) return false;
 
@@ -244,7 +244,7 @@ function fillWithBestInventoryItem(targetUnits: number): boolean {
   const amountToUse = clamp(
     Math.ceil(targetUnits / getAverageAdventures(best)),
     0,
-    itemAmount(best)
+    itemAmount(best),
   );
   return insertFuel(best, amountToUse);
 }
@@ -292,7 +292,7 @@ export const Driving = {
 export function drive(
   style: Effect,
   turns = 1,
-  preferInventory = false
+  preferInventory = false,
 ): boolean {
   if (!Object.values(Driving).includes(style)) return false;
   if (!installed()) return false;

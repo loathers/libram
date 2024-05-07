@@ -25,7 +25,7 @@ describe(Kmail.send, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=0",
       true,
-      true
+      true,
     );
   });
 
@@ -35,7 +35,7 @@ describe(Kmail.send, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=100",
       true,
-      true
+      true,
     );
   });
 
@@ -45,7 +45,7 @@ describe(Kmail.send, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       `sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=0&whichitem1=${mockItem1.id}&howmany1=1`,
       true,
-      true
+      true,
     );
   });
 
@@ -57,13 +57,13 @@ describe(Kmail.send, () => {
         [mockItem1, 11],
         [mockItem2, 42],
       ]),
-      100
+      100,
     );
 
     expect(visitUrl).toHaveBeenCalledWith(
       `sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=100&whichitem1=${mockItem1.id}&howmany1=11&whichitem2=${mockItem2.id}&howmany2=42`,
       true,
-      true
+      true,
     );
   });
 
@@ -79,22 +79,22 @@ describe(Kmail.send, () => {
       1,
       `sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=100&whichitem1=${mockItems[0].id}&howmany1=1&whichitem2=${mockItems[1].id}&howmany2=1&whichitem3=${mockItems[2].id}&howmany3=1&whichitem4=${mockItems[3].id}&howmany4=1&whichitem5=${mockItems[4].id}&howmany5=1&whichitem6=${mockItems[5].id}&howmany6=1&whichitem7=${mockItems[6].id}&howmany7=1&whichitem8=${mockItems[7].id}&howmany8=1&whichitem9=${mockItems[8].id}&howmany9=1&whichitem10=${mockItems[9].id}&howmany10=1&whichitem11=${mockItems[10].id}&howmany11=1`,
       true,
-      true
+      true,
     );
     expect(visitUrl).toHaveBeenNthCalledWith(
       2,
       `sendmessage.php?action=send&pwd&towho=11&message=Hello%2C%20world!&sendmeat=0&whichitem1=${mockItems[11].id}&howmany1=1&whichitem2=${mockItems[12].id}&howmany2=1&whichitem3=${mockItems[13].id}&howmany3=1&whichitem4=${mockItems[14].id}&howmany4=1`,
       true,
-      true
+      true,
     );
   });
 
   it.todo(
-    "should send a kmail with a message, items, and meat, and skip ungiftable items"
+    "should send a kmail with a message, items, and meat, and skip ungiftable items",
   );
 
   it.todo(
-    "should fallback to sending a gift if the user cannot receive meat or items"
+    "should fallback to sending a gift if the user cannot receive meat or items",
   );
 
   it("should properly encode ampersand characters", () => {
@@ -103,7 +103,7 @@ describe(Kmail.send, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "sendmessage.php?action=send&pwd&towho=11&message=Hi%20there%2C%20give%20me%20all%20your%20money!%26sendmeat%3D10000000000&sendmeat=0",
       true,
-      true
+      true,
     );
   });
 });
@@ -115,7 +115,7 @@ describe(Kmail.gift, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=0&sendmeat=0",
       true,
-      true
+      true,
     );
   });
 
@@ -125,13 +125,13 @@ describe(Kmail.gift, () => {
       "Hello, world!",
       undefined,
       undefined,
-      "This is not even funny."
+      "This is not even funny.",
     );
 
     expect(visitUrl).toHaveBeenCalledWith(
       "town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=This%20is%20not%20even%20funny.&towho=11&whichpackage=0&sendmeat=0",
       true,
-      true
+      true,
     );
   });
 
@@ -141,7 +141,7 @@ describe(Kmail.gift, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=0&sendmeat=100",
       true,
-      true
+      true,
     );
   });
 
@@ -151,7 +151,7 @@ describe(Kmail.gift, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=1&sendmeat=0&whichitem1=${mockItem1.id}&howmany1=1`,
       true,
-      true
+      true,
     );
   });
 
@@ -163,13 +163,13 @@ describe(Kmail.gift, () => {
         [mockItem1, 11],
         [mockItem2, 42],
       ]),
-      100
+      100,
     );
 
     expect(visitUrl).toHaveBeenCalledWith(
       `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=2&sendmeat=100&whichitem1=${mockItem1.id}&howmany1=11&whichitem2=${mockItem2.id}&howmany2=42`,
       true,
-      true
+      true,
     );
   });
 
@@ -185,13 +185,13 @@ describe(Kmail.gift, () => {
       1,
       `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=3&sendmeat=100&whichitem1=${mockItems[0].id}&howmany1=1&whichitem2=${mockItems[1].id}&howmany2=1&whichitem3=${mockItems[2].id}&howmany3=1`,
       true,
-      true
+      true,
     );
     expect(visitUrl).toHaveBeenNthCalledWith(
       2,
       `town_sendgift.php?action=Yep.&pwd&fromwhere=0&note=Hello%2C%20world!&insidenote=&towho=11&whichpackage=2&sendmeat=0&whichitem1=${mockItems[3].id}&howmany1=1&whichitem2=${mockItems[4].id}&howmany2=1`,
       true,
-      true
+      true,
     );
   });
 });
@@ -212,7 +212,7 @@ describe("message parsing", () => {
     mocked(visitUrl).mockReturnValueOnce(
       JSON.stringify([
         { ...baseMessage, type: "normal", message: "Hello, world!" },
-      ])
+      ]),
     );
 
     const kmails = Kmail.inbox();
@@ -229,7 +229,7 @@ describe("message parsing", () => {
           hour12: true,
           timeZone: "Europe/Berlin",
         })
-        .replace(/, /g, " ")
+        .replace(/, /g, " "),
     ).toEqual(baseMessage.localtime);
   });
 
@@ -321,7 +321,7 @@ describe("message parsing", () => {
       expect(kmails).toHaveLength(1);
       expect(kmails[0].message).toMatch("You gain 11 Meat");
       expect(kmails[0].meat()).toEqual(expectedMeat);
-    }
+    },
   );
 
   it.each([
@@ -351,7 +351,7 @@ describe("message parsing", () => {
       const kmails = Kmail.inbox();
       expect(kmails).toHaveLength(1);
       expect(kmails[0].items()).toEqual(expectedItems);
-    }
+    },
   );
 
   it.each([
@@ -385,7 +385,7 @@ describe("message parsing", () => {
       expect(kmails).toHaveLength(1);
       expect(kmails[0].message).toEqual(expectedMessage);
       expect(kmails[0].meat()).toEqual(expectedMeat);
-    }
+    },
   );
 
   it.each([
@@ -487,6 +487,6 @@ describe("message parsing", () => {
       expect(kmails[0].outsideItems()).toEqual(expectedOutsideItems);
       expect(kmails[0].insideItems()).toEqual(expectedInsideItems);
       expect(kmails[0].meat()).toEqual(expectedMeat);
-    }
+    },
   );
 });

@@ -47,7 +47,7 @@ export class Clan {
 
   private static _join(id: number) {
     const result = visitUrl(
-      `showclan.php?recruiter=1&whichclan=${id}&pwd&whichclan=${id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`
+      `showclan.php?recruiter=1&whichclan=${id}&pwd&whichclan=${id}&action=joinclan&apply=Apply+to+this+Clan&confirm=on`,
     );
 
     if (!result.includes("clanhalltop.gif")) {
@@ -60,19 +60,19 @@ export class Clan {
   private static _withStash<T>(
     borrowFn: () => Item[],
     returnFn: (items: Item[]) => Item[],
-    callback: (borrowedItems: Item[]) => T
+    callback: (borrowedItems: Item[]) => T,
   ): T;
   private static _withStash<T>(
     borrowFn: () => Map<Item, number>,
     returnFn: (items: Map<Item, number>) => Map<Item, number>,
-    callback: (borrowedItems: Map<Item, number>) => T
+    callback: (borrowedItems: Map<Item, number>) => T,
   ): T;
   private static _withStash<T>(
     borrowFn: () => Item[] | Map<Item, number>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     returnFn: (items: any) => Item[] | Map<Item, number>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    callback: (borrowedItems: any) => T
+    callback: (borrowedItems: any) => T,
   ): T {
     const borrowed = borrowFn();
     const map = arrayToCountedMap(borrowed);
@@ -94,7 +94,7 @@ export class Clan {
           logger.error(
             `Failed to return <b>${countedMapToString(map)}</b> to <b>${
               this.name
-            }</b> stash`
+            }</b> stash`,
           );
         }
       }
@@ -118,7 +118,7 @@ export class Clan {
 
       if (!(clanName in clanIdCache)) {
         const clan = Clan.getWhitelisted().find(
-          (c) => c.name.toLowerCase() === clanName
+          (c) => c.name.toLowerCase() === clanName,
         );
 
         if (!clan) {
@@ -148,7 +148,7 @@ export class Clan {
    */
   static with<T>(
     clanIdOrName: string | number,
-    callback: (clan: Clan) => T
+    callback: (clan: Clan) => T,
   ): T {
     const startingClan = Clan.get();
     const clan = Clan.join(clanIdOrName);
@@ -170,22 +170,22 @@ export class Clan {
   static withStash<T>(
     clanIdOrName: string | number,
     items: Item[],
-    callback: (borrowedItems: Item[]) => T
+    callback: (borrowedItems: Item[]) => T,
   ): T;
   static withStash<T>(
     clanIdOrName: string | number,
     items: Map<Item, number>,
-    callback: (borrowedItems: Map<Item, number>) => T
+    callback: (borrowedItems: Map<Item, number>) => T,
   ): T;
   static withStash<T>(
     clanIdOrName: string | number,
     items: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    callback: (borrowedItems: any) => T, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   ): T {
     return Clan._withStash(
       () => Clan.with(clanIdOrName, (clan) => clan.take(items)),
       (borrowed) => Clan.with(clanIdOrName, (clan) => clan.put(borrowed)),
-      callback
+      callback,
     );
   }
 
@@ -278,7 +278,7 @@ export class Clan {
       .map((option) => {
         const validHtml = `<select>${option}</select>`;
         const match = xpath(validHtml, "//text()")[0].match(
-          WHITELIST_DEGREE_PATTERN
+          WHITELIST_DEGREE_PATTERN,
         );
         const id = xpath(validHtml, "//@value")[0];
 
@@ -307,7 +307,7 @@ export class Clan {
   addPlayerToWhitelist(
     player: string | number,
     rankName?: string,
-    title = ""
+    title = "",
   ): boolean {
     this._check();
 
@@ -321,7 +321,7 @@ export class Clan {
     if (!rank) return false;
 
     const result = visitUrl(
-      `clan_whitelist.php?action=add&pwd&addwho=${playerId}&level=${rank.id}&title=${title}`
+      `clan_whitelist.php?action=add&pwd&addwho=${playerId}&level=${rank.id}&title=${title}`,
     );
 
     return (
@@ -342,7 +342,7 @@ export class Clan {
     const playerId = toPlayerId(player);
 
     const result = visitUrl(
-      `clan_whitelist.php?action=updatewl&pwd&who=${playerId}&remove=Remove`
+      `clan_whitelist.php?action=updatewl&pwd&who=${playerId}&remove=Remove`,
     );
 
     return result.includes("Whitelist updated.");
@@ -358,7 +358,7 @@ export class Clan {
 
     const page = visitUrl("clan_stash.php");
     const [, meat] = page.match(
-      /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./
+      /Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./,
     ) || ["0", "0"];
     return parseNumber(meat);
   }
@@ -373,7 +373,7 @@ export class Clan {
     this._check();
 
     const result = visitUrl(
-      `clan_stash.php?pwd&action=contribute&howmuch=${amount}`
+      `clan_stash.php?pwd&action=contribute&howmuch=${amount}`,
     );
     return result.includes("You contributed");
   }
@@ -448,7 +448,7 @@ export class Clan {
       throw new Error(
         `Wanted to return ${countedMapToString(map)} to ${
           this.name
-        } but KoLmafia's clan data is out of sync`
+        } but KoLmafia's clan data is out of sync`,
       );
 
     map.forEach((quantity, item) => {
@@ -467,11 +467,11 @@ export class Clan {
   withStash<T>(items: Item[], callback: (borrowedItems: Item[]) => T): T;
   withStash<T>(
     items: Map<Item, number>,
-    callback: (borrowedItems: Map<Item, number>) => T
+    callback: (borrowedItems: Map<Item, number>) => T,
   ): T;
   withStash<T>(
     items: Item[] | Map<Item, number>,
-    callback: (borrowedItems: any) => T // eslint-disable-line @typescript-eslint/no-explicit-any
+    callback: (borrowedItems: any) => T, // eslint-disable-line @typescript-eslint/no-explicit-any
   ): T {
     this._check();
 
@@ -479,7 +479,7 @@ export class Clan {
     return Clan._withStash(
       () => this.take(map),
       (borrowed) => this.put(borrowed),
-      callback
+      callback,
     );
   }
 }

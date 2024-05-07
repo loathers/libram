@@ -29,21 +29,21 @@ const concatTemplateString = (
 ) =>
   literals.raw.reduce(
     (acc, literal, i) => acc + literal + (placeholders[i] ?? ""),
-    ""
+    "",
   );
 
 const handleTypeGetError = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T),
-  error: unknown
+  error: unknown,
 ) => {
   const message = `${error}`;
   const match = message.match(
-    RegExp(`Bad ${Type.name.toLowerCase()} value: .*`)
+    RegExp(`Bad ${Type.name.toLowerCase()} value: .*`),
   );
   if (match) {
     print(
       `${match[0]}; if you're certain that this ${Type.name} exists and is spelled correctly, please update KoLMafia`,
-      "red"
+      "red",
     );
   } else {
     print(message);
@@ -51,7 +51,7 @@ const handleTypeGetError = <T extends MafiaClass>(
 };
 
 const createSingleConstant = <T extends MafiaClass>(
-  Type: typeof MafiaClass & (new () => T)
+  Type: typeof MafiaClass & (new () => T),
 ) => {
   const tagFunction = (
     literals: TemplateStringsArray,
@@ -70,7 +70,7 @@ const createSingleConstant = <T extends MafiaClass>(
 };
 
 const createPluralConstant = <T extends MafiaClass>(
-  Type: typeof MafiaClass & (new () => T)
+  Type: typeof MafiaClass & (new () => T),
 ) => {
   const tagFunction = (
     literals: TemplateStringsArray,

@@ -44,7 +44,7 @@ export function have(): boolean {
 function checkLocations(html: string): Location[] {
   return xpath(
     html,
-    '//select[@name="heythereprogrammer"]//option[position()>1]/text()'
+    '//select[@name="heythereprogrammer"]//option[position()>1]/text()',
   ).map((name) => toLocation(name));
 }
 
@@ -64,7 +64,7 @@ export function currentlyIn(): Location | null {
  */
 export function sendTo(
   target: Location | Location[] | ((locations: Location[]) => Location),
-  upgrade = true
+  upgrade = true,
 ): Location | null {
   if (!available()) return null;
 
@@ -77,8 +77,8 @@ export function sendTo(
     target instanceof Location
       ? target
       : Array.isArray(target)
-      ? target.find((l) => locationsAvailable.includes(l))
-      : target(locationsAvailable);
+        ? target.find((l) => locationsAvailable.includes(l))
+        : target(locationsAvailable);
   if (!location) return null;
   if (!locationsAvailable.includes(location)) return null;
 
@@ -125,7 +125,7 @@ export const possibleUpgrades = [
   "radardish",
   "dualexhaust",
 ] as const;
-export type Upgrade = typeof possibleUpgrades[number];
+export type Upgrade = (typeof possibleUpgrades)[number];
 
 /**
  * @returns An array containing the upgrades that you currently have on your autumn-aton.

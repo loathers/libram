@@ -30,7 +30,7 @@ const parsedProp = () =>
     .filter((tuple) => tuple.length === 3)
     .map(
       ([, location, monster]) =>
-        [toLocation(location), toMonster(monster)] as [Location, Monster]
+        [toLocation(location), toMonster(monster)] as [Location, Monster],
     );
 
 const getLastPondered = () =>

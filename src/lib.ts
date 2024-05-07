@@ -159,7 +159,7 @@ export function canRememberSong(quantity = 1): boolean {
  */
 export function getMonsterLocations(monster: Monster): Location[] {
   return Location.all().filter(
-    (location) => monster.name in appearanceRates(location)
+    (location) => monster.name in appearanceRates(location),
   );
 }
 
@@ -203,7 +203,7 @@ export function getRemainingSpleen(): number {
  */
 export function have(
   thing: Effect | Familiar | Item | Servant | Skill | Thrall,
-  quantity = 1
+  quantity = 1,
 ): boolean {
   if (thing instanceof Effect) {
     return haveEffect(thing) >= quantity;
@@ -272,7 +272,7 @@ const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 export function haveCounter(
   counterName: string,
   minTurns = 0,
-  maxTurns = 500
+  maxTurns = 500,
 ): boolean {
   return getCounters(counterName, minTurns, maxTurns) === counterName;
 }
@@ -359,7 +359,7 @@ export function getKramcoWandererChance(): number {
   const turnsSinceLastFight = totalTurns - lastFight;
   return Math.min(
     1.0,
-    (turnsSinceLastFight + 1) / (5 + fights * 3 + Math.max(0, fights - 5) ** 3)
+    (turnsSinceLastFight + 1) / (5 + fights * 3 + Math.max(0, fights - 5) ** 3),
   );
 }
 
@@ -507,7 +507,7 @@ export function canUse(item: Item): boolean {
   if (path !== Path.get("Nuclear Autumn")) {
     if (
       $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
-        item
+        item,
       )
     ) {
       return false;
@@ -603,7 +603,7 @@ export function getPlayerIdFromName(name: string, onMissing?: "throw"): number;
  */
 export function getPlayerIdFromName(
   name: string,
-  onMissing: "throw" | "return-null"
+  onMissing: "throw" | "return-null",
 ): number | null;
 /**
  * Get the player id from a player name (if it exists)
@@ -613,7 +613,7 @@ export function getPlayerIdFromName(
  */
 export function getPlayerIdFromName(
   name: string,
-  onMissing: "throw" | "return-null" = "throw"
+  onMissing: "throw" | "return-null" = "throw",
 ): number | null {
   const playerId = getPlayerId(name);
   // KoLmafia returns the input when not found
@@ -641,7 +641,7 @@ export function getPlayerNameFromId(id: number, onMissing?: "throw"): string;
  */
 export function getPlayerNameFromId(
   id: number,
-  onMissing: "throw" | "return-null"
+  onMissing: "throw" | "return-null",
 ): string | null;
 /**
  * Get the player id from a player name (if it exists)
@@ -651,7 +651,7 @@ export function getPlayerNameFromId(
  */
 export function getPlayerNameFromId(
   id: number,
-  onMissing: "throw" | "return-null" = "throw"
+  onMissing: "throw" | "return-null" = "throw",
 ): string | null {
   const playerName = getPlayerName(id);
   // KoLmafia returns the input when not found
@@ -679,7 +679,7 @@ export type Player = {
  */
 export function getPlayerFromIdOrName(
   idOrName: number | string,
-  onMissing?: "throw"
+  onMissing?: "throw",
 ): Player;
 /**
  * Get both the name and id of a player from either their name or id
@@ -690,7 +690,7 @@ export function getPlayerFromIdOrName(
  */
 export function getPlayerFromIdOrName(
   idOrName: number | string,
-  onMissing: "throw" | "return-null"
+  onMissing: "throw" | "return-null",
 ): Player | null;
 /**
  * Get both the name and id of a player from either their name or id
@@ -701,7 +701,7 @@ export function getPlayerFromIdOrName(
  */
 export function getPlayerFromIdOrName(
   idOrName: number | string,
-  onMissing: "throw" | "return-null" = "throw"
+  onMissing: "throw" | "return-null" = "throw",
 ): Player | null {
   if (typeof idOrName === "number") {
     const name = getPlayerNameFromId(idOrName, onMissing);
@@ -781,12 +781,12 @@ export function getSaleValue(...items: Item[]): number {
             item,
             mallPrice(item) > Math.max(2 * autosellPrice(item), 100)
               ? MALL_VALUE_MODIFIER * mallPrice(item)
-              : autosellPrice(item)
+              : autosellPrice(item),
           );
         } else {
           valueMap.set(
             item,
-            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0
+            mallPrice(item) > 100 ? MALL_VALUE_MODIFIER * mallPrice(item) : 0,
           );
         }
         return valueMap.get(item) || 0;
@@ -802,7 +802,7 @@ export const Environment = {
   Underwater: "underwater",
 } as const;
 
-export type EnvironmentType = typeof Environment[keyof typeof Environment];
+export type EnvironmentType = (typeof Environment)[keyof typeof Environment];
 
 /**
  * Determines the weight-coefficient of any leprechaunning that this familiar may find itself doing
@@ -864,7 +864,7 @@ export function getTodaysHolidayWanderers(): Monster[] {
   return flat(
     holiday()
       .split("/")
-      .map((holiday) => holidayWanderers.get(holiday) ?? [])
+      .map((holiday) => holidayWanderers.get(holiday) ?? []),
   );
 }
 
@@ -903,7 +903,7 @@ export function canVisitUrl(): boolean {
  */
 export function damageTakenByElement(
   baseDamage: number,
-  element: Element
+  element: Element,
 ): number {
   if (baseDamage < 0) return 1;
   const res = elementalResistance(element);
@@ -985,7 +985,7 @@ export function telescope(): {
       hedge1: hedgeTrap1.get(get("telescope3")),
       hedge2: hedgeTrap2.get(get("telescope4")),
       hedge3: hedgeTrap3.get(get("telescope5")),
-    } as const).filter(([, value]) => value)
+    } as const).filter(([, value]) => value),
   );
 }
 
@@ -1000,10 +1000,10 @@ export function examine(thing: Item | Familiar | Effect | Skill): string {
     thing instanceof Item
       ? `desc_item.php?whichitem=${thing.descid}`
       : thing instanceof Familiar
-      ? `desc_familiar.php?which=${thing.id}`
-      : thing instanceof Effect
-      ? `desc_effect.php?whicheffect=${thing.descid}`
-      : `desc_skill.php?whichskill=${thing.id}`;
+        ? `desc_familiar.php?which=${thing.id}`
+        : thing instanceof Effect
+          ? `desc_effect.php?whicheffect=${thing.descid}`
+          : `desc_skill.php?whichskill=${thing.id}`;
   return visitUrl(url);
 }
 
@@ -1063,7 +1063,7 @@ export function unequip(thing: Item | Slot): boolean {
   });
   if (failedSlots.length)
     logger.debug(
-      `Failed to unequip ${thing} from slots ${failedSlots.join(", ")}`
+      `Failed to unequip ${thing} from slots ${failedSlots.join(", ")}`,
     );
   return failedSlots.length === 0;
 }
@@ -1083,7 +1083,7 @@ export function gameDay(): Date {
  * @returns the number of free crafts available of that type
  */
 export function freeCrafts(
-  type: "food" | "smith" | "booze" | "all" = "all"
+  type: "food" | "smith" | "booze" | "all" = "all",
 ): number {
   const effectCrafts = (effect: Effect) => Math.floor(haveEffect(effect) / 5);
 
@@ -1111,7 +1111,7 @@ export const realmTypes = [
   "fantasy",
   "pirate",
 ] as const;
-export type RealmType = typeof realmTypes[number];
+export type RealmType = (typeof realmTypes)[number];
 /**
  * @param identifier which realm to check for
  * @returns if that realm is available
@@ -1158,7 +1158,7 @@ export function lgrCurrencies(): Item[] {
     .filter(
       (realm) =>
         realmAvailable(realm) &&
-        !(realm === "hot" && get("_luckyGoldRingVolcoino"))
+        !(realm === "hot" && get("_luckyGoldRingVolcoino")),
     )
     .map(realmCurrency)
     .filter(notNull);
@@ -1183,7 +1183,7 @@ const ACCOUNT_COMBAT_FLAGS = [
  * disablelovebugs disables love bugs
  * boringdarts avoid rendering the dartboard in combat
  */
-export type AccountCombatFlag = typeof ACCOUNT_COMBAT_FLAGS[number];
+export type AccountCombatFlag = (typeof ACCOUNT_COMBAT_FLAGS)[number];
 
 /**
  * Get the current value of all of your account's combat setting flags
@@ -1191,7 +1191,7 @@ export type AccountCombatFlag = typeof ACCOUNT_COMBAT_FLAGS[number];
  * @returns An array of objects that contain the flags and their values as booleans
  */
 export function getCombatFlags(
-  flags: AccountCombatFlag[] = [...ACCOUNT_COMBAT_FLAGS]
+  flags: AccountCombatFlag[] = [...ACCOUNT_COMBAT_FLAGS],
 ): {
   flag: AccountCombatFlag;
   value: boolean;
@@ -1202,7 +1202,7 @@ export function getCombatFlags(
     value:
       xpath(
         accountPage,
-        `//*[@id="opt_flag_${flag}"]/label/input[@type='checkbox']@checked`
+        `//*[@id="opt_flag_${flag}"]/label/input[@type='checkbox']@checked`,
       )[0] === "checked",
   }));
 }
@@ -1223,14 +1223,14 @@ export function setCombatFlags(
           flags.map(({ flag, value }) => [
             `actions[]=flag_${flag}`,
             `flag_${flag}=${Number(value)}`,
-          ])
+          ]),
         ),
         "action=Update",
         "am=1",
         "ajax=1",
       ].join("&"),
       true)
-    }`
+    }`,
   );
 }
 
@@ -1274,8 +1274,8 @@ export function haveIntrinsic(effect: Effect): boolean {
 export function extractItems(text: string): Map<Item, number> {
   return new Map(
     Object.entries(kolmafiaExtractItems(text)).map(
-      ([itemName, quantity]) => [Item.get(itemName), quantity] as const
-    )
+      ([itemName, quantity]) => [Item.get(itemName), quantity] as const,
+    ),
   );
 }
 

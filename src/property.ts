@@ -90,7 +90,7 @@ type MafiaClasses =
 
 const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T),
-  toType: (x: string) => T
+  toType: (x: string) => T,
 ): ((property: string, default_?: T) => T | null) =>
   createPropertyGetter((value) => {
     if (value === "") return null;
@@ -101,7 +101,7 @@ const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
 export const getString = createPropertyGetter((value) => value);
 
 export const getCommaSeparated = createPropertyGetter((value) =>
-  value.split(/, ?/)
+  value.split(/, ?/),
 );
 
 export const getBoolean = createPropertyGetter((value) => value === "true");
@@ -114,7 +114,7 @@ export const getClass = createMafiaClassPropertyGetter(Class, toClass);
 
 export const getCoinmaster = createMafiaClassPropertyGetter(
   Coinmaster,
-  toCoinmaster
+  toCoinmaster,
 );
 
 export const getEffect = createMafiaClassPropertyGetter(Effect, toEffect);
@@ -148,7 +148,7 @@ export function get(property: NumericProperty, _default: number): number;
 export function get(property: NumericOrStringProperty): number | string;
 export function get(
   property: NumericOrStringProperty,
-  _default: number | string
+  _default: number | string,
 ): number | string;
 export function get(property: StringProperty): string;
 export function get(property: StringProperty, _default: string): string;
@@ -225,7 +225,7 @@ export function set(property: BooleanProperty, value: boolean): boolean;
 export function set(property: NumericProperty, value: number): number;
 export function set<T extends number | string>(
   property: NumericOrStringProperty,
-  value: T
+  value: T,
 ): T;
 export function set(property: StringProperty, value: string): string;
 export function set(property: LocationProperty, value: Location): Location;
@@ -235,7 +235,7 @@ export function set(property: StatProperty, value: Stat): Stat;
 export function set(property: PhylumProperty, value: Phylum): Phylum;
 export function set<D extends { toString(): string }>(
   property: string,
-  value: D
+  value: D,
 ): D;
 /**
  * Sets the value of a mafia property, either built in or custom
@@ -246,7 +246,7 @@ export function set<D extends { toString(): string }>(
  */
 export function set<D extends { toString(): string }>(
   property: string,
-  value: D
+  value: D,
 ): D {
   const stringValue = value === null ? "" : value.toString();
   setProperty(property, stringValue);
@@ -264,7 +264,7 @@ export function set<D extends { toString(): string }>(
 export function increment(
   property: NumericProperty,
   delta = 1,
-  max = Infinity
+  max = Infinity,
 ) {
   const value = get(property);
 
@@ -286,7 +286,7 @@ export function increment(
 export function decrement(
   property: NumericProperty,
   delta = 1,
-  min = Infinity
+  min = Infinity,
 ) {
   const value = get(property);
 
@@ -321,10 +321,10 @@ export function setProperties(properties: Properties): void {
  */
 export function withProperties<T>(
   properties: Properties,
-  callback: () => T
+  callback: () => T,
 ): T {
   const propertiesBackup = Object.fromEntries(
-    Object.entries(properties).map(([prop]) => [prop, get(prop)])
+    Object.entries(properties).map(([prop]) => [prop, get(prop)]),
   ) as Properties;
   setProperties(properties);
   try {
@@ -345,7 +345,7 @@ export function withProperties<T>(
 export function withProperty<P extends KnownProperty, T>(
   property: P,
   value: unknown,
-  callback: () => T
+  callback: () => T,
 ): T {
   return withProperties({ [property]: value }, callback);
 }
@@ -359,13 +359,13 @@ export function withProperty<P extends KnownProperty, T>(
  */
 export function withChoices<T>(
   choices: { [choice: number]: number | string },
-  callback: () => T
+  callback: () => T,
 ): T {
   const properties = Object.fromEntries(
     Object.entries(choices).map(([choice, option]) => [
       `choiceAdventure${choice}` as NumericOrStringProperty,
       option,
-    ])
+    ]),
   );
   return withProperties(properties, callback);
 }
@@ -381,7 +381,7 @@ export function withChoices<T>(
 export function withChoice<T>(
   choice: number,
   value: number | string,
-  callback: () => T
+  callback: () => T,
 ): T {
   return withChoices({ [choice]: value }, callback);
 }
@@ -401,11 +401,11 @@ export class PropertiesManager {
    */
   set(propertiesToSet: Properties): void {
     for (const [propertyName, propertyValue] of Object.entries(
-      propertiesToSet
+      propertiesToSet,
     )) {
       if (!(propertyName in this.properties)) {
         this.properties[propertyName as KnownProperty] = propertyExists(
-          propertyName
+          propertyName,
         )
           ? get(propertyName)
           : PropertiesManager.EMPTY_PREFERENCE;
@@ -425,8 +425,8 @@ export class PropertiesManager {
         Object.entries(choicesToSet).map(([choiceNumber, choiceValue]) => [
           `choiceAdventure${choiceNumber}`,
           choiceValue,
-        ])
-      ) as Properties
+        ]),
+      ) as Properties,
     );
   }
 

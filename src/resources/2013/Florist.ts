@@ -24,7 +24,7 @@ class Flower {
     id: number,
     environment: EnvironmentType,
     modifier: Modifiers | SpecialFlowerAbility,
-    territorial = false
+    territorial = false,
   ) {
     this.name = name;
     this.id = id;
@@ -38,13 +38,13 @@ class Flower {
   }
 
   static plantNamesInZone(
-    location = get("lastAdventure") ?? $location.none
+    location = get("lastAdventure") ?? $location.none,
   ): string[] {
     return getFloristPlants()[location.toString()] ?? [];
   }
 
   static plantsInZone(
-    location = get("lastAdventure") ?? $location.none
+    location = get("lastAdventure") ?? $location.none,
   ): Flower[] {
     return this.plantNamesInZone(location)
       .map((flowerName) => toFlower(flowerName))
@@ -52,7 +52,7 @@ class Flower {
   }
 
   static modifiersInZone(
-    location = get("lastAdventure") ?? $location.none
+    location = get("lastAdventure") ?? $location.none,
   ): Modifiers {
     const plants = this.plantsInZone(location);
     if (!plants) return {};
@@ -130,7 +130,7 @@ export function flowersIn(location: Location): Flower[] {
  * @returns an array of the Flowers we can plant in that location
  */
 export function flowersAvailableFor(
-  location = get("lastAdventure") ?? $location.none
+  location = get("lastAdventure") ?? $location.none,
 ): Flower[] {
   return all.filter((flower) => flower.available(location));
 }
@@ -140,7 +140,7 @@ export function flowersAvailableFor(
  * @returns `true` if the location has 3 flowers in it; `false` otherwise
  */
 export function isFull(
-  location = get("lastAdventure") ?? $location.none
+  location = get("lastAdventure") ?? $location.none,
 ): boolean {
   return flowersIn(location).length === 3;
 }
@@ -152,7 +152,7 @@ export const RabidDogwood = new Flower(
   {
     "Monster Level": 30,
   },
-  true
+  true,
 );
 export const Rutabeggar = new Flower(
   "Rutabeggar",
@@ -161,20 +161,20 @@ export const Rutabeggar = new Flower(
   {
     "Item Drop": 25,
   },
-  true
+  true,
 );
 export const RadishRadish = new Flower(
   "Rad-ish Radish",
   3,
   "outdoor",
   { "Moxie Experience": 5 },
-  true
+  true,
 );
 export const Artichoker = new Flower(
   "Artichoker",
   4,
   "outdoor",
-  "Delevels Enemy"
+  "Delevels Enemy",
 );
 export const SmokeRa = new Flower("Smoke-ra", 5, "outdoor", "Blocks Attacks");
 export const SkunkCabbage = new Flower("Skunk Cabbage", 6, "outdoor", {
@@ -194,28 +194,28 @@ export const SeltzerWatercress = new Flower(
   "Seltzer Watercress",
   10,
   "outdoor",
-  { "MP Regen Min": 5, "MP Regen Max": 15 }
+  { "MP Regen Min": 5, "MP Regen Max": 15 },
 );
 export const WarLily = new Flower(
   "War Lily",
   11,
   "indoor",
   { "Monster Level": 30 },
-  true
+  true,
 );
 export const StealingMagnolia = new Flower(
   "Stealing Magnolia",
   12,
   "indoor",
   { "Item Drop": 25 },
-  true
+  true,
 );
 export const CannedSpinach = new Flower(
   "Canned Spinach",
   13,
   "indoor",
   { "Muscle Experience": 5 },
-  true
+  true,
 );
 export const Impatiens = new Flower("Impatiens", 14, "indoor", {
   Initiative: 25,
@@ -241,21 +241,21 @@ export const BlusteryPuffball = new Flower(
   21,
   "underground",
   { "Monster Level": 30 },
-  true
+  true,
 );
 export const HornOfPlenty = new Flower(
   "Horn of Plenty",
   22,
   "underground",
   { "Item Drop": 25 },
-  true
+  true,
 );
 export const WizardsWig = new Flower(
   "Wizard's Wig",
   23,
   "underground",
   { "Mysticality Experience": 5 },
-  true
+  true,
 );
 export const ShuffleTruffle = new Flower("Shuffle Truffle", 24, "underground", {
   Initiative: 25,
@@ -264,7 +264,7 @@ export const DisLichen = new Flower(
   "Dis Lichen",
   25,
   "underground",
-  "Delevels Enemy"
+  "Delevels Enemy",
 );
 export const LooseMorels = new Flower("Loose Morels", 26, "underground", {
   "Sleaze Damage": 12.5,
@@ -288,33 +288,33 @@ export const Spankton = new Flower(
   31,
   "underwater",
   "Delevels Enemy",
-  true
+  true,
 );
 export const Kelptomaniac = new Flower(
   "Kelptomaniac",
   32,
   "underwater",
   { "Item Drop": 40 },
-  true
+  true,
 );
 export const Crookweed = new Flower(
   "Crookweed",
   33,
   "underwater",
   { "Meat Drop": 60 },
-  true
+  true,
 );
 export const ElectricEelgrass = new Flower(
   "Electric Eelgrass",
   34,
   "underwater",
-  "Blocks Attacks"
+  "Blocks Attacks",
 );
 export const Duckweed = new Flower(
   "Duckweed",
   35,
   "underwater",
-  "Blocks Attacks"
+  "Blocks Attacks",
 );
 export const OrcaOrchid = new Flower("Orca Orchid", 36, "underwater", {
   "Weapon Damage": 12.5,

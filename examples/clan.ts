@@ -12,15 +12,15 @@ Clan.with("The Hogs of Exploitery", () => {
 });
 
 printHtml(
-  `<b>1. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`
+  `<b>1. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`,
 );
 
 Clan.withStash("The Hogs of Exploitery", [$item`toast`], () => {
   printHtml(
-    `<b>2. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`
+    `<b>2. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`,
   );
 });
 
 printHtml(
-  `<b>3. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`
+  `<b>3. In ${getClanName()} with my ${itemAmount($item`toast`)} toast</b>`,
 );

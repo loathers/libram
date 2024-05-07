@@ -84,7 +84,7 @@ export const cards = Object.freeze([
   "Unstable Portal",
 ] as const);
 
-export type Card = typeof cards[number];
+export type Card = (typeof cards)[number];
 
 /**
  * @returns The number of cards we've drawn so far today--remember, cheating counts as 5

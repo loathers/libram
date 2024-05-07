@@ -43,7 +43,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
   processModifier(
     modifierType: keyof ModifiersVisitor["modifiers"],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    list: any
+    list: any,
   ) {
     const modifierDefinition = list.children.variableInitializer;
     const name = modifierDefinition[0].children.expression?.[0].children;
@@ -71,7 +71,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
   processModifiers(
     modifierType: keyof ModifiersVisitor["modifiers"],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    list: any
+    list: any,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     list.children.variableInitializer.forEach((v: any) => {
@@ -90,7 +90,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
         .Identifier[0].image;
 
     const modifierType = Object.keys(this.modifiers).find(
-      (m) => name === `${m}Modifiers`
+      (m) => name === `${m}Modifiers`,
     ) as keyof ModifiersVisitor["modifiers"] | undefined;
 
     if (modifierType) {
@@ -118,10 +118,10 @@ async function main() {
     const typeName = type === "double" ? "numeric" : type;
     console.log(`Storing ${values.length} props of type ${typeName}`);
     contents += `export const ${typeName}Modifiers = ${JSON.stringify(
-      values
+      values,
     )} as const;\n`;
     contents += `export type ${tc(
-      typeName
+      typeName,
     )}Modifier = typeof ${typeName}Modifiers[number];\n`;
   });
 

@@ -57,7 +57,7 @@ function getScriptName(): string {
 export function sinceKolmafiaRevision(revision: number): void {
   if (!Number.isInteger(revision)) {
     throw new TypeError(
-      `Invalid revision number ${revision} (must be an integer)`
+      `Invalid revision number ${revision} (must be an integer)`,
     );
   }
 
@@ -65,7 +65,7 @@ export function sinceKolmafiaRevision(revision: number): void {
   const currentRevision = getRevision();
   if (currentRevision > 0 && currentRevision < revision) {
     throw new KolmafiaVersionError(
-      `${getScriptName()} requires revision r${revision} of kolmafia or higher (current: ${getRevision()}). Up-to-date builds can be found at https://ci.kolmafia.us/.`
+      `${getScriptName()} requires revision r${revision} of kolmafia or higher (current: ${getRevision()}). Up-to-date builds can be found at https://ci.kolmafia.us/.`,
     );
   }
 }
@@ -93,7 +93,7 @@ export function sinceKolmafiaRevision(revision: number): void {
  */
 export function sinceKolmafiaVersion(
   majorVersion: number,
-  minorVersion: number
+  minorVersion: number,
 ): void {
   if (getRevision() >= 25720) {
     return;
@@ -101,18 +101,18 @@ export function sinceKolmafiaVersion(
 
   if (!Number.isInteger(majorVersion)) {
     throw new TypeError(
-      `Invalid major version number ${majorVersion} (must be an integer)`
+      `Invalid major version number ${majorVersion} (must be an integer)`,
     );
   }
   if (!Number.isInteger(minorVersion)) {
     throw new TypeError(
-      `Invalid minor version number ${minorVersion} (must be an integer)`
+      `Invalid minor version number ${minorVersion} (must be an integer)`,
     );
   }
 
   if (majorVersion > 21 || (majorVersion === 20 && minorVersion > 9)) {
     throw new Error(
-      `There were no versions released after 21.09. This command will always fail`
+      `There were no versions released after 21.09. This command will always fail`,
     );
   }
 
@@ -121,7 +121,7 @@ export function sinceKolmafiaVersion(
   if (!versionStrMatch) {
     // This is not something the user should handle
     throw new Error(
-      `Unexpected KoLmafia version string: "${versionStr}". You may need to update the script.`
+      `Unexpected KoLmafia version string: "${versionStr}". You may need to update the script.`,
     );
   }
 
@@ -134,7 +134,7 @@ export function sinceKolmafiaVersion(
     (currentMajorVersion === majorVersion && currentMinorVersion < minorVersion)
   ) {
     throw new KolmafiaVersionError(
-      `${getScriptName()} requires version ${majorVersion}.${minorVersion} of kolmafia or higher (current: ${currentMajorVersion}.${currentMinorVersion}). Up-to-date builds can be found at https://ci.kolmafia.us/.`
+      `${getScriptName()} requires version ${majorVersion}.${minorVersion} of kolmafia or higher (current: ${currentMajorVersion}.${currentMinorVersion}). Up-to-date builds can be found at https://ci.kolmafia.us/.`,
     );
   }
 }

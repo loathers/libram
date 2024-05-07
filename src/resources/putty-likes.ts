@@ -40,7 +40,7 @@ export const RainDohBlackBox = new Copier(
   null,
   () => couldUseRainDohBlackBox(),
   () => getRainDohBlackBoxMonster(),
-  () => useRainDohBlackBox()
+  () => useRainDohBlackBox(),
 );
 
 /**
@@ -61,5 +61,5 @@ export const SpookyPuttySheet = new Copier(
   () => prepareSpookyPuttySheet(),
   () => couldUseSpookyPuttySheet(),
   () => getSpookyPuttySheetMonster(),
-  () => useSpookyPuttySheet()
+  () => useSpookyPuttySheet(),
 );

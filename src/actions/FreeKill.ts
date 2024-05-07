@@ -23,7 +23,7 @@ const freeKillSources: ActionSource[] = [
     Macro.skill($skill`Gingerbread Mob Hit`),
     {
       preparation: () => restoreMp(30),
-    }
+    },
   ),
 
   new ActionSource(
@@ -33,7 +33,7 @@ const freeKillSources: ActionSource[] = [
     Macro.skill($skill`Shattering Punch`),
     {
       preparation: () => restoreMp(30),
-    }
+    },
   ),
 
   new ActionSource(
@@ -42,7 +42,7 @@ const freeKillSources: ActionSource[] = [
       have($item`replica bat-oomerang`)
         ? 3 - get("_usedReplicaBatoomerang")
         : 0,
-    Macro.item($item`replica bat-oomerang`)
+    Macro.item($item`replica bat-oomerang`),
   ),
 
   new ActionSource(
@@ -59,7 +59,7 @@ const freeKillSources: ActionSource[] = [
         new Requirement([], {
           forceEquip: $items`The Jokester's gun`,
         }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -71,7 +71,7 @@ const freeKillSources: ActionSource[] = [
         new Requirement([], {
           forceEquip: $items`Lil' Doctor™ bag`,
         }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -80,14 +80,14 @@ const freeKillSources: ActionSource[] = [
     Macro.skill($skill`Asdon Martin: Missile Launcher`),
     {
       preparation: () => AsdonMartin.fillTo(100),
-    }
+    },
   ),
 
   // Heavy Rains
   new ActionSource(
     $skill`Lightning Strike`,
     () => (have($skill`Lightning Strike`) ? Math.floor(myLightning() / 20) : 0),
-    Macro.skill($skill`Lightning Strike`)
+    Macro.skill($skill`Lightning Strike`),
   ),
 
   // Expensive limited sources
@@ -98,7 +98,7 @@ const freeKillSources: ActionSource[] = [
     {
       preparation: () => retrieveItem($item`powdered madness`),
       cost: () => ActionSource.defaultPriceFunction($item`powdered madness`),
-    }
+    },
   ),
 
   new ActionSource(
@@ -109,7 +109,7 @@ const freeKillSources: ActionSource[] = [
       familiar: () => $familiar`Puck Man`,
       preparation: () => retrieveItem($item`power pill`),
       cost: () => ActionSource.defaultPriceFunction($item`power pill`),
-    }
+    },
   ),
 
   new ActionSource(
@@ -120,7 +120,7 @@ const freeKillSources: ActionSource[] = [
       familiar: () => $familiar`Ms. Puck Man`,
       preparation: () => retrieveItem($item`power pill`),
       cost: () => ActionSource.defaultPriceFunction($item`power pill`),
-    }
+    },
   ),
 
   // Expensive unlimited sources
@@ -139,7 +139,7 @@ const freeKillSources: ActionSource[] = [
         return get("shockingLickCharges") > 0;
       },
       cost: () => ActionSource.defaultPriceFunction($item`battery (AAA)`) * 4,
-    }
+    },
   ),
 
   ...$items`Daily Affirmation: Think Win-Lose, superduperheated metal`.map(
@@ -147,7 +147,7 @@ const freeKillSources: ActionSource[] = [
       new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => ActionSource.defaultPriceFunction(item),
-      })
+      }),
   ),
 ];
 
@@ -158,7 +158,7 @@ const freeKillSources: ActionSource[] = [
  * @returns Free kill source satisfying constraints, or null.
  */
 export function tryFindFreeKill(
-  constraints?: FindActionSourceConstraints
+  constraints?: FindActionSourceConstraints,
 ): ActionSource | null {
   return findActionSource(freeKillSources, constraints);
 }
@@ -171,7 +171,7 @@ export function tryFindFreeKill(
  * @returns Free kill source satisfying constraints.
  */
 export function ensureFreeKill(
-  constraints?: FindActionSourceConstraints
+  constraints?: FindActionSourceConstraints,
 ): ActionSource {
   const source = tryFindFreeKill(constraints);
 

@@ -22,6 +22,7 @@ import { arrayContains, tc } from "./utils";
 export enum Lifestyle {
   casual = 1,
   softcore = 2,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   normal = 2,
   hardcore = 3,
 }
@@ -44,8 +45,8 @@ export function permedSkills(): Map<Skill, Lifestyle> {
       ([skillName, isHardcore]) => [
         toSkill(skillName),
         isHardcore ? Lifestyle.hardcore : Lifestyle.softcore,
-      ]
-    )
+      ],
+    ),
   );
 }
 
@@ -62,7 +63,7 @@ const gardens = [
   "packet of mushroom spores",
   "packet of rock seeds",
 ] as const;
-type Garden = typeof gardens[number];
+type Garden = (typeof gardens)[number];
 
 const eudorae = [
   "My Own Pen Pal kit",
@@ -71,7 +72,7 @@ const eudorae = [
   "New-You Club Membership Form",
   "Our Daily Candles™ order form",
 ] as const;
-type Eudora = typeof eudorae[number];
+type Eudora = (typeof eudorae)[number];
 
 const isGarden = (x: string) => arrayContains(x, gardens);
 const isEudora = (x: string) => arrayContains(x, eudorae);
@@ -85,23 +86,23 @@ export class AscensionPrepError extends Error {
   constructor(cause: string, original?: MafiaClass | string) {
     if (isGarden(cause)) {
       super(
-        `Unable to swap garden to ${cause}; garden is currently ${original}.`
+        `Unable to swap garden to ${cause}; garden is currently ${original}.`,
       );
     } else if (isEudora(cause)) {
       super(
-        `Unable to swap eudora to ${cause}; eudora is currently ${original}.`
+        `Unable to swap eudora to ${cause}; eudora is currently ${original}.`,
       );
     } else if (isDesk(cause)) {
       super(
-        `Unable to swap chateau desk to ${cause}; desk is currently ${original}.`
+        `Unable to swap chateau desk to ${cause}; desk is currently ${original}.`,
       );
     } else if (isNightstand(cause)) {
       super(
-        `Unable to swap chateau nightstand to ${cause}; nightstand is currently ${original}.`
+        `Unable to swap chateau nightstand to ${cause}; nightstand is currently ${original}.`,
       );
     } else if (isCeiling(cause)) {
       super(
-        `Unable to swap chateau ceiling to ${cause}; ceiling is currently ${original}.`
+        `Unable to swap chateau ceiling to ${cause}; ceiling is currently ${original}.`,
       );
     } else super(cause);
     this.cause = cause;
@@ -178,7 +179,7 @@ function isInValhalla(): boolean {
   // At time of writing, the full img tag used is:
   // <img src="https://d2uyhvukfffg5a.cloudfront.net/otherimages/inf_small.gif">
   const matches = charPaneText.match(
-    /<img src="[^"]*\/otherimages\/inf_\w+\.gif">/
+    /<img src="[^"]*\/otherimages\/inf_\w+\.gif">/,
   );
   return matches !== null;
 }
@@ -217,7 +218,7 @@ export function ascend(options: {
     pet: $item`none`,
   };
   const prunedOptions = Object.fromEntries(
-    Object.entries(options).filter(([, value]) => value)
+    Object.entries(options).filter(([, value]) => value),
   ) as typeof options;
   const {
     path,
@@ -240,7 +241,7 @@ export function ascend(options: {
 
   if (
     !$items`none, astral six-pack, astral hot dog dinner, [10882]carton of astral energy drinks`.includes(
-      consumable
+      consumable,
     )
   ) {
     throw new AscendError(`Invalid astral consumable: ${consumable}`);
@@ -248,31 +249,31 @@ export function ascend(options: {
 
   if (
     !$items`none, astral bludgeon, astral shield, astral chapeau, astral bracer, astral longbow, astral shorts, astral mace, astral trousers, astral ring, astral statuette, astral pistol, astral mask, astral pet sweater, astral shirt, astral belt`.includes(
-      pet
+      pet,
     )
   ) {
     throw new AscendError(`Invalid astral pet: ${pet}`);
   }
 
   const unownedSkills = [...(permOptions?.permSkills.keys() ?? [])].filter(
-    (skill) => !haveSkill(skill)
+    (skill) => !haveSkill(skill),
   );
   if (unownedSkills.length) {
     throw new AscendError(
       `You're trying to perm the following skills, but don't actually have them: ${unownedSkills.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
   const unpermableSkills = [...(permOptions?.permSkills.keys() ?? [])].filter(
-    (skill) => !skill.permable
+    (skill) => !skill.permable,
   );
   if (unpermableSkills.length) {
     throw new AscendError(
       `You're trying to perm the following skills, but they're unpermable: ${unownedSkills.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
@@ -281,7 +282,7 @@ export function ascend(options: {
   }
   if (!isInValhalla()) {
     throw new AscendError(
-      "Failed to ascend--do you have a pending trade offer?"
+      "Failed to ascend--do you have a pending trade offer?",
     );
   }
 
@@ -308,7 +309,7 @@ export function ascend(options: {
         if (karma < expectedKarma) {
           if (!permOptions.neverAbort)
             throw new AscendError(
-              `Skill ${skill} is too karmaically expensive!`
+              `Skill ${skill} is too karmaically expensive!`,
             );
           continue;
         }
@@ -322,7 +323,7 @@ export function ascend(options: {
 
   visitUrl(
     `afterlife.php?action=ascend&confirmascend=1&whichsign=${moonId}&gender=${kolGender}&whichclass=${playerClass.id}&whichpath=${path.id}&asctype=${lifestyle}&nopetok=1&noskillsok=1&lamepathok=1&lamesignok=1&pwd`,
-    true
+    true,
   );
 }
 
@@ -356,9 +357,8 @@ export function prepareAscension({
   throwOnFail = throwOnFail ?? true;
   if (garden && !Object.getOwnPropertyNames(getCampground()).includes(garden)) {
     use(Item.get(garden));
-    const gardenName = Object.getOwnPropertyNames(getCampground()).find(
-      isGarden
-    );
+    const gardenName =
+      Object.getOwnPropertyNames(getCampground()).find(isGarden);
     if (gardenName !== garden && throwOnFail) {
       throw new AscensionPrepError(garden, gardenName);
     }
@@ -369,17 +369,17 @@ export function prepareAscension({
     if (
       !xpath(
         visitUrl("account.php?tab=correspondence"),
-        `//select[@name="whichpenpal"]/option/@value`
+        `//select[@name="whichpenpal"]/option/@value`,
       ).includes(eudoraNumber.toString()) &&
       throwOnFail
     ) {
       throw new AscensionPrepError(
-        `Unable to swap eudora to ${eudora} because you are not subscribed to it.`
+        `Unable to swap eudora to ${eudora} because you are not subscribed to it.`,
       );
     } else {
       visitUrl(
         `account.php?actions[]=whichpenpal&whichpenpal=${eudoraNumber}&action=Update`,
-        true
+        true,
       );
     }
 
@@ -394,7 +394,7 @@ export function prepareAscension({
       if (!ChateauMantegna.changeCeiling(ceiling) && throwOnFail) {
         throw new AscensionPrepError(
           ceiling,
-          ChateauMantegna.getCeiling() ?? "unknown"
+          ChateauMantegna.getCeiling() ?? "unknown",
         );
       }
     }
@@ -403,7 +403,7 @@ export function prepareAscension({
       if (!ChateauMantegna.changeDesk(desk) && throwOnFail) {
         throw new AscensionPrepError(
           desk,
-          ChateauMantegna.getDesk() ?? "unknown"
+          ChateauMantegna.getDesk() ?? "unknown",
         );
       }
     }
@@ -412,7 +412,7 @@ export function prepareAscension({
       if (!ChateauMantegna.changeNightstand(nightstand) && throwOnFail) {
         throw new AscensionPrepError(
           nightstand,
-          ChateauMantegna.getNightstand() ?? "unknown"
+          ChateauMantegna.getNightstand() ?? "unknown",
         );
       }
     }

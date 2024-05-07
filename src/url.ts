@@ -23,7 +23,7 @@ type Options = {
 export function fetchUrl(
   path: string,
   query: Query = [],
-  options: Options = {}
+  options: Options = {},
 ): string {
   const { method = "POST" } = options;
 

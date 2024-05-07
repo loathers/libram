@@ -13,14 +13,16 @@ import {
   FindActionSourceConstraints,
 } from "./ActionSource";
 
-const everythingLooksGreen = () =>
-  have($effect`Everything Looks Green`) ? 0 : 1;
+const everythingLooksGreen =
+  (otherClause = () => true) =>
+  () =>
+    otherClause() && have($effect`Everything Looks Green`) ? 0 : 1;
 
 const freeRunSources: ActionSource[] = [
   // Free unlimited source
   new ActionSource(
     $item`spring shoes`,
-    everythingLooksGreen,
+    everythingLooksGreen(() => have($item`spring shoes`)),
     Macro.skill($skill`Spring Away`),
     {
       equipmentRequirements: () =>
@@ -100,7 +102,7 @@ const freeRunSources: ActionSource[] = [
   // unlimited items that trigger everything looks green
   ...$items`green smoke bomb, tattered scrap of paper, GOTO, T.U.R.D.S. Key`.map(
     (item) =>
-      new ActionSource(item, everythingLooksGreen, Macro.item(item), {
+      new ActionSource(item, everythingLooksGreen(), Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => ActionSource.defaultPriceFunction(item),
       })

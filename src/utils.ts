@@ -109,7 +109,7 @@ export function countedMapToString<T>(map: Map<T, number>): string {
 export function sum<
   S extends string | number | symbol,
   T extends { [s in S]: number },
->(addends: T[], property: S): number;
+>(addends: readonly T[], property: S): number;
 /**
  * Sum an array of numbers.
  *
@@ -118,7 +118,7 @@ export function sum<
  * @returns Sum of numbers
  */
 export function sum<T>(
-  addends: T[],
+  addends: readonly T[],
   mappingFunction: (element: T) => number,
 ): number;
 /**
@@ -131,7 +131,7 @@ export function sum<T>(
 export function sum<
   S extends string | number | symbol,
   T extends { [s in S]: number },
->(addends: T[], x: ((element: T) => number) | S): number {
+>(addends: readonly T[], x: ((element: T) => number) | S): number {
   return addends.reduce(
     (subtotal, element) =>
       subtotal + (typeof x === "function" ? x(element) : element[x]),

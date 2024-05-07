@@ -88,7 +88,7 @@ export const RESONANCES = Object.freeze({
   "yam1 meat eyepatch yam4": $item`yamtility belt`,
   "chair yam2 yam3 clock": $effect`Caught Yam-Handed`,
   "yam1 yam2 cheese clock": $effect`Memories of Cheesier Age`,
-} as const);
+});
 
 /**
  * Find the combination needed to get a particular resonance

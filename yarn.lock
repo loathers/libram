@@ -3816,13 +3816,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.4.5":
-  version: 0.4.5
-  resolution: "eslint-plugin-libram@npm:0.4.5"
+"eslint-plugin-libram@npm:^0.4.7":
+  version: 0.4.7
+  resolution: "eslint-plugin-libram@npm:0.4.7"
   dependencies:
     html-entities: "npm:^2.4.0"
     requireindex: "npm:~1.2.0"
-  checksum: 10c0/99b9072ec1e931846b9cd09b844befbe83a3d74af4b733bc8e1aedb9598f34d0dac85361a232dc22c057cdd2c8670140b2bb0cf23adbbe2614edd5e17457d77f
+  checksum: 10c0/596fb704328006ed57a5097430b8717c8b4ed6e8c9f12b9a628d52b93d909c1fcf66c45c642a725cee1863d54a0dbf43520ae02a677dbf6a4d15da8eb67524d2
   languageName: node
   linkType: hard
 
@@ -5475,7 +5475,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.25.4"
     eslint-plugin-jest: "npm:^25.2.3"
     eslint-plugin-jsdoc: "npm:^46.5.0"
-    eslint-plugin-libram: "npm:^0.4.5"
+    eslint-plugin-libram: "npm:^0.4.7"
     html-entities: "npm:^2.4.0"
     husky: "npm:^4.3.6"
     java-parser: "npm:^1.4.0"

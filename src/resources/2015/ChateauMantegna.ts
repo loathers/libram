@@ -50,9 +50,9 @@ export const nightstands = [
   "electric muscle stimulator",
 ] as const;
 
-export type Desk = typeof desks[number];
-export type Ceiling = typeof ceilings[number];
-export type Nightstand = typeof nightstands[number];
+export type Desk = (typeof desks)[number];
+export type Ceiling = (typeof ceilings)[number];
+export type Nightstand = (typeof nightstands)[number];
 
 /**
  * @returns The currently installed desk in your chateau; `null` for none
@@ -77,7 +77,7 @@ export function getCeiling(): Ceiling | null {
 export function getNightstand(): Nightstand | null {
   return (
     nightstands.find((nightstand) =>
-      Object.keys(getChateau()).includes(nightstand)
+      Object.keys(getChateau()).includes(nightstand),
     ) ?? null
   );
 }

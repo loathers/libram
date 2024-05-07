@@ -73,7 +73,7 @@ export function haveTeaPartyHat(effect: Effect): boolean {
   }
   return (
     Item.all().find(
-      (item) => validTeaPartyHat(item, characters) && have(item)
+      (item) => validTeaPartyHat(item, characters) && have(item),
     ) !== undefined
   );
 }

@@ -15,21 +15,21 @@ const defaultHandlers = {
   },
   [LogLevels.WARNING]: (message: string): unknown => {
     printHtml(
-      `<span style="background: orange; color: white;"><b>[Libram Warning]</b> ${message}</span>`
+      `<span style="background: orange; color: white;"><b>[Libram Warning]</b> ${message}</span>`,
     );
     logprint(`[Libram] ${message}`);
     return;
   },
   [LogLevels.ERROR]: (error: string | Error): unknown => {
     printHtml(
-      `<span style="background: red; color: white;"><b>[Libram Error]</b> ${error.toString()}</span>`
+      `<span style="background: red; color: white;"><b>[Libram Error]</b> ${error.toString()}</span>`,
     );
     logprint(`[Libram] ${error}`);
     return;
   },
   [LogLevels.DEBUG]: (message: string): unknown => {
     printHtml(
-      `<span style="background: red; color: white;"><b>[Libram Debug]</b> ${message}</span>`
+      `<span style="background: red; color: white;"><b>[Libram Debug]</b> ${message}</span>`,
     );
     logprint(`[Libram] ${message}`);
     return;
@@ -37,7 +37,7 @@ const defaultHandlers = {
 };
 
 type LogLevel = keyof typeof defaultHandlers;
-type LogFunction<T extends LogLevel> = typeof defaultHandlers[T];
+type LogFunction<T extends LogLevel> = (typeof defaultHandlers)[T];
 
 class Logger {
   handlers = defaultHandlers;

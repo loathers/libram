@@ -45,5 +45,5 @@ export const UnfinishedIceSculpture = new Copier(
   () => couldUseUnfinishedIceSculpture(),
   null,
   () => couldUseUnfinishedIceSculpture(),
-  () => getUnfinishedIceSculptureMonster()
+  () => getUnfinishedIceSculptureMonster(),
 );

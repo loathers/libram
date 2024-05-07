@@ -61,7 +61,7 @@ class QuestData {
     questProgressLimit: number,
     canUseWanderers: boolean,
     requiredItem: Item,
-    questLocation: Location
+    questLocation: Location,
   ) {
     this.name = name;
     this.priority = priority;
@@ -94,7 +94,7 @@ export const quests = [
     0,
     false,
     $item`lube-shoes`,
-    $location`Barf Mountain`
+    $location`Barf Mountain`,
   ),
   new QuestData(
     "fuel",
@@ -106,7 +106,7 @@ export const quests = [
     0,
     false,
     $item`none`,
-    $location`The Toxic Teacups`
+    $location`The Toxic Teacups`,
   ),
   new QuestData(
     "sexism",
@@ -118,7 +118,7 @@ export const quests = [
     15,
     true,
     $item`none`,
-    $location`Pirates of the Garbage Barges`
+    $location`Pirates of the Garbage Barges`,
   ),
   new QuestData(
     "racism",
@@ -130,7 +130,7 @@ export const quests = [
     15,
     true,
     $item`none`,
-    $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
+    $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`,
   ),
   new QuestData(
     "fun",
@@ -142,7 +142,7 @@ export const quests = [
     15,
     true,
     $item`Dinsey mascot mask`,
-    $location`The Toxic Teacups`
+    $location`The Toxic Teacups`,
   ),
   new QuestData(
     "trash",
@@ -154,7 +154,7 @@ export const quests = [
     0,
     true,
     $item`trash net`,
-    $location`Pirates of the Garbage Barges`
+    $location`Pirates of the Garbage Barges`,
   ),
   new QuestData(
     "bear",
@@ -166,7 +166,7 @@ export const quests = [
     8,
     false,
     $item`none`,
-    $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`
+    $location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`,
   ),
   new QuestData(
     "food",
@@ -178,7 +178,7 @@ export const quests = [
     30,
     false,
     $item`none`,
-    $location`Barf Mountain`
+    $location`Barf Mountain`,
   ),
 ];
 
@@ -215,7 +215,7 @@ const BLANK_QUEST = new QuestData(
   -1,
   false,
   $item`none`,
-  $location`none`
+  $location`none`,
 );
 
 /**
@@ -324,7 +324,7 @@ export const keyCardsLocations = new Map<Item, Location>([
 export function canFightWartDinsey(): boolean {
   return (
     Array.from(keyCardsLocations.keys()).every((keycard) =>
-      haveItem(keycard)
+      haveItem(keycard),
     ) &&
     !foughtWartDinseyThisLife() &&
     getRemainingLiver() >= 0 &&

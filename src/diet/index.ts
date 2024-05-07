@@ -56,7 +56,7 @@ function isMonday() {
  */
 function expectedAdventures(
   item: Item,
-  modifiers: ConsumptionModifiers
+  modifiers: ConsumptionModifiers,
 ): number {
   if (item.adventures === "") return 0;
   const [min, recordedMax] = item.adventures
@@ -260,10 +260,10 @@ export class MenuItem<T> {
       (this.organ === "food"
         ? this.item.fullness
         : this.organ === "booze"
-        ? this.item.inebriety
-        : this.organ === "spleen item"
-        ? this.item.spleen
-        : 0);
+          ? this.item.inebriety
+          : this.organ === "spleen item"
+            ? this.item.spleen
+            : 0);
   }
 
   equals(other: MenuItem<T>): boolean {
@@ -283,7 +283,7 @@ export class MenuItem<T> {
 }
 
 const organs = ["food", "booze", "spleen item"] as const;
-type Organ = typeof organs[number];
+type Organ = (typeof organs)[number];
 type OrganSize = [Organ, number];
 
 /**
@@ -307,13 +307,13 @@ class DietPlanner<T> {
   constructor(mpa: number, menu: MenuItem<T>[]) {
     this.mpa = mpa;
     const fork = menu.find(
-      (item) => item.item === $item`Ol' Scratch's salad fork`
+      (item) => item.item === $item`Ol' Scratch's salad fork`,
     );
     if (fork) this.fork = fork;
     const mug = menu.find((item) => item.item === $item`Frosty's frosty mug`);
     if (mug) this.mug = mug;
     const seasoning = menu.find(
-      (item) => item.item === $item`Special Seasoning`
+      (item) => item.item === $item`Special Seasoning`,
     );
     if (seasoning) this.seasoning = seasoning;
     const whetStone = menu.find((item) => item.item === $item`whet stone`);
@@ -331,7 +331,7 @@ class DietPlanner<T> {
     if (
       menu.filter(
         (item) =>
-          historicalPrice(item.item) === 0 || historicalAge(item.item) >= 1
+          historicalPrice(item.item) === 0 || historicalAge(item.item) >= 1,
       ).length > 100
     ) {
       mallPrices("food");
@@ -339,14 +339,14 @@ class DietPlanner<T> {
     }
 
     const spleenItems = menu.filter(
-      (item) => itemType(item.item) === "spleen item"
+      (item) => itemType(item.item) === "spleen item",
     );
     spleenItems.sort(
       (x, y) =>
         -(
           this.consumptionValue(x) / x.item.spleen -
           this.consumptionValue(y) / y.item.spleen
-        )
+        ),
     );
     if (spleenItems.length > 0) {
       // Marginal value for sliders and jars depends on our best unlimited spleen item.
@@ -354,13 +354,13 @@ class DietPlanner<T> {
       const bestMarginalSpleenItem = spleenItems.find(
         (spleenItem) =>
           spleenItem.maximum === undefined ||
-          spleenItem.maximum * spleenItem.size >= spleenLimit() - mySpleenUse()
+          spleenItem.maximum * spleenItem.size >= spleenLimit() - mySpleenUse(),
       );
       if (bestMarginalSpleenItem) {
         this.spleenValue = Math.max(
           0,
           this.consumptionValue(bestMarginalSpleenItem) /
-            bestMarginalSpleenItem.size
+            bestMarginalSpleenItem.size,
         );
       }
     }
@@ -385,7 +385,7 @@ class DietPlanner<T> {
    */
   consumptionHelpersAndValue(
     menuItem: MenuItem<T>,
-    overrideModifiers: Partial<ConsumptionModifiers>
+    overrideModifiers: Partial<ConsumptionModifiers>,
   ): RawDietEntry<T> {
     const helpers = [];
     if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
@@ -440,8 +440,8 @@ class DietPlanner<T> {
       itemType(menuItem.item) === "food"
         ? this.fork
         : itemType(menuItem.item) === "booze"
-        ? this.mug
-        : null;
+          ? this.mug
+          : null;
     const forkMugPrice = forkMug ? forkMug.price() : Infinity;
 
     const baseCost = menuItem.price() + sum(helpers, (item) => item.price());
@@ -461,7 +461,7 @@ class DietPlanner<T> {
 
     const valueSpleen =
       $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-        menuItem.item
+        menuItem.item,
       )
         ? 5 * this.spleenValue
         : 0;
@@ -482,11 +482,11 @@ class DietPlanner<T> {
   planOrgan(
     organ: Organ,
     capacity: number,
-    overrideModifiers: Partial<ConsumptionModifiers> = {}
+    overrideModifiers: Partial<ConsumptionModifiers> = {},
   ): [number, RawDiet<T>] {
     const submenu = this.menu.filter(
       (menuItem) =>
-        menuItem.organ === organ && myLevel() >= menuItem.item.levelreq
+        menuItem.organ === organ && myLevel() >= menuItem.item.levelreq,
     );
     const knapsackValues = submenu.map(
       (menuItem) =>
@@ -494,7 +494,7 @@ class DietPlanner<T> {
           ...this.consumptionHelpersAndValue(menuItem, overrideModifiers),
           menuItem.size,
           menuItem.maximum,
-        ] as [MenuItem<T>[], number, number, number?]
+        ] as [MenuItem<T>[], number, number, number?],
     );
     return knapsack(knapsackValues, capacity);
   }
@@ -508,10 +508,10 @@ class DietPlanner<T> {
    */
   planOrgans(
     organCapacities: OrganSize[],
-    overrideModifiers: Partial<ConsumptionModifiers> = {}
+    overrideModifiers: Partial<ConsumptionModifiers> = {},
   ): [number, RawDiet<T>] {
     const valuePlans = organCapacities.map(([organ, capacity]) =>
-      this.planOrgan(organ, capacity, overrideModifiers)
+      this.planOrgan(organ, capacity, overrideModifiers),
     );
     return [
       sum(valuePlans, ([value]) => value),
@@ -531,7 +531,7 @@ class DietPlanner<T> {
   planOrgansWithTrials(
     organCapacities: OrganSize[],
     trialItems: [MenuItem<T>, OrganSize[]][],
-    overrideModifiers: Partial<ConsumptionModifiers>
+    overrideModifiers: Partial<ConsumptionModifiers>,
   ): [number, RawDiet<T>] {
     if (trialItems.length === 0) {
       return this.planOrgans(organCapacities, overrideModifiers);
@@ -542,7 +542,7 @@ class DietPlanner<T> {
       return this.planOrgansWithTrials(
         organCapacities,
         trialItems.slice(1),
-        overrideModifiers
+        overrideModifiers,
       );
     }
 
@@ -555,7 +555,7 @@ class DietPlanner<T> {
         return this.planOrgansWithTrials(
           organCapacities,
           trialItems.slice(1),
-          overrideModifiers
+          overrideModifiers,
         );
       }
 
@@ -576,7 +576,7 @@ class DietPlanner<T> {
     const [valueWithout, planWithout] = this.planOrgansWithTrials(
       organCapacities,
       trialItems.slice(1),
-      overrideModifiers
+      overrideModifiers,
     );
     const [valueWith, planWith] = this.planOrgansWithTrials(
       organCapacitiesWith,
@@ -585,12 +585,12 @@ class DietPlanner<T> {
         ...overrideModifiers,
         ...(isRefinedPalate ? { refinedPalate: true } : {}),
         ...(isGarish ? { garish: true } : {}),
-      }
+      },
     );
 
     const [helpersAndItem, value] = this.consumptionHelpersAndValue(
       trialItem,
-      {}
+      {},
     );
 
     return valueWithout > valueWith + value
@@ -668,7 +668,7 @@ function planDiet<T>(
     ["food", null],
     ["booze", null],
     ["spleen item", null],
-  ]
+  ],
 ): RawDiet<T> {
   // FIXME: Figure out a better way to handle overfull organs (e.g. coming out of Ed).
   const resolvedOrganCapacities = organCapacities.map(
@@ -679,11 +679,11 @@ function planDiet<T>(
           (organ === "food"
             ? fullnessLimit() - myFullness()
             : organ === "booze"
-            ? inebrietyLimit() - myInebriety()
-            : organ === "spleen item"
-            ? spleenLimit() - mySpleenUse()
-            : 0),
-      ] as [Organ, number]
+              ? inebrietyLimit() - myInebriety()
+              : organ === "spleen item"
+                ? spleenLimit() - mySpleenUse()
+                : 0),
+      ] as [Organ, number],
   );
 
   /**
@@ -697,7 +697,7 @@ function planDiet<T>(
         ([itemOrEffect]) =>
           menuItem.item === itemOrEffect ||
           (menuItem.item === $item`pocket wish` &&
-            menuItem.effect === itemOrEffect)
+            menuItem.effect === itemOrEffect),
       );
       if (interacting) {
         const [, organSizes] = interacting;
@@ -714,9 +714,9 @@ function planDiet<T>(
     menu.filter(
       (menuItem) =>
         !includedInteractingItems.some(
-          ([interacting]) => interacting === menuItem
-        )
-    )
+          ([interacting]) => interacting === menuItem,
+        ),
+    ),
   );
 
   /**
@@ -728,30 +728,30 @@ function planDiet<T>(
    */
   const [, planFoodBooze] = dietPlanner.planOrgansWithTrials(
     resolvedOrganCapacities.filter(
-      ([organ, capacity]) => ["food", "booze"].includes(organ) && capacity >= 0
+      ([organ, capacity]) => ["food", "booze"].includes(organ) && capacity >= 0,
     ),
     includedInteractingItems,
-    {}
+    {},
   );
 
   const spleenCapacity = resolvedOrganCapacities.find(
-    ([organ]) => organ === "spleen item"
+    ([organ]) => organ === "spleen item",
   );
   if (spleenCapacity) {
     // Count sliders and pickle juice, figure out how much extra spleen we got.
     const additionalSpleen = sum(planFoodBooze, ([items, number]) =>
       items.some((menuItem) =>
         $items`jar of fermented pickle juice, extra-greasy slider`.includes(
-          menuItem.item
-        )
+          menuItem.item,
+        ),
       )
         ? 5 * number
-        : 0
+        : 0,
     );
     const [, availableSpleen] = spleenCapacity;
     const [, planSpleen] = dietPlanner.planOrgan(
       "spleen item",
-      availableSpleen + additionalSpleen
+      availableSpleen + additionalSpleen,
     );
 
     return [...planFoodBooze, ...planSpleen];
@@ -762,7 +762,10 @@ function planDiet<T>(
 
 class DietEntry<T> {
   quantity: number;
-  constructor(readonly menuItems: MenuItem<T>[], quantity: number) {
+  menuItems: readonly MenuItem<T>[];
+
+  constructor(menuItems: MenuItem<T>[], quantity: number) {
+    this.menuItems = Object.freeze(menuItems);
     this.quantity = quantity;
   }
 
@@ -812,7 +815,7 @@ class DietEntry<T> {
   expectedValue(
     mpa: number,
     diet: Diet<T>,
-    method: "gross" | "net" = "gross"
+    method: "gross" | "net" = "gross",
   ): number {
     const gross =
       mpa * this.expectedAdventures(diet) +
@@ -850,8 +853,8 @@ export class Diet<T> {
         (trialItem) =>
           (trialItem.item === $item`pocket wish` &&
             trialItem.effect === $effect`Refined Palate`) ||
-          trialItem.item === $item`toasted brie`
-      )
+          trialItem.item === $item`toasted brie`,
+      ),
     );
   }
 
@@ -861,8 +864,8 @@ export class Diet<T> {
         (trialItem) =>
           (trialItem.item === $item`pocket wish` &&
             trialItem.effect === $effect`Gar-ish`) ||
-          trialItem.item === $item`potion of the field gar`
-      )
+          trialItem.item === $item`potion of the field gar`,
+      ),
     );
   }
 
@@ -884,7 +887,7 @@ export class Diet<T> {
 
   expectedValue(mpa: number, method: "gross" | "net" = "gross"): number {
     return sum(this.entries, (dietEntry) =>
-      dietEntry.expectedValue(mpa, this, method)
+      dietEntry.expectedValue(mpa, this, method),
     );
   }
 
@@ -911,7 +914,7 @@ export class Diet<T> {
       food: "auto",
       booze: "auto",
       spleen: "auto",
-    }
+    },
   ): Diet<T> {
     const { food, booze, spleen } = organCapacities;
     const plannerCapacity: [Organ, number | null][] = [];

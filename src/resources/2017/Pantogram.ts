@@ -184,7 +184,7 @@ export function makePants(
   element: PantogramElement,
   leftSac: PantogramSacrificeL,
   middleSac: PantogramSacrificeM,
-  rightSac: PantogramSacrificeR
+  rightSac: PantogramSacrificeR,
 ): boolean {
   if (haveItem(pants) || !haveItem(pantogram)) return false;
 
@@ -198,7 +198,7 @@ export function makePants(
 
   if (
     Array.from(requirements.entries()).some(
-      ([item, quantity]) => !haveItem(item, quantity)
+      ([item, quantity]) => !haveItem(item, quantity),
     )
   ) {
     return false;
@@ -226,6 +226,6 @@ export function makePantsFromObject(pants: Pants): boolean {
     pants.element,
     pants.leftSac,
     pants.middleSac,
-    pants.rightSac
+    pants.rightSac,
   );
 }

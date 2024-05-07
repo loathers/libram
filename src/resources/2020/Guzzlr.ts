@@ -255,7 +255,7 @@ export const ingredientToPlatinumCocktail = new Map<Item, Item>([
 ]);
 
 export const platinumCocktailToIngredient = invertMap(
-  ingredientToPlatinumCocktail
+  ingredientToPlatinumCocktail,
 );
 
 /**
@@ -270,11 +270,11 @@ export function getCheapestPlatinumCocktail(freeCraft = true): Item {
       Array.from(ingredientToPlatinumCocktail),
       (ingredientAndCocktail: [Item, Item]) =>
         Math.min(...ingredientAndCocktail.map((item) => mallPrice(item))),
-      true
+      true,
     )[1];
   } else {
     return maxBy(Array.from(ingredientToPlatinumCocktail), ([, cocktail]) =>
-      mallPrice(cocktail)
+      mallPrice(cocktail),
     )[1];
   }
 }

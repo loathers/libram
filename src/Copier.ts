@@ -12,7 +12,7 @@ export class Copier {
     prepare: (() => boolean) | null,
     canCopy: () => boolean,
     copiedMonster: () => Monster | null,
-    fightCopy?: () => boolean
+    fightCopy?: () => boolean,
   ) {
     this.couldCopy = couldCopy;
     this.prepare = prepare;

@@ -43,7 +43,7 @@ export const phylumItem = new Map<Phylum, Item>([
  * Map of drop item to phylum it drops from.
  */
 export const itemPhylum = new Map(
-  [...phylumItem].map(([phylum, item]) => [item, phylum])
+  [...phylumItem].map(([phylum, item]) => [item, phylum]),
 );
 
 /**

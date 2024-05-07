@@ -93,7 +93,7 @@ export function reminisce(
  */
 export function findMonster(
   criteria: (monster: Monster) => boolean,
-  value: (monster: Monster) => number = () => 1
+  value: (monster: Monster) => number = () => 1,
 ): Monster | null {
   if (!have() || reminiscesLeft() === 0) return null;
 

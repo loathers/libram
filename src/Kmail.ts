@@ -50,7 +50,7 @@ export default class Kmail {
   static inbox(count = 100): Kmail[] {
     return (
       JSON.parse(
-        visitUrl(`api.php?what=kmail&for=libram&count=${count}`)
+        visitUrl(`api.php?what=kmail&for=libram&count=${count}`),
       ) as RawKmail[]
     ).map(Kmail.parse);
   }
@@ -82,12 +82,12 @@ export default class Kmail {
       path: string;
       query: Query;
     },
-    successString: string
+    successString: string,
   ) {
     let m = meat;
 
     const sendableItems = [...arrayToCountedMap(items).entries()].filter(
-      ([item]) => isGiftable(item)
+      ([item]) => isGiftable(item),
     );
 
     let result = true;
@@ -141,7 +141,7 @@ export default class Kmail {
     to: string | number,
     message = "",
     items: Map<Item, number> | Item[] = [],
-    meat = 0
+    meat = 0,
   ): boolean {
     return Kmail._genericSend(
       to,
@@ -159,7 +159,7 @@ export default class Kmail {
           sendmeat: meat,
         },
       }),
-      ">Message sent.</"
+      ">Message sent.</",
     );
   }
 
@@ -181,7 +181,7 @@ export default class Kmail {
     message = "",
     items: Map<Item, number> | Item[] = [],
     meat = 0,
-    insideNote = ""
+    insideNote = "",
   ): boolean {
     return Kmail._genericSend(
       to,
@@ -202,7 +202,7 @@ export default class Kmail {
           sendmeat: meat,
         },
       }),
-      ">Package sent.</"
+      ">Package sent.</",
     );
   }
 
@@ -345,7 +345,7 @@ export default class Kmail {
   reply(
     message = "",
     items: Map<Item, number> | Item[] = [],
-    meat = 0
+    meat = 0,
   ): boolean {
     return Kmail.send(this.senderId, message, items, meat);
   }

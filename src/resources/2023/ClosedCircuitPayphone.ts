@@ -123,7 +123,7 @@ export function chooseQuest(
     entity: Monster;
     artifact: Item;
     items: Item;
-  }) => 1 | 2 | 3 | 4
+  }) => 1 | 2 | 3 | 4,
 ): boolean {
   if (get("questRufus") !== "unstarted") return false;
   if (!have()) return false;
@@ -134,7 +134,7 @@ export function chooseQuest(
         artifact: toItem(get("rufusDesiredArtifact")),
         entity: get("rufusDesiredEntity") ?? $monster.none,
         items: toItem(get("rufusDesiredItems")),
-      })
+      }),
     );
   });
 

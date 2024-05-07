@@ -32,7 +32,7 @@ export function have(): boolean {
 export function weapon(): Item | null {
   return (
     $items`scratch 'n' sniff sword, scratch 'n' sniff crossbow`.find((i) =>
-      availableAmount(i)
+      availableAmount(i),
     ) ?? null
   );
 }
@@ -75,7 +75,7 @@ export function currentStickers(): [Item, Item, Item] {
   return $slots`sticker1, sticker2, sticker3`.map((s) => equippedItem(s)) as [
     Item,
     Item,
-    Item
+    Item,
   ];
 }
 

@@ -9,7 +9,7 @@ const MoonSigns = [
   "Blender",
   "Packrat",
 ] as const;
-export type MoonSign = typeof MoonSigns[number];
+export type MoonSign = (typeof MoonSigns)[number];
 
 /**
  * @param moon Moon sign name

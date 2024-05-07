@@ -85,14 +85,14 @@ export function hasMeatified(): boolean {
  */
 export function fightsUntil(
   target: number,
-  bonusExperience = getModifier("Familiar Experience")
+  bonusExperience = getModifier("Familiar Experience"),
 ) {
   const diff = Math.pow(target, 2) - currentExperience();
 
   if (diff <= 0) return 0;
   return Math.ceil(
     diff /
-      (1 + bonusExperience + (have_($skill`Testudinal Teachings`) ? 1 / 6 : 0))
+      (1 + bonusExperience + (have_($skill`Testudinal Teachings`) ? 1 / 6 : 0)),
   );
 }
 

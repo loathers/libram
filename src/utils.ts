@@ -64,7 +64,7 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
  * @returns Map of distinct values to count
  */
 export function arrayToCountedMap<T>(
-  array: T[] | Map<T, number>
+  array: T[] | Map<T, number>,
 ): Map<T, number> {
   if (!Array.isArray(array)) return array;
 
@@ -85,7 +85,7 @@ export function arrayToCountedMap<T>(
  */
 export function countedMapToArray<T>(map: Map<T, number>): T[] {
   return ([] as T[]).concat(
-    ...[...map].map(([item, quantity]) => Array(quantity).fill(item))
+    ...[...map].map(([item, quantity]) => Array(quantity).fill(item)),
   );
 }
 
@@ -108,8 +108,8 @@ export function countedMapToString<T>(map: Map<T, number>): string {
  */
 export function sum<
   S extends string | number | symbol,
-  T extends { [s in S]: number }
->(addends: T[], property: S): number;
+  T extends { [s in S]: number },
+>(addends: readonly T[], property: S): number;
 /**
  * Sum an array of numbers.
  *
@@ -118,8 +118,8 @@ export function sum<
  * @returns Sum of numbers
  */
 export function sum<T>(
-  addends: T[],
-  mappingFunction: (element: T) => number
+  addends: readonly T[],
+  mappingFunction: (element: T) => number,
 ): number;
 /**
  * Sum an array of numbers.
@@ -130,12 +130,12 @@ export function sum<T>(
  */
 export function sum<
   S extends string | number | symbol,
-  T extends { [s in S]: number }
->(addends: T[], x: ((element: T) => number) | S): number {
+  T extends { [s in S]: number },
+>(addends: readonly T[], x: ((element: T) => number) | S): number {
   return addends.reduce(
     (subtotal, element) =>
       subtotal + (typeof x === "function" ? x(element) : element[x]),
-    0
+    0,
   );
 }
 
@@ -158,7 +158,7 @@ export function sumNumbers(addends: number[]): number {
  */
 export function arrayContains<T, A extends T>(
   item: T,
-  array: ReadonlyArray<A>
+  array: ReadonlyArray<A>,
 ): item is A {
   return array.includes(item as A);
 }
@@ -226,11 +226,11 @@ export function splitByCommasWithEscapes(str: string): string[] {
 export function maxBy<T>(
   array: T[] | readonly T[],
   optimizer: (element: T) => number,
-  reverse?: boolean
+  reverse?: boolean,
 ): T;
 export function maxBy<
   S extends string | number | symbol,
-  T extends { [x in S]: number }
+  T extends { [x in S]: number },
 >(array: T[] | readonly T[], key: S, reverse?: boolean): T;
 /**
  * Find the best element of an array, where "best" is defined by some given criteria.
@@ -242,11 +242,11 @@ export function maxBy<
  */
 export function maxBy<
   S extends string | number | symbol,
-  T extends { [x in S]: number }
+  T extends { [x in S]: number },
 >(
   array: T[] | readonly T[],
   optimizer: ((element: T) => number) | S,
-  reverse = false
+  reverse = false,
 ): T {
   if (!array.length) throw new Error("Cannot call maxBy on an empty array!");
   if (typeof optimizer === "function") {
@@ -257,11 +257,11 @@ export function maxBy<
           ? { value, item }
           : { value: otherValue, item: other };
       },
-      { item: array[0], value: optimizer(array[0]) }
+      { item: array[0], value: optimizer(array[0]) },
     ).item;
   } else {
     return array.reduce((a, b) =>
-      a[optimizer] >= b[optimizer] !== reverse ? a : b
+      a[optimizer] >= b[optimizer] !== reverse ? a : b,
     );
   }
 }
@@ -284,7 +284,7 @@ type _tupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
  */
 export function arrayEquals<T>(
   left: T[] | readonly T[],
-  right: T[] | readonly T[]
+  right: T[] | readonly T[],
 ): boolean {
   if (left.length !== right.length) return false;
   return left.every((element, index) => element === right[index]);
@@ -298,7 +298,7 @@ export function arrayEquals<T>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Delayed<T, S extends any[] = never[]> = [T] extends [
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (...args: any) => any
+  (...args: any) => any,
 ]
   ? never
   : T | ((...args: S) => T);
@@ -335,7 +335,7 @@ export type Switch<T extends string, S> =
  * @returns A function akin to byStat or byClass; it accepts an object that either is "complete" in the sense that it has a key for every conceivable value, or contains a `default` parameter. If an inappropriate input is provided, returns undefined.
  */
 export function makeByXFunction<T extends string>(
-  source: Delayed<T>
+  source: Delayed<T>,
 ): <S>(options: Switch<T, S>) => S {
   return function <S>(options: Switch<T, S>) {
     const val = undelay(source);
@@ -354,12 +354,13 @@ export function makeByXFunction<T extends string>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function flat<A extends any[], D extends number = 1>(
   arr: A,
-  depth = Infinity
+  depth = Infinity,
 ): FlatArray<A, D>[] {
   let flatArray: FlatArray<A, D>[] = [];
   for (const item of arr) {
     if (Array.isArray(item) && depth > 0) {
-      flatArray = flatArray.concat(flat(item, depth - 1));
+      const child = flat(item, depth - 1);
+      flatArray = flatArray.concat(child);
     } else {
       flatArray.push(item);
     }
@@ -386,7 +387,7 @@ export const tc = (word: string) =>
 
 type Enumerate<
   N extends number,
-  A extends number[] = []
+  A extends number[] = [],
 > = A["length"] extends N ? A[number] : Enumerate<N, [...A, A["length"]]>;
 
 /**

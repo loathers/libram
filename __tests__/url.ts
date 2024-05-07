@@ -7,7 +7,7 @@ jest.mock(
   () => ({
     visitUrl: jest.fn(),
   }),
-  { virtual: true }
+  { virtual: true },
 );
 
 describe(buildUrl, () => {
@@ -38,7 +38,7 @@ describe(buildUrl, () => {
     "should append query (as object) to the given path",
     (path, query, expected) => {
       expect(buildUrl(path, query)).toEqual(expected);
-    }
+    },
   );
 
   it.each([
@@ -69,7 +69,7 @@ describe(buildUrl, () => {
     "should append query (as array) to the given path",
     (path, query, expected) => {
       expect(buildUrl(path, query)).toEqual(expected);
-    }
+    },
   );
 
   it.each([
@@ -83,7 +83,7 @@ describe(buildUrl, () => {
     "should append a parameter even if it already exists",
     (path, query, expected) => {
       expect(buildUrl(path, query)).toEqual(expected);
-    }
+    },
   );
 
   it.each([
@@ -105,7 +105,7 @@ describe(buildUrl, () => {
     "should correctly encode non-string types",
     (path, query, expected) => {
       expect(buildUrl(path, query)).toEqual(expected);
-    }
+    },
   );
 
   it.each([
@@ -119,7 +119,7 @@ describe(buildUrl, () => {
     ],
   ])("should fail if a query parameter is not a pair", (query) => {
     expect(() => buildUrl("test.php", query as any)).toThrow(
-      "may only contain pair"
+      "may only contain pair",
     );
   });
 });
@@ -137,7 +137,7 @@ describe(fetchUrl, () => {
     expect(visitUrl).toHaveBeenCalledWith(
       "test.php?foo=bar%26baz",
       false,
-      true
+      true,
     );
   });
 });
@@ -181,7 +181,7 @@ describe(combineQuery, () => {
 
   it("should combine more than two queries", () => {
     expect(
-      combineQuery({ foo: "bar" }, [["baz", "qux"]], { quux: "quuz" })
+      combineQuery({ foo: "bar" }, [["baz", "qux"]], { quux: "quuz" }),
     ).toEqual([
       ["foo", "bar"],
       ["baz", "qux"],

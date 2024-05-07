@@ -303,8 +303,8 @@ export function modifierOf(ingredient: Ingredient): Modifiers {
  * @returns The location that can be used to unlock said ingredient; null if the ingredient is free
  */
 export function locationOf<T extends Ingredient>(
-  ingredient: T
-): typeof INGREDIENTS[T]["location"] {
+  ingredient: T,
+): (typeof INGREDIENTS)[T]["location"] {
   return INGREDIENTS[ingredient].location;
 }
 

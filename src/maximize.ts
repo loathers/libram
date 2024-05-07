@@ -58,7 +58,7 @@ export type MaximizeOptions = {
  */
 export function mergeMaximizeOptions(
   defaultOptions: MaximizeOptions,
-  addendums: Partial<MaximizeOptions>
+  addendums: Partial<MaximizeOptions>,
 ): MaximizeOptions {
   return {
     updateOnFamiliarChange:
@@ -79,7 +79,7 @@ export function mergeMaximizeOptions(
     ].filter(
       (item) =>
         !defaultOptions.forceEquip.includes(item) &&
-        !addendums.forceEquip?.includes(item)
+        !addendums.forceEquip?.includes(item),
     ),
 
     bonusEquip: new Map<Item, number>([
@@ -122,7 +122,7 @@ const defaultMaximizeOptions: MaximizeOptions = {
  * @param options.bonusEquip Equipment to apply a bonus to ("200 bonus X").
  */
 export function setDefaultMaximizeOptions(
-  options: Partial<MaximizeOptions>
+  options: Partial<MaximizeOptions>,
 ): void {
   Object.assign(defaultMaximizeOptions, options);
 }
@@ -136,7 +136,7 @@ const modeableCommands = [
   "parka",
   "jillcandle",
 ] as const;
-export type Mode = typeof modeableCommands[number];
+export type Mode = (typeof modeableCommands)[number];
 export type Modes = Partial<{ [x in Mode]: string }>;
 export const modeableItems = {
   backupcamera: $item`backup camera`,
@@ -206,7 +206,7 @@ class CacheEntry {
     rider: Map<Item, Familiar>,
     familiar: Familiar,
     canEquipItemCount: number,
-    modes: Modes
+    modes: Modes,
   ) {
     this.equipment = equipment;
     this.rider = rider;
@@ -299,7 +299,7 @@ let cachedCanEquipItemCount = 0;
  */
 function canEquipItemCount(): number {
   const stats = $stats`Muscle, Mysticality, Moxie`.map((stat) =>
-    Math.min(myBasestat(stat), 300)
+    Math.min(myBasestat(stat), 300),
   );
   if (stats.every((value, index) => value === cachedStats[index])) {
     return cachedCanEquipItemCount;
@@ -318,7 +318,7 @@ function canEquipItemCount(): number {
  */
 function checkCache(
   cacheKey: string,
-  options: MaximizeOptions
+  options: MaximizeOptions,
 ): CacheEntry | null {
   const entry = cachedObjectives[cacheKey];
   if (!entry) {
@@ -327,7 +327,7 @@ function checkCache(
 
   if (options.updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
     logger.warning(
-      "Equipment found in maximize cache but familiar is different."
+      "Equipment found in maximize cache but familiar is different.",
     );
     return null;
   }
@@ -337,7 +337,7 @@ function checkCache(
     entry.canEquipItemCount !== canEquipItemCount()
   ) {
     logger.warning(
-      "Equipment found in maximize cache but equippable item list is out of date."
+      "Equipment found in maximize cache but equippable item list is out of date.",
     );
     return null;
   }
@@ -379,7 +379,7 @@ function applyCached(entry: CacheEntry, options: MaximizeOptions): void {
     entry.rider.get($item`Crown of Thrones`)
   ) {
     enthroneFamiliar(
-      entry.rider.get($item`Crown of Thrones`) || $familiar.none
+      entry.rider.get($item`Crown of Thrones`) || $familiar.none,
     );
   }
 
@@ -422,8 +422,8 @@ function verifyCached(entry: CacheEntry, warn = true): boolean {
       if (warn) {
         logger.warning(
           `Failed to apply cached ${desiredSet.join(", ")} in ${slotGroup.join(
-            ", "
-          )}.`
+            ", ",
+          )}.`,
         );
       }
       success = false;
@@ -438,8 +438,8 @@ function verifyCached(entry: CacheEntry, warn = true): boolean {
       if (warn) {
         logger.warning(
           `Failed to apply ${entry.rider.get(
-            $item`Crown of Thrones`
-          )} in ${$item`Crown of Thrones`}.`
+            $item`Crown of Thrones`,
+          )} in ${$item`Crown of Thrones`}.`,
         );
       }
       success = false;
@@ -454,8 +454,8 @@ function verifyCached(entry: CacheEntry, warn = true): boolean {
       if (warn) {
         logger.warning(
           `Failed to apply${entry.rider.get(
-            $item`Buddy Bjorn`
-          )} in ${$item`Buddy Bjorn`}.`
+            $item`Buddy Bjorn`,
+          )} in ${$item`Buddy Bjorn`}.`,
         );
       }
       success = false;
@@ -523,7 +523,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     rider,
     myFamiliar(),
     canEquipItemCount(),
-    { ...getCurrentModes(), ...options.modes }
+    { ...getCurrentModes(), ...options.modes },
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {
@@ -547,7 +547,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
  */
 export function maximizeCached(
   objectives: string[],
-  options: Partial<MaximizeOptions> = {}
+  options: Partial<MaximizeOptions> = {},
 ): boolean {
   const fullOptions = mergeMaximizeOptions(defaultMaximizeOptions, options);
   const {
@@ -580,7 +580,7 @@ export function maximizeCached(
         .filter(([, bonus]) => bonus !== 0)
         .map(
           ([item, bonus]) =>
-            `${Math.round(bonus * 100) / 100} "bonus ${toMaximizerName(item)}"`
+            `${Math.round(bonus * 100) / 100} "bonus ${toMaximizerName(item)}"`,
         )
         .sort(),
     ]),
@@ -590,7 +590,7 @@ export function maximizeCached(
   const untouchedSlots = cachedSlots.filter(
     (slot: Slot) =>
       preventSlot.includes(slot) ||
-      (onlySlot.length > 0 && !onlySlot.includes(slot))
+      (onlySlot.length > 0 && !onlySlot.includes(slot)),
   );
   const cacheKey = [
     objective,
@@ -629,7 +629,7 @@ function mergeOptionalOptions<T extends keyof MaximizeOptions>(
         ? {}
         : { [key]: optionsA[key] || optionsB[key] }),
     }),
-    {}
+    {},
   );
 }
 
@@ -645,7 +645,7 @@ export class Requirement {
    */
   constructor(
     maximizeParameters: string[],
-    maximizeOptions: Partial<MaximizeOptions>
+    maximizeOptions: Partial<MaximizeOptions>,
   ) {
     this.#maximizeParameters = maximizeParameters;
     this.#maximizeOptions = maximizeOptions;
@@ -673,7 +673,7 @@ export class Requirement {
       optionsB,
       "updateOnFamiliarChange",
       "updateOnCanEquipChanged",
-      "forceUpdate"
+      "forceUpdate",
     );
 
     return new Requirement(
@@ -697,7 +697,7 @@ export class Requirement {
           ...(optionsA.preventSlot ?? []),
           ...(optionsB.preventSlot ?? []),
         ],
-      }
+      },
     );
   }
 
@@ -710,7 +710,7 @@ export class Requirement {
   static merge(allRequirements: Requirement[]): Requirement {
     return allRequirements.reduce(
       (x, y) => x.merge(y),
-      new Requirement([], {})
+      new Requirement([], {}),
     );
   }
 

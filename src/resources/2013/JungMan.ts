@@ -70,6 +70,6 @@ export function makeJar(jar: Jar): boolean {
   if (jar === Jar.JICK && !canJickJar()) return false;
   const result = visitUrl(getJungUrl(jar));
   return result.includes(
-    "You open up the jar and look into the patient's eyes."
+    "You open up the jar and look into the patient's eyes.",
   );
 }

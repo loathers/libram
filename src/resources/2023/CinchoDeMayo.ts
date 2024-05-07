@@ -40,7 +40,7 @@ export function totalAvailableCinch(): number {
           new Array(remainingRests)
             .fill(null)
             .map((_, i) => i + get("_cinchoRests")),
-          (restNumber) => cinchRestoredBy(restNumber)
+          (restNumber) => cinchRestoredBy(restNumber),
         )
     : 0;
 }

@@ -349,7 +349,7 @@ export function valueRider(
   rider: FamiliarRider,
   modifierValueFunction: (familiar: Familiar) => number,
   dropsValueFunction: (drops: Item[] | Map<Item, number>) => number,
-  ignoreLimitedDrops = false
+  ignoreLimitedDrops = false,
 ): number {
   const dropValue =
     !rider.dropPredicate || (rider.dropPredicate() && !ignoreLimitedDrops)
@@ -390,7 +390,7 @@ const DEFAULTS = {
  */
 export function createRiderMode(
   name: string,
-  details: Partial<RiderMode>
+  details: Partial<RiderMode>,
 ): Map<string, RiderMode> {
   return riderModes.set(name, { ...DEFAULTS, ...details });
 }
@@ -430,15 +430,15 @@ export function pickRider(mode: string): FamiliarRider | null {
             b,
             modifierValueFunction,
             dropsValueFunction,
-            ignoreLimitedDrops
+            ignoreLimitedDrops,
           ) -
           valueRider(
             a,
             modifierValueFunction,
             dropsValueFunction,
-            ignoreLimitedDrops
-          )
-      )
+            ignoreLimitedDrops,
+          ),
+      ),
     );
   }
 
@@ -447,7 +447,7 @@ export function pickRider(mode: string): FamiliarRider | null {
     const riderToReturn = list.find(
       ({ dropPredicate, familiar }) =>
         (dropPredicate?.() ?? true) &&
-        (!excludeCurrentFamiliar || myFamiliar() !== familiar)
+        (!excludeCurrentFamiliar || myFamiliar() !== familiar),
     );
     return riderToReturn ?? null;
   }
@@ -463,7 +463,7 @@ export function pickRider(mode: string): FamiliarRider | null {
  */
 export function getModifier(
   modifier: NumericModifier,
-  familiar: Familiar
+  familiar: Familiar,
 ): number {
   return numericModifier(`Throne:${familiar}`, modifier);
 }
@@ -477,10 +477,10 @@ export function getModifier(
  */
 export function createModifierValueFunction<T extends NumericModifier>(
   modifiers: T[],
-  functions: { [x in T]: (mod: number) => number }
+  functions: { [x in T]: (mod: number) => number },
 ): (familiar: Familiar) => number {
   return (familiar: Familiar) =>
     sum(modifiers, (modifier) =>
-      functions[modifier](getModifier(modifier, familiar))
+      functions[modifier](getModifier(modifier, familiar)),
     );
 }

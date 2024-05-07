@@ -35,16 +35,16 @@ const MACRO_NAME = "Script Autoattack Macro";
 export function getMacroId(name = MACRO_NAME): number {
   const macroMatches = xpath(
     visitUrl("account_combatmacros.php"),
-    `//select[@name="macroid"]/option[text()="${name}"]/@value`
+    `//select[@name="macroid"]/option[text()="${name}"]/@value`,
   );
   if (macroMatches.length === 0) {
     visitUrl("account_combatmacros.php?action=new");
     const newMacroText = visitUrl(
-      `account_combatmacros.php?macroid=0&name=${name}&macrotext=abort&action=save`
+      `account_combatmacros.php?macroid=0&name=${name}&macrotext=abort&action=save`,
     );
     return parseInt(
       xpath(newMacroText, `//input[@name=${name}]/@value`)[0],
-      10
+      10,
     );
   } else {
     return parseInt(macroMatches[0], 10);
@@ -69,7 +69,7 @@ function itemOrNameToItem(itemOrName: ItemOrName) {
  * @returns BALLS macro-compatible value for item or items provided
  */
 function itemOrItemsBallsMacroName(
-  itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
+  itemOrItems: ItemOrName | [ItemOrName, ItemOrName],
 ): string {
   if (Array.isArray(itemOrItems)) {
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
@@ -88,7 +88,7 @@ function itemOrItemsBallsMacroName(
  * @returns BALLS macro condition
  */
 function itemOrItemsBallsMacroPredicate(
-  itemOrItems: ItemOrName | [ItemOrName, ItemOrName]
+  itemOrItems: ItemOrName | [ItemOrName, ItemOrName],
 ): string {
   if (Array.isArray(itemOrItems)) {
     return itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ");
@@ -218,7 +218,7 @@ export class Macro {
    */
   step(...nextSteps: (string | Macro)[]): this {
     const nextStepsStrings = ([] as string[]).concat(
-      ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x]))
+      ...nextSteps.map((x) => (x instanceof Macro ? x.components : [x])),
     );
     this.components.push(...nextStepsStrings.filter(Boolean));
     return this;
@@ -247,7 +247,7 @@ export class Macro {
     return visitUrl(
       `fight.php?action=macro&macrotext=${urlEncode(final)}`,
       true,
-      true
+      true,
     );
   }
 
@@ -270,13 +270,13 @@ export class Macro {
 
     visitUrl(
       `account_combatmacros.php?macroid=${id}&name=${urlEncode(
-        this.name
+        this.name,
       )}&macrotext=${urlEncode(this.toString())}&action=save`,
       true,
-      true
+      true,
     );
     visitUrl(
-      `account.php?am=1&action=autoattack&value=${99000000 + id}&ajax=1`
+      `account.php?am=1&action=autoattack&value=${99000000 + id}&ajax=1`,
     );
     Macro.cachedAutoAttacks.set(this.name, this.toString());
   }
@@ -298,7 +298,7 @@ export class Macro {
     for (const name of Macro.cachedAutoAttacks.keys()) {
       const id = Macro.cachedMacroIds.get(name) ?? getMacroId(name);
       visitUrl(
-        `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`
+        `account_combatmacros.php?macroid=${id}&action=edit&what=Delete&confirm=1`,
       );
       Macro.cachedAutoAttacks.delete(name);
       Macro.cachedMacroIds.delete(name);
@@ -341,7 +341,7 @@ export class Macro {
    */
   static abortWithWarning<T extends Macro>(
     this: Constructor<T>,
-    warning: string
+    warning: string,
   ): T {
     return new this().abortWithWarning(warning);
   }
@@ -380,7 +380,7 @@ export class Macro {
     } else if (condition instanceof Item) {
       if (!condition.combat) {
         throw new InvalidMacroError(
-          `Item ${condition} cannot be made a valid BALLS predicate (it is not combat-usable)`
+          `Item ${condition} cannot be made a valid BALLS predicate (it is not combat-usable)`,
         );
       }
 
@@ -390,7 +390,7 @@ export class Macro {
 
       if (snarfblat < 1) {
         throw new InvalidMacroError(
-          `Location ${condition} cannot be made a valid BALLS predicate (it has no location id)`
+          `Location ${condition} cannot be made a valid BALLS predicate (it has no location id)`,
         );
       }
 
@@ -398,7 +398,7 @@ export class Macro {
     } else if (condition instanceof Class) {
       if (condition.id > 6) {
         throw new InvalidMacroError(
-          `Class ${condition} cannot be made a valid BALLS predicate (it is not a standard class)`
+          `Class ${condition} cannot be made a valid BALLS predicate (it is not a standard class)`,
         );
       }
 
@@ -434,7 +434,7 @@ export class Macro {
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
-    ifTrue: string | Macro
+    ifTrue: string | Macro,
   ): T {
     return new this().if_(condition, ifTrue);
   }
@@ -461,7 +461,7 @@ export class Macro {
   static ifNot<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
-    ifTrue: string | Macro
+    ifTrue: string | Macro,
   ): T {
     return new this().ifNot(condition, ifTrue);
   }
@@ -487,7 +487,7 @@ export class Macro {
   static while_<T extends Macro>(
     this: Constructor<T>,
     condition: string,
-    contents: string | Macro
+    contents: string | Macro,
   ): T {
     return new this().while_(condition, contents);
   }
@@ -503,7 +503,7 @@ export class Macro {
   externalIf(
     condition: boolean,
     ifTrue: string | Macro,
-    ifFalse?: string | Macro
+    ifFalse?: string | Macro,
   ): this {
     if (condition) return this.step(ifTrue);
     else if (ifFalse) return this.step(ifFalse);
@@ -522,7 +522,7 @@ export class Macro {
     this: Constructor<T>,
     condition: boolean,
     ifTrue: string | Macro,
-    ifFalse?: string | Macro
+    ifFalse?: string | Macro,
   ): T {
     return new this().externalIf(condition, ifTrue, ifFalse);
   }
@@ -546,7 +546,7 @@ export class Macro {
     return this.step(
       ...skills.map((skill) => {
         return `skill ${skillBallsMacroName(skill)}`;
-      })
+      }),
     );
   }
 
@@ -574,9 +574,9 @@ export class Macro {
       ...skills.map((skill) => {
         return Macro.if_(
           `hasskill ${skillBallsMacroName(skill)}`,
-          Macro.skill(skill)
+          Macro.skill(skill),
         );
-      })
+      }),
     );
   }
 
@@ -604,9 +604,9 @@ export class Macro {
       ...skills.map((skill) => {
         return Macro.if_(
           `hasskill ${skillBallsMacroName(skill)}`,
-          Macro.skill(skill).repeat()
+          Macro.skill(skill).repeat(),
         );
-      })
+      }),
     );
   }
 
@@ -633,7 +633,7 @@ export class Macro {
     return this.step(
       ...items.map((itemOrItems) => {
         return `use ${itemOrItemsBallsMacroName(itemOrItems)}`;
-      })
+      }),
     );
   }
 
@@ -661,9 +661,9 @@ export class Macro {
       ...items.map((item) => {
         return Macro.if_(
           itemOrItemsBallsMacroPredicate(item),
-          `use ${itemOrItemsBallsMacroName(item)}`
+          `use ${itemOrItemsBallsMacroName(item)}`,
         );
-      })
+      }),
     );
   }
 
@@ -709,7 +709,7 @@ export class Macro {
     if (todaysWanderers.length === 0) return this;
     return this.if_(
       todaysWanderers.map((monster) => `monsterid ${monster.id}`).join(" || "),
-      macro
+      macro,
     );
   }
   /**
@@ -720,7 +720,7 @@ export class Macro {
    */
   static ifHolidayWanderer<T extends Macro>(
     this: Constructor<T>,
-    macro: Macro
+    macro: Macro,
   ): T {
     return new this().ifHolidayWanderer(macro);
   }
@@ -736,7 +736,7 @@ export class Macro {
     if (todaysWanderers.length === 0) return this.step(macro);
     return this.if_(
       todaysWanderers.map((monster) => `!monsterid ${monster.id}`).join(" && "),
-      macro
+      macro,
     );
   }
   /**
@@ -747,7 +747,7 @@ export class Macro {
    */
   static ifNotHolidayWanderer<T extends Macro>(
     this: Constructor<T>,
-    macro: Macro
+    macro: Macro,
   ): T {
     return new this().ifNotHolidayWanderer(macro);
   }
@@ -787,7 +787,7 @@ export function adventureMacro(loc: Location, macro: Macro): void {
 export function adventureMacroAuto(
   loc: Location,
   autoMacro: Macro,
-  nextMacro: Macro | null = null
+  nextMacro: Macro | null = null,
 ): void {
   nextMacro = nextMacro ?? Macro.abort();
   autoMacro.setAutoAttack();

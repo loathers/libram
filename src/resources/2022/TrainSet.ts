@@ -172,7 +172,7 @@ export function nextConfigurable(): number {
   return clamp(
     get("lastTrainsetConfiguration") + 40 - get("trainsetPosition"),
     0,
-    40
+    40,
   );
 }
 
@@ -234,13 +234,13 @@ export function setConfiguration(configuration: Cycle): boolean {
     1,
     `forceoption=0${configuration
       .map((station, index) => `&slot[${index}]=${stationToInt(station)}`)
-      .join("")}`
+      .join("")}`,
   );
   visitUrl("main.php");
 
   const currentConfiguration = cycle();
   return configuration.every(
-    (station, index) => station === currentConfiguration[index]
+    (station, index) => station === currentConfiguration[index],
   );
 }
 

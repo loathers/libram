@@ -81,7 +81,7 @@ export function donate(monster: Monster): boolean {
     const available = getMonsters(selectNumber, page);
     if (!available.includes(monster)) return false;
     return runChoice(1, `mid=${monster.id}`).includes(
-      "You donate your egg to science."
+      "You donate your egg to science.",
     );
   } finally {
     visitUrl("main.php");
@@ -103,7 +103,7 @@ export function receive(monster: Monster): boolean {
 
     if (!available.includes(monster)) return false;
     return runChoice(2, `mid=${monster.id}`).includes(
-      "Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!"
+      "Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!",
     );
   } finally {
     visitUrl("main.php");

@@ -48,12 +48,12 @@ describe(getPlayerIdFromName, () => {
       "should return the player id for a given name, case-insensitively",
       (name, id) => {
         expect(getPlayerIdFromName(name)).toBe(id);
-      }
+      },
     );
 
     it("should throw an error for an unknown name", () => {
       expect(() => getPlayerIdFromName("Unknown")).toThrowError(
-        "Player not found: Unknown"
+        "Player not found: Unknown",
       );
     });
   });
@@ -75,7 +75,7 @@ describe(getPlayerIdFromName, () => {
       "should return the player id for a given name, case-insensitively",
       (name, id) => {
         expect(getPlayerIdFromName(name, "return-null")).toBe(id);
-      }
+      },
     );
 
     it("should return undefined for an unknown name", () => {
@@ -95,7 +95,7 @@ describe(getPlayerNameFromId, () => {
 
     it("should throw an error for an unknown id", () => {
       expect(() => getPlayerNameFromId(123)).toThrowError(
-        "Player not found: 123"
+        "Player not found: 123",
       );
     });
   });
@@ -139,16 +139,16 @@ describe(getPlayerFromIdOrName, () => {
       "should return the player id and name for a given name, case-insensitively",
       (name, id, expectedName) => {
         expect(getPlayerFromIdOrName(name)).toEqual({ id, name: expectedName });
-      }
+      },
     );
 
     it.each(["Unknown", 123])(
       "should throw an error for an unknown id or name",
       (idOrName) => {
         expect(() => getPlayerFromIdOrName(idOrName)).toThrowError(
-          `Player not found: ${idOrName}`
+          `Player not found: ${idOrName}`,
         );
-      }
+      },
     );
   });
 
@@ -179,14 +179,14 @@ describe(getPlayerFromIdOrName, () => {
           id,
           name: expectedName,
         });
-      }
+      },
     );
 
     it.each(["Unknown", 123])(
       "should return undefined for an unknown id or name",
       (idOrName) => {
         expect(getPlayerFromIdOrName(idOrName, "return-null")).toBeNull();
-      }
+      },
     );
   });
 });

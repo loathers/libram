@@ -95,7 +95,7 @@ export function bestLibramToCast(): Skill | null {
   return maxBy(arr, ([, itemMap]) =>
     sum(
       Array.from(itemMap.entries()),
-      ([item, weight]) => weight * getSaleValue(item)
-    )
+      ([item, weight]) => weight * getSaleValue(item),
+    ),
   )[0];
 }

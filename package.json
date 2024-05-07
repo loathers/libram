@@ -17,61 +17,57 @@
     "format": "yarn run prettier --write .",
     "lint": "yarn run eslint src tools --ext .ts && yarn run prettier --check .",
     "test": "yarn run jest",
-    "prepack": "yarn run build",
-    "ts-node": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"ts-node/esm\", pathToFileURL(\"./\"));'",
-    "updateProps": "yarn run ts-node ./tools/parseDefaultProperties.ts",
-    "updateOverlappingItemSkillNames": "yarn run ts-node ./tools/parseItemSkillNames.ts"
+    "prepack": "yarn run build && pinst --disable",
+    "updateProps": "node --loader tsm ./tools/parseDefaultProperties.ts",
+    "updateOverlappingItemSkillNames": "node --loader tsm ./tools/parseItemSkillNames.ts",
+    "postinstall": "husky install",
+    "postpack": "pinst --enable"
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
   "dependencies": {
-    "html-entities": "^2.4.0"
+    "html-entities": "^2.5.2"
   },
   "devDependencies": {
-    "@babel/compat-data": "^7.17.0",
-    "@babel/core": "^7.17.2",
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
-    "@babel/plugin-transform-runtime": "^7.15.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.15.0",
+    "@babel/compat-data": "^7.24.4",
+    "@babel/core": "^7.24.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.24.3",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-typescript": "^7.24.1",
     "@tsconfig/node20": "^20.1.4",
     "@types/jest": "^29.5.12",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^16.11.11",
-    "@types/node-fetch": "^2.5.7",
-    "@typescript-eslint/eslint-plugin": "^5.5.0",
-    "@typescript-eslint/parser": "^5.5.0",
-    "esbuild": "^0.20.2",
+    "@types/node": "^20.12.10",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "esbuild": "^0.21.0",
     "esbuild-plugin-babel": "^0.2.3",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^25.2.3",
-    "eslint-plugin-jsdoc": "^46.5.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^28.5.0",
+    "eslint-plugin-jsdoc": "^48.2.3",
     "eslint-plugin-libram": "^0.4.7",
-    "husky": "^4.3.6",
+    "husky": "^9.0.11",
     "java-parser": "^1.4.0",
     "jest": "^29.7.0",
-    "kolmafia": "^5.27916.0",
-    "lint-staged": ">=10",
+    "kolmafia": "^5.27934.0",
+    "lint-staged": "^15.2.2",
     "lodash-es": "^4.17.21",
-    "node-fetch": "^2.6.1",
-    "prettier": "^2.1.2",
+    "node-fetch": "^3.3.2",
+    "pinst": "^3.0.0",
+    "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "typedoc": "^0.22.10",
-    "typescript": "^4.5.2"
+    "tsm": "^2.3.0",
+    "typedoc": "^0.25.13",
+    "typescript": "^5.4.5"
   },
   "peerDependencies": {
     "kolmafia": "^5.27668.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "src/**/*.{ts,js}": "prettier --write"

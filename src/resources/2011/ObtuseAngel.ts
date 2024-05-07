@@ -61,5 +61,5 @@ export const BadlyRomanticArrow = new Copier(
   () => couldUseBadlyRomanticArrow(),
   () => prepareBadlyRomanticArrow(),
   () => canUseBadlyRomanticArrow(),
-  () => getBadlyRomanticArrowMonster()
+  () => getBadlyRomanticArrowMonster(),
 );

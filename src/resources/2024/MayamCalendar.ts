@@ -10,8 +10,8 @@ export const RINGS = Object.freeze([
   ["explosion", "clock", "yam4"],
 ] as const);
 
-export type MayamSymbol = typeof RINGS[number][number];
-export type Ring<N extends number> = typeof RINGS[N][number];
+export type MayamSymbol = (typeof RINGS)[number][number];
+export type Ring<N extends number> = (typeof RINGS)[N][number];
 export type Combination = [Ring<0>, Ring<1>, Ring<2>, Ring<3>];
 export type CombinationString = `${Ring<0>} ${Ring<1>} ${Ring<2>} ${Ring<3>}`;
 
@@ -56,7 +56,7 @@ export function remainingUses(): number {
 }
 
 const toCombination = (
-  combination: Combination | [CombinationString]
+  combination: Combination | [CombinationString],
 ): Combination =>
   combination.length === 1
     ? (combination[0].split(" ") as Combination)

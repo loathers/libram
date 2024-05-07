@@ -53,24 +53,24 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
     ...manyToOne($item`can of Rain-Doh`, $items`empty Rain-Doh can`),
     ...manyToOne(
       $item`meteorite fragment`,
-      $items`meteorite earring, meteorite necklace, meteorite ring`
+      $items`meteorite earring, meteorite necklace, meteorite ring`,
     ),
     ...manyToOne(
       $item`Sneaky Pete's leather jacket`,
-      $items`Sneaky Pete's leather jacket (collar popped)`
+      $items`Sneaky Pete's leather jacket (collar popped)`,
     ),
     ...manyToOne($item`Boris's Helm`, $items`Boris's Helm (askew)`),
     ...manyToOne(
       $item`Jarlsberg's pan`,
-      $items`Jarlsberg's pan (Cosmic portal mode)`
+      $items`Jarlsberg's pan (Cosmic portal mode)`,
     ),
     ...manyToOne(
       $item`tiny plastic sword`,
-      $items`grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo`
+      $items`grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo`,
     ),
     ...manyToOne(
       $item`earthenware muffin tin`,
-      $items`blueberry muffin, bran muffin, chocolate chip muffin`
+      $items`blueberry muffin, bran muffin, chocolate chip muffin`,
     ),
     ...manyToOne($item`ChibiBuddy™ (on)`, $items`ChibiBuddy™ (off)`),
   ]);
@@ -114,7 +114,7 @@ function mySessionItemsWrapper(sessionOnly = false): Map<Item, number> {
 function inventoryOperation(
   a: Map<Item, number>,
   b: Map<Item, number>,
-  op: (aPart: number, bPart: number) => number
+  op: (aPart: number, bPart: number) => number,
 ): Map<Item, number> {
   // return every entry that is in a and not in b
   const difference = new Map<Item, number>();
@@ -196,7 +196,7 @@ export class Session {
   private constructor(
     meat: number,
     items: Map<Item, number>,
-    totalTurns: number
+    totalTurns: number,
   ) {
     this.meat = meat;
     this.items = items;
@@ -254,9 +254,9 @@ export class Session {
       inventoryOperation(
         this.items,
         other.items,
-        (a: number, b: number) => a - b
+        (a: number, b: number) => a - b,
       ),
-      this.totalTurns - other.totalTurns
+      this.totalTurns - other.totalTurns,
     );
   }
   /**
@@ -283,9 +283,9 @@ export class Session {
       inventoryOperation(
         this.items,
         other.items,
-        (a: number, b: number) => a + b
+        (a: number, b: number) => a + b,
       ),
-      this.totalTurns + other.totalTurns
+      this.totalTurns + other.totalTurns,
     );
   }
 
@@ -297,7 +297,7 @@ export class Session {
    */
   static add(...sessions: Session[]): Session {
     return sessions.reduce((previousSession, currentSession) =>
-      previousSession.add(currentSession)
+      previousSession.add(currentSession),
     );
   }
 
@@ -338,12 +338,12 @@ export class Session {
       } = JSON.parse(fileValue);
 
       const parsedItems: [Item, number][] = Object.entries(val.items).map(
-        ([itemStr, quantity]) => [toItem(itemStr), quantity]
+        ([itemStr, quantity]) => [toItem(itemStr), quantity],
       );
       return new Session(
         val.meat,
         new Map<Item, number>(parsedItems),
-        val.totalTurns ?? 0
+        val.totalTurns ?? 0,
       );
     } else {
       // if the file does not exist, return an empty session
@@ -364,7 +364,7 @@ export class Session {
     return new Session(
       sum(meat, (f) => f()),
       mySessionItemsWrapper(sessionOnly),
-      totalTurnsPlayed()
+      totalTurnsPlayed(),
     );
   }
 
@@ -386,7 +386,7 @@ export class Session {
       value: (item: Item) => number;
       isOutlier?: (item: ItemDetail) => boolean;
       excludeValue?: { meat?: number; item?: number };
-    }
+    },
   ): MeatPerAdventureAnalysis {
     const value = options.value;
     const excludeValue = options.excludeValue ?? { meat: 0, item: 0 };
@@ -431,7 +431,7 @@ export class Session {
       value: (item: Item) => number;
       isOutlier?: (item: ItemDetail) => boolean;
       excludeValue?: { meat?: number; item?: number };
-    }
+    },
   ): MeatPerAdventureAnalysis {
     return Session.computeMPA(this, other, options);
   }

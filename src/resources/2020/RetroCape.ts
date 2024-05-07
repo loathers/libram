@@ -95,7 +95,7 @@ export function set(hero: Hero, mode: Mode): boolean {
  */
 export function getModifier(
   hero = currentHero(),
-  mode = currentMode()
+  mode = currentMode(),
 ): Modifiers {
   return {
     ...Heroes[hero],
@@ -123,6 +123,6 @@ export function tuneToSkill(skill: Skill): boolean {
   if (!setting || !have()) return false;
   set(...setting);
   return [currentHero(), currentMode()].every(
-    (element, index) => element === setting[index]
+    (element, index) => element === setting[index],
   );
 }

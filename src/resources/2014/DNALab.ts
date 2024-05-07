@@ -91,8 +91,8 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
     tonic instanceof Effect
       ? tonic
       : tonic instanceof Phylum
-      ? getEffect(tonic)
-      : getModifier("Effect", tonic);
+        ? getEffect(tonic)
+        : getModifier("Effect", tonic);
   return (
     tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483647
   );
@@ -129,12 +129,12 @@ export function getEffect(phylum: Phylum): Effect {
 export function phylumFor(dnatype: Effect | Item): Phylum | null {
   if (dnatype instanceof Effect) {
     const phylumPair = Array.from(phylaEffects.entries()).find(
-      ([, effect]) => effect === dnatype
+      ([, effect]) => effect === dnatype,
     );
     return phylumPair ? phylumPair[0] : null;
   } else {
     const phylumPair = Array.from(phylaTonics.entries()).find(
-      ([, tonic]) => tonic === dnatype
+      ([, tonic]) => tonic === dnatype,
     );
     return phylumPair ? phylumPair[0] : null;
   }

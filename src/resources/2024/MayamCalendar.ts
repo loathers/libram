@@ -2,7 +2,6 @@ import { cliExecute, Effect, Item } from "kolmafia";
 import { have as have_ } from "../../lib";
 import { get } from "../../property";
 import { $effect, $item } from "../../template-string";
-import { arrayContains } from "../../utils";
 
 export const RINGS = Object.freeze([
   ["yam1", "sword", "eye", "chair", "fur", "vessel"],
@@ -87,8 +86,8 @@ export const RESONANCES = Object.freeze({
   "fur yam2 wall yam4": $item`furry yam buckler`,
   "yam1 yam2 yam3 explosion": $item`thanksgiving bomb`,
   "yam1 meat eyepatch yam4": $item`yamtility belt`,
-  "chair yam2 yam3 clock": $effect`caught yam-handed`,
-  "yam1 yam2 cheese clock": $effect`memories of a cheesier age`,
+  "chair yam2 yam3 clock": $effect`Caught Yam-Handed`,
+  "yam1 yam2 cheese clock": $effect`Memories of Cheesier Age`,
 } as const);
 
 /**

@@ -2,6 +2,6 @@
   "include": ["./"],
   "extends": "../node_modules/@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
-    "module": "es2022"
+    "module": "Node16"
   }
 }

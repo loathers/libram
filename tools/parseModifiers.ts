@@ -6,14 +6,6 @@ import nodeFetch from "node-fetch";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
-/**
- *
-import type {
-  VariableDeclaratorListCtx,
-  VariableInitializerListCstNode
-} from "java-parser";
- */
-
 const MODIFIERS_SOURCE_FILE =
   "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/net/sourceforge/kolmafia/Modifiers.java";
 

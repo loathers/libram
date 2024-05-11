@@ -9387,7 +9387,7 @@ var everythingLooksGreen = function() {
     return !0;
   };
   return function() {
-    return otherClause() && have($effect(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral8(["Everything Looks Green"])))) ? 0 : 1;
+    return otherClause() && !have($effect(_templateObject60 || (_templateObject60 = _taggedTemplateLiteral8(["Everything Looks Green"])))) ? 1 : 0;
   };
 }, freeRunSources = [
   // Free unlimited source

@@ -16,7 +16,7 @@ import {
 const everythingLooksGreen =
   (otherClause = () => true) =>
   () =>
-    otherClause() && have($effect`Everything Looks Green`) ? 0 : 1;
+    otherClause() && !have($effect`Everything Looks Green`) ? 1 : 0;
 
 const freeRunSources: ActionSource[] = [
   // Free unlimited source

@@ -16,7 +16,7 @@ import {
 const everythingLooksGreen =
   (otherClause = () => true) =>
   () =>
-    otherClause() && have($effect`Everything Looks Green`) ? 0 : 1;
+    otherClause() && !have($effect`Everything Looks Green`) ? 1 : 0;
 
 const freeRunSources: ActionSource[] = [
   // Free unlimited source
@@ -27,7 +27,7 @@ const freeRunSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`spring shoes` }),
-    },
+    }
   ),
   // Free limited sources
   new ActionSource(
@@ -45,7 +45,7 @@ const freeRunSources: ActionSource[] = [
         return have($effect`Ode to Booze`);
       },
       familiar: () => $familiar`Frumious Bandersnatch`,
-    },
+    }
   ),
 
   new ActionSource(
@@ -56,7 +56,7 @@ const freeRunSources: ActionSource[] = [
     {
       equipmentRequirements: () => new Requirement(["Familiar Weight"], {}),
       familiar: () => $familiar`Pair of Stomping Boots`,
-    },
+    }
   ),
 
   new ActionSource(
@@ -69,7 +69,7 @@ const freeRunSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`navel ring of navel gazing` }),
-    },
+    }
   ),
 
   new ActionSource(
@@ -82,7 +82,7 @@ const freeRunSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`Greatest American Pants` }),
-    },
+    }
   ),
 
   new ActionSource(
@@ -94,9 +94,9 @@ const freeRunSources: ActionSource[] = [
       cost: () =>
         Math.min(
           ActionSource.defaultPriceFunction($item`peppermint sprout`) * 5,
-          ActionSource.defaultPriceFunction($item`peppermint parasol`),
+          ActionSource.defaultPriceFunction($item`peppermint parasol`)
         ) / 10, // Breaks after 10 successful runaways.
-    },
+    }
   ),
 
   // unlimited items that trigger everything looks green
@@ -105,7 +105,7 @@ const freeRunSources: ActionSource[] = [
       new ActionSource(item, everythingLooksGreen(), Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => ActionSource.defaultPriceFunction(item),
-      }),
+      })
   ),
 
   // limited quest items
@@ -114,7 +114,7 @@ const freeRunSources: ActionSource[] = [
       new ActionSource(item, () => (!have(item) ? 0 : 1), Macro.item(item), {
         preparation: () => have(item),
         cost: () => 0,
-      }),
+      })
   ),
 ];
 
@@ -125,7 +125,7 @@ const freeRunSources: ActionSource[] = [
  * @returns Free run source satisfying constraints, or null.
  */
 export function tryFindFreeRun(
-  constraints?: FindActionSourceConstraints,
+  constraints?: FindActionSourceConstraints
 ): ActionSource | null {
   const source = findActionSource(freeRunSources, constraints);
   return source;
@@ -139,7 +139,7 @@ export function tryFindFreeRun(
  * @returns Free run source satisfying constraints.
  */
 export function ensureFreeRun(
-  constraints?: FindActionSourceConstraints,
+  constraints?: FindActionSourceConstraints
 ): ActionSource {
   const source = tryFindFreeRun(constraints);
 

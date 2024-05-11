@@ -329,6 +329,21 @@ export type Switch<T extends string, S> =
   | (Partial<{ [x in T]: S }> & { default: S });
 
 /**
+ * Picks the `source` value or the default from the given object.
+ * @param options the options object to pick from; it accepts an object that either is "complete" in the sense that it has a key for every conceivable value, or contains a `default` parameter. If an inappropriate input is provided, returns undefined.
+ * @param source the name (function) to pick from the options object
+ * @returns the value from the given object for `source`, or the default
+ */
+export function pickX<T extends string, S>(
+  options: Switch<T, S>,
+  source: Delayed<T>,
+): S {
+  const val = undelay(source);
+  if ("default" in options) return options[val] ?? options.default;
+  return options[val];
+}
+
+/**
  * Makes a byX function, like byStat or byClass
  *
  * @param source A method for finding your stat, or class, or whatever X is in this context
@@ -337,11 +352,7 @@ export type Switch<T extends string, S> =
 export function makeByXFunction<T extends string>(
   source: Delayed<T>,
 ): <S>(options: Switch<T, S>) => S {
-  return function <S>(options: Switch<T, S>) {
-    const val = undelay(source);
-    if ("default" in options) return options[val] ?? options.default;
-    return options[val];
-  };
+  return <S>(options: Switch<T, S>) => pickX(options, source);
 }
 
 /**

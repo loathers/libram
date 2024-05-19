@@ -6261,8 +6261,8 @@ function undelay(delayedObject) {
   return typeof delayedObject == "function" ? delayedObject.apply(void 0, args) : delayedObject;
 }
 function makeByXFunction(source) {
-  return function(options) {
-    var _options$val, val = undelay(source);
+  return function(options, alternateSource) {
+    var _options$val, val = undelay(alternateSource != null ? alternateSource : source);
     return "default" in options ? (_options$val = options[val]) !== null && _options$val !== void 0 ? _options$val : options.default : options[val];
   };
 }

@@ -152,6 +152,7 @@ export function rifts(): Location[] {
  * Picks an option based on your current shadow rift ingress
  *
  * @param options An object keyed by shadow rift ingress; it must either contain all possible ingresses, or have a `default` parameter.
+ * @param alternateSource An optional alternate way of determining which Ingress to choose by.
  * @returns The option corresponding to your current shadow rift ingress.
  */
 export const byIngress = makeByXFunction(currentIngress);

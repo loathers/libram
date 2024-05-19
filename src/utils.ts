@@ -336,9 +336,9 @@ export type Switch<T extends string, S> =
  */
 export function makeByXFunction<T extends string>(
   source: Delayed<T>,
-): <S>(options: Switch<T, S>) => S {
-  return function <S>(options: Switch<T, S>) {
-    const val = undelay(source);
+): <S>(options: Switch<T, S>, alternateSource?: Delayed<T>) => S {
+  return function <S>(options: Switch<T, S>, alternateSource?: Delayed<T>) {
+    const val = undelay(alternateSource ?? source);
     if ("default" in options) return options[val] ?? options.default;
     return options[val];
   };

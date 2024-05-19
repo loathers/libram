@@ -1011,6 +1011,7 @@ export function examine(thing: Item | Familiar | Effect | Skill): string {
  * Picks an option based on your primestat
  *
  * @param options An object keyed by stat; it must either contain all stats, or have a `default` parameter.
+ * @param alternateSource An optional alternate way of determining which Stat to choose by.
  * @returns The option corresponding to your primestat.
  */
 export const byStat = makeByXFunction(() => myPrimestat().toString());
@@ -1018,6 +1019,7 @@ export const byStat = makeByXFunction(() => myPrimestat().toString());
  * Picks an option based on your player class
  *
  * @param options An object keyed by player class; it must either contain all classes, or have a `default` parameter.
+ * @param alternateSource An optional anternate way of determining which Class to choose by.
  * @returns The option corresponding to your player class.
  */
 export const byClass = makeByXFunction(() => myClass().toString());

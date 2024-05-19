@@ -337,7 +337,7 @@ export class Macro {
    * Create a new macro with an "abort" step to this macro, with a warning message to print
    *
    * @param warning The warning message to print
-   * @returns  {Macro} This object itself.
+   * @returns {Macro} This object itself.
    */
   static abortWithWarning<T extends Macro>(
     this: Constructor<T>,
@@ -364,19 +364,22 @@ export class Macro {
     return new this().runaway();
   }
 
-  private static makeBALLSPredicate(condition: PreBALLSPredicate): string {
-    let ballsCondition = "";
+  /**
+   *
+   * @param condition The BALLS condition or a type to make a condition for (Monster, Item, Skill, etc.)
+   * @returns {string} The BALLS condition string
+   */
+  static makeBALLSPredicate(condition: PreBALLSPredicate): string {
     if (condition instanceof Monster) {
-      ballsCondition = `monsterid ${condition.id}`;
+      return `monsterid ${condition.id}`;
     } else if (condition instanceof Array) {
-      ballsCondition = condition
-        .map((mon) => `monsterid ${mon.id}`)
-        .join(" || ");
-      ballsCondition = `(${ballsCondition})`;
+      return `(${condition
+        .map((entry) => Macro.makeBALLSPredicate(entry))
+        .join(" || ")})`;
     } else if (condition instanceof Effect) {
-      ballsCondition = `haseffect ${condition.id}`;
+      return `haseffect ${condition.id}`;
     } else if (condition instanceof Skill) {
-      ballsCondition = `hasskill ${skillBallsMacroName(condition)}`;
+      return `hasskill ${skillBallsMacroName(condition)}`;
     } else if (condition instanceof Item) {
       if (!condition.combat) {
         throw new InvalidMacroError(
@@ -384,7 +387,7 @@ export class Macro {
         );
       }
 
-      ballsCondition = `hascombatitem ${itemOrItemsBallsMacroName(condition)}`;
+      return `hascombatitem ${itemOrItemsBallsMacroName(condition)}`;
     } else if (condition instanceof Location) {
       const snarfblat = condition.id;
 
@@ -394,7 +397,7 @@ export class Macro {
         );
       }
 
-      ballsCondition = `snarfblat ${snarfblat}`;
+      return `snarfblat ${snarfblat}`;
     } else if (condition instanceof Class) {
       if (condition.id > 6) {
         throw new InvalidMacroError(
@@ -402,13 +405,11 @@ export class Macro {
         );
       }
 
-      ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
+      return condition.toString().replaceAll(" ", "").toLowerCase();
     } else if (condition instanceof Stat) {
-      ballsCondition = `${condition.toString().toLowerCase()}class`;
-    } else {
-      ballsCondition = condition;
+      return `${condition.toString().toLowerCase()}class`;
     }
-    return ballsCondition;
+    return condition;
   }
 
   /**
@@ -469,24 +470,26 @@ export class Macro {
   /**
    * Add a "while" statement to this macro.
    *
-   * @param condition The BALLS condition for the if statement.
+   * @param condition The BALLS condition for the while statement.
    * @param contents Loop to repeat while the condition is true.
    * @returns {Macro} This object itself.
    */
-  while_(condition: string, contents: string | Macro): this {
-    return this.step(`while ${condition}`).step(contents).step("endwhile");
+  while_(condition: PreBALLSPredicate, contents: string | Macro): this {
+    return this.step(`while ${Macro.makeBALLSPredicate(condition)}`)
+      .step(contents)
+      .step("endwhile");
   }
 
   /**
    * Create a new macro with a "while" statement.
    *
-   * @param condition The BALLS condition for the if statement.
+   * @param condition The BALLS condition for the while statement.
    * @param contents Loop to repeat while the condition is true.
    * @returns {Macro} This object itself.
    */
   static while_<T extends Macro>(
     this: Constructor<T>,
-    condition: string,
+    condition: PreBALLSPredicate,
     contents: string | Macro,
   ): T {
     return new this().while_(condition, contents);
@@ -530,10 +533,13 @@ export class Macro {
   /**
    * Add a repeat step to the macro.
    *
+   * @param condition The BALLS condition for the repeat statement, optional.
    * @returns {Macro} This object itself.
    */
-  repeat(): this {
-    return this.step("repeat");
+  repeat(condition?: PreBALLSPredicate): this {
+    return condition === undefined
+      ? this.step("repeat")
+      : this.step(`repeat ${Macro.makeBALLSPredicate(condition)}`);
   }
 
   /**
@@ -601,12 +607,14 @@ export class Macro {
    */
   trySkillRepeat(...skills: SkillOrName[]): this {
     return this.step(
-      ...skills.map((skill) => {
-        return Macro.if_(
-          `hasskill ${skillBallsMacroName(skill)}`,
-          Macro.skill(skill).repeat(),
-        );
-      }),
+      ...skills
+        .map((skillOrName) => skillOrNameToSkill(skillOrName))
+        .map((skill) => {
+          return Macro.if_(
+            Macro.makeBALLSPredicate(skill),
+            Macro.skill(skill).repeat(skill),
+          );
+        }),
     );
   }
 

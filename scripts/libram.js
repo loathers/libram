@@ -7266,7 +7266,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * Create a new macro with an "abort" step to this macro, with a warning message to print
      *
      * @param warning The warning message to print
-     * @returns  {Macro} This object itself.
+     * @returns {Macro} This object itself.
      */
   }, {
     key: "runaway",
@@ -7333,18 +7333,18 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       /**
        * Add a "while" statement to this macro.
        *
-       * @param condition The BALLS condition for the if statement.
+       * @param condition The BALLS condition for the while statement.
        * @param contents Loop to repeat while the condition is true.
        * @returns {Macro} This object itself.
        */
       function(condition, contents) {
-        return this.step("while ".concat(condition)).step(contents).step("endwhile");
+        return this.step("while ".concat(Macro2.makeBALLSPredicate(condition))).step(contents).step("endwhile");
       }
     )
     /**
      * Create a new macro with a "while" statement.
      *
-     * @param condition The BALLS condition for the if statement.
+     * @param condition The BALLS condition for the while statement.
      * @param contents Loop to repeat while the condition is true.
      * @returns {Macro} This object itself.
      */
@@ -7377,10 +7377,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       /**
        * Add a repeat step to the macro.
        *
+       * @param condition The BALLS condition for the repeat statement, optional.
        * @returns {Macro} This object itself.
        */
-      function() {
-        return this.step("repeat");
+      function(condition) {
+        return condition === void 0 ? this.step("repeat") : this.step("repeat ".concat(Macro2.makeBALLSPredicate(condition)));
       }
     )
     /**
@@ -7439,8 +7440,10 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       function() {
         for (var _len4 = arguments.length, skills3 = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++)
           skills3[_key4] = arguments[_key4];
-        return this.step.apply(this, _toConsumableArray3(skills3.map(function(skill) {
-          return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill).repeat());
+        return this.step.apply(this, _toConsumableArray3(skills3.map(function(skillOrName) {
+          return skillOrNameToSkill(skillOrName);
+        }).map(function(skill) {
+          return Macro2.if_(Macro2.makeBALLSPredicate(skill), Macro2.skill(skill).repeat(skill));
         })));
       }
     )
@@ -7612,35 +7615,40 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     value: function() {
       return new this().runaway();
     }
+    /**
+     *
+     * @param condition The BALLS condition or a type to make a condition for (Monster, Item, Skill, etc.)
+     * @returns {string} The BALLS condition string
+     */
   }, {
     key: "makeBALLSPredicate",
     value: function(condition) {
-      var ballsCondition = "";
       if (condition instanceof import_kolmafia5.Monster)
-        ballsCondition = "monsterid ".concat(condition.id);
-      else if (condition instanceof Array)
-        ballsCondition = condition.map(function(mon) {
-          return "monsterid ".concat(mon.id);
-        }).join(" || "), ballsCondition = "(".concat(ballsCondition, ")");
-      else if (condition instanceof import_kolmafia5.Effect)
-        ballsCondition = "haseffect ".concat(condition.id);
-      else if (condition instanceof import_kolmafia5.Skill)
-        ballsCondition = "hasskill ".concat(skillBallsMacroName(condition));
-      else if (condition instanceof import_kolmafia5.Item) {
+        return "monsterid ".concat(condition.id);
+      if (condition instanceof Array)
+        return "(".concat(condition.map(function(entry) {
+          return Macro2.makeBALLSPredicate(entry);
+        }).join(" || "), ")");
+      if (condition instanceof import_kolmafia5.Effect)
+        return "haseffect ".concat(condition.id);
+      if (condition instanceof import_kolmafia5.Skill)
+        return "hasskill ".concat(skillBallsMacroName(condition));
+      if (condition instanceof import_kolmafia5.Item) {
         if (!condition.combat)
           throw new InvalidMacroError("Item ".concat(condition, " cannot be made a valid BALLS predicate (it is not combat-usable)"));
-        ballsCondition = "hascombatitem ".concat(itemOrItemsBallsMacroName(condition));
+        return "hascombatitem ".concat(itemOrItemsBallsMacroName(condition));
       } else if (condition instanceof import_kolmafia5.Location) {
         var snarfblat = condition.id;
         if (snarfblat < 1)
           throw new InvalidMacroError("Location ".concat(condition, " cannot be made a valid BALLS predicate (it has no location id)"));
-        ballsCondition = "snarfblat ".concat(snarfblat);
+        return "snarfblat ".concat(snarfblat);
       } else if (condition instanceof import_kolmafia5.Class) {
         if (condition.id > 6)
           throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
-        ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
-      } else condition instanceof import_kolmafia5.Stat ? ballsCondition = "".concat(condition.toString().toLowerCase(), "class") : ballsCondition = condition;
-      return ballsCondition;
+        return condition.toString().replaceAll(" ", "").toLowerCase();
+      } else if (condition instanceof import_kolmafia5.Stat)
+        return "".concat(condition.toString().toLowerCase(), "class");
+      return condition;
     }
   }, {
     key: "if_",

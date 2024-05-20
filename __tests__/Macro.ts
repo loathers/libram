@@ -92,7 +92,9 @@ describe(Macro, () => {
 
   it("tryItem", () => {
     const mock = $item`mock item`;
-    expect(Macro.tryItem(mock).toString()).toEqual(`if hascombatitem mock item;use ${mock.name};endif;`);
+    expect(Macro.tryItem(mock).toString()).toEqual(
+      `if hascombatitem mock item;use ${mock.name};endif;`,
+    );
   });
 
   it("attack", () => {

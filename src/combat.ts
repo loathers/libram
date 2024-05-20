@@ -577,12 +577,11 @@ export class Macro {
    */
   trySkill(...skills: SkillOrName[]): this {
     return this.step(
-      ...skills.map((skill) => {
-        return Macro.if_(
-          `hasskill ${skillBallsMacroName(skill)}`,
-          Macro.skill(skill),
-        );
-      }),
+      ...skills
+        .map((skillOrName) => skillOrNameToSkill(skillOrName))
+        .map((skill) => {
+          return Macro.if_(Macro.makeBALLSPredicate(skill), Macro.skill(skill));
+        }),
     );
   }
 
@@ -669,7 +668,7 @@ export class Macro {
       ...items.map((item) => {
         return Macro.if_(
           itemOrItemsBallsMacroPredicate(item),
-          `use ${itemOrItemsBallsMacroName(item)}`,
+          Macro.item(item),
         );
       }),
     );

@@ -33,6 +33,8 @@ function mockOneOrMany<
 }
 
 abstract class MafiaClass {
+  toString = jest.fn(() => this.name);
+
   constructor(readonly name: string) {}
 }
 
@@ -50,11 +52,20 @@ class Bounty extends MafiaClass {
 class Class extends MafiaClass {
   private static knownInstances: Class[] = [];
 
+  private static mockId = 11;
+
   static get = jest.fn((n: N) => mockOneOrMany(Class, n, Class.knownInstances));
 
   static all = jest.fn(() => Class.knownInstances);
 
   static none = {};
+
+  constructor(
+    readonly name: string,
+    readonly id: number = ++Class.mockId,
+  ) {
+    super(name);
+  }
 }
 class Coinmaster extends MafiaClass {
   private static knownInstances: Coinmaster[] = [];
@@ -70,6 +81,8 @@ class Coinmaster extends MafiaClass {
 class Effect extends MafiaClass {
   private static knownInstances: Effect[] = [];
 
+  private static mockId = 11;
+
   static get = jest.fn((n: N) =>
     mockOneOrMany(Effect, n, Effect.knownInstances),
   );
@@ -77,6 +90,13 @@ class Effect extends MafiaClass {
   static all = jest.fn(() => Effect.knownInstances);
 
   static none = {};
+
+  constructor(
+    readonly name: string,
+    readonly id: number = ++Effect.mockId,
+  ) {
+    super(name);
+  }
 }
 class Element extends MafiaClass {
   private static knownInstances: Element[] = [];
@@ -119,6 +139,7 @@ class Item extends MafiaClass {
     readonly name: string,
     readonly id: number = ++Item.mockId,
     public plural: string = `Multiple ${name}`,
+    readonly combat: boolean = false,
   ) {
     super(name);
   }
@@ -127,6 +148,8 @@ class Item extends MafiaClass {
 class Location extends MafiaClass {
   private static knownInstances: Location[] = [];
 
+  private static mockId = 11;
+
   static get = jest.fn((n: N) =>
     mockOneOrMany(Location, n, Location.knownInstances),
   );
@@ -134,6 +157,13 @@ class Location extends MafiaClass {
   static all = jest.fn(() => Location.knownInstances);
 
   static none = {};
+
+  constructor(
+    readonly name: string,
+    readonly id: number = ++Location.mockId,
+  ) {
+    super(name);
+  }
 }
 class Modifier extends MafiaClass {
   private static knownInstances: Modifier[] = [];
@@ -149,6 +179,8 @@ class Modifier extends MafiaClass {
 class Monster extends MafiaClass {
   private static knownInstances: Monster[] = [];
 
+  private static mockId = 11;
+
   static get = jest.fn((n: N) =>
     mockOneOrMany(Monster, n, Monster.knownInstances),
   );
@@ -156,6 +188,13 @@ class Monster extends MafiaClass {
   static all = jest.fn(() => Monster.knownInstances);
 
   static none = {};
+
+  constructor(
+    readonly name: string,
+    readonly id: number = ++Monster.mockId,
+  ) {
+    super(name);
+  }
 }
 class Path extends MafiaClass {
   private static knownInstances: Path[] = [];
@@ -191,11 +230,20 @@ class Servant extends MafiaClass {
 class Skill extends MafiaClass {
   private static knownInstances: Skill[] = [];
 
+  private static mockId = 11;
+
   static get = jest.fn((n: N) => mockOneOrMany(Skill, n, Skill.knownInstances));
 
   static all = jest.fn(() => Skill.knownInstances);
 
   static none = {};
+
+  constructor(
+    readonly name: string,
+    readonly id: number = ++Skill.mockId,
+  ) {
+    super(name);
+  }
 }
 class Slot extends MafiaClass {
   private static knownInstances: Slot[] = [];

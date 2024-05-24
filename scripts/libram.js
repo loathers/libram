@@ -7417,8 +7417,10 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       function() {
         for (var _len3 = arguments.length, skills3 = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++)
           skills3[_key3] = arguments[_key3];
-        return this.step.apply(this, _toConsumableArray3(skills3.map(function(skill) {
-          return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill));
+        return this.step.apply(this, _toConsumableArray3(skills3.map(function(skillOrName) {
+          return skillOrNameToSkill(skillOrName);
+        }).map(function(skill) {
+          return Macro2.if_(Macro2.makeBALLSPredicate(skill), Macro2.skill(skill));
         })));
       }
     )
@@ -7489,7 +7491,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
         for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++)
           items[_key6] = arguments[_key6];
         return this.step.apply(this, _toConsumableArray3(items.map(function(item11) {
-          return Macro2.if_(itemOrItemsBallsMacroPredicate(item11), "use ".concat(itemOrItemsBallsMacroName(item11)));
+          return Macro2.if_(itemOrItemsBallsMacroPredicate(item11), Macro2.item(item11));
         })));
       }
     )

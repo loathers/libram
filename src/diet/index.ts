@@ -18,13 +18,16 @@ import {
   spleenLimit,
 } from "kolmafia";
 
-import { have } from "../lib";
-import { get as getModifier } from "../modifier";
-import { get } from "../property";
-import { Mayo, installed as mayoInstalled } from "../resources/2015/MayoClinic";
-import { $effect, $item, $items, $skill, $stat } from "../template-string";
-import { notNullish, sum } from "../utils";
-import { knapsack } from "./knapsack";
+import { have } from "../lib.js";
+import { get as getModifier } from "../modifier.js";
+import { get } from "../property.js";
+import {
+  Mayo,
+  installed as mayoInstalled,
+} from "../resources/2015/MayoClinic.js";
+import { $effect, $item, $items, $skill, $stat } from "../template-string.js";
+import { notNullish, sum } from "../utils.js";
+import { knapsack } from "./knapsack.js";
 
 type RawDietEntry<T> = [MenuItem<T>[], number];
 type RawDiet<T> = RawDietEntry<T>[];

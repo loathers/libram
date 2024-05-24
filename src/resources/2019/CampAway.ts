@@ -7,10 +7,10 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { signIdToName } from "../../moonSign";
-import { get, withChoice } from "../../property";
-import { $item } from "../../template-string";
-import { random } from "../../utils";
+import { signIdToName } from "../../moonSign.js";
+import { get, withChoice } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { random } from "../../utils.js";
 
 /**
  * Determines whether we `have` the campsite

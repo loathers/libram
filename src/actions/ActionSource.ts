@@ -1,8 +1,8 @@
 import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
 
-import { Macro } from "../combat";
-import { Requirement } from "../maximize";
-import { sum, flat } from "../utils";
+import { Macro } from "../combat.js";
+import { Requirement } from "../maximize.js";
+import { sum, flat } from "../utils.js";
 
 export type FindActionSourceConstraints = {
   /**

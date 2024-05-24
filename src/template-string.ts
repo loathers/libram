@@ -21,7 +21,7 @@ import {
   Thrall,
 } from "kolmafia";
 
-import { splitByCommasWithEscapes } from "./utils";
+import { splitByCommasWithEscapes } from "./utils.js";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,

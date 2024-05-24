@@ -1,17 +1,17 @@
-import { Copier } from "../Copier";
+import { Copier } from "../Copier.js";
 import {
   getSpookyPuttySheetCopiesMade,
   getSpookyPuttySheetMonster,
   have as haveSpookyPutty,
   prepareSpookyPuttySheet,
   useSpookyPuttySheet,
-} from "./2009/SpookyPutty";
+} from "./2009/SpookyPutty.js";
 import {
   getRainDohBlackBoxCopiesMade,
   getRainDohBlackBoxMonster,
   have as haveRainDoh,
   useRainDohBlackBox,
-} from "./2012/RainDoh";
+} from "./2012/RainDoh.js";
 
 /**
  * Get total putty-like copies made

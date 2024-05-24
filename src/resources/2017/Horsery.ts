@@ -1,6 +1,6 @@
 import { cliExecute, visitUrl } from "kolmafia";
-import { Modifiers } from "../..";
-import { get } from "../../property";
+import { Modifiers } from "../../modifier.js";
+import { get } from "../../property.js";
 
 /**
  * @returns Whether or not the horsery is available

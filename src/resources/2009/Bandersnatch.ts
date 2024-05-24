@@ -11,9 +11,9 @@ import {
   getActiveSongs,
   isCurrentFamiliar,
   uneffect,
-} from "../../lib";
-import { get } from "../../property";
-import { $effect, $familiar, $skill } from "../../template-string";
+} from "../../lib.js";
+import { get } from "../../property.js";
+import { $effect, $familiar, $skill } from "../../template-string.js";
 
 const familiar = $familiar`Frumious Bandersnatch`;
 

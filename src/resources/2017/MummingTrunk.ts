@@ -1,6 +1,6 @@
 import { Familiar, toFamiliar } from "kolmafia";
-import { NumericModifier } from "../../modifierTypes";
-import { get } from "../../property";
+import { NumericModifier } from "../../modifierTypes.js";
+import { get } from "../../property.js";
 
 /**
  * Internal function used to parse mods

@@ -1,8 +1,8 @@
 import { decode as decodeEntities } from "html-entities";
 import { extractMeat, isGiftable, Item, visitUrl } from "kolmafia";
-import { extractItems } from "./lib";
-import { combineQuery, EMPTY_VALUE, fetchUrl, Query } from "./url";
-import { arrayToCountedMap, chunk } from "./utils";
+import { extractItems } from "./lib.js";
+import { combineQuery, EMPTY_VALUE, fetchUrl, Query } from "./url.js";
+import { arrayToCountedMap, chunk } from "./utils.js";
 
 type RawKmail = {
   id: string;

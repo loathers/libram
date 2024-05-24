@@ -1,7 +1,7 @@
 import { Item } from "kolmafia";
-import { have as _have } from "../../lib";
-import { get } from "../../property";
-import { $item, $skill } from "../../template-string";
+import { have as _have } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item, $skill } from "../../template-string.js";
 
 const summonSkill = $skill`Summon Taffy`;
 

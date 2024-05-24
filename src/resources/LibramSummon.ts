@@ -1,32 +1,32 @@
 import { Skill, Item } from "kolmafia";
-import { getSaleValue } from "../lib";
-import { $skill } from "../template-string";
-import { sum, maxBy } from "../utils";
+import { getSaleValue } from "../lib.js";
+import { $skill } from "../template-string.js";
+import { sum, maxBy } from "../utils.js";
 import {
   expected as candyHeartsExpected,
   have as candyHeartsHave,
-} from "./2007/CandyHearts";
+} from "./2007/CandyHearts.js";
 import {
   expected as divineFavorsExpected,
   have as divineFavorsHave,
-} from "./2008/DivineFavors";
+} from "./2008/DivineFavors.js";
 import {
   expected as loveSongsExpected,
   have as loveSongsHave,
-} from "./2009/LoveSongs";
+} from "./2009/LoveSongs.js";
 import {
   expected as brickosExpected,
   have as brickosHave,
-} from "./2010/Brickos";
-import { expected as diceExpected, have as diceHave } from "./2011/Gygaxian";
+} from "./2010/Brickos.js";
+import { expected as diceExpected, have as diceHave } from "./2011/Gygaxian.js";
 import {
   expected as resolutionsExpected,
   have as resolutionsHave,
-} from "./2012/Resolutions";
+} from "./2012/Resolutions.js";
 import {
   expected as taffyExpected,
   have as taffyHave,
-} from "./2013/PulledTaffy";
+} from "./2013/PulledTaffy.js";
 
 /**
  *

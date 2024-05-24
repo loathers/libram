@@ -1,6 +1,6 @@
 import { Item, visitUrl } from "kolmafia";
-import { directlyUse, have as haveItem } from "../../lib";
-import { $item } from "../../template-string";
+import { directlyUse, have as haveItem } from "../../lib.js";
+import { $item } from "../../template-string.js";
 
 const pantogram = $item`portable pantogram`;
 const pants = $item`pantogram pants`;

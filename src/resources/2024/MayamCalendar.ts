@@ -1,7 +1,7 @@
 import { cliExecute, Effect, Item } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $effect, $item } from "../../template-string";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $effect, $item } from "../../template-string.js";
 
 export const RINGS = Object.freeze([
   ["yam1", "sword", "eye", "chair", "fur", "vessel"],

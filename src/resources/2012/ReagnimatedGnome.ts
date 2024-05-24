@@ -1,6 +1,6 @@
 import { Item, runChoice, visitUrl } from "kolmafia";
-import { have as _have } from "../../lib";
-import { $familiar, $item } from "../../template-string";
+import { have as _have } from "../../lib.js";
+import { $familiar, $item } from "../../template-string.js";
 
 /**
  * @returns Whether the player has a Reagnimated Gnome in their terrarium

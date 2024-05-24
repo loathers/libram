@@ -1,6 +1,6 @@
 import { Item } from "kolmafia";
-import { have as _have } from "../../lib";
-import { $item, $skill } from "../../template-string";
+import { have as _have } from "../../lib.js";
+import { $item, $skill } from "../../template-string.js";
 
 const summonSkill = $skill`Summon Resolutions`;
 const commonChance = 0.98 / 6;

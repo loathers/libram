@@ -1,6 +1,6 @@
 import { availableAmount, cliExecute, Item, visitUrl } from "kolmafia";
-import { get } from "../../property";
-import { $item } from "../../template-string";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 /**
  * @returns Whether you have permanent Spacegate Access

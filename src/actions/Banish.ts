@@ -7,17 +7,17 @@ import {
   visitUrl,
 } from "kolmafia";
 
-import { Macro } from "../combat";
-import { getFoldGroup, have } from "../lib";
-import { Requirement } from "../maximize";
-import { get } from "../property";
-import * as AsdonMartin from "../resources/2017/AsdonMartin";
-import { $item, $items, $skill } from "../template-string";
+import { Macro } from "../combat.js";
+import { getFoldGroup, have } from "../lib.js";
+import { Requirement } from "../maximize.js";
+import { get } from "../property.js";
+import * as AsdonMartin from "../resources/2017/AsdonMartin.js";
+import { $item, $items, $skill } from "../template-string.js";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceConstraints,
-} from "./ActionSource";
+} from "./ActionSource.js";
 
 // Value of _lastCombatStarted the last time we updated scrapbook charges.
 let scrapbookChargesLastUpdated = get("_lastCombatStarted");

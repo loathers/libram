@@ -5,11 +5,11 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
-import { EnvironmentType } from "../../lib";
-import { mergeModifiers, Modifiers } from "../../modifier";
-import { get } from "../../property";
-import { $location } from "../../template-string";
-import { notNull } from "../../utils";
+import { EnvironmentType } from "../../lib.js";
+import { mergeModifiers, Modifiers } from "../../modifier.js";
+import { get } from "../../property.js";
+import { $location } from "../../template-string.js";
+import { notNull } from "../../utils.js";
 type SpecialFlowerAbility = "Delevels Enemy" | "Blocks Attacks" | "Poison";
 
 class Flower {

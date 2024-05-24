@@ -19,7 +19,7 @@ import {
   statModifier,
   stringModifier,
 } from "kolmafia";
-import { have } from "./lib";
+import { have } from "./lib.js";
 
 import {
   BooleanModifier,
@@ -38,9 +38,9 @@ import {
   statModifiers,
   StringModifier,
   stringModifiers,
-} from "./modifierTypes";
-import { $effect } from "./template-string";
-import { arrayContains, sum } from "./utils";
+} from "./modifierTypes.js";
+import { $effect } from "./template-string.js";
+import { arrayContains, sum } from "./utils.js";
 
 export function get(
   name: BooleanModifier,

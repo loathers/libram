@@ -9,9 +9,9 @@ import {
   myTotalTurnsSpent,
   totalTurnsPlayed,
 } from "kolmafia";
-import { canVisitUrl } from "../../lib";
-import logger from "../../logger";
-import { get } from "../../property";
+import { canVisitUrl } from "../../lib.js";
+import logger from "../../logger.js";
+import { get } from "../../property.js";
 
 export const orb = Item.get("miniature crystal ball");
 /**

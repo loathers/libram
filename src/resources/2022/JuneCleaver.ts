@@ -1,5 +1,5 @@
 import { toItem, availableAmount } from "kolmafia";
-import { get } from "../../property";
+import { get } from "../../property.js";
 
 export const cleaver = toItem("June cleaver");
 

@@ -8,9 +8,9 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { have } from "../../lib";
-import { withChoice } from "../../property";
-import { $monster, $path, $skill } from "../../template-string";
+import { have } from "../../lib.js";
+import { withChoice } from "../../property.js";
+import { $monster, $path, $skill } from "../../template-string.js";
 
 /**
  * Cast Rain Man and fight the target monster

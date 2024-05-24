@@ -1,7 +1,7 @@
 import { cliExecute } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
+import { have as haveItem } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 const item = $item`SongBoom™ BoomBox`;
 /**

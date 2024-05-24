@@ -17,7 +17,7 @@ import {
   StatProperty,
   stringProperties,
   StringProperty,
-} from "./propertyTypes";
+} from "./propertyTypes.js";
 
 const booleanPropertiesSet = new Set(booleanProperties);
 const numericPropertiesSet = new Set(numericProperties);

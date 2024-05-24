@@ -13,11 +13,11 @@ import {
   getPermedSkills,
   toSkill,
 } from "kolmafia";
-import { MoonSign, signNameToId } from "./moonSign";
-import { get } from "./property";
-import { ChateauMantegna } from "./resources";
-import { $item, $items, $stat } from "./template-string";
-import { arrayContains, tc } from "./utils";
+import { MoonSign, signNameToId } from "./moonSign.js";
+import { get } from "./property.js";
+import { ChateauMantegna } from "./resources/index.js";
+import { $item, $items, $stat } from "./template-string.js";
+import { arrayContains, tc } from "./utils.js";
 
 export enum Lifestyle {
   casual = 1,

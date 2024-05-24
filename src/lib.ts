@@ -59,8 +59,8 @@ import {
   xpath,
 } from "kolmafia";
 
-import logger from "./logger";
-import { get } from "./property";
+import logger from "./logger.js";
+import { get } from "./property.js";
 import {
   $class,
   $effect,
@@ -71,8 +71,8 @@ import {
   $monsters,
   $skill,
   $stat,
-} from "./template-string";
-import { makeByXFunction, chunk, flat, notNull } from "./utils";
+} from "./template-string.js";
+import { makeByXFunction, chunk, flat, notNull } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head

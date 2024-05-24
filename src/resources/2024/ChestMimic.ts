@@ -7,9 +7,14 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { CombatParams, directlyUse, examine, have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $familiar, $item } from "../../template-string";
+import {
+  CombatParams,
+  directlyUse,
+  examine,
+  have as have_,
+} from "../../lib.js";
+import { get } from "../../property.js";
+import { $familiar, $item } from "../../template-string.js";
 
 const familiar = $familiar`Chest Mimic`;
 

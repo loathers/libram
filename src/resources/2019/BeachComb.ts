@@ -7,10 +7,10 @@ import {
   Item,
   runChoice,
 } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $effect } from "../../template-string";
-import { clamp } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $effect } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 /**
  * Determines whether we `have` the beach comb

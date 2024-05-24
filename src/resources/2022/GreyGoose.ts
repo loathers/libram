@@ -1,8 +1,8 @@
 import { myClass } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get as getModifier } from "../../modifier";
-import { get } from "../../property";
-import { $familiar, $item, $skill } from "../../template-string";
+import { have as have_ } from "../../lib.js";
+import { get as getModifier } from "../../modifier.js";
+import { get } from "../../property.js";
+import { $familiar, $item, $skill } from "../../template-string.js";
 
 const goose = $familiar`Grey Goose`;
 

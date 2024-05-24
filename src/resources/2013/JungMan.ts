@@ -1,6 +1,6 @@
 import { haveFamiliar, visitUrl } from "kolmafia";
-import { get } from "../../property";
-import { $familiar, $item } from "../../template-string";
+import { get } from "../../property.js";
+import { $familiar, $item } from "../../template-string.js";
 
 const familiar = $familiar`Angry Jung Man`;
 

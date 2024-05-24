@@ -1,7 +1,7 @@
 import { Item, Monster, cliExecute, itemAmount, runChoice } from "kolmafia";
-import { haveInCampground } from "../../lib";
-import { get } from "../../property";
-import { $item, $monster } from "../../template-string";
+import { haveInCampground } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item, $monster } from "../../template-string.js";
 
 const item = $item`A Guide to Burning Leaves`;
 

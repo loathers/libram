@@ -1,17 +1,23 @@
 import { retrieveItem } from "kolmafia";
 
-import { Macro } from "../combat";
-import { ensureEffect, getSongCount, getSongLimit, have } from "../lib";
-import { Requirement } from "../maximize";
-import { get } from "../property";
-import * as Bandersnatch from "../resources/2009/Bandersnatch";
-import * as StompingBoots from "../resources/2011/StompingBoots";
-import { $effect, $familiar, $item, $items, $skill } from "../template-string";
+import { Macro } from "../combat.js";
+import { ensureEffect, getSongCount, getSongLimit, have } from "../lib.js";
+import { Requirement } from "../maximize.js";
+import { get } from "../property.js";
+import * as Bandersnatch from "../resources/2009/Bandersnatch.js";
+import * as StompingBoots from "../resources/2011/StompingBoots.js";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $items,
+  $skill,
+} from "../template-string.js";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceConstraints,
-} from "./ActionSource";
+} from "./ActionSource.js";
 
 const everythingLooksGreen =
   (otherClause = () => true) =>

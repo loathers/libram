@@ -16,15 +16,15 @@ import {
   xpath,
 } from "kolmafia";
 
-import { getFoldGroup } from "./lib";
-import logger from "./logger";
+import { getFoldGroup } from "./lib.js";
+import logger from "./logger.js";
 import {
   arrayToCountedMap,
   countedMapToArray,
   countedMapToString,
   notNull,
   parseNumber,
-} from "./utils";
+} from "./utils.js";
 
 export interface Rank {
   name: string;

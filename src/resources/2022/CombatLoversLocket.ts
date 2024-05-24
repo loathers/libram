@@ -5,10 +5,10 @@ import {
   runCombat,
   toMonster,
 } from "kolmafia";
-import { CombatParams, have as haveItem } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { CombatParams, have as haveItem } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 const locket = $item`combat lover's locket`;
 

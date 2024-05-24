@@ -1,7 +1,7 @@
 import { availableAmount, runChoice, visitUrl } from "kolmafia";
-import { get } from "../../property";
-import { $items } from "../../template-string";
-import { sum } from "../../utils";
+import { get } from "../../property.js";
+import { $items } from "../../template-string.js";
+import { sum } from "../../utils.js";
 
 const BARRELS = $items`little firkin, normal barrel, big tun, weathered barrel, dusty barrel, disintegrating barrel, moist barrel, rotting barrel, mouldering barrel, barnacled barrel`;
 

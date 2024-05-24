@@ -11,11 +11,11 @@ import {
   cliExecute,
   Monster,
 } from "kolmafia";
-import { have as have_ } from "../../lib";
-import logger from "../../logger";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { clamp, flat } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import logger from "../../logger.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { clamp, flat } from "../../utils.js";
 
 const item = $item`cursed monkey's paw`;
 

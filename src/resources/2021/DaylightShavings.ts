@@ -1,7 +1,7 @@
 import { Effect, myClass, toEffect } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import { get } from "../../property";
-import { $effects, $item } from "../../template-string";
+import { have as haveItem } from "../../lib.js";
+import { get } from "../../property.js";
+import { $effects, $item } from "../../template-string.js";
 
 const helmet = $item`Daylight Shavings Helmet`;
 

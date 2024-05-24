@@ -1,10 +1,10 @@
 import { cliExecute, getProperty, Monster } from "kolmafia";
-import * as Counter from "../../counter";
-import { have as haveItem } from "../../lib";
-import { Modifiers } from "../../modifier";
-import { get } from "../../property";
-import { $item, $location } from "../../template-string";
-import { clamp } from "../../utils";
+import * as Counter from "../../counter.js";
+import { have as haveItem } from "../../lib.js";
+import { Modifiers } from "../../modifier.js";
+import { get } from "../../property.js";
+import { $item, $location } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 /**
  * @returns Whether we `have` the latte lovers member's mug

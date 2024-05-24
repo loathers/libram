@@ -610,10 +610,7 @@ export class Macro {
       ...skills
         .map((skillOrName) => skillOrNameToSkill(skillOrName))
         .map((skill) => {
-          return Macro.if_(
-            Macro.makeBALLSPredicate(skill),
-            Macro.skill(skill).repeat(skill),
-          );
+          return Macro.while_(skill, Macro.skill(skill));
         }),
     );
   }

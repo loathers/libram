@@ -2178,12 +2178,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.12.10":
-  version: 20.12.10
-  resolution: "@types/node@npm:20.12.10"
+"@types/node@npm:^20.12.12":
+  version: 20.12.12
+  resolution: "@types/node@npm:20.12.12"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/2cc3b6ea09894ed1a3cf39f6491ec539281580f4ff83216e7d26ce85c83237fe0543c0ca49e25b2515ccdb6c8814b488d17a64a05f536dcaea94f9d32a60c7d7
+  checksum: 10c0/f374b763c744e8f16e4f38cf6e2c0eef31781ec9228c9e43a6f267880fea420fab0a238b59f10a7cb3444e49547c5e3785787e371fc242307310995b21988812
   languageName: node
   linkType: hard
 
@@ -4953,10 +4953,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.27934.0":
-  version: 5.27934.0
-  resolution: "kolmafia@npm:5.27934.0"
-  checksum: 10c0/dfe9804737f9c001a00803b711435665aef9a2e47e3c596c01e924232ea571bbe4aed921f6394c403b28ade2b3ac373ea9c6b7848f61f08fe22f9a824799a5ce
+"kolmafia@npm:^5.27956.0":
+  version: 5.27956.0
+  resolution: "kolmafia@npm:5.27956.0"
+  checksum: 10c0/00ebdbcbf26620ee45d9594ebaddc3dd7673b92b069fdd0ff4f08fff475cbd59a31a0cb18f8f4213824a5ea433720ff49c27266244ba3b5a6515271c024f5571
   languageName: node
   linkType: hard
 
@@ -4982,7 +4982,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.24.1"
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/lodash-es": "npm:^4.17.12"
-    "@types/node": "npm:^20.12.10"
+    "@types/node": "npm:^20.12.12"
     "@typescript-eslint/eslint-plugin": "npm:^7.8.0"
     "@typescript-eslint/parser": "npm:^7.8.0"
     esbuild: "npm:^0.21.0"
@@ -4996,7 +4996,7 @@ __metadata:
     html-entities: "npm:^2.5.2"
     husky: "npm:^9.0.11"
     java-parser: "npm:^1.4.0"
-    kolmafia: "npm:^5.27934.0"
+    kolmafia: "npm:^5.27956.0"
     lint-staged: "npm:^15.2.2"
     lodash-es: "npm:^4.17.21"
     node-fetch: "npm:^3.3.2"

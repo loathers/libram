@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     setupFiles: ["./setupTests.ts"],
     reporters: process.env.GITHUB_ACTIONS
-      ? ['default', new GithubActionsReporter()]
-      : 'default'
-  }
+      ? ["default", new GithubActionsReporter()]
+      : "default",
+  },
 });

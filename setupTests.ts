@@ -34,36 +34,39 @@ function mockOneOrMany<
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const knownInstances: Record<string, any[]> = {};
-const knownIds: Record< string, number> = {};
+const knownIds: Record<string, number> = {};
 
-// Check that we are mocking all of the 
+// Mock all of the MafiaClasses
 for (const [key, value] of Object.entries(kolmafia)) {
   if (typeof value !== "function") {
     continue;
   }
 
+  // Let's take the existence of a none static to be proof of being a MafiaClass
   const descriptor = Object.getOwnPropertyDescriptor(value, "prototype");
-
-  if (descriptor?.value.constructor.none) {
-    const mockedClass = vi.mocked(kolmafia)[key];
-    knownInstances[key] = [];
-    knownIds[key] = 11;
-    mockedClass.prototype.constructor.mockImplementation(function (name) {
-      this.name = name;
-      this.id = knownIds[key]++;
-    });
-    mockedClass.prototype.toString = function () {
-      return this.name;
-    };
-    mockedClass.get.mockImplementation((n: N) => mockOneOrMany(mockedClass, n, knownInstances[key]));
-    mockedClass.all.mockImplementation(() => knownInstances[key]);
+  if (!descriptor?.value.constructor.none) {
+    continue;
   }
+
+  const mockedClass = vi.mocked(kolmafia)[key];
+  knownInstances[key] = [];
+  knownIds[key] = 11;
+  mockedClass.prototype.constructor.mockImplementation(function (name) {
+    this.name = name;
+    this.id = knownIds[key]++;
+  });
+  mockedClass.prototype.toString = function () {
+    return this.name;
+  };
+  mockedClass.get.mockImplementation((n: N) =>
+    mockOneOrMany(mockedClass, n, knownInstances[key]),
+  );
+  mockedClass.all.mockImplementation(() => knownInstances[key]);
 }
 
 function findItemByPlural(plural: string) {
   return knownInstances["Item"].find((i) => i.plural === plural);
 }
-
 
 vi.mocked(kolmafia).logprint.mockImplementation((msg) =>
   console.log(`[kolmafia.logprint] ${msg}`),
@@ -84,7 +87,7 @@ vi.mocked(kolmafia).extractItems.mockImplementation((s) => {
   for (const match of s.matchAll(/You acquire <b>(\d+) ([^<]+)<\/b>/g)) {
     const count = parseInt(match[1], 10);
     const plural = decodeEntities(match[2]);
-    const item = findItemByPlural(plural) ?? (kolmafia.Item.get(plural));
+    const item = findItemByPlural(plural) ?? kolmafia.Item.get(plural);
     const name = item.name;
     items[name] = (items[name] ?? 0) + count;
   }
@@ -95,14 +98,20 @@ vi.mocked(kolmafia).extractMeat.mockImplementation((s) => {
   return match ? parseInt(match[1], 10) : 0;
 });
 vi.mocked(kolmafia).getMonsters.mockImplementation(() => []);
-vi.mocked(kolmafia).nowToString.mockImplementation(() => new Date().toISOString());
-vi.mocked(kolmafia).toInt.mockImplementation((value) => parseInt(value.toString(), 10));
+vi.mocked(kolmafia).nowToString.mockImplementation(() =>
+  new Date().toISOString(),
+);
+vi.mocked(kolmafia).toInt.mockImplementation((value) =>
+  parseInt(value.toString(), 10),
+);
 vi.mocked(kolmafia).toPlural.mockImplementation((item) => item.plural);
 vi.mocked(kolmafia).toString.mockImplementation((value) => value.toString());
 
 const mockProperties = new Map<string, string>();
 export const clearMockProperties = () => mockProperties.clear();
-vi.mocked(kolmafia).getProperty.mockImplementation((key) => mockProperties.get(key) ?? "");
+vi.mocked(kolmafia).getProperty.mockImplementation(
+  (key) => mockProperties.get(key) ?? "",
+);
 vi.mocked(kolmafia).setProperty.mockImplementation((key, value) =>
   mockProperties.set(key, value),
 );

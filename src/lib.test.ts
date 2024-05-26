@@ -5,7 +5,7 @@ import {
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
-} from "../../src";
+} from "./lib.js";
 
 jest.mock("kolmafia");
 

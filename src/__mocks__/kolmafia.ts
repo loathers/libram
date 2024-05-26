@@ -1,5 +1,5 @@
-import { decode as decodeEntities } from "html-entities";
 import { jest } from "@jest/globals";
+import { decode as decodeEntities } from "html-entities";
 
 import type RuntimeLibrary from "kolmafia";
 import Mocked = jest.Mocked;
@@ -361,7 +361,7 @@ kolmafia.extractMeat.mockImplementation((s) => {
 });
 kolmafia.getMonsters.mockImplementation(() => []);
 kolmafia.nowToString.mockImplementation(() => new Date().toISOString());
-kolmafia.toInt.mockImplementation((value) => parseInt(value as any, 10));
+kolmafia.toInt.mockImplementation((value) => parseInt(value.toString(), 10));
 kolmafia.toPlural.mockImplementation((item) => item.plural);
 kolmafia.toString.mockImplementation((value) => value.toString());
 

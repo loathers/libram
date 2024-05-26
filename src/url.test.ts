@@ -1,6 +1,6 @@
 import { visitUrl } from "kolmafia";
 
-import { buildUrl, combineQuery, EMPTY_VALUE, fetchUrl } from "../src/url";
+import { buildUrl, combineQuery, EMPTY_VALUE, fetchUrl } from "./url.js";
 
 jest.mock(
   "kolmafia",
@@ -118,9 +118,8 @@ describe(buildUrl, () => {
       ],
     ],
   ])("should fail if a query parameter is not a pair", (query) => {
-    expect(() => buildUrl("test.php", query as any)).toThrow(
-      "may only contain pair",
-    );
+    // @ts-expect-error We are testing a runtime error
+    expect(() => buildUrl("test.php", query)).toThrow("may only contain pair");
   });
 });
 

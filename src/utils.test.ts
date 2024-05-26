@@ -1,4 +1,4 @@
-import { splitByCommasWithEscapes } from "../src/utils";
+import { splitByCommasWithEscapes } from "./utils.js";
 
 describe("splitByCommasWithEscapes", () => {
   it("can split by commas with escapes", () => {

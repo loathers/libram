@@ -1,4 +1,5 @@
-import { InvalidMacroError, Macro } from "../src/combat";
+/* eslint-disable libram/verify-constants */
+import { InvalidMacroError, Macro } from "./combat.js";
 import {
   $class,
   $effect,
@@ -7,7 +8,7 @@ import {
   $monster,
   $skill,
   $stat,
-} from "../src/template-string";
+} from "./template-string.js";
 
 jest.mock("kolmafia");
 

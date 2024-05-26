@@ -1,5 +1,5 @@
 import { visitUrl } from "kolmafia";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 import { buildUrl, combineQuery, EMPTY_VALUE, fetchUrl } from "./url.js";
 

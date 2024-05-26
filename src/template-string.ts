@@ -65,6 +65,7 @@ const createSingleConstant = <T extends MafiaClass>(
     }
     abort();
   };
+  tagFunction.cls = Type;
   tagFunction.none = Type.none as T;
   return tagFunction;
 };

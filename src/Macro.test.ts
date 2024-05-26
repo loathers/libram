@@ -1,4 +1,5 @@
 /* eslint-disable libram/verify-constants */
+import { describe, it, expect } from "vitest";
 import { InvalidMacroError, Macro } from "./combat.js";
 import {
   $class,
@@ -9,12 +10,6 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-
-jest.mock("kolmafia");
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
 
 describe(Macro, () => {
   it("abort", () => {
@@ -137,7 +132,8 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("Item", () => {
     const mock = $item`mock item`;
-    jest.replaceProperty(mock, "combat", true);
+    // @ts-expect-error TypeScript believes that this is readonly
+    mock.combat = true;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(
       `hascombatitem ${mock.name}`,
     );
@@ -145,7 +141,8 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("Item Overlapping", () => {
     const mock = $item`spider web`;
-    jest.replaceProperty(mock, "combat", true);
+    // @ts-expect-error TypeScript believes that this is readonly
+    mock.combat = true;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(`hascombatitem ${mock.id}`);
   });
 
@@ -161,13 +158,15 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("Location Invalid", () => {
     const mock = $location`invalid mock location`;
-    jest.replaceProperty(mock, "id", -1);
+    // @ts-expect-error TypeScript believes that this is readonly
+    mock.id = -1;
     expect(() => Macro.makeBALLSPredicate(mock)).toThrow(InvalidMacroError);
   });
 
   it("Class", () => {
     const mock = $class`Mock Name`;
-    jest.replaceProperty(mock, "id", 1);
+    // @ts-expect-error TypeScript believes that this is readonly
+    mock.id = 1;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(`mockname`);
   });
 

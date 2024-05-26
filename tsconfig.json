@@ -12,9 +12,11 @@
     "outDir": "dist",
     "stripInternal": true,
     "resolveJsonModule": true,
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    "types": ["node"]
   },
   "include": ["src/"],
+  "exclude": ["*.test.ts"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

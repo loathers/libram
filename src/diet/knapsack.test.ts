@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { knapsack } from "./knapsack.js";
 
 function sortValues<T>(items: [T, number][]) {

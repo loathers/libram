@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "declaration": true,
-    "lib": ["esnext", "DOM"],
+    "lib": ["esnext"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "newLine": "LF",
@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "dist",
+    "skipLibCheck": true,
     "stripInternal": true,
     "resolveJsonModule": true,
     "exactOptionalPropertyTypes": true,

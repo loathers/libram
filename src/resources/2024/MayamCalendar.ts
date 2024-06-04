@@ -55,13 +55,30 @@ export function remainingUses(): number {
   return RINGS[3].filter((symbol) => available(symbol)).length;
 }
 
-const toCombination = (
+/**
+ * Utility function to ensure you're dealing with a `Combination` array.
+ * @param combination An array containing a `CombinationString` or a `Combination` array.
+ * @returns A `Combination` corresponding to the information passed in.
+ */
+export function toCombination(
   combination: Combination | [CombinationString],
-): Combination =>
-  combination.length === 1
+): Combination {
+  return combination.length === 1
     ? (combination[0].split(" ") as Combination)
     : combination;
-
+}
+/**
+ * Utility function to ensure you're dealing with a `CombinationString` string.
+ * @param combination An array containing a `CombinationString` or a `Combination` array.
+ * @returns A `CombinationSTring` corresponding to the information passed in.
+ */
+export function toCombinationString(
+  combination: Combination | [CombinationString],
+): CombinationString {
+  return combination.length === 1
+    ? combination[0]
+    : (combination.join(" ") as CombinationString);
+}
 /**
  * Enter a combination in the Mayam calendar
  * @param combination The combination to submit, either as a single string or as a series of symbols

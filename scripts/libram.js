@@ -6314,7 +6314,7 @@ var concatTemplateString = function(literals) {
     }
     (0, import_kolmafia3.abort)();
   };
-  return tagFunction.none = Type.none, tagFunction;
+  return tagFunction.cls = Type, tagFunction.none = Type.none, tagFunction;
 }, createPluralConstant = function(Type) {
   var tagFunction = function(literals) {
     for (var _len3 = arguments.length, placeholders = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)

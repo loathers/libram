@@ -1,6 +1,6 @@
 import { Location, canAdventure } from "kolmafia";
-import { get } from "../../property";
-import { $location, $locations } from "../../template-string";
+import { get } from "../../property.js";
+import { $location, $locations } from "../../template-string.js";
 
 /**
  * @returns Whether or not you can currently access Gingerbread City

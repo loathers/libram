@@ -1,8 +1,8 @@
 import { totalFreeRests } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $item, $skill } from "../../template-string";
-import { clamp, sum } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item, $skill } from "../../template-string.js";
+import { clamp, sum } from "../../utils.js";
 
 const cincho = $item`Cincho de Mayo`;
 

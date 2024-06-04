@@ -8,11 +8,11 @@ import {
   Skill,
 } from "kolmafia";
 
-import { Copier } from "../../Copier";
-import { haveInCampground } from "../../lib";
-import { get } from "../../property";
-import { $effect, $item, $skill } from "../../template-string";
-import { arrayEquals } from "../../utils";
+import { Copier } from "../../Copier.js";
+import { haveInCampground } from "../../lib.js";
+import { get } from "../../property.js";
+import { $effect, $item, $skill } from "../../template-string.js";
+import { arrayEquals } from "../../utils.js";
 
 const item = $item`Source terminal`;
 

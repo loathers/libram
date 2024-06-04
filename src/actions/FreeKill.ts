@@ -1,16 +1,16 @@
 import { canEquip, myLightning, restoreMp, retrieveItem, use } from "kolmafia";
 
-import { Macro } from "../combat";
-import { have } from "../lib";
-import { Requirement } from "../maximize";
-import { get } from "../property";
-import * as AsdonMartin from "../resources/2017/AsdonMartin";
-import { $familiar, $item, $items, $skill } from "../template-string";
+import { Macro } from "../combat.js";
+import { have } from "../lib.js";
+import { Requirement } from "../maximize.js";
+import { get } from "../property.js";
+import * as AsdonMartin from "../resources/2017/AsdonMartin.js";
+import { $familiar, $item, $items, $skill } from "../template-string.js";
 import {
   ActionSource,
   findActionSource,
   FindActionSourceConstraints,
-} from "./ActionSource";
+} from "./ActionSource.js";
 
 const freeKillSources: ActionSource[] = [
   // Free limited sources

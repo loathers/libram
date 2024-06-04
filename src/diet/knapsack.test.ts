@@ -1,4 +1,5 @@
-import { knapsack } from "../../src/diet/knapsack";
+import { describe, it, expect } from "vitest";
+import { knapsack } from "./knapsack.js";
 
 function sortValues<T>(items: [T, number][]) {
   return items.sort(([x], [y]) => (x < y ? -1 : x === y ? 0 : 1));

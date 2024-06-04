@@ -3,18 +3,21 @@
     "target": "ESNext",
     "declaration": true,
     "lib": ["esnext"],
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "newLine": "LF",
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "dist",
+    "skipLibCheck": true,
     "stripInternal": true,
     "resolveJsonModule": true,
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    "types": ["node"]
   },
   "include": ["src/"],
+  "exclude": ["*.test.ts"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

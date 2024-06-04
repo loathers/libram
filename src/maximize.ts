@@ -20,8 +20,8 @@ import {
   outfit,
   Slot,
 } from "kolmafia";
-import { have } from "./lib";
-import logger from "./logger";
+import { have } from "./lib.js";
+import logger from "./logger.js";
 import {
   $effect,
   $familiar,
@@ -29,8 +29,8 @@ import {
   $slot,
   $slots,
   $stats,
-} from "./template-string";
-import { setEqual } from "./utils";
+} from "./template-string.js";
+import { setEqual } from "./utils.js";
 
 function toMaximizerName({ name, id }: Item): string {
   return name.includes(";") ? `¶${id}` : name;

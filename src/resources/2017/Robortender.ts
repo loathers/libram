@@ -9,8 +9,8 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { get } from "../../property";
-import { $familiar, $item, $items, $phylum } from "../../template-string";
+import { get } from "../../property.js";
+import { $familiar, $item, $items, $phylum } from "../../template-string.js";
 
 /**
  * The Robortender itself

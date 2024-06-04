@@ -7,9 +7,9 @@ import {
   toSlot,
 } from "kolmafia";
 
-import { ensureEffect, have } from "../../lib";
-import { get } from "../../property";
-import { $effect, $slot } from "../../template-string";
+import { ensureEffect, have } from "../../lib.js";
+import { get } from "../../property.js";
+import { $effect, $slot } from "../../template-string.js";
 
 const firstTeaPartyEffect = $effect`Assaulted with Pepper`;
 const lastTeaPartyEffect = $effect`Oleaginous Soles`;

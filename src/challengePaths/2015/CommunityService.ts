@@ -20,11 +20,11 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { have } from "../../lib";
-import { Requirement } from "../../maximize";
-import { NumericModifier } from "../../modifierTypes";
-import { get } from "../../property";
-import { MummingTrunk } from "../../resources";
+import { have } from "../../lib.js";
+import { Requirement } from "../../maximize.js";
+import { NumericModifier } from "../../modifierTypes.js";
+import { get } from "../../property.js";
+import { MummingTrunk } from "../../resources/index.js";
 import {
   $effect,
   $familiar,
@@ -34,8 +34,8 @@ import {
   $slot,
   $stat,
   $thrall,
-} from "../../template-string";
-import { clamp, sum } from "../../utils";
+} from "../../template-string.js";
+import { clamp, sum } from "../../utils.js";
 
 const thralls = new Map<Stat, Thrall>([
   [$stat`muscle`, $thrall`Elbow Macaroni`],

@@ -1,5 +1,5 @@
 import { visitUrl } from "kolmafia";
-import { $path } from "../../template-string";
+import { $path } from "../../template-string.js";
 
 /**
  * Visits the Cooling Tank on level 8 of the Fallout shelter to gain 300 rads

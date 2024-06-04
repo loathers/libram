@@ -10,10 +10,10 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { directlyUse } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { arrayContains } from "../../utils";
+import { directlyUse } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { arrayContains } from "../../utils.js";
 
 const item = Item.get("autumn-aton");
 

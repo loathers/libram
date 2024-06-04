@@ -1,8 +1,8 @@
 import { Monster } from "kolmafia";
-import { Copier } from "../../Copier";
-import { haveInCampground, have as haveItem } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
+import { Copier } from "../../Copier.js";
+import { haveInCampground, have as haveItem } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 /**
  * @returns Whether the Winter Garden is our currently installed garden

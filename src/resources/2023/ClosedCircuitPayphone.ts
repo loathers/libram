@@ -9,10 +9,10 @@ import {
   toItem,
   use,
 } from "kolmafia";
-import { directlyUse, have as have_, questStep } from "../../lib";
-import { get, withChoice } from "../../property";
-import { $item, $location, $monster } from "../../template-string";
-import { makeByXFunction, maxBy } from "../../utils";
+import { directlyUse, have as have_, questStep } from "../../lib.js";
+import { get, withChoice } from "../../property.js";
+import { $item, $location, $monster } from "../../template-string.js";
+import { makeByXFunction, maxBy } from "../../utils.js";
 
 const item = $item`closed-circuit pay phone`;
 

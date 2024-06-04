@@ -17,9 +17,9 @@ import {
   retrieveItem,
   visitUrl,
 } from "kolmafia";
-import { getAverageAdventures, have as haveItem } from "../../lib";
-import { $effect, $item, $items } from "../../template-string";
-import { clamp } from "../../utils";
+import { getAverageAdventures, have as haveItem } from "../../lib.js";
+import { $effect, $item, $items } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 enum PriceAge {
   HISTORICAL, // If Mafia has a historical price stored, use it.

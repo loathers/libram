@@ -17,12 +17,12 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { getTodaysHolidayWanderers } from "./lib";
+import { getTodaysHolidayWanderers } from "./lib.js";
 import {
   overlappingItemNames,
   overlappingSkillNames,
-} from "./overlappingNames";
-import { get, set } from "./property";
+} from "./overlappingNames.js";
+import { get, set } from "./property.js";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**

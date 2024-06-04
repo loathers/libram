@@ -1,8 +1,8 @@
 import { adv1, Monster } from "kolmafia";
-import { Copier } from "../../Copier";
-import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib";
-import { get, withChoices } from "../../property";
-import { $item, $location } from "../../template-string";
+import { Copier } from "../../Copier.js";
+import { have as haveItem, haveWandererCounter, Wanderer } from "../../lib.js";
+import { get, withChoices } from "../../property.js";
+import { $item, $location } from "../../template-string.js";
 
 /**
  * @returns Is the love tunnel available?

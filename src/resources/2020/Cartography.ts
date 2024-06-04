@@ -11,9 +11,9 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { have as _have } from "../../lib";
-import { get } from "../../property";
-import { $skill } from "../../template-string";
+import { have as _have } from "../../lib.js";
+import { get } from "../../property.js";
+import { $skill } from "../../template-string.js";
 
 const passive = $skill`Comprehensive Cartography`;
 

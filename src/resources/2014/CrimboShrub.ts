@@ -1,7 +1,7 @@
 import { useFamiliar, visitUrl } from "kolmafia";
-import { directlyUse, have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $familiar, $item } from "../../template-string";
+import { directlyUse, have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $familiar, $item } from "../../template-string.js";
 
 /**
  * @returns Whether we `have` the Crimbo Shrub in our terrarium

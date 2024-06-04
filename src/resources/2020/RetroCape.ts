@@ -1,8 +1,8 @@
 import { cliExecute, Skill } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import { Modifiers } from "../../modifier";
-import { get } from "../../property";
-import { $item, $skill } from "../../template-string";
+import { have as haveItem } from "../../lib.js";
+import { Modifiers } from "../../modifier.js";
+import { get } from "../../property.js";
+import { $item, $skill } from "../../template-string.js";
 
 const item = $item`unwrapped knock-off retro superhero cape`;
 /**

@@ -24,11 +24,11 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { getActiveSongs, have, isSong } from "./lib";
-import { get } from "./property";
-import { AsdonMartin } from "./resources";
-import { $item, $skill } from "./template-string";
-import { clamp, sum } from "./utils";
+import { getActiveSongs, have, isSong } from "./lib.js";
+import { get } from "./property.js";
+import { AsdonMartin } from "./resources/index.js";
+import { $item, $skill } from "./template-string.js";
+import { clamp, sum } from "./utils.js";
 
 export abstract class MpSource {
   usesRemaining(): number {

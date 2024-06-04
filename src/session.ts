@@ -15,9 +15,9 @@ import {
   myStorageMeat,
   totalTurnsPlayed,
 } from "kolmafia";
-import { getFoldGroup } from "./lib";
-import { $item, $items } from "./template-string";
-import { sum } from "./utils";
+import { getFoldGroup } from "./lib.js";
+import { $item, $items } from "./template-string.js";
+import { sum } from "./utils.js";
 
 /**
  * Return a mapping of the session items, mapping foldable items to a single of their forms

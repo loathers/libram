@@ -21,7 +21,7 @@ import {
   Thrall,
 } from "kolmafia";
 
-import { splitByCommasWithEscapes } from "./utils";
+import { splitByCommasWithEscapes } from "./utils.js";
 
 const concatTemplateString = (
   literals: TemplateStringsArray,
@@ -65,6 +65,7 @@ const createSingleConstant = <T extends MafiaClass>(
     }
     abort();
   };
+  tagFunction.cls = Type;
   tagFunction.none = Type.none as T;
   return tagFunction;
 };

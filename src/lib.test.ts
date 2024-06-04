@@ -1,15 +1,13 @@
-import { mocked } from "jest-mock";
 import { getPlayerId, getPlayerName } from "kolmafia";
+import { describe, it, expect, vi } from "vitest";
 
 import {
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
-} from "../../src";
+} from "./lib.js";
 
-jest.mock("kolmafia");
-
-mocked(getPlayerName).mockImplementation((id: number) => {
+vi.mocked(getPlayerName).mockImplementation((id: number) => {
   switch (id) {
     case 1:
       return "Jick";
@@ -19,7 +17,7 @@ mocked(getPlayerName).mockImplementation((id: number) => {
       return id.toString();
   }
 });
-mocked(getPlayerId).mockImplementation((name: string) => {
+vi.mocked(getPlayerId).mockImplementation((name: string) => {
   switch (name.toLowerCase()) {
     case "jick":
       return "1";

@@ -1,8 +1,8 @@
 import { Monster, use } from "kolmafia";
 
-import { getFoldGroup, have as haveItem } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
+import { getFoldGroup, have as haveItem } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 const box = $item`Rain-Doh black box`;
 

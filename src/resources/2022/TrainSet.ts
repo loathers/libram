@@ -1,8 +1,8 @@
 import { Effect, getWorkshed, runChoice, visitUrl } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { clamp, Tuple } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { clamp, Tuple } from "../../utils.js";
 
 const item = $item`model train set`;
 

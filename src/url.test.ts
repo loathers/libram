@@ -1,14 +1,7 @@
 import { visitUrl } from "kolmafia";
+import { describe, it, expect } from "vitest";
 
-import { buildUrl, combineQuery, EMPTY_VALUE, fetchUrl } from "../src/url";
-
-jest.mock(
-  "kolmafia",
-  () => ({
-    visitUrl: jest.fn(),
-  }),
-  { virtual: true },
-);
+import { buildUrl, combineQuery, EMPTY_VALUE, fetchUrl } from "./url.js";
 
 describe(buildUrl, () => {
   it.each([
@@ -118,9 +111,8 @@ describe(buildUrl, () => {
       ],
     ],
   ])("should fail if a query parameter is not a pair", (query) => {
-    expect(() => buildUrl("test.php", query as any)).toThrow(
-      "may only contain pair",
-    );
+    // @ts-expect-error We are testing a runtime error
+    expect(() => buildUrl("test.php", query)).toThrow("may only contain pair");
   });
 });
 

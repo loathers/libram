@@ -1,8 +1,8 @@
 import { cliExecute } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { clamp } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 /**
  * @returns Do we `have` the Deck of Every Card?

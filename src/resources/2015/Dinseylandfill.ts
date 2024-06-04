@@ -7,9 +7,9 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
-import { getRemainingLiver, have as haveItem } from "../../lib";
-import { get, set } from "../../property";
-import { $item, $location } from "../../template-string";
+import { getRemainingLiver, have as haveItem } from "../../lib.js";
+import { get, set } from "../../property.js";
+import { $item, $location } from "../../template-string.js";
 
 /**
  * @returns Whether you permanently own Dinseylandfill

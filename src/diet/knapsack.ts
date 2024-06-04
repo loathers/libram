@@ -1,4 +1,4 @@
-import { sum } from "../utils";
+import { sum } from "../utils.js";
 
 class Not<T> {
   thing: T;

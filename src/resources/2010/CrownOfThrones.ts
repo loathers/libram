@@ -1,9 +1,9 @@
 import { Familiar, Item, myFamiliar, numericModifier } from "kolmafia";
-import { have } from "../../lib";
-import { NumericModifier } from "../../modifierTypes";
-import { get } from "../../property";
-import { $familiar, $item, $items } from "../../template-string";
-import { sum } from "../../utils";
+import { have } from "../../lib.js";
+import { NumericModifier } from "../../modifierTypes.js";
+import { get } from "../../property.js";
+import { $familiar, $item, $items } from "../../template-string.js";
+import { sum } from "../../utils.js";
 
 export type FamiliarRider = {
   familiar: Familiar;

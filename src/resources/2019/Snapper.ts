@@ -7,7 +7,7 @@ import {
   Phylum,
   useFamiliar,
 } from "kolmafia";
-import { get } from "../../property";
+import { get } from "../../property.js";
 
 const familiar = Familiar.get("Red-Nosed Snapper");
 

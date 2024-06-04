@@ -46,7 +46,7 @@ import {
   PhylumProperty,
   StatProperty,
   StringProperty,
-} from "./propertyTypes";
+} from "./propertyTypes.js";
 import {
   isBooleanProperty,
   isFamiliarProperty,
@@ -58,7 +58,7 @@ import {
   isStatProperty,
   isStringProperty,
   KnownProperty,
-} from "./propertyTyping";
+} from "./propertyTyping.js";
 
 const createPropertyGetter =
   <T>(transform: (value: string, property: string) => T) =>

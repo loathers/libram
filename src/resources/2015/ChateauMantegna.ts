@@ -1,6 +1,6 @@
 import { buy, getChateau, Item, Monster, runCombat, visitUrl } from "kolmafia";
-import { CombatParams } from "../../lib";
-import { get } from "../../property";
+import { CombatParams } from "../../lib.js";
+import { get } from "../../property.js";
 
 /**
  * @returns Whether we own the Chateau Mantegna

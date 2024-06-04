@@ -1,8 +1,8 @@
 import { buy, getWorkshed, Item, retrieveItem, use } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import logger from "../../logger";
-import { get, withChoice } from "../../property";
-import { $item } from "../../template-string";
+import { have as haveItem } from "../../lib.js";
+import logger from "../../logger.js";
+import { get, withChoice } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 export const Mayo = {
   nex: $item`Mayonex`,

@@ -9,10 +9,10 @@ import {
   totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $item } from "../../template-string";
-import { arrayContains } from "../../utils";
+import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
+import { arrayContains } from "../../utils.js";
 
 const helmet = $item`Apriling band helmet`;
 

@@ -7,11 +7,11 @@ import {
   itemAmount,
   Phylum,
 } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import { get as getModifier } from "../../modifier";
-import { get } from "../../property";
-import { $effect, $item, $phylum } from "../../template-string";
-import { clamp } from "../../utils";
+import { have as haveItem } from "../../lib.js";
+import { get as getModifier } from "../../modifier.js";
+import { get } from "../../property.js";
+import { $effect, $item, $phylum } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 const lab = $item`Little Geneticist DNA-Splicing Lab`;
 

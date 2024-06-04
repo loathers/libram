@@ -7,10 +7,10 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { have as haveItem } from "../../lib";
-import { get, withChoice } from "../../property";
-import { $item, $items } from "../../template-string";
-import { invertMap, maxBy } from "../../utils";
+import { have as haveItem } from "../../lib.js";
+import { get, withChoice } from "../../property.js";
+import { $item, $items } from "../../template-string.js";
+import { invertMap, maxBy } from "../../utils.js";
 
 const item = $item`Guzzlr tablet`;
 /**

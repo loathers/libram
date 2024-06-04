@@ -1,8 +1,8 @@
 import { Skill, toSkill } from "kolmafia";
-import { gameDay, have as have_ } from "../../lib";
-import { get } from "../../property";
-import { $item, $skills } from "../../template-string";
-import { Range } from "../../utils";
+import { gameDay, have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
+import { $item, $skills } from "../../template-string.js";
+import { Range } from "../../utils.js";
 
 /**
  * @returns Whether you `have` the august scepter

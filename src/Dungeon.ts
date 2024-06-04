@@ -1,8 +1,8 @@
 import { getClanName, Item, toItem, visitUrl, xpath } from "kolmafia";
-import { Clan } from "./Clan";
-import { getPlayerFromIdOrName } from "./lib";
-import { $items } from "./template-string";
-import { countedMapToArray } from "./utils";
+import { Clan } from "./Clan.js";
+import { getPlayerFromIdOrName } from "./lib.js";
+import { $items } from "./template-string.js";
+import { countedMapToArray } from "./utils.js";
 
 export class Dungeon {
   private name_: string;

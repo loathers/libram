@@ -6,7 +6,7 @@ import {
   retrieveItem,
   visitUrl,
 } from "kolmafia";
-import { $item, $items, $skill, $slots } from "../../template-string";
+import { $item, $items, $skill, $slots } from "../../template-string.js";
 
 export const stickers = {
   unicorn: $item`scratch 'n' sniff unicorn sticker`,

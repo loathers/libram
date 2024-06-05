@@ -15159,6 +15159,12 @@ __export(MayamCalendar_exports, {
   },
   submit: function() {
     return submit;
+  },
+  toCombination: function() {
+    return toCombination;
+  },
+  toCombinationString: function() {
+    return toCombinationString;
   }
 });
 init_kolmafia_polyfill();
@@ -15241,9 +15247,12 @@ function remainingUses() {
     return available5(symbol);
   }).length;
 }
-var toCombination = function(combination) {
+function toCombination(combination) {
   return combination.length === 1 ? combination[0].split(" ") : combination;
-};
+}
+function toCombinationString(combination) {
+  return combination.length === 1 ? combination[0] : combination.join(" ");
+}
 function submit() {
   for (var _len2 = arguments.length, combination = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     combination[_key2] = arguments[_key2];

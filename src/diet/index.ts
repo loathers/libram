@@ -434,7 +434,7 @@ class DietPlanner<T> {
             ...defaultModifiers,
             seasoning: false,
           })) >
-        mallPrice($item`Special Seasoning`)
+        this.seasoning.price()
     ) {
       helpers.push(this.seasoning);
     }
@@ -442,7 +442,7 @@ class DietPlanner<T> {
     if (
       this.whetStone &&
       itemType(menuItem.item) === "food" &&
-      this.mpa > mallPrice($item`whet stone`)
+      this.mpa > this.whetStone.price()
     ) {
       helpers.push(this.whetStone);
     }
@@ -450,8 +450,7 @@ class DietPlanner<T> {
     if (
       this.aioli &&
       itemType(menuItem.item) === "food" &&
-      this.mpa * menuItem.item.fullness >
-        Math.min(mallPrice($item`mini kiwi aioli`))
+      this.mpa * menuItem.item.fullness > this.aioli.price()
     ) {
       helpers.push(this.aioli);
     }

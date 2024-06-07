@@ -1,22 +1,14 @@
 import {
   booleanModifier,
-  Class,
-  classModifier,
   cliExecuteOutput,
   Effect,
-  effectModifier,
   Familiar,
   familiarWeight,
   Item,
-  Monster,
-  monsterModifier,
   myFamiliar,
   numericModifier,
   print,
   Skill,
-  skillModifier,
-  Stat,
-  statModifier,
   stringModifier,
 } from "kolmafia";
 import { have } from "./lib.js";

@@ -6,6 +6,7 @@ import {
   Item,
   itemAmount,
   Phylum,
+  toEffect,
 } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get as getModifier } from "../../modifier.js";
@@ -92,7 +93,7 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
       ? tonic
       : tonic instanceof Phylum
         ? getEffect(tonic)
-        : getModifier("Effect", tonic);
+        : toEffect(getModifier("Effect", tonic));
   return (
     tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483647
   );
@@ -151,7 +152,7 @@ export function hybridize(): boolean {
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
   const tonicPotion = getTonic(currentSyringe);
-  const expectedEffect = getModifier("Effect", tonicPotion);
+  const expectedEffect = toEffect(getModifier("Effect", tonicPotion));
   cliExecute("camp dnainject");
   return isHybridized(expectedEffect);
 }

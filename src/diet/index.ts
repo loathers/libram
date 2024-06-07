@@ -36,6 +36,7 @@ type ConsumptionModifiers = {
   forkMug: boolean;
   seasoning: boolean;
   whetStone: boolean;
+  aioli: boolean;
   mayoflex: boolean;
   refinedPalate: boolean;
   garish: boolean;
@@ -73,6 +74,7 @@ function expectedAdventures(
       ? 1.5
       : 1.3;
   const seasoningAdventures = max - min <= 1 ? 1 : 0.5;
+  const aioliAdventures = item.fullness;
   const garish =
     modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
   const refinedPalate = modifiers.refinedPalate && item.notes?.includes("WINE");
@@ -95,6 +97,8 @@ function expectedAdventures(
       if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
       if (itemType(item) === "food" && modifiers.seasoning)
         adventures += seasoningAdventures;
+      if (itemType(item) === "food" && modifiers.aioli)
+        adventures += aioliAdventures;
       if (itemType(item) === "food" && modifiers.whetStone) adventures++;
       return adventures;
     }) / interpolated.length
@@ -305,6 +309,7 @@ class DietPlanner<T> {
   mug?: MenuItem<T>;
   seasoning?: MenuItem<T>;
   whetStone?: MenuItem<T>;
+  aioli?: MenuItem<T>;
   spleenValue = 0;
 
   constructor(mpa: number, menu: MenuItem<T>[]) {
@@ -321,6 +326,8 @@ class DietPlanner<T> {
     if (seasoning) this.seasoning = seasoning;
     const whetStone = menu.find((item) => item.item === $item`whet stone`);
     if (whetStone) this.whetStone = whetStone;
+    const aioli = menu.find((item) => item.item === $item`mini kiwi aioli`);
+    if (aioli) this.aioli = aioli;
     this.mayoLookup = new Map<Item, MenuItem<T>>();
     if (mayoInstalled()) {
       for (const mayo of [Mayo.flex, Mayo.zapine]) {
@@ -402,6 +409,7 @@ class DietPlanner<T> {
       forkMug: false,
       seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
       whetStone: this.whetStone ? helpers.includes(this.whetStone) : false,
+      aioli: this.aioli ? helpers.includes(this.aioli) : false,
       mayoflex: this.mayoLookup.size
         ? helpers.some((item) => item.item === Mayo.flex)
         : false,
@@ -426,7 +434,7 @@ class DietPlanner<T> {
             ...defaultModifiers,
             seasoning: false,
           })) >
-        mallPrice($item`Special Seasoning`)
+        this.seasoning.price()
     ) {
       helpers.push(this.seasoning);
     }
@@ -434,9 +442,17 @@ class DietPlanner<T> {
     if (
       this.whetStone &&
       itemType(menuItem.item) === "food" &&
-      this.mpa > mallPrice($item`whet stone`)
+      this.mpa > this.whetStone.price()
     ) {
       helpers.push(this.whetStone);
+    }
+
+    if (
+      this.aioli &&
+      itemType(menuItem.item) === "food" &&
+      this.mpa * menuItem.item.fullness > this.aioli.price()
+    ) {
+      helpers.push(this.aioli);
     }
 
     const forkMug =
@@ -803,6 +819,7 @@ class DietEntry<T> {
             forkMug: fork || mug,
             seasoning: items.includes($item`Special Seasoning`),
             whetStone: items.includes($item`whet stone`),
+            aioli: items.includes($item`mini kiwi aioli`),
             mayoflex: items.includes(Mayo.flex),
             refinedPalate: diet.refinedPalate,
             garish: diet.garish,

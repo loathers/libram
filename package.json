@@ -69,7 +69,7 @@
     "kolmafia": "^5.27668.0"
   },
   "lint-staged": {
-    "src/**/*.{ts,js}": "prettier --write"
+    "src/**/*.{ts,js}": "yarn run format"
   },
   "sideEffects": false,
   "packageManager": "yarn@4.1.1"

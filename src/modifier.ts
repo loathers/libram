@@ -24,18 +24,8 @@ import { have } from "./lib.js";
 import {
   BooleanModifier,
   booleanModifiers,
-  ClassModifier,
-  classModifiers,
-  EffectModifier,
-  effectModifiers,
-  MonsterModifier,
-  monsterModifiers,
   NumericModifier,
   numericModifiers,
-  SkillModifier,
-  skillModifiers,
-  StatModifier,
-  statModifiers,
   StringModifier,
   stringModifiers,
 } from "./modifierTypes.js";
@@ -46,19 +36,14 @@ export function get(
   name: BooleanModifier,
   subject?: string | Item | Effect,
 ): boolean;
-export function get(name: ClassModifier, subject: string | Item): Class;
-export function get(name: EffectModifier, subject: string | Item): Effect;
-export function get(name: MonsterModifier, subject: Effect): Monster;
 export function get(
   name: NumericModifier,
   subject?: string | Item | Effect | Skill | Familiar,
 ): number;
-export function get(name: SkillModifier, subject: string | Item): Skill;
 export function get(
   name: StringModifier,
   subject?: string | Effect | Item,
 ): string;
-export function get(name: StatModifier, subject: Effect): Stat;
 /**
  * Get the value of a modifier
  *
@@ -67,15 +52,7 @@ export function get(name: StatModifier, subject: Effect): Stat;
  * @returns Value of modifier
  */
 export function get(
-  name:
-    | BooleanModifier
-    | ClassModifier
-    | EffectModifier
-    | MonsterModifier
-    | NumericModifier
-    | SkillModifier
-    | StringModifier
-    | StatModifier,
+  name: BooleanModifier | NumericModifier | StringModifier,
   subject?: string | Item | Effect | Skill | Familiar,
 ): unknown {
   if (arrayContains(name, booleanModifiers)) {
@@ -84,26 +61,10 @@ export function get(
       : booleanModifier(subject as string, name);
   }
 
-  if (arrayContains(name, classModifiers)) {
-    return classModifier(subject as string, name);
-  }
-
-  if (arrayContains(name, effectModifiers)) {
-    return effectModifier(subject as string, name);
-  }
-
-  if (arrayContains(name, monsterModifiers)) {
-    return monsterModifier(subject as Effect, name);
-  }
-
   if (arrayContains(name, numericModifiers)) {
     return subject === undefined
       ? numericModifier(name)
       : numericModifier(subject as string, name);
-  }
-
-  if (arrayContains(name, skillModifiers)) {
-    return skillModifier(subject as string, name);
   }
 
   if (arrayContains(name, stringModifiers)) {
@@ -111,40 +72,18 @@ export function get(
       ? stringModifier(name)
       : stringModifier(subject as string, name);
   }
-
-  if (arrayContains(name, statModifiers)) {
-    return statModifier(subject as Effect, name);
-  }
 }
 
 export type ModifierValue<T> = T extends BooleanModifier
   ? boolean
-  : T extends ClassModifier
-    ? Class
-    : T extends EffectModifier
-      ? Effect
-      : T extends MonsterModifier
-        ? Monster
-        : T extends NumericModifier
-          ? number
-          : T extends SkillModifier
-            ? Skill
-            : T extends StatModifier
-              ? Stat
-              : T extends StringModifier
-                ? string
-                : string;
+  : T extends NumericModifier
+    ? number
+    : T extends StringModifier
+      ? string
+      : string;
 
 export type Modifiers = Partial<{
-  [T in
-    | BooleanModifier
-    | ClassModifier
-    | EffectModifier
-    | MonsterModifier
-    | NumericModifier
-    | SkillModifier
-    | StatModifier
-    | StringModifier]: ModifierValue<T>;
+  [T in BooleanModifier | NumericModifier | StringModifier]: ModifierValue<T>;
 }>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.

@@ -55,21 +55,21 @@ const modeMap = new Map<[Hero, Mode], Modifiers>([
   [
     ["vampire", "kiss"],
     {
-      Skill: $skill`Smooch of the Daywalker`,
+      Skill: "Smooch of the Daywalker",
     },
   ],
   [
     ["vampire", "kill"],
     {
-      Skill: $skill`Slay the Dead`,
+      Skill: "Slay the Dead",
     },
   ],
   [["heck", "thrill"], { "Mysticality Experience": 3 }],
-  [["heck", "kiss"], { Skill: $skill`Unleash the Devil's Kiss` }],
-  [["robot", "hold"], { Skill: $skill`Deploy Robo-Handcuffs` }],
+  [["heck", "kiss"], { Skill: "Unleash the Devil's Kiss" }],
+  [["robot", "hold"], { Skill: "Deploy Robo-Handcuffs" }],
   [["robot", "thrill"], { "Moxie Experience": 3 }],
-  [["robot", "kiss"], { Skill: $skill`Blow a Robo-Kiss` }],
-  [["robot", "kill"], { Skill: $skill`Precision Shot` }],
+  [["robot", "kiss"], { Skill: "Blow a Robo-Kiss" }],
+  [["robot", "kill"], { Skill: "Precision Shot" }],
 ]);
 
 /**

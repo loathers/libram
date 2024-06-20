@@ -322,6 +322,11 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
     probability: 1,
   },
   {
+    familiar: $familiar`Mini Kiwi`,
+    drops: $items`mini kiwi`,
+    probability: 1,
+  },
+  {
     familiar: $familiar`Flaming Gravy Fairy`,
     // drops a hot nugget every combat, 5 of which can be used to make a hot wad
     drops: $items`hot nuggets`,

@@ -9962,7 +9962,7 @@ var ridingFamiliars = [{
 }, {
   familiar: $familiar(_templateObject982 || (_templateObject982 = _taggedTemplateLiteral11(["Mini Kiwi"]))),
   drops: $items(_templateObject99 || (_templateObject99 = _taggedTemplateLiteral11(["mini kiwi"]))),
-  probability: 1
+  probability: 0.08
 }, {
   familiar: $familiar(_templateObject100 || (_templateObject100 = _taggedTemplateLiteral11(["Flaming Gravy Fairy"]))),
   // drops a hot nugget every combat, 5 of which can be used to make a hot wad

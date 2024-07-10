@@ -324,7 +324,7 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
   {
     familiar: $familiar`Mini Kiwi`,
     drops: $items`mini kiwi`,
-    probability: 1,
+    probability: 0.08,
   },
   {
     familiar: $familiar`Flaming Gravy Fairy`,

@@ -33,22 +33,22 @@ const MACRO_NAME = "Script Autoattack Macro";
  * @returns {number} The macro ID.
  */
 export function getMacroId(name = MACRO_NAME): number {
-  const macroMatches = xpath(
-    visitUrl("account_combatmacros.php"),
-    `//select[@name="macroid"]/option[text()="${name}"]/@value`,
-  );
+  const query = `//select[@name="macroid"]/option[text()="${name}"]/@value`;
+  let macroMatches = xpath(visitUrl("account_combatmacros.php"), query);
+
   if (macroMatches.length === 0) {
     visitUrl("account_combatmacros.php?action=new");
     const newMacroText = visitUrl(
       `account_combatmacros.php?macroid=0&name=${name}&macrotext=abort&action=save`,
     );
-    return parseInt(
-      xpath(newMacroText, `//input[@name=${name}]/@value`)[0],
-      10,
-    );
-  } else {
-    return parseInt(macroMatches[0], 10);
+    macroMatches = xpath(newMacroText, query);
   }
+
+  if (macroMatches.length === 0) {
+    throw new InvalidMacroError(`Could not find or create macro ${name}`);
+  }
+
+  return parseInt(macroMatches[0], 10);
 }
 
 type ItemOrName = Item | string;

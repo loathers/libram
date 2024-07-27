@@ -34,7 +34,8 @@ const MACRO_NAME = "Script Autoattack Macro";
  */
 export function getMacroId(name = MACRO_NAME): number {
   const query = `//select[@name="macroid"]/option[text()="${name}"]/@value`;
-  let macroMatches = xpath(visitUrl("account_combatmacros.php"), query);
+  const macroText = visitUrl("account_combatmacros.php");
+  let macroMatches = xpath(macroText, query);
 
   if (macroMatches.length === 0) {
     visitUrl("account_combatmacros.php?action=new");
@@ -45,6 +46,13 @@ export function getMacroId(name = MACRO_NAME): number {
   }
 
   if (macroMatches.length === 0) {
+    // We may have hit the macro cap
+    if (xpath(macroText, '//select[@name="macroid"]/option').length >= 128) {
+      throw new InvalidMacroError(
+        `Please delete at least one existing macro to make some space for Libram`,
+      );
+    }
+    // Otherwise who knows why it failed
     throw new InvalidMacroError(`Could not find or create macro ${name}`);
   }
 

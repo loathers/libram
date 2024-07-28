@@ -47,7 +47,7 @@ export function getMacroId(name = MACRO_NAME): number {
 
   if (macroMatches.length === 0) {
     // We may have hit the macro cap
-    if (xpath(macroText, '//select[@name="macroid"]/option').length >= 128) {
+    if (xpath(macroText, '//select[@name="macroid"]/option').length >= 100) {
       throw new InvalidMacroError(
         `Please delete at least one existing macro to make some space for Libram`,
       );

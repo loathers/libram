@@ -7062,13 +7062,15 @@ function _getPrototypeOf2(t) {
 }
 var MACRO_NAME = "Script Autoattack Macro";
 function getMacroId() {
-  var name = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : MACRO_NAME, macroMatches = (0, import_kolmafia5.xpath)((0, import_kolmafia5.visitUrl)("account_combatmacros.php"), '//select[@name="macroid"]/option[text()="'.concat(name, '"]/@value'));
+  var name = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : MACRO_NAME, query = '//select[@name="macroid"]/option[text()="'.concat(name, '"]/@value'), macroText = (0, import_kolmafia5.visitUrl)("account_combatmacros.php"), macroMatches = (0, import_kolmafia5.xpath)(macroText, query);
   if (macroMatches.length === 0) {
     (0, import_kolmafia5.visitUrl)("account_combatmacros.php?action=new");
     var newMacroText = (0, import_kolmafia5.visitUrl)("account_combatmacros.php?macroid=0&name=".concat(name, "&macrotext=abort&action=save"));
-    return parseInt((0, import_kolmafia5.xpath)(newMacroText, "//input[@name=".concat(name, "]/@value"))[0], 10);
-  } else
-    return parseInt(macroMatches[0], 10);
+    macroMatches = (0, import_kolmafia5.xpath)(newMacroText, query);
+  }
+  if (macroMatches.length === 0)
+    throw (0, import_kolmafia5.xpath)(macroText, '//select[@name="macroid"]/option').length >= 100 ? new InvalidMacroError("Please delete at least one existing macro to make some space for Libram") : new InvalidMacroError("Could not find or create macro ".concat(name));
+  return parseInt(macroMatches[0], 10);
 }
 function itemOrNameToItem(itemOrName) {
   return typeof itemOrName == "string" ? import_kolmafia5.Item.get(itemOrName) : itemOrName;

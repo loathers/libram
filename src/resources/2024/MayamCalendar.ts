@@ -90,7 +90,9 @@ export function submit(
   if (!available(...toCombination(combination))) {
     return false;
   }
-  return cliExecute(`mayam ring ${combination.join(" ")}`);
+  return cliExecute(
+    `mayam ring ${combination.join(" ").replace(/yam\d/g, "yam")}`,
+  );
 }
 
 export const RESONANCES = Object.freeze({

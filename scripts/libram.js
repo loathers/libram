@@ -15191,7 +15191,7 @@ function toCombinationString(combination) {
 function submit() {
   for (var _len2 = arguments.length, combination = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     combination[_key2] = arguments[_key2];
-  return available5.apply(void 0, _toConsumableArray15(toCombination(combination))) ? (0, import_kolmafia63.cliExecute)("mayam ring ".concat(combination.join(" "))) : !1;
+  return available5.apply(void 0, _toConsumableArray15(toCombination(combination))) ? (0, import_kolmafia63.cliExecute)("mayam ring ".concat(combination.join(" ").replace(/yam\d/g, "yam"))) : !1;
 }
 var RESONANCES = Object.freeze({
   "eye yam2 eyepatch yam4": $item(_templateObject2108 || (_templateObject2108 = _taggedTemplateLiteral50(["Mayam spinach"]))),

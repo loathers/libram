@@ -91,7 +91,7 @@ export function submit(
     return false;
   }
   return cliExecute(
-    `mayam ring ${combination.join(" ").replace(/yam\d/g, "yam")}`,
+    `mayam rings ${combination.join(" ").replace(/yam\d/g, "yam")}`,
   );
 }
 

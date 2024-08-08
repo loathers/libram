@@ -15072,6 +15072,9 @@ __export(MayamCalendar_exports, {
   RESONANCES: function() {
     return RESONANCES;
   },
+  RESONANCE_KEYS: function() {
+    return RESONANCE_KEYS;
+  },
   RINGS: function() {
     return RINGS;
   },
@@ -15095,6 +15098,9 @@ __export(MayamCalendar_exports, {
   },
   submit: function() {
     return submit;
+  },
+  symbolsUsed: function() {
+    return symbolsUsed;
   },
   toCombination: function() {
     return toCombination;
@@ -15167,9 +15173,9 @@ var RINGS = Object.freeze([["yam1", "sword", "eye", "chair", "fur", "vessel"], [
 function have49() {
   return have($item(_templateObject400 || (_templateObject400 = _taggedTemplateLiteral50(["Mayam Calendar"]))));
 }
-var symbolsUsed = function() {
+function symbolsUsed() {
   return get("_mayamSymbolsUsed").split(",");
-};
+}
 function available5() {
   for (var _len = arguments.length, symbols = new Array(_len), _key = 0; _key < _len; _key++)
     symbols[_key] = arguments[_key];
@@ -15191,7 +15197,7 @@ function toCombinationString(combination) {
 function submit() {
   for (var _len2 = arguments.length, combination = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     combination[_key2] = arguments[_key2];
-  return available5.apply(void 0, _toConsumableArray15(toCombination(combination))) ? (0, import_kolmafia63.cliExecute)("mayam ring ".concat(combination.join(" ").replace(/yam\d/g, "yam"))) : !1;
+  return available5.apply(void 0, _toConsumableArray15(toCombination(combination))) ? (0, import_kolmafia63.cliExecute)("mayam rings ".concat(combination.join(" ").replace(/yam\d/g, "yam"))) : !1;
 }
 var RESONANCES = Object.freeze({
   "eye yam2 eyepatch yam4": $item(_templateObject2108 || (_templateObject2108 = _taggedTemplateLiteral50(["Mayam spinach"]))),
@@ -15205,7 +15211,7 @@ var RESONANCES = Object.freeze({
   "yam1 meat eyepatch yam4": $item(_templateObject1021 || (_templateObject1021 = _taggedTemplateLiteral50(["yamtility belt"]))),
   "chair yam2 yam3 clock": $effect(_templateObject1120 || (_templateObject1120 = _taggedTemplateLiteral50(["Caught Yam-Handed"]))),
   "yam1 yam2 cheese clock": $effect(_templateObject1219 || (_templateObject1219 = _taggedTemplateLiteral50(["Memories of Cheesier Age"])))
-});
+}), RESONANCE_KEYS = Object.keys(RESONANCES);
 function resonanceFor(target) {
   var _ref, _find;
   return (_ref = (_find = _toConsumableArray15(Object.entries(RESONANCES)).find(function(_ref2) {

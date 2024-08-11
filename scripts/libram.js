@@ -5366,6 +5366,9 @@ __export(src_exports, {
   tryFindFreeRun: function() {
     return tryFindFreeRun;
   },
+  tuple: function() {
+    return tuple;
+  },
   undelay: function() {
     return undelay;
   },
@@ -6234,14 +6237,19 @@ function maxBy(array, optimizer) {
     return a[optimizer] >= b[optimizer] !== reverse ? a : b;
   });
 }
+function tuple() {
+  for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++)
+    args[_key2] = arguments[_key2];
+  return args;
+}
 function arrayEquals(left, right) {
   return left.length !== right.length ? !1 : left.every(function(element, index) {
     return element === right[index];
   });
 }
 function undelay(delayedObject) {
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key2 = 1; _key2 < _len; _key2++)
-    args[_key2 - 1] = arguments[_key2];
+  for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key3 = 1; _key3 < _len2; _key3++)
+    args[_key3 - 1] = arguments[_key3];
   return typeof delayedObject == "function" ? delayedObject.apply(void 0, args) : delayedObject;
 }
 function makeByXFunction(source) {
@@ -13855,8 +13863,8 @@ function have35() {
 var parsedProp = function() {
   return get("crystalBallPredictions").split("|").filter(Boolean).map(function(element) {
     return element.split(":");
-  }).filter(function(tuple) {
-    return tuple.length === 3;
+  }).filter(function(tuple2) {
+    return tuple2.length === 3;
   }).map(function(_ref) {
     var _ref2 = _slicedToArray12(_ref, 3), location = _ref2[1], monster = _ref2[2];
     return [(0, import_kolmafia49.toLocation)(location), (0, import_kolmafia49.toMonster)(monster)];
@@ -19535,6 +19543,7 @@ var Session = /* @__PURE__ */ function() {
   tryFindBanish,
   tryFindFreeKill,
   tryFindFreeRun,
+  tuple,
   undelay,
   uneffect,
   unequip,

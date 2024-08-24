@@ -15,7 +15,7 @@ import { have as have_ } from "../../lib.js";
 import logger from "../../logger.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
-import { clamp, flat } from "../../utils.js";
+import { clamp } from "../../utils.js";
 
 const item = $item`cursed monkey's paw`;
 
@@ -48,24 +48,23 @@ export type WishableItemsFilters = Partial<{
  */
 export function wishableItems(filters: WishableItemsFilters = {}): Set<Item> {
   return new Set(
-    flat<Item[][][], 3>(
-      Location.all()
-        .filter((l) => canAdventure(l) && (filters.location?.(l) ?? true))
-        .map((l) =>
-          getMonsters(l)
-            .filter((m) => m.copyable && (filters.monster?.(m) ?? true))
-            .map((m) =>
-              itemDropsArray(m)
-                .filter(
-                  ({ type, rate, drop }) =>
-                    !drop.quest &&
-                    (type !== "c" || rate >= 1) && // Remove random roll drops
-                    (filters.drop?.({ type, rate, drop }) ?? true),
-                )
-                .map(({ drop }) => drop),
-            ),
-        ),
-    ),
+    Location.all()
+      .filter((l) => canAdventure(l) && (filters.location?.(l) ?? true))
+      .map((l) =>
+        getMonsters(l)
+          .filter((m) => m.copyable && (filters.monster?.(m) ?? true))
+          .map((m) =>
+            itemDropsArray(m)
+              .filter(
+                ({ type, rate, drop }) =>
+                  !drop.quest &&
+                  (type !== "c" || rate >= 1) && // Remove random roll drops
+                  (filters.drop?.({ type, rate, drop }) ?? true),
+              )
+              .map(({ drop }) => drop),
+          ),
+      )
+      .flat(2),
   );
 }
 

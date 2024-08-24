@@ -1220,12 +1220,10 @@ export function setCombatFlags(
   return visitUrl(
     `account.php?${
       ([
-        flags
-          .map(({ flag, value }) => [
-            `actions[]=flag_${flag}`,
-            `flag_${flag}=${Number(value)}`,
-          ])
-          .flat(),
+        ...flags.flatMap(({ flag, value }) => [
+          `actions[]=flag_${flag}`,
+          `flag_${flag}=${Number(value)}`,
+        ]),
         "action=Update",
         "am=1",
         "ajax=1",

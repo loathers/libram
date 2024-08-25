@@ -1292,13 +1292,9 @@ function makeScalerCalcFunction(
     const current = cache.get(monster);
     if (current !== undefined) return monsterEval(current);
 
-    const result = pattern.exec(monster.attributes);
-    if (!result) {
-      cache.set(monster, "0");
-      return 0;
-    }
-    cache.set(monster, result[1]);
-    return monsterEval(result[1]);
+    const result = pattern.exec(monster.attributes)?.[1] ?? "0";
+    cache.set(monster, result);
+    return monsterEval(result);
   };
 }
 

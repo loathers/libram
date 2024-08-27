@@ -456,9 +456,7 @@ export class Macro {
    * @returns {Macro} This object itself.
    */
   ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.step(`if !(${Macro.makeBALLSPredicate(condition)})`)
-      .step(ifTrue)
-      .step("endif");
+    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue);
   }
   /**
    * Create a new macro with an "if" statement, inverting the condition.

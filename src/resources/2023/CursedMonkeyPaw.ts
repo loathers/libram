@@ -50,10 +50,10 @@ export function wishableItems(filters: WishableItemsFilters = {}): Set<Item> {
   return new Set(
     Location.all()
       .filter((l) => canAdventure(l) && (filters.location?.(l) ?? true))
-      .map((l) =>
+      .flatMap((l) =>
         getMonsters(l)
           .filter((m) => m.copyable && (filters.monster?.(m) ?? true))
-          .map((m) =>
+          .flatMap((m) =>
             itemDropsArray(m)
               .filter(
                 ({ type, rate, drop }) =>
@@ -63,8 +63,7 @@ export function wishableItems(filters: WishableItemsFilters = {}): Set<Item> {
               )
               .map(({ drop }) => drop),
           ),
-      )
-      .flat(2),
+      ),
   );
 }
 

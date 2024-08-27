@@ -72,7 +72,7 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, chunk, flat, notNull } from "./utils.js";
+import { makeByXFunction, chunk, notNull } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -861,11 +861,9 @@ export const holidayWanderers = new Map<string, Monster[]>([
  * @returns List of holiday wanderer Monsters
  */
 export function getTodaysHolidayWanderers(): Monster[] {
-  return flat(
-    holiday()
-      .split("/")
-      .map((holiday) => holidayWanderers.get(holiday) ?? []),
-  );
+  return holiday()
+    .split("/")
+    .flatMap((holiday) => holidayWanderers.get(holiday) ?? []);
 }
 
 /**
@@ -1221,12 +1219,10 @@ export function setCombatFlags(
   return visitUrl(
     `account.php?${
       ([
-        ...flat(
-          flags.map(({ flag, value }) => [
-            `actions[]=flag_${flag}`,
-            `flag_${flag}=${Number(value)}`,
-          ]),
-        ),
+        ...flags.flatMap(({ flag, value }) => [
+          `actions[]=flag_${flag}`,
+          `flag_${flag}=${Number(value)}`,
+        ]),
         "action=Update",
         "am=1",
         "ajax=1",

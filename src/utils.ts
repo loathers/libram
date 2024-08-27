@@ -357,6 +357,7 @@ export function makeByXFunction<T extends string>(
 
 /**
  * Flattens an array. Basically replacing Array.prototype.flat for which Rhino doesn't yet have an implementation
+ * @deprecated KoLMafia now supports the `flat` and `flatMap` methods
  *
  * @param arr Array to flatten
  * @param depth Number of layers to flatten by; Infinity for a fully flat array

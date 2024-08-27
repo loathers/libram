@@ -2,7 +2,7 @@ import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
 
 import { Macro } from "../combat.js";
 import { Requirement } from "../maximize.js";
-import { sum, flat } from "../utils.js";
+import { sum } from "../utils.js";
 
 export type FindActionSourceConstraints = {
   /**
@@ -187,7 +187,7 @@ export class ActionSource {
       return null;
     }
     return new ActionSource(
-      [...flat(actions.map((action) => action.source))],
+      actions.flatMap((action) => action.source),
       () => sum(actions, (action) => action.potential()),
       Macro.step(...actions.map((action) => action.macro)),
       constraints,

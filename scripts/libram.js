@@ -6777,10 +6777,10 @@ function findFairyMultiplier(familiar8) {
 }
 var holidayWanderers = /* @__PURE__ */ new Map([["El Dia De Los Muertos Borrachos", $monsters(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["Novia Cad\xE1ver, Novio Cad\xE1ver, Padre Cad\xE1ver, Persona Inocente Cad\xE1ver"])))], ["Feast of Boris", $monsters(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["Candied Yam Golem, Malevolent Tofurkey, Possessed Can of Cranberry Sauce, Stuffing Golem"])))], ["Talk Like a Pirate Day", $monsters(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["ambulatory pirate, migratory pirate, peripatetic pirate"])))]]);
 function getTodaysHolidayWanderers() {
-  return flat((0, import_kolmafia4.holiday)().split("/").map(function(holiday2) {
+  return (0, import_kolmafia4.holiday)().split("/").flatMap(function(holiday2) {
     var _holidayWanderers$get;
     return (_holidayWanderers$get = holidayWanderers.get(holiday2)) !== null && _holidayWanderers$get !== void 0 ? _holidayWanderers$get : [];
-  }));
+  });
 }
 function canVisitUrl() {
   return (0, import_kolmafia4.currentRound)() ? (logger_default.debug("Current round is ".concat((0, import_kolmafia4.currentRound)(), "; you're in combat.")), !1) : (0, import_kolmafia4.inMultiFight)() ? (logger_default.debug("You're in a multifight."), !1) : (0, import_kolmafia4.choiceFollowsFight)() ? (logger_default.debug("A choice follows this fight."), !1) : (0, import_kolmafia4.handlingChoice)() ? (logger_default.debug("You're currently in a choice adventure"), !1) : !0;
@@ -6873,10 +6873,10 @@ function getCombatFlags() {
 function setCombatFlags() {
   for (var _len2 = arguments.length, flags = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     flags[_key2] = arguments[_key2];
-  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flat(flags.map(function(_ref11) {
+  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flags.flatMap(function(_ref11) {
     var flag = _ref11.flag, value = _ref11.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
-  }))), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
+  })), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
@@ -8565,9 +8565,9 @@ var ActionSource = /* @__PURE__ */ function() {
       var actions = [this].concat(others), constraints = mergeConstraints.apply(void 0, _toConsumableArray5(actions.map(function(action) {
         return action.constraints;
       })));
-      return constraints === null ? null : new ActionSource2(_toConsumableArray5(flat(actions.map(function(action) {
+      return constraints === null ? null : new ActionSource2(actions.flatMap(function(action) {
         return action.source;
-      }))), function() {
+      }), function() {
         return sum(actions, function(action) {
           return action.potential();
         });
@@ -14755,14 +14755,14 @@ function wishes() {
 }
 function wishableItems() {
   var filters = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-  return new Set(flat(import_kolmafia60.Location.all().filter(function(l) {
+  return new Set(import_kolmafia60.Location.all().filter(function(l) {
     var _filters$location, _filters$location2;
     return (0, import_kolmafia60.canAdventure)(l) && ((_filters$location = (_filters$location2 = filters.location) === null || _filters$location2 === void 0 ? void 0 : _filters$location2.call(filters, l)) !== null && _filters$location !== void 0 ? _filters$location : !0);
-  }).map(function(l) {
+  }).flatMap(function(l) {
     return (0, import_kolmafia60.getMonsters)(l).filter(function(m) {
       var _filters$monster, _filters$monster2;
       return m.copyable && ((_filters$monster = (_filters$monster2 = filters.monster) === null || _filters$monster2 === void 0 ? void 0 : _filters$monster2.call(filters, m)) !== null && _filters$monster !== void 0 ? _filters$monster : !0);
-    }).map(function(m) {
+    }).flatMap(function(m) {
       return (0, import_kolmafia60.itemDropsArray)(m).filter(function(_ref) {
         var _filters$drop, _filters$drop2, type = _ref.type, rate = _ref.rate, drop = _ref.drop;
         return !drop.quest && (type !== "c" || rate >= 1) && // Remove random roll drops
@@ -14776,7 +14776,7 @@ function wishableItems() {
         return drop;
       });
     });
-  })));
+  }));
 }
 var INVALID_CHARACTERS = /[^a-z\d -]/g, _unwishableEffects;
 function unwishableEffects() {

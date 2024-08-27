@@ -32,7 +32,7 @@ describe(Macro, () => {
 
   it("ifNot", () => {
     expect(Macro.ifNot("mock", Macro.abort()).toString()).toEqual(
-      `if !(mock);abort;endif;`,
+      `if !mock;abort;endif;`,
     );
   });
 

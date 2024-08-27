@@ -5162,6 +5162,12 @@ __export(src_exports, {
   getSaleValue: function() {
     return getSaleValue;
   },
+  getScalingCap: function() {
+    return getScalingCap;
+  },
+  getScalingRate: function() {
+    return getScalingRate;
+  },
   getSongCount: function() {
     return getSongCount;
   },
@@ -6900,6 +6906,15 @@ function extractItems(text) {
     return [import_kolmafia4.Item.get(itemName), quantity];
   }));
 }
+function makeScalerCalcFunction(cache, pattern) {
+  return function(monster) {
+    var _pattern$exec$, _pattern$exec, current2 = cache.get(monster);
+    if (current2 !== void 0) return (0, import_kolmafia4.monsterEval)(current2);
+    var result = (_pattern$exec$ = (_pattern$exec = pattern.exec(monster.attributes)) === null || _pattern$exec === void 0 ? void 0 : _pattern$exec[1]) !== null && _pattern$exec$ !== void 0 ? _pattern$exec$ : "0";
+    return cache.set(monster, result), (0, import_kolmafia4.monsterEval)(result);
+  };
+}
+var scalerRates = /* @__PURE__ */ new Map(), scalerCaps = /* @__PURE__ */ new Map(), SCALE_RATE_PATTERN = /Scale: (?:\[([^\]]*)\]|(\d*))/, SCALE_CAP_PATTERN = /Cap: (?:\[([^\]]*)\]|(\d*))/, getScalingRate = makeScalerCalcFunction(scalerRates, SCALE_RATE_PATTERN), getScalingCap = makeScalerCalcFunction(scalerCaps, SCALE_CAP_PATTERN);
 
 // src/overlappingNames.ts
 init_kolmafia_polyfill();
@@ -19475,6 +19490,8 @@ var Session = /* @__PURE__ */ function() {
   getRemainingSpleen,
   getRemainingStomach,
   getSaleValue,
+  getScalingCap,
+  getScalingRate,
   getSongCount,
   getSongLimit,
   getTodaysHolidayWanderers,

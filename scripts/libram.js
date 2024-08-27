@@ -7296,7 +7296,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function(condition, ifTrue) {
-        return this.step("if !(".concat(Macro2.makeBALLSPredicate(condition), ")")).step(ifTrue).step("endif");
+        return this.if_("!".concat(Macro2.makeBALLSPredicate(condition)), ifTrue);
       }
     )
     /**

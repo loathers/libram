@@ -1357,15 +1357,48 @@ const makeBulkFunction =
     return batchClose();
   };
 
+/*
+ * Autosell items in bulk
+ */
 export const bulkAutosell = makeBulkFunction(autosell);
+/*
+ * Closet items in bulk
+ * Note: each item transfer will still consume one request
+ */
 export const bulkPutCloset = makeBulkFunction(putCloset);
+/*
+ * Display items in bulk
+ */
 export const bulkPutDisplay = makeBulkFunction(putDisplay);
+/*
+ * Deposit items into your clan stash in bulk
+ */
 export const bulkPutStash = makeBulkFunction(putStash);
+/*
+ * Remove items from your closet in bulk
+ * Note: each item transfer will still consume one request
+ */
 export const bulkTakeCloset = makeBulkFunction(takeCloset);
+/*
+ * Remove items from your display case in bulk
+ */
 export const bulkTakeDisplay = makeBulkFunction(takeDisplay);
+/*
+ * Remove items from your shop in bulk
+ */
 export const bulkTakeShop = makeBulkFunction(takeShop);
+/*
+ * Withdraw items from your clan stash in bulk
+ * Note: each item transfer will still consume one request
+ */
 export const bulkTakeStash = makeBulkFunction(takeStash);
+/*
+ * Remove items from your Hagnk's in bulk
+ */
 export const bulkTakeStorage = makeBulkFunction(takeStorage);
+/*
+ * Mallsell items in bulk
+ */
 export const bulkPutShop = (
   items: Map<Item, { quantity?: number; limit?: number; price: number }>,
 ) => {
@@ -1377,12 +1410,18 @@ export const bulkPutShop = (
   }
   return batchClose();
 };
+/*
+ * Coinmaster-sell items to the same coinmaster in bulk
+ */
 export const bulkSell = (coinmaster: Coinmaster, items: Map<Item, number>) => {
   batchOpen();
   for (const [item, quantity] of items.entries())
     sell(coinmaster, quantity, item);
   return batchClose();
 };
+/*
+ * Reprice items in your mallstore in bulk
+ */
 export const bulkRepriceShop = (
   items: Map<Item, { quantity?: number; limit?: number; price: number }>,
 ) => {

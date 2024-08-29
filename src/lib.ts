@@ -60,6 +60,19 @@ import {
   monsterEval,
   batchOpen,
   batchClose,
+  autosell,
+  putCloset,
+  putDisplay,
+  putShop,
+  putStash,
+  sell,
+  takeCloset,
+  takeDisplay,
+  takeShop,
+  takeStash,
+  takeStorage,
+  Coinmaster,
+  repriceShop,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1335,3 +1348,47 @@ export function withBatch<T>(action: () => T): T {
     batchClose();
   }
 }
+
+const makeBulkFunction =
+  (action: (quantity: number, item: Item) => boolean) =>
+  (items: Map<Item, number>) => {
+    batchOpen();
+    for (const [item, quantity] of items.entries()) action(quantity, item);
+    return batchClose();
+  };
+
+export const bulkAutosell = makeBulkFunction(autosell);
+export const bulkPutCloset = makeBulkFunction(putCloset);
+export const bulkPutDisplay = makeBulkFunction(putDisplay);
+export const bulkPutStash = makeBulkFunction(putStash);
+export const bulkTakeCloset = makeBulkFunction(takeCloset);
+export const bulkTakeDisplay = makeBulkFunction(takeDisplay);
+export const bulkTakeShop = makeBulkFunction(takeShop);
+export const bulkTakeStash = makeBulkFunction(takeStash);
+export const bulkTakeStorage = makeBulkFunction(takeStorage);
+export const bulkPutShop = (
+  items: Map<Item, { quantity?: number; limit?: number; price: number }>,
+) => {
+  batchOpen();
+  for (const [item, { quantity, limit, price }] of items.entries()) {
+    quantity
+      ? putShop(price, limit ?? 0, quantity, item)
+      : putShop(price, limit ?? 0, item);
+  }
+  return batchClose();
+};
+export const bulkSell = (coinmaster: Coinmaster, items: Map<Item, number>) => {
+  batchOpen();
+  for (const [item, quantity] of items.entries())
+    sell(coinmaster, quantity, item);
+  return batchClose();
+};
+export const bulkRepriceShop = (
+  items: Map<Item, { quantity?: number; limit?: number; price: number }>,
+) => {
+  batchOpen();
+  for (const [item, { limit, price }] of items.entries()) {
+    limit ? repriceShop(price, limit, item) : repriceShop(price, item);
+  }
+  return batchClose();
+};

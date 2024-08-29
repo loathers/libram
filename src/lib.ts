@@ -58,6 +58,8 @@ import {
   visitUrl,
   xpath,
   monsterEval,
+  batchOpen,
+  batchClose,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1318,3 +1320,18 @@ export const getScalingCap = makeScalerCalcFunction(
   scalerCaps,
   SCALE_CAP_PATTERN,
 );
+
+/**
+ * Wrap a specified action in mafia's `batchOpen` and `batchClose`
+ *
+ * @param action Action to perform while using mafia's batching feature
+ * @returns The return value of the action
+ */
+export function withBatch<T>(action: () => T): T {
+  batchOpen();
+  try {
+    return action();
+  } finally {
+    batchClose();
+  }
+}

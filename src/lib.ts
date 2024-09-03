@@ -837,6 +837,10 @@ export function findFairyMultiplier(familiar: Familiar): number {
   if (familiar === $familiar`Reanimated Reanimator`) return 0;
   const itemBonus = numericModifier(familiar, "Item Drop", 1, $item.none);
   if (itemBonus === 0) return 0;
+  if (familiar === $familiar`Jill-of-All-Trades`)
+    return (
+      Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2) * 1.5
+    );
   return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }
 

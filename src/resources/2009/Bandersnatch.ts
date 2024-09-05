@@ -10,6 +10,7 @@ import {
   canRememberSong,
   getActiveSongs,
   isCurrentFamiliar,
+  totalFamiliarWeight,
   uneffect,
 } from "../../lib.js";
 import { get } from "../../property.js";
@@ -45,8 +46,9 @@ export function getRunaways(): number {
  * @returns Current maximum runaways
  */
 export function getMaxRunaways(considerWeightAdjustment = true): number {
-  const weightBuffs = considerWeightAdjustment ? weightAdjustment() : 0;
-  return Math.floor((familiarWeight(familiar) + weightBuffs) / 5);
+  return Math.floor(
+    totalFamiliarWeight(familiar, considerWeightAdjustment) / 5,
+  );
 }
 
 /**

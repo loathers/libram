@@ -58,6 +58,8 @@ import {
   visitUrl,
   xpath,
   monsterEval,
+  familiarWeight,
+  weightAdjustment,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -73,7 +75,7 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, chunk, notNull } from "./utils.js";
+import { makeByXFunction, chunk, notNull, clamp } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -1318,3 +1320,25 @@ export const getScalingCap = makeScalerCalcFunction(
   scalerCaps,
   SCALE_CAP_PATTERN,
 );
+
+/**
+ * Calculate the total weight of a given familiar, including soup & modifiers
+ * @param familiar The familiar to use--defaults to your current one
+ * @param considerAdjustment Whether to include your `weightAdjustment` in the calculation
+ * @returns The total weight of the given familiar
+ */
+export function totalFamiliarWeight(
+  familiar = myFamiliar(),
+  considerAdjustment = true,
+): number {
+  return (
+    clamp(
+      familiarWeight(myFamiliar()),
+      have($effect`Fidoxene`) ? 20 : 0,
+      Infinity,
+    ) +
+    familiar.soupWeight +
+    (considerAdjustment ? weightAdjustment() : 0) +
+    (familiar.feasted ? 10 : 0)
+  );
+}

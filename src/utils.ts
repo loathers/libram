@@ -266,6 +266,17 @@ export function maxBy<
   }
 }
 
+/**
+ * Let Typescript see that you're working with tuples!
+ *
+ * @param args A spread array to interpret as a tuple
+ * @returns The given arg, its type now interpreted as a tuple
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function tuple<T extends any[]>(...args: T): T {
+  return args;
+}
+
 export type Tuple<T, N extends number> = N extends N
   ? number extends N
     ? T[]
@@ -346,6 +357,7 @@ export function makeByXFunction<T extends string>(
 
 /**
  * Flattens an array. Basically replacing Array.prototype.flat for which Rhino doesn't yet have an implementation
+ * @deprecated KoLMafia now supports the `flat` and `flatMap` methods
  *
  * @param arr Array to flatten
  * @param depth Number of layers to flatten by; Infinity for a fully flat array

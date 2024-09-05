@@ -22,7 +22,12 @@ export function have(): boolean {
   return have_($item`Mayam Calendar`);
 }
 
-const symbolsUsed = () => get("_mayamSymbolsUsed").split(",");
+/**
+ * @returns The Mayam calendar symbols you've used so far today.
+ */
+export function symbolsUsed(): MayamSymbol[] {
+  return get("_mayamSymbolsUsed").split(",") as MayamSymbol[];
+}
 
 /**
  * Determine whether a certain Mayam symbol is available for use today
@@ -90,7 +95,9 @@ export function submit(
   if (!available(...toCombination(combination))) {
     return false;
   }
-  return cliExecute(`mayam ring ${combination.join(" ")}`);
+  return cliExecute(
+    `mayam rings ${combination.join(" ").replace(/yam\d/g, "yam")}`,
+  );
 }
 
 export const RESONANCES = Object.freeze({
@@ -106,6 +113,10 @@ export const RESONANCES = Object.freeze({
   "chair yam2 yam3 clock": $effect`Caught Yam-Handed`,
   "yam1 yam2 cheese clock": $effect`Memories of Cheesier Age`,
 });
+
+export const RESONANCE_KEYS = Object.keys(
+  RESONANCES,
+) as (keyof typeof RESONANCES)[];
 
 /**
  * Find the combination needed to get a particular resonance

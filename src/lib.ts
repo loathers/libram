@@ -57,6 +57,7 @@ import {
   totalTurnsPlayed,
   visitUrl,
   xpath,
+  monsterEval,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -72,7 +73,7 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, chunk, flat, notNull } from "./utils.js";
+import { makeByXFunction, chunk, notNull } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -862,11 +863,9 @@ export const holidayWanderers = new Map<string, Monster[]>([
  * @returns List of holiday wanderer Monsters
  */
 export function getTodaysHolidayWanderers(): Monster[] {
-  return flat(
-    holiday()
-      .split("/")
-      .map((holiday) => holidayWanderers.get(holiday) ?? []),
-  );
+  return holiday()
+    .split("/")
+    .flatMap((holiday) => holidayWanderers.get(holiday) ?? []);
 }
 
 /**
@@ -1222,12 +1221,10 @@ export function setCombatFlags(
   return visitUrl(
     `account.php?${
       ([
-        ...flat(
-          flags.map(({ flag, value }) => [
-            `actions[]=flag_${flag}`,
-            `flag_${flag}=${Number(value)}`,
-          ]),
-        ),
+        ...flags.flatMap(({ flag, value }) => [
+          `actions[]=flag_${flag}`,
+          `flag_${flag}=${Number(value)}`,
+        ]),
         "action=Update",
         "am=1",
         "ajax=1",
@@ -1283,3 +1280,42 @@ export function extractItems(text: string): Map<Item, number> {
 }
 
 export type CombatParams = Parameters<typeof runCombat>;
+
+function makeScalerCalcFunction(
+  cache: Map<Monster, string>,
+  pattern: RegExp,
+): (monster: Monster) => number {
+  return function (monster: Monster) {
+    const current = cache.get(monster);
+    if (current !== undefined) return monsterEval(current);
+
+    const result = pattern.exec(monster.attributes)?.[1] ?? "0";
+    cache.set(monster, result);
+    return monsterEval(result);
+  };
+}
+
+const scalerRates = new Map<Monster, string>();
+const scalerCaps = new Map<Monster, string>();
+const SCALE_RATE_PATTERN = /Scale: (?:\[([^\]]*)\]|(\d*))/;
+const SCALE_CAP_PATTERN = /Cap: (?:\[([^\]]*)\]|(\d*))/;
+
+/**
+ * Calculate & return the scaling rate of a monster--`0` for non-scalers.
+ * @param monster The monster to check
+ * @returns The current scaling rate of the monster, based on your current in-game state
+ */
+export const getScalingRate = makeScalerCalcFunction(
+  scalerRates,
+  SCALE_RATE_PATTERN,
+);
+
+/**
+ * Calculate & return the scaling cap of a monster--`0` for non-scalers.
+ * @param monster The monster to check
+ * @returns The current scaling cap of the monster, based on your current in-game state
+ */
+export const getScalingCap = makeScalerCalcFunction(
+  scalerCaps,
+  SCALE_CAP_PATTERN,
+);

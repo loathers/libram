@@ -378,7 +378,7 @@ export default class CommunityService {
     (...effects) =>
       60 -
       Math.floor(
-        (totalFamiliarWeight() +
+        (totalFamiliarWeight(myFamiliar(), false) +
           hypotheticalModifier("Familiar Weight", ...effects)) /
           5,
       ),
@@ -478,7 +478,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Combat Rate",
-          totalFamiliarWeight() +
+          totalFamiliarWeight(myFamiliar(), false) +
             hypotheticalModifier("Familiar Weight", ...effects),
           equippedItem($slot`familiar`),
         );
@@ -564,7 +564,7 @@ export default class CommunityService {
       const newFamiliarModifier = numericModifier(
         myFamiliar(),
         "Hot Resistance",
-        totalFamiliarWeight() +
+        totalFamiliarWeight(myFamiliar(), false) +
           hypotheticalModifier("Familiar Weight", ...effects),
         equippedItem($slot`familiar`),
       );

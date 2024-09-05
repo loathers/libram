@@ -837,9 +837,8 @@ export function findFairyMultiplier(familiar: Familiar): number {
   if (familiar === $familiar`Reanimated Reanimator`) return 0;
   const itemBonus = numericModifier(familiar, "Item Drop", 1, $item.none);
   if (itemBonus === 0) return 0;
-  if (familiar === $familiar`Jill-of-All-Trades`)
-    return 1.5;
-  return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
+  if (familiar === $familiar`Jill-of-All-Trades`) return 1.5; // returns effective weight multiplier
+  return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2); // working out the multiplier based on the Item Drop at 1lb
 }
 
 export const holidayWanderers = new Map<string, Monster[]>([

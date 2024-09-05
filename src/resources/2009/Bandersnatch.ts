@@ -1,10 +1,4 @@
-import {
-  Effect,
-  familiarWeight,
-  useFamiliar,
-  useSkill,
-  weightAdjustment,
-} from "kolmafia";
+import { Effect, useFamiliar, useSkill } from "kolmafia";
 import {
   have as _have,
   canRememberSong,

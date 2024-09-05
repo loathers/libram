@@ -1,4 +1,4 @@
-import { familiarWeight, useFamiliar, weightAdjustment } from "kolmafia";
+import { useFamiliar } from "kolmafia";
 import {
   have as _have,
   isCurrentFamiliar,

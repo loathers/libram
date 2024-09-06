@@ -9,6 +9,7 @@ import * as RainDoh from "./2012/RainDoh.js";
 import * as ReagnimatedGnome from "./2012/ReagnimatedGnome.js";
 import * as FloristFriar from "./2013/Florist.js";
 import * as JungMan from "./2013/JungMan.js";
+import * as ConspiracyIsland from "./2014/ConspiracyIsland.js";
 import * as CrimboShrub from "./2014/CrimboShrub.js";
 import * as DNALab from "./2014/DNALab.js";
 import * as WinterGarden from "./2014/WinterGarden.js";
@@ -67,6 +68,7 @@ export {
   CinchoDeMayo,
   ClosedCircuitPayphone,
   CombatLoversLocket,
+  ConspiracyIsland,
   CrimboShrub,
   CrownOfThrones,
   CrystalBall,

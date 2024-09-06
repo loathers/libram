@@ -52,7 +52,7 @@
     "eslint-plugin-libram": "^0.4.8",
     "husky": "^9.0.11",
     "java-parser": "^2.3.0",
-    "kolmafia": "^5.27969.0",
+    "kolmafia": "^5.28032.0",
     "lint-staged": "^15.2.5",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2",

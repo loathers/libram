@@ -1,5 +1,9 @@
-import { familiarWeight, useFamiliar, weightAdjustment } from "kolmafia";
-import { have as _have, isCurrentFamiliar } from "../../lib.js";
+import { useFamiliar } from "kolmafia";
+import {
+  have as _have,
+  isCurrentFamiliar,
+  totalFamiliarWeight,
+} from "../../lib.js";
 import { get } from "../../property.js";
 import { $familiar } from "../../template-string.js";
 
@@ -25,8 +29,9 @@ export function getRunaways(): number {
  * @returns total number of free runaways that the player can get from their Stomping Boots
  */
 export function getMaxRunaways(considerWeightAdjustment = true): number {
-  const weightBuffs = considerWeightAdjustment ? weightAdjustment() : 0;
-  return Math.floor((familiarWeight(familiar) + weightBuffs) / 5);
+  return Math.floor(
+    totalFamiliarWeight(familiar, considerWeightAdjustment) / 5,
+  );
 }
 
 /**

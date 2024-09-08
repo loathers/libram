@@ -32,6 +32,7 @@ import * as Latte from "./2018/LatteLoversMembersMug.js";
 import * as SongBoom from "./2018/SongBoom.js";
 import * as BeachComb from "./2019/BeachComb.js";
 import * as CampAway from "./2019/CampAway.js";
+import * as PocketProfessor from "./2019/PocketProfessor.js";
 import * as Snapper from "./2019/Snapper.js";
 import * as Cartography from "./2020/Cartography.js";
 import * as Guzzlr from "./2020/Guzzlr.js";
@@ -91,6 +92,7 @@ export {
   MummingTrunk,
   ObtuseAngel,
   Pantogram,
+  PocketProfessor,
   RainDoh,
   ReagnimatedGnome,
   RetroCape,

@@ -1437,7 +1437,7 @@ export const bulkRepriceShop = (
   return batchClose();
 };
 
-/*
+/**
  * Calculate the total weight of a given familiar, including soup & modifiers
  * @param familiar The familiar to use--defaults to your current one
  * @param considerAdjustment Whether to include your `weightAdjustment` in the calculation

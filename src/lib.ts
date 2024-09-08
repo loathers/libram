@@ -73,6 +73,8 @@ import {
   takeStorage,
   Coinmaster,
   repriceShop,
+  familiarWeight,
+  weightAdjustment,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -88,7 +90,7 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, chunk, notNull } from "./utils.js";
+import { makeByXFunction, chunk, notNull, clamp } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -853,6 +855,9 @@ export function findFairyMultiplier(familiar: Familiar): number {
   if (familiar === $familiar`Reanimated Reanimator`) return 0;
   const itemBonus = numericModifier(familiar, "Item Drop", 1, $item.none);
   if (itemBonus === 0) return 0;
+  // Assumes you're using LED candle; returns effective weight multiplier
+  if (familiar === $familiar`Jill-of-All-Trades`) return 1.5;
+  // Working out the multiplier based on the Item Drop at 1lb
   return Math.pow(Math.sqrt(itemBonus + 55 / 4 + 3) - Math.sqrt(55) / 2, 2);
 }
 
@@ -1431,3 +1436,25 @@ export const bulkRepriceShop = (
   }
   return batchClose();
 };
+
+/*
+ * Calculate the total weight of a given familiar, including soup & modifiers
+ * @param familiar The familiar to use--defaults to your current one
+ * @param considerAdjustment Whether to include your `weightAdjustment` in the calculation
+ * @returns The total weight of the given familiar
+ */
+export function totalFamiliarWeight(
+  familiar = myFamiliar(),
+  considerAdjustment = true,
+): number {
+  return (
+    clamp(
+      familiarWeight(myFamiliar()),
+      have($effect`Fidoxene`) ? 20 : 0,
+      Infinity,
+    ) +
+    familiar.soupWeight +
+    (considerAdjustment ? weightAdjustment() : 0) +
+    (familiar.feasted ? 10 : 0)
+  );
+}

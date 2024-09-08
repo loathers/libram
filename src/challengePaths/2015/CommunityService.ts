@@ -1,7 +1,6 @@
 import {
   Effect,
   equippedItem,
-  familiarWeight,
   getPower,
   haveEquipped,
   myAdventures,
@@ -18,9 +17,8 @@ import {
   Thrall,
   toSlot,
   visitUrl,
-  weightAdjustment,
 } from "kolmafia";
-import { have } from "../../lib.js";
+import { have, totalFamiliarWeight } from "../../lib.js";
 import { Requirement } from "../../maximize.js";
 import { NumericModifier } from "../../modifierTypes.js";
 import { get } from "../../property.js";
@@ -57,9 +55,6 @@ const statCommunityServicePredictor = (stat: Stat) => {
 };
 
 const visitCouncil = () => visitUrl("council.php");
-
-const baseWeight = (): number =>
-  have($effect`Fidoxene`) ? 20 : familiarWeight(myFamiliar());
 
 function hypotheticalModifier(
   modifier: NumericModifier,
@@ -383,7 +378,8 @@ export default class CommunityService {
     (...effects) =>
       60 -
       Math.floor(
-        (baseWeight() + hypotheticalModifier("Familiar Weight", ...effects)) /
+        (totalFamiliarWeight(myFamiliar(), false) +
+          hypotheticalModifier("Familiar Weight", ...effects)) /
           5,
       ),
     new Requirement(["Familiar Weight"], {}),
@@ -438,7 +434,7 @@ export default class CommunityService {
           ? numericModifier(
               $familiar`Magic Dragonfish`,
               "Spell Damage Percent",
-              baseWeight() + weightAdjustment(),
+              totalFamiliarWeight(),
               $item.none,
             )
           : 0;
@@ -474,7 +470,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Combat Rate",
-          familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
+          totalFamiliarWeight(),
           equippedItem($slot`familiar`),
         );
       const newFamiliarModifier =
@@ -482,7 +478,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Combat Rate",
-          familiarWeight(myFamiliar()) +
+          totalFamiliarWeight(myFamiliar(), false) +
             hypotheticalModifier("Familiar Weight", ...effects),
           equippedItem($slot`familiar`),
         );
@@ -510,7 +506,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Item Drop",
-          baseWeight() + weightAdjustment(),
+          totalFamiliarWeight(),
           equippedItem($slot`familiar`),
         ) +
         mummingBuff -
@@ -520,7 +516,7 @@ export default class CommunityService {
         numericModifier(
           myFamiliar(),
           "Booze Drop",
-          baseWeight() + weightAdjustment(),
+          totalFamiliarWeight(),
           equippedItem($slot`familiar`),
         ) - numericModifier(equippedItem($slot`familiar`), "Booze Drop");
 
@@ -562,13 +558,13 @@ export default class CommunityService {
       const currentFamiliarModifier = numericModifier(
         myFamiliar(),
         "Hot Resistance",
-        familiarWeight(myFamiliar()) + numericModifier("Familiar Weight"),
+        totalFamiliarWeight(),
         equippedItem($slot`familiar`),
       );
       const newFamiliarModifier = numericModifier(
         myFamiliar(),
         "Hot Resistance",
-        familiarWeight(myFamiliar()) +
+        totalFamiliarWeight(myFamiliar(), false) +
           hypotheticalModifier("Familiar Weight", ...effects),
         equippedItem($slot`familiar`),
       );

@@ -58,6 +58,21 @@ import {
   visitUrl,
   xpath,
   monsterEval,
+  batchOpen,
+  batchClose,
+  autosell,
+  putCloset,
+  putDisplay,
+  putShop,
+  putStash,
+  sell,
+  takeCloset,
+  takeDisplay,
+  takeShop,
+  takeStash,
+  takeStorage,
+  Coinmaster,
+  repriceShop,
   familiarWeight,
   weightAdjustment,
 } from "kolmafia";
@@ -1323,6 +1338,104 @@ export const getScalingCap = makeScalerCalcFunction(
   scalerCaps,
   SCALE_CAP_PATTERN,
 );
+
+/**
+ * Wrap a specified action in mafia's `batchOpen` and `batchClose`
+ *
+ * @param action Action to perform while using mafia's batching feature
+ * @returns The return value of the action
+ */
+export function withBatch<T>(action: () => T): T {
+  batchOpen();
+  try {
+    return action();
+  } finally {
+    batchClose();
+  }
+}
+
+const makeBulkFunction =
+  (action: (quantity: number, item: Item) => boolean) =>
+  (items: Map<Item, number>) => {
+    batchOpen();
+    for (const [item, quantity] of items.entries()) action(quantity, item);
+    return batchClose();
+  };
+
+/*
+ * Autosell items in bulk
+ */
+export const bulkAutosell = makeBulkFunction(autosell);
+/*
+ * Closet items in bulk
+ * Note: each item transfer will still consume one request
+ */
+export const bulkPutCloset = makeBulkFunction(putCloset);
+/*
+ * Display items in bulk
+ */
+export const bulkPutDisplay = makeBulkFunction(putDisplay);
+/*
+ * Deposit items into your clan stash in bulk
+ */
+export const bulkPutStash = makeBulkFunction(putStash);
+/*
+ * Remove items from your closet in bulk
+ * Note: each item transfer will still consume one request
+ */
+export const bulkTakeCloset = makeBulkFunction(takeCloset);
+/*
+ * Remove items from your display case in bulk
+ */
+export const bulkTakeDisplay = makeBulkFunction(takeDisplay);
+/*
+ * Remove items from your shop in bulk
+ */
+export const bulkTakeShop = makeBulkFunction(takeShop);
+/*
+ * Withdraw items from your clan stash in bulk
+ * Note: each item transfer will still consume one request
+ */
+export const bulkTakeStash = makeBulkFunction(takeStash);
+/*
+ * Remove items from your Hagnk's in bulk
+ */
+export const bulkTakeStorage = makeBulkFunction(takeStorage);
+/*
+ * Mallsell items in bulk
+ */
+export const bulkPutShop = (
+  items: Map<Item, { quantity?: number; limit?: number; price: number }>,
+) => {
+  batchOpen();
+  for (const [item, { quantity, limit, price }] of items.entries()) {
+    quantity
+      ? putShop(price, limit ?? 0, quantity, item)
+      : putShop(price, limit ?? 0, item);
+  }
+  return batchClose();
+};
+/*
+ * Coinmaster-sell items to the same coinmaster in bulk
+ */
+export const bulkSell = (coinmaster: Coinmaster, items: Map<Item, number>) => {
+  batchOpen();
+  for (const [item, quantity] of items.entries())
+    sell(coinmaster, quantity, item);
+  return batchClose();
+};
+/*
+ * Reprice items in your mallstore in bulk
+ */
+export const bulkRepriceShop = (
+  items: Map<Item, { quantity?: number; limit?: number; price: number }>,
+) => {
+  batchOpen();
+  for (const [item, { limit, price }] of items.entries()) {
+    limit ? repriceShop(price, limit, item) : repriceShop(price, item);
+  }
+  return batchClose();
+};
 
 /**
  * Calculate the total weight of a given familiar, including soup & modifiers

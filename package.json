@@ -49,7 +49,7 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.9",
-    "eslint-plugin-libram": "^0.4.8",
+    "eslint-plugin-libram": "^0.4.12",
     "husky": "^9.0.11",
     "java-parser": "^2.3.0",
     "kolmafia": "^5.28032.0",

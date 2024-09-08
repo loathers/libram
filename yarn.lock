@@ -3987,13 +3987,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.4.8":
-  version: 0.4.8
-  resolution: "eslint-plugin-libram@npm:0.4.8"
+"eslint-plugin-libram@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "eslint-plugin-libram@npm:0.4.12"
   dependencies:
-    html-entities: "npm:^2.4.0"
+    html-entities: "npm:^2.5.2"
     requireindex: "npm:~1.2.0"
-  checksum: 10c0/cb5c40bcaeba7cbbfd28b05f25475a3c366b84de4e98c18014dedee85ce9fd37342e06b3b2b818daa568254939e6ecb34396e2b65af5d92a63917c788c13091b
+  checksum: 10c0/ede509f0ce2ce2a18b1c919640ddc0aabb27792e4e84f5653c128513a0ae8b18b029e4445628d89a94e2ef8b71b6a262311ed59c3858f45abc20c4cee8cda37c
   languageName: node
   linkType: hard
 
@@ -4668,13 +4668,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-entities@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "html-entities@npm:2.4.0"
-  checksum: 10c0/42bbd5d91f451625d7e35aaed41c8cd110054c0d0970764cb58df467b3f27f20199e8cf7b4aebc8d4eeaf17a27c0d1fb165f2852db85de200995d0f009c9011d
-  languageName: node
-  linkType: hard
-
 "html-entities@npm:^2.5.2":
   version: 2.5.2
   resolution: "html-entities@npm:2.5.2"
@@ -5284,7 +5277,7 @@ __metadata:
     eslint-import-resolver-typescript: "npm:^3.6.1"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-jsdoc: "npm:^48.2.9"
-    eslint-plugin-libram: "npm:^0.4.8"
+    eslint-plugin-libram: "npm:^0.4.12"
     html-entities: "npm:^2.5.2"
     husky: "npm:^9.0.11"
     java-parser: "npm:^2.3.0"

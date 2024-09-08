@@ -5021,6 +5021,42 @@ __export(src_exports, {
   booleanModifiers: function() {
     return booleanModifiers;
   },
+  bulkAutosell: function() {
+    return bulkAutosell;
+  },
+  bulkPutCloset: function() {
+    return bulkPutCloset;
+  },
+  bulkPutDisplay: function() {
+    return bulkPutDisplay;
+  },
+  bulkPutShop: function() {
+    return bulkPutShop;
+  },
+  bulkPutStash: function() {
+    return bulkPutStash;
+  },
+  bulkRepriceShop: function() {
+    return bulkRepriceShop;
+  },
+  bulkSell: function() {
+    return bulkSell;
+  },
+  bulkTakeCloset: function() {
+    return bulkTakeCloset;
+  },
+  bulkTakeDisplay: function() {
+    return bulkTakeDisplay;
+  },
+  bulkTakeShop: function() {
+    return bulkTakeShop;
+  },
+  bulkTakeStash: function() {
+    return bulkTakeStash;
+  },
+  bulkTakeStorage: function() {
+    return bulkTakeStorage;
+  },
   byClass: function() {
     return byClass;
   },
@@ -5392,6 +5428,9 @@ __export(src_exports, {
   },
   unequip: function() {
     return unequip;
+  },
+  withBatch: function() {
+    return withBatch;
   },
   withChoice: function() {
     return withChoice;
@@ -6924,6 +6963,73 @@ function makeScalerCalcFunction(cache, pattern) {
   };
 }
 var scalerRates = /* @__PURE__ */ new Map(), scalerCaps = /* @__PURE__ */ new Map(), SCALE_RATE_PATTERN = /Scale: (?:\[([^\]]*)\]|(\d*))/, SCALE_CAP_PATTERN = /Cap: (?:\[([^\]]*)\]|(\d*))/, getScalingRate = makeScalerCalcFunction(scalerRates, SCALE_RATE_PATTERN), getScalingCap = makeScalerCalcFunction(scalerCaps, SCALE_CAP_PATTERN);
+function withBatch(action) {
+  (0, import_kolmafia4.batchOpen)();
+  try {
+    return action();
+  } finally {
+    (0, import_kolmafia4.batchClose)();
+  }
+}
+var makeBulkFunction = function(action) {
+  return function(items) {
+    (0, import_kolmafia4.batchOpen)();
+    var _iterator2 = _createForOfIteratorHelper2(items.entries()), _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
+        var _step2$value = _slicedToArray3(_step2.value, 2), _item = _step2$value[0], quantity = _step2$value[1];
+        action(quantity, _item);
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+    return (0, import_kolmafia4.batchClose)();
+  };
+}, bulkAutosell = makeBulkFunction(import_kolmafia4.autosell), bulkPutCloset = makeBulkFunction(import_kolmafia4.putCloset), bulkPutDisplay = makeBulkFunction(import_kolmafia4.putDisplay), bulkPutStash = makeBulkFunction(import_kolmafia4.putStash), bulkTakeCloset = makeBulkFunction(import_kolmafia4.takeCloset), bulkTakeDisplay = makeBulkFunction(import_kolmafia4.takeDisplay), bulkTakeShop = makeBulkFunction(import_kolmafia4.takeShop), bulkTakeStash = makeBulkFunction(import_kolmafia4.takeStash), bulkTakeStorage = makeBulkFunction(import_kolmafia4.takeStorage), bulkPutShop = function(items) {
+  (0, import_kolmafia4.batchOpen)();
+  var _iterator3 = _createForOfIteratorHelper2(items.entries()), _step3;
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
+      var _step3$value = _slicedToArray3(_step3.value, 2), _item2 = _step3$value[0], _step3$value$ = _step3$value[1], quantity = _step3$value$.quantity, limit = _step3$value$.limit, price2 = _step3$value$.price;
+      quantity ? (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, quantity, _item2) : (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, _item2);
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+  return (0, import_kolmafia4.batchClose)();
+}, bulkSell = function(coinmaster, items) {
+  (0, import_kolmafia4.batchOpen)();
+  var _iterator4 = _createForOfIteratorHelper2(items.entries()), _step4;
+  try {
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done; ) {
+      var _step4$value = _slicedToArray3(_step4.value, 2), _item3 = _step4$value[0], quantity = _step4$value[1];
+      (0, import_kolmafia4.sell)(coinmaster, quantity, _item3);
+    }
+  } catch (err) {
+    _iterator4.e(err);
+  } finally {
+    _iterator4.f();
+  }
+  return (0, import_kolmafia4.batchClose)();
+}, bulkRepriceShop = function(items) {
+  (0, import_kolmafia4.batchOpen)();
+  var _iterator5 = _createForOfIteratorHelper2(items.entries()), _step5;
+  try {
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done; ) {
+      var _step5$value = _slicedToArray3(_step5.value, 2), _item4 = _step5$value[0], _step5$value$ = _step5$value[1], limit = _step5$value$.limit, price2 = _step5$value$.price;
+      limit ? (0, import_kolmafia4.repriceShop)(price2, limit, _item4) : (0, import_kolmafia4.repriceShop)(price2, _item4);
+    }
+  } catch (err) {
+    _iterator5.e(err);
+  } finally {
+    _iterator5.f();
+  }
+  return (0, import_kolmafia4.batchClose)();
+};
 function totalFamiliarWeight() {
   var familiar8 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia4.myFamiliar)(), considerAdjustment = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
   return clamp((0, import_kolmafia4.familiarWeight)((0, import_kolmafia4.myFamiliar)()), have($effect(_templateObject47 || (_templateObject47 = _taggedTemplateLiteral(["Fidoxene"])))) ? 20 : 0, 1 / 0) + familiar8.soupWeight + (considerAdjustment ? (0, import_kolmafia4.weightAdjustment)() : 0) + (familiar8.feasted ? 10 : 0);
@@ -19655,6 +19761,18 @@ var Session = /* @__PURE__ */ function() {
   ascend,
   bestLibramToCast,
   booleanModifiers,
+  bulkAutosell,
+  bulkPutCloset,
+  bulkPutDisplay,
+  bulkPutShop,
+  bulkPutStash,
+  bulkRepriceShop,
+  bulkSell,
+  bulkTakeCloset,
+  bulkTakeDisplay,
+  bulkTakeShop,
+  bulkTakeStash,
+  bulkTakeStorage,
   byClass,
   byStat,
   canRememberSong,
@@ -19779,6 +19897,7 @@ var Session = /* @__PURE__ */ function() {
   undelay,
   uneffect,
   unequip,
+  withBatch,
   withChoice,
   withChoices,
   withCombatFlags,

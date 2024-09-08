@@ -51,6 +51,7 @@ import * as CursedMonkeyPaw from "./2023/CursedMonkeyPaw.js";
 import * as AprilingBandHelmet from "./2024/AprilingBandHelmet.js";
 import * as ChestMimic from "./2024/ChestMimic.js";
 import * as MayamCalendar from "./2024/MayamCalendar.js";
+import * as TearawayPants from "./2024/TearawayPants.js";
 
 export {
   AprilingBandHelmet,
@@ -102,6 +103,7 @@ export {
   SpookyPutty,
   Stickers,
   StompingBoots,
+  TearawayPants,
   TrainSet,
   TunnelOfLove,
   WinterGarden,

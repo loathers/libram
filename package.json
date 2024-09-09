@@ -72,5 +72,5 @@
     "src/**/*.{ts,js}": "yarn run format"
   },
   "sideEffects": false,
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.4.1"
 }

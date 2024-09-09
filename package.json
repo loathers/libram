@@ -20,7 +20,7 @@
     "prepack": "yarn run build && pinst --disable",
     "updateProps": "node --loader tsm ./tools/parseDefaultProperties.ts",
     "updateOverlappingItemSkillNames": "node --loader tsm ./tools/parseItemSkillNames.ts",
-    "postinstall": "husky install && patch-package",
+    "postinstall": "husky install",
     "postpack": "pinst --enable"
   },
   "files": [
@@ -51,12 +51,11 @@
     "eslint-plugin-jsdoc": "^48.2.9",
     "eslint-plugin-libram": "^0.4.12",
     "husky": "^9.1.5",
-    "java-parser": "^2.3.0",
+    "java-parser": "^2.3.1",
     "kolmafia": "^5.28032.0",
     "lint-staged": "^15.2.10",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2",
-    "patch-package": "^8.0.0",
     "pinst": "^3.0.0",
     "prettier": "^3.3.1",
     "tsm": "^2.3.0",

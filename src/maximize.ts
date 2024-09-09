@@ -12,11 +12,13 @@ import {
   haveEquipped,
   isWearingOutfit,
   Item,
+  Location,
   maximize,
   myBasestat,
   myBjornedFamiliar,
   myEnthronedFamiliar,
   myFamiliar,
+  myLocation,
   outfit,
   Slot,
 } from "kolmafia";
@@ -39,6 +41,7 @@ function toMaximizerName({ name, id }: Item): string {
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;
   updateOnCanEquipChanged: boolean;
+  updateOnLocationChange: boolean;
   useOutfitCaching: boolean;
   forceEquip: Item[];
   preventEquip: Item[];
@@ -67,6 +70,8 @@ export function mergeMaximizeOptions(
     updateOnCanEquipChanged:
       addendums.updateOnCanEquipChanged ??
       defaultOptions.updateOnCanEquipChanged,
+    updateOnLocationChange:
+      addendums.updateOnLocationChange ?? defaultOptions.updateOnLocationChange,
 
     useOutfitCaching:
       addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
@@ -102,6 +107,7 @@ export function mergeMaximizeOptions(
 const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
+  updateOnLocationChange: false,
   useOutfitCaching: true,
   forceEquip: [],
   preventEquip: [],
@@ -200,6 +206,7 @@ class CacheEntry {
   familiar: Familiar;
   canEquipItemCount: number;
   modes: Modes;
+  location: Location;
 
   constructor(
     equipment: Map<Slot, Item>,
@@ -207,12 +214,14 @@ class CacheEntry {
     familiar: Familiar,
     canEquipItemCount: number,
     modes: Modes,
+    location: Location,
   ) {
     this.equipment = equipment;
     this.rider = rider;
     this.familiar = familiar;
     this.canEquipItemCount = canEquipItemCount;
     this.modes = modes;
+    this.location = location;
   }
 }
 
@@ -328,6 +337,13 @@ function checkCache(
   if (options.updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
     logger.warning(
       "Equipment found in maximize cache but familiar is different.",
+    );
+    return null;
+  }
+
+  if (options.updateOnLocationChange && myLocation() !== entry.location) {
+    logger.warning(
+      "Equipment found in maximize cache but location is different.",
     );
     return null;
   }
@@ -524,6 +540,7 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     myFamiliar(),
     canEquipItemCount(),
     { ...getCurrentModes(), ...options.modes },
+    myLocation(),
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {
@@ -673,6 +690,7 @@ export class Requirement {
       optionsB,
       "updateOnFamiliarChange",
       "updateOnCanEquipChanged",
+      "updateOnLocationChange",
       "forceUpdate",
     );
 

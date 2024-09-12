@@ -27,6 +27,7 @@ import {
   toFamiliar,
   toItem,
   toLocation,
+  toModifier,
   toMonster,
   toPath,
   toPhylum,

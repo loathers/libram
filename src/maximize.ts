@@ -12,7 +12,6 @@ import {
   haveEquipped,
   isWearingOutfit,
   Item,
-  Location,
   maximize,
   myBasestat,
   myBjornedFamiliar,
@@ -206,7 +205,6 @@ class CacheEntry {
   familiar: Familiar;
   canEquipItemCount: number;
   modes: Modes;
-  location: Location;
 
   constructor(
     equipment: Map<Slot, Item>,
@@ -214,14 +212,12 @@ class CacheEntry {
     familiar: Familiar,
     canEquipItemCount: number,
     modes: Modes,
-    location: Location,
   ) {
     this.equipment = equipment;
     this.rider = rider;
     this.familiar = familiar;
     this.canEquipItemCount = canEquipItemCount;
     this.modes = modes;
-    this.location = location;
   }
 }
 
@@ -337,13 +333,6 @@ function checkCache(
   if (options.updateOnFamiliarChange && myFamiliar() !== entry.familiar) {
     logger.warning(
       "Equipment found in maximize cache but familiar is different.",
-    );
-    return null;
-  }
-
-  if (options.updateOnLocationChange && myLocation() !== entry.location) {
-    logger.warning(
-      "Equipment found in maximize cache but location is different.",
     );
     return null;
   }
@@ -540,7 +529,6 @@ function saveCached(cacheKey: string, options: MaximizeOptions): void {
     myFamiliar(),
     canEquipItemCount(),
     { ...getCurrentModes(), ...options.modes },
-    myLocation(),
   );
   cachedObjectives[cacheKey] = entry;
   if (options.useOutfitCaching) {
@@ -615,6 +603,7 @@ export function maximizeCached(
       .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
       .sort(),
     have($effect`Offhand Remarkable`),
+    options.updateOnLocationChange && myLocation(),
   ].join("; ");
 
   const cacheEntry = checkCache(cacheKey, fullOptions);

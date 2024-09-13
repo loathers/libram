@@ -568,12 +568,14 @@ export function noneToNull<T>(thing: T): T | null {
 /**
  * Parse the sort of range that KoLmafia encodes as a string
  * @param range KoLmafia-style range string
- * @returns Tuple of min and max of range
+ * @returns Tuple of integers representing range
  */
 export function getRange(range: string): [number, number] {
-  const [min, recordedMax] = range.split(/[-]/).map((s) => parseInt(s));
-  const max = recordedMax ?? min;
-  return [min, max];
+  const [lower, upper] = range
+    .match(/^(-?\d+)(?:-(-?\d+))?$/)
+    ?.slice(1, 3)
+    .map((v) => parseInt(v)) ?? [0];
+  return [lower, upper || lower];
 }
 
 /**

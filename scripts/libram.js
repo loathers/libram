@@ -6351,7 +6351,7 @@ var concatTemplateString = function(literals) {
 }, handleTypeGetError = function(Type, error2) {
   var message = "".concat(error2), match = message.match(RegExp("Bad ".concat(Type.name.toLowerCase(), " value: .*")));
   match ? (0, import_kolmafia3.print)("".concat(match[0], "; if you're certain that this ").concat(Type.name, " exists and is spelled correctly, please update KoLMafia"), "red") : (0, import_kolmafia3.print)(message);
-}, createSingleConstant = function(Type) {
+}, createSingleConstant = function(Type, converter) {
   var tagFunction = function(literals) {
     for (var _len2 = arguments.length, placeholders = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
       placeholders[_key2 - 1] = arguments[_key2];
@@ -6363,7 +6363,7 @@ var concatTemplateString = function(literals) {
     }
     (0, import_kolmafia3.abort)();
   };
-  return tagFunction.cls = Type, tagFunction.none = Type.none, tagFunction;
+  return tagFunction.cls = Type, tagFunction.none = Type.none, tagFunction.get = converter, tagFunction;
 }, createPluralConstant = function(Type) {
   var tagFunction = function(literals) {
     for (var _len3 = arguments.length, placeholders = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
@@ -6381,7 +6381,7 @@ var concatTemplateString = function(literals) {
   return tagFunction.all = function() {
     return Type.all();
   }, tagFunction;
-}, $bounty = createSingleConstant(import_kolmafia3.Bounty), $bounties = createPluralConstant(import_kolmafia3.Bounty), $class = createSingleConstant(import_kolmafia3.Class), $classes = createPluralConstant(import_kolmafia3.Class), $coinmaster = createSingleConstant(import_kolmafia3.Coinmaster), $coinmasters = createPluralConstant(import_kolmafia3.Coinmaster), $effect = createSingleConstant(import_kolmafia3.Effect), $effects = createPluralConstant(import_kolmafia3.Effect), $element = createSingleConstant(import_kolmafia3.Element), $elements = createPluralConstant(import_kolmafia3.Element), $familiar = createSingleConstant(import_kolmafia3.Familiar), $familiars = createPluralConstant(import_kolmafia3.Familiar), $item = createSingleConstant(import_kolmafia3.Item), $items = createPluralConstant(import_kolmafia3.Item), $location = createSingleConstant(import_kolmafia3.Location), $locations = createPluralConstant(import_kolmafia3.Location), $modifier = createSingleConstant(import_kolmafia3.Modifier), $modifiers = createPluralConstant(import_kolmafia3.Modifier), $monster = createSingleConstant(import_kolmafia3.Monster), $monsters = createPluralConstant(import_kolmafia3.Monster), $phylum = createSingleConstant(import_kolmafia3.Phylum), $phyla = createPluralConstant(import_kolmafia3.Phylum), $servant = createSingleConstant(import_kolmafia3.Servant), $servants = createPluralConstant(import_kolmafia3.Servant), $skill = createSingleConstant(import_kolmafia3.Skill), $skills = createPluralConstant(import_kolmafia3.Skill), $slot = createSingleConstant(import_kolmafia3.Slot), $slots = createPluralConstant(import_kolmafia3.Slot), $stat = createSingleConstant(import_kolmafia3.Stat), $stats = createPluralConstant(import_kolmafia3.Stat), $thrall = createSingleConstant(import_kolmafia3.Thrall), $thralls = createPluralConstant(import_kolmafia3.Thrall), $path = createSingleConstant(import_kolmafia3.Path), $paths = createPluralConstant(import_kolmafia3.Path);
+}, $bounty = createSingleConstant(import_kolmafia3.Bounty, import_kolmafia3.toBounty), $bounties = createPluralConstant(import_kolmafia3.Bounty), $class = createSingleConstant(import_kolmafia3.Class, import_kolmafia3.toClass), $classes = createPluralConstant(import_kolmafia3.Class), $coinmaster = createSingleConstant(import_kolmafia3.Coinmaster, import_kolmafia3.toCoinmaster), $coinmasters = createPluralConstant(import_kolmafia3.Coinmaster), $effect = createSingleConstant(import_kolmafia3.Effect, import_kolmafia3.toEffect), $effects = createPluralConstant(import_kolmafia3.Effect), $element = createSingleConstant(import_kolmafia3.Element, import_kolmafia3.toElement), $elements = createPluralConstant(import_kolmafia3.Element), $familiar = createSingleConstant(import_kolmafia3.Familiar, import_kolmafia3.toFamiliar), $familiars = createPluralConstant(import_kolmafia3.Familiar), $item = createSingleConstant(import_kolmafia3.Item, import_kolmafia3.toItem), $items = createPluralConstant(import_kolmafia3.Item), $location = createSingleConstant(import_kolmafia3.Location, import_kolmafia3.toLocation), $locations = createPluralConstant(import_kolmafia3.Location), $modifier = createSingleConstant(import_kolmafia3.Modifier, import_kolmafia3.toModifier), $modifiers = createPluralConstant(import_kolmafia3.Modifier), $monster = createSingleConstant(import_kolmafia3.Monster, import_kolmafia3.toMonster), $monsters = createPluralConstant(import_kolmafia3.Monster), $path = createSingleConstant(import_kolmafia3.Path, import_kolmafia3.toPath), $paths = createPluralConstant(import_kolmafia3.Path), $phylum = createSingleConstant(import_kolmafia3.Phylum, import_kolmafia3.toPhylum), $phyla = createPluralConstant(import_kolmafia3.Phylum), $servant = createSingleConstant(import_kolmafia3.Servant, import_kolmafia3.toServant), $servants = createPluralConstant(import_kolmafia3.Servant), $skill = createSingleConstant(import_kolmafia3.Skill, import_kolmafia3.toSkill), $skills = createPluralConstant(import_kolmafia3.Skill), $slot = createSingleConstant(import_kolmafia3.Slot, import_kolmafia3.toSlot), $slots = createPluralConstant(import_kolmafia3.Slot), $stat = createSingleConstant(import_kolmafia3.Stat, import_kolmafia3.toStat), $stats = createPluralConstant(import_kolmafia3.Stat), $thrall = createSingleConstant(import_kolmafia3.Thrall, import_kolmafia3.toThrall), $thralls = createPluralConstant(import_kolmafia3.Thrall);
 
 // src/lib.ts
 var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47;
@@ -12305,7 +12305,7 @@ function _arrayLikeToArray18(r, a) {
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function toModifier(input) {
+function toModifier2(input) {
   var regExp = new RegExp(/Experience \((.*?)\)/), matcher = input.match(regExp);
   return matcher ? "".concat(matcher[2], " Experience") : input;
 }
@@ -12314,7 +12314,7 @@ function currentCostumes() {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
       var entry = _step.value, matcher = entry.match(regExp);
-      matcher && returnValue.set((0, import_kolmafia36.toFamiliar)(matcher[3]), [toModifier(matcher[1]), parseInt(matcher[2])]);
+      matcher && returnValue.set((0, import_kolmafia36.toFamiliar)(matcher[3]), [toModifier2(matcher[1]), parseInt(matcher[2])]);
     }
   } catch (err) {
     _iterator.e(err);

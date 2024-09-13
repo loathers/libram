@@ -5144,7 +5144,7 @@ __metadata:
     eslint-plugin-libram: "npm:^0.4.12"
     html-entities: "npm:^2.5.2"
     husky: "npm:^9.1.5"
-    java-parser: "npm:^2.3.1
+    java-parser: "npm:^2.3.1"
     kolmafia: "npm:^5.28043.0"
     lint-staged: "npm:^15.2.10"
     lodash-es: "npm:^4.17.21"

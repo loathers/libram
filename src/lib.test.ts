@@ -5,6 +5,7 @@ import {
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
+  getRange,
 } from "./lib.js";
 
 vi.mocked(getPlayerName).mockImplementation((id: number) => {
@@ -186,5 +187,18 @@ describe(getPlayerFromIdOrName, () => {
         expect(getPlayerFromIdOrName(idOrName, "return-null")).toBeNull();
       },
     );
+  });
+});
+
+describe("getRange", () => {
+  it.each([
+    ["1-2", [1, 2]],
+    ["-1", [-1, -1]],
+    ["1", [1, 1]],
+    ["1-", [0, 0]],
+    ["-5--1", [-5, -1]],
+    ["10--1", [10, -1]],
+  ])("should return the range for %p", (input, expected) => {
+    expect(getRange(input)).toEqual(expected);
   });
 });

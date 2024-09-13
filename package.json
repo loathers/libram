@@ -18,9 +18,10 @@
     "lint": "yarn run eslint src tools --ext .ts && yarn run prettier --check .",
     "test": "yarn run vitest",
     "prepack": "yarn run build && pinst --disable",
-    "updateProps": "node --loader tsm ./tools/parseDefaultProperties.ts",
-    "updateOverlappingItemSkillNames": "node --loader tsm ./tools/parseItemSkillNames.ts",
-    "postinstall": "husky install && patch-package",
+    "updateProps": "node --import tsx ./tools/parseDefaultProperties.ts",
+    "updateOverlappingItemSkillNames": "node --import tsx ./tools/parseItemSkillNames.ts",
+    "parseModifiers": "node --import tsx ./tools/parseModifiers.ts",
+    "postinstall": "husky install",
     "postpack": "pinst --enable"
   },
   "files": [
@@ -50,16 +51,15 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.9",
     "eslint-plugin-libram": "^0.4.12",
-    "husky": "^9.0.11",
-    "java-parser": "^2.3.0",
-    "kolmafia": "^5.28032.0",
-    "lint-staged": "^15.2.5",
+    "husky": "^9.1.5",
+    "java-parser": "^2.3.2",
+    "kolmafia": "^5.28043.0",
+    "lint-staged": "^15.2.10",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.2",
-    "patch-package": "^8.0.0",
     "pinst": "^3.0.0",
     "prettier": "^3.3.1",
-    "tsm": "^2.3.0",
+    "tsx": "^4.19.1",
     "typedoc": "^0.25.13",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0",
@@ -72,5 +72,5 @@
     "src/**/*.{ts,js}": "yarn run format"
   },
   "sideEffects": false,
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.4.1"
 }

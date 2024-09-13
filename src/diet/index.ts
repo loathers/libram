@@ -18,7 +18,7 @@ import {
   spleenLimit,
 } from "kolmafia";
 
-import { have } from "../lib.js";
+import { getRange, have } from "../lib.js";
 import { get as getModifier } from "../modifier.js";
 import { get } from "../property.js";
 import {
@@ -50,30 +50,33 @@ function isMonday() {
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
+function seasoningAdventures(item: Item): number {
+  const [min, max] = getRange(item.adventures);
+  return max - min <= 1 ? 1 : 0.5;
+}
+
+/**
 /**
  * Expected adventures from an item given a specified state
  *
  * @todo Include Salty Mouth and potentially other modifiers.
- * @param item Item to consider
+ * @param menuItem Menu item to consider
  * @param modifiers Consumption modifiers to consider
  * @returns Adventures expected
  */
-function expectedAdventures(
-  item: Item,
+function expectedAdventures<T>(
+  menuItem: MenuItem<T>,
   modifiers: ConsumptionModifiers,
 ): number {
+  const item = menuItem.item;
   if (item.adventures === "") return 0;
-  const [min, recordedMax] = item.adventures
-    .split(/[-]/)
-    .map((s) => parseInt(s));
-  const max = recordedMax ?? min;
+  const [min, max] = getRange(item.adventures);
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
   const forkMugMultiplier =
-    (itemType(item) === "food" && item.notes?.includes("SALAD")) ||
-    (itemType(item) === "booze" && item.notes?.includes("BEER"))
+    (menuItem.itemType() === "food" && item.notes?.includes("SALAD")) ||
+    (menuItem.itemType() === "booze" && item.notes?.includes("BEER"))
       ? 1.5
       : 1.3;
-  const seasoningAdventures = max - min <= 1 ? 1 : 0.5;
   const aioliAdventures = item.fullness;
   const garish =
     modifiers.garish && item.notes?.includes("LASAGNA") && !isMonday();
@@ -94,12 +97,14 @@ function expectedAdventures(
       if (item.notes?.includes("MARTINI") && modifiers.tuxedoShirt) {
         adventures += 2;
       }
-      if (itemType(item) === "food" && modifiers.mayoflex) adventures++;
-      if (itemType(item) === "food" && modifiers.seasoning)
-        adventures += seasoningAdventures;
-      if (itemType(item) === "food" && modifiers.aioli)
+      if (menuItem.itemType() === "food" && modifiers.mayoflex) adventures++;
+      if (menuItem.itemType() === "food" && modifiers.seasoning) {
+        adventures += seasoningAdventures(item);
+      }
+      if (menuItem.itemType() === "food" && modifiers.aioli) {
         adventures += aioliAdventures;
-      if (itemType(item) === "food" && modifiers.whetStone) adventures++;
+      }
+      if (menuItem.itemType() === "food" && modifiers.whetStone) adventures++;
       return adventures;
     }) / interpolated.length
   );
@@ -127,6 +132,8 @@ export class MenuItem<T> {
   priceOverride?: number;
   mayo?: Item;
   data?: T;
+  private priceCached?: number;
+  private itemTypeCached?: string;
 
   static defaultPriceFunction: (item: Item) => number = (item: Item) =>
     npcPrice(item) > 0 ? npcPrice(item) : mallPrice(item);
@@ -285,7 +292,18 @@ export class MenuItem<T> {
   }
 
   price(): number {
-    return this.priceOverride ?? MenuItem.defaultPriceFunction?.(this.item);
+    if (!this.priceCached) {
+      this.priceCached =
+        this.priceOverride ?? MenuItem.defaultPriceFunction(this.item);
+    }
+    return this.priceCached;
+  }
+
+  itemType(): string {
+    if (!this.itemTypeCached) {
+      this.itemTypeCached = itemType(this.item);
+    }
+    return this.itemTypeCached;
   }
 }
 
@@ -311,6 +329,20 @@ class DietPlanner<T> {
   whetStone?: MenuItem<T>;
   aioli?: MenuItem<T>;
   spleenValue = 0;
+
+  baseDefaultModifiers: ConsumptionModifiers = {
+    forkMug: false,
+    seasoning: false,
+    whetStone: false,
+    aioli: false,
+    mayoflex: false,
+    refinedPalate: have($effect`Refined Palate`),
+    garish: have($effect`Gar-ish`),
+    saucemaven: have($skill`Saucemaven`),
+    pinkyRing:
+      have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`),
+    tuxedoShirt: have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
+  };
 
   constructor(mpa: number, menu: MenuItem<T>[]) {
     this.mpa = mpa;
@@ -398,7 +430,7 @@ class DietPlanner<T> {
     overrideModifiers: Partial<ConsumptionModifiers>,
   ): RawDietEntry<T> {
     const helpers = [];
-    if (itemType(menuItem.item) === "food" && this.mayoLookup.size) {
+    if (menuItem.itemType() === "food" && this.mayoLookup.size) {
       const mayo = menuItem.mayo
         ? this.mayoLookup.get(menuItem.mayo)
         : this.mayoLookup.get(Mayo.flex);
@@ -406,42 +438,24 @@ class DietPlanner<T> {
     }
 
     const defaultModifiers = {
-      forkMug: false,
-      seasoning: this.seasoning ? helpers.includes(this.seasoning) : false,
-      whetStone: this.whetStone ? helpers.includes(this.whetStone) : false,
-      aioli: this.aioli ? helpers.includes(this.aioli) : false,
+      ...this.baseDefaultModifiers,
       mayoflex: this.mayoLookup.size
         ? helpers.some((item) => item.item === Mayo.flex)
         : false,
-      refinedPalate: have($effect`Refined Palate`),
-      garish: have($effect`Gar-ish`),
-      saucemaven: have($skill`Saucemaven`),
-      pinkyRing:
-        have($item`mafia pinky ring`) && canEquip($item`mafia pinky ring`),
-      tuxedoShirt: have($item`tuxedo shirt`) && canEquip($item`tuxedo shirt`),
       ...overrideModifiers,
     };
 
     if (
       this.seasoning &&
-      itemType(menuItem.item) === "food" &&
-      this.mpa *
-        (expectedAdventures(menuItem.item, {
-          ...defaultModifiers,
-          seasoning: true,
-        }) -
-          expectedAdventures(menuItem.item, {
-            ...defaultModifiers,
-            seasoning: false,
-          })) >
-        this.seasoning.price()
+      menuItem.itemType() === "food" &&
+      this.mpa * seasoningAdventures(menuItem.item) > this.seasoning.price()
     ) {
       helpers.push(this.seasoning);
     }
 
     if (
       this.whetStone &&
-      itemType(menuItem.item) === "food" &&
+      menuItem.itemType() === "food" &&
       this.mpa > this.whetStone.price()
     ) {
       helpers.push(this.whetStone);
@@ -449,27 +463,27 @@ class DietPlanner<T> {
 
     if (
       this.aioli &&
-      itemType(menuItem.item) === "food" &&
+      menuItem.itemType() === "food" &&
       this.mpa * menuItem.item.fullness > this.aioli.price()
     ) {
       helpers.push(this.aioli);
     }
 
     const forkMug =
-      itemType(menuItem.item) === "food"
+      menuItem.itemType() === "food"
         ? this.fork
-        : itemType(menuItem.item) === "booze"
+        : menuItem.itemType() === "booze"
           ? this.mug
           : null;
     const forkMugPrice = forkMug ? forkMug.price() : Infinity;
 
     const baseCost = menuItem.price() + sum(helpers, (item) => item.price());
     const valueRaw =
-      expectedAdventures(menuItem.item, defaultModifiers) * this.mpa -
+      expectedAdventures(menuItem, defaultModifiers) * this.mpa -
       baseCost +
       (menuItem.additionalValue ?? 0);
     const valueForkMug =
-      expectedAdventures(menuItem.item, {
+      expectedAdventures(menuItem, {
         ...defaultModifiers,
         forkMug: true,
       }) *
@@ -815,7 +829,7 @@ class DietEntry<T> {
 
         return (
           this.quantity *
-          expectedAdventures(this.menuItems[this.menuItems.length - 1].item, {
+          expectedAdventures(this.menuItems[this.menuItems.length - 1], {
             forkMug: fork || mug,
             seasoning: items.includes($item`Special Seasoning`),
             whetStone: items.includes($item`whet stone`),

@@ -192,12 +192,20 @@ describe(getPlayerFromIdOrName, () => {
 
 describe("getRange", () => {
   it.each([
+    // Normal range
     ["1-2", [1, 2]],
-    ["-1", [-1, -1]],
+    // Single number
     ["1", [1, 1]],
+    // Negative single number
+    ["-1", [-1, -1]],
+    // Invalid
     ["1-", [0, 0]],
+    // Negative upper bound
     ["-5--1", [-5, -1]],
+    // Unusual order (let this slide)
     ["10--1", [10, -1]],
+    // Ending in zero
+    ["-5-0", [-5, 0]],
   ])("should return the range for %p", (input, expected) => {
     expect(getRange(input)).toEqual(expected);
   });

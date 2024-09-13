@@ -15,7 +15,7 @@
     "clean": "rm -rf dist",
     "docs": "yarn run typedoc",
     "format": "yarn run prettier --write .",
-    "lint": "yarn run eslint src tools --ext .ts && yarn run prettier --check .",
+    "lint": "yarn run eslint && yarn run prettier --check .",
     "test": "yarn run vitest",
     "prepack": "yarn run build && pinst --disable",
     "updateProps": "node --import tsx ./tools/parseDefaultProperties.ts",

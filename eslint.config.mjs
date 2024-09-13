@@ -1,15 +1,15 @@
 // @ts-check
 
-import eslint from '@eslint/js';
-import jsdoc from 'eslint-plugin-jsdoc';
-import tseslint from 'typescript-eslint';
+import eslint from "@eslint/js";
+import jsdoc from "eslint-plugin-jsdoc";
+import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 import * as libram from "eslint-plugin-libram";
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  jsdoc.configs['flat/recommended-error'],
+  jsdoc.configs["flat/recommended-error"],
   prettier,
   {
     plugins: {
@@ -17,11 +17,14 @@ export default tseslint.config(
     },
     rules: {
       "libram/verify-constants": "error",
-    }
+    },
   },
   {
     rules: {
-      "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { varsIgnorePattern: "^_" },
+      ],
       "jsdoc/require-jsdoc": [
         "error",
         {
@@ -40,9 +43,9 @@ export default tseslint.config(
           definedTags: ["category", "packageDocumentation"],
         },
       ],
-    }
+    },
   },
   {
-    ignores: ["dist", "KoLmafia", "**/*.{js,cjs}"]
-  }
+    ignores: ["dist", "KoLmafia", "**/*.{js,cjs}"],
+  },
 );

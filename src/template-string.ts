@@ -85,7 +85,10 @@ const createSingleConstant = <T extends MafiaClass>(
   };
   tagFunction.cls = Type;
   tagFunction.none = Type.none as T;
-  tagFunction.get = converter;
+  tagFunction.get = (name: string) => {
+    const value = converter(name);
+    return value === Type.none ? null : value;
+  };
   return tagFunction;
 };
 

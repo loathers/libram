@@ -575,7 +575,7 @@ export function getRange(range: string): [number, number] {
     .match(/^(-?\d+)(?:-(-?\d+))?$/)
     ?.slice(1, 3)
     .map((v) => parseInt(v)) ?? [0];
-  return [lower, upper || lower];
+  return [lower, upper ?? lower];
 }
 
 /**

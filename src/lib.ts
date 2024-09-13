@@ -75,10 +75,7 @@ import {
   repriceShop,
   familiarWeight,
   weightAdjustment,
-  Phylum,
-  Modifier,
-  Class,
-  Bounty,
+  MafiaClasses,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -95,26 +92,6 @@ import {
   $stat,
 } from "./template-string.js";
 import { makeByXFunction, chunk, notNull, clamp } from "./utils.js";
-
-const MafiaClasses = [
-  Bounty,
-  Class,
-  Coinmaster,
-  Effect,
-  Element,
-  Familiar,
-  Item,
-  Location,
-  Modifier,
-  Monster,
-  Path,
-  Phylum,
-  Servant,
-  Skill,
-  Slot,
-  Stat,
-  Thrall,
-];
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head

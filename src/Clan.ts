@@ -179,8 +179,8 @@ export class Clan {
   ): T;
   static withStash<T>(
     clanIdOrName: string | number,
-    items: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    callback: (borrowedItems: any) => T, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    items: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    callback: (borrowedItems: any) => T, // eslint-disable-line @typescript-eslint/no-explicit-any
   ): T {
     return Clan._withStash(
       () => Clan.with(clanIdOrName, (clan) => clan.take(items)),

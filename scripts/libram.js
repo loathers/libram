@@ -5195,6 +5195,9 @@ __export(src_exports, {
   getPlayerNameFromId: function() {
     return getPlayerNameFromId;
   },
+  getRange: function() {
+    return getRange;
+  },
   getRemainingLiver: function() {
     return getRemainingLiver;
   },
@@ -6729,11 +6732,15 @@ function canUse(item12) {
 function noneToNull(thing) {
   return thing instanceof import_kolmafia4.Effect ? thing === import_kolmafia4.Effect.none ? null : thing : thing instanceof import_kolmafia4.Familiar ? thing === import_kolmafia4.Familiar.none ? null : thing : thing instanceof import_kolmafia4.Item && thing === import_kolmafia4.Item.none ? null : thing;
 }
+function getRange(range) {
+  var _range$split$map = range.split(/[-]/).map(function(s) {
+    return parseInt(s);
+  }), _range$split$map2 = _slicedToArray3(_range$split$map, 2), min = _range$split$map2[0], recordedMax = _range$split$map2[1], max = recordedMax != null ? recordedMax : min;
+  return [min, max];
+}
 function getAverage(range) {
-  var _range$match;
-  if (range.indexOf("-") < 0) return Number(range);
-  var _ref7 = (_range$match = range.match(/(-?[0-9]+)-(-?[0-9]+)/)) !== null && _range$match !== void 0 ? _range$match : ["0", "0", "0"], _ref8 = _slicedToArray3(_ref7, 3), lower = _ref8[1], upper = _ref8[2];
-  return (Number(lower) + Number(upper)) / 2;
+  var _getRange = getRange(range), _getRange2 = _slicedToArray3(_getRange, 2), min = _getRange2[0], max = _getRange2[1];
+  return (min + max) / 2;
 }
 function getAverageAdventures(item12) {
   return getAverage(item12.adventures);
@@ -6855,8 +6862,8 @@ function telescope() {
     hedge1: hedgeTrap1.get(get("telescope3")),
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5"))
-  }).filter(function(_ref9) {
-    var _ref10 = _slicedToArray3(_ref9, 2), value = _ref10[1];
+  }).filter(function(_ref7) {
+    var _ref8 = _slicedToArray3(_ref7, 2), value = _ref8[1];
     return value;
   }));
 }
@@ -6930,16 +6937,16 @@ function getCombatFlags() {
 function setCombatFlags() {
   for (var _len2 = arguments.length, flags = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     flags[_key2] = arguments[_key2];
-  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flags.flatMap(function(_ref11) {
-    var flag = _ref11.flag, value = _ref11.value;
+  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flags.flatMap(function(_ref9) {
+    var flag = _ref9.flag, value = _ref9.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
   })), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
     flags[_key3 - 1] = arguments[_key3];
-  var initialValues = getCombatFlags(flags.map(function(_ref12) {
-    var flag = _ref12.flag;
+  var initialValues = getCombatFlags(flags.map(function(_ref10) {
+    var flag = _ref10.flag;
     return flag;
   }));
   try {
@@ -6952,8 +6959,8 @@ function haveIntrinsic(effect2) {
   return (0, import_kolmafia4.haveEffect)(effect2) >= 2147483647;
 }
 function extractItems(text) {
-  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref13) {
-    var _ref14 = _slicedToArray3(_ref13, 2), itemName = _ref14[0], quantity = _ref14[1];
+  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref11) {
+    var _ref12 = _slicedToArray3(_ref11, 2), itemName = _ref12[0], quantity = _ref12[1];
     return [import_kolmafia4.Item.get(itemName), quantity];
   }));
 }
@@ -17487,23 +17494,25 @@ function _taggedTemplateLiteral66(e, t) {
 function isMonday() {
   return get2("Muscle Percent", $item(_templateObject505 || (_templateObject505 = _taggedTemplateLiteral66(["Tuesday's ruby"])))) > 0;
 }
-function _expectedAdventures(item12, modifiers) {
-  var _item$notes, _item$notes2, _item$notes3, _item$notes4, _item$notes5;
+function seasoningAdventures(item12) {
+  var _getRange = getRange(item12.adventures), _getRange2 = _slicedToArray21(_getRange, 2), min = _getRange2[0], max = _getRange2[1];
+  return max - min <= 1 ? 1 : 0.5;
+}
+function _expectedAdventures(menuItem, modifiers) {
+  var _item$notes, _item$notes2, _item$notes3, _item$notes4, _item$notes5, item12 = menuItem.item;
   if (item12.adventures === "") return 0;
-  var _item$adventures$spli = item12.adventures.split(/[-]/).map(function(s) {
-    return parseInt(s);
-  }), _item$adventures$spli2 = _slicedToArray21(_item$adventures$spli, 2), min = _item$adventures$spli2[0], recordedMax = _item$adventures$spli2[1], max = recordedMax != null ? recordedMax : min, interpolated = _toConsumableArray19(new Array(max - min + 1).keys()).map(function(n) {
+  var _getRange3 = getRange(item12.adventures), _getRange4 = _slicedToArray21(_getRange3, 2), min = _getRange4[0], max = _getRange4[1], interpolated = _toConsumableArray19(new Array(max - min + 1).keys()).map(function(n) {
     return n + min;
-  }), forkMugMultiplier = (0, import_kolmafia72.itemType)(item12) === "food" && (_item$notes = item12.notes) !== null && _item$notes !== void 0 && _item$notes.includes("SALAD") || (0, import_kolmafia72.itemType)(item12) === "booze" && (_item$notes2 = item12.notes) !== null && _item$notes2 !== void 0 && _item$notes2.includes("BEER") ? 1.5 : 1.3, seasoningAdventures = max - min <= 1 ? 1 : 0.5, aioliAdventures = item12.fullness, garish = modifiers.garish && ((_item$notes3 = item12.notes) === null || _item$notes3 === void 0 ? void 0 : _item$notes3.includes("LASAGNA")) && !isMonday(), refinedPalate = modifiers.refinedPalate && ((_item$notes4 = item12.notes) === null || _item$notes4 === void 0 ? void 0 : _item$notes4.includes("WINE")), pinkyRing = modifiers.pinkyRing && ((_item$notes5 = item12.notes) === null || _item$notes5 === void 0 ? void 0 : _item$notes5.includes("WINE"));
+  }), forkMugMultiplier = menuItem.itemType() === "food" && (_item$notes = item12.notes) !== null && _item$notes !== void 0 && _item$notes.includes("SALAD") || menuItem.itemType() === "booze" && (_item$notes2 = item12.notes) !== null && _item$notes2 !== void 0 && _item$notes2.includes("BEER") ? 1.5 : 1.3, aioliAdventures = item12.fullness, garish = modifiers.garish && ((_item$notes3 = item12.notes) === null || _item$notes3 === void 0 ? void 0 : _item$notes3.includes("LASAGNA")) && !isMonday(), refinedPalate = modifiers.refinedPalate && ((_item$notes4 = item12.notes) === null || _item$notes4 === void 0 ? void 0 : _item$notes4.includes("WINE")), pinkyRing = modifiers.pinkyRing && ((_item$notes5 = item12.notes) === null || _item$notes5 === void 0 ? void 0 : _item$notes5.includes("WINE"));
   return sum(interpolated, function(baseAdventures) {
     var _item$notes6, _item$notes7, adventures = baseAdventures;
-    return modifiers.forkMug && (adventures = Math.floor(adventures * forkMugMultiplier)), (_item$notes6 = item12.notes) !== null && _item$notes6 !== void 0 && _item$notes6.includes("SAUCY") && modifiers.saucemaven && (adventures += (0, import_kolmafia72.myPrimestat)() === $stat(_templateObject2131 || (_templateObject2131 = _taggedTemplateLiteral66(["Mysticality"]))) ? 5 : 3), garish && (adventures += 5), refinedPalate && (adventures = Math.floor(adventures * 1.25)), pinkyRing && (adventures = Math.round(adventures * 1.125)), (_item$notes7 = item12.notes) !== null && _item$notes7 !== void 0 && _item$notes7.includes("MARTINI") && modifiers.tuxedoShirt && (adventures += 2), (0, import_kolmafia72.itemType)(item12) === "food" && modifiers.mayoflex && adventures++, (0, import_kolmafia72.itemType)(item12) === "food" && modifiers.seasoning && (adventures += seasoningAdventures), (0, import_kolmafia72.itemType)(item12) === "food" && modifiers.aioli && (adventures += aioliAdventures), (0, import_kolmafia72.itemType)(item12) === "food" && modifiers.whetStone && adventures++, adventures;
+    return modifiers.forkMug && (adventures = Math.floor(adventures * forkMugMultiplier)), (_item$notes6 = item12.notes) !== null && _item$notes6 !== void 0 && _item$notes6.includes("SAUCY") && modifiers.saucemaven && (adventures += (0, import_kolmafia72.myPrimestat)() === $stat(_templateObject2131 || (_templateObject2131 = _taggedTemplateLiteral66(["Mysticality"]))) ? 5 : 3), garish && (adventures += 5), refinedPalate && (adventures = Math.floor(adventures * 1.25)), pinkyRing && (adventures = Math.round(adventures * 1.125)), (_item$notes7 = item12.notes) !== null && _item$notes7 !== void 0 && _item$notes7.includes("MARTINI") && modifiers.tuxedoShirt && (adventures += 2), menuItem.itemType() === "food" && modifiers.mayoflex && adventures++, menuItem.itemType() === "food" && modifiers.seasoning && (adventures += seasoningAdventures(item12)), menuItem.itemType() === "food" && modifiers.aioli && (adventures += aioliAdventures), menuItem.itemType() === "food" && modifiers.whetStone && adventures++, adventures;
   }) / interpolated.length;
 }
 var MenuItem = /* @__PURE__ */ function() {
   function MenuItem2(item12) {
     var _MenuItem$defaultOpti, options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    _classCallCheck15(this, MenuItem2), _defineProperty19(this, "item", void 0), _defineProperty19(this, "organ", void 0), _defineProperty19(this, "size", void 0), _defineProperty19(this, "maximum", void 0), _defineProperty19(this, "additionalValue", void 0), _defineProperty19(this, "effect", void 0), _defineProperty19(this, "priceOverride", void 0), _defineProperty19(this, "mayo", void 0), _defineProperty19(this, "data", void 0);
+    _classCallCheck15(this, MenuItem2), _defineProperty19(this, "item", void 0), _defineProperty19(this, "organ", void 0), _defineProperty19(this, "size", void 0), _defineProperty19(this, "maximum", void 0), _defineProperty19(this, "additionalValue", void 0), _defineProperty19(this, "effect", void 0), _defineProperty19(this, "priceOverride", void 0), _defineProperty19(this, "mayo", void 0), _defineProperty19(this, "data", void 0), _defineProperty19(this, "priceCached", void 0), _defineProperty19(this, "itemTypeCached", void 0);
     var _options = _objectSpread8(_objectSpread8({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item12)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
     if (this.item = item12, notNullish(maximum) && (this.maximum = maximum === "auto" ? item12.dailyusesleft : maximum), notNullish(additionalValue) && (this.additionalValue = additionalValue), notNullish(effect2) && (this.effect = effect2), notNullish(priceOverride) && (this.priceOverride = priceOverride), notNullish(mayo) && (this.mayo = mayo), notNullish(data) && (this.data = data), notNullish(organ))
       this.organ = organ;
@@ -17526,8 +17535,16 @@ var MenuItem = /* @__PURE__ */ function() {
   }, {
     key: "price",
     value: function() {
-      var _this$priceOverride, _MenuItem$defaultPric;
-      return (_this$priceOverride = this.priceOverride) !== null && _this$priceOverride !== void 0 ? _this$priceOverride : (_MenuItem$defaultPric = MenuItem2.defaultPriceFunction) === null || _MenuItem$defaultPric === void 0 ? void 0 : _MenuItem$defaultPric.call(MenuItem2, this.item);
+      if (!this.priceCached) {
+        var _this$priceOverride;
+        this.priceCached = (_this$priceOverride = this.priceOverride) !== null && _this$priceOverride !== void 0 ? _this$priceOverride : MenuItem2.defaultPriceFunction(this.item);
+      }
+      return this.priceCached;
+    }
+  }, {
+    key: "itemType",
+    value: function() {
+      return this.itemTypeCached || (this.itemTypeCached = (0, import_kolmafia72.itemType)(this.item)), this.itemTypeCached;
     }
   }], [{
     key: "defaultOptions",
@@ -17599,25 +17616,36 @@ var DietPlanner = /* @__PURE__ */ function() {
   function DietPlanner2(mpa, menu) {
     var _this2 = this;
     var _this = this;
-    _classCallCheck15(this, DietPlanner2), _defineProperty19(this, "mpa", void 0), _defineProperty19(this, "menu", void 0), _defineProperty19(this, "mayoLookup", void 0), _defineProperty19(this, "fork", void 0), _defineProperty19(this, "mug", void 0), _defineProperty19(this, "seasoning", void 0), _defineProperty19(this, "whetStone", void 0), _defineProperty19(this, "aioli", void 0), _defineProperty19(this, "spleenValue", 0), this.mpa = mpa;
+    _classCallCheck15(this, DietPlanner2), _defineProperty19(this, "mpa", void 0), _defineProperty19(this, "menu", void 0), _defineProperty19(this, "mayoLookup", void 0), _defineProperty19(this, "fork", void 0), _defineProperty19(this, "mug", void 0), _defineProperty19(this, "seasoning", void 0), _defineProperty19(this, "whetStone", void 0), _defineProperty19(this, "aioli", void 0), _defineProperty19(this, "spleenValue", 0), _defineProperty19(this, "baseDefaultModifiers", {
+      forkMug: !1,
+      seasoning: !1,
+      whetStone: !1,
+      aioli: !1,
+      mayoflex: !1,
+      refinedPalate: have($effect(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral66(["Refined Palate"])))),
+      garish: have($effect(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral66(["Gar-ish"])))),
+      saucemaven: have($skill(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral66(["Saucemaven"])))),
+      pinkyRing: have($item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral66(["mafia pinky ring"])))) && (0, import_kolmafia72.canEquip)($item(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral66(["mafia pinky ring"])))),
+      tuxedoShirt: have($item(_templateObject3120 || (_templateObject3120 = _taggedTemplateLiteral66(["tuxedo shirt"])))) && (0, import_kolmafia72.canEquip)($item(_templateObject3213 || (_templateObject3213 = _taggedTemplateLiteral66(["tuxedo shirt"]))))
+    }), this.mpa = mpa;
     var fork = menu.find(function(item12) {
-      return item12.item === $item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral66(["Ol' Scratch's salad fork"])));
+      return item12.item === $item(_templateObject3312 || (_templateObject3312 = _taggedTemplateLiteral66(["Ol' Scratch's salad fork"])));
     });
     fork && (this.fork = fork);
     var mug = menu.find(function(item12) {
-      return item12.item === $item(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral66(["Frosty's frosty mug"])));
+      return item12.item === $item(_templateObject3411 || (_templateObject3411 = _taggedTemplateLiteral66(["Frosty's frosty mug"])));
     });
     mug && (this.mug = mug);
     var seasoning = menu.find(function(item12) {
-      return item12.item === $item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral66(["Special Seasoning"])));
+      return item12.item === $item(_templateObject3510 || (_templateObject3510 = _taggedTemplateLiteral66(["Special Seasoning"])));
     });
     seasoning && (this.seasoning = seasoning);
     var whetStone = menu.find(function(item12) {
-      return item12.item === $item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral66(["whet stone"])));
+      return item12.item === $item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral66(["whet stone"])));
     });
     whetStone && (this.whetStone = whetStone);
     var aioli = menu.find(function(item12) {
-      return item12.item === $item(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral66(["mini kiwi aioli"])));
+      return item12.item === $item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral66(["mini kiwi aioli"])));
     });
     if (aioli && (this.aioli = aioli), this.mayoLookup = /* @__PURE__ */ new Map(), installed3())
       for (var _loop = function() {
@@ -17660,32 +17688,19 @@ var DietPlanner = /* @__PURE__ */ function() {
     key: "consumptionHelpersAndValue",
     value: function(menuItem, overrideModifiers) {
       var _menuItem$additionalV, _menuItem$additionalV2, helpers = [];
-      if ((0, import_kolmafia72.itemType)(menuItem.item) === "food" && this.mayoLookup.size) {
+      if (menuItem.itemType() === "food" && this.mayoLookup.size) {
         var mayo = menuItem.mayo ? this.mayoLookup.get(menuItem.mayo) : this.mayoLookup.get(Mayo.flex);
         mayo && helpers.push(mayo);
       }
-      var defaultModifiers = _objectSpread8({
-        forkMug: !1,
-        seasoning: this.seasoning ? helpers.includes(this.seasoning) : !1,
-        whetStone: this.whetStone ? helpers.includes(this.whetStone) : !1,
-        aioli: this.aioli ? helpers.includes(this.aioli) : !1,
+      var defaultModifiers = _objectSpread8(_objectSpread8({}, this.baseDefaultModifiers), {}, {
         mayoflex: this.mayoLookup.size ? helpers.some(function(item12) {
           return item12.item === Mayo.flex;
-        }) : !1,
-        refinedPalate: have($effect(_templateObject3120 || (_templateObject3120 = _taggedTemplateLiteral66(["Refined Palate"])))),
-        garish: have($effect(_templateObject3213 || (_templateObject3213 = _taggedTemplateLiteral66(["Gar-ish"])))),
-        saucemaven: have($skill(_templateObject3312 || (_templateObject3312 = _taggedTemplateLiteral66(["Saucemaven"])))),
-        pinkyRing: have($item(_templateObject3411 || (_templateObject3411 = _taggedTemplateLiteral66(["mafia pinky ring"])))) && (0, import_kolmafia72.canEquip)($item(_templateObject3510 || (_templateObject3510 = _taggedTemplateLiteral66(["mafia pinky ring"])))),
-        tuxedoShirt: have($item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral66(["tuxedo shirt"])))) && (0, import_kolmafia72.canEquip)($item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral66(["tuxedo shirt"]))))
+        }) : !1
       }, overrideModifiers);
-      this.seasoning && (0, import_kolmafia72.itemType)(menuItem.item) === "food" && this.mpa * (_expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
-        seasoning: !0
-      })) - _expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
-        seasoning: !1
-      }))) > this.seasoning.price() && helpers.push(this.seasoning), this.whetStone && (0, import_kolmafia72.itemType)(menuItem.item) === "food" && this.mpa > this.whetStone.price() && helpers.push(this.whetStone), this.aioli && (0, import_kolmafia72.itemType)(menuItem.item) === "food" && this.mpa * menuItem.item.fullness > this.aioli.price() && helpers.push(this.aioli);
-      var forkMug = (0, import_kolmafia72.itemType)(menuItem.item) === "food" ? this.fork : (0, import_kolmafia72.itemType)(menuItem.item) === "booze" ? this.mug : null, forkMugPrice = forkMug ? forkMug.price() : 1 / 0, baseCost = menuItem.price() + sum(helpers, function(item12) {
+      this.seasoning && menuItem.itemType() === "food" && this.mpa * seasoningAdventures(menuItem.item) > this.seasoning.price() && helpers.push(this.seasoning), this.whetStone && menuItem.itemType() === "food" && this.mpa > this.whetStone.price() && helpers.push(this.whetStone), this.aioli && menuItem.itemType() === "food" && this.mpa * menuItem.item.fullness > this.aioli.price() && helpers.push(this.aioli);
+      var forkMug = menuItem.itemType() === "food" ? this.fork : menuItem.itemType() === "booze" ? this.mug : null, forkMugPrice = forkMug ? forkMug.price() : 1 / 0, baseCost = menuItem.price() + sum(helpers, function(item12) {
         return item12.price();
-      }), valueRaw = _expectedAdventures(menuItem.item, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem.item, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
+      }), valueRaw = _expectedAdventures(menuItem, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
         forkMug: !0
       })) * this.mpa - baseCost - forkMugPrice + ((_menuItem$additionalV2 = menuItem.additionalValue) !== null && _menuItem$additionalV2 !== void 0 ? _menuItem$additionalV2 : 0), valueSpleen = $items(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral66(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item) ? 5 * this.spleenValue : 0;
       return forkMug && valueForkMug > valueRaw ? [[].concat(helpers, [forkMug, menuItem]), valueForkMug + valueSpleen] : [[].concat(helpers, [menuItem]), valueRaw + valueSpleen];
@@ -17833,7 +17848,7 @@ var DietEntry = /* @__PURE__ */ function() {
         var items = this.menuItems.map(function(m) {
           return m.item;
         }), targetItem = this.menuItems[this.menuItems.length - 1].item, fork = (0, import_kolmafia72.itemType)(targetItem) === "food" && items.includes($item(_templateObject574 || (_templateObject574 = _taggedTemplateLiteral66(["Ol' Scratch's salad fork"])))), mug = (0, import_kolmafia72.itemType)(targetItem) === "booze" && items.includes($item(_templateObject584 || (_templateObject584 = _taggedTemplateLiteral66(["Frosty's frosty mug"]))));
-        return this.quantity * _expectedAdventures(this.menuItems[this.menuItems.length - 1].item, {
+        return this.quantity * _expectedAdventures(this.menuItems[this.menuItems.length - 1], {
           forkMug: fork || mug,
           seasoning: items.includes($item(_templateObject594 || (_templateObject594 = _taggedTemplateLiteral66(["Special Seasoning"])))),
           whetStone: items.includes($item(_templateObject604 || (_templateObject604 = _taggedTemplateLiteral66(["whet stone"])))),
@@ -19866,6 +19881,7 @@ var Session = /* @__PURE__ */ function() {
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
+  getRange,
   getRemainingLiver,
   getRemainingSpleen,
   getRemainingStomach,

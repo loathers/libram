@@ -30,7 +30,7 @@ class ModifiersVisitor extends BaseJavaCstVisitorWithDefaults {
 
   processModifier(expression: ExpressionCtx) {
     const literal =
-      expression.ternaryExpression?.[0].children.binaryExpression[0].children
+      expression.conditionalExpression?.[0].children.binaryExpression[0].children
         .unaryExpression[0].children.primary[0].children.primaryPrefix[0]
         .children.literal?.[0].children.StringLiteral?.[0].image;
 

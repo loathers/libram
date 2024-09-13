@@ -18,7 +18,7 @@ import {
   spleenLimit,
 } from "kolmafia";
 
-import { have } from "../lib.js";
+import { getRange, have } from "../lib.js";
 import { get as getModifier } from "../modifier.js";
 import { get } from "../property.js";
 import {
@@ -50,16 +50,8 @@ function isMonday() {
   return getModifier("Muscle Percent", $item`Tuesday's ruby`) > 0;
 }
 
-function adventureRange(item: Item): [number, number] {
-  const [min, recordedMax] = item.adventures
-    .split(/[-]/)
-    .map((s) => parseInt(s));
-  const max = recordedMax ?? min;
-  return [min, max];
-}
-
 function seasoningAdventures(item: Item): number {
-  const [min, max] = adventureRange(item);
+  const [min, max] = getRange(item.adventures);
   return max - min <= 1 ? 1 : 0.5;
 }
 
@@ -78,7 +70,7 @@ function expectedAdventures<T>(
 ): number {
   const item = menuItem.item;
   if (item.adventures === "") return 0;
-  const [min, max] = adventureRange(item);
+  const [min, max] = getRange(item.adventures);
   const interpolated = [...new Array(max - min + 1).keys()].map((n) => n + min);
   const forkMugMultiplier =
     (menuItem.itemType() === "food" && item.notes?.includes("SALAD")) ||

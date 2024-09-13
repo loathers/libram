@@ -19,6 +19,23 @@ import {
   Slot,
   Stat,
   Thrall,
+  toBounty,
+  toClass,
+  toCoinmaster,
+  toEffect,
+  toElement,
+  toFamiliar,
+  toItem,
+  toLocation,
+  toModifier,
+  toMonster,
+  toPath,
+  toPhylum,
+  toServant,
+  toSkill,
+  toSlot,
+  toStat,
+  toThrall,
 } from "kolmafia";
 
 import { splitByCommasWithEscapes } from "./utils.js";
@@ -52,6 +69,7 @@ const handleTypeGetError = <T extends MafiaClass>(
 
 const createSingleConstant = <T extends MafiaClass>(
   Type: typeof MafiaClass & (new () => T),
+  converter: (name: string) => T,
 ) => {
   const tagFunction = (
     literals: TemplateStringsArray,
@@ -67,6 +85,7 @@ const createSingleConstant = <T extends MafiaClass>(
   };
   tagFunction.cls = Type;
   tagFunction.none = Type.none as T;
+  tagFunction.get = converter;
   return tagFunction;
 };
 
@@ -99,7 +118,7 @@ const createPluralConstant = <T extends MafiaClass>(
  *
  * @category In-game constant
  */
-export const $bounty = createSingleConstant(Bounty);
+export const $bounty = createSingleConstant(Bounty, toBounty);
 
 /**
  * A list of Bounties specified by a comma-separated list of names.
@@ -114,7 +133,7 @@ export const $bounties = createPluralConstant(Bounty);
  *
  * @category In-game constant
  */
-export const $class = createSingleConstant(Class);
+export const $class = createSingleConstant(Class, toClass);
 
 /**
  * A list of Classes specified by a comma-separated list of names.
@@ -129,7 +148,7 @@ export const $classes = createPluralConstant(Class);
  *
  * @category In-game constant
  */
-export const $coinmaster = createSingleConstant(Coinmaster);
+export const $coinmaster = createSingleConstant(Coinmaster, toCoinmaster);
 
 /**
  * A list of Coinmasters specified by a comma-separated list of names.
@@ -144,7 +163,7 @@ export const $coinmasters = createPluralConstant(Coinmaster);
  *
  * @category In-game constant
  */
-export const $effect = createSingleConstant(Effect);
+export const $effect = createSingleConstant(Effect, toEffect);
 
 /**
  * A list of Effects specified by a comma-separated list of names.
@@ -159,7 +178,7 @@ export const $effects = createPluralConstant(Effect);
  *
  * @category In-game constant
  */
-export const $element = createSingleConstant(Element);
+export const $element = createSingleConstant(Element, toElement);
 
 /**
  * A list of Elements specified by a comma-separated list of names.
@@ -174,7 +193,7 @@ export const $elements = createPluralConstant(Element);
  *
  * @category In-game constant
  */
-export const $familiar = createSingleConstant(Familiar);
+export const $familiar = createSingleConstant(Familiar, toFamiliar);
 
 /**
  * A list of Familiars specified by a comma-separated list of names.
@@ -189,7 +208,7 @@ export const $familiars = createPluralConstant(Familiar);
  *
  * @category In-game constant
  */
-export const $item = createSingleConstant(Item);
+export const $item = createSingleConstant(Item, toItem);
 
 /**
  * A list of Items specified by a comma-separated list of names.
@@ -204,7 +223,7 @@ export const $items = createPluralConstant(Item);
  *
  * @category In-game constant
  */
-export const $location = createSingleConstant(Location);
+export const $location = createSingleConstant(Location, toLocation);
 
 /**
  * A list of Locations specified by a comma-separated list of names.
@@ -219,7 +238,7 @@ export const $locations = createPluralConstant(Location);
  *
  * @category In-game constant
  */
-export const $modifier = createSingleConstant(Modifier);
+export const $modifier = createSingleConstant(Modifier, toModifier);
 /**
  * A list of Modifiers specified by a comma-separated list of names.
  * For a list of all possible Modifiers, leave the template string blank.
@@ -233,7 +252,7 @@ export const $modifiers = createPluralConstant(Modifier);
  *
  * @category In-game constant
  */
-export const $monster = createSingleConstant(Monster);
+export const $monster = createSingleConstant(Monster, toMonster);
 
 /**
  * A list of Monsters specified by a comma-separated list of names.
@@ -244,11 +263,26 @@ export const $monster = createSingleConstant(Monster);
 export const $monsters = createPluralConstant(Monster);
 
 /**
+ * A Path specified by name.
+ *
+ * @category In-game constant
+ */
+export const $path = createSingleConstant(Path, toPath);
+
+/**
+ * A list of Paths specified by a comma-separated list of names.
+ * For a list of all possible Paths, leave the template string blank.
+ *
+ * @category In-game constant
+ */
+export const $paths = createPluralConstant(Path);
+
+/**
  * A Phylum specified by name.
  *
  * @category In-game constant
  */
-export const $phylum = createSingleConstant(Phylum);
+export const $phylum = createSingleConstant(Phylum, toPhylum);
 
 /**
  * A list of Phyla specified by a comma-separated list of names.
@@ -263,7 +297,7 @@ export const $phyla = createPluralConstant(Phylum);
  *
  * @category In-game constant
  */
-export const $servant = createSingleConstant(Servant);
+export const $servant = createSingleConstant(Servant, toServant);
 
 /**
  * A list of Servants specified by a comma-separated list of names.
@@ -278,7 +312,7 @@ export const $servants = createPluralConstant(Servant);
  *
  * @category In-game constant
  */
-export const $skill = createSingleConstant(Skill);
+export const $skill = createSingleConstant(Skill, toSkill);
 
 /**
  * A list of Skills specified by a comma-separated list of names.
@@ -293,7 +327,7 @@ export const $skills = createPluralConstant(Skill);
  *
  * @category In-game constant
  */
-export const $slot = createSingleConstant(Slot);
+export const $slot = createSingleConstant(Slot, toSlot);
 
 /**
  * A list of Slots specified by a comma-separated list of names.
@@ -308,7 +342,7 @@ export const $slots = createPluralConstant(Slot);
  *
  * @category In-game constant
  */
-export const $stat = createSingleConstant(Stat);
+export const $stat = createSingleConstant(Stat, toStat);
 
 /**
  * A list of Stats specified by a comma-separated list of names.
@@ -323,7 +357,7 @@ export const $stats = createPluralConstant(Stat);
  *
  * @category In-game constant
  */
-export const $thrall = createSingleConstant(Thrall);
+export const $thrall = createSingleConstant(Thrall, toThrall);
 
 /**
  * A list of Thralls specified by a comma-separated list of names.
@@ -332,18 +366,3 @@ export const $thrall = createSingleConstant(Thrall);
  * @category In-game constant
  */
 export const $thralls = createPluralConstant(Thrall);
-
-/**
- * A Path specified by name.
- *
- * @category In-game constant
- */
-export const $path = createSingleConstant(Path);
-
-/**
- * A list of Paths specified by a comma-separated list of names.
- * For a list of all possible Paths, leave the template string blank.
- *
- * @category In-game constant
- */
-export const $paths = createPluralConstant(Path);

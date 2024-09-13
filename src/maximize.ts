@@ -17,6 +17,7 @@ import {
   myBjornedFamiliar,
   myEnthronedFamiliar,
   myFamiliar,
+  myLocation,
   outfit,
   Slot,
 } from "kolmafia";
@@ -39,6 +40,7 @@ function toMaximizerName({ name, id }: Item): string {
 export type MaximizeOptions = {
   updateOnFamiliarChange: boolean;
   updateOnCanEquipChanged: boolean;
+  updateOnLocationChange: boolean;
   useOutfitCaching: boolean;
   forceEquip: Item[];
   preventEquip: Item[];
@@ -67,6 +69,8 @@ export function mergeMaximizeOptions(
     updateOnCanEquipChanged:
       addendums.updateOnCanEquipChanged ??
       defaultOptions.updateOnCanEquipChanged,
+    updateOnLocationChange:
+      addendums.updateOnLocationChange ?? defaultOptions.updateOnLocationChange,
 
     useOutfitCaching:
       addendums.useOutfitCaching ?? defaultOptions.useOutfitCaching,
@@ -102,6 +106,7 @@ export function mergeMaximizeOptions(
 const defaultMaximizeOptions: MaximizeOptions = {
   updateOnFamiliarChange: true,
   updateOnCanEquipChanged: true,
+  updateOnLocationChange: false,
   useOutfitCaching: true,
   forceEquip: [],
   preventEquip: [],
@@ -598,6 +603,7 @@ export function maximizeCached(
       .map((slot: Slot) => `${slot}:${equippedItem(slot)}`)
       .sort(),
     have($effect`Offhand Remarkable`),
+    options.updateOnLocationChange && myLocation(),
   ].join("; ");
 
   const cacheEntry = checkCache(cacheKey, fullOptions);
@@ -673,6 +679,7 @@ export class Requirement {
       optionsB,
       "updateOnFamiliarChange",
       "updateOnCanEquipChanged",
+      "updateOnLocationChange",
       "forceUpdate",
     );
 

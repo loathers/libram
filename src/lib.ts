@@ -75,6 +75,10 @@ import {
   repriceShop,
   familiarWeight,
   weightAdjustment,
+  Phylum,
+  Modifier,
+  Class,
+  Bounty,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -91,6 +95,26 @@ import {
   $stat,
 } from "./template-string.js";
 import { makeByXFunction, chunk, notNull, clamp } from "./utils.js";
+
+const MafiaClasses = [
+  Bounty,
+  Class,
+  Coinmaster,
+  Effect,
+  Element,
+  Familiar,
+  Item,
+  Location,
+  Modifier,
+  Monster,
+  Path,
+  Phylum,
+  Servant,
+  Skill,
+  Slot,
+  Stat,
+  Thrall,
+];
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -550,19 +574,8 @@ export function canUse(item: Item): boolean {
  * @returns The thing specified or `null`
  */
 export function noneToNull<T>(thing: T): T | null {
-  if (thing instanceof Effect) {
-    return thing === Effect.none ? null : thing;
-  }
-
-  if (thing instanceof Familiar) {
-    return thing === Familiar.none ? null : thing;
-  }
-
-  if (thing instanceof Item) {
-    return thing === Item.none ? null : thing;
-  }
-
-  return thing;
+  const type = MafiaClasses.find((t) => thing instanceof t);
+  return type && thing === type.none ? null : thing;
 }
 
 /**

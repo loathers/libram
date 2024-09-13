@@ -6736,7 +6736,7 @@ function getRange(range) {
   var _range$match$slice$ma, _range$match, _ref7 = (_range$match$slice$ma = (_range$match = range.match(/^(-?\d+)(?:-(-?\d+))?$/)) === null || _range$match === void 0 ? void 0 : _range$match.slice(1, 3).map(function(v) {
     return parseInt(v);
   })) !== null && _range$match$slice$ma !== void 0 ? _range$match$slice$ma : [0], _ref8 = _slicedToArray3(_ref7, 2), lower = _ref8[0], upper = _ref8[1];
-  return [lower, upper || lower];
+  return [lower, Number.isNaN(upper) || upper === void 0 ? lower : upper];
 }
 function getAverage(range) {
   var _getRange = getRange(range), _getRange2 = _slicedToArray3(_getRange, 2), min = _getRange2[0], max = _getRange2[1];

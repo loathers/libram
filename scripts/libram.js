@@ -6733,10 +6733,10 @@ function noneToNull(thing) {
   return thing instanceof import_kolmafia4.Effect ? thing === import_kolmafia4.Effect.none ? null : thing : thing instanceof import_kolmafia4.Familiar ? thing === import_kolmafia4.Familiar.none ? null : thing : thing instanceof import_kolmafia4.Item && thing === import_kolmafia4.Item.none ? null : thing;
 }
 function getRange(range) {
-  var _range$split$map = range.split(/[-]/).map(function(s) {
-    return parseInt(s);
-  }), _range$split$map2 = _slicedToArray3(_range$split$map, 2), min = _range$split$map2[0], recordedMax = _range$split$map2[1], max = recordedMax != null ? recordedMax : min;
-  return [min, max];
+  var _range$match$slice$ma, _range$match, _ref7 = (_range$match$slice$ma = (_range$match = range.match(/^(-?\d+)(?:-(-?\d+))?$/)) === null || _range$match === void 0 ? void 0 : _range$match.slice(1, 3).map(function(v) {
+    return parseInt(v);
+  })) !== null && _range$match$slice$ma !== void 0 ? _range$match$slice$ma : [0], _ref8 = _slicedToArray3(_ref7, 2), lower = _ref8[0], upper = _ref8[1];
+  return [lower, upper || lower];
 }
 function getAverage(range) {
   var _getRange = getRange(range), _getRange2 = _slicedToArray3(_getRange, 2), min = _getRange2[0], max = _getRange2[1];
@@ -6862,8 +6862,8 @@ function telescope() {
     hedge1: hedgeTrap1.get(get("telescope3")),
     hedge2: hedgeTrap2.get(get("telescope4")),
     hedge3: hedgeTrap3.get(get("telescope5"))
-  }).filter(function(_ref7) {
-    var _ref8 = _slicedToArray3(_ref7, 2), value = _ref8[1];
+  }).filter(function(_ref9) {
+    var _ref10 = _slicedToArray3(_ref9, 2), value = _ref10[1];
     return value;
   }));
 }
@@ -6937,16 +6937,16 @@ function getCombatFlags() {
 function setCombatFlags() {
   for (var _len2 = arguments.length, flags = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     flags[_key2] = arguments[_key2];
-  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flags.flatMap(function(_ref9) {
-    var flag = _ref9.flag, value = _ref9.value;
+  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray2(flags.flatMap(function(_ref11) {
+    var flag = _ref11.flag, value = _ref11.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
   })), ["action=Update", "am=1", "ajax=1"]).join("&"), !0)));
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
     flags[_key3 - 1] = arguments[_key3];
-  var initialValues = getCombatFlags(flags.map(function(_ref10) {
-    var flag = _ref10.flag;
+  var initialValues = getCombatFlags(flags.map(function(_ref12) {
+    var flag = _ref12.flag;
     return flag;
   }));
   try {
@@ -6959,8 +6959,8 @@ function haveIntrinsic(effect2) {
   return (0, import_kolmafia4.haveEffect)(effect2) >= 2147483647;
 }
 function extractItems(text) {
-  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref11) {
-    var _ref12 = _slicedToArray3(_ref11, 2), itemName = _ref12[0], quantity = _ref12[1];
+  return new Map(Object.entries((0, import_kolmafia4.extractItems)(text)).map(function(_ref13) {
+    var _ref14 = _slicedToArray3(_ref13, 2), itemName = _ref14[0], quantity = _ref14[1];
     return [import_kolmafia4.Item.get(itemName), quantity];
   }));
 }

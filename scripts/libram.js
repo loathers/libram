@@ -6893,8 +6893,7 @@ function gameDay() {
 function freeCrafts() {
   var type = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "all", effectCrafts = function(effect2) {
     return Math.floor((0, import_kolmafia4.haveEffect)(effect2) / 5);
-  }, all2 = (have($skill(_templateObject36 || (_templateObject36 = _taggedTemplateLiteral(["Rapid Prototyping"])))) ? 5 - get("_rapidPrototypingUsed") : 0) + (have($skill(_templateObject37 || (_templateObject37 = _taggedTemplateLiteral(["Expert Corner-Cutter"])))) ? 5 - get("_expertCornerCutterUsed") : 0) + effectCrafts($effect(_templateObject38 || (_templateObject38 = _taggedTemplateLiteral(["Inigo's Incantation of Inspiration"])))) + effectCrafts($effect(_templateObject39 || (_templateObject39 = _taggedTemplateLiteral(["Craft Tea"])))) + // eslint-disable-next-line libram/verify-constants
-  effectCrafts($effect(_templateObject40 || (_templateObject40 = _taggedTemplateLiteral(["Cooking Concentrate"])))), food = type === "food" ? 5 - get("_cookbookbatCrafting") : 0, smith = type === "smith" ? 5 - get("_thorsPliersCrafting") : 0, booze = 0;
+  }, all2 = (have($skill(_templateObject36 || (_templateObject36 = _taggedTemplateLiteral(["Rapid Prototyping"])))) ? 5 - get("_rapidPrototypingUsed") : 0) + (have($skill(_templateObject37 || (_templateObject37 = _taggedTemplateLiteral(["Expert Corner-Cutter"])))) ? 5 - get("_expertCornerCutterUsed") : 0) + effectCrafts($effect(_templateObject38 || (_templateObject38 = _taggedTemplateLiteral(["Inigo's Incantation of Inspiration"])))) + effectCrafts($effect(_templateObject39 || (_templateObject39 = _taggedTemplateLiteral(["Craft Tea"])))) + effectCrafts($effect(_templateObject40 || (_templateObject40 = _taggedTemplateLiteral(["Cooking Concentrate"])))), food = type === "food" ? 5 - get("_cookbookbatCrafting") : 0, smith = type === "smith" ? 5 - get("_thorsPliersCrafting") : 0, booze = 0;
   return all2 + food + smith + booze;
 }
 var realmTypes = ["spooky", "stench", "hot", "cold", "sleaze", "fantasy", "pirate"];
@@ -7050,6 +7049,12 @@ init_kolmafia_polyfill();
 var overlappingItemNames = ["spider web", "really sticky spider web", "dictionary", "NG", "Cloaca-Cola", "yo-yo", "top", "ball", "kite", "yo", "red potion", "blue potion", "bowling ball", "adder", "red button", "pile of sand", "mushroom", "deluxe mushroom"], overlappingSkillNames = ["Shoot", "Thrust-Smack", "Headbutt", "Toss", "Knife in the Dark", "Sing", "Disarm", "LIGHT", "BURN", "Extract", "Meteor Shower", "Snipe", "Bite", "Kick", "Howl", "Cleave", "Boil", "Slice", "Rainbow"];
 
 // src/combat.ts
+function _superPropGet(t, e, o, r) {
+  var p = _get(_getPrototypeOf2(1 & r ? t.prototype : t), e, o);
+  return 2 & r && typeof p == "function" ? function(t2) {
+    return p.apply(o, t2);
+  } : p;
+}
 function _get() {
   return _get = typeof Reflect < "u" && Reflect.get ? Reflect.get.bind() : function(e, t, r) {
     var p = _superPropBase(e, t);
@@ -7878,9 +7883,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _get2, _len7 = arguments.length, skills3 = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
+        for (var _len7 = arguments.length, skills3 = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
           skills3[_key7] = arguments[_key7];
-        return (_get2 = _get(_getPrototypeOf2(StrictMacro2.prototype), "skill", this)).call.apply(_get2, [this].concat(skills3));
+        return _superPropGet(StrictMacro2, "skill", this, 3)(skills3);
       }
     )
     /**
@@ -7899,9 +7904,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _get3, _len8 = arguments.length, items = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++)
+        for (var _len8 = arguments.length, items = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++)
           items[_key8] = arguments[_key8];
-        return (_get3 = _get(_getPrototypeOf2(StrictMacro2.prototype), "item", this)).call.apply(_get3, [this].concat(items));
+        return _superPropGet(StrictMacro2, "item", this, 3)(items);
       }
     )
     /**
@@ -7920,9 +7925,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _get4, _len9 = arguments.length, skills3 = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++)
+        for (var _len9 = arguments.length, skills3 = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++)
           skills3[_key9] = arguments[_key9];
-        return (_get4 = _get(_getPrototypeOf2(StrictMacro2.prototype), "trySkill", this)).call.apply(_get4, [this].concat(skills3));
+        return _superPropGet(StrictMacro2, "trySkill", this, 3)(skills3);
       }
     )
     /**
@@ -7941,9 +7946,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _get5, _len10 = arguments.length, items = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++)
+        for (var _len10 = arguments.length, items = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++)
           items[_key10] = arguments[_key10];
-        return (_get5 = _get(_getPrototypeOf2(StrictMacro2.prototype), "tryItem", this)).call.apply(_get5, [this].concat(items));
+        return _superPropGet(StrictMacro2, "tryItem", this, 3)(items);
       }
     )
     /**
@@ -7962,9 +7967,9 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _get6, _len11 = arguments.length, skills3 = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++)
+        for (var _len11 = arguments.length, skills3 = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++)
           skills3[_key11] = arguments[_key11];
-        return (_get6 = _get(_getPrototypeOf2(StrictMacro2.prototype), "trySkillRepeat", this)).call.apply(_get6, [this].concat(skills3));
+        return _superPropGet(StrictMacro2, "trySkillRepeat", this, 3)(skills3);
       }
     )
     /**

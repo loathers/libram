@@ -7,7 +7,6 @@ import { $item } from "../../template-string.js";
  */
 export function have(): boolean {
   return get("spacegateAlways");
-  ("");
 }
 
 /**

@@ -14279,13 +14279,13 @@ function buffAvailable() {
   });
 }
 function buffCycle() {
-  var playerclass = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia52.myClass)();
-  if (playerclass.id <= 0) return [];
-  for (var returnValue = [], id = playerclass.id, seed = id > 6 ? id % 6 + 1 : id, i = 1; i < 12; i++) {
+  var playerclass = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia52.myClass)(), cycle2 = tuple(import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none, import_kolmafia52.Effect.none);
+  if (playerclass.id <= 0) return cycle2;
+  for (var id = playerclass.id, seed = id > 6 ? id % 6 + 1 : id, i = 1; i < 12; i++) {
     var index = i * seed % 11;
-    returnValue.push(buffs[index]);
+    cycle2[i - 1] = buffs[index];
   }
-  return returnValue;
+  return cycle2;
 }
 function nextBuff() {
   var currentBuff = (0, import_kolmafia52.toEffect)(get("lastBeardBuff").toFixed(0)), cycle2 = buffCycle(), index = cycle2.indexOf(currentBuff), newIndex = (1 + index) % 11;

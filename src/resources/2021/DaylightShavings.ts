@@ -2,6 +2,7 @@ import { Effect, myClass, toEffect } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $effects, $item } from "../../template-string.js";
+import { Tuple, tuple } from "../../utils.js";
 
 const helmet = $item`Daylight Shavings Helmet`;
 
@@ -37,18 +38,30 @@ export function buffAvailable(): boolean {
  * Calculates and returns the cycle of buffs that the hat should cycle through.
  *
  * @param playerclass The class to generate a cycle for
- * @returns An ordered array consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
+ * @returns An ordered 11-tuple consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
  */
-export function buffCycle(playerclass = myClass()): Effect[] {
-  if (playerclass.id <= 0) return [];
-  const returnValue: Effect[] = [];
+export function buffCycle(playerclass = myClass()): Tuple<Effect, 11> {
+  const cycle = tuple(
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+    Effect.none,
+  );
+  if (playerclass.id <= 0) return cycle;
   const id = playerclass.id;
   const seed = id > 6 ? (id % 6) + 1 : id;
   for (let i = 1; i < 12; i++) {
     const index = (i * seed) % 11;
-    returnValue.push(buffs[index]);
+    cycle[i - 1] = buffs[index];
   }
-  return returnValue;
+  return cycle;
 }
 
 /**

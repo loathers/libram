@@ -2,7 +2,7 @@ import { Effect, myClass, toEffect } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $effects, $item } from "../../template-string.js";
-import { tuple } from "../../utils.js";
+import { Tuple, tuple } from "../../utils.js";
 
 const helmet = $item`Daylight Shavings Helmet`;
 
@@ -40,21 +40,7 @@ export function buffAvailable(): boolean {
  * @param playerclass The class to generate a cycle for
  * @returns An ordered 11-tuple consisting of the cycle for this class. The first element of the array will be the first buff a player should expect to get in a given ascension.
  */
-export function buffCycle(
-  playerclass = myClass(),
-): [
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-  Effect,
-] {
+export function buffCycle(playerclass = myClass()): Tuple<Effect, 11> {
   const cycle = tuple(
     Effect.none,
     Effect.none,

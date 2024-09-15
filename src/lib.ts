@@ -550,7 +550,7 @@ export function canUse(item: Item): boolean {
  * @param thing Thing that can have a mafia "none" value
  * @returns The thing specified or `null`
  */
-export function noneToNull<T>(thing: T): T | null {
+export function noneToNull<T extends MafiaClass>(thing: T): T | null {
   const type = MafiaClasses.find((t) => thing instanceof t);
   return type && thing === type.none ? null : thing;
 }

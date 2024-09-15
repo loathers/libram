@@ -500,7 +500,7 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
       ].includes(banisherItem)
     ) {
       const skill = $skill.get(banisher);
-      if (!skill) break;
+      if (!skill) continue;
       result.set(skill, Monster.get(foe));
     } else {
       result.set(banisherItem, Monster.get(foe));

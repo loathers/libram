@@ -6366,7 +6366,10 @@ var concatTemplateString = function(literals) {
     }
     (0, import_kolmafia3.abort)();
   };
-  return tagFunction.cls = Type, tagFunction.none = Type.none, tagFunction.get = converter, tagFunction;
+  return tagFunction.cls = Type, tagFunction.none = Type.none, tagFunction.get = function(name) {
+    var value = converter(name);
+    return value === Type.none ? null : value;
+  }, tagFunction;
 }, createPluralConstant = function(Type) {
   var tagFunction = function(literals) {
     for (var _len3 = arguments.length, placeholders = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
@@ -6712,9 +6715,9 @@ function getBanishedMonsters() {
       else if (banisher.toLowerCase() === "nanorhino")
         result.set($skill(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["Unleash Nanites"]))), import_kolmafia4.Monster.get(foe));
       else if ([import_kolmafia4.Item.none, import_kolmafia4.Item.get("training scroll:  Snokebomb"), import_kolmafia4.Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
-        if (import_kolmafia4.Skill.get(banisher) === $skill.none)
-          break;
-        result.set(import_kolmafia4.Skill.get(banisher), import_kolmafia4.Monster.get(foe));
+        var skill = $skill.get(banisher);
+        if (!skill) continue;
+        result.set(skill, import_kolmafia4.Monster.get(foe));
       } else
         result.set(banisherItem, import_kolmafia4.Monster.get(foe));
     }

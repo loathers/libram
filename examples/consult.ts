@@ -2,6 +2,9 @@
 
 import { Macro } from "../src";
 
+/**
+ * Main function for the consult script.
+ */
 export function main(): void {
   Macro.load().submit();
 }

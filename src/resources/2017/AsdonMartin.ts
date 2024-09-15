@@ -217,7 +217,8 @@ export function fillTo(targetUnits: number): boolean {
     }
 
     if (!canInteract()) retrieveItem(count, bestFuel);
-    else ceiling ? buy(count, bestFuel, ceiling) : buy(count, bestFuel);
+    else if (ceiling) buy(count, bestFuel, ceiling);
+    else buy(count, bestFuel);
 
     if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
       throw new Error("Failed to fuel Asdon Martin.");

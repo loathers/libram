@@ -75,6 +75,7 @@ import {
   repriceShop,
   familiarWeight,
   weightAdjustment,
+  MafiaClass,
   MafiaClasses,
 } from "kolmafia";
 

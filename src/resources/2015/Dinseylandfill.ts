@@ -264,7 +264,7 @@ export function acceptQuest(priority: number | string): boolean {
 
   const priorityNum =
     typeof priority === "string"
-      ? quests.find((q) => q.name === priority)?.priority ?? 7
+      ? (quests.find((q) => q.name === priority)?.priority ?? 7)
       : priority;
 
   const availableJobs: QuestData[] = [];

@@ -1112,7 +1112,6 @@ export function freeCrafts(
       : 0) +
     effectCrafts($effect`Inigo's Incantation of Inspiration`) +
     effectCrafts($effect`Craft Tea`) +
-    // eslint-disable-next-line libram/verify-constants
     effectCrafts($effect`Cooking Concentrate`);
   const food = type === "food" ? 5 - get("_cookbookbatCrafting") : 0;
   const smith = type === "smith" ? 5 - get("_thorsPliersCrafting") : 0;
@@ -1406,9 +1405,11 @@ export const bulkPutShop = (
 ) => {
   batchOpen();
   for (const [item, { quantity, limit, price }] of items.entries()) {
-    quantity
-      ? putShop(price, limit ?? 0, quantity, item)
-      : putShop(price, limit ?? 0, item);
+    if (quantity) {
+      putShop(price, limit ?? 0, quantity, item);
+    } else {
+      putShop(price, limit ?? 0, item);
+    }
   }
   return batchClose();
 };
@@ -1429,7 +1430,11 @@ export const bulkRepriceShop = (
 ) => {
   batchOpen();
   for (const [item, { limit, price }] of items.entries()) {
-    limit ? repriceShop(price, limit, item) : repriceShop(price, item);
+    if (limit) {
+      repriceShop(price, limit, item);
+    } else {
+      repriceShop(price, item);
+    }
   }
   return batchClose();
 };

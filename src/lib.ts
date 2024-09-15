@@ -75,6 +75,8 @@ import {
   repriceShop,
   familiarWeight,
   weightAdjustment,
+  MafiaClass,
+  MafiaClasses,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -547,20 +549,9 @@ export function canUse(item: Item): boolean {
  * @param thing Thing that can have a mafia "none" value
  * @returns The thing specified or `null`
  */
-export function noneToNull<T>(thing: T): T | null {
-  if (thing instanceof Effect) {
-    return thing === Effect.none ? null : thing;
-  }
-
-  if (thing instanceof Familiar) {
-    return thing === Familiar.none ? null : thing;
-  }
-
-  if (thing instanceof Item) {
-    return thing === Item.none ? null : thing;
-  }
-
-  return thing;
+export function noneToNull<T extends MafiaClass>(thing: T): T | null {
+  const type = MafiaClasses.find((t) => thing instanceof t);
+  return type && thing === type.none ? null : thing;
 }
 
 /**

@@ -6730,7 +6730,10 @@ function canUse(item12) {
   return !(path3 !== import_kolmafia4.Path.get("Nuclear Autumn") && $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record"]))).includes(item12) || path3 === import_kolmafia4.Path.get("G-Lover") && !item12.name.toLowerCase().includes("g") || path3 === import_kolmafia4.Path.get("Bees Hate You") && item12.name.toLowerCase().includes("b"));
 }
 function noneToNull(thing) {
-  return thing instanceof import_kolmafia4.Effect ? thing === import_kolmafia4.Effect.none ? null : thing : thing instanceof import_kolmafia4.Familiar ? thing === import_kolmafia4.Familiar.none ? null : thing : thing instanceof import_kolmafia4.Item && thing === import_kolmafia4.Item.none ? null : thing;
+  var type = import_kolmafia4.MafiaClasses.find(function(t) {
+    return thing instanceof t;
+  });
+  return type && thing === type.none ? null : thing;
 }
 function getRange(range) {
   var _range$match$slice$ma, _range$match, _ref7 = (_range$match$slice$ma = (_range$match = range.match(/^(-?\d+)(?:-(-?\d+))?$/)) === null || _range$match === void 0 ? void 0 : _range$match.slice(1, 3).map(function(v) {

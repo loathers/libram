@@ -54,6 +54,7 @@ const otherLocations = [
   "sourceOracleTarget",
   "lastAdventure",
   "nextAdventure",
+  "_lastPirateRealmIsland",
 ];
 /**
  * @param property Property name

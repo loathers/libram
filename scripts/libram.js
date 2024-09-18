@@ -15470,7 +15470,7 @@ function differentiate(monster) {
   return import_kolmafia64.runCombat.apply(void 0, combatParams), !0;
 }
 function eggMonsters() {
-  return new Map(get("mimicEggMonsters").split(",").map(function(pair) {
+  return new Map(get("mimicEggMonsters").split(",").filter(Boolean).map(function(pair) {
     return pair.split(":").map(Number);
   }).map(function(_ref) {
     var _ref2 = _slicedToArray15(_ref, 2), id = _ref2[0], quantity = _ref2[1];

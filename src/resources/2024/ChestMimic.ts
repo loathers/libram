@@ -138,6 +138,18 @@ export function differentiate(
 }
 
 /**
+ * @returns A Map containing all monsters available in your mimic eggs and their associated quantities
+ */
+export function eggMonsters(): Map<Monster, number> {
+  return new Map(
+    get("mimicEggMonsters")
+      .split(",")
+      .map((pair) => pair.split(":").map(Number) as [number, number])
+      .map(([id, quantity]) => [Monster.get(id), quantity]),
+  );
+}
+
+/**
  * Check how many of a monster is available to differentiate into
  *
  * @param monster The monster to differentiate your egg into
@@ -145,9 +157,5 @@ export function differentiate(
  */
 export function differentiableQuantity(monster: Monster): number {
   if (!have_($item`mimic egg`)) return 0;
-  const regex = new RegExp(`<!-- monsterid:${monster.id} --> \\((\\d+)\\)`);
-  const page = examine($item`mimic egg`);
-  const match = page.match(regex);
-  if (!match?.[1]) return 0;
-  return Math.min(Number(match[1]), itemAmount($item`mimic egg`));
+  return eggMonsters().get(monster) ?? 0;
 }

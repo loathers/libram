@@ -138,6 +138,7 @@ export function eggMonsters(): Map<Monster, number> {
   return new Map(
     get("mimicEggMonsters")
       .split(",")
+      .filter(Boolean)
       .map((pair) => pair.split(":").map(Number) as [number, number])
       .map(([id, quantity]) => [Monster.get(id), quantity]),
   );

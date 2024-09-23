@@ -109,8 +109,8 @@ function itemOrItemsBallsMacroPredicate(
   }
 }
 
-// Monster, Location, Class, Element, and Phylum can only be sensibly self-joined with an OR
-// A fight can't be against more than one monster, or occur in more than one location, or be with a player of multiple classes, etc
+// The ones that are arrayable are ones we would only ever want to combine with an OR
+// You can't be fighting more than one different type of monster, or in more than one snarfblat, etc
 type PreBALLSPredicate =
   | string
   | Monster
@@ -123,6 +123,7 @@ type PreBALLSPredicate =
   | Class
   | Class[]
   | Stat
+  | Stat[]
   | Phylum
   | Phylum[]
   | Element

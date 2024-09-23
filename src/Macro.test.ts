@@ -10,8 +10,13 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
+import { before } from "node:test";
 
 describe(Macro, () => {
+  before(() => {
+    const mock = $skill`mock skill`;
+    Object.assign(mock, { combat: true });
+  });
   it("abort", () => {
     expect(Macro.abort().toString()).toEqual(`abort;`);
   });

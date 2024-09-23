@@ -101,6 +101,8 @@ function itemOrItemsBallsMacroPredicate(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName],
 ): string {
   if (Array.isArray(itemOrItems)) {
+    if (itemOrItems[0] === itemOrItems[1])
+      return `hastwocombatitems ${itemOrItems[0]}`;
     return itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ");
   } else {
     return `hascombatitem ${itemOrItems}`;

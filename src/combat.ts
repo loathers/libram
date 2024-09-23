@@ -3,11 +3,13 @@ import {
   choiceFollowsFight,
   Class,
   Effect,
+  Element,
   getAutoAttack,
   inMultiFight,
   Item,
   Location,
   Monster,
+  Phylum,
   removeProperty,
   runCombat,
   setAutoAttack,
@@ -105,6 +107,8 @@ function itemOrItemsBallsMacroPredicate(
   }
 }
 
+// Monster, Location, Class, Element, and Phylum can only be sensibly self-joined with an OR
+// A fight can't be against more than one monster, or occur in more than one location, or be with a player of multiple classes, etc
 type PreBALLSPredicate =
   | string
   | Monster
@@ -113,8 +117,14 @@ type PreBALLSPredicate =
   | Skill
   | Item
   | Location
+  | Location[]
   | Class
-  | Stat;
+  | Class[]
+  | Stat
+  | Phylum
+  | Phylum[]
+  | Element
+  | Element[];
 
 type SkillOrName = Skill | string;
 /**
@@ -416,6 +426,10 @@ export class Macro {
       return condition.toString().replaceAll(" ", "").toLowerCase();
     } else if (condition instanceof Stat) {
       return `${condition.toString().toLowerCase()}class`;
+    } else if (condition instanceof Phylum) {
+      return `monsterphylum ${condition}`;
+    } else if (condition instanceof Element) {
+      return `monsterelement ${condition}`;
     }
     return condition;
   }

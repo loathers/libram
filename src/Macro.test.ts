@@ -14,8 +14,8 @@ import { before } from "node:test";
 
 describe(Macro, () => {
   before(() => {
-    const mock = $skill`mock skill`;
-    Object.assign(mock, { combat: true });
+    Object.assign($skill`mock skill`, { combat: true });
+    Object.assign($skill`Thrust-Smack`, { combat: true });
   });
   it("abort", () => {
     expect(Macro.abort().toString()).toEqual(`abort;`);

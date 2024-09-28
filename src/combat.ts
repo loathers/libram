@@ -3,11 +3,13 @@ import {
   choiceFollowsFight,
   Class,
   Effect,
+  Element,
   getAutoAttack,
   inMultiFight,
   Item,
   Location,
   Monster,
+  Phylum,
   removeProperty,
   runCombat,
   setAutoAttack,
@@ -99,12 +101,16 @@ function itemOrItemsBallsMacroPredicate(
   itemOrItems: ItemOrName | [ItemOrName, ItemOrName],
 ): string {
   if (Array.isArray(itemOrItems)) {
+    if (itemOrItems[0] === itemOrItems[1])
+      return `hastwocombatitems ${itemOrItems[0]}`;
     return itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ");
   } else {
     return `hascombatitem ${itemOrItems}`;
   }
 }
 
+// The ones that are arrayable are ones we would only ever want to combine with an OR
+// You can't be fighting more than one different type of monster, or in more than one snarfblat, etc
 type PreBALLSPredicate =
   | string
   | Monster
@@ -113,8 +119,15 @@ type PreBALLSPredicate =
   | Skill
   | Item
   | Location
+  | Location[]
   | Class
-  | Stat;
+  | Class[]
+  | Stat
+  | Stat[]
+  | Phylum
+  | Phylum[]
+  | Element
+  | Element[];
 
 type SkillOrName = Skill | string;
 /**
@@ -387,7 +400,9 @@ export class Macro {
     } else if (condition instanceof Effect) {
       return `haseffect ${condition.id}`;
     } else if (condition instanceof Skill) {
-      return `hasskill ${skillBallsMacroName(condition)}`;
+      return condition.combat
+        ? `hasskill ${skillBallsMacroName(condition)}`
+        : `knowsskill ${condition.id}`;
     } else if (condition instanceof Item) {
       if (!condition.combat) {
         throw new InvalidMacroError(
@@ -416,6 +431,10 @@ export class Macro {
       return condition.toString().replaceAll(" ", "").toLowerCase();
     } else if (condition instanceof Stat) {
       return `${condition.toString().toLowerCase()}class`;
+    } else if (condition instanceof Phylum) {
+      return `monsterphylum ${condition}`;
+    } else if (condition instanceof Element) {
+      return `monsterelement ${condition}`;
     }
     return condition;
   }

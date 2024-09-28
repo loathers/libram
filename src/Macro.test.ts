@@ -1,5 +1,5 @@
 /* eslint-disable libram/verify-constants */
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { InvalidMacroError, Macro } from "./combat.js";
 import {
   $class,
@@ -12,6 +12,34 @@ import {
 } from "./template-string.js";
 
 describe(Macro, () => {
+  beforeAll(() => {
+    // Prepare some mock instances
+
+    const combatSkill = $skill`mock combat skill`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    combatSkill.combat = true;
+
+    const lungeSmack = $skill`Thrust-Smack`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    lungeSmack.combat = true;
+
+    const spiderWeb = $item`spider web`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    spiderWeb.combat = true;
+
+    const combatItem = $item`mock combat item`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    combatItem.combat = true;
+
+    const sealClubber = $class`Seal Clubber`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    sealClubber.id = 1;
+
+    const invalidLocation = $location`invalid mock location`;
+    // @ts-expect-error TypeScript believes that this is readonly
+    invalidLocation.id = -1;
+  });
+
   it("abort", () => {
     expect(Macro.abort().toString()).toEqual(`abort;`);
   });
@@ -68,14 +96,14 @@ describe(Macro, () => {
   });
 
   it("trySkill", () => {
-    const mock = $skill`mock skill`;
+    const mock = $skill`mock combat skill`;
     expect(Macro.trySkill(mock).toString()).toEqual(
       `if hasskill ${mock.name};skill ${mock.name};endif;`,
     );
   });
 
   it("trySkillRepeat", () => {
-    const mock = $skill`mock skill`;
+    const mock = $skill`mock combat skill`;
     expect(Macro.trySkillRepeat(mock).toString()).toEqual(
       `if hasskill ${mock.name};skill ${mock.name};repeat hasskill ${mock.name};endif;`,
     );
@@ -121,7 +149,7 @@ describe(Macro.makeBALLSPredicate, () => {
   });
 
   it("Skill", () => {
-    const mock = $skill`mock skill`;
+    const mock = $skill`mock combat skill`;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(`hasskill ${mock.name}`);
   });
 
@@ -131,9 +159,7 @@ describe(Macro.makeBALLSPredicate, () => {
   });
 
   it("Item", () => {
-    const mock = $item`mock item`;
-    // @ts-expect-error TypeScript believes that this is readonly
-    mock.combat = true;
+    const mock = $item`mock combat item`;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(
       `hascombatitem ${mock.name}`,
     );
@@ -141,8 +167,6 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("Item Overlapping", () => {
     const mock = $item`spider web`;
-    // @ts-expect-error TypeScript believes that this is readonly
-    mock.combat = true;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(`hascombatitem ${mock.id}`);
   });
 
@@ -158,19 +182,16 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("Location Invalid", () => {
     const mock = $location`invalid mock location`;
-    // @ts-expect-error TypeScript believes that this is readonly
-    mock.id = -1;
     expect(() => Macro.makeBALLSPredicate(mock)).toThrow(InvalidMacroError);
   });
 
   it("Class", () => {
-    const mock = $class`Mock Name`;
-    // @ts-expect-error TypeScript believes that this is readonly
-    mock.id = 1;
-    expect(Macro.makeBALLSPredicate(mock)).toEqual(`mockname`);
+    const mock = $class`Seal Clubber`;
+    expect(Macro.makeBALLSPredicate(mock)).toEqual(`sealclubber`);
   });
 
   it("Class Invalid", () => {
+    // Our testing tools produce instances starting at id = 11. By creating a new class, we can ensure that the id is invalid.
     const mock = $class`invalid mock class`;
     expect(() => Macro.makeBALLSPredicate(mock)).toThrow(InvalidMacroError);
   });

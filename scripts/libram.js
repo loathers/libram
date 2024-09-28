@@ -7245,7 +7245,7 @@ function itemOrItemsBallsMacroName(itemOrItems) {
   return overlappingItemNames.includes(item12.name) ? item12.id.toFixed(0) : item12.name;
 }
 function itemOrItemsBallsMacroPredicate(itemOrItems) {
-  return Array.isArray(itemOrItems) ? itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItems);
+  return Array.isArray(itemOrItems) ? itemOrItems[0] === itemOrItems[1] ? "hastwocombatitems ".concat(itemOrItems[0]) : itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItems);
 }
 function skillOrNameToSkill(skillOrName) {
   return typeof skillOrName == "string" ? import_kolmafia5.Skill.get(skillOrName) : skillOrName;
@@ -7768,7 +7768,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       if (condition instanceof import_kolmafia5.Effect)
         return "haseffect ".concat(condition.id);
       if (condition instanceof import_kolmafia5.Skill)
-        return "hasskill ".concat(skillBallsMacroName(condition));
+        return condition.combat ? "hasskill ".concat(skillBallsMacroName(condition)) : "knowsskill ".concat(condition.id);
       if (condition instanceof import_kolmafia5.Item) {
         if (!condition.combat)
           throw new InvalidMacroError("Item ".concat(condition, " cannot be made a valid BALLS predicate (it is not combat-usable)"));
@@ -7782,8 +7782,14 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
         if (condition.id > 6)
           throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
         return condition.toString().replaceAll(" ", "").toLowerCase();
-      } else if (condition instanceof import_kolmafia5.Stat)
-        return "".concat(condition.toString().toLowerCase(), "class");
+      } else {
+        if (condition instanceof import_kolmafia5.Stat)
+          return "".concat(condition.toString().toLowerCase(), "class");
+        if (condition instanceof import_kolmafia5.Phylum)
+          return "monsterphylum ".concat(condition);
+        if (condition instanceof import_kolmafia5.Element)
+          return "monsterelement ".concat(condition);
+      }
       return condition;
     }
   }, {
@@ -12435,7 +12441,7 @@ function have23() {
 function havePants() {
   return have(pants);
 }
-var Alignment = _defineProperty13(_defineProperty13(_defineProperty13({}, "Muscle", 1), "Mysticality", 2), "Moxie", 3), Element3 = _defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13({}, "Hot Resistance: 2", 1), "Cold Resistance: 2", 2), "Spooky Resistance: 2", 3), "Sleaze Resistance: 2", 4), "Stench Resistance: 2", 5), LeftSacrifice = _defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13({}, "Maximum HP: 40", [-1, 0]), "Maximum MP: 20", [-2, 0]), "HP Regen Max: 10", [$item(_templateObject341 || (_templateObject341 = _taggedTemplateLiteral28(["red pixel potion"]))), 1]), "HP Regen Max: 15", [$item(_templateObject440 || (_templateObject440 = _taggedTemplateLiteral28(["royal jelly"]))), 1]), "HP Regen Max: 20", [$item(_templateObject526 || (_templateObject526 = _taggedTemplateLiteral28(["scented massage oil"]))), 1]), "MP Regen Max: 10", [$item(_templateObject621 || (_templateObject621 = _taggedTemplateLiteral28(["Cherry Cloaca Cola"]))), 1]), "MP Regen Max: 15", [$item(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral28(["bubblin' crude"]))), 1]), "MP Regen Max: 20", [$item(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral28(["glowing New Age crystal"]))), 1]), "Mana Cost: -3", [$item(_templateObject916 || (_templateObject916 = _taggedTemplateLiteral28(["baconstone"]))), 1]);
+var Alignment = _defineProperty13(_defineProperty13(_defineProperty13({}, "Muscle", 1), "Mysticality", 2), "Moxie", 3), Element4 = _defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13({}, "Hot Resistance: 2", 1), "Cold Resistance: 2", 2), "Spooky Resistance: 2", 3), "Sleaze Resistance: 2", 4), "Stench Resistance: 2", 5), LeftSacrifice = _defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13(_defineProperty13({}, "Maximum HP: 40", [-1, 0]), "Maximum MP: 20", [-2, 0]), "HP Regen Max: 10", [$item(_templateObject341 || (_templateObject341 = _taggedTemplateLiteral28(["red pixel potion"]))), 1]), "HP Regen Max: 15", [$item(_templateObject440 || (_templateObject440 = _taggedTemplateLiteral28(["royal jelly"]))), 1]), "HP Regen Max: 20", [$item(_templateObject526 || (_templateObject526 = _taggedTemplateLiteral28(["scented massage oil"]))), 1]), "MP Regen Max: 10", [$item(_templateObject621 || (_templateObject621 = _taggedTemplateLiteral28(["Cherry Cloaca Cola"]))), 1]), "MP Regen Max: 15", [$item(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral28(["bubblin' crude"]))), 1]), "MP Regen Max: 20", [$item(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral28(["glowing New Age crystal"]))), 1]), "Mana Cost: -3", [$item(_templateObject916 || (_templateObject916 = _taggedTemplateLiteral28(["baconstone"]))), 1]);
 function getLeftSacPair(mod) {
   return LeftSacrifice[mod];
 }
@@ -12481,7 +12487,7 @@ function makePants(alignment, element, leftSac, middleSac, rightSac) {
     return !have(item12, quantity);
   }))
     return !1;
-  var s1 = sacrificePairToURL(getLeftSacPair(leftSac)), s2 = sacrificePairToURL(getRightSacPair(rightSac)), s3 = sacrificePairToURL(getMiddleSacPair(middleSac)), url = "choice.php?whichchoice=1270&pwd&option=1&m=".concat(Alignment[alignment], "&e=").concat(Element3[element], "&s1=").concat(s1, "&s2=").concat(s2, "&s3=").concat(s3);
+  var s1 = sacrificePairToURL(getLeftSacPair(leftSac)), s2 = sacrificePairToURL(getRightSacPair(rightSac)), s3 = sacrificePairToURL(getMiddleSacPair(middleSac)), url = "choice.php?whichchoice=1270&pwd&option=1&m=".concat(Alignment[alignment], "&e=").concat(Element4[element], "&s1=").concat(s1, "&s2=").concat(s2, "&s3=").concat(s3);
   return directlyUse(pantogram), (0, import_kolmafia37.visitUrl)(url), have(pants);
 }
 function makePantsFromObject(pants2) {

@@ -400,7 +400,9 @@ export class Macro {
     } else if (condition instanceof Effect) {
       return `haseffect ${condition.id}`;
     } else if (condition instanceof Skill) {
-      return `${condition.combat ? "hasskill" : "knowsskill"} ${skillBallsMacroName(condition)}`;
+      return condition.combat
+        ? `hasskill ${skillBallsMacroName(condition)}`
+        : `knowsskill ${condition.id}`;
     } else if (condition instanceof Item) {
       if (!condition.combat) {
         throw new InvalidMacroError(

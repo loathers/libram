@@ -6689,14 +6689,31 @@ function getWandererChance(wanderer) {
 function isCurrentFamiliar(familiar9) {
   return (0, import_kolmafia4.myFamiliar)() === familiar9;
 }
+var foldGroupCache = /* @__PURE__ */ new Map();
 function getFoldGroup(item12) {
-  return Object.entries((0, import_kolmafia4.getRelated)(item12, "fold")).sort(function(_ref, _ref2) {
+  var cache = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
+  if (cache) {
+    var cached = foldGroupCache.get(item12);
+    if (cached !== void 0) return cached;
+  }
+  var result = Object.entries((0, import_kolmafia4.getRelated)(item12, "fold")).sort(function(_ref, _ref2) {
     var _ref3 = _slicedToArray3(_ref, 2), a = _ref3[1], _ref4 = _slicedToArray3(_ref2, 2), b = _ref4[1];
     return a - b;
   }).map(function(_ref5) {
     var _ref6 = _slicedToArray3(_ref5, 1), i = _ref6[0];
     return import_kolmafia4.Item.get(i);
-  });
+  }), _iterator = _createForOfIteratorHelper2(result), _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+      var fold = _step.value;
+      foldGroupCache.set(fold, result);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return result;
 }
 function getZapGroup(item12) {
   return Object.keys((0, import_kolmafia4.getRelated)(item12, "zap")).map(function(i) {
@@ -6704,10 +6721,10 @@ function getZapGroup(item12) {
   });
 }
 function getBanishedMonsters() {
-  var banishes = chunk(get("banishedMonsters").split(":"), 3), result = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper2(banishes), _step;
+  var banishes = chunk(get("banishedMonsters").split(":"), 3), result = /* @__PURE__ */ new Map(), _iterator2 = _createForOfIteratorHelper2(banishes), _step2;
   try {
-    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var _step$value = _slicedToArray3(_step.value, 2), foe = _step$value[0], banisher = _step$value[1];
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
+      var _step2$value = _slicedToArray3(_step2.value, 2), foe = _step2$value[0], banisher = _step2$value[1];
       if (foe === void 0 || banisher === void 0) break;
       var banisherItem = (0, import_kolmafia4.toItem)(banisher);
       if (banisher.toLowerCase() === "saber force")
@@ -6722,9 +6739,9 @@ function getBanishedMonsters() {
         result.set(banisherItem, import_kolmafia4.Monster.get(foe));
     }
   } catch (err) {
-    _iterator.e(err);
+    _iterator2.e(err);
   } finally {
-    _iterator.f();
+    _iterator2.f();
   }
   return result;
 }
@@ -6989,40 +7006,26 @@ function withBatch(action) {
 var makeBulkFunction = function(action) {
   return function(items) {
     (0, import_kolmafia4.batchOpen)();
-    var _iterator2 = _createForOfIteratorHelper2(items.entries()), _step2;
+    var _iterator3 = _createForOfIteratorHelper2(items.entries()), _step3;
     try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
-        var _step2$value = _slicedToArray3(_step2.value, 2), _item = _step2$value[0], quantity = _step2$value[1];
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
+        var _step3$value = _slicedToArray3(_step3.value, 2), _item = _step3$value[0], quantity = _step3$value[1];
         action(quantity, _item);
       }
     } catch (err) {
-      _iterator2.e(err);
+      _iterator3.e(err);
     } finally {
-      _iterator2.f();
+      _iterator3.f();
     }
     return (0, import_kolmafia4.batchClose)();
   };
 }, bulkAutosell = makeBulkFunction(import_kolmafia4.autosell), bulkPutCloset = makeBulkFunction(import_kolmafia4.putCloset), bulkPutDisplay = makeBulkFunction(import_kolmafia4.putDisplay), bulkPutStash = makeBulkFunction(import_kolmafia4.putStash), bulkTakeCloset = makeBulkFunction(import_kolmafia4.takeCloset), bulkTakeDisplay = makeBulkFunction(import_kolmafia4.takeDisplay), bulkTakeShop = makeBulkFunction(import_kolmafia4.takeShop), bulkTakeStash = makeBulkFunction(import_kolmafia4.takeStash), bulkTakeStorage = makeBulkFunction(import_kolmafia4.takeStorage), bulkPutShop = function(items) {
   (0, import_kolmafia4.batchOpen)();
-  var _iterator3 = _createForOfIteratorHelper2(items.entries()), _step3;
-  try {
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
-      var _step3$value = _slicedToArray3(_step3.value, 2), _item2 = _step3$value[0], _step3$value$ = _step3$value[1], quantity = _step3$value$.quantity, limit = _step3$value$.limit, price2 = _step3$value$.price;
-      quantity ? (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, quantity, _item2) : (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, _item2);
-    }
-  } catch (err) {
-    _iterator3.e(err);
-  } finally {
-    _iterator3.f();
-  }
-  return (0, import_kolmafia4.batchClose)();
-}, bulkSell = function(coinmaster, items) {
-  (0, import_kolmafia4.batchOpen)();
   var _iterator4 = _createForOfIteratorHelper2(items.entries()), _step4;
   try {
     for (_iterator4.s(); !(_step4 = _iterator4.n()).done; ) {
-      var _step4$value = _slicedToArray3(_step4.value, 2), _item3 = _step4$value[0], quantity = _step4$value[1];
-      (0, import_kolmafia4.sell)(coinmaster, quantity, _item3);
+      var _step4$value = _slicedToArray3(_step4.value, 2), _item2 = _step4$value[0], _step4$value$ = _step4$value[1], quantity = _step4$value$.quantity, limit = _step4$value$.limit, price2 = _step4$value$.price;
+      quantity ? (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, quantity, _item2) : (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, _item2);
     }
   } catch (err) {
     _iterator4.e(err);
@@ -7030,18 +7033,32 @@ var makeBulkFunction = function(action) {
     _iterator4.f();
   }
   return (0, import_kolmafia4.batchClose)();
-}, bulkRepriceShop = function(items) {
+}, bulkSell = function(coinmaster, items) {
   (0, import_kolmafia4.batchOpen)();
   var _iterator5 = _createForOfIteratorHelper2(items.entries()), _step5;
   try {
     for (_iterator5.s(); !(_step5 = _iterator5.n()).done; ) {
-      var _step5$value = _slicedToArray3(_step5.value, 2), _item4 = _step5$value[0], _step5$value$ = _step5$value[1], limit = _step5$value$.limit, price2 = _step5$value$.price;
-      limit ? (0, import_kolmafia4.repriceShop)(price2, limit, _item4) : (0, import_kolmafia4.repriceShop)(price2, _item4);
+      var _step5$value = _slicedToArray3(_step5.value, 2), _item3 = _step5$value[0], quantity = _step5$value[1];
+      (0, import_kolmafia4.sell)(coinmaster, quantity, _item3);
     }
   } catch (err) {
     _iterator5.e(err);
   } finally {
     _iterator5.f();
+  }
+  return (0, import_kolmafia4.batchClose)();
+}, bulkRepriceShop = function(items) {
+  (0, import_kolmafia4.batchOpen)();
+  var _iterator6 = _createForOfIteratorHelper2(items.entries()), _step6;
+  try {
+    for (_iterator6.s(); !(_step6 = _iterator6.n()).done; ) {
+      var _step6$value = _slicedToArray3(_step6.value, 2), _item4 = _step6$value[0], _step6$value$ = _step6$value[1], limit = _step6$value$.limit, price2 = _step6$value$.price;
+      limit ? (0, import_kolmafia4.repriceShop)(price2, limit, _item4) : (0, import_kolmafia4.repriceShop)(price2, _item4);
+    }
+  } catch (err) {
+    _iterator6.e(err);
+  } finally {
+    _iterator6.f();
   }
   return (0, import_kolmafia4.batchClose)();
 };

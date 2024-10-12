@@ -450,6 +450,8 @@ export function isCurrentFamiliar(familiar: Familiar): boolean {
   return myFamiliar() === familiar;
 }
 
+const foldGroupCache = new Map<Item, Item[]>();
+
 /**
  * Determines the fold group (if any) of which the given item is a part
  *
@@ -458,7 +460,6 @@ export function isCurrentFamiliar(familiar: Familiar): boolean {
  * @param cache Whether to query the fold group cache
  * @returns List of items in the fold group
  */
-const foldGroupCache = new Map<Item, Item[]>();
 export function getFoldGroup(item: Item, cache = true): Item[] {
   if (cache) {
     const cached = foldGroupCache.get(item);

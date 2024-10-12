@@ -450,17 +450,29 @@ export function isCurrentFamiliar(familiar: Familiar): boolean {
   return myFamiliar() === familiar;
 }
 
+const foldGroupCache = new Map<Item, Item[]>();
+
 /**
  * Determines the fold group (if any) of which the given item is a part
  *
  * @category General
  * @param item Item that is part of the required fold group
+ * @param cache Whether to query the fold group cache
  * @returns List of items in the fold group
  */
-export function getFoldGroup(item: Item): Item[] {
-  return Object.entries(getRelated(item, "fold"))
+export function getFoldGroup(item: Item, cache = true): Item[] {
+  if (cache) {
+    const cached = foldGroupCache.get(item);
+    if (cached !== undefined) return cached;
+  }
+
+  const result = Object.entries(getRelated(item, "fold"))
     .sort(([, a], [, b]) => a - b)
     .map(([i]) => Item.get(i));
+  for (const fold of result) {
+    foldGroupCache.set(fold, result);
+  }
+  return result;
 }
 
 /**
@@ -1449,7 +1461,7 @@ export function totalFamiliarWeight(
 ): number {
   return (
     clamp(
-      familiarWeight(myFamiliar()),
+      familiarWeight(familiar),
       have($effect`Fidoxene`) ? 20 : 0,
       Infinity,
     ) +

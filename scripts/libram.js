@@ -7064,7 +7064,7 @@ var makeBulkFunction = function(action) {
 };
 function totalFamiliarWeight() {
   var familiar9 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia4.myFamiliar)(), considerAdjustment = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
-  return clamp((0, import_kolmafia4.familiarWeight)((0, import_kolmafia4.myFamiliar)()), have($effect(_templateObject47 || (_templateObject47 = _taggedTemplateLiteral(["Fidoxene"])))) ? 20 : 0, 1 / 0) + familiar9.soupWeight + (considerAdjustment ? (0, import_kolmafia4.weightAdjustment)() : 0) + (familiar9.feasted ? 10 : 0);
+  return clamp((0, import_kolmafia4.familiarWeight)(familiar9), have($effect(_templateObject47 || (_templateObject47 = _taggedTemplateLiteral(["Fidoxene"])))) ? 20 : 0, 1 / 0) + familiar9.soupWeight + (considerAdjustment ? (0, import_kolmafia4.weightAdjustment)() : 0) + (familiar9.feasted ? 10 : 0);
 }
 
 // src/overlappingNames.ts

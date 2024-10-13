@@ -53,6 +53,7 @@ import * as AprilingBandHelmet from "./2024/AprilingBandHelmet.js";
 import * as ChestMimic from "./2024/ChestMimic.js";
 import * as MayamCalendar from "./2024/MayamCalendar.js";
 import * as TearawayPants from "./2024/TearawayPants.js";
+import * as BatWings from "./2024/BatWings.js";
 
 export {
   AprilingBandHelmet,
@@ -61,6 +62,7 @@ export {
   AsdonMartin,
   Bandersnatch,
   BarrelShrine,
+  BatWings,
   BeachComb,
   BurningLeaves,
   CampAway,

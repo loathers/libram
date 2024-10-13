@@ -66,3 +66,10 @@ export function mapMonster(location: Location, monster: Monster): boolean {
 export function availableMaps(): number {
   return have() ? clamp(3 - get("_monstersMapped"), 0, 3) : 0;
 }
+
+/**
+ * @returns Whether or not `Map the Monsters` is currently active
+ */
+export function currentlyMapping(): boolean {
+  return get("mappingMonsters");
+}

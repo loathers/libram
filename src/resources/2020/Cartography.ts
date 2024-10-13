@@ -14,6 +14,7 @@ import {
 import { have as _have } from "../../lib.js";
 import { get } from "../../property.js";
 import { $skill } from "../../template-string.js";
+import { clamp } from "../../utils.js";
 
 const passive = $skill`Comprehensive Cartography`;
 
@@ -57,4 +58,11 @@ export function mapMonster(location: Location, monster: Monster): boolean {
     }
   }
   return false;
+}
+
+/**
+ * @returns The number of monsters you can map today
+ */
+export function availableMaps(): number {
+  return have() ? clamp(3 - get("_monstersMapped"), 0, 3) : 0;
 }

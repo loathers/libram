@@ -58,3 +58,17 @@ export function mapMonster(location: Location, monster: Monster): boolean {
   }
   return false;
 }
+
+/**
+ * @returns The number of monsters you can map today
+ */
+export function availableMaps(): number {
+  return have() ? $skill`Map the Monsters`.dailylimit : 0;
+}
+
+/**
+ * @returns Whether or not `Map the Monsters` is currently active
+ */
+export function currentlyMapping(): boolean {
+  return get("mappingMonsters");
+}

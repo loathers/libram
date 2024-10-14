@@ -1,3 +1,4 @@
+import { visitUrl } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item, $skill } from "../../template-string.js";
@@ -37,4 +38,20 @@ export function cauldronsRemaining(): number {
  */
 export function flapChance(flaps = get("_batWingsFreeFights")): number {
   return flaps < 5 ? 1 / (2 + flaps) : 0;
+}
+
+/**
+ * Attempts to do bridge skip
+ * @returns whether we were successfully able to skip the bridge
+ */
+export function bridgeSkip(): boolean {
+  if (get("chasmBridgeProgress") < 25 || get("questL09Topping") !== "started") {
+    return false;
+  }
+  visitUrl(
+    `place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`,
+  ); // use existing materials
+  visitUrl("place.php?whichplace=orc_chasm&action=bridge_jump"); // Jump the bridge
+  visitUrl("place.php?whichplace=highlands&action=highlands_dude"); // Tell mafia you jumped the bridge
+  return get("questL09Topping") === "step2"; // have spoken to the highland lord
 }

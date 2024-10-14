@@ -1,7 +1,7 @@
-import { visitUrl } from "kolmafia";
-import { have as have_ } from "../../lib.js";
+import { equip, equippedItem, visitUrl } from "kolmafia";
+import { have as have_, questStep } from "../../lib.js";
 import { get } from "../../property.js";
-import { $item, $skill } from "../../template-string.js";
+import { $item, $skill, $slot } from "../../template-string.js";
 
 /**
  * @returns Whether you `have` the Bat Wings
@@ -45,13 +45,20 @@ export function flapChance(flaps = get("_batWingsFreeFights")): number {
  * @returns whether we were successfully able to skip the bridge
  */
 export function bridgeSkip(): boolean {
-  if (get("chasmBridgeProgress") < 25 || get("questL09Topping") !== "started") {
+  if (
+    get("chasmBridgeProgress") < 25 ||
+    questStep("questL09Topping") === 0 ||
+    !have()
+  ) {
     return false;
   }
-  visitUrl(
-    `place.php?whichplace=orc_chasm&action=bridge${get("chasmBridgeProgress")}`,
-  ); // use existing materials
+  if (get("chasmBridgeProgress") === 30 || questStep("questL09Topping") >= 1) {
+    return true;
+  }
+  const back = equippedItem($slot`back`);
+  equip($item`bat wings`);
   visitUrl("place.php?whichplace=orc_chasm&action=bridge_jump"); // Jump the bridge
   visitUrl("place.php?whichplace=highlands&action=highlands_dude"); // Tell mafia you jumped the bridge
-  return get("questL09Topping") === "step2"; // have spoken to the highland lord
+  equip(back);
+  return questStep("questL09Topping") >= 2; // have spoken to the highland lord
 }

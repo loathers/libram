@@ -196,7 +196,7 @@ export function get(property: string, _default?: unknown): unknown {
   } else if (isPhylumProperty(property)) {
     return getPhylum(property, _default as Phylum | undefined);
   } else if (isStringProperty(property)) {
-    return value;
+    return value === "" && _default !== undefined ? _default : value;
   }
 
   // Not a KnownProperty from here on out.

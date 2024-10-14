@@ -44,7 +44,7 @@ export function flapChance(flaps = get("_batWingsFreeFights")): number {
  * Attempts to do bridge skip
  * @returns whether we were successfully able to skip the bridge
  */
-export function bridgeSkip(): boolean {
+export function jumpBridge(): boolean {
   if (
     get("chasmBridgeProgress") < 25 ||
     questStep("questL09Topping") === 0 ||

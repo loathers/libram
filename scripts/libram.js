@@ -10201,13 +10201,18 @@ function pickRider(mode) {
   riderLists.has(mode) || riderLists.set(mode, FULL_RIDING_LIST.filter(function(_ref2) {
     var familiar9 = _ref2.familiar;
     return have(familiar9);
-  }).sort(function(a, b) {
-    return valueRider(b, modifierValueFunction, dropsValueFunction, ignoreLimitedDrops) - valueRider(a, modifierValueFunction, dropsValueFunction, ignoreLimitedDrops);
+  }).map(function(rider) {
+    return _objectSpread4(_objectSpread4({}, rider), {}, {
+      value: valueRider(rider, modifierValueFunction, dropsValueFunction, ignoreLimitedDrops)
+    });
+  }).sort(function(_ref3, _ref4) {
+    var a = _ref3.value, b = _ref4.value;
+    return b - a;
   }));
   var list = riderLists.get(mode);
   if (list) {
-    var riderToReturn = list.find(function(_ref3) {
-      var _dropPredicate, dropPredicate = _ref3.dropPredicate, familiar9 = _ref3.familiar;
+    var riderToReturn = list.find(function(_ref5) {
+      var _dropPredicate, dropPredicate = _ref5.dropPredicate, familiar9 = _ref5.familiar;
       return ((_dropPredicate = dropPredicate == null ? void 0 : dropPredicate()) !== null && _dropPredicate !== void 0 ? _dropPredicate : !0) && (!excludeCurrentFamiliar || (0, import_kolmafia16.myFamiliar)() !== familiar9);
     });
     return riderToReturn != null ? riderToReturn : null;

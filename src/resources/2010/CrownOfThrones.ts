@@ -429,21 +429,17 @@ export function pickRider(mode: string): FamiliarRider | null {
   if (!riderLists.has(mode)) {
     riderLists.set(
       mode,
-      FULL_RIDING_LIST.filter(({ familiar }) => have(familiar)).sort(
-        (a, b) =>
-          valueRider(
-            b,
-            modifierValueFunction,
-            dropsValueFunction,
-            ignoreLimitedDrops,
-          ) -
-          valueRider(
-            a,
+      FULL_RIDING_LIST.filter(({ familiar }) => have(familiar))
+        .map((rider) => ({
+          ...rider,
+          value: valueRider(
+            rider,
             modifierValueFunction,
             dropsValueFunction,
             ignoreLimitedDrops,
           ),
-      ),
+        }))
+        .sort(({ value: a }, { value: b }) => b - a),
     );
   }
 

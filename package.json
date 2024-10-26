@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.9.13",
+  "version": "0.9.14",
   "description": "JavaScript helper library for KoLmafia",
   "type": "module",
   "main": "dist/index.js",
@@ -65,7 +65,7 @@
     "vitest-github-actions-reporter": "^0.11.1"
   },
   "peerDependencies": {
-    "kolmafia": "^5.27668.0"
+    "kolmafia": "^5.28100.0"
   },
   "lint-staged": {
     "src/**/*.{ts,js}": "yarn run format"

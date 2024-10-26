@@ -4364,7 +4364,7 @@ __metadata:
     vitest: "npm:^1.6.0"
     vitest-github-actions-reporter: "npm:^0.11.1"
   peerDependencies:
-    kolmafia: ^5.27668.0
+    kolmafia: ^5.28100.0
   languageName: unknown
   linkType: soft
 

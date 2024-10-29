@@ -466,18 +466,13 @@ export class PropertiesManager {
     const { regularProperties, emptyProperties } = Object.entries(
       this.properties,
     ).reduce(
-      ({ regularProperties, emptyProperties }, [key, value]) => ({
-        regularProperties: {
-          ...regularProperties,
-          ...(value === PropertiesManager.EMPTY_PREFERENCE
-            ? {}
-            : { [key]: value }),
-        },
-        emptyProperties: [
-          ...emptyProperties,
-          ...(value === PropertiesManager.EMPTY_PREFERENCE ? [key] : []),
-        ],
-      }),
+      ({ regularProperties, emptyProperties }, [key, value]) =>
+        value === PropertiesManager.EMPTY_PREFERENCE
+          ? { regularProperties, emptyProperties: [...emptyProperties, key] }
+          : {
+              regularProperties: { ...regularProperties, [key]: value },
+              emptyProperties,
+            },
       { regularProperties: {} as Properties, emptyProperties: [] as string[] },
     );
     setProperties(regularProperties);

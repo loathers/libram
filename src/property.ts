@@ -453,8 +453,6 @@ export class PropertiesManager {
         removeProperty(property);
       } else if (value) {
         set(property, value as { toString(): string });
-      } else {
-        set(property, "");
       }
     }
   }

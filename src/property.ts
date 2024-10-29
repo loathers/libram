@@ -463,14 +463,23 @@ export class PropertiesManager {
    * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
    */
   resetAll(): void {
-    const regularProperties = Object.fromEntries(
-      Object.entries(this.properties).filter(
-        ([, value]) => value !== PropertiesManager.EMPTY_PREFERENCE,
-      ),
+    const { regularProperties, emptyProperties } = Object.entries(
+      this.properties,
+    ).reduce(
+      ({ regularProperties, emptyProperties }, [key, value]) => ({
+        regularProperties: {
+          ...regularProperties,
+          ...(value === PropertiesManager.EMPTY_PREFERENCE
+            ? {}
+            : { [key]: value }),
+        },
+        emptyProperties: [
+          ...emptyProperties,
+          ...(value === PropertiesManager.EMPTY_PREFERENCE ? [key] : []),
+        ],
+      }),
+      { regularProperties: {} as Properties, emptyProperties: [] as string[] },
     );
-    const emptyProperties = Object.entries(this.properties)
-      .filter(([, value]) => value === PropertiesManager.EMPTY_PREFERENCE)
-      .map(([key]) => key);
     setProperties(regularProperties);
     for (const emptyProperty of emptyProperties) removeProperty(emptyProperty);
   }

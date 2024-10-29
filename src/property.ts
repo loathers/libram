@@ -453,8 +453,6 @@ export class PropertiesManager {
         removeProperty(property);
       } else if (value) {
         set(property, value as { toString(): string });
-      } else {
-        set(property, "");
       }
     }
   }
@@ -463,7 +461,7 @@ export class PropertiesManager {
    * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
    */
   resetAll(): void {
-    setProperties(this.properties);
+    this.reset(...(Object.keys(this.properties) as KnownProperty[]));
   }
 
   /**

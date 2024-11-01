@@ -54,6 +54,7 @@ import * as ChestMimic from "./2024/ChestMimic.js";
 import * as MayamCalendar from "./2024/MayamCalendar.js";
 import * as TearawayPants from "./2024/TearawayPants.js";
 import * as BatWings from "./2024/BatWings.js";
+import * as EverfullDarts from "./2024/EverfullDarts.js";
 
 export {
   AprilingBandHelmet,
@@ -81,6 +82,7 @@ export {
   DeckOfEveryCard,
   Dinseylandfill,
   DNALab,
+  EverfullDarts,
   FloristFriar,
   GingerBread,
   GreyGoose,

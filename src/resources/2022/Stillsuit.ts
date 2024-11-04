@@ -1,7 +1,12 @@
-import { cliExecute, Modifier, toModifier, visitUrl } from "kolmafia";
+import { cliExecute, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
+import {
+  arrayContains,
+  NumericModifier,
+  numericModifiers,
+} from "../../index.js";
 
 /**
  * Do you own a still-suit?
@@ -30,50 +35,27 @@ export function drinkDistillate(): boolean {
   return true;
 }
 
-const modifierMap: Record<string, string> = {
-  "Muscle Stats Per Fight": "Muscle Experience",
-  "Mysticality Stats Per Fight": "Mysticality Experience",
-  "Moxie Stats Per Fight": "Moxie Experience",
-  "Item Drops from Monsters": "Item Drop",
-  "Food Drops from Monsters": "Food Drop",
-  "Combat Initiative": "Initiative",
-  "Spooky Damage": "Spooky Damage",
-  "Hot Damage": "Hot Damage",
-  "Cold Damage": "Cold Damage",
-  "Stench Damage": "Stench Damage",
-  "Sleaze Damage": "Sleaze Damage",
-  "Weapon Damage": "Weapon Damage",
-  "Damage Reduction": "Damage Reduction",
-  "Sleaze Spell Damage": "Sleaze Spell Damage",
-  "Hot Spell Damage": "Hot Spell Damage",
-  "Cold Spell Damage": "Cold Spell Damage",
-  "Stench Spell Damage": "Stench Spell Damage",
-  "Spooky Spell Damage": "Spooky Spell Damage",
-};
-
-// Regex to capture both "+X [modifier]" and "[modifier] +X" or "[modifier]: X"
-const regex =
-  /(?:\+(\d+)%?\s*(Muscle Stats Per Fight|Mysticality Stats Per Fight|Moxie Stats Per Fight|Item Drops from Monsters|Food Drops from Monsters|Combat Initiative|Spooky Damage|Hot Damage|Cold Damage|Stench Damage|Sleaze Damage|Weapon Damage|Damage Reduction|Sleaze Spell Damage|Hot Spell Damage|Cold Spell Damage|Stench Spell Damage|Spooky Spell Damage)|(?:Damage Reduction|Weapon Damage):?\s+(\d+))/g;
-
 /**
- * Checks distillate for buffs
- * @returns an array of tuples with the standardized modifier and its numeric value
+ * Checks distillate for specific modifiers
+ * @param modifier determines what modifier to check stillsuit buffs against
+ * @returns the modifier value for the given modifier
  */
-export function distillateBuffs(): Array<[Modifier, number]> {
-  const text = visitUrl("inventory.php?action=distill&pwd");
-  const matches = [...text.matchAll(regex)]
-    .map((match) => {
-      // Extract value and modifier text
-      const value = parseInt(match[1] ?? match[3], 10); // Supports both formats (before or after)
-      const modifierText = match[2] || match[4];
+export function distillateModifier(modifier: NumericModifier): number {
+  visitUrl("inventory.php?action=distill&pwd"); // Update the mafia pref
+  const distillateModsString = get("currentDistillateMods");
 
-      // Map to standardized modifier names
-      const standardizedModifier = toModifier(modifierMap[modifierText]);
+  const distillateMods: Record<NumericModifier, number> = distillateModsString
+    .split(", ")
+    .reduce(
+      (acc, modString) => {
+        const [key, value] = modString.split(": ");
+        if (key && value && arrayContains(key, numericModifiers)) {
+          acc[key as NumericModifier] = parseInt(value.replace("+", ""), 10);
+        }
+        return acc;
+      },
+      {} as Record<NumericModifier, number>,
+    );
 
-      // Return tuple if mapping exists
-      return standardizedModifier ? [standardizedModifier, value] : null;
-    })
-    .filter((result): result is [Modifier, number] => result !== null); // Adjusted type predicate
-
-  return matches;
+  return distillateMods[modifier] || 0;
 }

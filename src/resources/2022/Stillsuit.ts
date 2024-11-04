@@ -2,11 +2,7 @@ import { cliExecute, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
-import {
-  arrayContains,
-  NumericModifier,
-  numericModifiers,
-} from "../../index.js";
+import { NumericModifier } from "../../modifierTypes.js";
 
 /**
  * Do you own a still-suit?
@@ -40,6 +36,7 @@ export function drinkDistillate(): boolean {
  * @returns the modifier value for the given modifier
  */
 export function distillateModifier(modifier: NumericModifier): number {
+  visitUrl("inventory.php?action=distill&pwd");
   // Retrieve the current distillate modifiers as a string
   const distillateMods = get("currentDistillateMods");
 

@@ -39,14 +39,23 @@ export function drinkDistillate(): boolean {
  * @param modifier determines what modifier to check stillsuit buffs against
  * @returns the modifier value for the given modifier
  */
-export function distillateModifier(modifier: string): number {
+export function distillateModifier(modifier: NumericModifier): number {
   // Retrieve the current distillate modifiers as a string
   const distillateMods = get("currentDistillateMods");
 
+  const experienceMap: Record<string, string> = {
+    "Muscle Experience": "Experience (Muscle)",
+    "Mysticality Experience": "Experience (Mysticality)",
+    "Moxie Experience": "Experience (Moxie)",
+  };
+
+  // Adjust the modifier if it is one of the special cases
+  const adjustedModifier = experienceMap[modifier] ?? modifier;
+
   // Construct a regex pattern to match the modifier and capture the numeric value
-  const regex = new RegExp(`${modifier}: \\+?(-?\\d+)`);
+  const regex = new RegExp(`${adjustedModifier}: \\+?(-?\\d+)`);
   const match = distillateMods.match(regex);
 
   // If a match is found, parse and return the captured number; otherwise, return 0
-  return match ? parseInt(match[1], 10) : 0;
+  return match ? Number(match[1]) : 0;
 }

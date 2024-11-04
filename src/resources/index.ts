@@ -55,6 +55,7 @@ import * as MayamCalendar from "./2024/MayamCalendar.js";
 import * as TearawayPants from "./2024/TearawayPants.js";
 import * as BatWings from "./2024/BatWings.js";
 import * as EverfullDarts from "./2024/EverfullDarts.js";
+import * as StillSuit from "./2022/Stillsuit.js";
 
 export {
   AprilingBandHelmet,
@@ -108,6 +109,7 @@ export {
   Spacegate,
   SpookyPutty,
   Stickers,
+  StillSuit,
   StompingBoots,
   TearawayPants,
   TrainSet,

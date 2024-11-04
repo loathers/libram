@@ -22,7 +22,7 @@ export function have(): boolean {
 export function distillateAdventures(): number {
   if (!have()) return 0;
   const sweat = get("familiarSweat");
-  return Math.round(sweat ^ 0.4);
+  return Math.round(sweat ** 0.4);
 }
 
 /**
@@ -31,8 +31,7 @@ export function distillateAdventures(): number {
  */
 export function drinkDistillate(): boolean {
   if (!have() || get("familiarSweat") <= 0) return false;
-  cliExecute("drink stillsuit distillate");
-  return true;
+  return cliExecute("drink stillsuit distillate");
 }
 
 /**
@@ -40,22 +39,14 @@ export function drinkDistillate(): boolean {
  * @param modifier determines what modifier to check stillsuit buffs against
  * @returns the modifier value for the given modifier
  */
-export function distillateModifier(modifier: NumericModifier): number {
-  visitUrl("inventory.php?action=distill&pwd"); // Update the mafia pref
-  const distillateModsString = get("currentDistillateMods");
+export function distillateModifier(modifier: string): number {
+  // Retrieve the current distillate modifiers as a string
+  const distillateMods = get("currentDistillateMods");
 
-  const distillateMods: Record<NumericModifier, number> = distillateModsString
-    .split(", ")
-    .reduce(
-      (acc, modString) => {
-        const [key, value] = modString.split(": ");
-        if (key && value && arrayContains(key, numericModifiers)) {
-          acc[key as NumericModifier] = parseInt(value.replace("+", ""), 10);
-        }
-        return acc;
-      },
-      {} as Record<NumericModifier, number>,
-    );
+  // Construct a regex pattern to match the modifier and capture the numeric value
+  const regex = new RegExp(`${modifier}: \\+?(-?\\d+)`);
+  const match = distillateMods.match(regex);
 
-  return distillateMods[modifier] || 0;
+  // If a match is found, parse and return the captured number; otherwise, return 0
+  return match ? parseInt(match[1], 10) : 0;
 }

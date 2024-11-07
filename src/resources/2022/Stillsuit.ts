@@ -1,8 +1,17 @@
-import { cliExecute, visitUrl } from "kolmafia";
+import { cliExecute, getProperty, splitModifiers, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
-import { NumericModifier } from "../../modifierTypes.js";
+import {
+  BooleanModifier,
+  booleanModifiers,
+  NumericModifier,
+  numericModifiers,
+  StringModifier,
+} from "../../modifierTypes.js";
+import { Modifiers } from "../../modifier.js";
+import { arrayContains } from "../../utils.js";
+import { StringProperty } from "../../propertyTypes.js";
 
 /**
  * Do you own a still-suit?
@@ -30,6 +39,35 @@ export function drinkDistillate(): boolean {
   return cliExecute("drink stillsuit distillate");
 }
 
+const distillateModifiers = (pref: StringProperty): Modifiers =>
+  Object.entries(splitModifiers(getProperty(pref))).reduce(
+    (acc, [modifier, value]) => ({
+      ...acc,
+      [modifier as NumericModifier | StringModifier | BooleanModifier]:
+        arrayContains(modifier, numericModifiers)
+          ? Number(value)
+          : arrayContains(modifier, booleanModifiers)
+            ? value === "true"
+            : value,
+    }),
+    {} as Modifiers,
+  );
+
+/**
+ * @returns A `Modifiers` object that contains your next Distillate modifiers
+ */
+export function nextDistillateModifiers(): Modifiers {
+  visitUrl("inventory.php?action=distill&pwd");
+  return distillateModifiers("nextDistillateMods");
+}
+
+/**
+ * @returns A `Modifiers` object that contains your current Distillate modifiers
+ */
+export function currentDistillateModifiers(): Modifiers {
+  return distillateModifiers("currentDistillateMods");
+}
+
 /**
  * Checks distillate for specific modifiers
  * @param modifier determines what modifier to check stillsuit buffs against
@@ -37,22 +75,7 @@ export function drinkDistillate(): boolean {
  */
 export function distillateModifier(modifier: NumericModifier): number {
   visitUrl("inventory.php?action=distill&pwd");
-  // Retrieve the current distillate modifiers as a string
-  const distillateMods = get("currentDistillateMods");
 
-  const experienceMap: Record<string, string> = {
-    "Muscle Experience": "Experience (Muscle)",
-    "Mysticality Experience": "Experience (Mysticality)",
-    "Moxie Experience": "Experience (Moxie)",
-  };
-
-  // Adjust the modifier if it is one of the special cases
-  const adjustedModifier = experienceMap[modifier] ?? modifier;
-
-  // Construct a regex pattern to match the modifier and capture the numeric value
-  const regex = new RegExp(`${adjustedModifier}: \\+?(-?\\d+)`);
-  const match = distillateMods.match(regex);
-
-  // If a match is found, parse and return the captured number; otherwise, return 0
-  return match ? Number(match[1]) : 0;
+  const value = splitModifiers("currentDistillateMods")[modifier];
+  return value ? Number(value) : 0;
 }

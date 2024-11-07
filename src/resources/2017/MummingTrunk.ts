@@ -13,13 +13,14 @@ export function currentCostumes(): Map<
   Familiar,
   readonly [NumericModifier, number]
 > {
-  const splitMods = splitModifiers(get("_mummeryMods"));
   return new Map(
-    Object.entries(splitMods)
+    Object.entries(splitModifiers(get("_mummeryMods")))
       .map(([modifier, value]) => {
         if (!arrayContains(modifier, numericModifiers)) return null;
+
         const matcher = value.match(MUMMERY_MODS_PATTERN);
         if (!matcher) return null;
+
         return [
           Familiar.get(matcher[1]),
           [modifier as NumericModifier, Number(matcher[2])],

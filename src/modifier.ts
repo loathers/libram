@@ -5,24 +5,76 @@ import {
   Familiar,
   familiarWeight,
   Item,
+  ModifierValueType,
   myFamiliar,
   numericModifier,
   print,
   Skill,
   stringModifier,
+  toModifier,
 } from "kolmafia";
 import { have } from "./lib.js";
 
 import {
   BooleanModifier,
-  booleanModifiers,
   NumericModifier,
-  numericModifiers,
   StringModifier,
-  stringModifiers,
 } from "./modifierTypes.js";
 import { $effect } from "./template-string.js";
-import { arrayContains, sum } from "./utils.js";
+import { sum } from "./utils.js";
+
+function testModifierType(
+  potentialModifier: string,
+  modifierType: ModifierValueType,
+) {
+  const modifier = toModifier(potentialModifier);
+  return modifier.name === potentialModifier && modifier.type === modifierType;
+}
+
+/**
+ * Type guard that determines if a given string is a boolean modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid boolean modifier
+ */
+export function isBooleanModifier(
+  modifier: string,
+): modifier is BooleanModifier {
+  return testModifierType(modifier, "boolean");
+}
+
+/**
+ * Type guard that determines if a given string is a numeric modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid numeric modifier
+ */
+export function isNumericModifier(
+  modifier: string,
+): modifier is NumericModifier {
+  return testModifierType(modifier, "numeric");
+}
+
+/**
+ * Type guard that determines if a given string is a string modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid string modifier
+ */
+export function isStringModifier(modifier: string): modifier is StringModifier {
+  return testModifierType(modifier, "string");
+}
+
+/**
+ * Type guard that determines if a given string is a valid modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid modifier
+ */
+export function isValidModifier(
+  modifier: string,
+): modifier is BooleanModifier | NumericModifier | StringModifier {
+  return (
+    toModifier(modifier).type !== "none" &&
+    toModifier(modifier).name === modifier
+  );
+}
 
 export function get(
   name: BooleanModifier,
@@ -47,19 +99,19 @@ export function get(
   name: BooleanModifier | NumericModifier | StringModifier,
   subject?: string | Item | Effect | Skill | Familiar,
 ): unknown {
-  if (arrayContains(name, booleanModifiers)) {
+  if (isBooleanModifier(name)) {
     return subject === undefined
       ? booleanModifier(name)
       : booleanModifier(subject as string, name);
   }
 
-  if (arrayContains(name, numericModifiers)) {
+  if (isNumericModifier(name)) {
     return subject === undefined
       ? numericModifier(name)
       : numericModifier(subject as string, name);
   }
 
-  if (arrayContains(name, stringModifiers)) {
+  if (isStringModifier(name)) {
     return subject === undefined
       ? stringModifier(name)
       : stringModifier(subject as string, name);
@@ -88,11 +140,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
   const returnValue = { ...modifiers1, ...modifiers2 };
   for (const modifier in modifiers1) {
     if (Array.from(Object.values(modifiers2)).includes(modifier)) {
-      if (arrayContains(modifier, numericModifiers)) {
+      if (isNumericModifier(modifier)) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? 0) + (modifiers2[modifier] ?? 0);
       }
-      if (arrayContains(modifier, booleanModifiers)) {
+      if (isBooleanModifier(modifier)) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
       }

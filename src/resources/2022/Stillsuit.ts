@@ -4,13 +4,14 @@ import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
 import {
   BooleanModifier,
-  booleanModifiers,
   NumericModifier,
-  numericModifiers,
   StringModifier,
 } from "../../modifierTypes.js";
-import { Modifiers } from "../../modifier.js";
-import { arrayContains } from "../../utils.js";
+import {
+  isBooleanModifier,
+  isNumericModifier,
+  Modifiers,
+} from "../../modifier.js";
 import { StringProperty } from "../../propertyTypes.js";
 
 /**
@@ -44,9 +45,9 @@ const distillateModifiers = (pref: StringProperty): Modifiers =>
     (acc, [modifier, value]) => ({
       ...acc,
       [modifier as NumericModifier | StringModifier | BooleanModifier]:
-        arrayContains(modifier, numericModifiers)
+        isNumericModifier(modifier)
           ? Number(value)
-          : arrayContains(modifier, booleanModifiers)
+          : isBooleanModifier(modifier)
             ? value === "true"
             : value,
     }),

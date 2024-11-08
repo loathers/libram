@@ -1,7 +1,8 @@
 import { Familiar, splitModifiers } from "kolmafia";
-import { NumericModifier, numericModifiers } from "../../modifierTypes.js";
+import { NumericModifier } from "../../modifierTypes.js";
 import { get } from "../../property.js";
-import { arrayContains, notNull } from "../../utils.js";
+import { notNull } from "../../utils.js";
+import { isNumericModifier } from "../../modifier.js";
 
 const MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\([^)]*\)/;
 /**
@@ -16,14 +17,14 @@ export function currentCostumes(): Map<
   return new Map(
     Object.entries(splitModifiers(get("_mummeryMods")))
       .map(([modifier, value]) => {
-        if (!arrayContains(modifier, numericModifiers)) return null;
+        if (!isNumericModifier(modifier)) return null;
 
         const matcher = value.match(MUMMERY_MODS_PATTERN);
         if (!matcher) return null;
 
         return [
           Familiar.get(matcher[1]),
-          [modifier as NumericModifier, Number(matcher[2])],
+          [modifier, Number(matcher[2])],
         ] as const;
       })
       .filter(notNull),

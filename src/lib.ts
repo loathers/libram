@@ -1470,19 +1470,3 @@ export function totalFamiliarWeight(
     (familiar.feasted ? 10 : 0)
   );
 }
-
-/**
- * JSON-ify an object with mafia constants rendered legibly
- * @param obj The object to convert to a JSON string
- * @returns A JSON string
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function toMafiaJson(obj: any): string {
-  return JSON.stringify(obj, (_, value) => {
-    const mafiaClass = MafiaClasses.find(
-      (mafiaClass) => value instanceof mafiaClass,
-    );
-    if (mafiaClass) return `[${mafiaClass.name}]${value}`;
-    return value;
-  });
-}

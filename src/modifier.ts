@@ -4,12 +4,14 @@ import {
   Effect,
   Familiar,
   familiarWeight,
+  getProperty,
   Item,
   ModifierValueType,
   myFamiliar,
   numericModifier,
   print,
   Skill,
+  splitModifiers,
   stringModifier,
   toModifier,
 } from "kolmafia";
@@ -22,6 +24,7 @@ import {
 } from "./modifierTypes.js";
 import { $effect } from "./template-string.js";
 import { sum } from "./utils.js";
+import { StringProperty } from "./propertyTypes.js";
 
 function testModifierType(
   potentialModifier: string,
@@ -289,4 +292,39 @@ export function getTotalModifier(
   ...subjects: (Skill | Effect | Item)[]
 ): number {
   return sum(subjects, (subject) => get(modifier, subject));
+}
+
+/**
+ * Translate a pref into a `Modifiers` object by wrapping mafia's `splitModifiers`
+ * @param pref The name of the mafia preference in question
+ * @param translator Optional object to help translate fields into their appropriate values
+ * @param translator.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
+ * @param translator.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
+ * @param translator.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @returns A `Modifiers` object corresponding to the given preference.
+ */
+export function parseModifiers(
+  pref: StringProperty,
+  {
+    numeric = Number,
+    str = String,
+    bool = (val) => val === "true",
+  }: Partial<{
+    numeric: (value: string) => number;
+    str: (value: string) => string;
+    bool: (value: string) => boolean;
+  }> = {},
+): Modifiers {
+  return Object.entries(splitModifiers(getProperty(pref))).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key as NumericModifier | StringModifier | BooleanModifier]:
+        isBooleanModifier(key)
+          ? bool(value)
+          : isNumericModifier(key)
+            ? numeric(value)
+            : str(value),
+    }),
+    {} as Modifiers,
+  );
 }

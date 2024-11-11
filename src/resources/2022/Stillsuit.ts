@@ -1,17 +1,9 @@
-import { cliExecute, getProperty, splitModifiers, visitUrl } from "kolmafia";
+import { cliExecute, splitModifiers, visitUrl } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
-import {
-  BooleanModifier,
-  NumericModifier,
-  StringModifier,
-} from "../../modifierTypes.js";
-import {
-  isBooleanModifier,
-  isNumericModifier,
-  Modifiers,
-} from "../../modifier.js";
+import { NumericModifier } from "../../modifierTypes.js";
+import { Modifiers, parseModifiers } from "../../modifier.js";
 import { StringProperty } from "../../propertyTypes.js";
 
 /**
@@ -41,18 +33,7 @@ export function drinkDistillate(): boolean {
 }
 
 const distillateModifiers = (pref: StringProperty): Modifiers =>
-  Object.entries(splitModifiers(getProperty(pref))).reduce(
-    (acc, [modifier, value]) => ({
-      ...acc,
-      [modifier as NumericModifier | StringModifier | BooleanModifier]:
-        isNumericModifier(modifier)
-          ? Number(value)
-          : isBooleanModifier(modifier)
-            ? value === "true"
-            : value,
-    }),
-    {} as Modifiers,
-  );
+  parseModifiers(pref);
 
 /**
  * @returns A `Modifiers` object that contains your next Distillate modifiers

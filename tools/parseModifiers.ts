@@ -96,7 +96,7 @@ async function main() {
       typeName,
     )}Modifier = typeof ${typeName}Modifiers[number];\n`;
   });
-  
+
   contents += `export type ModifierType = NumericModifier | StringModifier | BooleanModifier;\n`;
 
   await writeFile(MODIFIERS_FILE, contents);

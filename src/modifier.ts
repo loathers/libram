@@ -19,6 +19,7 @@ import { have } from "./lib.js";
 
 import {
   BooleanModifier,
+  ModifierType,
   NumericModifier,
   StringModifier,
 } from "./modifierTypes.js";
@@ -70,9 +71,7 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
  * @param modifier The modifier in question
  * @returns Whether the string in question is a valid modifier
  */
-export function isValidModifier(
-  modifier: string,
-): modifier is BooleanModifier | NumericModifier | StringModifier {
+export function isValidModifier(modifier: string): modifier is ModifierType {
   return (
     toModifier(modifier).type !== "none" &&
     toModifier(modifier).name === modifier
@@ -99,7 +98,7 @@ export function get(
  * @returns Value of modifier
  */
 export function get(
-  name: BooleanModifier | NumericModifier | StringModifier,
+  name: ModifierType,
   subject?: string | Item | Effect | Skill | Familiar,
 ): unknown {
   if (isBooleanModifier(name)) {
@@ -130,7 +129,7 @@ export type ModifierValue<T> = T extends BooleanModifier
       : string;
 
 export type Modifiers = Partial<{
-  [T in BooleanModifier | NumericModifier | StringModifier]: ModifierValue<T>;
+  [T in ModifierType]: ModifierValue<T>;
 }>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
@@ -318,12 +317,11 @@ export function parseModifiers(
   return Object.entries(splitModifiers(getProperty(pref))).reduce(
     (acc, [key, value]) => ({
       ...acc,
-      [key as NumericModifier | StringModifier | BooleanModifier]:
-        isBooleanModifier(key)
-          ? bool(value)
-          : isNumericModifier(key)
-            ? numeric(value)
-            : str(value),
+      [key as ModifierType]: isBooleanModifier(key)
+        ? bool(value)
+        : isNumericModifier(key)
+          ? numeric(value)
+          : str(value),
     }),
     {} as Modifiers,
   );

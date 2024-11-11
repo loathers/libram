@@ -5420,6 +5420,9 @@ __export(src_exports, {
   telescope: function() {
     return telescope;
   },
+  toMafiaJson: function() {
+    return toMafiaJson;
+  },
   totalFamiliarWeight: function() {
     return totalFamiliarWeight;
   },
@@ -7086,6 +7089,14 @@ var makeBulkFunction = function(action) {
 function totalFamiliarWeight() {
   var familiar9 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia4.myFamiliar)(), considerAdjustment = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
   return clamp((0, import_kolmafia4.familiarWeight)(familiar9), have($effect(_templateObject47 || (_templateObject47 = _taggedTemplateLiteral(["Fidoxene"])))) ? 20 : 0, 1 / 0) + familiar9.soupWeight + (considerAdjustment ? (0, import_kolmafia4.weightAdjustment)() : 0) + (familiar9.feasted ? 10 : 0);
+}
+function toMafiaJson(obj) {
+  return JSON.stringify(obj, function(_, value) {
+    var mafiaClass = import_kolmafia4.MafiaClasses.find(function(mafiaClass2) {
+      return value instanceof mafiaClass2;
+    });
+    return mafiaClass ? "[".concat(mafiaClass.name, "]").concat(value) : value;
+  });
 }
 
 // src/overlappingNames.ts
@@ -20237,6 +20248,7 @@ var Session = /* @__PURE__ */ function() {
   sumNumbers,
   tc,
   telescope,
+  toMafiaJson,
   totalFamiliarWeight,
   tryFindBanish,
   tryFindFreeKill,

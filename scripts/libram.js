@@ -5135,6 +5135,9 @@ __export(src_exports, {
   extractItems: function() {
     return extractItems;
   },
+  familiarTags: function() {
+    return familiarTags;
+  },
   findActionSource: function() {
     return findActionSource;
   },
@@ -5176,6 +5179,9 @@ __export(src_exports, {
   },
   getCurrentModes: function() {
     return getCurrentModes;
+  },
+  getFamiliarTags: function() {
+    return getFamiliarTags;
   },
   getFamiliarWandererChance: function() {
     return getFamiliarWandererChance;
@@ -7086,6 +7092,10 @@ var makeBulkFunction = function(action) {
 function totalFamiliarWeight() {
   var familiar9 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : (0, import_kolmafia4.myFamiliar)(), considerAdjustment = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
   return clamp((0, import_kolmafia4.familiarWeight)(familiar9), have($effect(_templateObject47 || (_templateObject47 = _taggedTemplateLiteral(["Fidoxene"])))) ? 20 : 0, 1 / 0) + familiar9.soupWeight + (considerAdjustment ? (0, import_kolmafia4.weightAdjustment)() : 0) + (familiar9.feasted ? 10 : 0);
+}
+var familiarTags = Object.freeze(["animal", "insect", "haseyes", "haswings", "fast", "bite", "flies", "hashands", "wearsclothes", "organic", "vegetable", "hovers", "edible", "food", "sentient", "cute", "mineral", "polygonal", "object", "undead", "cantalk", "evil", "orb", "spooky", "sleaze", "aquatic", "swims", "isclothes", "phallic", "stench", "hot", "hasbeak", "haslegs", "robot", "technological", "hard", "cold", "hasbones", "hasclaws", "reallyevil", "good", "person", "humanoid", "animatedart", "software", "pokefam", "hasshell", "hasstinger"]);
+function getFamiliarTags(familiar9) {
+  return familiar9.attributes.split("; ").filter(Boolean);
 }
 
 // src/overlappingNames.ts
@@ -15867,6 +15877,12 @@ var BULLSEYE_ACCURACY_PERKS = ["25% Better bullseye targeting", "25% better chan
 // src/resources/2022/Stillsuit.ts
 var Stillsuit_exports = {};
 __export(Stillsuit_exports, {
+  MODIFIER_TAGS: function() {
+    return MODIFIER_TAGS;
+  },
+  bestFamiliar: function() {
+    return bestFamiliar;
+  },
   distillateAdventures: function() {
     return distillateAdventures;
   },
@@ -15878,11 +15894,52 @@ __export(Stillsuit_exports, {
   },
   have: function() {
     return have54;
+  },
+  modifierRatio: function() {
+    return modifierRatio;
   }
 });
 init_kolmafia_polyfill();
 var import_kolmafia68 = require("kolmafia");
 var _templateObject477;
+function ownKeys7(e, r) {
+  var t = Object.keys(e);
+  if (Object.getOwnPropertySymbols) {
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
+  }
+  return t;
+}
+function _objectSpread7(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = arguments[r] != null ? arguments[r] : {};
+    r % 2 ? ownKeys7(Object(t), !0).forEach(function(r2) {
+      _defineProperty15(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys7(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+    });
+  }
+  return e;
+}
+function _defineProperty15(e, r, t) {
+  return (r = _toPropertyKey16(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+}
+function _toPropertyKey16(t) {
+  var i = _toPrimitive16(t, "string");
+  return typeof i == "symbol" ? i : i + "";
+}
+function _toPrimitive16(t, r) {
+  if (typeof t != "object" || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (e !== void 0) {
+    var i = e.call(t, r || "default");
+    if (typeof i != "object") return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (r === "string" ? String : Number)(t);
+}
 function _taggedTemplateLiteral56(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
@@ -15906,6 +15963,71 @@ function distillateModifier(modifier) {
     "Moxie Experience": "Experience (Moxie)"
   }, adjustedModifier = (_experienceMap$modifi = experienceMap[modifier]) !== null && _experienceMap$modifi !== void 0 ? _experienceMap$modifi : modifier, regex = new RegExp("".concat(adjustedModifier, ": \\+?(-?\\d+)")), match = distillateMods.match(regex);
   return match ? Number(match[1]) : 0;
+}
+var MODIFIER_TAGS = Object.freeze({
+  mineral: "Muscle",
+  robot: "Muscle",
+  organic: "Muscle",
+  hasbones: "Muscle",
+  technological: "Mysticality",
+  orb: "Mysticality",
+  sentient: "Mysticality",
+  polygonal: "Mysticality",
+  software: "Mysticality",
+  cantalk: "Mysticality",
+  humanoid: "Moxie",
+  hashands: "Moxie",
+  cute: "Moxie",
+  good: "Moxie",
+  phallic: "Moxie",
+  animatedart: "Moxie",
+  person: "Moxie",
+  haseyes: "Item Drop",
+  object: "Item Drop",
+  haslegs: "Item Drop",
+  food: "Food Drop",
+  vegetable: "Food Drop",
+  edible: "Food Drop",
+  animal: "Damage Reduction",
+  insect: "Damage Reduction",
+  wearsclothes: "Damage Reduction",
+  isclothes: "Damage Reduction",
+  hasshell: "Damage Reduction",
+  haswings: "Initiative",
+  fast: "Initiative",
+  flies: "Initiative",
+  hovers: "Initiative",
+  swims: "Initiative",
+  aquatic: "Initiative",
+  spooky: "Spooky Damage",
+  undead: "Spooky Damage",
+  evil: "Spooky Damage",
+  reallyevil: "Spooky Damage",
+  hot: "Hot Damage",
+  cold: "Cold Damage",
+  sleaze: "Sleaze Damage",
+  stench: "Stench Damage",
+  bite: "Weapon Damage",
+  hasclaws: "Weapon Damage",
+  hasbeak: "Weapon Damage",
+  hasstinger: "Weapon Damage",
+  hard: "Weapon Damage"
+});
+function isStillsuitTag(tag) {
+  return tag in MODIFIER_TAGS;
+}
+function modifierRatio(familiar9) {
+  var tags = getFamiliarTags(familiar9);
+  return tags.filter(isStillsuitTag).reduce(function(acc, tag) {
+    var _acc$MODIFIER_TAGS$ta;
+    return _objectSpread7(_objectSpread7({}, acc), {}, _defineProperty15({}, MODIFIER_TAGS[tag], (((_acc$MODIFIER_TAGS$ta = acc[MODIFIER_TAGS[tag]]) !== null && _acc$MODIFIER_TAGS$ta !== void 0 ? _acc$MODIFIER_TAGS$ta : 0) + 1) / tags.length));
+  }, {});
+}
+function bestFamiliar(modifier) {
+  return maxBy(import_kolmafia68.Familiar.all().filter(have54), function(familiar9) {
+    var _modifierRatio$modifi;
+    return (_modifierRatio$modifi = modifierRatio(familiar9)[modifier]) !== null && _modifierRatio$modifi !== void 0 ? _modifierRatio$modifi : 0;
+  });
 }
 
 // src/resources/putty-likes.ts
@@ -16170,7 +16292,7 @@ function _iterableToArray17(r) {
 function _arrayWithoutHoles17(r) {
   if (Array.isArray(r)) return _arrayLikeToArray31(r);
 }
-function ownKeys7(e, r) {
+function ownKeys8(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -16180,12 +16302,12 @@ function ownKeys7(e, r) {
   }
   return t;
 }
-function _objectSpread7(e) {
+function _objectSpread8(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = arguments[r] != null ? arguments[r] : {};
-    r % 2 ? ownKeys7(Object(t), !0).forEach(function(r2) {
-      _defineProperty15(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys7(Object(t)).forEach(function(r2) {
+    r % 2 ? ownKeys8(Object(t), !0).forEach(function(r2) {
+      _defineProperty16(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys8(Object(t)).forEach(function(r2) {
       Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
@@ -16194,23 +16316,23 @@ function _objectSpread7(e) {
 function _taggedTemplateLiteral65(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
-function _defineProperty15(e, r, t) {
-  return (r = _toPropertyKey16(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty16(e, r, t) {
+  return (r = _toPropertyKey17(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
 function _defineProperties11(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey16(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey17(o.key), o);
   }
 }
 function _createClass11(e, r, t) {
   return r && _defineProperties11(e.prototype, r), t && _defineProperties11(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _toPropertyKey16(t) {
-  var i = _toPrimitive16(t, "string");
+function _toPropertyKey17(t) {
+  var i = _toPrimitive17(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive16(t, r) {
+function _toPrimitive17(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -16359,7 +16481,7 @@ var AscendError = /* @__PURE__ */ function(_Error) {
 }, AscensionPrepError = /* @__PURE__ */ function(_Error2) {
   function AscensionPrepError2(cause, original) {
     var _this;
-    return _classCallCheck11(this, AscensionPrepError2), isGarden(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap garden to ".concat(cause, "; garden is currently ").concat(original, ".")]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)) : isEudora(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap eudora to ".concat(cause, "; eudora is currently ").concat(original, ".")]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)) : isDesk(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau desk to ".concat(cause, "; desk is currently ").concat(original, ".")]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)) : isNightstand(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau nightstand to ".concat(cause, "; nightstand is currently ").concat(original, ".")]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)) : isCeiling(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau ceiling to ".concat(cause, "; ceiling is currently ").concat(original, ".")]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)) : (_this = _callSuper3(this, AscensionPrepError2, [cause]), _defineProperty15(_assertThisInitialized3(_this), "cause", void 0)), _this.cause = cause, _assertThisInitialized3(_this);
+    return _classCallCheck11(this, AscensionPrepError2), isGarden(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap garden to ".concat(cause, "; garden is currently ").concat(original, ".")]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)) : isEudora(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap eudora to ".concat(cause, "; eudora is currently ").concat(original, ".")]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)) : isDesk(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau desk to ".concat(cause, "; desk is currently ").concat(original, ".")]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)) : isNightstand(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau nightstand to ".concat(cause, "; nightstand is currently ").concat(original, ".")]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)) : isCeiling(cause) ? (_this = _callSuper3(this, AscensionPrepError2, ["Unable to swap chateau ceiling to ".concat(cause, "; ceiling is currently ").concat(original, ".")]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)) : (_this = _callSuper3(this, AscensionPrepError2, [cause]), _defineProperty16(_assertThisInitialized3(_this), "cause", void 0)), _this.cause = cause, _assertThisInitialized3(_this);
   }
   return _inherits3(AscensionPrepError2, _Error2), _createClass11(AscensionPrepError2);
 }(/* @__PURE__ */ _wrapNativeSuper3(Error));
@@ -16408,7 +16530,7 @@ function ascend(options) {
   }, prunedOptions = Object.fromEntries(Object.entries(options).filter(function(_ref3) {
     var _ref4 = _slicedToArray18(_ref3, 2), value = _ref4[1];
     return value;
-  })), _DEFAULT_OPTIONS$prun = _objectSpread7(_objectSpread7({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
+  })), _DEFAULT_OPTIONS$prun = _objectSpread8(_objectSpread8({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
   if (playerClass.path !== (path3.avatar ? path3 : import_kolmafia69.Path.none))
     throw new AscendError("Invalid class ".concat(playerClass, " for this path!"));
   if (path3.id < 0) throw new AscendError("Invalid path: ".concat(path3, "!"));
@@ -16580,20 +16702,20 @@ function _classCallCheck12(a, n) {
 function _defineProperties12(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey17(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey18(o.key), o);
   }
 }
 function _createClass12(e, r, t) {
   return r && _defineProperties12(e.prototype, r), t && _defineProperties12(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty16(e, r, t) {
-  return (r = _toPropertyKey17(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty17(e, r, t) {
+  return (r = _toPropertyKey18(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey17(t) {
-  var i = _toPrimitive17(t, "string");
+function _toPropertyKey18(t) {
+  var i = _toPrimitive18(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive17(t, r) {
+function _toPrimitive18(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -16668,7 +16790,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
   degree: 2
 }), Clan = /* @__PURE__ */ function() {
   function Clan2(id, name) {
-    _classCallCheck12(this, Clan2), _defineProperty16(this, "id", void 0), _defineProperty16(this, "name", void 0), this.id = id, this.name = name;
+    _classCallCheck12(this, Clan2), _defineProperty17(this, "id", void 0), _defineProperty17(this, "name", void 0), this.id = id, this.name = name;
   }
   return _createClass12(Clan2, [{
     key: "_check",
@@ -17093,20 +17215,20 @@ function _classCallCheck13(a, n) {
 function _defineProperties13(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey18(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey19(o.key), o);
   }
 }
 function _createClass13(e, r, t) {
   return r && _defineProperties13(e.prototype, r), t && _defineProperties13(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty17(e, r, t) {
-  return (r = _toPropertyKey18(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty18(e, r, t) {
+  return (r = _toPropertyKey19(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey18(t) {
-  var i = _toPrimitive18(t, "string");
+function _toPropertyKey19(t) {
+  var i = _toPrimitive19(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive18(t, r) {
+function _toPrimitive19(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -17138,7 +17260,7 @@ function hypotheticalModifier(modifier) {
 }
 var CommunityService = /* @__PURE__ */ function() {
   function CommunityService2(id, stat, property, predictor, maximizeRequirements) {
-    _classCallCheck13(this, CommunityService2), _defineProperty17(this, "choice", void 0), _defineProperty17(this, "stat", void 0), _defineProperty17(this, "property", void 0), _defineProperty17(this, "predictor", void 0), _defineProperty17(this, "maximizeRequirements", void 0), _defineProperty17(this, "timer", null), this.choice = id, this.stat = stat, this.property = property, this.predictor = predictor, this.maximizeRequirements = maximizeRequirements;
+    _classCallCheck13(this, CommunityService2), _defineProperty18(this, "choice", void 0), _defineProperty18(this, "stat", void 0), _defineProperty18(this, "property", void 0), _defineProperty18(this, "predictor", void 0), _defineProperty18(this, "maximizeRequirements", void 0), _defineProperty18(this, "timer", null), this.choice = id, this.stat = stat, this.property = property, this.predictor = predictor, this.maximizeRequirements = maximizeRequirements;
   }
   return _createClass13(CommunityService2, [{
     key: "id",
@@ -17348,30 +17470,30 @@ var CommunityService = /* @__PURE__ */ function() {
   }]);
 }();
 _CommunityService = CommunityService;
-_defineProperty17(CommunityService, "taskTimers", /* @__PURE__ */ new Map());
-_defineProperty17(CommunityService, "log", {});
-_defineProperty17(CommunityService, "HP", new _CommunityService(1, "HP", "Donate Blood", function() {
+_defineProperty18(CommunityService, "taskTimers", /* @__PURE__ */ new Map());
+_defineProperty18(CommunityService, "log", {});
+_defineProperty18(CommunityService, "HP", new _CommunityService(1, "HP", "Donate Blood", function() {
   return 60 - Math.floor(((0, import_kolmafia72.myMaxhp)() - (0, import_kolmafia72.myBuffedstat)($stat(_templateObject744 || (_templateObject744 = _taggedTemplateLiteral67(["muscle"])))) - 3) / 30);
 }, new Requirement(["HP"], {})));
-_defineProperty17(CommunityService, "Muscle", new _CommunityService(2, "Muscle", "Feed The Children", statCommunityServicePredictor($stat(_templateObject836 || (_templateObject836 = _taggedTemplateLiteral67(["Muscle"])))), new Requirement(["Muscle"], {})));
-_defineProperty17(CommunityService, "Mysticality", new _CommunityService(3, "Mysticality", "Build Playground Mazes", statCommunityServicePredictor($stat(_templateObject929 || (_templateObject929 = _taggedTemplateLiteral67(["Mysticality"])))), new Requirement(["Mysticality"], {})));
-_defineProperty17(CommunityService, "Moxie", new _CommunityService(4, "Moxie", "Feed Conspirators", statCommunityServicePredictor($stat(_templateObject1025 || (_templateObject1025 = _taggedTemplateLiteral67(["Moxie"])))), new Requirement(["Moxie"], {})));
-_defineProperty17(CommunityService, "FamiliarWeight", new _CommunityService(5, "Familiar Weight", "Breed More Collies", function() {
+_defineProperty18(CommunityService, "Muscle", new _CommunityService(2, "Muscle", "Feed The Children", statCommunityServicePredictor($stat(_templateObject836 || (_templateObject836 = _taggedTemplateLiteral67(["Muscle"])))), new Requirement(["Muscle"], {})));
+_defineProperty18(CommunityService, "Mysticality", new _CommunityService(3, "Mysticality", "Build Playground Mazes", statCommunityServicePredictor($stat(_templateObject929 || (_templateObject929 = _taggedTemplateLiteral67(["Mysticality"])))), new Requirement(["Mysticality"], {})));
+_defineProperty18(CommunityService, "Moxie", new _CommunityService(4, "Moxie", "Feed Conspirators", statCommunityServicePredictor($stat(_templateObject1025 || (_templateObject1025 = _taggedTemplateLiteral67(["Moxie"])))), new Requirement(["Moxie"], {})));
+_defineProperty18(CommunityService, "FamiliarWeight", new _CommunityService(5, "Familiar Weight", "Breed More Collies", function() {
   for (var _len2 = arguments.length, effects = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     effects[_key2] = arguments[_key2];
   return 60 - Math.floor((totalFamiliarWeight((0, import_kolmafia72.myFamiliar)(), !1) + hypotheticalModifier.apply(void 0, ["Familiar Weight"].concat(effects))) / 5);
 }, new Requirement(["Familiar Weight"], {})));
-_defineProperty17(CommunityService, "WeaponDamage", new _CommunityService(6, "Weapon Damage", "Reduce Gazelle Population", function() {
+_defineProperty18(CommunityService, "WeaponDamage", new _CommunityService(6, "Weapon Damage", "Reduce Gazelle Population", function() {
   for (var weaponPower = (0, import_kolmafia72.getPower)((0, import_kolmafia72.equippedItem)($slot(_templateObject1123 || (_templateObject1123 = _taggedTemplateLiteral67(["weapon"]))))), offhandPower = (0, import_kolmafia72.toSlot)((0, import_kolmafia72.equippedItem)($slot(_templateObject1222 || (_templateObject1222 = _taggedTemplateLiteral67(["off-hand"]))))) === $slot(_templateObject1320 || (_templateObject1320 = _taggedTemplateLiteral67(["weapon"]))) ? (0, import_kolmafia72.getPower)((0, import_kolmafia72.equippedItem)($slot(_templateObject1418 || (_templateObject1418 = _taggedTemplateLiteral67(["off-hand"]))))) : 0, familiarPower = (0, import_kolmafia72.toSlot)((0, import_kolmafia72.equippedItem)($slot(_templateObject1515 || (_templateObject1515 = _taggedTemplateLiteral67(["familiar"]))))) === $slot(_templateObject1615 || (_templateObject1615 = _taggedTemplateLiteral67(["weapon"]))) ? (0, import_kolmafia72.getPower)((0, import_kolmafia72.equippedItem)($slot(_templateObject1715 || (_templateObject1715 = _taggedTemplateLiteral67(["familiar"]))))) : 0, multiplier = have($effect(_templateObject1815 || (_templateObject1815 = _taggedTemplateLiteral67(["Bow-Legged Swagger"])))) ? 2 : 1, _len3 = arguments.length, effects = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++)
     effects[_key3] = arguments[_key3];
   return 60 - Math.floor(multiplier * (hypotheticalModifier.apply(void 0, ["Weapon Damage"].concat(effects)) - 0.15 * (weaponPower + offhandPower + familiarPower)) / 50 + 1e-3) - Math.floor(multiplier * hypotheticalModifier.apply(void 0, ["Weapon Damage Percent"].concat(effects)) / 50 + 1e-3);
 }, new Requirement(["Weapon Damage", "Weapon Damage Percent"], {})));
-_defineProperty17(CommunityService, "SpellDamage", new _CommunityService(7, "Spell Damage", "Make Sausage", function() {
+_defineProperty18(CommunityService, "SpellDamage", new _CommunityService(7, "Spell Damage", "Make Sausage", function() {
   for (var dragonfishDamage = (0, import_kolmafia72.myFamiliar)() === $familiar(_templateObject1914 || (_templateObject1914 = _taggedTemplateLiteral67(["Magic Dragonfish"]))) ? (0, import_kolmafia72.numericModifier)($familiar(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral67(["Magic Dragonfish"]))), "Spell Damage Percent", totalFamiliarWeight(), $item.none) : 0, _len4 = arguments.length, effects = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++)
     effects[_key4] = arguments[_key4];
   return 60 - Math.floor(hypotheticalModifier.apply(void 0, ["Spell Damage"].concat(effects)) / 50 + 1e-3) - Math.floor((hypotheticalModifier.apply(void 0, ["Spell Damage Percent"].concat(effects)) - dragonfishDamage) / 50 + 1e-3);
 }, new Requirement(["Spell Damage", "Spell Damage Percent"], {})));
-_defineProperty17(CommunityService, "Noncombat", new _CommunityService(8, "Non-Combat", "Be a Living Statue", function() {
+_defineProperty18(CommunityService, "Noncombat", new _CommunityService(8, "Non-Combat", "Be a Living Statue", function() {
   for (var _len5 = arguments.length, effects = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++)
     effects[_key5] = arguments[_key5];
   var noncombatRate = -1 * hypotheticalModifier.apply(void 0, ["Combat Rate"].concat(effects)), unsoftcappedRate = function(rate) {
@@ -17379,26 +17501,26 @@ _defineProperty17(CommunityService, "Noncombat", new _CommunityService(8, "Non-C
   }, currentFamiliarModifier = -1 * (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Combat Rate", totalFamiliarWeight(), (0, import_kolmafia72.equippedItem)($slot(_templateObject2131 || (_templateObject2131 = _taggedTemplateLiteral67(["familiar"]))))), newFamiliarModifier = -1 * (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Combat Rate", totalFamiliarWeight((0, import_kolmafia72.myFamiliar)(), !1) + hypotheticalModifier.apply(void 0, ["Familiar Weight"].concat(effects)), (0, import_kolmafia72.equippedItem)($slot(_templateObject2216 || (_templateObject2216 = _taggedTemplateLiteral67(["familiar"]))))), adjustedRate = unsoftcappedRate(noncombatRate) - unsoftcappedRate(currentFamiliarModifier) + unsoftcappedRate(newFamiliarModifier);
   return 60 - 3 * Math.floor(adjustedRate / 5);
 }, new Requirement(["-combat"], {})));
-_defineProperty17(CommunityService, "BoozeDrop", new _CommunityService(9, "Item Drop", "Make Margaritas", function() {
+_defineProperty18(CommunityService, "BoozeDrop", new _CommunityService(9, "Item Drop", "Make Margaritas", function() {
   for (var mummingCostume = MummingTrunk_exports.currentCostumes().get((0, import_kolmafia72.myFamiliar)()), mummingBuff = mummingCostume && mummingCostume[0] === "Item Drop" ? mummingCostume[1] : 0, familiarItemDrop = (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Item Drop", totalFamiliarWeight(), (0, import_kolmafia72.equippedItem)($slot(_templateObject2315 || (_templateObject2315 = _taggedTemplateLiteral67(["familiar"]))))) + mummingBuff - (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.equippedItem)($slot(_templateObject2414 || (_templateObject2414 = _taggedTemplateLiteral67(["familiar"])))), "Item Drop"), familiarBoozeDrop = (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Booze Drop", totalFamiliarWeight(), (0, import_kolmafia72.equippedItem)($slot(_templateObject2513 || (_templateObject2513 = _taggedTemplateLiteral67(["familiar"]))))) - (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.equippedItem)($slot(_templateObject2612 || (_templateObject2612 = _taggedTemplateLiteral67(["familiar"])))), "Booze Drop"), multiplier = (0, import_kolmafia72.haveEquipped)($item(_templateObject2712 || (_templateObject2712 = _taggedTemplateLiteral67(["broken champagne bottle"])))) && get("garbageChampagneCharge") > 0 ? 0.5 : 1, _len6 = arguments.length, effects = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++)
     effects[_key6] = arguments[_key6];
   return 60 - Math.floor(multiplier * (hypotheticalModifier.apply(void 0, ["Item Drop"].concat(effects)) - familiarItemDrop - (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myThrall)(), "Item Drop")) / 30 + 1e-3) - Math.floor((hypotheticalModifier.apply(void 0, ["Booze Drop"].concat(effects)) - familiarBoozeDrop) / 15 + 1e-3);
 }, new Requirement(["Item Drop", "2 Booze Drop"], {
   preventEquip: $items(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral67(["broken champagne bottle"])))
 })));
-_defineProperty17(CommunityService, "HotRes", new _CommunityService(10, "Hot Resistance", "Clean Steam Tunnels", function() {
+_defineProperty18(CommunityService, "HotRes", new _CommunityService(10, "Hot Resistance", "Clean Steam Tunnels", function() {
   for (var currentFamiliarModifier = (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Hot Resistance", totalFamiliarWeight(), (0, import_kolmafia72.equippedItem)($slot(_templateObject2910 || (_templateObject2910 = _taggedTemplateLiteral67(["familiar"]))))), _len7 = arguments.length, effects = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
     effects[_key7] = arguments[_key7];
   var newFamiliarModifier = (0, import_kolmafia72.numericModifier)((0, import_kolmafia72.myFamiliar)(), "Hot Resistance", totalFamiliarWeight((0, import_kolmafia72.myFamiliar)(), !1) + hypotheticalModifier.apply(void 0, ["Familiar Weight"].concat(effects)), (0, import_kolmafia72.equippedItem)($slot(_templateObject3010 || (_templateObject3010 = _taggedTemplateLiteral67(["familiar"])))));
   return 60 - (hypotheticalModifier.apply(void 0, ["Hot Resistance"].concat(effects)) - currentFamiliarModifier + newFamiliarModifier);
 }, new Requirement(["Hot Resistance"], {})));
-_defineProperty17(CommunityService, "CoilWire", new _CommunityService(11, "Coil Wire", "Coil Wire", function() {
+_defineProperty18(CommunityService, "CoilWire", new _CommunityService(11, "Coil Wire", "Coil Wire", function() {
   return 60;
 }, new Requirement([], {})));
-_defineProperty17(CommunityService, "donate", function() {
+_defineProperty18(CommunityService, "donate", function() {
   visitCouncil(), (0, import_kolmafia72.visitUrl)("choice.php?whichchoice=1089&option=30");
 });
-_defineProperty17(CommunityService, "path", $path(_templateObject3120 || (_templateObject3120 = _taggedTemplateLiteral67(["Community Service"]))));
+_defineProperty18(CommunityService, "path", $path(_templateObject3120 || (_templateObject3120 = _taggedTemplateLiteral67(["Community Service"]))));
 
 // src/challengePaths/2016/NuclearAutumn.ts
 var NuclearAutumn_exports = {};
@@ -17527,7 +17649,7 @@ function _arrayLikeToArray34(r, a) {
 function _defineProperties14(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey19(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey20(o.key), o);
   }
 }
 function _createClass14(e, r, t) {
@@ -17536,14 +17658,14 @@ function _createClass14(e, r, t) {
 function _classCallCheck14(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
-function _defineProperty18(e, r, t) {
-  return (r = _toPropertyKey19(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty19(e, r, t) {
+  return (r = _toPropertyKey20(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey19(t) {
-  var i = _toPrimitive19(t, "string");
+function _toPropertyKey20(t) {
+  var i = _toPrimitive20(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive19(t, r) {
+function _toPrimitive20(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -17554,7 +17676,7 @@ function _toPrimitive19(t, r) {
   return (r === "string" ? String : Number)(t);
 }
 var Not = /* @__PURE__ */ _createClass14(function Not2(thing) {
-  _classCallCheck14(this, Not2), _defineProperty18(this, "thing", void 0), this.thing = thing;
+  _classCallCheck14(this, Not2), _defineProperty19(this, "thing", void 0), this.thing = thing;
 });
 function aggregate(list, isEqual) {
   var aggregatedList = [], _iterator = _createForOfIteratorHelper11(list), _step;
@@ -17665,7 +17787,7 @@ function _createForOfIteratorHelper12(r, e) {
     }
   } };
 }
-function ownKeys8(e, r) {
+function ownKeys9(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -17675,12 +17797,12 @@ function ownKeys8(e, r) {
   }
   return t;
 }
-function _objectSpread8(e) {
+function _objectSpread9(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = arguments[r] != null ? arguments[r] : {};
-    r % 2 ? ownKeys8(Object(t), !0).forEach(function(r2) {
-      _defineProperty19(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys8(Object(t)).forEach(function(r2) {
+    r % 2 ? ownKeys9(Object(t), !0).forEach(function(r2) {
+      _defineProperty20(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys9(Object(t)).forEach(function(r2) {
       Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
@@ -17692,20 +17814,20 @@ function _classCallCheck15(a, n) {
 function _defineProperties15(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey20(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey21(o.key), o);
   }
 }
 function _createClass15(e, r, t) {
   return r && _defineProperties15(e.prototype, r), t && _defineProperties15(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty19(e, r, t) {
-  return (r = _toPropertyKey20(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty20(e, r, t) {
+  return (r = _toPropertyKey21(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey20(t) {
-  var i = _toPrimitive20(t, "string");
+function _toPropertyKey21(t) {
+  var i = _toPrimitive21(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive20(t, r) {
+function _toPrimitive21(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -17793,8 +17915,8 @@ function _expectedAdventures(menuItem, modifiers) {
 var MenuItem = /* @__PURE__ */ function() {
   function MenuItem2(item13) {
     var _MenuItem$defaultOpti, options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    _classCallCheck15(this, MenuItem2), _defineProperty19(this, "item", void 0), _defineProperty19(this, "organ", void 0), _defineProperty19(this, "size", void 0), _defineProperty19(this, "maximum", void 0), _defineProperty19(this, "additionalValue", void 0), _defineProperty19(this, "effect", void 0), _defineProperty19(this, "priceOverride", void 0), _defineProperty19(this, "mayo", void 0), _defineProperty19(this, "data", void 0), _defineProperty19(this, "priceCached", void 0), _defineProperty19(this, "itemTypeCached", void 0);
-    var _options = _objectSpread8(_objectSpread8({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item13)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
+    _classCallCheck15(this, MenuItem2), _defineProperty20(this, "item", void 0), _defineProperty20(this, "organ", void 0), _defineProperty20(this, "size", void 0), _defineProperty20(this, "maximum", void 0), _defineProperty20(this, "additionalValue", void 0), _defineProperty20(this, "effect", void 0), _defineProperty20(this, "priceOverride", void 0), _defineProperty20(this, "mayo", void 0), _defineProperty20(this, "data", void 0), _defineProperty20(this, "priceCached", void 0), _defineProperty20(this, "itemTypeCached", void 0);
+    var _options = _objectSpread9(_objectSpread9({}, options), (_MenuItem$defaultOpti = MenuItem2.defaultOptions().get(item13)) !== null && _MenuItem$defaultOpti !== void 0 ? _MenuItem$defaultOpti : {}), size = _options.size, organ = _options.organ, maximum = _options.maximum, additionalValue = _options.additionalValue, effect2 = _options.effect, priceOverride = _options.priceOverride, mayo = _options.mayo, data = _options.data;
     if (this.item = item13, notNullish(maximum) && (this.maximum = maximum === "auto" ? item13.dailyusesleft : maximum), notNullish(additionalValue) && (this.additionalValue = additionalValue), notNullish(effect2) && (this.effect = effect2), notNullish(priceOverride) && (this.priceOverride = priceOverride), notNullish(mayo) && (this.mayo = mayo), notNullish(data) && (this.data = data), notNullish(organ))
       this.organ = organ;
     else {
@@ -17886,7 +18008,7 @@ var MenuItem = /* @__PURE__ */ function() {
     }
   }]);
 }();
-_defineProperty19(MenuItem, "defaultPriceFunction", function(item13) {
+_defineProperty20(MenuItem, "defaultPriceFunction", function(item13) {
   return (0, import_kolmafia74.npcPrice)(item13) > 0 ? (0, import_kolmafia74.npcPrice)(item13) : (0, import_kolmafia74.mallPrice)(item13);
 });
 var organs = ["food", "booze", "spleen item"];
@@ -17897,7 +18019,7 @@ var DietPlanner = /* @__PURE__ */ function() {
   function DietPlanner2(mpa, menu) {
     var _this2 = this;
     var _this = this;
-    _classCallCheck15(this, DietPlanner2), _defineProperty19(this, "mpa", void 0), _defineProperty19(this, "menu", void 0), _defineProperty19(this, "mayoLookup", void 0), _defineProperty19(this, "fork", void 0), _defineProperty19(this, "mug", void 0), _defineProperty19(this, "seasoning", void 0), _defineProperty19(this, "whetStone", void 0), _defineProperty19(this, "aioli", void 0), _defineProperty19(this, "spleenValue", 0), _defineProperty19(this, "baseDefaultModifiers", {
+    _classCallCheck15(this, DietPlanner2), _defineProperty20(this, "mpa", void 0), _defineProperty20(this, "menu", void 0), _defineProperty20(this, "mayoLookup", void 0), _defineProperty20(this, "fork", void 0), _defineProperty20(this, "mug", void 0), _defineProperty20(this, "seasoning", void 0), _defineProperty20(this, "whetStone", void 0), _defineProperty20(this, "aioli", void 0), _defineProperty20(this, "spleenValue", 0), _defineProperty20(this, "baseDefaultModifiers", {
       forkMug: !1,
       seasoning: !1,
       whetStone: !1,
@@ -17973,7 +18095,7 @@ var DietPlanner = /* @__PURE__ */ function() {
         var mayo = menuItem.mayo ? this.mayoLookup.get(menuItem.mayo) : this.mayoLookup.get(Mayo.flex);
         mayo && helpers.push(mayo);
       }
-      var defaultModifiers = _objectSpread8(_objectSpread8({}, this.baseDefaultModifiers), {}, {
+      var defaultModifiers = _objectSpread9(_objectSpread9({}, this.baseDefaultModifiers), {}, {
         mayoflex: this.mayoLookup.size ? helpers.some(function(item13) {
           return item13.item === Mayo.flex;
         }) : !1
@@ -17981,7 +18103,7 @@ var DietPlanner = /* @__PURE__ */ function() {
       this.seasoning && menuItem.itemType() === "food" && this.mpa * seasoningAdventures(menuItem.item) > this.seasoning.price() && helpers.push(this.seasoning), this.whetStone && menuItem.itemType() === "food" && this.mpa > this.whetStone.price() && helpers.push(this.whetStone), this.aioli && menuItem.itemType() === "food" && this.mpa * menuItem.item.fullness > this.aioli.price() && helpers.push(this.aioli);
       var forkMug = menuItem.itemType() === "food" ? this.fork : menuItem.itemType() === "booze" ? this.mug : null, forkMugPrice = forkMug ? forkMug.price() : 1 / 0, baseCost = menuItem.price() + sum(helpers, function(item13) {
         return item13.price();
-      }), valueRaw = _expectedAdventures(menuItem, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem, _objectSpread8(_objectSpread8({}, defaultModifiers), {}, {
+      }), valueRaw = _expectedAdventures(menuItem, defaultModifiers) * this.mpa - baseCost + ((_menuItem$additionalV = menuItem.additionalValue) !== null && _menuItem$additionalV !== void 0 ? _menuItem$additionalV : 0), valueForkMug = _expectedAdventures(menuItem, _objectSpread9(_objectSpread9({}, defaultModifiers), {}, {
         forkMug: !0
       })) * this.mpa - baseCost - forkMugPrice + ((_menuItem$additionalV2 = menuItem.additionalValue) !== null && _menuItem$additionalV2 !== void 0 ? _menuItem$additionalV2 : 0), valueSpleen = $items(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral69(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item) ? 5 * this.spleenValue : 0;
       return forkMug && valueForkMug > valueRaw ? [[].concat(helpers, [forkMug, menuItem]), valueForkMug + valueSpleen] : [[].concat(helpers, [menuItem]), valueRaw + valueSpleen];
@@ -18058,7 +18180,7 @@ var DietPlanner = /* @__PURE__ */ function() {
       } finally {
         _iterator.f();
       }
-      var organCapacitiesWith = _toConsumableArray20(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral69(["Refined Palate"]))) || trialItem.item === $item(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral69(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4212 || (_templateObject4212 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral69(["Gar-ish"]))) || trialItem.item === $item(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral69(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray22(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread8(_objectSpread8(_objectSpread8({}, overrideModifiers), isRefinedPalate ? {
+      var organCapacitiesWith = _toConsumableArray20(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral69(["Refined Palate"]))) || trialItem.item === $item(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral69(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4212 || (_templateObject4212 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral69(["Gar-ish"]))) || trialItem.item === $item(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral69(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray22(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread9(_objectSpread9(_objectSpread9({}, overrideModifiers), isRefinedPalate ? {
         refinedPalate: !0
       } : {}), isGarish ? {
         garish: !0
@@ -18108,7 +18230,7 @@ function planDiet(mpa, menu) {
 }
 var DietEntry = /* @__PURE__ */ function() {
   function DietEntry2(menuItems, quantity) {
-    _classCallCheck15(this, DietEntry2), _defineProperty19(this, "quantity", void 0), _defineProperty19(this, "menuItems", void 0), this.menuItems = Object.freeze(menuItems), this.quantity = quantity;
+    _classCallCheck15(this, DietEntry2), _defineProperty20(this, "quantity", void 0), _defineProperty20(this, "menuItems", void 0), this.menuItems = Object.freeze(menuItems), this.quantity = quantity;
   }
   return _createClass15(DietEntry2, [{
     key: "target",
@@ -18163,7 +18285,7 @@ var DietEntry = /* @__PURE__ */ function() {
 }(), Diet = /* @__PURE__ */ function() {
   function Diet2() {
     var entries = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
-    _classCallCheck15(this, Diet2), _defineProperty19(this, "entries", void 0), this.entries = entries;
+    _classCallCheck15(this, Diet2), _defineProperty20(this, "entries", void 0), this.entries = entries;
   }
   return _createClass15(Diet2, [{
     key: "refinedPalate",
@@ -18317,20 +18439,20 @@ function _classCallCheck16(a, n) {
 function _defineProperties16(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey21(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey22(o.key), o);
   }
 }
 function _createClass16(e, r, t) {
   return r && _defineProperties16(e.prototype, r), t && _defineProperties16(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty20(e, r, t) {
-  return (r = _toPropertyKey21(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty21(e, r, t) {
+  return (r = _toPropertyKey22(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey21(t) {
-  var i = _toPrimitive21(t, "string");
+function _toPropertyKey22(t) {
+  var i = _toPrimitive22(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive21(t, r) {
+function _toPrimitive22(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -18342,7 +18464,7 @@ function _toPrimitive21(t, r) {
 }
 var Dungeon = /* @__PURE__ */ function() {
   function Dungeon2(name_, loot, openAction, closeAction, openCost, openImage, closedImage) {
-    _classCallCheck16(this, Dungeon2), _defineProperty20(this, "name_", void 0), _defineProperty20(this, "loot", void 0), _defineProperty20(this, "openAction", void 0), _defineProperty20(this, "closeAction", void 0), _defineProperty20(this, "openCost", void 0), _defineProperty20(this, "openImage", void 0), _defineProperty20(this, "closedImage", void 0), this.name_ = name_, this.loot = loot, this.openAction = openAction, this.closeAction = closeAction, this.openCost = openCost, this.openImage = openImage, this.closedImage = closedImage;
+    _classCallCheck16(this, Dungeon2), _defineProperty21(this, "name_", void 0), _defineProperty21(this, "loot", void 0), _defineProperty21(this, "openAction", void 0), _defineProperty21(this, "closeAction", void 0), _defineProperty21(this, "openCost", void 0), _defineProperty21(this, "openImage", void 0), _defineProperty21(this, "closedImage", void 0), this.name_ = name_, this.loot = loot, this.openAction = openAction, this.closeAction = closeAction, this.openCost = openCost, this.openImage = openImage, this.closedImage = closedImage;
   }
   return _createClass16(Dungeon2, [{
     key: "possibleLoot",
@@ -18432,7 +18554,7 @@ var Dungeon = /* @__PURE__ */ function() {
 init_kolmafia_polyfill();
 var import_kolmafia76 = require("kolmafia");
 var _OscusSoda, _templateObject558, _templateObject2135, _MagicalSausages, _templateObject3124, _templateObject4105, _templateObject559, _templateObject650, _templateObject746, _templateObject838, _templateObject931, _templateObject1027;
-function ownKeys9(e, r) {
+function ownKeys10(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -18442,12 +18564,12 @@ function ownKeys9(e, r) {
   }
   return t;
 }
-function _objectSpread9(e) {
+function _objectSpread10(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = arguments[r] != null ? arguments[r] : {};
-    r % 2 ? ownKeys9(Object(t), !0).forEach(function(r2) {
-      _defineProperty21(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys9(Object(t)).forEach(function(r2) {
+    r % 2 ? ownKeys10(Object(t), !0).forEach(function(r2) {
+      _defineProperty22(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys10(Object(t)).forEach(function(r2) {
       Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
@@ -18535,8 +18657,8 @@ function _setPrototypeOf5(t, e) {
     return t2.__proto__ = e2, t2;
   }, _setPrototypeOf5(t, e);
 }
-function _defineProperty21(e, r, t) {
-  return (r = _toPropertyKey22(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty22(e, r, t) {
+  return (r = _toPropertyKey23(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
 function _classCallCheck17(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -18544,17 +18666,17 @@ function _classCallCheck17(a, n) {
 function _defineProperties17(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey22(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey23(o.key), o);
   }
 }
 function _createClass17(e, r, t) {
   return r && _defineProperties17(e.prototype, r), t && _defineProperties17(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _toPropertyKey22(t) {
-  var i = _toPrimitive22(t, "string");
+function _toPropertyKey23(t) {
+  var i = _toPrimitive23(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive22(t, r) {
+function _toPrimitive23(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -18611,7 +18733,7 @@ var MpSource = /* @__PURE__ */ function() {
   }]);
 }(MpSource);
 _OscusSoda = OscusSoda;
-_defineProperty21(OscusSoda, "instance", new _OscusSoda());
+_defineProperty22(OscusSoda, "instance", new _OscusSoda());
 var MagicalSausages = /* @__PURE__ */ function(_MpSource2) {
   function MagicalSausages2() {
     return _classCallCheck17(this, MagicalSausages2), _callSuper4(this, MagicalSausages2, arguments);
@@ -18644,7 +18766,7 @@ var MagicalSausages = /* @__PURE__ */ function(_MpSource2) {
   }]);
 }(MpSource);
 _MagicalSausages = MagicalSausages;
-_defineProperty21(MagicalSausages, "instance", new _MagicalSausages());
+_defineProperty22(MagicalSausages, "instance", new _MagicalSausages());
 var MoodElement = /* @__PURE__ */ function() {
   function MoodElement2() {
     _classCallCheck17(this, MoodElement2);
@@ -18663,7 +18785,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(), SkillMoodElement = /* @__PURE__ */ function(_MoodElement) {
   function SkillMoodElement2(skill) {
     var _this;
-    return _classCallCheck17(this, SkillMoodElement2), _this = _callSuper4(this, SkillMoodElement2), _defineProperty21(_this, "skill", void 0), _this.skill = skill, _this;
+    return _classCallCheck17(this, SkillMoodElement2), _this = _callSuper4(this, SkillMoodElement2), _defineProperty22(_this, "skill", void 0), _this.skill = skill, _this;
   }
   return _inherits5(SkillMoodElement2, _MoodElement), _createClass17(SkillMoodElement2, [{
     key: "mpCostPerTurn",
@@ -18720,7 +18842,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), PotionMoodElement = /* @__PURE__ */ function(_MoodElement2) {
   function PotionMoodElement2(potion, maxPricePerTurn) {
     var _this2;
-    return _classCallCheck17(this, PotionMoodElement2), _this2 = _callSuper4(this, PotionMoodElement2), _defineProperty21(_this2, "potion", void 0), _defineProperty21(_this2, "maxPricePerTurn", void 0), _this2.potion = potion, _this2.maxPricePerTurn = maxPricePerTurn, _this2;
+    return _classCallCheck17(this, PotionMoodElement2), _this2 = _callSuper4(this, PotionMoodElement2), _defineProperty22(_this2, "potion", void 0), _defineProperty22(_this2, "maxPricePerTurn", void 0), _this2.potion = potion, _this2.maxPricePerTurn = maxPricePerTurn, _this2;
   }
   return _inherits5(PotionMoodElement2, _MoodElement2), _createClass17(PotionMoodElement2, [{
     key: "execute",
@@ -18745,7 +18867,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), GenieMoodElement = /* @__PURE__ */ function(_MoodElement3) {
   function GenieMoodElement2(effect2) {
     var _this3;
-    return _classCallCheck17(this, GenieMoodElement2), _this3 = _callSuper4(this, GenieMoodElement2), _defineProperty21(_this3, "effect", void 0), _this3.effect = effect2, _this3;
+    return _classCallCheck17(this, GenieMoodElement2), _this3 = _callSuper4(this, GenieMoodElement2), _defineProperty22(_this3, "effect", void 0), _this3.effect = effect2, _this3;
   }
   return _inherits5(GenieMoodElement2, _MoodElement3), _createClass17(GenieMoodElement2, [{
     key: "execute",
@@ -18761,7 +18883,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), CustomMoodElement = /* @__PURE__ */ function(_MoodElement4) {
   function CustomMoodElement2(effect2, gainEffect) {
     var _this4;
-    return _classCallCheck17(this, CustomMoodElement2), _this4 = _callSuper4(this, CustomMoodElement2), _defineProperty21(_this4, "effect", void 0), _defineProperty21(_this4, "gainEffect", void 0), _this4.effect = effect2, _this4.gainEffect = gainEffect != null ? gainEffect : function() {
+    return _classCallCheck17(this, CustomMoodElement2), _this4 = _callSuper4(this, CustomMoodElement2), _defineProperty22(_this4, "effect", void 0), _defineProperty22(_this4, "gainEffect", void 0), _this4.effect = effect2, _this4.gainEffect = gainEffect != null ? gainEffect : function() {
       return (0, import_kolmafia76.cliExecute)(effect2.default);
     }, _this4;
   }
@@ -18776,7 +18898,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), AsdonMoodElement = /* @__PURE__ */ function(_MoodElement5) {
   function AsdonMoodElement2(effect2) {
     var _this5, preferInventory = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !1;
-    return _classCallCheck17(this, AsdonMoodElement2), _this5 = _callSuper4(this, AsdonMoodElement2), _defineProperty21(_this5, "effect", void 0), _defineProperty21(_this5, "preferInventory", void 0), _this5.effect = effect2, _this5.preferInventory = preferInventory, _this5;
+    return _classCallCheck17(this, AsdonMoodElement2), _this5 = _callSuper4(this, AsdonMoodElement2), _defineProperty22(_this5, "effect", void 0), _defineProperty22(_this5, "preferInventory", void 0), _this5.effect = effect2, _this5.preferInventory = preferInventory, _this5;
   }
   return _inherits5(AsdonMoodElement2, _MoodElement5), _createClass17(AsdonMoodElement2, [{
     key: "execute",
@@ -18787,7 +18909,7 @@ var MoodElement = /* @__PURE__ */ function() {
 }(MoodElement), Mood = /* @__PURE__ */ function() {
   function Mood2() {
     var options = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    _classCallCheck17(this, Mood2), _defineProperty21(this, "options", void 0), _defineProperty21(this, "elements", []), this.options = _objectSpread9(_objectSpread9({}, Mood2.defaultOptions), options);
+    _classCallCheck17(this, Mood2), _defineProperty22(this, "options", void 0), _defineProperty22(this, "elements", []), this.options = _objectSpread10(_objectSpread10({}, Mood2.defaultOptions), options);
   }
   return _createClass17(Mood2, [{
     key: "availableMp",
@@ -18910,12 +19032,12 @@ var MoodElement = /* @__PURE__ */ function() {
        * @param options Default options for new Mood instances.
        */
       function(options) {
-        Mood2.defaultOptions = _objectSpread9(_objectSpread9({}, Mood2.defaultOptions), options);
+        Mood2.defaultOptions = _objectSpread10(_objectSpread10({}, Mood2.defaultOptions), options);
       }
     )
   }]);
 }();
-_defineProperty21(Mood, "defaultOptions", {
+_defineProperty22(Mood, "defaultOptions", {
   songSlots: [],
   mpSources: [MagicalSausages.instance, OscusSoda.instance],
   reserveMp: 0,
@@ -18928,17 +19050,17 @@ var import_kolmafia77 = require("kolmafia");
 function _defineProperties18(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey23(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey24(o.key), o);
   }
 }
 function _createClass18(e, r, t) {
   return r && _defineProperties18(e.prototype, r), t && _defineProperties18(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _toPropertyKey23(t) {
-  var i = _toPrimitive23(t, "string");
+function _toPropertyKey24(t) {
+  var i = _toPrimitive24(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive23(t, r) {
+function _toPrimitive24(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -19273,20 +19395,20 @@ function _classCallCheck19(a, n) {
 function _defineProperties19(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey24(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey25(o.key), o);
   }
 }
 function _createClass19(e, r, t) {
   return r && _defineProperties19(e.prototype, r), t && _defineProperties19(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty22(e, r, t) {
-  return (r = _toPropertyKey24(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty23(e, r, t) {
+  return (r = _toPropertyKey25(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey24(t) {
-  var i = _toPrimitive24(t, "string");
+function _toPropertyKey25(t) {
+  var i = _toPrimitive25(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive24(t, r) {
+function _toPrimitive25(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -19298,7 +19420,7 @@ function _toPrimitive24(t, r) {
 }
 var Kmail = /* @__PURE__ */ function() {
   function Kmail2(rawKmail) {
-    _classCallCheck19(this, Kmail2), _defineProperty22(this, "id", void 0), _defineProperty22(this, "date", void 0), _defineProperty22(this, "type", void 0), _defineProperty22(this, "senderId", void 0), _defineProperty22(this, "senderName", void 0), _defineProperty22(this, "rawMessage", void 0), _defineProperty22(this, "_parsedMessageParts", void 0), this.id = Number(rawKmail.id), this.date = new Date(Number(rawKmail.azunixtime) * 1e3), this.type = rawKmail.type, this.senderId = Number(rawKmail.fromid), this.senderName = rawKmail.fromname, this.rawMessage = rawKmail.message;
+    _classCallCheck19(this, Kmail2), _defineProperty23(this, "id", void 0), _defineProperty23(this, "date", void 0), _defineProperty23(this, "type", void 0), _defineProperty23(this, "senderId", void 0), _defineProperty23(this, "senderName", void 0), _defineProperty23(this, "rawMessage", void 0), _defineProperty23(this, "_parsedMessageParts", void 0), this.id = Number(rawKmail.id), this.date = new Date(Number(rawKmail.azunixtime) * 1e3), this.type = rawKmail.type, this.senderId = Number(rawKmail.fromid), this.senderName = rawKmail.fromname, this.rawMessage = rawKmail.message;
   }
   return _createClass19(Kmail2, [{
     key: "delete",
@@ -19605,20 +19727,20 @@ function _classCallCheck20(a, n) {
 function _defineProperties20(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey25(o.key), o);
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey26(o.key), o);
   }
 }
 function _createClass20(e, r, t) {
   return r && _defineProperties20(e.prototype, r), t && _defineProperties20(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function _defineProperty23(e, r, t) {
-  return (r = _toPropertyKey25(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
+function _defineProperty24(e, r, t) {
+  return (r = _toPropertyKey26(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e;
 }
-function _toPropertyKey25(t) {
-  var i = _toPrimitive25(t, "string");
+function _toPropertyKey26(t) {
+  var i = _toPrimitive26(t, "string");
   return typeof i == "symbol" ? i : i + "";
 }
-function _toPrimitive25(t, r) {
+function _toPrimitive26(t, r) {
   if (typeof t != "object" || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (e !== void 0) {
@@ -19765,7 +19887,7 @@ function inventoryOperation(a, b, op) {
 }
 var Session = /* @__PURE__ */ function() {
   function Session2(meat, items, totalTurns) {
-    _classCallCheck20(this, Session2), _defineProperty23(this, "meat", void 0), _defineProperty23(this, "items", void 0), _defineProperty23(this, "totalTurns", void 0), this.meat = meat, this.items = items, this.totalTurns = totalTurns;
+    _classCallCheck20(this, Session2), _defineProperty24(this, "meat", void 0), _defineProperty24(this, "items", void 0), _defineProperty24(this, "totalTurns", void 0), this.meat = meat, this.items = items, this.totalTurns = totalTurns;
   }
   return _createClass20(Session2, [{
     key: "register",
@@ -20142,6 +20264,7 @@ var Session = /* @__PURE__ */ function() {
   examine,
   expectedLibramSummon,
   extractItems,
+  familiarTags,
   findActionSource,
   findFairyMultiplier,
   findLeprechaunMultiplier,
@@ -20156,6 +20279,7 @@ var Session = /* @__PURE__ */ function() {
   getBanishedMonsters,
   getCombatFlags,
   getCurrentModes,
+  getFamiliarTags,
   getFamiliarWandererChance,
   getFoldGroup,
   getKramcoWandererChance,

@@ -128,8 +128,8 @@ export type ModifierValue<T> = T extends BooleanModifier
       ? string
       : string;
 
-export type Modifiers = Partial<{
-  [T in ModifierType]: ModifierValue<T>;
+export type Modifiers<T extends ModifierType = ModifierType> = Partial<{
+  [K in T]: ModifierValue<K>;
 }>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.

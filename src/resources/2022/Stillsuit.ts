@@ -3,6 +3,7 @@ import { FamiliarTag, getFamiliarTags, have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
 import { NumericModifier } from "../../modifierTypes.js";
+import { maxBy } from "../../utils.js";
 
 /**
  * Do you own a still-suit?
@@ -126,5 +127,17 @@ export function modifierRatio(
           }
         : acc,
     {} as Partial<Record<NumericModifier, number>>,
+  );
+}
+
+/**
+ * Identify the best familiar you have to generate stillsuit distillate for a given modifier
+ * @param modifier The modifier in question
+ * @returns The familiar you currently `have` that returns the best stillsuit distillate for that modifier.
+ */
+export function bestFamiliar(modifier: NumericModifier): Familiar {
+  return maxBy(
+    Familiar.all().filter(have),
+    (familiar) => modifierRatio(familiar)[modifier] ?? 0,
   );
 }

@@ -58,7 +58,7 @@ export function distillateModifier(modifier: NumericModifier): number {
   return match ? Number(match[1]) : 0;
 }
 
-export const MODIFIER_TAGS = {
+export const MODIFIER_TAGS = Object.freeze({
   mineral: "Muscle",
   robot: "Muscle",
   organic: "Muscle",
@@ -106,7 +106,7 @@ export const MODIFIER_TAGS = {
   hasbeak: "Weapon Damage",
   hasstinger: "Weapon Damage",
   hard: "Weapon Damage",
-} as const satisfies Record<Exclude<FamiliarTag, "pokefam">, NumericModifier>;
+} as const satisfies Record<Exclude<FamiliarTag, "pokefam">, NumericModifier>);
 
 /**
  * Calculate the ratio of stillsuit modifiers for a particular familiar.

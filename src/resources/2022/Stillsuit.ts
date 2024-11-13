@@ -123,7 +123,7 @@ export function modifierRatio(
         ? {
             ...acc,
             [MODIFIER_TAGS[tag]]:
-              (acc[MODIFIER_TAGS[tag]] ?? 0) + 1 / tags.length,
+              ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
           }
         : acc,
     {} as Partial<Record<NumericModifier, number>>,

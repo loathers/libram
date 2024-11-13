@@ -1470,3 +1470,65 @@ export function totalFamiliarWeight(
     (familiar.feasted ? 10 : 0)
   );
 }
+
+export const familiarTags = Object.freeze([
+  "animal",
+  "insect",
+  "haseyes",
+  "haswings",
+  "fast",
+  "bite",
+  "flies",
+  "hashands",
+  "wearsclothes",
+  "organic",
+  "vegetable",
+  "hovers",
+  "edible",
+  "food",
+  "sentient",
+  "cute",
+  "mineral",
+  "polygonal",
+  "object",
+  "undead",
+  "cantalk",
+  "evil",
+  "orb",
+  "spooky",
+  "sleaze",
+  "aquatic",
+  "swims",
+  "isclothes",
+  "phallic",
+  "stench",
+  "hot",
+  "hasbeak",
+  "haslegs",
+  "robot",
+  "technological",
+  "hard",
+  "cold",
+  "hasbones",
+  "hasclaws",
+  "reallyevil",
+  "good",
+  "person",
+  "humanoid",
+  "animatedart",
+  "software",
+  "pokefam",
+  "hasshell",
+  "hasstinger",
+] as const);
+
+export type FamiliarTag = (typeof familiarTags)[number];
+
+/**
+ * Find the tags (used in mumming trunk, stillsuit, etc) for a given familiar
+ * @param familiar The familiar in question
+ * @returns An array of the familiar's tags
+ */
+export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
+  return familiar.attributes.split("; ").filter(Boolean) as FamiliarTag[];
+}

@@ -118,14 +118,15 @@ export function modifierRatio(
 ): Partial<Record<NumericModifier, number>> {
   const tags = getFamiliarTags(familiar);
   return tags.reduce(
-    (acc, tag) =>
-      tag !== "pokefam"
-        ? {
-            ...acc,
+    (acc, tag) => ({
+      ...acc,
+      ...(tag === "pokefam"
+        ? {}
+        : {
             [MODIFIER_TAGS[tag]]:
               ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
-          }
-        : acc,
+          }),
+    }),
     {} as Partial<Record<NumericModifier, number>>,
   );
 }

@@ -32,13 +32,14 @@ export function drinkDistillate(): boolean {
   return cliExecute("drink stillsuit distillate");
 }
 
-const distillateModifiers = (pref: StringProperty): Modifiers =>
-  parseModifiers(pref);
+const distillateModifiers = (
+  pref: StringProperty,
+): Modifiers<NumericModifier> => parseModifiers(pref);
 
 /**
  * @returns A `Modifiers` object that contains your next Distillate modifiers
  */
-export function nextDistillateModifiers(): Modifiers {
+export function nextDistillateModifiers(): Modifiers<NumericModifier> {
   visitUrl("inventory.php?action=distill&pwd");
   return distillateModifiers("nextDistillateMods");
 }
@@ -46,7 +47,7 @@ export function nextDistillateModifiers(): Modifiers {
 /**
  * @returns A `Modifiers` object that contains your current Distillate modifiers
  */
-export function currentDistillateModifiers(): Modifiers {
+export function currentDistillateModifiers(): Modifiers<NumericModifier> {
   return distillateModifiers("currentDistillateMods");
 }
 

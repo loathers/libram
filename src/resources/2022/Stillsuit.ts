@@ -126,20 +126,15 @@ function isStillsuitTag(tag: string): tag is StillsuitTag {
  * @param familiar The familiar in question
  * @returns An object whose keys are NumericModifiers potentially granted by the stillsuit distillate from this familiar, and whose values are the relative weights of those modifiers
  */
-export function modifierRatio(
-  familiar: Familiar,
-): Partial<Record<NumericModifier, number>> {
+export function modifierRatio(familiar: Familiar): Modifiers<NumericModifier> {
   const tags = getFamiliarTags(familiar);
-  return tags
-    .filter(isStillsuitTag)
-    .reduce<Partial<Record<NumericModifier, number>>>(
-      (acc, tag) => ({
-        ...acc,
-        [MODIFIER_TAGS[tag]]:
-          ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
-      }),
-      {},
-    );
+  return tags.filter(isStillsuitTag).reduce<Modifiers<NumericModifier>>(
+    (acc, tag) => ({
+      ...acc,
+      [MODIFIER_TAGS[tag]]: ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
+    }),
+    {},
+  );
 }
 
 /**

@@ -10,7 +10,7 @@ export const RINGS = Object.freeze([
   ["explosion", "clock", "yam4"],
 ] as const);
 
-export type MayamSymbol = (typeof RINGS)[number][number];
+export type Glyph = (typeof RINGS)[number][number];
 export type Ring<N extends number> = (typeof RINGS)[N][number];
 export type Combination = [Ring<0>, Ring<1>, Ring<2>, Ring<3>];
 export type CombinationString = `${Ring<0>} ${Ring<1>} ${Ring<2>} ${Ring<3>}`;
@@ -25,17 +25,17 @@ export function have(): boolean {
 /**
  * @returns The Mayam calendar symbols you've used so far today.
  */
-export function symbolsUsed(): MayamSymbol[] {
-  return get("_mayamSymbolsUsed").split(",") as MayamSymbol[];
+export function symbolsUsed(): Glyph[] {
+  return get("_mayamSymbolsUsed").split(",") as Glyph[];
 }
 
 /**
  * Determine whether a certain Mayam symbol is available for use today
  *
- * @param {MayamSymbol} symbol The symbol to check
+ * @param {Glyph} symbol The symbol to check
  * @returns Whether or not the given symbol is available for use
  */
-export function available(symbol: MayamSymbol): boolean;
+export function available(symbol: Glyph): boolean;
 /**
  * Determine whether a certain Mayam combination is available for use today
  *
@@ -46,10 +46,10 @@ export function available(...combination: Combination): boolean;
 /**
  * Determine whether certain Mayam symbols are available for use today
  *
- * @param {...MayamSymbol[]} symbols The symbols to check
+ * @param {...Glyph[]} symbols The symbols to check
  * @returns Whether or not the given symbols are all available for use
  */
-export function available(...symbols: MayamSymbol[]): boolean {
+export function available(...symbols: Glyph[]): boolean {
   return symbols.every((symbol) => !symbolsUsed().includes(symbol));
 }
 

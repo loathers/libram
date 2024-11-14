@@ -10654,9 +10654,51 @@ var import_kolmafia21 = require("kolmafia");
 
 // src/modifierTypes.ts
 init_kolmafia_polyfill();
-var stringModifiers = ["Class", "Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Effect", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Avatar", "Rollover Effect", "Skill", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie", "Plumber Stat", "Recipe", "Evaluated Modifiers"], booleanModifiers = ["Softcore Only", "Single Equip", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Attacks Can't Miss", "Pirate", "Breakable", "Drops Items", "Drops Meat", "Volleyball or Sombrero", "Extra Pickpocket", "Negative Status Resist"], numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water", "Spleen Drop", "Potion Drop", "Sauce Spell Damage", "Monster Level Percent", "Food Fairy", "Booze Fairy", "Candy Fairy", "Food Fairy Effectiveness", "Booze Fairy Effectiveness", "Candy Fairy Effectiveness", "Damage Aura", "Sporadic Damage Aura", "Thorns", "Sporadic Thorns", "Stomach Capacity", "Liver Capacity", "Spleen Capacity", "Free Rests", "Leaves", "Elf Warfare Effectiveness", "Pirate Warfare Effectiveness", "MPC Drop", "Piece of Twelve Drop", "Combat Item Damage Percent"];
+var stringModifiers = ["Class", "Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Effect", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Avatar", "Rollover Effect", "Skill", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie", "Plumber Stat", "Recipe", "Evaluated Modifiers"], stringModifiersSet = new Set(stringModifiers), booleanModifiers = ["Softcore Only", "Single Equip", "Always Fumble", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Randomly", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Alters Page Text", "Attacks Can't Miss", "Pirate", "Blind", "Breakable", "Drops Items", "Drops Meat", "Volleyball or Sombrero", "Extra Pickpocket", "Negative Status Resist"], booleanModifiersSet = new Set(booleanModifiers), numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water", "Spleen Drop", "Potion Drop", "Sauce Spell Damage", "Monster Level Percent", "Food Fairy", "Booze Fairy", "Candy Fairy", "Food Fairy Effectiveness", "Booze Fairy Effectiveness", "Candy Fairy Effectiveness", "Damage Aura", "Sporadic Damage Aura", "Thorns", "Sporadic Thorns", "Stomach Capacity", "Liver Capacity", "Spleen Capacity", "Free Rests", "Leaves", "Elf Warfare Effectiveness", "Pirate Warfare Effectiveness", "MPC Drop", "Piece of Twelve Drop", "Combat Item Damage Percent", "Avoid Attack", "Damage vs. Bugbears", "Damage vs. Werewolves", "Damage vs. Zombies", "Damage vs. Ghosts", "Damage vs. Vampires", "Damage vs. Skeletons", "Damage vs. Undead"], numericModifiersSet = new Set(numericModifiers);
 
 // src/modifier.ts
+function _slicedToArray6(r, e) {
+  return _arrayWithHoles6(r) || _iterableToArrayLimit6(r, e) || _unsupportedIterableToArray13(r, e) || _nonIterableRest6();
+}
+function _nonIterableRest6() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray13(r, a) {
+  if (r) {
+    if (typeof r == "string") return _arrayLikeToArray13(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray13(r, a) : void 0;
+  }
+}
+function _arrayLikeToArray13(r, a) {
+  (a == null || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
+function _iterableToArrayLimit6(r, l) {
+  var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
+  if (t != null) {
+    var e, n, i, u, a = [], f = !0, o = !1;
+    try {
+      if (i = (t = t.call(r)).next, l === 0) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0) ;
+    } catch (r2) {
+      o = !0, n = r2;
+    } finally {
+      try {
+        if (!f && t.return != null && (u = t.return(), Object(u) !== u)) return;
+      } finally {
+        if (o) throw n;
+      }
+    }
+    return a;
+  }
+}
+function _arrayWithHoles6(r) {
+  if (Array.isArray(r)) return r;
+}
 function ownKeys5(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -10695,23 +10737,32 @@ function _toPrimitive9(t, r) {
   }
   return (r === "string" ? String : Number)(t);
 }
+function isBooleanModifier(modifier) {
+  return booleanModifiersSet.has(modifier);
+}
+function isNumericModifier(modifier) {
+  return numericModifiersSet.has(modifier);
+}
+function isStringModifier(modifier) {
+  return stringModifiersSet.has(modifier);
+}
 function get2(name, subject) {
-  if (arrayContains(name, booleanModifiers))
+  if (isBooleanModifier(name))
     return subject === void 0 ? (0, import_kolmafia21.booleanModifier)(name) : (0, import_kolmafia21.booleanModifier)(subject, name);
-  if (arrayContains(name, numericModifiers))
+  if (isNumericModifier(name))
     return subject === void 0 ? (0, import_kolmafia21.numericModifier)(name) : (0, import_kolmafia21.numericModifier)(subject, name);
-  if (arrayContains(name, stringModifiers))
+  if (isStringModifier(name))
     return subject === void 0 ? (0, import_kolmafia21.stringModifier)(name) : (0, import_kolmafia21.stringModifier)(subject, name);
 }
 function pairwiseMerge(modifiers1, modifiers2) {
   var returnValue = _objectSpread5(_objectSpread5({}, modifiers1), modifiers2);
   for (var modifier in modifiers1)
     if (Array.from(Object.values(modifiers2)).includes(modifier)) {
-      if (arrayContains(modifier, numericModifiers)) {
+      if (isNumericModifier(modifier)) {
         var _modifiers1$modifier, _modifiers2$modifier;
         returnValue[modifier] = ((_modifiers1$modifier = modifiers1[modifier]) !== null && _modifiers1$modifier !== void 0 ? _modifiers1$modifier : 0) + ((_modifiers2$modifier = modifiers2[modifier]) !== null && _modifiers2$modifier !== void 0 ? _modifiers2$modifier : 0);
       }
-      if (arrayContains(modifier, booleanModifiers)) {
+      if (isBooleanModifier(modifier)) {
         var _modifiers1$modifier2, _modifiers2$modifier2;
         returnValue[modifier] = ((_modifiers1$modifier2 = modifiers1[modifier]) !== null && _modifiers1$modifier2 !== void 0 ? _modifiers1$modifier2 : !1) || ((_modifiers2$modifier2 = modifiers2[modifier]) !== null && _modifiers2$modifier2 !== void 0 ? _modifiers2$modifier2 : !1);
       }
@@ -10732,28 +10783,37 @@ function getTotalModifier(modifier) {
     return get2(modifier, subject);
   });
 }
+function parseModifiers(pref) {
+  var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$numeric = _ref.numeric, numeric = _ref$numeric === void 0 ? Number : _ref$numeric, _ref$str = _ref.str, str = _ref$str === void 0 ? String : _ref$str, _ref$bool = _ref.bool, bool = _ref$bool === void 0 ? function(val) {
+    return val === "true";
+  } : _ref$bool;
+  return Object.entries((0, import_kolmafia21.splitModifiers)((0, import_kolmafia21.getProperty)(pref))).reduce(function(acc, _ref2) {
+    var _ref3 = _slicedToArray6(_ref2, 2), key = _ref3[0], value = _ref3[1];
+    return _objectSpread5(_objectSpread5({}, acc), {}, _defineProperty8({}, key, isBooleanModifier(key) ? bool(value) : isNumericModifier(key) ? numeric(value) : str(value)));
+  }, {});
+}
 
 // src/resources/2013/Florist.ts
 function _toConsumableArray11(r) {
-  return _arrayWithoutHoles11(r) || _iterableToArray11(r) || _unsupportedIterableToArray13(r) || _nonIterableSpread11();
+  return _arrayWithoutHoles11(r) || _iterableToArray11(r) || _unsupportedIterableToArray14(r) || _nonIterableSpread11();
 }
 function _nonIterableSpread11() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray13(r, a) {
+function _unsupportedIterableToArray14(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray13(r, a);
+    if (typeof r == "string") return _arrayLikeToArray14(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray13(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray14(r, a) : void 0;
   }
 }
 function _iterableToArray11(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles11(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray13(r);
+  if (Array.isArray(r)) return _arrayLikeToArray14(r);
 }
-function _arrayLikeToArray13(r, a) {
+function _arrayLikeToArray14(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -10973,25 +11033,25 @@ __export(JungMan_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia23 = require("kolmafia");
 var _templateObject120, _templateObject229, _templateObject327, _templateObject426, _templateObject516, _templateObject613, _templateObject710, _templateObject810;
-function _slicedToArray6(r, e) {
-  return _arrayWithHoles6(r) || _iterableToArrayLimit6(r, e) || _unsupportedIterableToArray14(r, e) || _nonIterableRest6();
+function _slicedToArray7(r, e) {
+  return _arrayWithHoles7(r) || _iterableToArrayLimit7(r, e) || _unsupportedIterableToArray15(r, e) || _nonIterableRest7();
 }
-function _nonIterableRest6() {
+function _nonIterableRest7() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray14(r, a) {
+function _unsupportedIterableToArray15(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray14(r, a);
+    if (typeof r == "string") return _arrayLikeToArray15(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray14(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray15(r, a) : void 0;
   }
 }
-function _arrayLikeToArray14(r, a) {
+function _arrayLikeToArray15(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit6(r, l) {
+function _iterableToArrayLimit7(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -11012,7 +11072,7 @@ function _iterableToArrayLimit6(r, l) {
     return a;
   }
 }
-function _arrayWithHoles6(r) {
+function _arrayWithHoles7(r) {
   if (Array.isArray(r)) return r;
 }
 function _defineProperty10(e, r, t) {
@@ -11043,7 +11103,7 @@ var Jar = /* @__PURE__ */ function(Jar2) {
   return Jar2.SUSPICIOUS_GUY = "susguy", Jar2.GOURD_CAPTAIN = "gourdcaptain", Jar2.CRACKPOT_MYSTIC = "mystic", Jar2.OLD_MAN = "oldman", Jar2.PRETENTIOUS_ARTIST = "artist", Jar2.MEATSMITH = "meatsmith", Jar2.JICK = "jick", Jar2;
 }({}), PLACES = _defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10({}, Jar.PRETENTIOUS_ARTIST, ["place", "town_wrong"]), Jar.GOURD_CAPTAIN, ["place", "town_right"]), Jar.CRACKPOT_MYSTIC, ["shop", "mystic"]), Jar.OLD_MAN, ["place", "sea_oldman"]), Jar.MEATSMITH, ["shop", "meatsmith"]), Jar.JICK, ["showplayer", "1"]), Jar.SUSPICIOUS_GUY, ["tavern"]), JAR_ITEMS = _defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10(_defineProperty10({}, Jar.SUSPICIOUS_GUY, $item(_templateObject229 || (_templateObject229 = _taggedTemplateLiteral16(["jar of psychoses (The Suspicious-Looking Guy)"])))), Jar.GOURD_CAPTAIN, $item(_templateObject327 || (_templateObject327 = _taggedTemplateLiteral16(["jar of psychoses (The Captain of the Gourd)"])))), Jar.CRACKPOT_MYSTIC, $item(_templateObject426 || (_templateObject426 = _taggedTemplateLiteral16(["jar of psychoses (The Crackpot Mystic)"])))), Jar.OLD_MAN, $item(_templateObject516 || (_templateObject516 = _taggedTemplateLiteral16(["jar of psychoses (The Old Man)"])))), Jar.PRETENTIOUS_ARTIST, $item(_templateObject613 || (_templateObject613 = _taggedTemplateLiteral16(["jar of psychoses (The Pretentious Artist)"])))), Jar.MEATSMITH, $item(_templateObject710 || (_templateObject710 = _taggedTemplateLiteral16(["jar of psychoses (The Meatsmith)"])))), Jar.JICK, $item(_templateObject810 || (_templateObject810 = _taggedTemplateLiteral16(["jar of psychoses (Jick)"]))));
 function getJungUrl(jar) {
-  var _PLACES$jar = _slicedToArray6(PLACES[jar], 2), page = _PLACES$jar[0], answer = _PLACES$jar[1], question = page === "showplayer" ? "who" : "which".concat(page), params = [["action", "jung"], ["whichperson", jar]];
+  var _PLACES$jar = _slicedToArray7(PLACES[jar], 2), page = _PLACES$jar[0], answer = _PLACES$jar[1], question = page === "showplayer" ? "who" : "which".concat(page), params = [["action", "jung"], ["whichperson", jar]];
   return answer && params.push([question, answer]), "".concat(page, ".php?").concat(params.map(function(pair) {
     return pair.join("=");
   }).join("&"));
@@ -11313,25 +11373,25 @@ __export(DNALab_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia26 = require("kolmafia");
 var _templateObject129, _templateObject237, _templateObject330, _templateObject429, _templateObject518, _templateObject615, _templateObject712, _templateObject812, _templateObject911, _templateObject1011, _templateObject1111, _templateObject1210, _templateObject138, _templateObject147, _templateObject157, _templateObject167, _templateObject177, _templateObject187, _templateObject197, _templateObject207, _templateObject2111, _templateObject2210, _templateObject238, _templateObject247, _templateObject257, _templateObject266, _templateObject276, _templateObject286, _templateObject296, _templateObject306, _templateObject3111, _templateObject3210, _templateObject336, _templateObject346, _templateObject356, _templateObject366, _templateObject376, _templateObject386, _templateObject396, _templateObject406, _templateObject4110, _templateObject4210, _templateObject436, _templateObject446, _templateObject455, _templateObject464, _templateObject474, _templateObject484, _templateObject494, _templateObject503, _templateObject519, _templateObject523, _templateObject533, _templateObject543, _templateObject553, _templateObject563, _templateObject573, _templateObject583, _templateObject593, _templateObject603, _templateObject616, _templateObject623, _templateObject633, _templateObject643, _templateObject653, _templateObject663, _templateObject673, _templateObject683, _templateObject693, _templateObject702, _templateObject713, _templateObject723, _templateObject733, _templateObject743, _templateObject753, _templateObject763, _templateObject773, _templateObject783, _templateObject792, _templateObject802, _templateObject813, _templateObject823, _templateObject833, _templateObject843, _templateObject853;
-function _slicedToArray7(r, e) {
-  return _arrayWithHoles7(r) || _iterableToArrayLimit7(r, e) || _unsupportedIterableToArray15(r, e) || _nonIterableRest7();
+function _slicedToArray8(r, e) {
+  return _arrayWithHoles8(r) || _iterableToArrayLimit8(r, e) || _unsupportedIterableToArray16(r, e) || _nonIterableRest8();
 }
-function _nonIterableRest7() {
+function _nonIterableRest8() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray15(r, a) {
+function _unsupportedIterableToArray16(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray15(r, a);
+    if (typeof r == "string") return _arrayLikeToArray16(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray15(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray16(r, a) : void 0;
   }
 }
-function _arrayLikeToArray15(r, a) {
+function _arrayLikeToArray16(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit7(r, l) {
+function _iterableToArrayLimit8(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -11352,7 +11412,7 @@ function _iterableToArrayLimit7(r, l) {
     return a;
   }
 }
-function _arrayWithHoles7(r) {
+function _arrayWithHoles8(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral19(e, t) {
@@ -11382,13 +11442,13 @@ function getEffect2(phylum) {
 function phylumFor(dnatype) {
   if (dnatype instanceof import_kolmafia26.Effect) {
     var phylumPair = Array.from(phylaEffects.entries()).find(function(_ref) {
-      var _ref2 = _slicedToArray7(_ref, 2), effect2 = _ref2[1];
+      var _ref2 = _slicedToArray8(_ref, 2), effect2 = _ref2[1];
       return effect2 === dnatype;
     });
     return phylumPair ? phylumPair[0] : null;
   } else {
     var _phylumPair = Array.from(phylaTonics.entries()).find(function(_ref3) {
-      var _ref4 = _slicedToArray7(_ref3, 2), tonic = _ref4[1];
+      var _ref4 = _slicedToArray8(_ref3, 2), tonic = _ref4[1];
       return tonic === dnatype;
     });
     return _phylumPair ? _phylumPair[0] : null;
@@ -11686,7 +11746,7 @@ var _templateObject140, _templateObject240, _templateObject337, _templateObject4
 function _createForOfIteratorHelper6(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray16(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray17(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -11714,14 +11774,14 @@ function _createForOfIteratorHelper6(r, e) {
     }
   } };
 }
-function _unsupportedIterableToArray16(r, a) {
+function _unsupportedIterableToArray17(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray16(r, a);
+    if (typeof r == "string") return _arrayLikeToArray17(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray16(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray17(r, a) : void 0;
   }
 }
-function _arrayLikeToArray16(r, a) {
+function _arrayLikeToArray17(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -12066,7 +12126,7 @@ var _templateObject150, _templateObject250, _templateObject340, _templateObject4
 function _createForOfIteratorHelper7(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray17(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray18(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -12094,14 +12154,14 @@ function _createForOfIteratorHelper7(r, e) {
     }
   } };
 }
-function _unsupportedIterableToArray17(r, a) {
+function _unsupportedIterableToArray18(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray17(r, a);
+    if (typeof r == "string") return _arrayLikeToArray18(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray17(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray18(r, a) : void 0;
   }
 }
-function _arrayLikeToArray17(r, a) {
+function _arrayLikeToArray18(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -12341,66 +12401,56 @@ __export(MummingTrunk_exports, {
 });
 init_kolmafia_polyfill();
 var import_kolmafia36 = require("kolmafia");
-function _createForOfIteratorHelper8(r, e) {
-  var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
-  if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray18(r)) || e && r && typeof r.length == "number") {
-      t && (r = t);
-      var _n = 0, F = function() {
-      };
-      return { s: F, n: function() {
-        return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] };
-      }, e: function(r2) {
-        throw r2;
-      }, f: F };
-    }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  var o, a = !0, u = !1;
-  return { s: function() {
-    t = t.call(r);
-  }, n: function() {
-    var r2 = t.next();
-    return a = r2.done, r2;
-  }, e: function(r2) {
-    u = !0, o = r2;
-  }, f: function() {
-    try {
-      a || t.return == null || t.return();
-    } finally {
-      if (u) throw o;
-    }
-  } };
+function _slicedToArray9(r, e) {
+  return _arrayWithHoles9(r) || _iterableToArrayLimit9(r, e) || _unsupportedIterableToArray19(r, e) || _nonIterableRest9();
 }
-function _unsupportedIterableToArray18(r, a) {
+function _nonIterableRest9() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray19(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray18(r, a);
+    if (typeof r == "string") return _arrayLikeToArray19(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray18(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray19(r, a) : void 0;
   }
 }
-function _arrayLikeToArray18(r, a) {
+function _arrayLikeToArray19(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function toModifier2(input) {
-  var regExp = new RegExp(/Experience \((.*?)\)/), matcher = input.match(regExp);
-  return matcher ? "".concat(matcher[2], " Experience") : input;
-}
-function currentCostumes() {
-  var entries = get("_mummeryMods").split(","), returnValue = /* @__PURE__ */ new Map(), regExp = new RegExp(/([^:]+): \[(\d+)\*fam\(([^)]+)\)\]/), _iterator = _createForOfIteratorHelper8(entries), _step;
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var entry = _step.value, matcher = entry.match(regExp);
-      matcher && returnValue.set((0, import_kolmafia36.toFamiliar)(matcher[3]), [toModifier2(matcher[1]), parseInt(matcher[2])]);
+function _iterableToArrayLimit9(r, l) {
+  var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
+  if (t != null) {
+    var e, n, i, u, a = [], f = !0, o = !1;
+    try {
+      if (i = (t = t.call(r)).next, l === 0) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0) ;
+    } catch (r2) {
+      o = !0, n = r2;
+    } finally {
+      try {
+        if (!f && t.return != null && (u = t.return(), Object(u) !== u)) return;
+      } finally {
+        if (o) throw n;
+      }
     }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
+    return a;
   }
-  return returnValue;
+}
+function _arrayWithHoles9(r) {
+  if (Array.isArray(r)) return r;
+}
+var MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\([^)]*\)/;
+function currentCostumes() {
+  return new Map(Object.entries((0, import_kolmafia36.splitModifiers)(get("_mummeryMods"))).map(function(_ref) {
+    var _ref2 = _slicedToArray9(_ref, 2), modifier = _ref2[0], value = _ref2[1];
+    if (!isNumericModifier(modifier)) return null;
+    var matcher = value.match(MUMMERY_MODS_PATTERN);
+    return matcher ? [import_kolmafia36.Familiar.get(matcher[1]), [modifier, Number(matcher[2])]] : null;
+  }).filter(notNull));
 }
 
 // src/resources/2017/Pantogram.ts
@@ -12425,25 +12475,25 @@ __export(Pantogram_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia37 = require("kolmafia");
 var _templateObject160, _templateObject251, _templateObject341, _templateObject440, _templateObject526, _templateObject621, _templateObject718, _templateObject818, _templateObject916, _templateObject1015, _templateObject1114, _templateObject1213, _templateObject1312, _templateObject1411, _templateObject1510, _templateObject1610, _templateObject1710, _templateObject1810, _MiddleSacrifice, _templateObject1910, _templateObject2010, _templateObject2114, _templateObject2213, _templateObject2312, _templateObject2411, _templateObject2510, _templateObject269, _templateObject279, _templateObject287, _RightSacrifice;
-function _slicedToArray8(r, e) {
-  return _arrayWithHoles8(r) || _iterableToArrayLimit8(r, e) || _unsupportedIterableToArray19(r, e) || _nonIterableRest8();
+function _slicedToArray10(r, e) {
+  return _arrayWithHoles10(r) || _iterableToArrayLimit10(r, e) || _unsupportedIterableToArray20(r, e) || _nonIterableRest10();
 }
-function _nonIterableRest8() {
+function _nonIterableRest10() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray19(r, a) {
+function _unsupportedIterableToArray20(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray19(r, a);
+    if (typeof r == "string") return _arrayLikeToArray20(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray19(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray20(r, a) : void 0;
   }
 }
-function _arrayLikeToArray19(r, a) {
+function _arrayLikeToArray20(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit8(r, l) {
+function _iterableToArrayLimit10(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -12464,7 +12514,7 @@ function _iterableToArrayLimit8(r, l) {
     return a;
   }
 }
-function _arrayWithHoles8(r) {
+function _arrayWithHoles10(r) {
   if (Array.isArray(r)) return r;
 }
 function _defineProperty13(e, r, t) {
@@ -12509,21 +12559,21 @@ function getRightSacPair(mod) {
 function findRequirements(modifiers) {
   var leftSac = modifiers.leftSac, rightSac = modifiers.rightSac, middleSac = modifiers.middleSac, returnValue = /* @__PURE__ */ new Map();
   if (leftSac) {
-    var _getLeftSacPair = getLeftSacPair(leftSac), _getLeftSacPair2 = _slicedToArray8(_getLeftSacPair, 2), sacrifice = _getLeftSacPair2[0], quantity = _getLeftSacPair2[1];
+    var _getLeftSacPair = getLeftSacPair(leftSac), _getLeftSacPair2 = _slicedToArray10(_getLeftSacPair, 2), sacrifice = _getLeftSacPair2[0], quantity = _getLeftSacPair2[1];
     sacrifice instanceof import_kolmafia37.Item && returnValue.set(sacrifice, quantity);
   }
   if (rightSac) {
-    var _getRightSacPair = getRightSacPair(rightSac), _getRightSacPair2 = _slicedToArray8(_getRightSacPair, 2), _sacrifice = _getRightSacPair2[0], _quantity = _getRightSacPair2[1];
+    var _getRightSacPair = getRightSacPair(rightSac), _getRightSacPair2 = _slicedToArray10(_getRightSacPair, 2), _sacrifice = _getRightSacPair2[0], _quantity = _getRightSacPair2[1];
     _sacrifice instanceof import_kolmafia37.Item && returnValue.set(_sacrifice, _quantity);
   }
   if (middleSac) {
-    var _getMiddleSacPair = getMiddleSacPair(middleSac), _getMiddleSacPair2 = _slicedToArray8(_getMiddleSacPair, 2), _sacrifice2 = _getMiddleSacPair2[0], _quantity2 = _getMiddleSacPair2[1];
+    var _getMiddleSacPair = getMiddleSacPair(middleSac), _getMiddleSacPair2 = _slicedToArray10(_getMiddleSacPair, 2), _sacrifice2 = _getMiddleSacPair2[0], _quantity2 = _getMiddleSacPair2[1];
     _sacrifice2 instanceof import_kolmafia37.Item && returnValue.set(_sacrifice2, _quantity2);
   }
   return returnValue;
 }
 function sacrificePairToURL(pair) {
-  var _pair = _slicedToArray8(pair, 2), rawSacrifice = _pair[0], quantity = _pair[1], sacrifice = rawSacrifice instanceof import_kolmafia37.Item ? rawSacrifice.id : rawSacrifice;
+  var _pair = _slicedToArray10(pair, 2), rawSacrifice = _pair[0], quantity = _pair[1], sacrifice = rawSacrifice instanceof import_kolmafia37.Item ? rawSacrifice.id : rawSacrifice;
   return "".concat(sacrifice, ",").concat(quantity);
 }
 function makePants(alignment, element, leftSac, middleSac, rightSac) {
@@ -12536,7 +12586,7 @@ function makePants(alignment, element, leftSac, middleSac, rightSac) {
     middleSac: middleSac
   });
   if (Array.from(requirements.entries()).some(function(_ref) {
-    var _ref2 = _slicedToArray8(_ref, 2), item13 = _ref2[0], quantity = _ref2[1];
+    var _ref2 = _slicedToArray10(_ref, 2), item13 = _ref2[0], quantity = _ref2[1];
     return !have(item13, quantity);
   }))
     return !1;
@@ -12579,25 +12629,25 @@ init_kolmafia_polyfill();
 var import_kolmafia38 = require("kolmafia");
 var _templateObject161, _templateObject260, _templateObject347, _templateObject441, _templateObject527, _templateObject624, _templateObject719, _templateObject819, _templateObject917, _templateObject1016, _templateObject1115, _templateObject1214, _templateObject1313, _templateObject1412, _templateObject1511, _templateObject1611, _templateObject1711, _templateObject1811, _templateObject1911, _templateObject2011, _templateObject2115, _templateObject2214, _templateObject2313, _templateObject2412, _templateObject2511, _templateObject2610, _templateObject2710, _templateObject288, _templateObject297, _templateObject307, _templateObject3112, _templateObject3211, _templateObject3310, _templateObject348, _templateObject357, _templateObject367, _templateObject377;
 function _toConsumableArray12(r) {
-  return _arrayWithoutHoles12(r) || _iterableToArray12(r) || _unsupportedIterableToArray20(r) || _nonIterableSpread12();
+  return _arrayWithoutHoles12(r) || _iterableToArray12(r) || _unsupportedIterableToArray21(r) || _nonIterableSpread12();
 }
 function _nonIterableSpread12() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray20(r, a) {
+function _unsupportedIterableToArray21(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray20(r, a);
+    if (typeof r == "string") return _arrayLikeToArray21(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray20(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray21(r, a) : void 0;
   }
 }
 function _iterableToArray12(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles12(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray20(r);
+  if (Array.isArray(r)) return _arrayLikeToArray21(r);
 }
-function _arrayLikeToArray20(r, a) {
+function _arrayLikeToArray21(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -12718,25 +12768,25 @@ __export(Spacegate_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia39 = require("kolmafia");
 var _templateObject170, _templateObject261, _templateObject349, _templateObject447, _templateObject528;
-function _slicedToArray9(r, e) {
-  return _arrayWithHoles9(r) || _iterableToArrayLimit9(r, e) || _unsupportedIterableToArray21(r, e) || _nonIterableRest9();
+function _slicedToArray11(r, e) {
+  return _arrayWithHoles11(r) || _iterableToArrayLimit11(r, e) || _unsupportedIterableToArray22(r, e) || _nonIterableRest11();
 }
-function _nonIterableRest9() {
+function _nonIterableRest11() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray21(r, a) {
+function _unsupportedIterableToArray22(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray21(r, a);
+    if (typeof r == "string") return _arrayLikeToArray22(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray21(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray22(r, a) : void 0;
   }
 }
-function _arrayLikeToArray21(r, a) {
+function _arrayLikeToArray22(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit9(r, l) {
+function _iterableToArrayLimit11(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -12757,7 +12807,7 @@ function _iterableToArrayLimit9(r, l) {
     return a;
   }
 }
-function _arrayWithHoles9(r) {
+function _arrayWithHoles11(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral30(e, t) {
@@ -12811,10 +12861,10 @@ function hazardEquipment(hazards2) {
     "high winds": $item(_templateObject528 || (_templateObject528 = _taggedTemplateLiteral30(["high-friction boots"])))
   };
   return Object.entries(hazardEquipment2).filter(function(_ref) {
-    var _ref2 = _slicedToArray9(_ref, 1), clue = _ref2[0];
+    var _ref2 = _slicedToArray11(_ref, 1), clue = _ref2[0];
     return hazards2.includes(clue);
   }).map(function(_ref3) {
-    var _ref4 = _slicedToArray9(_ref3, 2), item13 = _ref4[1];
+    var _ref4 = _slicedToArray11(_ref3, 2), item13 = _ref4[1];
     return item13;
   });
 }
@@ -13691,13 +13741,13 @@ __export(Snapper_exports, {
 });
 init_kolmafia_polyfill();
 var import_kolmafia47 = require("kolmafia");
-function _slicedToArray10(r, e) {
-  return _arrayWithHoles10(r) || _iterableToArrayLimit10(r, e) || _unsupportedIterableToArray22(r, e) || _nonIterableRest10();
+function _slicedToArray12(r, e) {
+  return _arrayWithHoles12(r) || _iterableToArrayLimit12(r, e) || _unsupportedIterableToArray23(r, e) || _nonIterableRest12();
 }
-function _nonIterableRest10() {
+function _nonIterableRest12() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit10(r, l) {
+function _iterableToArrayLimit12(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -13718,35 +13768,35 @@ function _iterableToArrayLimit10(r, l) {
     return a;
   }
 }
-function _arrayWithHoles10(r) {
+function _arrayWithHoles12(r) {
   if (Array.isArray(r)) return r;
 }
 function _toConsumableArray13(r) {
-  return _arrayWithoutHoles13(r) || _iterableToArray13(r) || _unsupportedIterableToArray22(r) || _nonIterableSpread13();
+  return _arrayWithoutHoles13(r) || _iterableToArray13(r) || _unsupportedIterableToArray23(r) || _nonIterableSpread13();
 }
 function _nonIterableSpread13() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray22(r, a) {
+function _unsupportedIterableToArray23(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray22(r, a);
+    if (typeof r == "string") return _arrayLikeToArray23(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray22(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray23(r, a) : void 0;
   }
 }
 function _iterableToArray13(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles13(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray22(r);
+  if (Array.isArray(r)) return _arrayLikeToArray23(r);
 }
-function _arrayLikeToArray22(r, a) {
+function _arrayLikeToArray23(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
 var familiar7 = import_kolmafia47.Familiar.get("Red-Nosed Snapper"), phylumItem = /* @__PURE__ */ new Map([[import_kolmafia47.Phylum.get("beast"), import_kolmafia47.Item.get("patch of extra-warm fur")], [import_kolmafia47.Phylum.get("bug"), import_kolmafia47.Item.get("a bug's lymph")], [import_kolmafia47.Phylum.get("constellation"), import_kolmafia47.Item.get("micronova")], [import_kolmafia47.Phylum.get("construct"), import_kolmafia47.Item.get("industrial lubricant")], [import_kolmafia47.Phylum.get("demon"), import_kolmafia47.Item.get("infernal snowball")], [import_kolmafia47.Phylum.get("dude"), import_kolmafia47.Item.get("human musk")], [import_kolmafia47.Phylum.get("elemental"), import_kolmafia47.Item.get("livid energy")], [import_kolmafia47.Phylum.get("elf"), import_kolmafia47.Item.get("peppermint syrup")], [import_kolmafia47.Phylum.get("fish"), import_kolmafia47.Item.get("fish sauce")], [import_kolmafia47.Phylum.get("goblin"), import_kolmafia47.Item.get("guffin")], [import_kolmafia47.Phylum.get("hippy"), import_kolmafia47.Item.get("organic potpourri")], [import_kolmafia47.Phylum.get("hobo"), import_kolmafia47.Item.get("beggin' cologne")], [import_kolmafia47.Phylum.get("horror"), import_kolmafia47.Item.get("powdered madness")], [import_kolmafia47.Phylum.get("humanoid"), import_kolmafia47.Item.get("vial of humanoid growth hormone")], [import_kolmafia47.Phylum.get("mer-kin"), import_kolmafia47.Item.get("Mer-kin eyedrops")], [import_kolmafia47.Phylum.get("orc"), import_kolmafia47.Item.get("boot flask")], [import_kolmafia47.Phylum.get("penguin"), import_kolmafia47.Item.get("envelope full of Meat")], [import_kolmafia47.Phylum.get("pirate"), import_kolmafia47.Item.get("Shantix\u2122")], [import_kolmafia47.Phylum.get("plant"), import_kolmafia47.Item.get("goodberry")], [import_kolmafia47.Phylum.get("slime"), import_kolmafia47.Item.get("extra-strength goo")], [import_kolmafia47.Phylum.get("undead"), import_kolmafia47.Item.get("unfinished pleasure")], [import_kolmafia47.Phylum.get("weird"), import_kolmafia47.Item.get("non-Euclidean angle")]]), itemPhylum = new Map(_toConsumableArray13(phylumItem).map(function(_ref) {
-  var _ref2 = _slicedToArray10(_ref, 2), phylum = _ref2[0], item13 = _ref2[1];
+  var _ref2 = _slicedToArray12(_ref, 2), phylum = _ref2[0], item13 = _ref2[1];
   return [item13, phylum];
 }));
 function have32() {
@@ -13902,13 +13952,13 @@ __export(Guzzlr_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia49 = require("kolmafia");
 var _templateObject291, _templateObject299, _templateObject361, _templateObject451, _templateObject531, _templateObject627, _templateObject724, _templateObject824, _templateObject920, _templateObject1019, _templateObject1118, _templateObject1217, _templateObject1316;
-function _slicedToArray11(r, e) {
-  return _arrayWithHoles11(r) || _iterableToArrayLimit11(r, e) || _unsupportedIterableToArray23(r, e) || _nonIterableRest11();
+function _slicedToArray13(r, e) {
+  return _arrayWithHoles13(r) || _iterableToArrayLimit13(r, e) || _unsupportedIterableToArray24(r, e) || _nonIterableRest13();
 }
-function _nonIterableRest11() {
+function _nonIterableRest13() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit11(r, l) {
+function _iterableToArrayLimit13(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -13929,29 +13979,29 @@ function _iterableToArrayLimit11(r, l) {
     return a;
   }
 }
-function _arrayWithHoles11(r) {
+function _arrayWithHoles13(r) {
   if (Array.isArray(r)) return r;
 }
 function _toConsumableArray14(r) {
-  return _arrayWithoutHoles14(r) || _iterableToArray14(r) || _unsupportedIterableToArray23(r) || _nonIterableSpread14();
+  return _arrayWithoutHoles14(r) || _iterableToArray14(r) || _unsupportedIterableToArray24(r) || _nonIterableSpread14();
 }
 function _nonIterableSpread14() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray23(r, a) {
+function _unsupportedIterableToArray24(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray23(r, a);
+    if (typeof r == "string") return _arrayLikeToArray24(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray23(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray24(r, a) : void 0;
   }
 }
 function _iterableToArray14(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles14(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray23(r);
+  if (Array.isArray(r)) return _arrayLikeToArray24(r);
 }
-function _arrayLikeToArray23(r, a) {
+function _arrayLikeToArray24(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -14052,7 +14102,7 @@ function getCheapestPlatinumCocktail() {
       return (0, import_kolmafia49.mallPrice)(item13);
     })));
   }, !0)[1] : maxBy(Array.from(ingredientToPlatinumCocktail), function(_ref) {
-    var _ref2 = _slicedToArray11(_ref, 2), cocktail = _ref2[1];
+    var _ref2 = _slicedToArray13(_ref, 2), cocktail = _ref2[1];
     return (0, import_kolmafia49.mallPrice)(cocktail);
   })[1];
 }
@@ -14100,25 +14150,25 @@ init_kolmafia_polyfill();
 var import_kolmafia50 = require("kolmafia");
 var _templateObject300, _templateObject2100, _templateObject369, _templateObject457, _templateObject535, _templateObject628, _templateObject725;
 function _toConsumableArray15(r) {
-  return _arrayWithoutHoles15(r) || _iterableToArray15(r) || _unsupportedIterableToArray24(r) || _nonIterableSpread15();
+  return _arrayWithoutHoles15(r) || _iterableToArray15(r) || _unsupportedIterableToArray25(r) || _nonIterableSpread15();
 }
 function _nonIterableSpread15() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray24(r, a) {
+function _unsupportedIterableToArray25(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray24(r, a);
+    if (typeof r == "string") return _arrayLikeToArray25(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray24(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray25(r, a) : void 0;
   }
 }
 function _iterableToArray15(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles15(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray24(r);
+  if (Array.isArray(r)) return _arrayLikeToArray25(r);
 }
-function _arrayLikeToArray24(r, a) {
+function _arrayLikeToArray25(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -14241,25 +14291,25 @@ __export(CrystalBall_exports, {
 });
 init_kolmafia_polyfill();
 var import_kolmafia51 = require("kolmafia");
-function _slicedToArray12(r, e) {
-  return _arrayWithHoles12(r) || _iterableToArrayLimit12(r, e) || _unsupportedIterableToArray25(r, e) || _nonIterableRest12();
+function _slicedToArray14(r, e) {
+  return _arrayWithHoles14(r) || _iterableToArrayLimit14(r, e) || _unsupportedIterableToArray26(r, e) || _nonIterableRest14();
 }
-function _nonIterableRest12() {
+function _nonIterableRest14() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray25(r, a) {
+function _unsupportedIterableToArray26(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray25(r, a);
+    if (typeof r == "string") return _arrayLikeToArray26(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray25(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray26(r, a) : void 0;
   }
 }
-function _arrayLikeToArray25(r, a) {
+function _arrayLikeToArray26(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit12(r, l) {
+function _iterableToArrayLimit14(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -14280,7 +14330,7 @@ function _iterableToArrayLimit12(r, l) {
     return a;
   }
 }
-function _arrayWithHoles12(r) {
+function _arrayWithHoles14(r) {
   if (Array.isArray(r)) return r;
 }
 var orb = import_kolmafia51.Item.get("miniature crystal ball");
@@ -14293,7 +14343,7 @@ var parsedProp = function() {
   }).filter(function(tuple2) {
     return tuple2.length === 3;
   }).map(function(_ref) {
-    var _ref2 = _slicedToArray12(_ref, 3), location = _ref2[1], monster = _ref2[2];
+    var _ref2 = _slicedToArray14(_ref, 3), location = _ref2[1], monster = _ref2[2];
     return [(0, import_kolmafia51.toLocation)(location), (0, import_kolmafia51.toMonster)(monster)];
   });
 }, getLastPondered = function() {
@@ -14571,25 +14621,25 @@ __export(CombatLoversLocket_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia54 = require("kolmafia");
 var _templateObject371;
-function _slicedToArray13(r, e) {
-  return _arrayWithHoles13(r) || _iterableToArrayLimit13(r, e) || _unsupportedIterableToArray26(r, e) || _nonIterableRest13();
+function _slicedToArray15(r, e) {
+  return _arrayWithHoles15(r) || _iterableToArrayLimit15(r, e) || _unsupportedIterableToArray27(r, e) || _nonIterableRest15();
 }
-function _nonIterableRest13() {
+function _nonIterableRest15() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray26(r, a) {
+function _unsupportedIterableToArray27(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray26(r, a);
+    if (typeof r == "string") return _arrayLikeToArray27(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray26(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray27(r, a) : void 0;
   }
 }
-function _arrayLikeToArray26(r, a) {
+function _arrayLikeToArray27(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit13(r, l) {
+function _iterableToArrayLimit15(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -14610,7 +14660,7 @@ function _iterableToArrayLimit13(r, l) {
     return a;
   }
 }
-function _arrayWithHoles13(r) {
+function _arrayWithHoles15(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral42(e, t) {
@@ -14622,16 +14672,16 @@ function have39() {
 }
 function availableLocketMonsters() {
   return reminiscesLeft() === 0 ? [] : Object.entries((0, import_kolmafia54.getLocketMonsters)()).filter(function(_ref) {
-    var _ref2 = _slicedToArray13(_ref, 2), unused = _ref2[1];
+    var _ref2 = _slicedToArray15(_ref, 2), unused = _ref2[1];
     return unused;
   }).map(function(_ref3) {
-    var _ref4 = _slicedToArray13(_ref3, 1), name = _ref4[0];
+    var _ref4 = _slicedToArray15(_ref3, 1), name = _ref4[0];
     return (0, import_kolmafia54.toMonster)(name);
   });
 }
 function unlockedLocketMonsters() {
   return Object.entries((0, import_kolmafia54.getLocketMonsters)()).map(function(_ref5) {
-    var _ref6 = _slicedToArray13(_ref5, 1), name = _ref6[0];
+    var _ref6 = _slicedToArray15(_ref5, 1), name = _ref6[0];
     return (0, import_kolmafia54.toMonster)(name);
   });
 }
@@ -15307,25 +15357,25 @@ __export(AprilingBandHelmet_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia63 = require("kolmafia");
 var _templateObject401;
-function _slicedToArray14(r, e) {
-  return _arrayWithHoles14(r) || _iterableToArrayLimit14(r, e) || _unsupportedIterableToArray27(r, e) || _nonIterableRest14();
+function _slicedToArray16(r, e) {
+  return _arrayWithHoles16(r) || _iterableToArrayLimit16(r, e) || _unsupportedIterableToArray28(r, e) || _nonIterableRest16();
 }
-function _nonIterableRest14() {
+function _nonIterableRest16() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray27(r, a) {
+function _unsupportedIterableToArray28(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray27(r, a);
+    if (typeof r == "string") return _arrayLikeToArray28(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray27(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray28(r, a) : void 0;
   }
 }
-function _arrayLikeToArray27(r, a) {
+function _arrayLikeToArray28(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit14(r, l) {
+function _iterableToArrayLimit16(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -15346,7 +15396,7 @@ function _iterableToArrayLimit14(r, l) {
     return a;
   }
 }
-function _arrayWithHoles14(r) {
+function _arrayWithHoles16(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral50(e, t) {
@@ -15369,7 +15419,7 @@ function canJoinSection() {
 function makeConductFunction(mafiaClass, canDo, set3, offset) {
   return function(input) {
     if (!canDo()) return !1;
-    var _ref = typeof input == "string" ? [input, mafiaClass.get(input)] : [input.name, input], _ref2 = _slicedToArray14(_ref, 2), name = _ref2[0], instance = _ref2[1];
+    var _ref = typeof input == "string" ? [input, mafiaClass.get(input)] : [input.name, input], _ref2 = _slicedToArray16(_ref, 2), name = _ref2[0], instance = _ref2[1];
     if (have(instance)) return !0;
     var key = set3.indexOf(name);
     return key === -1 ? !1 : (visitConduct(), (0, import_kolmafia63.runChoice)(key + offset), (0, import_kolmafia63.runChoice)(9), have(instance));
@@ -15428,25 +15478,25 @@ __export(ChestMimic_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia64 = require("kolmafia");
 var _templateObject408, _templateObject2108, _templateObject3101, _templateObject467;
-function _slicedToArray15(r, e) {
-  return _arrayWithHoles15(r) || _iterableToArrayLimit15(r, e) || _unsupportedIterableToArray28(r, e) || _nonIterableRest15();
+function _slicedToArray17(r, e) {
+  return _arrayWithHoles17(r) || _iterableToArrayLimit17(r, e) || _unsupportedIterableToArray29(r, e) || _nonIterableRest17();
 }
-function _nonIterableRest15() {
+function _nonIterableRest17() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray28(r, a) {
+function _unsupportedIterableToArray29(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray28(r, a);
+    if (typeof r == "string") return _arrayLikeToArray29(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray28(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray29(r, a) : void 0;
   }
 }
-function _arrayLikeToArray28(r, a) {
+function _arrayLikeToArray29(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit15(r, l) {
+function _iterableToArrayLimit17(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -15467,7 +15517,7 @@ function _iterableToArrayLimit15(r, l) {
     return a;
   }
 }
-function _arrayWithHoles15(r) {
+function _arrayWithHoles17(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral51(e, t) {
@@ -15544,7 +15594,7 @@ function eggMonsters() {
   return new Map(get("mimicEggMonsters").split(",").filter(Boolean).map(function(pair) {
     return pair.split(":").map(Number);
   }).map(function(_ref) {
-    var _ref2 = _slicedToArray15(_ref, 2), id = _ref2[0], quantity = _ref2[1];
+    var _ref2 = _slicedToArray17(_ref, 2), id = _ref2[0], quantity = _ref2[1];
     return [import_kolmafia64.Monster.get(id), quantity];
   }));
 }
@@ -15599,13 +15649,13 @@ __export(MayamCalendar_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia65 = require("kolmafia");
 var _templateObject409, _templateObject2109, _templateObject3102, _templateObject468, _templateObject540, _templateObject635, _templateObject730, _templateObject828, _templateObject925, _templateObject1022, _templateObject1121, _templateObject1220;
-function _slicedToArray16(r, e) {
-  return _arrayWithHoles16(r) || _iterableToArrayLimit16(r, e) || _unsupportedIterableToArray29(r, e) || _nonIterableRest16();
+function _slicedToArray18(r, e) {
+  return _arrayWithHoles18(r) || _iterableToArrayLimit18(r, e) || _unsupportedIterableToArray30(r, e) || _nonIterableRest18();
 }
-function _nonIterableRest16() {
+function _nonIterableRest18() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit16(r, l) {
+function _iterableToArrayLimit18(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -15626,29 +15676,29 @@ function _iterableToArrayLimit16(r, l) {
     return a;
   }
 }
-function _arrayWithHoles16(r) {
+function _arrayWithHoles18(r) {
   if (Array.isArray(r)) return r;
 }
 function _toConsumableArray16(r) {
-  return _arrayWithoutHoles16(r) || _iterableToArray16(r) || _unsupportedIterableToArray29(r) || _nonIterableSpread16();
+  return _arrayWithoutHoles16(r) || _iterableToArray16(r) || _unsupportedIterableToArray30(r) || _nonIterableSpread16();
 }
 function _nonIterableSpread16() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray29(r, a) {
+function _unsupportedIterableToArray30(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray29(r, a);
+    if (typeof r == "string") return _arrayLikeToArray30(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray29(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray30(r, a) : void 0;
   }
 }
 function _iterableToArray16(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles16(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray29(r);
+  if (Array.isArray(r)) return _arrayLikeToArray30(r);
 }
-function _arrayLikeToArray29(r, a) {
+function _arrayLikeToArray30(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -15702,7 +15752,7 @@ var RESONANCES = Object.freeze({
 function resonanceFor(target) {
   var _ref, _find;
   return (_ref = (_find = _toConsumableArray16(Object.entries(RESONANCES)).find(function(_ref2) {
-    var _ref3 = _slicedToArray16(_ref2, 2), value = _ref3[1];
+    var _ref3 = _slicedToArray18(_ref2, 2), value = _ref3[1];
     return value === target;
   })) === null || _find === void 0 ? void 0 : _find[0].split(" ")) !== null && _ref !== void 0 ? _ref : null;
 }
@@ -15883,6 +15933,9 @@ __export(Stillsuit_exports, {
   bestFamiliar: function() {
     return bestFamiliar;
   },
+  currentDistillateModifiers: function() {
+    return currentDistillateModifiers;
+  },
   distillateAdventures: function() {
     return distillateAdventures;
   },
@@ -15897,6 +15950,9 @@ __export(Stillsuit_exports, {
   },
   modifierRatio: function() {
     return modifierRatio;
+  },
+  nextDistillateModifiers: function() {
+    return nextDistillateModifiers;
   }
 });
 init_kolmafia_polyfill();
@@ -15954,15 +16010,19 @@ function distillateAdventures() {
 function drinkDistillate() {
   return !have54() || get("familiarSweat") <= 0 ? !1 : (0, import_kolmafia68.cliExecute)("drink stillsuit distillate");
 }
+var distillateModifiers = function(pref) {
+  return parseModifiers(pref);
+};
+function nextDistillateModifiers() {
+  return (0, import_kolmafia68.visitUrl)("inventory.php?action=distill&pwd"), distillateModifiers("nextDistillateMods");
+}
+function currentDistillateModifiers() {
+  return distillateModifiers("currentDistillateMods");
+}
 function distillateModifier(modifier) {
-  var _experienceMap$modifi;
   (0, import_kolmafia68.visitUrl)("inventory.php?action=distill&pwd");
-  var distillateMods = get("currentDistillateMods"), experienceMap = {
-    "Muscle Experience": "Experience (Muscle)",
-    "Mysticality Experience": "Experience (Mysticality)",
-    "Moxie Experience": "Experience (Moxie)"
-  }, adjustedModifier = (_experienceMap$modifi = experienceMap[modifier]) !== null && _experienceMap$modifi !== void 0 ? _experienceMap$modifi : modifier, regex = new RegExp("".concat(adjustedModifier, ": \\+?(-?\\d+)")), match = distillateMods.match(regex);
-  return match ? Number(match[1]) : 0;
+  var value = (0, import_kolmafia68.splitModifiers)("currentDistillateMods")[modifier];
+  return value ? Number(value) : 0;
 }
 var MODIFIER_TAGS = Object.freeze({
   mineral: "Muscle",
@@ -16168,25 +16228,25 @@ function expected7() {
 
 // src/resources/LibramSummon.ts
 var _templateObject499, _templateObject2127, _templateObject3116, _templateObject4100, _templateObject550, _templateObject645, _templateObject739, _templateObject831, _templateObject927, _templateObject1024, _templateObject1122, _templateObject1221, _templateObject1319, _templateObject1417;
-function _slicedToArray17(r, e) {
-  return _arrayWithHoles17(r) || _iterableToArrayLimit17(r, e) || _unsupportedIterableToArray30(r, e) || _nonIterableRest17();
+function _slicedToArray19(r, e) {
+  return _arrayWithHoles19(r) || _iterableToArrayLimit19(r, e) || _unsupportedIterableToArray31(r, e) || _nonIterableRest19();
 }
-function _nonIterableRest17() {
+function _nonIterableRest19() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray30(r, a) {
+function _unsupportedIterableToArray31(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray30(r, a);
+    if (typeof r == "string") return _arrayLikeToArray31(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray30(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray31(r, a) : void 0;
   }
 }
-function _arrayLikeToArray30(r, a) {
+function _arrayLikeToArray31(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit17(r, l) {
+function _iterableToArrayLimit19(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -16207,7 +16267,7 @@ function _iterableToArrayLimit17(r, l) {
     return a;
   }
 }
-function _arrayWithHoles17(r) {
+function _arrayWithHoles19(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral64(e, t) {
@@ -16239,9 +16299,9 @@ function possibleLibramSummons() {
 function bestLibramToCast() {
   var arr = Array.from(possibleLibramSummons().entries());
   return arr.length ? maxBy(arr, function(_ref) {
-    var _ref2 = _slicedToArray17(_ref, 2), itemMap = _ref2[1];
+    var _ref2 = _slicedToArray19(_ref, 2), itemMap = _ref2[1];
     return sum(Array.from(itemMap.entries()), function(_ref3) {
-      var _ref4 = _slicedToArray17(_ref3, 2), item13 = _ref4[0], weight = _ref4[1];
+      var _ref4 = _slicedToArray19(_ref3, 2), item13 = _ref4[0], weight = _ref4[1];
       return weight * getSaleValue(item13);
     });
   })[0] : null;
@@ -16249,10 +16309,10 @@ function bestLibramToCast() {
 
 // src/ascend.ts
 var _templateObject500, _templateObject2128, _templateObject3117, _templateObject4101, _templateObject551, _templateObject646, _templateObject740, _templateObject834, _templateObject928;
-function _createForOfIteratorHelper9(r, e) {
+function _createForOfIteratorHelper8(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray31(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray32(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -16281,7 +16341,7 @@ function _createForOfIteratorHelper9(r, e) {
   } };
 }
 function _toConsumableArray17(r) {
-  return _arrayWithoutHoles17(r) || _iterableToArray17(r) || _unsupportedIterableToArray31(r) || _nonIterableSpread17();
+  return _arrayWithoutHoles17(r) || _iterableToArray17(r) || _unsupportedIterableToArray32(r) || _nonIterableSpread17();
 }
 function _nonIterableSpread17() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -16290,7 +16350,7 @@ function _iterableToArray17(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles17(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray31(r);
+  if (Array.isArray(r)) return _arrayLikeToArray32(r);
 }
 function ownKeys8(e, r) {
   var t = Object.keys(e);
@@ -16410,25 +16470,25 @@ function _getPrototypeOf3(t) {
     return t2.__proto__ || Object.getPrototypeOf(t2);
   }, _getPrototypeOf3(t);
 }
-function _slicedToArray18(r, e) {
-  return _arrayWithHoles18(r) || _iterableToArrayLimit18(r, e) || _unsupportedIterableToArray31(r, e) || _nonIterableRest18();
+function _slicedToArray20(r, e) {
+  return _arrayWithHoles20(r) || _iterableToArrayLimit20(r, e) || _unsupportedIterableToArray32(r, e) || _nonIterableRest20();
 }
-function _nonIterableRest18() {
+function _nonIterableRest20() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray31(r, a) {
+function _unsupportedIterableToArray32(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray31(r, a);
+    if (typeof r == "string") return _arrayLikeToArray32(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray31(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray32(r, a) : void 0;
   }
 }
-function _arrayLikeToArray31(r, a) {
+function _arrayLikeToArray32(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit18(r, l) {
+function _iterableToArrayLimit20(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -16449,7 +16509,7 @@ function _iterableToArrayLimit18(r, l) {
     return a;
   }
 }
-function _arrayWithHoles18(r) {
+function _arrayWithHoles20(r) {
   if (Array.isArray(r)) return r;
 }
 var Lifestyle = /* @__PURE__ */ function(Lifestyle2) {
@@ -16459,7 +16519,7 @@ var Lifestyle = /* @__PURE__ */ function(Lifestyle2) {
 }({});
 function permedSkills() {
   return new Map(Array.from(Object.entries((0, import_kolmafia69.getPermedSkills)())).map(function(_ref) {
-    var _ref2 = _slicedToArray18(_ref, 2), skillName = _ref2[0], isHardcore = _ref2[1];
+    var _ref2 = _slicedToArray20(_ref, 2), skillName = _ref2[0], isHardcore = _ref2[1];
     return [(0, import_kolmafia69.toSkill)(skillName), isHardcore ? Lifestyle.hardcore : Lifestyle.softcore];
   }));
 }
@@ -16528,7 +16588,7 @@ function ascend(options) {
     consumable: $item(_templateObject4101 || (_templateObject4101 = _taggedTemplateLiteral65(["astral six-pack"]))),
     pet: $item(_templateObject551 || (_templateObject551 = _taggedTemplateLiteral65(["none"])))
   }, prunedOptions = Object.fromEntries(Object.entries(options).filter(function(_ref3) {
-    var _ref4 = _slicedToArray18(_ref3, 2), value = _ref4[1];
+    var _ref4 = _slicedToArray20(_ref3, 2), value = _ref4[1];
     return value;
   })), _DEFAULT_OPTIONS$prun = _objectSpread8(_objectSpread8({}, DEFAULT_OPTIONS), prunedOptions), path3 = _DEFAULT_OPTIONS$prun.path, playerClass = _DEFAULT_OPTIONS$prun.playerClass, lifestyle = _DEFAULT_OPTIONS$prun.lifestyle, kolGender = _DEFAULT_OPTIONS$prun.kolGender, moon = _DEFAULT_OPTIONS$prun.moon, consumable = _DEFAULT_OPTIONS$prun.consumable, pet = _DEFAULT_OPTIONS$prun.pet, permOptions = _DEFAULT_OPTIONS$prun.permOptions;
   if (playerClass.path !== (path3.avatar ? path3 : import_kolmafia69.Path.none))
@@ -16553,10 +16613,10 @@ function ascend(options) {
   if (isInValhalla() || (0, import_kolmafia69.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on"), !isInValhalla())
     throw new AscendError("Failed to ascend--do you have a pending trade offer?");
   if ((0, import_kolmafia69.visitUrl)("afterlife.php?action=pearlygates"), consumable !== $item(_templateObject834 || (_templateObject834 = _taggedTemplateLiteral65(["none"]))) && (0, import_kolmafia69.visitUrl)("afterlife.php?action=buydeli&whichitem=".concat(consumable.id)), pet !== $item(_templateObject928 || (_templateObject928 = _taggedTemplateLiteral65(["none"]))) && (0, import_kolmafia69.visitUrl)("afterlife.php?action=buyarmory&whichitem=".concat(pet.id)), permOptions) {
-    var currentPerms = permedSkills(), karma = get("bankedKarma"), _iterator = _createForOfIteratorHelper9(permOptions.permSkills.entries()), _step;
+    var currentPerms = permedSkills(), karma = get("bankedKarma"), _iterator = _createForOfIteratorHelper8(permOptions.permSkills.entries()), _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-        var _currentPerms$get, _step$value = _slicedToArray18(_step.value, 2), skill = _step$value[0], prospectivePermLevel = _step$value[1], currentPermLevel = (_currentPerms$get = currentPerms.get(skill)) !== null && _currentPerms$get !== void 0 ? _currentPerms$get : Lifestyle.casual;
+        var _currentPerms$get, _step$value = _slicedToArray20(_step.value, 2), skill = _step$value[0], prospectivePermLevel = _step$value[1], currentPermLevel = (_currentPerms$get = currentPerms.get(skill)) !== null && _currentPerms$get !== void 0 ? _currentPerms$get : Lifestyle.casual;
         if (prospectivePermLevel > currentPermLevel) {
           var expectedKarma = 100 * (prospectivePermLevel - currentPermLevel);
           if (karma < expectedKarma) {
@@ -16612,7 +16672,7 @@ function prepareAscension() {
 init_kolmafia_polyfill();
 var import_html_entities = __toESM(require_lib(), 1), import_kolmafia70 = require("kolmafia");
 function _toConsumableArray18(r) {
-  return _arrayWithoutHoles18(r) || _iterableToArray18(r) || _unsupportedIterableToArray32(r) || _nonIterableSpread18();
+  return _arrayWithoutHoles18(r) || _iterableToArray18(r) || _unsupportedIterableToArray33(r) || _nonIterableSpread18();
 }
 function _nonIterableSpread18() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -16621,12 +16681,12 @@ function _iterableToArray18(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles18(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray32(r);
+  if (Array.isArray(r)) return _arrayLikeToArray33(r);
 }
-function _createForOfIteratorHelper10(r, e) {
+function _createForOfIteratorHelper9(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray32(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray33(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -16654,25 +16714,25 @@ function _createForOfIteratorHelper10(r, e) {
     }
   } };
 }
-function _slicedToArray19(r, e) {
-  return _arrayWithHoles19(r) || _iterableToArrayLimit19(r, e) || _unsupportedIterableToArray32(r, e) || _nonIterableRest19();
+function _slicedToArray21(r, e) {
+  return _arrayWithHoles21(r) || _iterableToArrayLimit21(r, e) || _unsupportedIterableToArray33(r, e) || _nonIterableRest21();
 }
-function _nonIterableRest19() {
+function _nonIterableRest21() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray32(r, a) {
+function _unsupportedIterableToArray33(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray32(r, a);
+    if (typeof r == "string") return _arrayLikeToArray33(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray32(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray33(r, a) : void 0;
   }
 }
-function _arrayLikeToArray32(r, a) {
+function _arrayLikeToArray33(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit19(r, l) {
+function _iterableToArrayLimit21(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -16693,7 +16753,7 @@ function _iterableToArrayLimit19(r, l) {
     return a;
   }
 }
-function _arrayWithHoles19(r) {
+function _arrayWithHoles21(r) {
   if (Array.isArray(r)) return r;
 }
 function _classCallCheck12(a, n) {
@@ -16829,7 +16889,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
       this._check();
       var logs = (0, import_kolmafia70.visitUrl)("clan_log.php"), lastFax = logs.match(LOG_FAX_PATTERN);
       if (!lastFax) return null;
-      var _lastFax = _slicedToArray19(lastFax, 4), monsterName = _lastFax[3];
+      var _lastFax = _slicedToArray21(lastFax, 4), monsterName = _lastFax[3];
       return monsterName ? import_kolmafia70.Monster.get(monsterName) : null;
     }
     /**
@@ -16845,7 +16905,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
       return (0, import_kolmafia70.xpath)(page, '//select[@name="level"]//option').map(function(option) {
         var validHtml = "<select>".concat(option, "</select>"), match = (0, import_kolmafia70.xpath)(validHtml, "//text()")[0].match(WHITELIST_DEGREE_PATTERN), id = (0, import_kolmafia70.xpath)(validHtml, "//@value")[0];
         if (!match || !id) return null;
-        var _match = _slicedToArray19(match, 3), encodedName = _match[1], degree = _match[2];
+        var _match = _slicedToArray21(match, 3), encodedName = _match[1], degree = _match[2];
         return {
           name: (0, import_html_entities.decode)(encodedName),
           degree: Number.parseInt(degree),
@@ -16898,7 +16958,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
     key: "getMeatInCoffer",
     value: function() {
       this._check();
-      var page = (0, import_kolmafia70.visitUrl)("clan_stash.php"), _ref = page.match(/Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./) || ["0", "0"], _ref2 = _slicedToArray19(_ref, 2), meat = _ref2[1];
+      var page = (0, import_kolmafia70.visitUrl)("clan_stash.php"), _ref = page.match(/Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./) || ["0", "0"], _ref2 = _slicedToArray21(_ref, 2), meat = _ref2[1];
       return parseNumber(meat);
     }
     /**
@@ -16931,7 +16991,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
         var needed = Math.max(0, quantity - (0, import_kolmafia70.availableAmount)(item13));
         if (needed === 0)
           return map.set(item13, 0);
-        var foldGroup = getFoldGroup(item13), _iterator = _createForOfIteratorHelper10(foldGroup), _step;
+        var foldGroup = getFoldGroup(item13), _iterator = _createForOfIteratorHelper9(foldGroup), _step;
         try {
           for (_iterator.s(); !(_step = _iterator.n()).done; ) {
             for (var foldable = _step.value, quantityToFold = Math.min(needed, (0, import_kolmafia70.availableAmount)(foldable)), _i2 = 0; _i2 < quantityToFold; _i2++)
@@ -17167,25 +17227,25 @@ var path = $path(_templateObject835 || (_templateObject835 = _taggedTemplateLite
 init_kolmafia_polyfill();
 var import_kolmafia72 = require("kolmafia");
 var _templateObject505, _templateObject2130, _templateObject3119, _templateObject4103, _templateObject555, _templateObject648, _CommunityService, _templateObject744, _templateObject836, _templateObject929, _templateObject1025, _templateObject1123, _templateObject1222, _templateObject1320, _templateObject1418, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1914, _templateObject2014, _templateObject2131, _templateObject2216, _templateObject2315, _templateObject2414, _templateObject2513, _templateObject2612, _templateObject2712, _templateObject2810, _templateObject2910, _templateObject3010, _templateObject3120;
-function _slicedToArray20(r, e) {
-  return _arrayWithHoles20(r) || _iterableToArrayLimit20(r, e) || _unsupportedIterableToArray33(r, e) || _nonIterableRest20();
+function _slicedToArray22(r, e) {
+  return _arrayWithHoles22(r) || _iterableToArrayLimit22(r, e) || _unsupportedIterableToArray34(r, e) || _nonIterableRest22();
 }
-function _nonIterableRest20() {
+function _nonIterableRest22() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray33(r, a) {
+function _unsupportedIterableToArray34(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray33(r, a);
+    if (typeof r == "string") return _arrayLikeToArray34(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray33(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray34(r, a) : void 0;
   }
 }
-function _arrayLikeToArray33(r, a) {
+function _arrayLikeToArray34(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit20(r, l) {
+function _iterableToArrayLimit22(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -17206,7 +17266,7 @@ function _iterableToArrayLimit20(r, l) {
     return a;
   }
 }
-function _arrayWithHoles20(r) {
+function _arrayWithHoles22(r) {
   if (Array.isArray(r)) return r;
 }
 function _classCallCheck13(a, n) {
@@ -17456,11 +17516,11 @@ var CommunityService = /* @__PURE__ */ function() {
        */
       function() {
         for (var colour = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "blue", logEntries = Object.entries(CommunityService2.log), _i = 0, _logEntries = logEntries; _i < _logEntries.length; _i++) {
-          var _logEntries$_i = _slicedToArray20(_logEntries[_i], 2), testName = _logEntries$_i[0], testEntry = _logEntries$_i[1], type = testEntry.type, predictedTurns = testEntry.predictedTurns, turnCost = testEntry.turnCost, seconds = testEntry.seconds;
+          var _logEntries$_i = _slicedToArray22(_logEntries[_i], 2), testName = _logEntries$_i[0], testEntry = _logEntries$_i[1], type = testEntry.type, predictedTurns = testEntry.predictedTurns, turnCost = testEntry.turnCost, seconds = testEntry.seconds;
           type === "test" ? ((0, import_kolmafia72.print)("We predicted the ".concat(testName, " test would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour), (0, import_kolmafia72.print)("".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour)) : (predictedTurns === 0 && turnCost === 0 || (0, import_kolmafia72.print)("We predicted the task ".concat(testName, " would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour), (0, import_kolmafia72.print)("The task ".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour));
         }
         var totalTime = sum(logEntries, function(_ref3) {
-          var _ref4 = _slicedToArray20(_ref3, 2), testEntry2 = _ref4[1];
+          var _ref4 = _slicedToArray22(_ref3, 2), testEntry2 = _ref4[1];
           return testEntry2.seconds;
         });
         (0, import_kolmafia72.print)("All together, you have spent ".concat(totalTime.toFixed(1), " seconds during this Community Service run"), colour);
@@ -17562,7 +17622,7 @@ var import_kolmafia74 = require("kolmafia");
 // src/diet/knapsack.ts
 init_kolmafia_polyfill();
 function _toConsumableArray19(r) {
-  return _arrayWithoutHoles19(r) || _iterableToArray19(r) || _unsupportedIterableToArray34(r) || _nonIterableSpread19();
+  return _arrayWithoutHoles19(r) || _iterableToArray19(r) || _unsupportedIterableToArray35(r) || _nonIterableSpread19();
 }
 function _nonIterableSpread19() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -17571,15 +17631,15 @@ function _iterableToArray19(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles19(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray34(r);
+  if (Array.isArray(r)) return _arrayLikeToArray35(r);
 }
-function _slicedToArray21(r, e) {
-  return _arrayWithHoles21(r) || _iterableToArrayLimit21(r, e) || _unsupportedIterableToArray34(r, e) || _nonIterableRest21();
+function _slicedToArray23(r, e) {
+  return _arrayWithHoles23(r) || _iterableToArrayLimit23(r, e) || _unsupportedIterableToArray35(r, e) || _nonIterableRest23();
 }
-function _nonIterableRest21() {
+function _nonIterableRest23() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit21(r, l) {
+function _iterableToArrayLimit23(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -17600,13 +17660,13 @@ function _iterableToArrayLimit21(r, l) {
     return a;
   }
 }
-function _arrayWithHoles21(r) {
+function _arrayWithHoles23(r) {
   if (Array.isArray(r)) return r;
 }
-function _createForOfIteratorHelper11(r, e) {
+function _createForOfIteratorHelper10(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray34(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray35(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -17634,14 +17694,14 @@ function _createForOfIteratorHelper11(r, e) {
     }
   } };
 }
-function _unsupportedIterableToArray34(r, a) {
+function _unsupportedIterableToArray35(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray34(r, a);
+    if (typeof r == "string") return _arrayLikeToArray35(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray34(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray35(r, a) : void 0;
   }
 }
-function _arrayLikeToArray34(r, a) {
+function _arrayLikeToArray35(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -17679,14 +17739,14 @@ var Not = /* @__PURE__ */ _createClass14(function Not2(thing) {
   _classCallCheck14(this, Not2), _defineProperty19(this, "thing", void 0), this.thing = thing;
 });
 function aggregate(list, isEqual) {
-  var aggregatedList = [], _iterator = _createForOfIteratorHelper11(list), _step;
+  var aggregatedList = [], _iterator = _createForOfIteratorHelper10(list), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
       var item13 = _step.value;
       if (aggregatedList.length === 0)
         aggregatedList.push([item13, 1]);
       else {
-        var last = aggregatedList[aggregatedList.length - 1], _last = _slicedToArray21(last, 1), lastItem = _last[0];
+        var last = aggregatedList[aggregatedList.length - 1], _last = _slicedToArray23(last, 1), lastItem = _last[0];
         (isEqual ? isEqual(item13, lastItem) : item13 === lastItem) ? last[1]++ : aggregatedList.push([item13, 1]);
       }
     }
@@ -17702,10 +17762,10 @@ function knapsack(values, capacity) {
   if (!Number.isFinite(capacity))
     throw new Error("Invalid capacity.");
   var valuesInverted = values.map(function(_ref) {
-    var _ref2 = _slicedToArray21(_ref, 4), thing = _ref2[0], value2 = _ref2[1], weight = _ref2[2], maximum2 = _ref2[3];
+    var _ref2 = _slicedToArray23(_ref, 4), thing = _ref2[0], value2 = _ref2[1], weight = _ref2[2], maximum2 = _ref2[3];
     return weight < 0 && maximum2 !== void 0 ? [new Not(thing), -value2, -weight, maximum2] : [thing, value2, weight, maximum2];
   }), capacityAdjustment = sum(values, function(_ref3) {
-    var _ref4 = _slicedToArray21(_ref3, 4), weight = _ref4[2], maximum2 = _ref4[3];
+    var _ref4 = _slicedToArray23(_ref3, 4), weight = _ref4[2], maximum2 = _ref4[3];
     return weight < 0 && maximum2 !== void 0 ? -weight * maximum2 : 0;
   }), adjustedCapacity = capacity + capacityAdjustment;
   if (adjustedCapacity < 0)
@@ -17713,7 +17773,7 @@ function knapsack(values, capacity) {
   for (var valuesSorted = _toConsumableArray19(valuesInverted).sort(function(x, y) {
     return x[2] - y[2];
   }), values01 = (_ref5 = []).concat.apply(_ref5, _toConsumableArray19(valuesSorted.map(function(_ref6) {
-    var _ref7 = _slicedToArray21(_ref6, 4), thing = _ref7[0], value2 = _ref7[1], weight = _ref7[2], maximum2 = _ref7[3];
+    var _ref7 = _slicedToArray23(_ref6, 4), thing = _ref7[0], value2 = _ref7[1], weight = _ref7[2], maximum2 = _ref7[3];
     if (!Number.isFinite(weight) || weight < 0)
       throw new Error("Invalid weight ".concat(weight, " for ").concat(thing instanceof Not ? "not ".concat(thing.thing) : thing));
     var maxQuantity = Math.floor(maximum2 != null ? maximum2 : adjustedCapacity / weight);
@@ -17722,13 +17782,13 @@ function knapsack(values, capacity) {
     return new Array(maxQuantity).fill([thing, value2, weight]);
   }))), memoizationTable = new Array(values01.length), i = 0; i < values01.length; i++)
     memoizationTable[i] = new Array(adjustedCapacity).fill(null);
-  var _bestSolution = bestSolution(memoizationTable, values01, values01.length - 1, adjustedCapacity), _bestSolution2 = _slicedToArray21(_bestSolution, 2), value = _bestSolution2[0], invertedSolution = _bestSolution2[1], aggregatedSolution = aggregate(invertedSolution), countMap = new Map(aggregatedSolution), valueAdjustment = 0, solution = aggregatedSolution.filter(function(_ref8) {
-    var _ref9 = _slicedToArray21(_ref8, 1), thingOrNot2 = _ref9[0];
+  var _bestSolution = bestSolution(memoizationTable, values01, values01.length - 1, adjustedCapacity), _bestSolution2 = _slicedToArray23(_bestSolution, 2), value = _bestSolution2[0], invertedSolution = _bestSolution2[1], aggregatedSolution = aggregate(invertedSolution), countMap = new Map(aggregatedSolution), valueAdjustment = 0, solution = aggregatedSolution.filter(function(_ref8) {
+    var _ref9 = _slicedToArray23(_ref8, 1), thingOrNot2 = _ref9[0];
     return !(thingOrNot2 instanceof Not);
-  }), _iterator2 = _createForOfIteratorHelper11(valuesSorted), _step2;
+  }), _iterator2 = _createForOfIteratorHelper10(valuesSorted), _step2;
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
-      var _step2$value = _slicedToArray21(_step2.value, 4), thingOrNot = _step2$value[0], _value = _step2$value[1], maximum = _step2$value[3];
+      var _step2$value = _slicedToArray23(_step2.value, 4), thingOrNot = _step2$value[0], _value = _step2$value[1], maximum = _step2$value[3];
       if (thingOrNot instanceof Not) {
         var _countMap$get, notCount = (_countMap$get = countMap.get(thingOrNot)) !== null && _countMap$get !== void 0 ? _countMap$get : 0;
         if (maximum === void 0)
@@ -17750,16 +17810,16 @@ function bestSolution(memoizationTable, values, currentIndex, remainingCapacity)
   if (remainingCapacity === 0 || currentIndex < 0) return [0, []];
   var memoized = memoizationTable[currentIndex][remainingCapacity - 1];
   if (memoized !== null) return memoized;
-  var _values$currentIndex = _slicedToArray21(values[currentIndex], 3), item13 = _values$currentIndex[0], value = _values$currentIndex[1], weight = _values$currentIndex[2], _bestSolution3 = bestSolution(memoizationTable, values, currentIndex - 1, remainingCapacity - weight), _bestSolution4 = _slicedToArray21(_bestSolution3, 2), valueIncludeRest = _bestSolution4[0], itemsInclude = _bestSolution4[1], valueInclude = valueIncludeRest + value, _bestSolution5 = bestSolution(memoizationTable, values, currentIndex - 1, remainingCapacity), _bestSolution6 = _slicedToArray21(_bestSolution5, 2), valueExclude = _bestSolution6[0], itemsExclude = _bestSolution6[1], result = valueInclude > valueExclude ? [valueInclude, [].concat(_toConsumableArray19(itemsInclude), [item13])] : [valueExclude, itemsExclude];
+  var _values$currentIndex = _slicedToArray23(values[currentIndex], 3), item13 = _values$currentIndex[0], value = _values$currentIndex[1], weight = _values$currentIndex[2], _bestSolution3 = bestSolution(memoizationTable, values, currentIndex - 1, remainingCapacity - weight), _bestSolution4 = _slicedToArray23(_bestSolution3, 2), valueIncludeRest = _bestSolution4[0], itemsInclude = _bestSolution4[1], valueInclude = valueIncludeRest + value, _bestSolution5 = bestSolution(memoizationTable, values, currentIndex - 1, remainingCapacity), _bestSolution6 = _slicedToArray23(_bestSolution5, 2), valueExclude = _bestSolution6[0], itemsExclude = _bestSolution6[1], result = valueInclude > valueExclude ? [valueInclude, [].concat(_toConsumableArray19(itemsInclude), [item13])] : [valueExclude, itemsExclude];
   return memoizationTable[currentIndex][remainingCapacity - 1] = result, result;
 }
 
 // src/diet/index.ts
 var _templateObject507, _templateObject2132, _templateObject3121, _templateObject4104, _templateObject556, _templateObject649, _templateObject745, _templateObject837, _templateObject930, _templateObject1026, _templateObject1124, _templateObject1223, _templateObject1321, _templateObject1419, _templateObject1516, _templateObject1616, _templateObject1716, _templateObject1816, _templateObject1915, _templateObject2015, _templateObject2133, _templateObject2217, _templateObject2316, _templateObject2415, _templateObject2514, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3122, _templateObject3213, _templateObject3312, _templateObject3411, _templateObject3510, _templateObject3610, _templateObject3710, _templateObject3810, _templateObject3910, _templateObject4010, _templateObject4112, _templateObject4212, _templateObject4311, _templateObject4410, _templateObject4510, _templateObject4610, _templateObject4710, _templateObject4810, _templateObject4910, _templateObject508, _templateObject5111, _templateObject5211, _templateObject5310, _templateObject5410, _templateObject557, _templateObject564, _templateObject574, _templateObject584, _templateObject594, _templateObject604, _templateObject6110, _templateObject6210, _templateObject6310, _templateObject6410, _templateObject654, _templateObject664, _templateObject674, _templateObject684, _templateObject694, _templateObject703, _templateObject7110, _templateObject7210;
-function _createForOfIteratorHelper12(r, e) {
+function _createForOfIteratorHelper11(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray35(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray36(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -17838,7 +17898,7 @@ function _toPrimitive21(t, r) {
   return (r === "string" ? String : Number)(t);
 }
 function _toConsumableArray20(r) {
-  return _arrayWithoutHoles20(r) || _iterableToArray20(r) || _unsupportedIterableToArray35(r) || _nonIterableSpread20();
+  return _arrayWithoutHoles20(r) || _iterableToArray20(r) || _unsupportedIterableToArray36(r) || _nonIterableSpread20();
 }
 function _nonIterableSpread20() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -17847,27 +17907,27 @@ function _iterableToArray20(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles20(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray35(r);
+  if (Array.isArray(r)) return _arrayLikeToArray36(r);
 }
-function _slicedToArray22(r, e) {
-  return _arrayWithHoles22(r) || _iterableToArrayLimit22(r, e) || _unsupportedIterableToArray35(r, e) || _nonIterableRest22();
+function _slicedToArray24(r, e) {
+  return _arrayWithHoles24(r) || _iterableToArrayLimit24(r, e) || _unsupportedIterableToArray36(r, e) || _nonIterableRest24();
 }
-function _nonIterableRest22() {
+function _nonIterableRest24() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray35(r, a) {
+function _unsupportedIterableToArray36(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray35(r, a);
+    if (typeof r == "string") return _arrayLikeToArray36(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray35(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray36(r, a) : void 0;
   }
 }
-function _arrayLikeToArray35(r, a) {
+function _arrayLikeToArray36(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit22(r, l) {
+function _iterableToArrayLimit24(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -17888,7 +17948,7 @@ function _iterableToArrayLimit22(r, l) {
     return a;
   }
 }
-function _arrayWithHoles22(r) {
+function _arrayWithHoles24(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral69(e, t) {
@@ -17898,13 +17958,13 @@ function isMonday() {
   return get2("Muscle Percent", $item(_templateObject507 || (_templateObject507 = _taggedTemplateLiteral69(["Tuesday's ruby"])))) > 0;
 }
 function seasoningAdventures(item13) {
-  var _getRange = getRange(item13.adventures), _getRange2 = _slicedToArray22(_getRange, 2), min = _getRange2[0], max = _getRange2[1];
+  var _getRange = getRange(item13.adventures), _getRange2 = _slicedToArray24(_getRange, 2), min = _getRange2[0], max = _getRange2[1];
   return max - min <= 1 ? 1 : 0.5;
 }
 function _expectedAdventures(menuItem, modifiers) {
   var _item$notes, _item$notes2, _item$notes3, _item$notes4, _item$notes5, item13 = menuItem.item;
   if (item13.adventures === "") return 0;
-  var _getRange3 = getRange(item13.adventures), _getRange4 = _slicedToArray22(_getRange3, 2), min = _getRange4[0], max = _getRange4[1], interpolated = _toConsumableArray20(new Array(max - min + 1).keys()).map(function(n) {
+  var _getRange3 = getRange(item13.adventures), _getRange4 = _slicedToArray24(_getRange3, 2), min = _getRange4[0], max = _getRange4[1], interpolated = _toConsumableArray20(new Array(max - min + 1).keys()).map(function(n) {
     return n + min;
   }), forkMugMultiplier = menuItem.itemType() === "food" && (_item$notes = item13.notes) !== null && _item$notes !== void 0 && _item$notes.includes("SALAD") || menuItem.itemType() === "booze" && (_item$notes2 = item13.notes) !== null && _item$notes2 !== void 0 && _item$notes2.includes("BEER") ? 1.5 : 1.3, aioliAdventures = item13.fullness, garish = modifiers.garish && ((_item$notes3 = item13.notes) === null || _item$notes3 === void 0 ? void 0 : _item$notes3.includes("LASAGNA")) && !isMonday(), refinedPalate = modifiers.refinedPalate && ((_item$notes4 = item13.notes) === null || _item$notes4 === void 0 ? void 0 : _item$notes4.includes("WINE")), pinkyRing = modifiers.pinkyRing && ((_item$notes5 = item13.notes) === null || _item$notes5 === void 0 ? void 0 : _item$notes5.includes("WINE"));
   return sum(interpolated, function(baseAdventures) {
@@ -18139,14 +18199,14 @@ var DietPlanner = /* @__PURE__ */ function() {
     value: function(organCapacities) {
       var _this = this;
       var _ref5, overrideModifiers = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, valuePlans = organCapacities.map(function(_ref) {
-        var _ref2 = _slicedToArray22(_ref, 2), organ = _ref2[0], capacity = _ref2[1];
+        var _ref2 = _slicedToArray24(_ref, 2), organ = _ref2[0], capacity = _ref2[1];
         return _this.planOrgan(organ, capacity, overrideModifiers);
       });
       return [sum(valuePlans, function(_ref3) {
-        var _ref4 = _slicedToArray22(_ref3, 1), value = _ref4[0];
+        var _ref4 = _slicedToArray24(_ref3, 1), value = _ref4[0];
         return value;
       }), (_ref5 = []).concat.apply(_ref5, _toConsumableArray20(valuePlans.map(function(_ref6) {
-        var _ref7 = _slicedToArray22(_ref6, 2), plan = _ref7[1];
+        var _ref7 = _slicedToArray24(_ref6, 2), plan = _ref7[1];
         return plan;
       })))];
     }
@@ -18164,13 +18224,13 @@ var DietPlanner = /* @__PURE__ */ function() {
     value: function(organCapacities, trialItems, overrideModifiers) {
       if (trialItems.length === 0)
         return this.planOrgans(organCapacities, overrideModifiers);
-      var _trialItems$ = _slicedToArray22(trialItems[0], 2), trialItem = _trialItems$[0], organSizes = _trialItems$[1];
+      var _trialItems$ = _slicedToArray24(trialItems[0], 2), trialItem = _trialItems$[0], organSizes = _trialItems$[1];
       if (trialItem.maximum !== void 0 && trialItem.maximum <= 0)
         return this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers);
-      var organCapacitiesWithMap = new Map(organCapacities), _iterator = _createForOfIteratorHelper12(organSizes), _step;
+      var organCapacitiesWithMap = new Map(organCapacities), _iterator = _createForOfIteratorHelper11(organSizes), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-          var _step$value = _slicedToArray22(_step.value, 2), organ = _step$value[0], size = _step$value[1], current2 = organCapacitiesWithMap.get(organ);
+          var _step$value = _slicedToArray24(_step.value, 2), organ = _step$value[0], size = _step$value[1], current2 = organCapacitiesWithMap.get(organ);
           if (current2 === void 0)
             return this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers);
           organCapacitiesWithMap.set(organ, current2 - size);
@@ -18180,26 +18240,26 @@ var DietPlanner = /* @__PURE__ */ function() {
       } finally {
         _iterator.f();
       }
-      var organCapacitiesWith = _toConsumableArray20(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral69(["Refined Palate"]))) || trialItem.item === $item(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral69(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4212 || (_templateObject4212 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral69(["Gar-ish"]))) || trialItem.item === $item(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral69(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray22(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread9(_objectSpread9(_objectSpread9({}, overrideModifiers), isRefinedPalate ? {
+      var organCapacitiesWith = _toConsumableArray20(organCapacitiesWithMap), isRefinedPalate = trialItem.item === $item(_templateObject3910 || (_templateObject3910 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4010 || (_templateObject4010 = _taggedTemplateLiteral69(["Refined Palate"]))) || trialItem.item === $item(_templateObject4112 || (_templateObject4112 = _taggedTemplateLiteral69(["toasted brie"]))), isGarish = trialItem.item === $item(_templateObject4212 || (_templateObject4212 = _taggedTemplateLiteral69(["pocket wish"]))) && trialItem.effect === $effect(_templateObject4311 || (_templateObject4311 = _taggedTemplateLiteral69(["Gar-ish"]))) || trialItem.item === $item(_templateObject4410 || (_templateObject4410 = _taggedTemplateLiteral69(["potion of the field gar"]))), _this$planOrgansWithT = this.planOrgansWithTrials(organCapacities, trialItems.slice(1), overrideModifiers), _this$planOrgansWithT2 = _slicedToArray24(_this$planOrgansWithT, 2), valueWithout = _this$planOrgansWithT2[0], planWithout = _this$planOrgansWithT2[1], _this$planOrgansWithT3 = this.planOrgansWithTrials(organCapacitiesWith, trialItems.slice(1), _objectSpread9(_objectSpread9(_objectSpread9({}, overrideModifiers), isRefinedPalate ? {
         refinedPalate: !0
       } : {}), isGarish ? {
         garish: !0
-      } : {})), _this$planOrgansWithT4 = _slicedToArray22(_this$planOrgansWithT3, 2), valueWith = _this$planOrgansWithT4[0], planWith = _this$planOrgansWithT4[1], _this$consumptionHelp = this.consumptionHelpersAndValue(trialItem, {}), _this$consumptionHelp2 = _slicedToArray22(_this$consumptionHelp, 2), helpersAndItem = _this$consumptionHelp2[0], value = _this$consumptionHelp2[1];
+      } : {})), _this$planOrgansWithT4 = _slicedToArray24(_this$planOrgansWithT3, 2), valueWith = _this$planOrgansWithT4[0], planWith = _this$planOrgansWithT4[1], _this$consumptionHelp = this.consumptionHelpersAndValue(trialItem, {}), _this$consumptionHelp2 = _slicedToArray24(_this$consumptionHelp, 2), helpersAndItem = _this$consumptionHelp2[0], value = _this$consumptionHelp2[1];
       return valueWithout > valueWith + value ? [valueWithout, planWithout] : [valueWith + value, [].concat(_toConsumableArray20(planWith), [[helpersAndItem, 1]])];
     }
   }]);
 }(), interactingItems = [[$item(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral69(["spice melange"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject4610 || (_templateObject4610 = _taggedTemplateLiteral69(["Ultra Mega Sour Ball"]))), [["food", -3], ["booze", -3]]], [$item(_templateObject4710 || (_templateObject4710 = _taggedTemplateLiteral69(["The Plumber's mushroom stew"]))), [["food", 3], ["booze", -1]]], [$item(_templateObject4810 || (_templateObject4810 = _taggedTemplateLiteral69(["The Mad Liquor"]))), [["food", -1], ["booze", 3]]], [$item(_templateObject4910 || (_templateObject4910 = _taggedTemplateLiteral69(["Doc Clock's thyme cocktail"]))), [["food", -2], ["booze", 4]]], [$item(_templateObject508 || (_templateObject508 = _taggedTemplateLiteral69(["Mr. Burnsger"]))), [["food", 4], ["booze", -2]]], [$effect(_templateObject5111 || (_templateObject5111 = _taggedTemplateLiteral69(["Refined Palate"]))), []], [$item(_templateObject5211 || (_templateObject5211 = _taggedTemplateLiteral69(["toasted brie"]))), [["food", 2]]], [$effect(_templateObject5310 || (_templateObject5310 = _taggedTemplateLiteral69(["Gar-ish"]))), []], [$item(_templateObject5410 || (_templateObject5410 = _taggedTemplateLiteral69(["potion of the field gar"]))), []]];
 function planDiet(mpa, menu) {
   var organCapacities = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : [["food", null], ["booze", null], ["spleen item", null]], resolvedOrganCapacities = organCapacities.map(function(_ref8) {
-    var _ref9 = _slicedToArray22(_ref8, 2), organ = _ref9[0], size = _ref9[1];
+    var _ref9 = _slicedToArray24(_ref8, 2), organ = _ref9[0], size = _ref9[1];
     return [organ, size != null ? size : organ === "food" ? (0, import_kolmafia74.fullnessLimit)() - (0, import_kolmafia74.myFullness)() : organ === "booze" ? (0, import_kolmafia74.inebrietyLimit)() - (0, import_kolmafia74.myInebriety)() : organ === "spleen item" ? (0, import_kolmafia74.spleenLimit)() - (0, import_kolmafia74.mySpleenUse)() : 0];
   }), includedInteractingItems = menu.map(function(menuItem) {
     var interacting = interactingItems.find(function(_ref10) {
-      var _ref11 = _slicedToArray22(_ref10, 1), itemOrEffect = _ref11[0];
+      var _ref11 = _slicedToArray24(_ref10, 1), itemOrEffect = _ref11[0];
       return menuItem.item === itemOrEffect || menuItem.item === $item(_templateObject557 || (_templateObject557 = _taggedTemplateLiteral69(["pocket wish"]))) && menuItem.effect === itemOrEffect;
     });
     if (interacting) {
-      var _interacting = _slicedToArray22(interacting, 2), organSizes = _interacting[1];
+      var _interacting = _slicedToArray24(interacting, 2), organSizes = _interacting[1];
       return [menuItem, organSizes];
     } else
       return null;
@@ -18207,23 +18267,23 @@ function planDiet(mpa, menu) {
     return value !== null;
   }), dietPlanner = new DietPlanner(mpa, menu.filter(function(menuItem) {
     return !includedInteractingItems.some(function(_ref12) {
-      var _ref13 = _slicedToArray22(_ref12, 1), interacting = _ref13[0];
+      var _ref13 = _slicedToArray24(_ref12, 1), interacting = _ref13[0];
       return interacting === menuItem;
     });
   })), _dietPlanner$planOrga = dietPlanner.planOrgansWithTrials(resolvedOrganCapacities.filter(function(_ref14) {
-    var _ref15 = _slicedToArray22(_ref14, 2), organ = _ref15[0], capacity = _ref15[1];
+    var _ref15 = _slicedToArray24(_ref14, 2), organ = _ref15[0], capacity = _ref15[1];
     return ["food", "booze"].includes(organ) && capacity >= 0;
-  }), includedInteractingItems, {}), _dietPlanner$planOrga2 = _slicedToArray22(_dietPlanner$planOrga, 2), planFoodBooze = _dietPlanner$planOrga2[1], spleenCapacity = resolvedOrganCapacities.find(function(_ref16) {
-    var _ref17 = _slicedToArray22(_ref16, 1), organ = _ref17[0];
+  }), includedInteractingItems, {}), _dietPlanner$planOrga2 = _slicedToArray24(_dietPlanner$planOrga, 2), planFoodBooze = _dietPlanner$planOrga2[1], spleenCapacity = resolvedOrganCapacities.find(function(_ref16) {
+    var _ref17 = _slicedToArray24(_ref16, 1), organ = _ref17[0];
     return organ === "spleen item";
   });
   if (spleenCapacity) {
     var additionalSpleen = sum(planFoodBooze, function(_ref18) {
-      var _ref19 = _slicedToArray22(_ref18, 2), items = _ref19[0], number = _ref19[1];
+      var _ref19 = _slicedToArray24(_ref18, 2), items = _ref19[0], number = _ref19[1];
       return items.some(function(menuItem) {
         return $items(_templateObject564 || (_templateObject564 = _taggedTemplateLiteral69(["jar of fermented pickle juice, extra-greasy slider"]))).includes(menuItem.item);
       }) ? 5 * number : 0;
-    }), _spleenCapacity = _slicedToArray22(spleenCapacity, 2), availableSpleen = _spleenCapacity[1], _dietPlanner$planOrga3 = dietPlanner.planOrgan("spleen item", availableSpleen + additionalSpleen), _dietPlanner$planOrga4 = _slicedToArray22(_dietPlanner$planOrga3, 2), planSpleen = _dietPlanner$planOrga4[1];
+    }), _spleenCapacity = _slicedToArray24(spleenCapacity, 2), availableSpleen = _spleenCapacity[1], _dietPlanner$planOrga3 = dietPlanner.planOrgan("spleen item", availableSpleen + additionalSpleen), _dietPlanner$planOrga4 = _slicedToArray24(_dietPlanner$planOrga3, 2), planSpleen = _dietPlanner$planOrga4[1];
     return [].concat(_toConsumableArray20(planFoodBooze), _toConsumableArray20(planSpleen));
   } else
     return planFoodBooze;
@@ -18353,7 +18413,7 @@ var DietEntry = /* @__PURE__ */ function() {
     key: "from",
     value: function(rawDiet) {
       var diet = rawDiet.map(function(item13) {
-        var _item = _slicedToArray22(item13, 2), menuItems = _item[0], quantity = _item[1];
+        var _item = _slicedToArray24(item13, 2), menuItems = _item[0], quantity = _item[1];
         return new DietEntry(menuItems, quantity);
       });
       return new Diet2(diet);
@@ -18378,10 +18438,10 @@ var _templateObject509, _templateObject2134, _templateObject3123;
 function _taggedTemplateLiteral70(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
-function _createForOfIteratorHelper13(r, e) {
+function _createForOfIteratorHelper12(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray36(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray37(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -18410,25 +18470,25 @@ function _createForOfIteratorHelper13(r, e) {
   } };
 }
 function _toConsumableArray21(r) {
-  return _arrayWithoutHoles21(r) || _iterableToArray21(r) || _unsupportedIterableToArray36(r) || _nonIterableSpread21();
+  return _arrayWithoutHoles21(r) || _iterableToArray21(r) || _unsupportedIterableToArray37(r) || _nonIterableSpread21();
 }
 function _nonIterableSpread21() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray36(r, a) {
+function _unsupportedIterableToArray37(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray36(r, a);
+    if (typeof r == "string") return _arrayLikeToArray37(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray36(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray37(r, a) : void 0;
   }
 }
 function _iterableToArray21(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles21(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray36(r);
+  if (Array.isArray(r)) return _arrayLikeToArray37(r);
 }
-function _arrayLikeToArray36(r, a) {
+function _arrayLikeToArray37(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -18534,7 +18594,7 @@ var Dungeon = /* @__PURE__ */ function() {
   }, {
     key: "findLoot",
     value: function() {
-      var result = /* @__PURE__ */ new Map(), pageText = (0, import_kolmafia75.visitUrl)("clan_basement.php"), _iterator = _createForOfIteratorHelper13(this.loot), _step;
+      var result = /* @__PURE__ */ new Map(), pageText = (0, import_kolmafia75.visitUrl)("clan_basement.php"), _iterator = _createForOfIteratorHelper12(this.loot), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var _pageText$match$lengt, _pageText$match, lootItem = _step.value;
@@ -18575,10 +18635,10 @@ function _objectSpread10(e) {
   }
   return e;
 }
-function _createForOfIteratorHelper14(r, e) {
+function _createForOfIteratorHelper13(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray37(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray38(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -18606,14 +18666,14 @@ function _createForOfIteratorHelper14(r, e) {
     }
   } };
 }
-function _unsupportedIterableToArray37(r, a) {
+function _unsupportedIterableToArray38(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray37(r, a);
+    if (typeof r == "string") return _arrayLikeToArray38(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray37(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray38(r, a) : void 0;
   }
 }
-function _arrayLikeToArray37(r, a) {
+function _arrayLikeToArray38(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -18805,7 +18865,7 @@ var MoodElement = /* @__PURE__ */ function() {
       if (!(0, import_kolmafia76.haveSkill)(this.skill)) return !1;
       if (initialTurns >= ensureTurns) return !0;
       if (mood.options.songSlots.length > 0 && isSong(this.skill) && !have(effect2)) {
-        var activeSongs = getActiveSongs(), _iterator = _createForOfIteratorHelper14(activeSongs), _step;
+        var activeSongs = getActiveSongs(), _iterator = _createForOfIteratorHelper13(activeSongs), _step;
         try {
           var _loop = function() {
             var song2 = _step.value, slot = mood.options.songSlots.find(function(slot2) {
@@ -18922,7 +18982,7 @@ var MoodElement = /* @__PURE__ */ function() {
     key: "moreMp",
     value: function(minimumTarget) {
       if (!((0, import_kolmafia76.myMp)() >= minimumTarget)) {
-        var _iterator2 = _createForOfIteratorHelper14(this.options.mpSources), _step2;
+        var _iterator2 = _createForOfIteratorHelper13(this.options.mpSources), _step2;
         try {
           for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
             var mpSource = _step2.value;
@@ -19006,7 +19066,7 @@ var MoodElement = /* @__PURE__ */ function() {
     value: function() {
       var ensureTurns = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 1, availableMp = this.availableMp(), totalMpPerTurn = sum(this.elements, function(element2) {
         return element2.mpCostPerTurn();
-      }), potentialTurns = Math.floor(availableMp / totalMpPerTurn), completeSuccess = !0, _iterator3 = _createForOfIteratorHelper14(this.elements), _step3;
+      }), potentialTurns = Math.floor(availableMp / totalMpPerTurn), completeSuccess = !0, _iterator3 = _createForOfIteratorHelper13(this.elements), _step3;
       try {
         for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
           var element = _step3.value, elementTurns = ensureTurns;
@@ -19182,7 +19242,7 @@ var import_html_entities2 = __toESM(require_lib(), 1), import_kolmafia79 = requi
 init_kolmafia_polyfill();
 var import_kolmafia78 = require("kolmafia");
 function _toConsumableArray22(r) {
-  return _arrayWithoutHoles22(r) || _iterableToArray22(r) || _unsupportedIterableToArray38(r) || _nonIterableSpread22();
+  return _arrayWithoutHoles22(r) || _iterableToArray22(r) || _unsupportedIterableToArray39(r) || _nonIterableSpread22();
 }
 function _nonIterableSpread22() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -19191,15 +19251,15 @@ function _iterableToArray22(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles22(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray38(r);
+  if (Array.isArray(r)) return _arrayLikeToArray39(r);
 }
-function _slicedToArray23(r, e) {
-  return _arrayWithHoles23(r) || _iterableToArrayLimit23(r, e) || _unsupportedIterableToArray38(r, e) || _nonIterableRest23();
+function _slicedToArray25(r, e) {
+  return _arrayWithHoles25(r) || _iterableToArrayLimit25(r, e) || _unsupportedIterableToArray39(r, e) || _nonIterableRest25();
 }
-function _nonIterableRest23() {
+function _nonIterableRest25() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit23(r, l) {
+function _iterableToArrayLimit25(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -19220,91 +19280,10 @@ function _iterableToArrayLimit23(r, l) {
     return a;
   }
 }
-function _arrayWithHoles23(r) {
+function _arrayWithHoles25(r) {
   if (Array.isArray(r)) return r;
 }
-function _createForOfIteratorHelper15(r, e) {
-  var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
-  if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray38(r)) || e && r && typeof r.length == "number") {
-      t && (r = t);
-      var _n = 0, F = function() {
-      };
-      return { s: F, n: function() {
-        return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] };
-      }, e: function(r2) {
-        throw r2;
-      }, f: F };
-    }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  var o, a = !0, u = !1;
-  return { s: function() {
-    t = t.call(r);
-  }, n: function() {
-    var r2 = t.next();
-    return a = r2.done, r2;
-  }, e: function(r2) {
-    u = !0, o = r2;
-  }, f: function() {
-    try {
-      a || t.return == null || t.return();
-    } finally {
-      if (u) throw o;
-    }
-  } };
-}
-function _unsupportedIterableToArray38(r, a) {
-  if (r) {
-    if (typeof r == "string") return _arrayLikeToArray38(r, a);
-    var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray38(r, a) : void 0;
-  }
-}
-function _arrayLikeToArray38(r, a) {
-  (a == null || a > r.length) && (a = r.length);
-  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-  return n;
-}
-var EMPTY_VALUE = Symbol("empty");
-function fetchUrl(path3) {
-  var query = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [], options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {}, _options$method = options.method, method = _options$method === void 0 ? "POST" : _options$method, url = buildUrl(path3, query);
-  return (0, import_kolmafia78.visitUrl)(url, method === "POST", !0);
-}
-function buildUrl(path3) {
-  var query = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [], urlParams = Array.isArray(query) ? query : Object.entries(query);
-  if (urlParams.length === 0)
-    return path3;
-  var chunks = [path3], sep = path3.includes("?") ? "&" : "?", _iterator = _createForOfIteratorHelper15(urlParams), _step;
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var param = _step.value;
-      if (param.length !== 2)
-        throw new Error("Query parameter array may only contain pair elements");
-      var _param = _slicedToArray23(param, 2), _key = _param[0], _value = _param[1];
-      chunks.push(sep), sep = "&", chunks.push(encodeURIComponent(_key)), _value !== EMPTY_VALUE && (chunks.push("="), chunks.push(encodeURIComponent(_value)));
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-  return chunks.join("");
-}
-function combineQuery() {
-  for (var _len = arguments.length, queries = new Array(_len), _key2 = 0; _key2 < _len; _key2++)
-    queries[_key2] = arguments[_key2];
-  if (queries.length === 1)
-    return queries[0];
-  for (var result = [], _i = 0, _queries = queries; _i < _queries.length; _i++) {
-    var query = _queries[_i];
-    Array.isArray(query) ? result.push.apply(result, _toConsumableArray22(query)) : result.push.apply(result, _toConsumableArray22(Object.entries(query)));
-  }
-  return result;
-}
-
-// src/Kmail.ts
-function _createForOfIteratorHelper16(r, e) {
+function _createForOfIteratorHelper14(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
     if (Array.isArray(r) || (t = _unsupportedIterableToArray39(r)) || e && r && typeof r.length == "number") {
@@ -19335,24 +19314,6 @@ function _createForOfIteratorHelper16(r, e) {
     }
   } };
 }
-function _toConsumableArray23(r) {
-  return _arrayWithoutHoles23(r) || _iterableToArray23(r) || _unsupportedIterableToArray39(r) || _nonIterableSpread23();
-}
-function _nonIterableSpread23() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _iterableToArray23(r) {
-  if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
-}
-function _arrayWithoutHoles23(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray39(r);
-}
-function _slicedToArray24(r, e) {
-  return _arrayWithHoles24(r) || _iterableToArrayLimit24(r, e) || _unsupportedIterableToArray39(r, e) || _nonIterableRest24();
-}
-function _nonIterableRest24() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
 function _unsupportedIterableToArray39(r, a) {
   if (r) {
     if (typeof r == "string") return _arrayLikeToArray39(r, a);
@@ -19365,7 +19326,106 @@ function _arrayLikeToArray39(r, a) {
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit24(r, l) {
+var EMPTY_VALUE = Symbol("empty");
+function fetchUrl(path3) {
+  var query = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [], options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {}, _options$method = options.method, method = _options$method === void 0 ? "POST" : _options$method, url = buildUrl(path3, query);
+  return (0, import_kolmafia78.visitUrl)(url, method === "POST", !0);
+}
+function buildUrl(path3) {
+  var query = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [], urlParams = Array.isArray(query) ? query : Object.entries(query);
+  if (urlParams.length === 0)
+    return path3;
+  var chunks = [path3], sep = path3.includes("?") ? "&" : "?", _iterator = _createForOfIteratorHelper14(urlParams), _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+      var param = _step.value;
+      if (param.length !== 2)
+        throw new Error("Query parameter array may only contain pair elements");
+      var _param = _slicedToArray25(param, 2), _key = _param[0], _value = _param[1];
+      chunks.push(sep), sep = "&", chunks.push(encodeURIComponent(_key)), _value !== EMPTY_VALUE && (chunks.push("="), chunks.push(encodeURIComponent(_value)));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return chunks.join("");
+}
+function combineQuery() {
+  for (var _len = arguments.length, queries = new Array(_len), _key2 = 0; _key2 < _len; _key2++)
+    queries[_key2] = arguments[_key2];
+  if (queries.length === 1)
+    return queries[0];
+  for (var result = [], _i = 0, _queries = queries; _i < _queries.length; _i++) {
+    var query = _queries[_i];
+    Array.isArray(query) ? result.push.apply(result, _toConsumableArray22(query)) : result.push.apply(result, _toConsumableArray22(Object.entries(query)));
+  }
+  return result;
+}
+
+// src/Kmail.ts
+function _createForOfIteratorHelper15(r, e) {
+  var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
+  if (!t) {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray40(r)) || e && r && typeof r.length == "number") {
+      t && (r = t);
+      var _n = 0, F = function() {
+      };
+      return { s: F, n: function() {
+        return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] };
+      }, e: function(r2) {
+        throw r2;
+      }, f: F };
+    }
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  var o, a = !0, u = !1;
+  return { s: function() {
+    t = t.call(r);
+  }, n: function() {
+    var r2 = t.next();
+    return a = r2.done, r2;
+  }, e: function(r2) {
+    u = !0, o = r2;
+  }, f: function() {
+    try {
+      a || t.return == null || t.return();
+    } finally {
+      if (u) throw o;
+    }
+  } };
+}
+function _toConsumableArray23(r) {
+  return _arrayWithoutHoles23(r) || _iterableToArray23(r) || _unsupportedIterableToArray40(r) || _nonIterableSpread23();
+}
+function _nonIterableSpread23() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _iterableToArray23(r) {
+  if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
+}
+function _arrayWithoutHoles23(r) {
+  if (Array.isArray(r)) return _arrayLikeToArray40(r);
+}
+function _slicedToArray26(r, e) {
+  return _arrayWithHoles26(r) || _iterableToArrayLimit26(r, e) || _unsupportedIterableToArray40(r, e) || _nonIterableRest26();
+}
+function _nonIterableRest26() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray40(r, a) {
+  if (r) {
+    if (typeof r == "string") return _arrayLikeToArray40(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray40(r, a) : void 0;
+  }
+}
+function _arrayLikeToArray40(r, a) {
+  (a == null || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
+function _iterableToArrayLimit26(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -19386,7 +19446,7 @@ function _iterableToArrayLimit24(r, l) {
     return a;
   }
 }
-function _arrayWithHoles24(r) {
+function _arrayWithHoles26(r) {
   if (Array.isArray(r)) return r;
 }
 function _classCallCheck19(a, n) {
@@ -19443,13 +19503,13 @@ var Kmail = /* @__PURE__ */ function() {
           text = text.slice(endIdx + 9);
         }
       } else if (this.type === "giftshop") {
-        var _text$split = text.split("<p>Inside Note:<p>"), _text$split2 = _slicedToArray24(_text$split, 2);
+        var _text$split = text.split("<p>Inside Note:<p>"), _text$split2 = _slicedToArray26(_text$split, 2);
         text = _text$split2[0], insideText = _text$split2[1];
       }
       var split = function(s) {
         var idx = s.indexOf("<");
         return idx === -1 ? [s] : [s.slice(0, idx), s.slice(idx)];
-      }, _split = split(text), _split2 = _slicedToArray24(_split, 2), outsideNote = _split2[0], _split2$ = _split2[1], outsideAttachments = _split2$ === void 0 ? null : _split2$, _ref = insideText !== void 0 ? split(insideText) : [], _ref2 = _slicedToArray24(_ref, 2), _ref2$ = _ref2[0], insideNote = _ref2$ === void 0 ? null : _ref2$, _ref2$2 = _ref2[1], insideAttachments = _ref2$2 === void 0 ? null : _ref2$2;
+      }, _split = split(text), _split2 = _slicedToArray26(_split, 2), outsideNote = _split2[0], _split2$ = _split2[1], outsideAttachments = _split2$ === void 0 ? null : _split2$, _ref = insideText !== void 0 ? split(insideText) : [], _ref2 = _slicedToArray26(_ref, 2), _ref2$ = _ref2[0], insideNote = _ref2$ === void 0 ? null : _ref2$, _ref2$2 = _ref2[1], insideAttachments = _ref2$2 === void 0 ? null : _ref2$2;
       return {
         outsideNote: (0, import_html_entities2.decode)(outsideNote),
         outsideAttachments: outsideAttachments,
@@ -19592,14 +19652,14 @@ var Kmail = /* @__PURE__ */ function() {
     key: "_genericSend",
     value: function(to, message, items, meat, chunkSize, constructUrl, successString) {
       var m = meat, sendableItems = _toConsumableArray23(arrayToCountedMap(items).entries()).filter(function(_ref3) {
-        var _ref4 = _slicedToArray24(_ref3, 1), item13 = _ref4[0];
+        var _ref4 = _slicedToArray26(_ref3, 1), item13 = _ref4[0];
         return (0, import_kolmafia79.isGiftable)(item13);
-      }), result = !0, chunks = chunk(sendableItems, chunkSize), _iterator = _createForOfIteratorHelper16(chunks.length > 0 ? chunks : [null]), _step;
+      }), result = !0, chunks = chunk(sendableItems, chunkSize), _iterator = _createForOfIteratorHelper15(chunks.length > 0 ? chunks : [null]), _step;
       try {
         var _loop = function() {
           var _c$length, c = _step.value, itemsQuery = {};
           c !== null && c.forEach(function(_ref5, i) {
-            var _ref6 = _slicedToArray24(_ref5, 2), item13 = _ref6[0], quantity = _ref6[1];
+            var _ref6 = _slicedToArray26(_ref5, 2), item13 = _ref6[0], quantity = _ref6[1];
             itemsQuery["whichitem".concat(i + 1)] = item13.id, itemsQuery["howmany".concat(i + 1)] = quantity;
           });
           var _constructUrl = constructUrl({
@@ -19750,10 +19810,10 @@ function _toPrimitive26(t, r) {
   }
   return (r === "string" ? String : Number)(t);
 }
-function _createForOfIteratorHelper17(r, e) {
+function _createForOfIteratorHelper16(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray40(r)) || e && r && typeof r.length == "number") {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray41(r)) || e && r && typeof r.length == "number") {
       t && (r = t);
       var _n = 0, F = function() {
       };
@@ -19781,13 +19841,13 @@ function _createForOfIteratorHelper17(r, e) {
     }
   } };
 }
-function _slicedToArray25(r, e) {
-  return _arrayWithHoles25(r) || _iterableToArrayLimit25(r, e) || _unsupportedIterableToArray40(r, e) || _nonIterableRest25();
+function _slicedToArray27(r, e) {
+  return _arrayWithHoles27(r) || _iterableToArrayLimit27(r, e) || _unsupportedIterableToArray41(r, e) || _nonIterableRest27();
 }
-function _nonIterableRest25() {
+function _nonIterableRest27() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit25(r, l) {
+function _iterableToArrayLimit27(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -19808,32 +19868,32 @@ function _iterableToArrayLimit25(r, l) {
     return a;
   }
 }
-function _arrayWithHoles25(r) {
+function _arrayWithHoles27(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral72(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
 function _toConsumableArray24(r) {
-  return _arrayWithoutHoles24(r) || _iterableToArray24(r) || _unsupportedIterableToArray40(r) || _nonIterableSpread24();
+  return _arrayWithoutHoles24(r) || _iterableToArray24(r) || _unsupportedIterableToArray41(r) || _nonIterableSpread24();
 }
 function _nonIterableSpread24() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray40(r, a) {
+function _unsupportedIterableToArray41(r, a) {
   if (r) {
-    if (typeof r == "string") return _arrayLikeToArray40(r, a);
+    if (typeof r == "string") return _arrayLikeToArray41(r, a);
     var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray40(r, a) : void 0;
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray41(r, a) : void 0;
   }
 }
 function _iterableToArray24(r) {
   if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
 }
 function _arrayWithoutHoles24(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray40(r);
+  if (Array.isArray(r)) return _arrayLikeToArray41(r);
 }
-function _arrayLikeToArray40(r, a) {
+function _arrayLikeToArray41(r, a) {
   (a == null || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
@@ -19848,7 +19908,7 @@ function mySessionItemsWrapper() {
   }, itemMappings = new Map([].concat(_toConsumableArray24(foldable($item(_templateObject560 || (_templateObject560 = _taggedTemplateLiteral72(["liar's pants"]))))), _toConsumableArray24(foldable($item(_templateObject2136 || (_templateObject2136 = _taggedTemplateLiteral72(["ice pick"]))))), _toConsumableArray24(manyToOne($item(_templateObject3125 || (_templateObject3125 = _taggedTemplateLiteral72(["Spooky Putty sheet"]))), [$item(_templateObject4106 || (_templateObject4106 = _taggedTemplateLiteral72(["Spooky Putty monster"])))].concat(_toConsumableArray24(getFoldGroup($item(_templateObject561 || (_templateObject561 = _taggedTemplateLiteral72(["Spooky Putty sheet"])))))))), _toConsumableArray24(foldable($item(_templateObject651 || (_templateObject651 = _taggedTemplateLiteral72(["stinky cheese sword"]))))), _toConsumableArray24(foldable($item(_templateObject747 || (_templateObject747 = _taggedTemplateLiteral72(["naughty paper shuriken"]))))), _toConsumableArray24(foldable($item(_templateObject839 || (_templateObject839 = _taggedTemplateLiteral72(["Loathing Legion knife"]))))), _toConsumableArray24(foldable($item(_templateObject933 || (_templateObject933 = _taggedTemplateLiteral72(["deceased crimbo tree"]))))), _toConsumableArray24(foldable($item(_templateObject1028 || (_templateObject1028 = _taggedTemplateLiteral72(["makeshift turban"]))))), _toConsumableArray24(foldable($item(_templateObject1125 || (_templateObject1125 = _taggedTemplateLiteral72(["turtle wax shield"]))))), _toConsumableArray24(foldable($item(_templateObject1224 || (_templateObject1224 = _taggedTemplateLiteral72(["metallic foil bow"]))))), _toConsumableArray24(foldable($item(_templateObject1322 || (_templateObject1322 = _taggedTemplateLiteral72(["ironic moustache"]))))), _toConsumableArray24(foldable($item(_templateObject1420 || (_templateObject1420 = _taggedTemplateLiteral72(["bugged balaclava"]))))), _toConsumableArray24(foldable($item(_templateObject1517 || (_templateObject1517 = _taggedTemplateLiteral72(["toggle switch (Bartend)"]))))), _toConsumableArray24(foldable($item(_templateObject1617 || (_templateObject1617 = _taggedTemplateLiteral72(["mushroom cap"]))))), _toConsumableArray24(manyToOne($item(_templateObject1717 || (_templateObject1717 = _taggedTemplateLiteral72(["can of Rain-Doh"]))), $items(_templateObject1817 || (_templateObject1817 = _taggedTemplateLiteral72(["empty Rain-Doh can"]))))), _toConsumableArray24(manyToOne($item(_templateObject1916 || (_templateObject1916 = _taggedTemplateLiteral72(["meteorite fragment"]))), $items(_templateObject2016 || (_templateObject2016 = _taggedTemplateLiteral72(["meteorite earring, meteorite necklace, meteorite ring"]))))), _toConsumableArray24(manyToOne($item(_templateObject2137 || (_templateObject2137 = _taggedTemplateLiteral72(["Sneaky Pete's leather jacket"]))), $items(_templateObject2218 || (_templateObject2218 = _taggedTemplateLiteral72(["Sneaky Pete's leather jacket (collar popped)"]))))), _toConsumableArray24(manyToOne($item(_templateObject2317 || (_templateObject2317 = _taggedTemplateLiteral72(["Boris's Helm"]))), $items(_templateObject2416 || (_templateObject2416 = _taggedTemplateLiteral72(["Boris's Helm (askew)"]))))), _toConsumableArray24(manyToOne($item(_templateObject2515 || (_templateObject2515 = _taggedTemplateLiteral72(["Jarlsberg's pan"]))), $items(_templateObject2614 || (_templateObject2614 = _taggedTemplateLiteral72(["Jarlsberg's pan (Cosmic portal mode)"]))))), _toConsumableArray24(manyToOne($item(_templateObject2714 || (_templateObject2714 = _taggedTemplateLiteral72(["tiny plastic sword"]))), $items(_templateObject2812 || (_templateObject2812 = _taggedTemplateLiteral72(["grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo"]))))), _toConsumableArray24(manyToOne($item(_templateObject2912 || (_templateObject2912 = _taggedTemplateLiteral72(["earthenware muffin tin"]))), $items(_templateObject3012 || (_templateObject3012 = _taggedTemplateLiteral72(["blueberry muffin, bran muffin, chocolate chip muffin"]))))), _toConsumableArray24(manyToOne($item(_templateObject3126 || (_templateObject3126 = _taggedTemplateLiteral72(["ChibiBuddy\u2122 (on)"]))), $items(_templateObject3214 || (_templateObject3214 = _taggedTemplateLiteral72(["ChibiBuddy\u2122 (off)"]))))))), inventory = /* @__PURE__ */ new Map(), invLocations = sessionOnly ? [import_kolmafia81.mySessionItems] : [import_kolmafia81.mySessionItems, import_kolmafia81.getCloset, import_kolmafia81.getDisplay, import_kolmafia81.getStorage];
   if (!sessionOnly)
     for (var _i = 0, _Object$entries = Object.entries((0, import_kolmafia81.getCampground)()); _i < _Object$entries.length; _i++) {
-      var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray25(_Object$entries[_i], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1];
+      var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray27(_Object$entries[_i], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1];
       if (quantity) {
         var item13 = (0, import_kolmafia81.toItem)(itemStr);
         if (item13 !== $item(_templateObject3313 || (_templateObject3313 = _taggedTemplateLiteral72(["big rock"])))) {
@@ -19859,7 +19919,7 @@ function mySessionItemsWrapper() {
     }
   for (var _i2 = 0, _invLocations = invLocations; _i2 < _invLocations.length; _i2++)
     for (var inventoryFunc = _invLocations[_i2], _i3 = 0, _Object$entries2 = Object.entries(inventoryFunc()); _i3 < _Object$entries2.length; _i3++) {
-      var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray25(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1];
+      var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray27(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1];
       if (_quantity) {
         var _item = (0, import_kolmafia81.toItem)(_itemStr), _mappedItem = (_itemMappings$get2 = itemMappings.get(_item)) !== null && _itemMappings$get2 !== void 0 ? _itemMappings$get2 : _item;
         inventory.set(_mappedItem, _quantity + ((_inventory$get2 = inventory.get(_mappedItem)) !== null && _inventory$get2 !== void 0 ? _inventory$get2 : 0)), inventory.get(_mappedItem) === 0 && inventory.delete(_mappedItem);
@@ -19868,7 +19928,7 @@ function mySessionItemsWrapper() {
   return inventory;
 }
 function inventoryOperation(a, b, op) {
-  var difference = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper17(new Set([].concat(_toConsumableArray24(a.keys()), _toConsumableArray24(b.keys())))), _step;
+  var difference = /* @__PURE__ */ new Map(), _iterator = _createForOfIteratorHelper16(new Set([].concat(_toConsumableArray24(a.keys()), _toConsumableArray24(b.keys())))), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
       var _a$get, _b$get, item13 = _step.value;
@@ -19881,7 +19941,7 @@ function inventoryOperation(a, b, op) {
   }
   var diffEntries = _toConsumableArray24(difference.entries());
   return new Map(diffEntries.filter(function(_ref) {
-    var _ref2 = _slicedToArray25(_ref, 2), value = _ref2[1];
+    var _ref2 = _slicedToArray27(_ref, 2), value = _ref2[1];
     return value !== 0;
   }));
 }
@@ -19909,7 +19969,7 @@ var Session = /* @__PURE__ */ function() {
     key: "value",
     value: function(itemValue) {
       var turns2 = this.totalTurns, meat = Math.floor(this.meat), itemDetails = _toConsumableArray24(this.items.entries()).map(function(_ref3) {
-        var _ref4 = _slicedToArray25(_ref3, 2), item13 = _ref4[0], quantity = _ref4[1];
+        var _ref4 = _slicedToArray27(_ref3, 2), item13 = _ref4[0], quantity = _ref4[1];
         return {
           item: item13,
           quantity: quantity,
@@ -20033,7 +20093,7 @@ var Session = /* @__PURE__ */ function() {
       var fileValue = (0, import_kolmafia81.fileToBuffer)(Session2.getFilepath(filename));
       if (fileValue.length > 0) {
         var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref5) {
-          var _ref6 = _slicedToArray25(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
+          var _ref6 = _slicedToArray27(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
           return [(0, import_kolmafia81.toItem)(itemStr), quantity];
         });
         return new Session2(val.meat, new Map(parsedItems), (_val$totalTurns = val.totalTurns) !== null && _val$totalTurns !== void 0 ? _val$totalTurns : 0);

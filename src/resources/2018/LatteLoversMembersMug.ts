@@ -5,6 +5,7 @@ import { Modifiers } from "../../modifier.js";
 import { get } from "../../property.js";
 import { $item, $location } from "../../template-string.js";
 import { clamp } from "../../utils.js";
+import { NumericModifier } from "../../modifierTypes.js";
 
 /**
  * @returns Whether we `have` the latte lovers member's mug
@@ -294,7 +295,7 @@ export function fill(
  * @param ingredient A latte ingredient
  * @returns An object containing the modifiers associated with that latte ingredient
  */
-export function modifierOf(ingredient: Ingredient): Modifiers {
+export function modifierOf(ingredient: Ingredient): Modifiers<NumericModifier> {
   return INGREDIENTS[ingredient].modifier;
 }
 

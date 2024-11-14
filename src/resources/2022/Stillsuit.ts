@@ -1,8 +1,10 @@
-import { cliExecute, Familiar, visitUrl } from "kolmafia";
+import { cliExecute, Familiar, splitModifiers, visitUrl } from "kolmafia";
 import { FamiliarTag, getFamiliarTags, have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
 import { NumericModifier } from "../../modifierTypes.js";
+import { Modifiers, parseModifiers } from "../../modifier.js";
+import { StringProperty } from "../../propertyTypes.js";
 import { maxBy } from "../../utils.js";
 
 /**
@@ -31,6 +33,25 @@ export function drinkDistillate(): boolean {
   return cliExecute("drink stillsuit distillate");
 }
 
+const distillateModifiers = (
+  pref: StringProperty,
+): Modifiers<NumericModifier> => parseModifiers(pref);
+
+/**
+ * @returns A `Modifiers` object that contains your next Distillate modifiers
+ */
+export function nextDistillateModifiers(): Modifiers<NumericModifier> {
+  visitUrl("inventory.php?action=distill&pwd");
+  return distillateModifiers("nextDistillateMods");
+}
+
+/**
+ * @returns A `Modifiers` object that contains your current Distillate modifiers
+ */
+export function currentDistillateModifiers(): Modifiers<NumericModifier> {
+  return distillateModifiers("currentDistillateMods");
+}
+
 /**
  * Checks distillate for specific modifiers
  * @param modifier determines what modifier to check stillsuit buffs against
@@ -38,24 +59,9 @@ export function drinkDistillate(): boolean {
  */
 export function distillateModifier(modifier: NumericModifier): number {
   visitUrl("inventory.php?action=distill&pwd");
-  // Retrieve the current distillate modifiers as a string
-  const distillateMods = get("currentDistillateMods");
 
-  const experienceMap: Record<string, string> = {
-    "Muscle Experience": "Experience (Muscle)",
-    "Mysticality Experience": "Experience (Mysticality)",
-    "Moxie Experience": "Experience (Moxie)",
-  };
-
-  // Adjust the modifier if it is one of the special cases
-  const adjustedModifier = experienceMap[modifier] ?? modifier;
-
-  // Construct a regex pattern to match the modifier and capture the numeric value
-  const regex = new RegExp(`${adjustedModifier}: \\+?(-?\\d+)`);
-  const match = distillateMods.match(regex);
-
-  // If a match is found, parse and return the captured number; otherwise, return 0
-  return match ? Number(match[1]) : 0;
+  const value = splitModifiers("currentDistillateMods")[modifier];
+  return value ? Number(value) : 0;
 }
 
 type StillsuitTag = Exclude<FamiliarTag, "pokefam">;
@@ -120,20 +126,15 @@ function isStillsuitTag(tag: string): tag is StillsuitTag {
  * @param familiar The familiar in question
  * @returns An object whose keys are NumericModifiers potentially granted by the stillsuit distillate from this familiar, and whose values are the relative weights of those modifiers
  */
-export function modifierRatio(
-  familiar: Familiar,
-): Partial<Record<NumericModifier, number>> {
+export function modifierRatio(familiar: Familiar): Modifiers<NumericModifier> {
   const tags = getFamiliarTags(familiar);
-  return tags
-    .filter(isStillsuitTag)
-    .reduce<Partial<Record<NumericModifier, number>>>(
-      (acc, tag) => ({
-        ...acc,
-        [MODIFIER_TAGS[tag]]:
-          ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
-      }),
-      {},
-    );
+  return tags.filter(isStillsuitTag).reduce<Modifiers<NumericModifier>>(
+    (acc, tag) => ({
+      ...acc,
+      [MODIFIER_TAGS[tag]]: ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
+    }),
+    {},
+  );
 }
 
 /**

@@ -92,6 +92,7 @@ async function main() {
     contents += `export const ${typeName}Modifiers = ${JSON.stringify(
       values,
     )} as const;\n`;
+    contents += `export const ${typeName}ModifiersSet = new Set(${typeName}Modifiers)`
     contents += `export type ${tc(
       typeName,
     )}Modifier = typeof ${typeName}Modifiers[number];\n`;

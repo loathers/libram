@@ -6,34 +6,27 @@ import {
   familiarWeight,
   getProperty,
   Item,
-  ModifierValueType,
   myFamiliar,
   numericModifier,
   print,
   Skill,
   splitModifiers,
   stringModifier,
-  toModifier,
 } from "kolmafia";
 import { have } from "./lib.js";
 
 import {
   BooleanModifier,
+  booleanModifiersSet,
   ModifierType,
   NumericModifier,
+  numericModifiersSet,
   StringModifier,
+  stringModifiersSet,
 } from "./modifierTypes.js";
 import { $effect } from "./template-string.js";
 import { sum } from "./utils.js";
 import { StringProperty } from "./propertyTypes.js";
-
-function testModifierType(
-  potentialModifier: string,
-  modifierType: ModifierValueType,
-) {
-  const modifier = toModifier(potentialModifier);
-  return modifier.name === potentialModifier && modifier.type === modifierType;
-}
 
 /**
  * Type guard that determines if a given string is a boolean modifier
@@ -43,7 +36,7 @@ function testModifierType(
 export function isBooleanModifier(
   modifier: string,
 ): modifier is BooleanModifier {
-  return testModifierType(modifier, "boolean");
+  return (booleanModifiersSet as Set<string>).has(modifier);
 }
 
 /**
@@ -54,7 +47,7 @@ export function isBooleanModifier(
 export function isNumericModifier(
   modifier: string,
 ): modifier is NumericModifier {
-  return testModifierType(modifier, "numeric");
+  return (numericModifiersSet as Set<string>).has(modifier);
 }
 
 /**
@@ -63,7 +56,7 @@ export function isNumericModifier(
  * @returns Whether the string in question is a valid string modifier
  */
 export function isStringModifier(modifier: string): modifier is StringModifier {
-  return testModifierType(modifier, "string");
+  return (stringModifiersSet as Set<string>).has(modifier);
 }
 
 /**
@@ -73,8 +66,9 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
  */
 export function isValidModifier(modifier: string): modifier is ModifierType {
   return (
-    toModifier(modifier).type !== "none" &&
-    toModifier(modifier).name === modifier
+    isNumericModifier(modifier) ||
+    isBooleanModifier(modifier) ||
+    isStringModifier(modifier)
   );
 }
 

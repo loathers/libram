@@ -75,7 +75,7 @@ export function toCombination(
 /**
  * Utility function to ensure you're dealing with a `CombinationString` string.
  * @param combination An array containing a `CombinationString` or a `Combination` array.
- * @returns A `CombinationSTring` corresponding to the information passed in.
+ * @returns A `CombinationString` corresponding to the information passed in.
  */
 export function toCombinationString(
   combination: Combination | [CombinationString],

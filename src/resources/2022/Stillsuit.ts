@@ -1,5 +1,5 @@
 import { cliExecute, Familiar, splitModifiers, visitUrl } from "kolmafia";
-import { FamiliarTag, getFamiliarTags, have as haveItem } from "../../lib.js";
+import { FamiliarTag, getFamiliarTags, have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
 import { NumericModifier } from "../../modifierTypes.js";
@@ -12,7 +12,7 @@ import { maxBy } from "../../utils.js";
  * @returns Whether you have the tiny stillsuit
  */
 export function have(): boolean {
-  return haveItem($item`tiny stillsuit`);
+  return have_($item`tiny stillsuit`);
 }
 
 /**
@@ -144,7 +144,7 @@ export function modifierRatio(familiar: Familiar): Modifiers<NumericModifier> {
  */
 export function bestFamiliar(modifier: NumericModifier): Familiar {
   return maxBy(
-    Familiar.all().filter(have),
+    Familiar.all().filter(have_),
     (familiar) => modifierRatio(familiar)[modifier] ?? 0,
   );
 }

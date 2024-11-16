@@ -1,5 +1,5 @@
 /* eslint-disable libram/verify-constants */
-import { describe, it, expect, vi, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { InvalidMacroError, Macro } from "./combat.js";
 import {
   $class,

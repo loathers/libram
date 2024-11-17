@@ -131,7 +131,7 @@ export function modifierRatio(familiar: Familiar): Modifiers<NumericModifier> {
   return tags.filter(isStillsuitTag).reduce<Modifiers<NumericModifier>>(
     (acc, tag) => ({
       ...acc,
-      [MODIFIER_TAGS[tag]]: ((acc[MODIFIER_TAGS[tag]] ?? 0) + 1) / tags.length,
+      [MODIFIER_TAGS[tag]]: (acc[MODIFIER_TAGS[tag]] ?? 0) + 1 / tags.length,
     }),
     {},
   );

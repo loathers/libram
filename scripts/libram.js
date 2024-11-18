@@ -16080,11 +16080,11 @@ function modifierRatio(familiar9) {
   var tags = getFamiliarTags(familiar9);
   return tags.filter(isStillsuitTag).reduce(function(acc, tag) {
     var _acc$MODIFIER_TAGS$ta;
-    return _objectSpread7(_objectSpread7({}, acc), {}, _defineProperty15({}, MODIFIER_TAGS[tag], (((_acc$MODIFIER_TAGS$ta = acc[MODIFIER_TAGS[tag]]) !== null && _acc$MODIFIER_TAGS$ta !== void 0 ? _acc$MODIFIER_TAGS$ta : 0) + 1) / tags.length));
+    return _objectSpread7(_objectSpread7({}, acc), {}, _defineProperty15({}, MODIFIER_TAGS[tag], ((_acc$MODIFIER_TAGS$ta = acc[MODIFIER_TAGS[tag]]) !== null && _acc$MODIFIER_TAGS$ta !== void 0 ? _acc$MODIFIER_TAGS$ta : 0) + 1 / tags.length));
   }, {});
 }
 function bestFamiliar(modifier) {
-  return maxBy(import_kolmafia68.Familiar.all().filter(have54), function(familiar9) {
+  return maxBy(import_kolmafia68.Familiar.all().filter(have), function(familiar9) {
     var _modifierRatio$modifi;
     return (_modifierRatio$modifi = modifierRatio(familiar9)[modifier]) !== null && _modifierRatio$modifi !== void 0 ? _modifierRatio$modifi : 0;
   });

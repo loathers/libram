@@ -60,7 +60,7 @@ export function currentDistillateModifiers(): Modifiers<NumericModifier> {
 export function distillateModifier(modifier: NumericModifier): number {
   visitUrl("inventory.php?action=distill&pwd");
 
-  const value = splitModifiers("currentDistillateMods")[modifier];
+  const value = splitModifiers(get("currentDistillateMods"))[modifier];
   return value ? Number(value) : 0;
 }
 

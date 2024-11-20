@@ -4,7 +4,7 @@ import { get } from "../../property.js";
 import { notNull } from "../../utils.js";
 import { isNumericModifier } from "../../modifier.js";
 
-const MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\([^)]*\)/;
+const MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\((.*)\)/;
 /**
  * Parses the _mummeryMods preference into a Map for easier use.
  *
@@ -23,8 +23,8 @@ export function currentCostumes(): Map<
         if (!matcher) return null;
 
         return [
-          Familiar.get(matcher[1]),
-          [modifier, Number(matcher[2])],
+          Familiar.get(matcher[2]),
+          [modifier, Number(matcher[1])],
         ] as const;
       })
       .filter(notNull),

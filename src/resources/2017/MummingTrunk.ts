@@ -4,7 +4,7 @@ import { get } from "../../property.js";
 import { notNull } from "../../utils.js";
 import { isNumericModifier } from "../../modifier.js";
 
-const MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\((.*)\)/;
+const MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\(([^)]*)\)/;
 /**
  * Parses the _mummeryMods preference into a Map for easier use.
  *

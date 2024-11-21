@@ -16021,7 +16021,7 @@ function currentDistillateModifiers() {
 }
 function distillateModifier(modifier) {
   (0, import_kolmafia68.visitUrl)("inventory.php?action=distill&pwd");
-  var value = (0, import_kolmafia68.splitModifiers)("currentDistillateMods")[modifier];
+  var value = (0, import_kolmafia68.splitModifiers)(get("currentDistillateMods"))[modifier];
   return value ? Number(value) : 0;
 }
 var MODIFIER_TAGS = Object.freeze({

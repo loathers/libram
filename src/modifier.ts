@@ -4,25 +4,73 @@ import {
   Effect,
   Familiar,
   familiarWeight,
+  getProperty,
   Item,
   myFamiliar,
   numericModifier,
   print,
   Skill,
+  splitModifiers,
   stringModifier,
 } from "kolmafia";
 import { have } from "./lib.js";
 
 import {
   BooleanModifier,
-  booleanModifiers,
+  booleanModifiersSet,
+  ModifierType,
   NumericModifier,
-  numericModifiers,
+  numericModifiersSet,
   StringModifier,
-  stringModifiers,
+  stringModifiersSet,
 } from "./modifierTypes.js";
 import { $effect } from "./template-string.js";
-import { arrayContains, sum } from "./utils.js";
+import { sum } from "./utils.js";
+import { StringProperty } from "./propertyTypes.js";
+
+/**
+ * Type guard that determines if a given string is a boolean modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid boolean modifier
+ */
+export function isBooleanModifier(
+  modifier: string,
+): modifier is BooleanModifier {
+  return (booleanModifiersSet as Set<string>).has(modifier);
+}
+
+/**
+ * Type guard that determines if a given string is a numeric modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid numeric modifier
+ */
+export function isNumericModifier(
+  modifier: string,
+): modifier is NumericModifier {
+  return (numericModifiersSet as Set<string>).has(modifier);
+}
+
+/**
+ * Type guard that determines if a given string is a string modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid string modifier
+ */
+export function isStringModifier(modifier: string): modifier is StringModifier {
+  return (stringModifiersSet as Set<string>).has(modifier);
+}
+
+/**
+ * Type guard that determines if a given string is a valid modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid modifier
+ */
+export function isValidModifier(modifier: string): modifier is ModifierType {
+  return (
+    isNumericModifier(modifier) ||
+    isBooleanModifier(modifier) ||
+    isStringModifier(modifier)
+  );
+}
 
 export function get(
   name: BooleanModifier,
@@ -44,22 +92,22 @@ export function get(
  * @returns Value of modifier
  */
 export function get(
-  name: BooleanModifier | NumericModifier | StringModifier,
+  name: ModifierType,
   subject?: string | Item | Effect | Skill | Familiar,
 ): unknown {
-  if (arrayContains(name, booleanModifiers)) {
+  if (isBooleanModifier(name)) {
     return subject === undefined
       ? booleanModifier(name)
       : booleanModifier(subject as string, name);
   }
 
-  if (arrayContains(name, numericModifiers)) {
+  if (isNumericModifier(name)) {
     return subject === undefined
       ? numericModifier(name)
       : numericModifier(subject as string, name);
   }
 
-  if (arrayContains(name, stringModifiers)) {
+  if (isStringModifier(name)) {
     return subject === undefined
       ? stringModifier(name)
       : stringModifier(subject as string, name);
@@ -74,8 +122,8 @@ export type ModifierValue<T> = T extends BooleanModifier
       ? string
       : string;
 
-export type Modifiers = Partial<{
-  [T in BooleanModifier | NumericModifier | StringModifier]: ModifierValue<T>;
+export type Modifiers<T extends ModifierType = ModifierType> = Partial<{
+  [K in T]: ModifierValue<K>;
 }>;
 /**
  * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
@@ -88,11 +136,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
   const returnValue = { ...modifiers1, ...modifiers2 };
   for (const modifier in modifiers1) {
     if (Array.from(Object.values(modifiers2)).includes(modifier)) {
-      if (arrayContains(modifier, numericModifiers)) {
+      if (isNumericModifier(modifier)) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? 0) + (modifiers2[modifier] ?? 0);
       }
-      if (arrayContains(modifier, booleanModifiers)) {
+      if (isBooleanModifier(modifier)) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
       }
@@ -237,4 +285,38 @@ export function getTotalModifier(
   ...subjects: (Skill | Effect | Item)[]
 ): number {
   return sum(subjects, (subject) => get(modifier, subject));
+}
+
+/**
+ * Translate a pref into a `Modifiers` object by wrapping mafia's `splitModifiers`
+ * @param pref The name of the mafia preference in question
+ * @param translator Optional object to help translate fields into their appropriate values
+ * @param translator.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
+ * @param translator.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
+ * @param translator.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @returns A `Modifiers` object corresponding to the given preference.
+ */
+export function parseModifiers(
+  pref: StringProperty,
+  {
+    numeric = Number,
+    str = String,
+    bool = (val) => val === "true",
+  }: Partial<{
+    numeric: (value: string) => number;
+    str: (value: string) => string;
+    bool: (value: string) => boolean;
+  }> = {},
+): Modifiers {
+  return Object.entries(splitModifiers(getProperty(pref))).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key as ModifierType]: isBooleanModifier(key)
+        ? bool(value)
+        : isNumericModifier(key)
+          ? numeric(value)
+          : str(value),
+    }),
+    {} as Modifiers,
+  );
 }

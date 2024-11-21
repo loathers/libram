@@ -92,10 +92,13 @@ async function main() {
     contents += `export const ${typeName}Modifiers = ${JSON.stringify(
       values,
     )} as const;\n`;
+    contents += `export const ${typeName}ModifiersSet = new Set(${typeName}Modifiers);\n`;
     contents += `export type ${tc(
       typeName,
     )}Modifier = typeof ${typeName}Modifiers[number];\n`;
   });
+
+  contents += `export type ModifierType = NumericModifier | StringModifier | BooleanModifier;\n`;
 
   await writeFile(MODIFIERS_FILE, contents);
 }

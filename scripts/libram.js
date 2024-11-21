@@ -12443,13 +12443,13 @@ function _iterableToArrayLimit9(r, l) {
 function _arrayWithHoles9(r) {
   if (Array.isArray(r)) return r;
 }
-var MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\([^)]*\)/;
+var MUMMERY_MODS_PATTERN = /\[(\d*)\*fam\(([^)]*)\)/;
 function currentCostumes() {
   return new Map(Object.entries((0, import_kolmafia36.splitModifiers)(get("_mummeryMods"))).map(function(_ref) {
     var _ref2 = _slicedToArray9(_ref, 2), modifier = _ref2[0], value = _ref2[1];
     if (!isNumericModifier(modifier)) return null;
     var matcher = value.match(MUMMERY_MODS_PATTERN);
-    return matcher ? [import_kolmafia36.Familiar.get(matcher[1]), [modifier, Number(matcher[2])]] : null;
+    return matcher ? [import_kolmafia36.Familiar.get(matcher[2]), [modifier, Number(matcher[1])]] : null;
   }).filter(notNull));
 }
 

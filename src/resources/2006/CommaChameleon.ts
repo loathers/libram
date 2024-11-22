@@ -11,7 +11,7 @@ const familiar = $familiar`Comma Chameleon`;
  * @returns Whether the player has a Comma Chameleon
  */
 export function have(): boolean {
-  return _have(familiar);
+  return have_(familiar);
 }
 
 /**

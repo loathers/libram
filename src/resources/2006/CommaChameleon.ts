@@ -1,5 +1,5 @@
 import { $familiar } from "../../template-string.js";
-import { have as _have } from "../../lib.js";
+import { have as have_ } from "../../lib.js";
 import { Familiar, familiarEquipment, toInt, visitUrl } from "kolmafia";
 
 const familiar = $familiar`Comma Chameleon`;

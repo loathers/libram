@@ -20,10 +20,9 @@ export function have(): boolean {
  * @returns Whether Comma has been successfully transformed
  */
 export function transform(fam: Familiar): boolean {
-  let equipment = null;
-  equipment = familiarEquipment(fam);
-  if (!equipment) return false;
-  if (!_have(equipment)) return false;
+  const equipment = familiarEquipment(fam);
+  if (equipment !== $item.none) return false;
+  if (!have_(equipment)) return false;
   visitUrl(
     `inv_equip.php?which=2&action=equip&whichitem=${toInt(equipment)}&pwd`,
   );

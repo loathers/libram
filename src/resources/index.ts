@@ -1,3 +1,4 @@
+import * as CommaChameleon from "./2006/CommaChameleon.js";
 import * as Stickers from "./2008/Stickers.js";
 import * as Bandersnatch from "./2009/Bandersnatch.js";
 import * as SpookyPutty from "./2009/SpookyPutty.js";
@@ -74,6 +75,7 @@ export {
   CinchoDeMayo,
   ClosedCircuitPayphone,
   CombatLoversLocket,
+  CommaChameleon,
   ConspiracyIsland,
   CrimboShrub,
   CrownOfThrones,

@@ -12925,7 +12925,7 @@ function getVaccine(choice) {
 function dial(address) {
   if (!have25() || dialled())
     return !1;
-  if (!address.match("^[[alpha]]+$") || address.length !== 7)
+  if (!address.match(/^[A-Za-z]+$/) || address.length !== 7)
     throw "Invalid Spacegate Address - must be exactly 7 alphabetic characters";
   return (0, import_kolmafia39.cliExecute)("spacegate destination ".concat(address)), dialled() && planetCoords() === address;
 }

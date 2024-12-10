@@ -1,4 +1,4 @@
-import { $familiar } from "../../template-string.js";
+import { $familiar, $item } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 import { Familiar, familiarEquipment, toInt, visitUrl } from "kolmafia";
 

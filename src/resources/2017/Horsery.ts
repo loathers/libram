@@ -1,6 +1,7 @@
 import { cliExecute, visitUrl } from "kolmafia";
 import { Modifiers } from "../../modifier.js";
 import { get } from "../../property.js";
+import { NumericModifier } from "../../modifierTypes.js";
 
 /**
  * @returns Whether or not the horsery is available
@@ -33,7 +34,7 @@ export function changeHorse(horse: Horse): boolean {
 /**
  * @returns a `Modifiers` object consisting of the crazy horse's stats today
  */
-export function crazyHorseStats(): Modifiers {
+export function crazyHorseStats(): Modifiers<NumericModifier> {
   if (!have()) return {};
 
   if (!get("_horseryCrazyName")) {

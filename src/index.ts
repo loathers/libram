@@ -15,6 +15,7 @@ export {
 } from "./modifierTypes.js";
 export * from "./mood.js";
 export * from "./moonSign.js";
+export * from "./propertyTypes.js";
 export * from "./propertyTyping.js";
 export * from "./resources/index.js";
 export * from "./since.js";
@@ -44,4 +45,5 @@ export type {
   NumericModifier,
   StringModifier,
   BooleanModifier,
+  ModifierType,
 } from "./modifierTypes.js";

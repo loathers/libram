@@ -7320,7 +7320,7 @@ function itemOrItemsBallsMacroName(itemOrItems) {
   return overlappingItemNames.includes(item13.name) ? item13.id.toFixed(0) : item13.name;
 }
 function itemOrItemsBallsMacroPredicate(itemOrItems) {
-  return Array.isArray(itemOrItems) ? itemOrItems[0] === itemOrItems[1] ? "hastwocombatitems ".concat(itemOrItems[0]) : itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItems);
+  return Array.isArray(itemOrItems) ? itemOrItems[0] === itemOrItems[1] ? "hastwocombatitems ".concat(itemOrItemsBallsMacroName(itemOrItems[0])) : itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItemsBallsMacroName(itemOrItems));
 }
 function skillOrNameToSkill(skillOrName) {
   return typeof skillOrName == "string" ? import_kolmafia5.Skill.get(skillOrName) : skillOrName;
@@ -7837,7 +7837,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       if (condition instanceof import_kolmafia5.Monster)
         return "monsterid ".concat(condition.id);
       if (condition instanceof Array)
-        return "(".concat(condition.map(function(entry) {
+        return condition[0] instanceof import_kolmafia5.Item ? itemOrItemsBallsMacroPredicate(condition) : "(".concat(condition.map(function(entry) {
           return Macro2.makeBALLSPredicate(entry);
         }).join(" || "), ")");
       if (condition instanceof import_kolmafia5.Effect)

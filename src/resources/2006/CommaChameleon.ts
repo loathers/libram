@@ -3,7 +3,6 @@ import { have as have_ } from "../../lib.js";
 import {
   Familiar,
   familiarEquipment,
-  toFamiliar,
   toInt,
   visitUrl,
 } from "kolmafia";

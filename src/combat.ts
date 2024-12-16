@@ -102,10 +102,10 @@ function itemOrItemsBallsMacroPredicate(
 ): string {
   if (Array.isArray(itemOrItems)) {
     if (itemOrItems[0] === itemOrItems[1])
-      return `hastwocombatitems ${itemOrItems[0]}`;
+      return `hastwocombatitems ${itemOrItemsBallsMacroName(itemOrItems[0])}`;
     return itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ");
   } else {
-    return `hascombatitem ${itemOrItems}`;
+    return `hascombatitem ${itemOrItemsBallsMacroName(itemOrItems)}`;
   }
 }
 
@@ -127,7 +127,8 @@ type PreBALLSPredicate =
   | Phylum
   | Phylum[]
   | Element
-  | Element[];
+  | Element[]
+  | [Item, Item];
 
 type SkillOrName = Skill | string;
 /**
@@ -394,6 +395,8 @@ export class Macro {
     if (condition instanceof Monster) {
       return `monsterid ${condition.id}`;
     } else if (condition instanceof Array) {
+      if (condition[0] instanceof Item)
+        return itemOrItemsBallsMacroPredicate(condition as [Item, Item]);
       return `(${condition
         .map((entry) => Macro.makeBALLSPredicate(entry))
         .join(" || ")})`;

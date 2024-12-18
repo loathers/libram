@@ -409,3 +409,27 @@ export type Range<A extends number, B extends number> = Exclude<
   Enumerate<B>,
   Enumerate<A>
 >;
+
+/**
+ * Translate mafia's multi-dimensional array prefs into a multi-dimensional array
+ * @param prop The property (or whatever) to process; not the property NAME, the value itself
+ * @param outerDelimiter The "outer" delimiter, which separates tuples from eachother
+ * @param innerDelimiter The "inner" delimieter, which separates the elements of tuples from eachother
+ * @param mappers An array of string => whatever mapping functions that turn this into the actual objects we want
+ * @returns An array of typed tuples, based on the given inputs
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function multiSplit<T extends any[]>(
+  prop: string,
+  outerDelimiter: string,
+  innerDelimiter: string,
+  mappers: { [K in keyof T]: (str: string) => T[K] },
+): T[] {
+  const multiDimensionalArray = prop
+    .split(outerDelimiter)
+    .filter(Boolean)
+    .map((entry) => entry.split(innerDelimiter) as Tuple<string, T["length"]>);
+  return multiDimensionalArray.map((tup) =>
+    mappers.map((func, index) => func(tup[index])),
+  ) as T[];
+}

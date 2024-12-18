@@ -45,6 +45,7 @@ import * as CombatLoversLocket from "./2022/CombatLoversLocket.js";
 import * as GreyGoose from "./2022/GreyGoose.js";
 import * as JuneCleaver from "./2022/JuneCleaver.js";
 import * as TrainSet from "./2022/TrainSet.js";
+import * as StillSuit from "./2022/Stillsuit.js";
 import * as AugustScepter from "./2023/AugustScepter.js";
 import * as BurningLeaves from "./2023/BurningLeaves.js";
 import * as CinchoDeMayo from "./2023/CinchoDeMayo.js";
@@ -56,7 +57,7 @@ import * as MayamCalendar from "./2024/MayamCalendar.js";
 import * as TearawayPants from "./2024/TearawayPants.js";
 import * as BatWings from "./2024/BatWings.js";
 import * as EverfullDarts from "./2024/EverfullDarts.js";
-import * as StillSuit from "./2022/Stillsuit.js";
+import * as TakerSpace from "./2024/TakerSpace.js";
 
 export {
   AprilingBandHelmet,
@@ -113,6 +114,7 @@ export {
   Stickers,
   StillSuit,
   StompingBoots,
+  TakerSpace,
   TearawayPants,
   TrainSet,
   TunnelOfLove,

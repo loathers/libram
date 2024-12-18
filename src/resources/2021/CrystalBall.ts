@@ -22,20 +22,28 @@ export const orb = Item.get("miniature crystal ball");
 export function have(): boolean {
   return availableAmount(orb) > 0;
 }
-const parsedProp = () =>
-  get("crystalBallPredictions")
-    .split("|")
-    .filter(Boolean)
-    .map((element) => element.split(":") as [string, string, string])
-    .filter((tuple) => tuple.length === 3)
-    .map(
-      ([, location, monster]) =>
-        [toLocation(location), toMonster(monster)] as [Location, Monster],
-    );
+
+/**
+ * @returns A map keyed by locations and whose values are monsters, representing all active orb predictions
+ */
+export function getPrediction(): Map<Location, Monster> {
+  return new Map(
+    get("crystalBallPredictions")
+      .split("|")
+      .filter(Boolean)
+      .map((element) => element.split(":") as [string, string, string])
+      .filter((tuple) => tuple.length === 3)
+      .map(
+        ([, location, monster]) =>
+          [toLocation(location), toMonster(monster)] as [Location, Monster],
+      ),
+  );
+}
 
 const getLastPondered = () =>
   `${myTotalTurnsSpent()};${totalTurnsPlayed()};${get("lastAdventure")}`;
 let lastPondered = "";
+
 /**
  * Ponders your orb (if it is able to do so safely) and then returns a Map keyed by location consisting of extant predictions
  *
@@ -52,5 +60,5 @@ export function ponder(): Map<Location, Monster> {
       logger.debug("Failed to ponder Crystall Ball.");
     }
   }
-  return new Map(parsedProp());
+  return getPrediction();
 }

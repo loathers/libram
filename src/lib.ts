@@ -513,7 +513,8 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
         return item;
       },
       toMonster,
-    ]),
+      Number,
+    ]).map(([source, monster]) => [source, monster]),
   );
 }
 

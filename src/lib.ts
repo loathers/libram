@@ -487,6 +487,21 @@ export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
 }
 
+const banishSource = (banisher: string) => {
+  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
+  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+
+  const item = toItem(banisher);
+  if (
+    $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(
+      item,
+    )
+  ) {
+    return toSkill(banisher);
+  }
+  return item;
+};
+
 /**
  * Get a map of banished monsters keyed by what banished them
  *
@@ -496,22 +511,7 @@ export function getZapGroup(item: Item): Item[] {
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
   return new Map(
     multiSplit(get("banishedMonsters"), ":", ":", [
-      (banisher) => {
-        if (banisher.toLowerCase() === "saber force")
-          return $skill`Use the Force`;
-        if (banisher.toLowerCase() === "nanorhino")
-          return $skill`Unleash Nanites`;
-
-        const item = toItem(banisher);
-        if (
-          $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(
-            item,
-          )
-        ) {
-          return toSkill(banisher);
-        }
-        return item;
-      },
+      banishSource,
       toMonster,
       Number,
     ]).map(([source, monster]) => [source, monster]),

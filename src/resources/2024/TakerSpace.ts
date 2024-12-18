@@ -1,4 +1,4 @@
-import { getWorkshed, Item } from "kolmafia";
+import { create, getWorkshed, Item } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { Tuple } from "../../utils.js";
 import { $item } from "../../template-string.js";
@@ -61,4 +61,55 @@ export function amount(resource: Resource): number {
     get(`takerSpace${resource}`) +
     (!installed() && !get("_workshedItemUsed") ? defaultAmount(resource) : 0)
   );
+}
+
+/**
+ * Determine the Recipe for a given item
+ * @param item The item in question
+ * @returns The Recipe for that item, as a length-6 array in the order Spice, Rum, Anchor, Mast, Silk, Gold
+ */
+export function recipeFor(item: Item): Recipe | null {
+  const result = RECIPES.get(item);
+  return result ? [...result] : null;
+}
+
+/**
+ * @returns Your current available resources, as a length-6 array in the order Spice, Rum, Anchor, Mast, Silk, Gold
+ */
+export function currentResources(): Recipe {
+  return RESOURCES.map(amount) as Recipe;
+}
+
+/**
+ * Determine if you have enough resources to make a particular item
+ * @param item The item in question
+ * @param amount The number of the item to make; defaults to one
+ * @returns Whether we have enough resources available to make the amount of the item
+ */
+export function haveEnoughFor(item: Item, amount = 1): boolean {
+  const recipe = recipeFor(item);
+  if (!recipe) return false;
+  return currentResources().every(
+    (resource, index) => resource >= amount * recipe[index],
+  );
+}
+
+/**
+ * Determines if you're currently able to make a particular item
+ * @param item The item in question
+ * @param amount The number of the item to make; defaults to one
+ * @returns Whether we currently can make the item--that is, whether the TakerSpace is in your workshed and you have enough resources
+ */
+export function canMake(item: Item, amount = 1): boolean {
+  return installed() && haveEnoughFor(item, amount);
+}
+
+/**
+ * Attempts to make a particular item
+ * @param item The item in question
+ * @param amount The number of the item to make; defaults to one
+ * @returns Whether we succeeded in our endeavor
+ */
+export function make(item: Item, amount = 1): boolean {
+  return canMake(item, amount) && create(item, amount);
 }

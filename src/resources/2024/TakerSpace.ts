@@ -48,6 +48,15 @@ const RECIPES = new Map<Item, Recipe>([
   [$item`spices`, [1, 0, 0, 0, 0, 0]],
 ]);
 
+/**
+ * @returns A copy of our map of all recipes
+ */
+export function allRecipes(): Map<Item, Recipe> {
+  return new Map(
+    RECIPES.entries().map(([item, recipe]) => [item, [...recipe]]),
+  );
+}
+
 const defaultAmount = (resource: Resource) =>
   ["Silk", "Gold"].includes(resource) ? 1 : 3;
 

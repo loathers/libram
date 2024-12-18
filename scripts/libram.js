@@ -14342,6 +14342,9 @@ function tuneToSkill(skill) {
 // src/resources/2021/CrystalBall.ts
 var CrystalBall_exports = {};
 __export(CrystalBall_exports, {
+  getPrediction: function() {
+    return getPrediction;
+  },
   have: function() {
     return have37;
   },
@@ -14400,20 +14403,21 @@ var orb = import_kolmafia52.Item.get("miniature crystal ball");
 function have37() {
   return (0, import_kolmafia52.availableAmount)(orb) > 0;
 }
-var parsedProp = function() {
-  return get("crystalBallPredictions").split("|").filter(Boolean).map(function(element) {
+function getPrediction() {
+  return new Map(get("crystalBallPredictions").split("|").filter(Boolean).map(function(element) {
     return element.split(":");
   }).filter(function(tuple2) {
     return tuple2.length === 3;
   }).map(function(_ref) {
     var _ref2 = _slicedToArray14(_ref, 3), location = _ref2[1], monster = _ref2[2];
     return [(0, import_kolmafia52.toLocation)(location), (0, import_kolmafia52.toMonster)(monster)];
-  });
-}, getLastPondered = function() {
+  }));
+}
+var getLastPondered = function() {
   return "".concat((0, import_kolmafia52.myTotalTurnsSpent)(), ";").concat((0, import_kolmafia52.totalTurnsPlayed)(), ";").concat(get("lastAdventure"));
 }, lastPondered = "";
 function ponder() {
-  return have37() ? (lastPondered !== getLastPondered() && (canVisitUrl() ? (logger_default.debug("Now pondering Crystal Ball."), (0, import_kolmafia52.visitUrl)("inventory.php?ponder=1", !1), lastPondered = getLastPondered()) : logger_default.debug("Failed to ponder Crystall Ball.")), new Map(parsedProp())) : /* @__PURE__ */ new Map();
+  return have37() ? (lastPondered !== getLastPondered() && (canVisitUrl() ? (logger_default.debug("Now pondering Crystal Ball."), (0, import_kolmafia52.visitUrl)("inventory.php?ponder=1", !1), lastPondered = getLastPondered()) : logger_default.debug("Failed to ponder Crystall Ball.")), getPrediction()) : /* @__PURE__ */ new Map();
 }
 
 // src/resources/2021/DaylightShavings.ts

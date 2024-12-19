@@ -44,8 +44,8 @@ export function have(): boolean {
 function checkLocations(html: string): Location[] {
   return xpath(
     html,
-    '//select[@name="heythereprogrammer"]//option[position()>1]/text()',
-  ).map((name) => toLocation(name));
+    '//select[@name="heythereprogrammer"]//option[position()>1]/@value',
+  ).map((id) => toLocation(Number(id)));
 }
 
 /**

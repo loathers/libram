@@ -14547,8 +14547,8 @@ function have39() {
   return get("hasAutumnaton") || available4();
 }
 function checkLocations(html) {
-  return (0, import_kolmafia54.xpath)(html, '//select[@name="heythereprogrammer"]//option[position()>1]/text()').map(function(name) {
-    return (0, import_kolmafia54.toLocation)(name);
+  return (0, import_kolmafia54.xpath)(html, '//select[@name="heythereprogrammer"]//option[position()>1]/@value').map(function(id) {
+    return (0, import_kolmafia54.toLocation)(Number(id));
   });
 }
 function currentlyIn() {

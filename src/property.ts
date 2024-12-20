@@ -451,7 +451,7 @@ export class PropertiesManager {
       const value = this.properties[property];
       if (value === PropertiesManager.EMPTY_PREFERENCE) {
         removeProperty(property);
-      } else if (value) {
+      } else {
         set(property, value as { toString(): string });
       }
     }

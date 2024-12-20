@@ -6033,7 +6033,7 @@ var PropertiesManager = /* @__PURE__ */ function() {
         var _property = _properties[_i3];
         if (_property in this.properties) {
           var _value2 = this.properties[_property];
-          _value2 === PropertiesManager2.EMPTY_PREFERENCE ? (0, import_kolmafia2.removeProperty)(_property) : _value2 && _set(_property, _value2);
+          _value2 === PropertiesManager2.EMPTY_PREFERENCE ? (0, import_kolmafia2.removeProperty)(_property) : _set(_property, _value2);
         }
       }
     }

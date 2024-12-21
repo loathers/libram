@@ -1,4 +1,4 @@
-import { create, getWorkshed, Item } from "kolmafia";
+import { create, getWorkshed, Item, visitUrl } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { Tuple } from "../../utils.js";
 import { $item } from "../../template-string.js";
@@ -61,11 +61,22 @@ const defaultAmount = (resource: Resource) =>
   ["Silk", "Gold"].includes(resource) ? 1 : 3;
 
 /**
+ * Collect daily resources from takerspace if you haven't yet today and are able to
+ * @returns Whether we successfully collected supplies
+ */
+export function collect(): boolean {
+  if (!installed() || get("_takerSpaceSuppliesDelivered")) return false;
+  visitUrl("campground.php?action=workshed", false);
+  return get("_takerSpaceSuppliesDelivered");
+}
+
+/**
  * Determine how much of a resource you will have when the TakerSpace is installed
  * @param resource The resource in question
  * @returns The amount of that resource that you will have when the TakerSpace is installed
  */
 export function amount(resource: Resource): number {
+  collect();
   return (
     get(`takerSpace${resource}`) +
     (!installed() && !get("_workshedItemUsed") ? defaultAmount(resource) : 0)
@@ -86,6 +97,7 @@ export function recipeFor(item: Item): Recipe | null {
  * @returns Your current available resources, as a length-6 array in the order Spice, Rum, Anchor, Mast, Silk, Gold
  */
 export function currentResources(): Recipe {
+  collect();
   return RESOURCES.map(amount) as Recipe;
 }
 

@@ -511,10 +511,10 @@ const banishSource = (banisher: string) => {
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
   return new Map(
     multiSplit(get("banishedMonsters"), ":", ":", [
-      banishSource,
       toMonster,
+      banishSource,
       Number,
-    ]).map(([source, monster]) => [source, monster]),
+    ]).map(([monster, source]) => [source, monster]),
   );
 }
 

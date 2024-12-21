@@ -409,3 +409,6 @@ export type Range<A extends number, B extends number> = Exclude<
   Enumerate<B>,
   Enumerate<A>
 >;
+
+export const capitalize = <T extends string>(str: T): Capitalize<T> =>
+  (str.length ? `${str[0].toUpperCase()}${str.slice(1)}` : "") as Capitalize<T>;

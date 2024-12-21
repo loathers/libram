@@ -1,7 +1,7 @@
 import { Element } from "kolmafia";
 import { $elements } from "./template-string.js";
 import { get as getModifier } from "./modifier.js";
-import { sum } from "./utils.js";
+import { capitalize, sum } from "./utils.js";
 
 export const SUPER_EFFECTIVE_CHART = Object.freeze({
   hot: $elements`Spooky, Cold`,
@@ -54,11 +54,14 @@ export const TRADITIONAL_ELEMENTS = Object.freeze(
   $elements`cold, hot, sleaze, spooky, stench`,
 );
 
+/**
+ * @returns The total amount of elemental damage you have from all sources
+ */
 export function totalElementalDamage(): number {
   return sum(
     TRADITIONAL_ELEMENTS.map((el) => el.toString()).filter(
       isConventionalElement,
     ),
-    (el) => getModifier(`${el} Damage`),
+    (el) => getModifier(`${capitalize(el)} Damage`),
   );
 }

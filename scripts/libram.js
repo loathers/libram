@@ -6800,8 +6800,8 @@ var banishSource = function(banisher) {
   return $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["none, training scroll:  Snokebomb, tomayohawk-style reflex hammer"]))).includes(item14) ? (0, import_kolmafia4.toSkill)(banisher) : item14;
 };
 function getBanishedMonsters() {
-  return new Map(multiSplit(get("banishedMonsters"), ":", ":", [banishSource, import_kolmafia4.toMonster, Number]).map(function(_ref7) {
-    var _ref8 = _slicedToArray3(_ref7, 2), source = _ref8[0], monster = _ref8[1];
+  return new Map(multiSplit(get("banishedMonsters"), ":", ":", [import_kolmafia4.toMonster, banishSource, Number]).map(function(_ref7) {
+    var _ref8 = _slicedToArray3(_ref7, 2), monster = _ref8[0], source = _ref8[1];
     return [source, monster];
   }));
 }

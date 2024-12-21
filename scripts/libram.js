@@ -16121,6 +16121,9 @@ __export(TakerSpace_exports, {
   canMake: function() {
     return canMake;
   },
+  collect: function() {
+    return collect;
+  },
   currentResources: function() {
     return currentResources;
   },
@@ -16217,15 +16220,18 @@ function allRecipes() {
 var defaultAmount = function(resource) {
   return ["Silk", "Gold"].includes(resource) ? 1 : 3;
 };
+function collect() {
+  return !installed5() || get("_takerSpaceSuppliesDelivered") ? !1 : ((0, import_kolmafia70.visitUrl)("campground.php?action=workshed", !1), get("_takerSpaceSuppliesDelivered"));
+}
 function amount(resource) {
-  return get("takerSpace".concat(resource)) + (!installed5() && !get("_workshedItemUsed") ? defaultAmount(resource) : 0);
+  return collect(), get("takerSpace".concat(resource)) + (!installed5() && !get("_workshedItemUsed") ? defaultAmount(resource) : 0);
 }
 function recipeFor(item14) {
   var result = RECIPES.get(item14);
   return result ? _toConsumableArray17(result) : null;
 }
 function currentResources() {
-  return RESOURCES.map(amount);
+  return collect(), RESOURCES.map(amount);
 }
 function haveEnoughFor(item14) {
   var amount2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, recipe = recipeFor(item14);

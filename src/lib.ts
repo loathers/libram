@@ -77,6 +77,7 @@ import {
   weightAdjustment,
   MafiaClass,
   MafiaClasses,
+  toMonster,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -92,7 +93,7 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, chunk, notNull, clamp } from "./utils.js";
+import { makeByXFunction, notNull, clamp, multiSplit } from "./utils.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -486,6 +487,21 @@ export function getZapGroup(item: Item): Item[] {
   return Object.keys(getRelated(item, "zap")).map((i) => Item.get(i));
 }
 
+const banishSource = (banisher: string) => {
+  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
+  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+
+  const item = toItem(banisher);
+  if (
+    $items`none, training scroll:  Snokebomb, tomayohawk-style reflex hammer`.includes(
+      item,
+    )
+  ) {
+    return toSkill(banisher);
+  }
+  return item;
+};
+
 /**
  * Get a map of banished monsters keyed by what banished them
  *
@@ -493,34 +509,13 @@ export function getZapGroup(item: Item): Item[] {
  * @returns Map of banished monsters
  */
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
-  const banishes = chunk(get("banishedMonsters").split(":"), 3);
-
-  const result = new Map<Item | Skill, Monster>();
-
-  for (const [foe, banisher] of banishes) {
-    if (foe === undefined || banisher === undefined) break;
-    // toItem doesn"t error if the item doesn"t exist, so we have to use that.
-    const banisherItem = toItem(banisher);
-    if (banisher.toLowerCase() === "saber force") {
-      result.set($skill`Use the Force`, Monster.get(foe));
-    } else if (banisher.toLowerCase() === "nanorhino") {
-      result.set($skill`Unleash Nanites`, Monster.get(foe));
-    } else if (
-      [
-        Item.none,
-        Item.get(`training scroll:  Snokebomb`),
-        Item.get(`tomayohawk-style reflex hammer`),
-        null,
-      ].includes(banisherItem)
-    ) {
-      const skill = $skill.get(banisher);
-      if (!skill) continue;
-      result.set(skill, Monster.get(foe));
-    } else {
-      result.set(banisherItem, Monster.get(foe));
-    }
-  }
-  return result;
+  return new Map(
+    multiSplit(get("banishedMonsters"), ":", ":", [
+      toMonster,
+      banishSource,
+      Number,
+    ]).map(([monster, source]) => [source, monster]),
+  );
 }
 
 /**

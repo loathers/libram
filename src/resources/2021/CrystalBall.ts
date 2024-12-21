@@ -12,6 +12,7 @@ import {
 import { canVisitUrl } from "../../lib.js";
 import logger from "../../logger.js";
 import { get } from "../../property.js";
+import { multiSplit } from "../../utils.js";
 
 export const orb = Item.get("miniature crystal ball");
 /**
@@ -28,15 +29,11 @@ export function have(): boolean {
  */
 export function getPrediction(): Map<Location, Monster> {
   return new Map(
-    get("crystalBallPredictions")
-      .split("|")
-      .filter(Boolean)
-      .map((element) => element.split(":") as [string, string, string])
-      .filter((tuple) => tuple.length === 3)
-      .map(
-        ([, location, monster]) =>
-          [toLocation(location), toMonster(monster)] as [Location, Monster],
-      ),
+    multiSplit(get("crystalBallPredictions"), "|", ":", [
+      Number,
+      toLocation,
+      toMonster,
+    ]).map(([, location, monster]) => [location, monster]),
   );
 }
 

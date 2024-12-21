@@ -62,7 +62,7 @@ const defaultAmount = (resource: Resource) =>
 
 /**
  * Collect daily resources from takerspace if you haven't yet today and are able to
- * @returns Whether, at the end of all things, your daily resources have been collected
+ * @returns Whether we successfully collected supplies
  */
 export function collect(): boolean {
   if (!installed() || get("_takerSpaceSuppliesDelivered")) return false;

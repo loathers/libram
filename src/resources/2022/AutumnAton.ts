@@ -55,6 +55,10 @@ export function currentlyIn(): Location | null {
   return get("autumnatonQuestLocation");
 }
 
+function validateLocation(list: Location[], location: Location): boolean {
+  return list.some((loc) => loc.id === location.id);
+}
+
 /**
  * Deploy the autumn-aton to a location of your choosing.
  *
@@ -77,10 +81,10 @@ export function sendTo(
     target instanceof Location
       ? target
       : Array.isArray(target)
-        ? target.find((l) => locationsAvailable.includes(l))
+        ? target.find((l) => validateLocation(locationsAvailable, l))
         : target(locationsAvailable);
   if (!location) return null;
-  if (!locationsAvailable.includes(location)) return null;
+  if (!validateLocation(locationsAvailable, location)) return null;
 
   if (!handlingChoice()) directlyUse(item);
   runChoice(2, `heythereprogrammer=${location.id}`);

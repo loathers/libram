@@ -30,7 +30,8 @@ export function fight(mon: Monster): boolean {
   const monsters = checkMonsters(
     visitUrl("inventory.php?action=parachute&pwd"),
   );
-  if (!monsters.includes(mon)) return false;
+  const monster = undelay(target, monsters);
+  if (!monsters.includes(monster)) return false;
   runChoice(1, `pwd&monid=${mon.id}`);
   return true;
 }

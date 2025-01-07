@@ -14554,15 +14554,20 @@ function checkLocations(html) {
 function currentlyIn() {
   return get("autumnatonQuestLocation");
 }
+function validateLocation(list, location) {
+  return list.some(function(loc) {
+    return loc.id === location.id;
+  });
+}
 function sendTo(target) {
   var upgrade2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0;
   if (!available4()) return null;
   var pageHtml = directlyUse(item6);
   upgrade2 && (0, import_kolmafia54.availableChoiceOptions)()[1] && (0, import_kolmafia54.runChoice)(1);
   var locationsAvailable = checkLocations(pageHtml), location = target instanceof import_kolmafia54.Location ? target : Array.isArray(target) ? target.find(function(l) {
-    return locationsAvailable.includes(l);
+    return validateLocation(locationsAvailable, l);
   }) : target(locationsAvailable);
-  return !location || !locationsAvailable.includes(location) ? null : ((0, import_kolmafia54.handlingChoice)() || directlyUse(item6), (0, import_kolmafia54.runChoice)(2, "heythereprogrammer=".concat(location.id)), (0, import_kolmafia54.handlingChoice)() && (0, import_kolmafia54.visitUrl)("main.php"), location);
+  return !location || !validateLocation(locationsAvailable, location) ? null : ((0, import_kolmafia54.handlingChoice)() || directlyUse(item6), (0, import_kolmafia54.runChoice)(2, "heythereprogrammer=".concat(location.id)), (0, import_kolmafia54.handlingChoice)() && (0, import_kolmafia54.visitUrl)("main.php"), location);
 }
 function upgrade() {
   directlyUse(item6);

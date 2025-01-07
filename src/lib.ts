@@ -1248,6 +1248,7 @@ export function setCombatFlags(
         "action=Update",
         "am=1",
         "ajax=1",
+        "pwd",
       ].join("&"),
       true)
     }`,

@@ -22,12 +22,12 @@ function checkMonsters(html: string): Monster[] {
 }
 
 /**
- * @param mon is the monster you want to fight
+ * @param target Either the monster we want to fight or a function for choosing said monster
  * @returns whether we successfully parachuted into the target monster
  */
 export function fight(target: Delayed<Monster, [Monster[]]>): boolean {
   if (!have()) return false;
-  if (have_($effect`Everything Looks Beige`)) return false;
+  if (have_($effect`Everything looks Beige`)) return false;
   const monsters = checkMonsters(
     visitUrl("inventory.php?action=parachute&pwd"),
   );

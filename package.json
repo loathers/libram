@@ -44,7 +44,7 @@
     "@types/node": "^22.5.4",
     "esbuild": "^0.23.1",
     "esbuild-plugin-babel": "^0.2.3",
-    "eslint": "^9.11.0",
+    "eslint": "9.11.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-jsdoc": "^50.2.3",

@@ -1,6 +1,7 @@
 import { Monster, runChoice, toMonster, visitUrl, xpath } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { $effect, $item } from "../../template-string.js";
+import { Delayed, undelay } from "../../utils.js";
 
 /**
  * @returns Whether or not you have the crepe paper parachute cape
@@ -32,6 +33,6 @@ export function fight(target: Delayed<Monster, [Monster[]]>): boolean {
   );
   const monster = undelay(target, monsters);
   if (!monsters.includes(monster)) return false;
-  runChoice(1, `pwd&monid=${mon.id}`);
+  runChoice(1, `pwd&monid=${monster.id}`);
   return true;
 }

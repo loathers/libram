@@ -33,6 +33,6 @@ export function fight(target: Delayed<Monster, [Monster[]]>): boolean {
   );
   const monster = undelay(target, monsters);
   if (!monsters.includes(monster)) return false;
-  runChoice(1, `pwd&monid=${monster.id}`);
+  runChoice(1, `monid=${monster.id}`);
   return true;
 }

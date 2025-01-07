@@ -58,6 +58,7 @@ import * as TearawayPants from "./2024/TearawayPants.js";
 import * as BatWings from "./2024/BatWings.js";
 import * as EverfullDarts from "./2024/EverfullDarts.js";
 import * as TakerSpace from "./2024/TakerSpace.js";
+import * as CrepeParachute from "./2025/CrepeParachute.js";
 
 export {
   AprilingBandHelmet,
@@ -78,6 +79,7 @@ export {
   CombatLoversLocket,
   CommaChameleon,
   ConspiracyIsland,
+  CrepeParachute,
   CrimboShrub,
   CrownOfThrones,
   CrystalBall,

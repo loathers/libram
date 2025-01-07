@@ -10,15 +10,19 @@ export function have(): boolean {
   return have_($item`crepe paper parachute cape`);
 }
 
-/**
- * @param html the html for the page to return a monster array from
- * @returns Monsters available to parachute to
- */
 function checkMonsters(html: string): Monster[] {
   return xpath(
     html,
     "//select[@name='monid']//option[position()>1]/@value",
   ).map((id) => toMonster(Number(id)));
+}
+
+/**
+ * @returns An array of monsters currently available in the Parachute.
+ */
+export function availableMonsters(): Monster[] {
+  if (!have() || have_($effect`Everything looks Beige`)) return [];
+  return checkMonsters(visitUrl("inventory.php?action=parachute&pwd"));
 }
 
 /**

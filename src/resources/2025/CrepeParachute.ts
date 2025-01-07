@@ -24,7 +24,7 @@ function checkMonsters(html: string): Monster[] {
  * @param mon is the monster you want to fight
  * @returns whether we successfully parachuted into the target monster
  */
-export function fight(mon: Monster): boolean {
+export function fight(target: Delayed<Monster, [Monster[]]>): boolean {
   if (!have()) return false;
   if (have_($effect`Everything Looks Beige`)) return false;
   const monsters = checkMonsters(

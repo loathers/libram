@@ -26,7 +26,7 @@ function checkMonsters(html: string): Monster[] {
  */
 export function fight(mon: Monster): boolean {
   if (!have()) return false;
-  if (have($effect`Everything Looks Beige`)) return false;
+  if (have_($effect`Everything Looks Beige`)) return false;
   const monsters = checkMonsters(
     visitUrl("inventory.php?action=parachute&pwd"),
   );

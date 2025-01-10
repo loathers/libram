@@ -1,4 +1,12 @@
-import { Monster, runChoice, toMonster, visitUrl, xpath } from "kolmafia";
+import {
+  handlingChoice,
+  lastChoice,
+  Monster,
+  runChoice,
+  toMonster,
+  visitUrl,
+  xpath,
+} from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { $effect, $item } from "../../template-string.js";
 import { Delayed, undelay } from "../../utils.js";
@@ -9,6 +17,8 @@ import { Delayed, undelay } from "../../utils.js";
 export function have(): boolean {
   return have_($item`crepe paper parachute cape`);
 }
+
+const visitParachute = () => visitUrl("inventory.php?action=parachute&pwd");
 
 function checkMonsters(html: string): Monster[] {
   return xpath(
@@ -22,7 +32,7 @@ function checkMonsters(html: string): Monster[] {
  */
 export function availableMonsters(): Monster[] {
   if (!have() || have_($effect`Everything looks Beige`)) return [];
-  return checkMonsters(visitUrl("inventory.php?action=parachute&pwd"));
+  return checkMonsters(visitParachute());
 }
 
 /**
@@ -32,11 +42,10 @@ export function availableMonsters(): Monster[] {
 export function fight(target: Delayed<Monster, [Monster[]]>): boolean {
   if (!have()) return false;
   if (have_($effect`Everything looks Beige`)) return false;
-  const monsters = checkMonsters(
-    visitUrl("inventory.php?action=parachute&pwd"),
-  );
+  const monsters = checkMonsters(visitParachute());
   const monster = undelay(target, monsters);
   if (!monsters.includes(monster)) return false;
+  if (!handlingChoice() || lastChoice() !== 1543) visitParachute();
   runChoice(1, `monid=${monster.id}`);
   return true;
 }

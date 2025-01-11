@@ -93,7 +93,8 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, notNull, clamp, multiSplit } from "./utils.js";
+import { makeByXFunction, notNull, clamp, chunk, Tuple } from "./utils.js";
+import { StringProperty } from "./propertyTypes.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -503,6 +504,33 @@ const banishSource = (banisher: string) => {
 };
 
 /**
+ * Translate mafia's multi-dimensional array prefs into a multi-dimensional array
+ * @param prop The name of the mafia string property to process
+ * @param outerDelimiter The "outer" delimiter, which separates tuples from eachother
+ * @param innerDelimiter The "inner" delimieter, which separates the elements of tuples from eachother
+ * @param mappers An array of string => whatever mapping functions that turn this into the actual objects we want
+ * @returns An array of typed tuples, based on the given inputs
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function multiSplit<T extends any[]>(
+  prop: StringProperty,
+  outerDelimiter: string,
+  innerDelimiter: string,
+  mappers: { [K in keyof T]: (str: string) => T[K] },
+): T[] {
+  const initialSplit = prop.split(outerDelimiter).filter(Boolean);
+  const multiDimensionalArray =
+    outerDelimiter === innerDelimiter
+      ? chunk(initialSplit, mappers.length)
+      : initialSplit.map(
+          (entry) => entry.split(innerDelimiter) as Tuple<string, T["length"]>,
+        );
+  return multiDimensionalArray.map((tup) =>
+    mappers.map((func, index) => func(tup[index])),
+  ) as T[];
+}
+
+/**
  * Get a map of banished monsters keyed by what banished them
  *
  * @category General
@@ -510,7 +538,7 @@ const banishSource = (banisher: string) => {
  */
 export function getBanishedMonsters(): Map<Item | Skill, Monster> {
   return new Map(
-    multiSplit(get("banishedMonsters"), ":", ":", [
+    multiSplit("banishedMonsters", ":", ":", [
       toMonster,
       banishSource,
       Number,

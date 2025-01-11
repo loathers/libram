@@ -6,10 +6,14 @@ import {
   visitUrl,
   xpath,
 } from "kolmafia";
-import { CombatParams, directlyUse, have as have_ } from "../../lib.js";
+import {
+  CombatParams,
+  directlyUse,
+  have as have_,
+  multiSplit,
+} from "../../lib.js";
 import { get } from "../../property.js";
 import { $familiar, $item } from "../../template-string.js";
-import { multiSplit } from "../../utils.js";
 
 const familiar = $familiar`Chest Mimic`;
 
@@ -136,7 +140,7 @@ export function differentiate(
  * @returns A Map containing all monsters available in your mimic eggs and their associated quantities
  */
 export function eggMonsters(): Map<Monster, number> {
-  return new Map(multiSplit(get("mimicEgg"), ",", ":", [toMonster, Number]));
+  return new Map(multiSplit("mimicEggMonsters", ",", ":", [toMonster, Number]));
 }
 
 /**

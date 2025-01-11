@@ -9,10 +9,9 @@ import {
   myTotalTurnsSpent,
   totalTurnsPlayed,
 } from "kolmafia";
-import { canVisitUrl } from "../../lib.js";
+import { canVisitUrl, multiSplit } from "../../lib.js";
 import logger from "../../logger.js";
 import { get } from "../../property.js";
-import { multiSplit } from "../../utils.js";
 
 export const orb = Item.get("miniature crystal ball");
 /**
@@ -29,7 +28,7 @@ export function have(): boolean {
  */
 export function getPrediction(): Map<Location, Monster> {
   return new Map(
-    multiSplit(get("crystalBallPredictions"), "|", ":", [
+    multiSplit("crystalBallPredictions", "|", ":", [
       Number,
       toLocation,
       toMonster,

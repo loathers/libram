@@ -16292,7 +16292,11 @@ function availableMonsters() {
 function fight(target) {
   if (!have57() || have($effect(_templateObject3106 || (_templateObject3106 = _taggedTemplateLiteral59(["Everything looks Beige"]))))) return !1;
   var monsters = checkMonsters(visitParachute()), monster = undelay(target, monsters);
-  return monsters.includes(monster) ? ((!(0, import_kolmafia71.handlingChoice)() || (0, import_kolmafia71.lastChoice)() !== 1543) && visitParachute(), (0, import_kolmafia71.runChoice)(1, "monid=".concat(monster.id)), !0) : !1;
+  if (!monsters.includes(monster)) return !1;
+  (!(0, import_kolmafia71.handlingChoice)() || (0, import_kolmafia71.lastChoice)() !== 1543) && visitParachute(), (0, import_kolmafia71.runChoice)(1, "monid=".concat(monster.id));
+  for (var _len = arguments.length, combatParams = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
+    combatParams[_key - 1] = arguments[_key];
+  return import_kolmafia71.runCombat.apply(void 0, combatParams), !0;
 }
 
 // src/resources/putty-likes.ts

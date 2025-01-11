@@ -6408,16 +6408,6 @@ function random(array) {
 var tc = function(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
-function multiSplit(prop, outerDelimiter, innerDelimiter, mappers) {
-  var initialSplit = prop.split(outerDelimiter).filter(Boolean), multiDimensionalArray = outerDelimiter === innerDelimiter ? chunk(initialSplit, mappers.length) : initialSplit.map(function(entry) {
-    return entry.split(innerDelimiter);
-  });
-  return multiDimensionalArray.map(function(tup) {
-    return mappers.map(function(func, index) {
-      return func(tup[index]);
-    });
-  });
-}
 
 // src/template-string.ts
 var concatTemplateString = function(literals) {
@@ -6802,8 +6792,18 @@ var banishSource = function(banisher) {
   var item14 = (0, import_kolmafia4.toItem)(banisher);
   return $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["none, training scroll:  Snokebomb, tomayohawk-style reflex hammer"]))).includes(item14) ? (0, import_kolmafia4.toSkill)(banisher) : item14;
 };
+function multiSplit(prop, outerDelimiter, innerDelimiter, mappers) {
+  var initialSplit = prop.split(outerDelimiter).filter(Boolean), multiDimensionalArray = outerDelimiter === innerDelimiter ? chunk(initialSplit, mappers.length) : initialSplit.map(function(entry) {
+    return entry.split(innerDelimiter);
+  });
+  return multiDimensionalArray.map(function(tup) {
+    return mappers.map(function(func, index) {
+      return func(tup[index]);
+    });
+  });
+}
 function getBanishedMonsters() {
-  return new Map(multiSplit(get("banishedMonsters"), ":", ":", [import_kolmafia4.toMonster, banishSource, Number]).map(function(_ref7) {
+  return new Map(multiSplit("banishedMonsters", ":", ":", [import_kolmafia4.toMonster, banishSource, Number]).map(function(_ref7) {
     var _ref8 = _slicedToArray3(_ref7, 2), monster = _ref8[0], source = _ref8[1];
     return [source, monster];
   }));
@@ -14410,7 +14410,7 @@ function have37() {
   return (0, import_kolmafia52.availableAmount)(orb) > 0;
 }
 function getPrediction() {
-  return new Map(multiSplit(get("crystalBallPredictions"), "|", ":", [Number, import_kolmafia52.toLocation, import_kolmafia52.toMonster]).map(function(_ref) {
+  return new Map(multiSplit("crystalBallPredictions", "|", ":", [Number, import_kolmafia52.toLocation, import_kolmafia52.toMonster]).map(function(_ref) {
     var _ref2 = _slicedToArray14(_ref, 3), location = _ref2[1], monster = _ref2[2];
     return [location, monster];
   }));
@@ -15789,7 +15789,7 @@ function differentiate(monster) {
   return import_kolmafia66.runCombat.apply(void 0, combatParams), !0;
 }
 function eggMonsters() {
-  return new Map(multiSplit(get("mimicEgg"), ",", ":", [import_kolmafia66.toMonster, Number]));
+  return new Map(multiSplit("mimicEggMonsters", ",", ":", [import_kolmafia66.toMonster, Number]));
 }
 function differentiableQuantity(monster) {
   var _eggMonsters$get;

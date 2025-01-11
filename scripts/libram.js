@@ -6793,7 +6793,7 @@ var banishSource = function(banisher) {
   return $items(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["none, training scroll:  Snokebomb, tomayohawk-style reflex hammer"]))).includes(item14) ? (0, import_kolmafia4.toSkill)(banisher) : item14;
 };
 function multiSplit(prop, outerDelimiter, innerDelimiter, mappers) {
-  var initialSplit = prop.split(outerDelimiter).filter(Boolean), multiDimensionalArray = outerDelimiter === innerDelimiter ? chunk(initialSplit, mappers.length) : initialSplit.map(function(entry) {
+  var initialSplit = get(prop).split(outerDelimiter).filter(Boolean), multiDimensionalArray = outerDelimiter === innerDelimiter ? chunk(initialSplit, mappers.length) : initialSplit.map(function(entry) {
     return entry.split(innerDelimiter);
   });
   return multiDimensionalArray.map(function(tup) {

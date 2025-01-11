@@ -410,6 +410,9 @@ export type Range<A extends number, B extends number> = Exclude<
   Enumerate<A>
 >;
 
+export const capitalize = <T extends string>(str: T): Capitalize<T> =>
+  (str.length ? `${str[0].toUpperCase()}${str.slice(1)}` : "") as Capitalize<T>;
+
 /**
  * Translate mafia's multi-dimensional array prefs into a multi-dimensional array
  * @param prop The property (or whatever) to process; not the property NAME, the value itself
@@ -436,3 +439,4 @@ export function multiSplit<T extends any[]>(
     mappers.map((func, index) => func(tup[index])),
   ) as T[];
 }
+

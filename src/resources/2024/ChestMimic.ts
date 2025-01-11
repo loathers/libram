@@ -136,7 +136,9 @@ export function differentiate(
  * @returns A Map containing all monsters available in your mimic eggs and their associated quantities
  */
 export function eggMonsters(): Map<Monster, number> {
-  return new Map(multiSplit(get("mimicEgg"), ",", ":", [toMonster, Number]));
+  return new Map(
+    multiSplit(get("mimicEggMonsters"), ",", ":", [toMonster, Number]),
+  );
 }
 
 /**

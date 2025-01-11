@@ -518,7 +518,7 @@ export function multiSplit<T extends any[]>(
   innerDelimiter: string,
   mappers: { [K in keyof T]: (str: string) => T[K] },
 ): T[] {
-  const initialSplit = prop.split(outerDelimiter).filter(Boolean);
+  const initialSplit = get(prop).split(outerDelimiter).filter(Boolean);
   const multiDimensionalArray =
     outerDelimiter === innerDelimiter
       ? chunk(initialSplit, mappers.length)

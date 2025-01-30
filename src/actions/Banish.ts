@@ -39,7 +39,7 @@ const asdonMartinSource: ActionSource = new ActionSource(
   Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`),
   {
     preparation: () => AsdonMartin.fillTo(50),
-  }
+  },
 );
 
 const banishSources: ActionSource[] = [
@@ -50,13 +50,13 @@ const banishSources: ActionSource[] = [
     Macro.skill($skill`Snokebomb`),
     {
       preparation: () => restoreMp(50),
-    }
+    },
   ),
 
   new ActionSource(
     $skill`Emotionally Chipped`,
     () => (have($skill`Emotionally Chipped`) ? 3 - get("_feelHatredUsed") : 0),
-    Macro.skill($skill`Feel Hatred`)
+    Macro.skill($skill`Feel Hatred`),
   ),
 
   new ActionSource(
@@ -71,7 +71,7 @@ const banishSources: ActionSource[] = [
         new Requirement([], {
           forceEquip: $items`Kremlin's Greatest Briefcase`,
         }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -84,7 +84,7 @@ const banishSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`latte lovers member's mug` }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -94,7 +94,7 @@ const banishSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`Lil' Doctor™ bag` }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -109,7 +109,7 @@ const banishSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`mafia middle finger ring` }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -121,7 +121,7 @@ const banishSources: ActionSource[] = [
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`V for Vivala mask` }),
       preparation: () => restoreMp(30),
-    }
+    },
   ),
 
   new ActionSource(
@@ -142,7 +142,7 @@ const banishSources: ActionSource[] = [
         }
         return have($item`stinky cheese eye`);
       },
-    }
+    },
   ),
 
   new ActionSource(
@@ -161,7 +161,7 @@ const banishSources: ActionSource[] = [
     {
       equipmentRequirements: () =>
         new Requirement([], { forceEquip: $items`familiar scrapbook` }),
-    }
+    },
   ),
 
   new ActionSource(
@@ -171,7 +171,7 @@ const banishSources: ActionSource[] = [
     {
       preparation: () => retrieveItem($item`human musk`),
       cost: () => ActionSource.defaultPriceFunction($item`human musk`),
-    }
+    },
   ),
 
   // Expensive unlimited sources
@@ -180,7 +180,7 @@ const banishSources: ActionSource[] = [
       new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),
         cost: () => ActionSource.defaultPriceFunction(item),
-      })
+      }),
   ),
 ];
 
@@ -191,7 +191,7 @@ const banishSources: ActionSource[] = [
  * @returns Banish source satisfying constraints, or null.
  */
 export function tryFindBanish(
-  constraints?: FindActionSourceConstraints
+  constraints?: FindActionSourceConstraints,
 ): ActionSource | null {
   let source = findActionSource(banishSources, constraints);
 
@@ -212,7 +212,7 @@ export function tryFindBanish(
  * @returns Banish source satisfying constraints.
  */
 export function ensureBanish(
-  constraints?: FindActionSourceConstraints
+  constraints?: FindActionSourceConstraints,
 ): ActionSource {
   const source = tryFindBanish(constraints);
 

@@ -1,11 +1,4 @@
-import {
-  Familiar,
-  Item,
-  mallPrice,
-  retrievePrice,
-  Skill,
-  useFamiliar,
-} from "kolmafia";
+import { Familiar, Item, retrievePrice, Skill, useFamiliar } from "kolmafia";
 
 import { Macro } from "../combat.js";
 import { Requirement } from "../maximize.js";
@@ -98,7 +91,7 @@ function mergeConstraints(
       Requirement.merge([
         ...allConstraints.map(
           (constraints) =>
-            constraints.equipmentRequirements?.() ?? new Requirement([], {})
+            constraints.equipmentRequirements?.() ?? new Requirement([], {}),
         ),
       ]),
     preparation: () => {
@@ -135,7 +128,7 @@ export class ActionSource {
     source: Item | Skill | Familiar | Array<Item | Skill | Familiar>,
     potential: () => number,
     macro: Macro,
-    constraints: ActionConstraints = {}
+    constraints: ActionConstraints = {},
   ) {
     this.source = source;
     this.potential = potential;
@@ -187,7 +180,7 @@ export class ActionSource {
   merge(...others: ActionSource[]): ActionSource | null {
     const actions = [this, ...others];
     const constraints = mergeConstraints(
-      ...actions.map((action) => action.constraints)
+      ...actions.map((action) => action.constraints),
     );
     if (constraints === null) {
       // Inconsistent constraints - no path forward here.
@@ -197,7 +190,7 @@ export class ActionSource {
       actions.flatMap((action) => action.source),
       () => sum(actions, (action) => action.potential()),
       Macro.step(...actions.map((action) => action.macro)),
-      constraints
+      constraints,
     );
   }
 
@@ -243,7 +236,7 @@ export class ActionSource {
  */
 function filterAction(
   action: ActionSource,
-  constraints: FindActionSourceConstraints
+  constraints: FindActionSourceConstraints,
 ): boolean {
   return (
     action.available() &&
@@ -269,10 +262,10 @@ function filterAction(
  */
 export function findActionSource(
   actions: ActionSource[],
-  constraints: FindActionSourceConstraints = {}
+  constraints: FindActionSourceConstraints = {},
 ): ActionSource | null {
   const validActions = actions.filter((actions) =>
-    filterAction(actions, constraints)
+    filterAction(actions, constraints),
   );
   if (validActions.length < 1) return null;
   return validActions.reduce((a, b) => (a.cost() <= b.cost() ? a : b));
@@ -288,11 +281,11 @@ export function findActionSource(
  */
 export function actionSourcesAvailable(
   actions: ActionSource[],
-  constraints: FindActionSourceConstraints = {}
+  constraints: FindActionSourceConstraints = {},
 ): number {
   // TODO: This will overcount if any Actions share a counter
   return sum(
     actions.filter((action) => filterAction(action, constraints ?? {})),
-    (action) => action.potential()
+    (action) => action.potential(),
   );
 }

@@ -98,10 +98,7 @@ const freeRunSources: ActionSource[] = [
     {
       preparation: () => retrieveItem($item`peppermint parasol`),
       cost: () =>
-        Math.min(
-          ActionSource.defaultPriceFunction($item`peppermint sprout`) * 5,
-          ActionSource.defaultPriceFunction($item`peppermint parasol`),
-        ) / 10, // Breaks after 10 successful runaways.
+        ActionSource.defaultPriceFunction($item`peppermint parasol`) / 10, // Breaks after 10 successful runaways.
     },
   ),
 

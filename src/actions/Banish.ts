@@ -175,7 +175,7 @@ const banishSources: ActionSource[] = [
   ),
 
   // Expensive unlimited sources
-  ...$items`Louder Than Bomb, divine champagne popper, tennis ball`.map(
+  ...$items`Louder Than Bomb, divine champagne popper, tennis ball, stuffed yam stinkbomb, anchor bomb, handful of split pea soup`.map(
     (item) =>
       new ActionSource(item, () => Infinity, Macro.item(item), {
         preparation: () => retrieveItem(item),

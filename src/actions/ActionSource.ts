@@ -1,4 +1,4 @@
-import { Familiar, Item, mallPrice, Skill, useFamiliar } from "kolmafia";
+import { Familiar, Item, retrievePrice, Skill, useFamiliar } from "kolmafia";
 
 import { Macro } from "../combat.js";
 import { Requirement } from "../maximize.js";
@@ -112,7 +112,7 @@ function mergeConstraints(
  */
 export class ActionSource {
   static defaultPriceFunction = (item: Item) =>
-    mallPrice(item) > 0 ? mallPrice(item) : Infinity;
+    retrievePrice(item) > 0 ? retrievePrice(item) : Infinity;
   source: Item | Skill | Familiar | Array<Item | Skill | Familiar>;
   potential: () => number; // Infinity: unlimited
   macro: Macro;

@@ -138,7 +138,7 @@ const freeKillSources: ActionSource[] = [
         }
         return get("shockingLickCharges") > 0;
       },
-      cost: () => ActionSource.defaultPriceFunction($item`battery (AAA)`) * 4,
+      cost: () => ActionSource.defaultPriceFunction($item`battery (9-Volt)`),
     },
   ),
 

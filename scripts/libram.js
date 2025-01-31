@@ -8855,7 +8855,7 @@ var ActionSource = /* @__PURE__ */ function() {
   }]);
 }();
 _defineProperty5(ActionSource, "defaultPriceFunction", function(item14) {
-  return (0, import_kolmafia7.mallPrice)(item14) > 0 ? (0, import_kolmafia7.mallPrice)(item14) : 1 / 0;
+  return (0, import_kolmafia7.retrievePrice)(item14) > 0 ? (0, import_kolmafia7.retrievePrice)(item14) : 1 / 0;
 });
 function filterAction(action, constraints) {
   var _constraints$requireF, _constraints$requireU, _constraints$noFamili, _constraints$noRequir, _constraints$noPrepar, _constraints$maximumC, _constraints$maximumC2;
@@ -9225,7 +9225,7 @@ var scrapbookChargesLastUpdated = get("_lastCombatStarted"), asdonMartinSource =
       return ActionSource.defaultPriceFunction($item(_templateObject433 || (_templateObject433 = _taggedTemplateLiteral4(["human musk"]))));
     }
   })
-].concat(_toConsumableArray7($items(_templateObject443 || (_templateObject443 = _taggedTemplateLiteral4(["Louder Than Bomb, divine champagne popper, tennis ball"]))).map(function(item14) {
+].concat(_toConsumableArray7($items(_templateObject443 || (_templateObject443 = _taggedTemplateLiteral4(["Louder Than Bomb, divine champagne popper, tennis ball, stuffed yam stinkbomb, anchor bomb, handful of split pea soup"]))).map(function(item14) {
   return new ActionSource(item14, function() {
     return 1 / 0;
   }, Macro.item(item14), {

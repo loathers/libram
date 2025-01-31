@@ -16154,35 +16154,11 @@ __export(TakerSpace_exports, {
 init_kolmafia_polyfill();
 var import_kolmafia70 = require("kolmafia");
 var _templateObject478, _templateObject2120, _templateObject3105, _templateObject479, _templateObject544, _templateObject637, _templateObject731, _templateObject829, _templateObject926, _templateObject1023, _templateObject1122, _templateObject1221, _templateObject1319, _templateObject1417, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815;
-function _toConsumableArray17(r) {
-  return _arrayWithoutHoles17(r) || _iterableToArray17(r) || _unsupportedIterableToArray30(r) || _nonIterableSpread17();
-}
-function _nonIterableSpread17() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _iterableToArray17(r) {
-  if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
-}
-function _arrayWithoutHoles17(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray30(r);
-}
 function _slicedToArray18(r, e) {
   return _arrayWithHoles18(r) || _iterableToArrayLimit18(r, e) || _unsupportedIterableToArray30(r, e) || _nonIterableRest18();
 }
 function _nonIterableRest18() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _unsupportedIterableToArray30(r, a) {
-  if (r) {
-    if (typeof r == "string") return _arrayLikeToArray30(r, a);
-    var t = {}.toString.call(r).slice(8, -1);
-    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray30(r, a) : void 0;
-  }
-}
-function _arrayLikeToArray30(r, a) {
-  (a == null || a > r.length) && (a = r.length);
-  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-  return n;
 }
 function _iterableToArrayLimit18(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
@@ -16208,6 +16184,30 @@ function _iterableToArrayLimit18(r, l) {
 function _arrayWithHoles18(r) {
   if (Array.isArray(r)) return r;
 }
+function _toConsumableArray17(r) {
+  return _arrayWithoutHoles17(r) || _iterableToArray17(r) || _unsupportedIterableToArray30(r) || _nonIterableSpread17();
+}
+function _nonIterableSpread17() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray30(r, a) {
+  if (r) {
+    if (typeof r == "string") return _arrayLikeToArray30(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return t === "Object" && r.constructor && (t = r.constructor.name), t === "Map" || t === "Set" ? Array.from(r) : t === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray30(r, a) : void 0;
+  }
+}
+function _iterableToArray17(r) {
+  if (typeof Symbol < "u" && r[Symbol.iterator] != null || r["@@iterator"] != null) return Array.from(r);
+}
+function _arrayWithoutHoles17(r) {
+  if (Array.isArray(r)) return _arrayLikeToArray30(r);
+}
+function _arrayLikeToArray30(r, a) {
+  (a == null || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
 function _taggedTemplateLiteral58(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
@@ -16220,7 +16220,7 @@ function have56() {
 }
 var RESOURCES = ["Spice", "Rum", "Anchor", "Mast", "Silk", "Gold"], RECIPES = /* @__PURE__ */ new Map([[$item(_templateObject2120 || (_templateObject2120 = _taggedTemplateLiteral58(["deft pirate hook"]))), [0, 0, 1, 1, 0, 1]], [$item(_templateObject3105 || (_templateObject3105 = _taggedTemplateLiteral58(["iron tricorn hat"]))), [0, 0, 2, 1, 0, 0]], [$item(_templateObject479 || (_templateObject479 = _taggedTemplateLiteral58(["jolly roger flag"]))), [0, 1, 0, 1, 1, 0]], [$item(_templateObject544 || (_templateObject544 = _taggedTemplateLiteral58(["sleeping profane parrot"]))), [15, 3, 0, 0, 2, 1]], [$item(_templateObject637 || (_templateObject637 = _taggedTemplateLiteral58(["pirrrate's currrse"]))), [2, 2, 0, 0, 0, 0]], [$item(_templateObject731 || (_templateObject731 = _taggedTemplateLiteral58(["tankard of spiced rum"]))), [1, 2, 0, 0, 0, 0]], [$item(_templateObject829 || (_templateObject829 = _taggedTemplateLiteral58(["packaged luxury garment"]))), [0, 0, 0, 0, 3, 2]], [$item(_templateObject926 || (_templateObject926 = _taggedTemplateLiteral58(["harpoon"]))), [0, 0, 0, 2, 0, 0]], [$item(_templateObject1023 || (_templateObject1023 = _taggedTemplateLiteral58(["chili powder cutlass"]))), [5, 0, 1, 0, 0, 0]], [$item(_templateObject1122 || (_templateObject1122 = _taggedTemplateLiteral58(["cursed Aztec tamale"]))), [2, 0, 0, 0, 0, 0]], [$item(_templateObject1221 || (_templateObject1221 = _taggedTemplateLiteral58(["jolly roger tattoo kit"]))), [0, 6, 1, 1, 0, 6]], [$item(_templateObject1319 || (_templateObject1319 = _taggedTemplateLiteral58(["golden pet rock"]))), [0, 0, 0, 0, 0, 7]], [$item(_templateObject1417 || (_templateObject1417 = _taggedTemplateLiteral58(["groggles"]))), [0, 6, 0, 0, 0, 0]], [$item(_templateObject1515 || (_templateObject1515 = _taggedTemplateLiteral58(["pirate dinghy"]))), [0, 0, 1, 1, 1, 0]], [$item(_templateObject1615 || (_templateObject1615 = _taggedTemplateLiteral58(["anchor bomb"]))), [0, 1, 3, 1, 0, 1]], [$item(_templateObject1715 || (_templateObject1715 = _taggedTemplateLiteral58(["silky pirate drawers"]))), [0, 0, 0, 0, 2, 0]], [$item(_templateObject1815 || (_templateObject1815 = _taggedTemplateLiteral58(["spices"]))), [1, 0, 0, 0, 0, 0]]]);
 function allRecipes() {
-  return new Map(RECIPES.entries().map(function(_ref) {
+  return new Map(_toConsumableArray17(RECIPES.entries()).map(function(_ref) {
     var _ref2 = _slicedToArray18(_ref, 2), item14 = _ref2[0], recipe = _ref2[1];
     return [item14, _toConsumableArray17(recipe)];
   }));

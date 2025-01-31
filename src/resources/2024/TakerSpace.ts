@@ -53,7 +53,7 @@ const RECIPES = new Map<Item, Recipe>([
  */
 export function allRecipes(): Map<Item, Recipe> {
   return new Map(
-    RECIPES.entries().map(([item, recipe]) => [item, [...recipe]]),
+    [...RECIPES.entries()].map(([item, recipe]) => [item, [...recipe]]),
   );
 }
 

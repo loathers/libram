@@ -3,6 +3,7 @@ import { Familiar, Item, retrievePrice, Skill, useFamiliar } from "kolmafia";
 import { Macro } from "../combat.js";
 import { Requirement } from "../maximize.js";
 import { sum } from "../utils.js";
+import { getAcquirePrice } from "../lib.js";
 
 export type FindActionSourceConstraints = {
   /**
@@ -112,7 +113,7 @@ function mergeConstraints(
  */
 export class ActionSource {
   static defaultPriceFunction = (item: Item) =>
-    retrievePrice(item) > 0 ? retrievePrice(item) : Infinity;
+    getAcquirePrice(item) > 0 ? getAcquirePrice(item) : Infinity;
   source: Item | Skill | Familiar | Array<Item | Skill | Familiar>;
   potential: () => number; // Infinity: unlimited
   macro: Macro;

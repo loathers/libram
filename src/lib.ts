@@ -78,6 +78,7 @@ import {
   MafiaClass,
   MafiaClasses,
   toMonster,
+  retrievePrice,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1555,4 +1556,19 @@ export type FamiliarTag = (typeof familiarTags)[number];
  */
 export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
   return familiar.attributes.split("; ").filter(Boolean) as FamiliarTag[];
+}
+
+/**
+ * Determines the cost of acquiring an item taking into account your valueOfInventory preference
+ *
+ * @param item The item to check the price of
+ * @param quantity the number of items to acquire
+ * @returns The total value of the items
+ */
+export function getAcquirePrice(item: Item, quantity = 1): number {
+  const currentAmount = availableAmount(item);
+  return (
+    retrievePrice(item, currentAmount + quantity) -
+    retrievePrice(item, currentAmount)
+  );
 }

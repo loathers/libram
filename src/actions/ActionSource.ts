@@ -1,4 +1,4 @@
-import { Familiar, Item, retrievePrice, Skill, useFamiliar } from "kolmafia";
+import { Familiar, Item, Skill, useFamiliar } from "kolmafia";
 
 import { Macro } from "../combat.js";
 import { Requirement } from "../maximize.js";

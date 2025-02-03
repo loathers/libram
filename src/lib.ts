@@ -1566,10 +1566,23 @@ export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
  * @returns The total value of the items
  */
 export function getAcquirePrice(item: Item, quantity = 1): number {
+  if (quantity === 0) return 0;
   const currentAmount = availableAmount(item);
-  if (retrievePrice(item) === 0) return Infinity;
-  return (
+  const retrieveCost =
     retrievePrice(item, currentAmount + quantity) -
-    retrievePrice(item, currentAmount)
-  );
+    retrievePrice(item, currentAmount);
+
+  if (retrieveCost > 0) return retrieveCost;
+  if (item.tradeable && !have(item)) return quantity * mallPrice(item);
+  if (
+    item.tradeable &&
+    mallPrice(item) > Math.max(100, 2 * autosellPrice(item))
+  ) {
+    return mallPrice(item);
+  }
+  if (item.tradeable) return autosellPrice(item);
+  if (item.discardable) {
+    return have(item, quantity) ? quantity * autosellPrice(item) : Infinity;
+  }
+  return 0;
 }

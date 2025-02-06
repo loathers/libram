@@ -108,6 +108,37 @@ export function isPhylumProperty(property: string): boolean {
   return phylumProps.includes(property) || property.endsWith("Phylum");
 }
 
+const fakeItemProps = [
+  "_unknownEasyBountyItem",
+  "_unknownHardBountyItem",
+  "_unknownSpecialBountyItem",
+  "_untakenEasyBountyItem",
+  "_untakenHardBountyItem",
+  "_untakenSpecialBountyItem",
+  "currentEasyBountyItem",
+  "currentHardBountyItem",
+  "currentSpecialBountyItem",
+];
+const itemProps = [
+  "trapperOre",
+  "guzzlrQuestBooze",
+  "muffinOnOrder",
+  "rufusDesiredArtifact",
+  "_cookbookbatQuestIngredient",
+  "_dailySpecial",
+  "_pirateRealmCurio",
+];
+/**
+ * @param property Property name
+ * @returns Whether the supplied property should be coerced to an Item
+ */
+export function isItemProperty(property: string): boolean {
+  return (
+    !fakeItemProps.includes(property) &&
+    (itemProps.includes(property) || property.endsWith("Item"))
+  );
+}
+
 async function main() {
   const response = await nodeFetch(PROPS_FILE);
   const text = await response.text();
@@ -123,6 +154,7 @@ async function main() {
     FamiliarProperty: [],
     StatProperty: [],
     PhylumProperty: [],
+    ItemProperty: [],
   };
 
   for (const prop of props) {
@@ -139,6 +171,8 @@ async function main() {
       propTypes.FamiliarProperty.push(property);
     } else if (isPhylumProperty(property)) {
       propTypes.PhylumProperty.push(property);
+    } else if (isItemProperty(property)) {
+      propTypes.ItemProperty.push(property);
     } else if (isNumericOrStringProperty(property)) {
       propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {

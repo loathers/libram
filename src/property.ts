@@ -39,6 +39,7 @@ import {
 import {
   BooleanProperty,
   FamiliarProperty,
+  ItemProperty,
   LocationProperty,
   MonsterProperty,
   NumericOrStringProperty,
@@ -50,6 +51,7 @@ import {
 import {
   isBooleanProperty,
   isFamiliarProperty,
+  isItemProperty,
   isLocationProperty,
   isMonsterProperty,
   isNumericOrStringProperty,
@@ -162,9 +164,13 @@ export function get(property: StatProperty): Stat | null;
 export function get(property: StatProperty, _default: Stat): Stat;
 export function get(property: PhylumProperty): Phylum | null;
 export function get(property: PhylumProperty, _default: Phylum): Phylum;
-export function get(property: string, _default: Location): Location | null;
-export function get(property: string, _default: Monster): Monster | null;
-export function get(property: string, _default: Familiar): Familiar | null;
+export function get(property: ItemProperty): Item | null;
+export function get(property: ItemProperty, _default: Item): Item;
+export function get(property: string, _default: Location): Location;
+export function get(property: string, _default: Monster): Monster;
+export function get(property: string, _default: Familiar): Familiar;
+export function get(property: string, _default: Phylum): Phylum;
+export function get(property: string, _default: Item): Item;
 export function get(property: string, _default: boolean): boolean;
 export function get(property: string, _default: number): number;
 export function get(property: string, _default?: string): string;
@@ -195,6 +201,8 @@ export function get(property: string, _default?: unknown): unknown {
     return getStat(property, _default as Stat | undefined);
   } else if (isPhylumProperty(property)) {
     return getPhylum(property, _default as Phylum | undefined);
+  } else if (isItemProperty(property)) {
+    return getItem(property, _default as Item | undefined);
   } else if (isStringProperty(property)) {
     return value === "" && _default !== undefined ? _default : value;
   }

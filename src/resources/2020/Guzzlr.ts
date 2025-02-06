@@ -210,9 +210,7 @@ export function getTier(): "platinum" | "gold" | "bronze" | null {
  * @returns The booze item associated with your Guzzlr quest if it exists; `null` otherwise
  */
 export function getBooze(): Item | null {
-  const booze = get("guzzlrQuestBooze");
-  if (booze === "") return null;
-  return Item.get(booze);
+  return get("guzzlrQuestBooze");
 }
 
 /**

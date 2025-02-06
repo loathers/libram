@@ -78,6 +78,8 @@ import {
   MafiaClass,
   MafiaClasses,
   toMonster,
+  retrievePrice,
+  craftType,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1555,4 +1557,36 @@ export type FamiliarTag = (typeof familiarTags)[number];
  */
 export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
   return familiar.attributes.split("; ").filter(Boolean) as FamiliarTag[];
+}
+
+/**
+ * Determines the cost of acquiring an item taking into account your valueOfInventory preference
+ *
+ * @param item The item to check the price of
+ * @param quantity the number of items to acquire
+ * @returns The total value of the items
+ */
+export function getAcquirePrice(item: Item, quantity = 1): number {
+  if (quantity === 0) return 0;
+  const currentAmount = availableAmount(item);
+  const amountNeeded = quantity - currentAmount;
+  const retrieveCost =
+    retrievePrice(item, currentAmount + quantity) -
+    retrievePrice(item, currentAmount);
+  const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
+
+  if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
+    return retrieveCost;
+  }
+  if (item.tradeable && mallPrice(item) === mallMinPrice) {
+    return currentAmount * autosellPrice(item) + amountNeeded * mallPrice(item);
+  }
+  if (item.tradeable && mallPrice(item) > mallMinPrice) {
+    return quantity * mallPrice(item);
+  }
+  if (item.tradeable) return quantity * autosellPrice(item);
+  if (item.discardable) {
+    return have(item, quantity) ? quantity * autosellPrice(item) : Infinity;
+  }
+  return 0;
 }

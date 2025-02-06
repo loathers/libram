@@ -1573,23 +1573,15 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
   const retrieveCost =
     retrievePrice(item, currentAmount + quantity) -
     retrievePrice(item, currentAmount);
+  const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
   if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
     return retrieveCost;
   }
-  if (
-    item.tradeable &&
-    mallPrice(item) === Math.max(100, 2 * autosellPrice(item))
-  ) {
-    return (
-      currentAmount * Math.max(100, 2 * autosellPrice(item)) +
-      amountNeeded * mallPrice(item)
-    );
+  if (item.tradeable && mallPrice(item) === mallMinPrice) {
+    return currentAmount * autosellPrice(item) + amountNeeded * mallPrice(item);
   }
-  if (
-    item.tradeable &&
-    mallPrice(item) > Math.max(100, 2 * autosellPrice(item))
-  ) {
+  if (item.tradeable && mallPrice(item) > mallMinPrice) {
     return quantity * mallPrice(item);
   }
   if (item.tradeable) return quantity * autosellPrice(item);

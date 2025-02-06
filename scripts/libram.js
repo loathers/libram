@@ -7155,8 +7155,8 @@ function getFamiliarTags(familiar10) {
 }
 function getAcquirePrice(item14) {
   var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
-  if (quantity === 0) return 0;
-  var currentAmount = (0, import_kolmafia4.availableAmount)(item14), amountNeeded = quantity - currentAmount, retrieveCost = (0, import_kolmafia4.retrievePrice)(item14, currentAmount + quantity) - (0, import_kolmafia4.retrievePrice)(item14, currentAmount), mallMinPrice = Math.max(100, 2 * (0, import_kolmafia4.autosellPrice)(item14));
+  if (quantity <= 0) return 0;
+  var currentAmount = (0, import_kolmafia4.availableAmount)(item14), amountNeeded = Math.max(0, quantity - currentAmount), retrieveCost = (0, import_kolmafia4.retrievePrice)(item14, currentAmount + quantity) - (0, import_kolmafia4.retrievePrice)(item14, currentAmount), mallMinPrice = Math.max(100, 2 * (0, import_kolmafia4.autosellPrice)(item14));
   return (0, import_kolmafia4.craftType)(item14) === "Meatpasting" && retrieveCost > 0 ? retrieveCost : item14.tradeable && (0, import_kolmafia4.mallPrice)(item14) === mallMinPrice ? currentAmount * (0, import_kolmafia4.autosellPrice)(item14) + amountNeeded * (0, import_kolmafia4.mallPrice)(item14) : item14.tradeable && (0, import_kolmafia4.mallPrice)(item14) > mallMinPrice ? quantity * (0, import_kolmafia4.mallPrice)(item14) : item14.tradeable ? quantity * (0, import_kolmafia4.autosellPrice)(item14) : item14.discardable ? have(item14, quantity) ? quantity * (0, import_kolmafia4.autosellPrice)(item14) : 1 / 0 : 0;
 }
 

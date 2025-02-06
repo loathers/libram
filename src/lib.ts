@@ -1567,9 +1567,9 @@ export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
  * @returns The total value of the items
  */
 export function getAcquirePrice(item: Item, quantity = 1): number {
-  if (quantity === 0) return 0;
+  if (quantity <= 0) return 0;
   const currentAmount = availableAmount(item);
-  const amountNeeded = quantity - currentAmount;
+  const amountNeeded = Math.max(0, quantity - currentAmount);
   const retrieveCost =
     retrievePrice(item, currentAmount + quantity) -
     retrievePrice(item, currentAmount);

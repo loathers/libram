@@ -36,5 +36,5 @@ export function turnsLeft(familiar = currentFamiliar()): number {
   if ((familiarsToday() as (Familiar | null)[]).includes(familiar))
     return Infinity;
   if (currentFamiliar() !== familiar) return 5;
-  return clamp(5 - get("cupidBowFights"), 0, 5);
+  return clamp(5 - get("cupidBowFights"), 1, 5);
 }

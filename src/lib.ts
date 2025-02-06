@@ -79,6 +79,7 @@ import {
   MafiaClasses,
   toMonster,
   retrievePrice,
+  craftType,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1568,19 +1569,30 @@ export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
 export function getAcquirePrice(item: Item, quantity = 1): number {
   if (quantity === 0) return 0;
   const currentAmount = availableAmount(item);
+  const amountNeeded = quantity - currentAmount;
   const retrieveCost =
     retrievePrice(item, currentAmount + quantity) -
     retrievePrice(item, currentAmount);
 
-  if (retrieveCost > 0) return retrieveCost;
-  if (item.tradeable && !have(item)) return quantity * mallPrice(item);
+  if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
+    return retrieveCost;
+  }
+  if (
+    item.tradeable &&
+    mallPrice(item) === Math.max(100, 2 * autosellPrice(item))
+  ) {
+    return (
+      currentAmount * Math.max(100, 2 * autosellPrice(item)) +
+      amountNeeded * mallPrice(item)
+    );
+  }
   if (
     item.tradeable &&
     mallPrice(item) > Math.max(100, 2 * autosellPrice(item))
   ) {
-    return mallPrice(item);
+    return quantity * mallPrice(item);
   }
-  if (item.tradeable) return autosellPrice(item);
+  if (item.tradeable) return quantity * autosellPrice(item);
   if (item.discardable) {
     return have(item, quantity) ? quantity * autosellPrice(item) : Infinity;
   }

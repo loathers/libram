@@ -59,6 +59,7 @@ import * as BatWings from "./2024/BatWings.js";
 import * as EverfullDarts from "./2024/EverfullDarts.js";
 import * as TakerSpace from "./2024/TakerSpace.js";
 import * as CrepeParachute from "./2025/CrepeParachute.js";
+import * as ToyCupidBow from "./2025/ToyCupidBow.js";
 
 export {
   AprilingBandHelmet,
@@ -118,6 +119,7 @@ export {
   StompingBoots,
   TakerSpace,
   TearawayPants,
+  ToyCupidBow,
   TrainSet,
   TunnelOfLove,
   WinterGarden,

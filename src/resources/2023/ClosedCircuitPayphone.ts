@@ -131,7 +131,7 @@ export function chooseQuest(
     directlyUse(item);
     runChoice(
       chooser({
-        artifact: toItem(get("rufusDesiredArtifact")),
+        artifact: get("rufusDesiredArtifact") ?? $item.none,
         entity: get("rufusDesiredEntity") ?? $monster.none,
         items: toItem(get("rufusDesiredItems")),
       }),

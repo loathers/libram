@@ -3,6 +3,8 @@ import {
   BooleanProperty,
   familiarProperties,
   FamiliarProperty,
+  itemProperties,
+  ItemProperty,
   locationProperties,
   LocationProperty,
   monsterProperties,
@@ -28,6 +30,7 @@ const monsterPropertiesSet = new Set(monsterProperties);
 const familiarPropertiesSet = new Set(familiarProperties);
 const statPropertiesSet = new Set(statProperties);
 const phylumPropertiesSet = new Set(phylumProperties);
+const itemPropertiesSet = new Set(itemProperties);
 
 /**
  * Determine whether a property has a boolean value
@@ -131,6 +134,16 @@ export function isPhylumProperty(property: string): property is PhylumProperty {
   return (phylumPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ * Determine whether a property has an Item value
+ *
+ * @param property Property to check
+ * @returns Whether the supplied property has an Item value
+ */
+export function isItemProperty(property: string): property is ItemProperty {
+  return (itemPropertiesSet as Set<string>).has(property);
+}
+
 export type KnownProperty =
   | NumericProperty
   | BooleanProperty
@@ -138,6 +151,7 @@ export type KnownProperty =
   | LocationProperty
   | FamiliarProperty
   | PhylumProperty
+  | ItemProperty
   | StatProperty
   | StringProperty
   | NumericOrStringProperty;

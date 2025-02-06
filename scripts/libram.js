@@ -5174,6 +5174,9 @@ __export(src_exports, {
   get: function() {
     return get;
   },
+  getAcquirePrice: function() {
+    return getAcquirePrice;
+  },
   getActiveEffects: function() {
     return getActiveEffects;
   },
@@ -7139,6 +7142,12 @@ var familiarTags = Object.freeze(["animal", "insect", "haseyes", "haswings", "fa
 function getFamiliarTags(familiar10) {
   return familiar10.attributes.split("; ").filter(Boolean);
 }
+function getAcquirePrice(item14) {
+  var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
+  if (quantity === 0) return 0;
+  var currentAmount = (0, import_kolmafia4.availableAmount)(item14), amountNeeded = quantity - currentAmount, retrieveCost = (0, import_kolmafia4.retrievePrice)(item14, currentAmount + quantity) - (0, import_kolmafia4.retrievePrice)(item14, currentAmount), mallMinPrice = Math.max(100, 2 * (0, import_kolmafia4.autosellPrice)(item14));
+  return (0, import_kolmafia4.craftType)(item14) === "Meatpasting" && retrieveCost > 0 ? retrieveCost : item14.tradeable && (0, import_kolmafia4.mallPrice)(item14) === mallMinPrice ? currentAmount * (0, import_kolmafia4.autosellPrice)(item14) + amountNeeded * (0, import_kolmafia4.mallPrice)(item14) : item14.tradeable && (0, import_kolmafia4.mallPrice)(item14) > mallMinPrice ? quantity * (0, import_kolmafia4.mallPrice)(item14) : item14.tradeable ? quantity * (0, import_kolmafia4.autosellPrice)(item14) : item14.discardable ? have(item14, quantity) ? quantity * (0, import_kolmafia4.autosellPrice)(item14) : 1 / 0 : 0;
+}
 
 // src/overlappingNames.ts
 init_kolmafia_polyfill();
@@ -8861,7 +8870,7 @@ var ActionSource = /* @__PURE__ */ function() {
   }]);
 }();
 _defineProperty5(ActionSource, "defaultPriceFunction", function(item14) {
-  return (0, import_kolmafia7.retrievePrice)(item14) > 0 ? (0, import_kolmafia7.retrievePrice)(item14) : 1 / 0;
+  return getAcquirePrice(item14) > 0 ? getAcquirePrice(item14) : 1 / 0;
 });
 function filterAction(action, constraints) {
   var _constraints$requireF, _constraints$requireU, _constraints$noFamili, _constraints$noRequir, _constraints$noPrepar, _constraints$maximumC, _constraints$maximumC2;
@@ -20552,6 +20561,7 @@ var Session = /* @__PURE__ */ function() {
   freeCrafts,
   gameDay,
   get,
+  getAcquirePrice,
   getActiveEffects,
   getActiveSongs,
   getAverage,

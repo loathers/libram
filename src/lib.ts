@@ -80,6 +80,8 @@ import {
   toMonster,
   retrievePrice,
   craftType,
+  isNpcItem,
+  npcPrice,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1577,6 +1579,13 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
 
   if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
     return retrieveCost;
+  }
+  if (
+    isNpcItem(item) &&
+    npcPrice(item) > 0 &&
+    npcPrice(item) < mallPrice(item)
+  ) {
+    return quantity * npcPrice(item);
   }
   if (item.tradeable && mallPrice(item) === mallMinPrice) {
     return currentAmount * autosellPrice(item) + amountNeeded * mallPrice(item);

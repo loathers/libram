@@ -127,6 +127,7 @@ const itemProps = [
   "_cookbookbatQuestIngredient",
   "_dailySpecial",
   "_pirateRealmCurio",
+  "rufusDesiredItems",
 ];
 /**
  * @param property Property name

@@ -5947,7 +5947,7 @@ function get(property, _default) {
     if (isStringProperty(property))
       return value === "" && _default !== void 0 ? _default : value;
   }
-  return _default instanceof import_kolmafia2.Location ? getLocation(property, _default) : _default instanceof import_kolmafia2.Monster ? getMonster(property, _default) : _default instanceof import_kolmafia2.Familiar ? getFamiliar(property, _default) : _default instanceof import_kolmafia2.Stat ? getStat(property, _default) : _default instanceof import_kolmafia2.Phylum ? getPhylum(property, _default) : typeof _default == "boolean" ? value === "true" ? !0 : value === "false" ? !1 : _default : typeof _default == "number" ? value === "" ? _default : parseInt(value) : value === "" ? _default === void 0 ? "" : _default : value;
+  return _default instanceof import_kolmafia2.Location ? getLocation(property, _default) : _default instanceof import_kolmafia2.Monster ? getMonster(property, _default) : _default instanceof import_kolmafia2.Familiar ? getFamiliar(property, _default) : _default instanceof import_kolmafia2.Stat ? getStat(property, _default) : _default instanceof import_kolmafia2.Phylum ? getPhylum(property, _default) : _default instanceof import_kolmafia2.Item ? getItem(property, _default) : typeof _default == "boolean" ? value === "true" ? !0 : value === "false" ? !1 : _default : typeof _default == "number" ? value === "" ? _default : parseInt(value) : value === "" ? _default === void 0 ? "" : _default : value;
 }
 function _set(property, value) {
   var stringValue = value === null ? "" : value.toString();

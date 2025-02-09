@@ -6988,7 +6988,7 @@ function directlyUse(item14) {
 function unequip(thing) {
   if (thing instanceof import_kolmafia4.Slot) return (0, import_kolmafia4.equip)(thing, $item.none);
   var failedSlots = import_kolmafia4.Slot.all().filter(function(s) {
-    return (0, import_kolmafia4.equippedItem)(s) !== thing ? !1 : !unequip(thing);
+    return (0, import_kolmafia4.equippedItem)(s) !== thing ? !1 : !unequip(s);
   });
   return failedSlots.length && logger_default.debug("Failed to unequip ".concat(thing, " from slots ").concat(failedSlots.join(", "))), failedSlots.length === 0;
 }

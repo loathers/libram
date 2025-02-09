@@ -218,6 +218,8 @@ export function get(property: string, _default?: unknown): unknown {
     return getStat(property, _default as Stat | undefined);
   } else if (_default instanceof Phylum) {
     return getPhylum(property, _default as Phylum | undefined);
+  } else if (_default instanceof Item) {
+    return getItem(property, _default as Item | undefined);
   } else if (typeof _default === "boolean") {
     return value === "true" ? true : value === "false" ? false : _default;
   } else if (typeof _default === "number") {

@@ -1164,19 +1164,27 @@ export const realmTypes = [
   "sleaze",
   "fantasy",
   "pirate",
+  "cyber",
 ] as const;
+
 export type RealmType = (typeof realmTypes)[number];
 /**
  * @param identifier which realm to check for
  * @returns if that realm is available
  */
 export function realmAvailable(identifier: RealmType): boolean {
-  if (identifier === "fantasy") {
-    return get(`_frToday`) || get(`frAlways`);
-  } else if (identifier === "pirate") {
-    return get(`_prToday`) || get(`prAlways`);
+  switch (identifier) {
+    case "fantasy":
+      return get("_frToday") || get("frAlways");
+    case "pirate":
+      return get("_prToday") || get("prAlways");
+    case "cyber":
+      return get("_crToday") || get("crAlways");
+    default:
+      return (
+        get(`_${identifier}AirportToday`) || get(`${identifier}AirportAlways`)
+      );
   }
-  return get(`_${identifier}AirportToday`) || get(`${identifier}AirportAlways`);
 }
 
 /**

@@ -6,7 +6,6 @@ import {
   itemDrops,
   canAdventure,
   runChoice,
-  toItem,
   use,
 } from "kolmafia";
 import { directlyUse, have as have_, questStep } from "../../lib.js";
@@ -133,7 +132,7 @@ export function chooseQuest(
       chooser({
         artifact: get("rufusDesiredArtifact") ?? $item.none,
         entity: get("rufusDesiredEntity") ?? $monster.none,
-        items: toItem(get("rufusDesiredItems")),
+        items: get("rufusDesiredItems") ?? $item.none,
       }),
     );
   });

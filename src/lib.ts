@@ -98,7 +98,7 @@ import {
   $stat,
 } from "./template-string.js";
 import { makeByXFunction, notNull, clamp, chunk, Tuple } from "./utils.js";
-import { StringProperty } from "./propertyTypes.js";
+import { BooleanProperty, StringProperty } from "./propertyTypes.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -1164,19 +1164,30 @@ export const realmTypes = [
   "sleaze",
   "fantasy",
   "pirate",
+  "cyber",
 ] as const;
 export type RealmType = (typeof realmTypes)[number];
+
+const todayOrAlways = <T extends string>(
+  x: T,
+): `_${T}Today` extends BooleanProperty ? boolean : string =>
+  get(`_${x}Today`) || get(`${x}Always`);
+
 /**
  * @param identifier which realm to check for
  * @returns if that realm is available
  */
 export function realmAvailable(identifier: RealmType): boolean {
-  if (identifier === "fantasy") {
-    return get(`_frToday`) || get(`frAlways`);
-  } else if (identifier === "pirate") {
-    return get(`_prToday`) || get(`prAlways`);
+  switch (identifier) {
+    case "fantasy":
+      return todayOrAlways("fr");
+    case "pirate":
+      return todayOrAlways("pr");
+    case "cyber":
+      return todayOrAlways("cr");
+    default:
+      return todayOrAlways(`${identifier}Airport`);
   }
-  return get(`_${identifier}AirportToday`) || get(`${identifier}AirportAlways`);
 }
 
 /**

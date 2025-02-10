@@ -7005,9 +7005,20 @@ function freeCrafts() {
   }, all2 = (have($skill(_templateObject37 || (_templateObject37 = _taggedTemplateLiteral(["Rapid Prototyping"])))) ? 5 - get("_rapidPrototypingUsed") : 0) + (have($skill(_templateObject38 || (_templateObject38 = _taggedTemplateLiteral(["Expert Corner-Cutter"])))) ? 5 - get("_expertCornerCutterUsed") : 0) + effectCrafts($effect(_templateObject39 || (_templateObject39 = _taggedTemplateLiteral(["Inigo's Incantation of Inspiration"])))) + effectCrafts($effect(_templateObject40 || (_templateObject40 = _taggedTemplateLiteral(["Craft Tea"])))) + effectCrafts($effect(_templateObject41 || (_templateObject41 = _taggedTemplateLiteral(["Cooking Concentrate"])))), food = type === "food" ? 5 - get("_cookbookbatCrafting") : 0, smith = type === "smith" ? 5 - get("_thorsPliersCrafting") : 0, booze = 0;
   return all2 + food + smith + booze;
 }
-var realmTypes = ["spooky", "stench", "hot", "cold", "sleaze", "fantasy", "pirate"];
+var realmTypes = ["spooky", "stench", "hot", "cold", "sleaze", "fantasy", "pirate", "cyber"], todayOrAlways = function(x) {
+  return get("_".concat(x, "Today")) || get("".concat(x, "Always"));
+};
 function realmAvailable(identifier) {
-  return identifier === "fantasy" ? get("_frToday") || get("frAlways") : identifier === "pirate" ? get("_prToday") || get("prAlways") : get("_".concat(identifier, "AirportToday")) || get("".concat(identifier, "AirportAlways"));
+  switch (identifier) {
+    case "fantasy":
+      return todayOrAlways("fr");
+    case "pirate":
+      return todayOrAlways("pr");
+    case "cyber":
+      return todayOrAlways("cr");
+    default:
+      return todayOrAlways("".concat(identifier, "Airport"));
+  }
 }
 function realmCurrency(realm) {
   switch (realm) {

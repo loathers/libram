@@ -409,3 +409,5 @@ export type Range<A extends number, B extends number> = Exclude<
   Enumerate<B>,
   Enumerate<A>
 >;
+
+export type ValueOf<T> = T[keyof T];

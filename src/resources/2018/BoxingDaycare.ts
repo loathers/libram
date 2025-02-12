@@ -7,6 +7,7 @@ import {
   myMeat,
   retrieveItem,
   runChoice,
+  Stat,
   visitUrl,
 } from "kolmafia";
 import { get } from "../../property.js";
@@ -55,8 +56,15 @@ type SpaPackage = keyof typeof SPA_PACKAGES | ValueOf<typeof SPA_PACKAGES>;
  * @param target What spa package to request
  * @returns Whether we succeeded in our endeavor
  */
-export function visitSpa(target: SpaPackage | Effect): boolean {
+export function visitSpa(target: SpaPackage | Effect | Stat): boolean {
   if (!canVisitSpa()) return false;
+  if (target instanceof Stat) {
+    const command =
+      target === Stat.none
+        ? "regen"
+        : target.toString().toLowerCase().slice(0, 3);
+    return cliExecute(`daycare ${command}`);
+  }
   const targetString = target instanceof Effect ? target.name : target;
   const command =
     SPA_PACKAGE_COMMANDS[

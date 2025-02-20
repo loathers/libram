@@ -287,6 +287,33 @@ export function getTotalModifier(
   return sum(subjects, (subject) => get(modifier, subject));
 }
 
+export type ModifierParser = {
+  numeric: (value: string) => number;
+  str: (value: string) => string;
+  bool: (value: string) => boolean;
+};
+
+function parseModifierString(
+  modifiers: string,
+  {
+    numeric = Number,
+    str = String,
+    bool = (val) => val === "true",
+  }: Partial<ModifierParser> = {},
+): Modifiers {
+  return Object.entries(splitModifiers(modifiers)).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key as ModifierType]: isBooleanModifier(key)
+        ? bool(value)
+        : isNumericModifier(key)
+          ? numeric(value)
+          : str(value),
+    }),
+    {} as Modifiers,
+  );
+}
+
 /**
  * Translate a pref into a `Modifiers` object by wrapping mafia's `splitModifiers`
  * @param pref The name of the mafia preference in question
@@ -308,15 +335,24 @@ export function parseModifiers(
     bool: (value: string) => boolean;
   }> = {},
 ): Modifiers {
-  return Object.entries(splitModifiers(getProperty(pref))).reduce(
-    (acc, [key, value]) => ({
-      ...acc,
-      [key as ModifierType]: isBooleanModifier(key)
-        ? bool(value)
-        : isNumericModifier(key)
-          ? numeric(value)
-          : str(value),
-    }),
-    {} as Modifiers,
-  );
+  return parseModifierString(getProperty(pref), { numeric, str, bool });
+}
+
+const overloadedStringModifier = (
+  thing: Effect | Item | string,
+  modifier: string,
+) =>
+  thing instanceof Effect
+    ? stringModifier(thing, modifier)
+    : thing instanceof Item
+      ? stringModifier(thing, modifier)
+      : stringModifier(thing, modifier);
+
+/**
+ * Compile together all `Modifiers` something has
+ * @param thing An Item, Effect, or string to check all modifiers of
+ * @returns A `Modifiers` object corresponding to the givem Effect, Item, or string
+ */
+export function allModifiers(thing: Effect | Item | string): Modifiers {
+  return parseModifierString(overloadedStringModifier(thing, "Modifiers"));
 }

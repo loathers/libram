@@ -10892,14 +10892,24 @@ function getTotalModifier(modifier) {
     return get2(modifier, subject);
   });
 }
-function parseModifiers(pref) {
+function parseModifierString(modifiers) {
   var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$numeric = _ref.numeric, numeric = _ref$numeric === void 0 ? Number : _ref$numeric, _ref$str = _ref.str, str = _ref$str === void 0 ? String : _ref$str, _ref$bool = _ref.bool, bool = _ref$bool === void 0 ? function(val) {
     return val === "true";
   } : _ref$bool;
-  return Object.entries((0, import_kolmafia22.splitModifiers)((0, import_kolmafia22.getProperty)(pref))).reduce(function(acc, _ref2) {
+  return Object.entries((0, import_kolmafia22.splitModifiers)(modifiers)).reduce(function(acc, _ref2) {
     var _ref3 = _slicedToArray6(_ref2, 2), key = _ref3[0], value = _ref3[1];
     return _objectSpread5(_objectSpread5({}, acc), {}, _defineProperty8({}, key, isBooleanModifier(key) ? bool(value) : isNumericModifier(key) ? numeric(value) : str(value)));
   }, {});
+}
+function parseModifiers(pref) {
+  var _ref4 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref4$numeric = _ref4.numeric, numeric = _ref4$numeric === void 0 ? Number : _ref4$numeric, _ref4$str = _ref4.str, str = _ref4$str === void 0 ? String : _ref4$str, _ref4$bool = _ref4.bool, bool = _ref4$bool === void 0 ? function(val) {
+    return val === "true";
+  } : _ref4$bool;
+  return parseModifierString((0, import_kolmafia22.getProperty)(pref), {
+    numeric: numeric,
+    str: str,
+    bool: bool
+  });
 }
 
 // src/resources/2013/Florist.ts

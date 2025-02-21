@@ -97,7 +97,14 @@ import {
   $skill,
   $stat,
 } from "./template-string.js";
-import { makeByXFunction, notNull, clamp, chunk, Tuple } from "./utils.js";
+import {
+  makeByXFunction,
+  notNull,
+  clamp,
+  chunk,
+  Tuple,
+  ValueOf,
+} from "./utils.js";
 import { BooleanProperty, StringProperty } from "./propertyTypes.js";
 
 /**
@@ -854,7 +861,7 @@ export const Environment = {
   Underwater: "underwater",
 } as const;
 
-export type EnvironmentType = (typeof Environment)[keyof typeof Environment];
+export type EnvironmentType = ValueOf<typeof Environment>;
 
 /**
  * Determines the weight-coefficient of any leprechaunning that this familiar may find itself doing

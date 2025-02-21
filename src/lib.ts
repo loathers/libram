@@ -1517,7 +1517,7 @@ export function totalFamiliarWeight(
   );
 }
 
-export const familiarTags = Object.freeze([
+export const regularFamiliarTags = Object.freeze([
   "animal",
   "insect",
   "haseyes",
@@ -1566,6 +1566,7 @@ export const familiarTags = Object.freeze([
   "hasshell",
   "hasstinger",
 ] as const);
+const regularFamiliarTagSet = new Set(regularFamiliarTags);
 
 export const pokefamUltTags = Object.freeze([
   "ult_bearhug",
@@ -1575,10 +1576,9 @@ export const pokefamUltTags = Object.freeze([
   "ult_pepperscorn",
   "ult_rainbowstorm",
 ] as const);
-const ultSet = new Set(pokefamUltTags);
 
 export type PokefamUltTag = (typeof pokefamUltTags)[number];
-export type RegularFamiliarTag = (typeof familiarTags)[number];
+export type RegularFamiliarTag = (typeof regularFamiliarTags)[number];
 export type FamiliarTag = RegularFamiliarTag | PokefamUltTag;
 const SPECIAL_ULTS = new Map<Familiar, FamiliarTag[]>([
   [$familiar`Nursine`, ["ult_bearhug"]],
@@ -1590,6 +1590,15 @@ const SPECIAL_ULTS = new Map<Familiar, FamiliarTag[]>([
 ]);
 
 /**
+ * Type guard function to determine if a tag is a regular familiar tag or a pokefam ult
+ * @param tag The familiar tag to check
+ * @returns Asserts that `tag` is a `RegularFamiliarTag`
+ */
+export function isRegularFamiliarTag(tag: string): tag is RegularFamiliarTag {
+  return (regularFamiliarTagSet as Set<string>).has(tag);
+}
+
+/**
  * Find the tags (used in mumming trunk, stillsuit, etc) for a given familiar, EXCLUDING special tags used for pokefam ults
  * @param familiar The familiar in question
  * @returns An array of the familiar's tags
@@ -1599,18 +1608,7 @@ export function getRegularFamiliarTags(
 ): RegularFamiliarTag[] {
   return familiar.attributes
     .split("; ")
-    .filter((tag) => !["pokefam", ""].includes(tag)) as RegularFamiliarTag[];
-}
-
-/**
- * Type guard function to determine if a tag is a regular familiar tag or a pokefam ult
- * @param tag The familiar tag to check
- * @returns Asserts that `tag` is a `RegularFamiliarTag`
- */
-export function isRegularFamiliarTag(
-  tag: FamiliarTag,
-): tag is RegularFamiliarTag {
-  return !(ultSet as Set<string>).has(tag);
+    .filter(isRegularFamiliarTag) as RegularFamiliarTag[];
 }
 
 /**

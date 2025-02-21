@@ -149,13 +149,16 @@ async function main() {
     BooleanProperty: [],
     NumericProperty: [],
     MonsterProperty: [],
+    MonsterNumericProperty: [],
     LocationProperty: [],
     StringProperty: [],
     NumericOrStringProperty: [],
     FamiliarProperty: [],
+    FamiliarNumericProperty: [],
     StatProperty: [],
     PhylumProperty: [],
     ItemProperty: [],
+    ItemNumericProperty: [],
   };
 
   for (const prop of props) {
@@ -164,16 +167,25 @@ async function main() {
 
     if (isMonsterProperty(property)) {
       propTypes.MonsterProperty.push(property);
+      if (hasNumericDefault(property, defaultValue)) {
+        propTypes.MonsterNumericProperty.push(property);
+      }
     } else if (isLocationProperty(property)) {
       propTypes.LocationProperty.push(property);
     } else if (isStatProperty(property)) {
       propTypes.StatProperty.push(property);
     } else if (isFamiliarProperty(property)) {
       propTypes.FamiliarProperty.push(property);
+      if (hasNumericDefault(property, defaultValue)) {
+        propTypes.FamiliarNumericProperty.push(property);
+      }
     } else if (isPhylumProperty(property)) {
       propTypes.PhylumProperty.push(property);
     } else if (isItemProperty(property)) {
       propTypes.ItemProperty.push(property);
+      if (hasNumericDefault(property, defaultValue)) {
+        propTypes.ItemNumericProperty.push(property);
+      }
     } else if (isNumericOrStringProperty(property)) {
       propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {

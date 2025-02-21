@@ -1,5 +1,10 @@
 import { cliExecute, Familiar, splitModifiers, visitUrl } from "kolmafia";
-import { FamiliarTag, getFamiliarTags, have as have_ } from "../../lib.js";
+import {
+  getAllFamiliarTags,
+  have as have_,
+  isRegularFamiliarTag,
+  RegularFamiliarTag,
+} from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
 import { NumericModifier } from "../../modifierTypes.js";
@@ -64,9 +69,7 @@ export function distillateModifier(modifier: NumericModifier): number {
   return value ? Number(value) : 0;
 }
 
-type StillsuitTag = Exclude<FamiliarTag, "pokefam">;
-
-export const MODIFIER_TAGS: Record<StillsuitTag, NumericModifier> =
+export const MODIFIER_TAGS: Record<RegularFamiliarTag, NumericModifier> =
   Object.freeze({
     mineral: "Muscle",
     robot: "Muscle",
@@ -117,18 +120,14 @@ export const MODIFIER_TAGS: Record<StillsuitTag, NumericModifier> =
     hard: "Weapon Damage",
   } as const);
 
-function isStillsuitTag(tag: string): tag is StillsuitTag {
-  return tag in MODIFIER_TAGS;
-}
-
 /**
  * Calculate the ratio of stillsuit modifiers for a particular familiar.
  * @param familiar The familiar in question
  * @returns An object whose keys are NumericModifiers potentially granted by the stillsuit distillate from this familiar, and whose values are the relative weights of those modifiers
  */
 export function modifierRatio(familiar: Familiar): Modifiers<NumericModifier> {
-  const tags = getFamiliarTags(familiar);
-  return tags.filter(isStillsuitTag).reduce<Modifiers<NumericModifier>>(
+  const tags = getAllFamiliarTags(familiar);
+  return tags.filter(isRegularFamiliarTag).reduce<Modifiers<NumericModifier>>(
     (acc, tag) => ({
       ...acc,
       [MODIFIER_TAGS[tag]]: (acc[MODIFIER_TAGS[tag]] ?? 0) + 1 / tags.length,

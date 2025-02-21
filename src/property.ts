@@ -90,15 +90,30 @@ type MafiaClasses =
   | Stat
   | Thrall;
 
-const createMafiaClassPropertyGetter = <T extends MafiaClasses>(
+function createMafiaClassPropertyGetter<T extends MafiaClasses>(
   Type: typeof MafiaClass & (new () => T),
   toType: (x: string) => T,
-): ((property: string, default_?: T) => T | null) =>
-  createPropertyGetter((value) => {
+): (property: string, default_?: T) => T | null;
+function createMafiaClassPropertyGetter<T extends MafiaClasses>(
+  Type: typeof MafiaClass & (new () => T),
+  toType: (x: number) => T,
+  parseNumeric: true,
+): (property: string, default_?: T) => T | null;
+function createMafiaClassPropertyGetter<T extends MafiaClasses>(
+  Type: typeof MafiaClass & (new () => T),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  toType: (x: any) => T,
+  parseNumeric = false,
+): (property: string, default_?: T) => T | null {
+  return createPropertyGetter((value) => {
     if (value === "") return null;
-    const v = toType(value);
+    const v =
+      parseNumeric && value.match(/[0-9]+/)
+        ? toType(parseInt(value))
+        : toType(value);
     return v === Type.none ? null : v;
   });
+}
 
 export const getString = createPropertyGetter((value) => value);
 
@@ -112,30 +127,42 @@ export const getNumber = createPropertyGetter((value) => Number(value));
 
 export const getBounty = createMafiaClassPropertyGetter(Bounty, toBounty);
 
-export const getClass = createMafiaClassPropertyGetter(Class, toClass);
+export const getClass = createMafiaClassPropertyGetter(Class, toClass, true);
 
 export const getCoinmaster = createMafiaClassPropertyGetter(
   Coinmaster,
   toCoinmaster,
 );
 
-export const getEffect = createMafiaClassPropertyGetter(Effect, toEffect);
+export const getEffect = createMafiaClassPropertyGetter(Effect, toEffect, true);
 
 export const getElement = createMafiaClassPropertyGetter(Element, toElement);
 
-export const getFamiliar = createMafiaClassPropertyGetter(Familiar, toFamiliar);
+export const getFamiliar = createMafiaClassPropertyGetter(
+  Familiar,
+  toFamiliar,
+  true,
+);
 
-export const getItem = createMafiaClassPropertyGetter(Item, toItem);
+export const getItem = createMafiaClassPropertyGetter(Item, toItem, true);
 
-export const getLocation = createMafiaClassPropertyGetter(Location, toLocation);
+export const getLocation = createMafiaClassPropertyGetter(
+  Location,
+  toLocation,
+  true,
+);
 
-export const getMonster = createMafiaClassPropertyGetter(Monster, toMonster);
+export const getMonster = createMafiaClassPropertyGetter(
+  Monster,
+  toMonster,
+  true,
+);
 
 export const getPhylum = createMafiaClassPropertyGetter(Phylum, toPhylum);
 
 export const getServant = createMafiaClassPropertyGetter(Servant, toServant);
 
-export const getSkill = createMafiaClassPropertyGetter(Skill, toSkill);
+export const getSkill = createMafiaClassPropertyGetter(Skill, toSkill, true);
 
 export const getSlot = createMafiaClassPropertyGetter(Slot, toSlot);
 

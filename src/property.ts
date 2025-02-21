@@ -108,7 +108,7 @@ function createMafiaClassPropertyGetter<T extends MafiaClasses>(
   return createPropertyGetter((value) => {
     if (value === "") return null;
     const v =
-      parseNumeric && value.match(/[0-9]+/)
+      parseNumeric && value.match(/^[0-9]+$/)
         ? toType(parseInt(value))
         : toType(value);
     return v === Type.none ? null : v;

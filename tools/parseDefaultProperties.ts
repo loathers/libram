@@ -82,12 +82,25 @@ export function isMonsterProperty(property: string): boolean {
   );
 }
 
+const otherFamiliars = [
+  "zootGraftButtCheekLeft",
+  "zootGraftButtCheekRight",
+  "zootGraftFootLeft",
+  "zootGraftFootRight",
+  "zootGraftHandLeft",
+  "zootGraftHandRight",
+  "zootGraftHead",
+  "zootGraftNippleLeft",
+  "zootGraftNippleRight",
+  "zootGraftShoulderLeft",
+  "zootGraftShoulderRight",
+];
 /**
  * @param property Property name
  * @returns Whether the supplied property should be coerced to a Familiar
  */
 export function isFamiliarProperty(property: string): boolean {
-  return property.endsWith("Familiar");
+  return property.endsWith("Familiar") || otherFamiliars.includes(property);
 }
 
 const statProps = ["nsChallenge1", "shrugTopper", "snojoSetting"];

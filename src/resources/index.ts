@@ -29,6 +29,7 @@ import * as Pantogram from "./2017/Pantogram.js";
 import * as Robortender from "./2017/Robortender.js";
 import * as Spacegate from "./2017/Spacegate.js";
 import * as TunnelOfLove from "./2017/TunnelOfLove.js";
+import * as BoxingDaycare from "./2018/BoxingDaycare.js";
 import * as Latte from "./2018/LatteLoversMembersMug.js";
 import * as SongBoom from "./2018/SongBoom.js";
 import * as BeachComb from "./2019/BeachComb.js";
@@ -71,6 +72,7 @@ export {
   BarrelShrine,
   BatWings,
   BeachComb,
+  BoxingDaycare,
   BurningLeaves,
   CampAway,
   Cartography,

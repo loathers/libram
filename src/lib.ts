@@ -1517,7 +1517,7 @@ export function totalFamiliarWeight(
   );
 }
 
-export const familiarTags = Object.freeze([
+export const regularFamiliarTags = Object.freeze([
   "animal",
   "insect",
   "haseyes",
@@ -1563,20 +1563,64 @@ export const familiarTags = Object.freeze([
   "humanoid",
   "animatedart",
   "software",
-  "pokefam",
   "hasshell",
   "hasstinger",
 ] as const);
+const regularFamiliarTagSet = new Set(regularFamiliarTags);
 
-export type FamiliarTag = (typeof familiarTags)[number];
+export const pokefamUltTags = Object.freeze([
+  "ult_bearhug",
+  "ult_sticktreats",
+  "ult_owlstare",
+  "ult_bloodbath",
+  "ult_pepperscorn",
+  "ult_rainbowstorm",
+] as const);
+
+export type PokefamUltTag = (typeof pokefamUltTags)[number];
+export type RegularFamiliarTag = (typeof regularFamiliarTags)[number];
+export type FamiliarTag = RegularFamiliarTag | PokefamUltTag;
+const SPECIAL_ULTS = new Map<Familiar, FamiliarTag[]>([
+  [$familiar`Nursine`, ["ult_bearhug"]],
+  [$familiar`Caramel`, ["ult_sticktreats"]],
+  [$familiar`Smashmoth`, ["ult_owlstare"]],
+  [$familiar`Slotter`, ["ult_bloodbath"]],
+  [$familiar`Cornbeefadon`, ["ult_pepperscorn"]],
+  [$familiar`Mu`, ["ult_rainbowstorm"]],
+]);
 
 /**
- * Find the tags (used in mumming trunk, stillsuit, etc) for a given familiar
+ * Type guard function to determine if a tag is a regular familiar tag or a pokefam ult
+ * @param tag The familiar tag to check
+ * @returns Asserts that `tag` is a `RegularFamiliarTag`
+ */
+export function isRegularFamiliarTag(tag: string): tag is RegularFamiliarTag {
+  return (regularFamiliarTagSet as Set<string>).has(tag);
+}
+
+/**
+ * Find the tags (used in mumming trunk, stillsuit, etc) for a given familiar, EXCLUDING special tags used for pokefam ults
  * @param familiar The familiar in question
  * @returns An array of the familiar's tags
  */
-export function getFamiliarTags(familiar: Familiar): FamiliarTag[] {
-  return familiar.attributes.split("; ").filter(Boolean) as FamiliarTag[];
+export function getRegularFamiliarTags(
+  familiar: Familiar,
+): RegularFamiliarTag[] {
+  return familiar.attributes
+    .split("; ")
+    .filter(isRegularFamiliarTag) as RegularFamiliarTag[];
+}
+
+/**
+ * Find the tags (used in mumming trunk, stillsuit, etc) for a given familiar, INCLUDING special tags used for pokefam ults
+ * @param familiar The familiar in question
+ * @returns An array of the familiar's tags
+ */
+export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
+  return [
+    ...getRegularFamiliarTags(familiar),
+    ...(SPECIAL_ULTS.get(familiar) ?? []),
+  ];
 }
 
 /**

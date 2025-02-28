@@ -162,6 +162,10 @@ async function main() {
   };
 
   for (const prop of props) {
+    // Skip comments
+    if (prop.startsWith("#")) continue;
+
+    // Skip lines with fewer than 2 columns
     const [, property, defaultValue] = prop.split("\t");
     if (!property) continue;
 

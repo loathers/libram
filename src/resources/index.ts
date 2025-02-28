@@ -62,6 +62,7 @@ import * as TakerSpace from "./2024/TakerSpace.js";
 import * as CrepeParachute from "./2025/CrepeParachute.js";
 import * as ToyCupidBow from "./2025/ToyCupidBow.js";
 import * as Raffle from "./evergreen/Raffle.js";
+import * as CyberRealm from "./2025/CyberRealm.js";
 
 export {
   AprilingBandHelmet,
@@ -88,6 +89,7 @@ export {
   CrownOfThrones,
   CrystalBall,
   CursedMonkeyPaw,
+  CyberRealm,
   DaylightShavings,
   DeckOfEveryCard,
   Dinseylandfill,

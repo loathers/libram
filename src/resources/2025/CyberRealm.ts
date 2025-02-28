@@ -1,11 +1,18 @@
-import { gamedayToString, Item } from "kolmafia";
+import { gamedayToInt, Item } from "kolmafia";
 import { realmAvailable } from "../../lib.js";
-import { $item } from "../../index.js";
+import { $item, get } from "../../index.js";
 
 /**
  * @returns Whether or not you have Cyber Realm
  */
 export function have(): boolean {
+  return get("crAlways");
+}
+
+/**
+ * @returns Whether or Cyber Realm is available to adventure in
+ */
+export function available(): boolean {
   return realmAvailable("cyber");
 }
 
@@ -24,6 +31,6 @@ const ZONE3ITEMS_ARRAY: Item[] = [
  * @returns The Zone 3 Item we expect to find today, based on KOL Calendar
  */
 export function zone3Rewards(): Item {
-  const lastDigit = parseInt(gamedayToString().slice(-1), 10);
-  return ZONE3ITEMS_ARRAY[lastDigit - 1]; // Adjust index since array starts at 0
+  const dayOfMonth = 1 + (gamedayToInt() % 8);
+  return ZONE3ITEMS_ARRAY[dayOfMonth - 1]; // Adjust index since array starts at 0
 }

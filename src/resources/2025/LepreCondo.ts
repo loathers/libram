@@ -11,26 +11,40 @@ export function have(): boolean {
 }
 
 /**
- * @returns Current furniture setup, as a string
+ * @returns How many more times you can rearrange today
  */
-export function currentFurntiture(): string {
-  return installedItems.map((item) => item.name).join(", ");
+export function rearrangeUses(): number {
+  return get("_leprecondoRearrangements");
 }
 
-const rearrangeUses = get("_leprecondoRearrangements");
-
-const discovered = get("leprecondoDiscovered");
-
-const installed = get("leprecondoInstalled");
-
-const installedNumbers = installed
-  .split(",")
-  .map((num) => parseInt(num.trim(), 10));
-
-const installedItems = installedNumbers.map((id) => itemsMap[id]);
+function parseFurniture(str: string): Furniture[] {
+  return str
+    .split(",")
+    .map(Number)
+    .map((furnitureNumber) => itemsMap[furnitureNumber]);
+}
 
 /**
- * @returns Sets current furniture to desired furniture state
+ * @returns the Furniture elements you've discovered
+ */
+export function furnitureDiscovered(): Furniture[] {
+  const discoveredItems = get("leprecondoDiscovered");
+  return parseFurniture(discoveredItems); // No need for get() again
+}
+
+/**
+ * @returns the Furniture elements you've installed
+ */
+export function installedFurniture(): Furniture[] {
+  return parseFurniture(get("leprecondoInstalled"));
+}
+
+/**
+ * @param f1 is the furniture you want to install in the top-left of the house
+ * @param f2 is the furniture you want to install in the top-right of the house
+ * @param f3 is the furniture you want to install in the bottom-left of the house
+ * @param f4 is the furniture you want to install in the bottom-right of the house
+ * @returns Whether or not you successfully installed the desired furniture
  */
 export function setFurniture(
   f1?: Furniture,
@@ -38,31 +52,57 @@ export function setFurniture(
   f3?: Furniture,
   f4?: Furniture,
 ): boolean {
-  // Check if rearrangements are too frequent
-  if (rearrangeUses >= 3) return false;
+  if (rearrangeUses() >= 3) return false;
 
-  // Check if any of f1, f2, f3, or f4 are not discovered
-  const furnitureItems = [f1, f2, f3, f4].filter(Boolean); // Only include non-undefined furniture
+  const furnitureItems = [f1, f2, f3, f4].filter(Boolean); // Filter out any undefined values
+  const discoveredFurniture = furnitureDiscovered(); // Get discovered furniture
+
+  // Check if all provided furniture are in discovered list
   if (
     !furnitureItems.every((furniture) =>
-      discovered.includes(furniture?.number ?? 0),
+      discoveredFurniture.some((d) => d.number === furniture?.number),
     )
-  )
+  ) {
     return false;
+  }
 
-  // Use the first piece of furniture as furn1, default to 0 if not provided
-  const furn1 = f1 ? f1.number : 0;
-  const furn2 = f2 ? f2.number : 0;
-  const furn3 = f3 ? f3.number : 0;
-  const furn4 = f4 ? f4.number : 0;
-
-  // Use the Leprecondo item and visit the URL with the appropriate query parameters
+  const furnitureNumbers = [f1, f2, f3, f4].map((f) => f?.number ?? 0); // Default to 0 if undefined
   directlyUse($item`Leprecondo`);
   visitUrl(
-    `choice.php?pwd&option=1&whichchoice=1556&r0=${furn1}&r1=${furn2}&r2=${furn3}&r3=${furn4}`,
+    `choice.php?pwd&option=1&whichchoice=1556&r0=${furnitureNumbers[0]}&r1=${furnitureNumbers[1]}&r2=${furnitureNumbers[2]}&r3=${furnitureNumbers[3]}`,
   );
 
   return true;
+}
+
+/**
+ * @returns the effects (or items) of furniture currently installed
+ */
+export function furnitureBonuses(): Record<
+  Need,
+  Item | [Effect, number] | null
+> {
+  const installedItems = installedFurniture(); // Get installed furniture using the new function
+  const needBonuses: Record<Need, Item | [Effect, number] | null> = {
+    exercise: null,
+    "mental stimulation": null,
+    "dumb entertainment": null,
+    food: null,
+    booze: null,
+    sleep: null,
+  };
+
+  installedItems.forEach((furniture) => {
+    Object.entries(furniture.need).forEach(([need, benefit]) => {
+      if (!needBonuses[need as Need]) {
+        needBonuses[need as Need] = benefit;
+      } else {
+        needBonuses[need as Need] = benefit;
+      }
+    });
+  });
+
+  return needBonuses;
 }
 
 type Need =

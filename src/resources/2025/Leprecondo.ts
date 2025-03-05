@@ -3,6 +3,7 @@ import { directlyUse, have as have_ } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
 import { arrayEquals, clamp, Tuple } from "../../utils.js";
 import { get } from "../../property.js";
+import { installed } from "../2014/DNALab.js";
 
 /**
  * @returns Whether you `have` the Leprecondo
@@ -220,10 +221,13 @@ export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
 }
 
 /**
+ * @param furniture The set of furniture to examine; defaults to currently installed furniture
  * @returns The cumulative bonuses of all currently-installed furniture.
  */
-export function furnitureBonuses(): FurnitureStat {
-  return installedFurniture().reduceRight<FurnitureStat>(
+export function furnitureBonuses(
+  furniture = installedFurniture(),
+): FurnitureStat {
+  return furniture.reduceRight<FurnitureStat>(
     (acc, piece) => ({
       ...Furniture[piece],
       ...acc,

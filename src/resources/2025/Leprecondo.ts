@@ -223,11 +223,11 @@ export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
  * @returns The cumulative bonuses of all currently-installed furniture.
  */
 export function furnitureBonuses(): FurnitureStat {
-  return installedFurniture().reduceRight(
+  return installedFurniture().reduceRight<FurnitureStat>(
     (acc, piece) => ({
       ...Furniture[piece],
       ...acc,
     }),
-    {} as FurnitureStat,
+    {},
   );
 }

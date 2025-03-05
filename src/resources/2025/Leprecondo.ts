@@ -206,10 +206,11 @@ export function installedFurniture(): FurniturePiece[] {
 export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
   if (rearrangesRemaining() < 0) return false;
 
-  const availableFurniture = ["empty", ...discoveredFurniture()];
-  if (furniture.some((piece) => !availableFurniture.includes(piece)))
+  const nonemptyFurniture = furniture.filter((f) => f !== "empty");
+  if (nonemptyFurniture.some((piece) => !discoveredFurniture().includes(piece)))
     return false;
-  if (new Set(furniture).size !== furniture.length) return false;
+  if (new Set(nonemptyFurniture).size !== nonemptyFurniture.length)
+    return false;
 
   directlyUse($item`Leprecondo`);
   runChoice(
@@ -228,10 +229,10 @@ export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
 export function furnitureBonuses(
   furniture = installedFurniture(),
 ): FurnitureStat {
-  return furniture.reduceRight<FurnitureStat>(
+  return furniture.reduce<FurnitureStat>(
     (acc, piece) => ({
-      ...Furniture[piece],
       ...acc,
+      ...Furniture[piece],
     }),
     {},
   );

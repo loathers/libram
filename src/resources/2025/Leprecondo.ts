@@ -184,7 +184,7 @@ export function rearrangesRemaining(): number {
 /**
  * @returns the Furniture elements you've discovered
  */
-export function furnitureDiscovered(): FurniturePiece[] {
+export function discoveredFurniture(): FurniturePiece[] {
   return get("leprecondoDiscovered")
     .split(",")
     .map((id) => FURNITURE_PIECES[Number(id)]) as FurniturePiece[];
@@ -206,7 +206,7 @@ export function installedFurniture(): FurniturePiece[] {
 export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
   if (rearrangesRemaining() < 0) return false;
 
-  const availableFurniture = ["empty", ...furnitureDiscovered()];
+  const availableFurniture = ["empty", ...discoveredFurniture()];
   if (furniture.some((piece) => !availableFurniture.includes(piece)))
     return false;
 

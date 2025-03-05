@@ -209,6 +209,7 @@ export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
   const availableFurniture = ["empty", ...discoveredFurniture()];
   if (furniture.some((piece) => !availableFurniture.includes(piece)))
     return false;
+  if (new Set(furniture).size !== furniture.length) return false;
 
   directlyUse($item`Leprecondo`);
   runChoice(

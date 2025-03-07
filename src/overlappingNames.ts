@@ -16,9 +16,11 @@ export const overlappingItemNames = [
   "bowling ball",
   "adder",
   "red button",
+  "tennis ball",
   "pile of sand",
   "mushroom",
   "deluxe mushroom",
+  "spoon",
 ];
 
 export const overlappingSkillNames = [

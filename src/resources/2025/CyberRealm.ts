@@ -16,7 +16,7 @@ export function available(): boolean {
   return realmAvailable("cyber");
 }
 
-const ZONE3ITEMS_ARRAY: Item[] = [
+const ZONE_3_ITEMS_ARRAY = [
   $item`dedigitizer schematic: virtual cybertattoo`, // Index 0 → Day 1
   $item`dedigitizer schematic: SLEEP(5) rom chip`,
   $item`dedigitizer schematic: insignificant bit`,

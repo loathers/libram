@@ -232,8 +232,8 @@ export function furnitureBonuses(
 ): FurnitureStat {
   return furniture.reduce<FurnitureStat>(
     (acc, piece) => ({
-      ...acc,
       ...Furniture[piece],
+      ...acc,
     }),
     {},
   );

@@ -54,8 +54,8 @@ export const FURNITURE_PIECES = Object.freeze([
 ] as const);
 export type FurniturePiece = (typeof FURNITURE_PIECES)[number];
 
-type Result = Item | Item[] | { effect: Effect; duration: number };
-type FurnitureStat = Partial<Record<Need, Result>>;
+export type Result = Item | Item[] | { effect: Effect; duration: number };
+export type FurnitureStat = Partial<Record<Need, Result>>;
 
 export const Furniture = Object.freeze({
   empty: {},

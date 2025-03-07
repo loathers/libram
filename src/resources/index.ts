@@ -61,6 +61,7 @@ import * as EverfullDarts from "./2024/EverfullDarts.js";
 import * as TakerSpace from "./2024/TakerSpace.js";
 import * as CrepeParachute from "./2025/CrepeParachute.js";
 import * as ToyCupidBow from "./2025/ToyCupidBow.js";
+import * as Leprecondo from "./2025/Leprecondo.js";
 import * as Raffle from "./evergreen/Raffle.js";
 
 export {
@@ -101,6 +102,7 @@ export {
   JuneCleaver,
   JungMan,
   Latte,
+  Leprecondo,
   LookingGlass,
   MayamCalendar,
   MayoClinic,

@@ -1,9 +1,9 @@
+/* eslint-disable libram/verify-constants */
 import { Effect, Item, runChoice } from "kolmafia";
 import { directlyUse, have as have_ } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
 import { arrayEquals, clamp, Tuple } from "../../utils.js";
 import { get } from "../../property.js";
-import { installed } from "../2014/DNALab.js";
 
 /**
  * @returns Whether you `have` the Leprecondo
@@ -60,10 +60,10 @@ type FurnitureStat = Partial<Record<Need, Result>>;
 export const Furniture = Object.freeze({
   empty: {},
   "beer cooler": {
-    booze: $items`beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced \&quot;imported\&quot; beer, plain old beer`,
+    booze: $items`beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced "imported" beer, plain old beer`,
   },
   "beer pong table": {
-    booze: $items`beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced \&quot;imported\&quot; beer, plain old beer`,
+    booze: $items`beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced "imported" beer, plain old beer`,
     exercise: $item`table tennis ball`,
   },
   "boxes of old comic books": {
@@ -87,7 +87,7 @@ export const Furniture = Object.freeze({
     food: $item`standard-issue cupcake`,
   },
   "fine upholstered dining set": {
-    food: $item`random food from the drop pool`,
+    food: $items`boring spaghetti, delicious noodles, goat cheese pizza, sausage pizza, spicy bean burrito, spicy noodles`,
     sleep: { effect: $effect`Sur La Table`, duration: 10 },
   },
   "four-poster bed": {
@@ -104,7 +104,7 @@ export const Furniture = Object.freeze({
     food: $items`cherry, cranberries, grapefruit, grapes, kiwi, kumquat, lemon, lime, orange, papaya, raspberry, strawberry, tangerine`,
   },
   "fully-stocked wet bar": {
-    booze: $item`Divine Sidecar, prussian cathouse sidecar, tangarita sidecar`,
+    booze: $items`Divine Sidecar, prussian cathouse sidecar, tangarita sidecar`,
   },
   "gigantic chess set": {
     exercise: { effect: $effect`Work Out Smarter, Not Harder`, duration: 10 },
@@ -119,7 +119,7 @@ export const Furniture = Object.freeze({
   },
   kegerator: {
     booze: $item`pint of Leprechaun Stout`,
-    food: $items`bean burrito , plain pizza, spicy mushroom quesadilla, tofu casserole, Trollhouse cookies`,
+    food: $items`bean burrito, plain pizza, spicy mushroom quesadilla, tofu casserole, Trollhouse cookies`,
   },
   "ManCave™ sports bar set": {
     booze: $items`melted Jell-o shot, shot of blackberry schnapps, shot of nepenthe schnapps, shot of peach schnapps, shot of pear schnapps, shot of rotgut`,
@@ -170,7 +170,7 @@ export const Furniture = Object.freeze({
     exercise: { effect: $effect`Vicarious Sweat`, duration: 10 },
   },
   whiskeybed: {
-    booze: $item`random booze from the drop pool`,
+    booze: $items`Divine sidecar, lumbering jack, old-fashioned, whiskey and cola, whiskey and soda, whiskey bittersweet, whiskey sour`,
     sleep: { effect: $effect`Moist Night's Sleep`, duration: 10 },
   },
 } as const satisfies Record<FurniturePiece, FurnitureStat>);

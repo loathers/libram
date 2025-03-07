@@ -191,16 +191,17 @@ export function discoveredFurniture(): FurniturePiece[] {
 }
 
 /**
- * @returns the Furniture elements you've installed
+ * @returns the Furniture elements you've installed, in descending order of importance (starting from bottom right and ending in top left)
  */
-export function installedFurniture(): FurniturePiece[] {
+export function installedFurniture(): Tuple<FurniturePiece, 4> {
   return get("leprecondoInstalled")
     .split(",")
-    .map((id) => FURNITURE_PIECES[Number(id)]) as FurniturePiece[];
+    .map((id) => FURNITURE_PIECES[Number(id)])
+    .reverse() as Tuple<FurniturePiece, 4>;
 }
 
 /**
- * @param furniture A spread array of furniture pieces to install, starting from the top left and ending in the bottom right
+ * @param furniture A spread array of furniture pieces to install, starting from bottom right and ending in top left
  * @returns Whether or not you successfully installed the desired furniture
  */
 export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
@@ -216,14 +217,14 @@ export function setFurniture(...furniture: Tuple<FurniturePiece, 4>): boolean {
   runChoice(
     1,
     furniture
-      .map((piece, index) => `r${index}=${FURNITURE_PIECES.indexOf(piece)}`)
+      .map((piece, index) => `r${3 - index}=${FURNITURE_PIECES.indexOf(piece)}`)
       .join("&"),
   );
   return arrayEquals(installedFurniture(), furniture);
 }
 
 /**
- * @param furniture The set of furniture to examine; defaults to currently installed furniture
+ * @param furniture The set of furniture to examine; defaults to currently installed furniture. Reads furniture from most important (bottom right) to least important (top left)
  * @returns The cumulative bonuses of all currently-installed furniture.
  */
 export function furnitureBonuses(

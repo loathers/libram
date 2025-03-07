@@ -31,6 +31,5 @@ const ZONE3ITEMS_ARRAY: Item[] = [
  * @returns The Zone 3 Item we expect to find today, based on KOL Calendar
  */
 export function zone3Rewards(): Item {
-  const dayOfMonth = 1 + (gamedayToInt() % 8);
-  return ZONE3ITEMS_ARRAY[dayOfMonth - 1]; // Adjust index since array starts at 0
+  return ZONE3ITEMS_ARRAY[gamedayToInt() % 8];
 }

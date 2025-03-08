@@ -16551,11 +16551,17 @@ __export(Leprecondo_exports, {
   NEEDS: function() {
     return NEEDS;
   },
+  currentNeed: function() {
+    return currentNeed;
+  },
   discoveredFurniture: function() {
     return discoveredFurniture;
   },
   furnitureBonuses: function() {
     return furnitureBonuses;
+  },
+  furnitureDiscoveredToday: function() {
+    return furnitureDiscoveredToday;
   },
   getStats: function() {
     return getStats;
@@ -16565,6 +16571,12 @@ __export(Leprecondo_exports, {
   },
   installedFurniture: function() {
     return installedFurniture;
+  },
+  lastNeedChange: function() {
+    return lastNeedChange;
+  },
+  needOrder: function() {
+    return needOrder;
   },
   rearrangesRemaining: function() {
     return rearrangesRemaining;
@@ -16787,6 +16799,18 @@ var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment
 });
 function rearrangesRemaining() {
   return clamp(3 - get("_leprecondoRearrangements"), 0, 3);
+}
+function currentNeed() {
+  return get("leprecondoCurrentNeed");
+}
+function needOrder() {
+  return get("leprecondoNeedOrder").split(",");
+}
+function furnitureDiscoveredToday() {
+  return get("_leprecondoFurniture");
+}
+function lastNeedChange() {
+  return (0, import_kolmafia74.turnsPlayed)() - get("leprecondoLastNeedChange");
 }
 function getStats(furniture) {
   return Furniture[furniture];

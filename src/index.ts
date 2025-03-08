@@ -8,6 +8,7 @@ export * from "./diet/index.js";
 export * from "./Dungeon.js";
 export * from "./lib.js";
 export * from "./maximize.js";
+export * as Mining from "./mining.js";
 export {
   numericModifiers,
   booleanModifiers,

@@ -1,4 +1,4 @@
-import { Effect, Item, runChoice } from "kolmafia";
+import { Effect, Item, runChoice, turnsPlayed } from "kolmafia";
 import { directlyUse, have as have_ } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
 import { arrayEquals, clamp, Tuple } from "../../utils.js";
@@ -179,6 +179,34 @@ export const Furniture = Object.freeze({
  */
 export function rearrangesRemaining(): number {
   return clamp(3 - get("_leprecondoRearrangements"), 0, 3);
+}
+
+/**
+ * @returns Your current Leprecondo need
+ */
+export function currentNeed(): Need {
+  return get("leprecondoCurrentNeed") as Need;
+}
+
+/**
+ * @returns Your leprecondo need order, as an array
+ */
+export function needOrder(): Need[] {
+  return get("leprecondoNeedOrder").split(",") as Need[];
+}
+
+/**
+ * @returns The number of leprecondo furniture pieces you've discovered today
+ */
+export function furnitureDiscoveredToday(): number {
+  return get("_leprecondoFurniture");
+}
+
+/**
+ * @returns How many turns ago your Leprecondo need last changed; an imperfect system for tracking because the Leprecondo relies on turn-taking combats.
+ */
+export function lastNeedChange(): number {
+  return turnsPlayed() - get("leprecondoLastNeedChange");
 }
 
 /**

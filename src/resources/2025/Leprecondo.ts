@@ -1,4 +1,3 @@
-/* eslint-disable libram/verify-constants */
 import { Effect, Item, runChoice } from "kolmafia";
 import { directlyUse, have as have_ } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
@@ -58,7 +57,6 @@ export type Result = Item | Item[] | { effect: Effect; duration: number };
 export type FurnitureStat = Partial<Record<Need, Result>>;
 
 export const Furniture = Object.freeze({
-  empty: {},
   "beer cooler": {
     booze: $items`beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced "imported" beer, plain old beer`,
   },
@@ -90,6 +88,7 @@ export const Furniture = Object.freeze({
     food: $items`boring spaghetti, delicious noodles, goat cheese pizza, sausage pizza, spicy bean burrito, spicy noodles`,
     sleep: { effect: $effect`Sur La Table`, duration: 10 },
   },
+  empty: {},
   "four-poster bed": {
     sleep: { effect: $effect`Spacious Night's Sleep`, duration: 10 },
   },
@@ -104,7 +103,7 @@ export const Furniture = Object.freeze({
     food: $items`cherry, cranberries, grapefruit, grapes, kiwi, kumquat, lemon, lime, orange, papaya, raspberry, strawberry, tangerine`,
   },
   "fully-stocked wet bar": {
-    booze: $items`Divine Sidecar, prussian cathouse sidecar, tangarita sidecar`,
+    booze: $items`Divine sidecar, prussian cathouse sidecar, tangarita sidecar`,
   },
   "gigantic chess set": {
     exercise: { effect: $effect`Work Out Smarter, Not Harder`, duration: 10 },
@@ -126,7 +125,7 @@ export const Furniture = Object.freeze({
     "dumb entertainment": $item`bar dart`,
   },
   Omnipot: {
-    food: $item`Heck ramen, incredible mini-pizza, small beer brat, tiny burrito, tiny peach pie, savoy truffle, white chocolate chip brownies`,
+    food: $items`Heck ramen, incredible mini-pizza, small beer brat, tiny burrito, tiny peach pie, savoy truffle, white chocolate chip brownies`,
   },
   "padded weight bench": {
     exercise: { effect: $effect`Gym Bros`, duration: 10 },
@@ -181,6 +180,16 @@ export const Furniture = Object.freeze({
 export function rearrangesRemaining(): number {
   return clamp(3 - get("_leprecondoRearrangements"), 0, 3);
 }
+
+/**
+ * Find the need-result mapping for a given furniture
+ * @param furniture The furniture in question
+ * @returns An object, keyed by need, whose values correspond to what the furniture gives you
+ */
+export function getStats(furniture: FurniturePiece): FurnitureStat {
+  return Furniture[furniture];
+}
+
 /**
  * @returns the Furniture elements you've discovered
  */

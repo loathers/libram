@@ -16557,6 +16557,9 @@ __export(Leprecondo_exports, {
   furnitureBonuses: function() {
     return furnitureBonuses;
   },
+  getStats: function() {
+    return getStats;
+  },
   have: function() {
     return have60;
   },
@@ -16618,7 +16621,6 @@ function have60() {
   return have($item(_templateObject486 || (_templateObject486 = _taggedTemplateLiteral61(["Leprecondo"]))));
 }
 var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment", "food", "booze", "sleep"]), FURNITURE_PIECES = Object.freeze(["empty", "buckets of concrete", "thrift store oil painting", "boxes of old comic books", "second-hand hot plate", "beer cooler", "free mattress", "gigantic chess set", "UltraDance karaoke machine", "cupcake treadmill", "beer pong table", "padded weight bench", "internet-connected laptop", "sous vide laboratory", "programmable blender", "sensory deprivation tank", "fruit-smashing robot", "ManCave\u2122 sports bar set", "couch and flatscreen", "kegerator", "fine upholstered dining set", "whiskeybed", "high-end home workout system", "complete classics library", "ultimate retro game console", "Omnipot", "fully-stocked wet bar", "four-poster bed"]), Furniture = Object.freeze({
-  empty: {},
   "beer cooler": {
     booze: $items(_templateObject2122 || (_templateObject2122 = _taggedTemplateLiteral61(['beer bomb, bloody beer, ice-cold fotie, ice-cold Sir Schlitz, ice-cold Willer, overpriced "imported" beer, plain old beer'])))
   },
@@ -16665,6 +16667,7 @@ var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment
       duration: 10
     }
   },
+  empty: {},
   "four-poster bed": {
     sleep: {
       effect: $effect(_templateObject1418 || (_templateObject1418 = _taggedTemplateLiteral61(["Spacious Night's Sleep"]))),
@@ -16685,7 +16688,7 @@ var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment
     food: $items(_templateObject1716 || (_templateObject1716 = _taggedTemplateLiteral61(["cherry, cranberries, grapefruit, grapes, kiwi, kumquat, lemon, lime, orange, papaya, raspberry, strawberry, tangerine"])))
   },
   "fully-stocked wet bar": {
-    booze: $items(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral61(["Divine Sidecar, prussian cathouse sidecar, tangarita sidecar"])))
+    booze: $items(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral61(["Divine sidecar, prussian cathouse sidecar, tangarita sidecar"])))
   },
   "gigantic chess set": {
     exercise: {
@@ -16716,7 +16719,7 @@ var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment
     "dumb entertainment": $item(_templateObject2712 || (_templateObject2712 = _taggedTemplateLiteral61(["bar dart"])))
   },
   Omnipot: {
-    food: $item(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral61(["Heck ramen, incredible mini-pizza, small beer brat, tiny burrito, tiny peach pie, savoy truffle, white chocolate chip brownies"])))
+    food: $items(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral61(["Heck ramen, incredible mini-pizza, small beer brat, tiny burrito, tiny peach pie, savoy truffle, white chocolate chip brownies"])))
   },
   "padded weight bench": {
     exercise: {
@@ -16784,6 +16787,9 @@ var NEEDS = Object.freeze(["exercise", "mental stimulation", "dumb entertainment
 });
 function rearrangesRemaining() {
   return clamp(3 - get("_leprecondoRearrangements"), 0, 3);
+}
+function getStats(furniture) {
+  return Furniture[furniture];
 }
 function discoveredFurniture() {
   return get("leprecondoDiscovered").split(",").map(function(id) {

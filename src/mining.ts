@@ -33,7 +33,7 @@ export type MiningCoordinate = [column: number, row: number];
  * @param mine Which mine
  * @returns Whether twinkly squares will be visible even when when not accessible
  */
-export function hasObjectDetection(mine = 1): boolean {
+export function hasObjectDetection(mine = Mine.ITZNOTYERZITZ): boolean {
   if (mine === Mine.CRIMBONIUM && have($effect`Crimbonar`)) return true;
   return (
     haveEffect($effect`Object Detection`) !== 0 ||

@@ -1,7 +1,7 @@
 import { haveEffect, isWearingOutfit, myBuffedstat, visitUrl } from "kolmafia";
 import { $effect, $element, $skill, $stat } from "./template-string.js";
 
-import { chunk, tuple } from "./utils.js";
+import { chunk, Range, tuple } from "./utils.js";
 import { damageTakenByElement, extractItems, have } from "./lib.js";
 import { get } from "./property.js";
 
@@ -27,7 +27,22 @@ export enum Mine {
  * Coordinate system that the Kingdom of Loathing uses for mining.
  * The first row, first column and last column are all unbreakable.
  */
-export type MiningCoordinate = [column: number, row: number];
+export type MiningCoordinate = [column: Range<0, 7>, row: Range<0, 7>];
+
+/**
+ * Type guard for coordinates KoL uses for mining
+ *
+ * @param coord Coordinate to check
+ * @returns True if the coordinate is valid
+ */
+export const isValidCoordinate = (
+  coord: number[],
+): coord is MiningCoordinate => {
+  if (coord.length != 2) return false;
+  if (coord[0] < 0 || coord[0] > 7) return false;
+  if (coord[1] < 0 || coord[1] > 7) return false;
+  return true;
+};
 
 /**
  * @param mine Which mine
@@ -62,10 +77,17 @@ export function caveInCost(mine: Mine) {
   }
 }
 
-const stateIndexToCoord = (position: number) => {
-  const row = Math.floor(position / 6);
-  const col = position % 6;
-  return tuple<MiningCoordinate>(col + 1, row + 1);
+/**
+ * @param position Index in the mine state
+ * @returns KoL coordinate for given position
+ */
+export const stateIndexToCoord = (position: number) => {
+  const row = Math.floor(position / 6) + 1;
+  const col = (position % 6) + 1;
+  const coord = [col, row];
+  if (!isValidCoordinate(coord))
+    throw `Could not create valid coordinate from position ${position}`;
+  return coord;
 };
 
 const getAccessibleSparklesForIndex = (state: string, index: number) => {

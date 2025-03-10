@@ -1,7 +1,7 @@
 import { haveEffect, isWearingOutfit, myBuffedstat, visitUrl } from "kolmafia";
 import { $effect, $element, $skill, $stat } from "./template-string.js";
 
-import { chunk, Range, tuple } from "./utils.js";
+import { chunk, Range } from "./utils.js";
 import { damageTakenByElement, extractItems, have } from "./lib.js";
 import { get } from "./property.js";
 
@@ -27,7 +27,7 @@ export enum Mine {
  * Coordinate system that the Kingdom of Loathing uses for mining.
  * The first row, first column and last column are all unbreakable.
  */
-export type MiningCoordinate = [column: Range<0, 7>, row: Range<0, 7>];
+export type MiningCoordinate = [column: Range<0, 8>, row: Range<0, 8>];
 
 /**
  * Type guard for coordinates KoL uses for mining

@@ -7122,9 +7122,11 @@ function extractItems(text) {
 }
 function makeScalerCalcFunction(cache, pattern) {
   return function(monster) {
-    var _pattern$exec$, _pattern$exec, current2 = cache.get(monster);
+    var _find, _pattern$exec$slice, _pattern$exec, current2 = cache.get(monster);
     if (current2 !== void 0) return (0, import_kolmafia4.monsterEval)(current2);
-    var result = (_pattern$exec$ = (_pattern$exec = pattern.exec(monster.attributes)) === null || _pattern$exec === void 0 ? void 0 : _pattern$exec[1]) !== null && _pattern$exec$ !== void 0 ? _pattern$exec$ : "0";
+    var result = (_find = ((_pattern$exec$slice = (_pattern$exec = pattern.exec(monster.attributes)) === null || _pattern$exec === void 0 ? void 0 : _pattern$exec.slice(1)) !== null && _pattern$exec$slice !== void 0 ? _pattern$exec$slice : []).find(function(m) {
+      return m !== void 0;
+    })) !== null && _find !== void 0 ? _find : "0";
     return cache.set(monster, result), (0, import_kolmafia4.monsterEval)(result);
   };
 }

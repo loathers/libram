@@ -1360,7 +1360,10 @@ function makeScalerCalcFunction(
     const current = cache.get(monster);
     if (current !== undefined) return monsterEval(current);
 
-    const result = pattern.exec(monster.attributes)?.[1] ?? "0";
+    const result =
+      (pattern.exec(monster.attributes)?.slice(1) ?? []).find(
+        (m) => m !== undefined,
+      ) ?? "0";
     cache.set(monster, result);
     return monsterEval(result);
   };

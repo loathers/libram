@@ -14883,6 +14883,9 @@ __export(CombatLoversLocket_exports, {
   availableLocketMonsters: function() {
     return availableLocketMonsters;
   },
+  canReminisce: function() {
+    return canReminisce;
+  },
   findMonster: function() {
     return findMonster;
   },
@@ -14996,9 +14999,10 @@ function findMonster(criteria) {
   };
   if (!have41() || reminiscesLeft() === 0) return null;
   var options = availableLocketMonsters().filter(criteria);
-  return options.length ? options.reduce(function(a, b) {
-    return value(a) > value(b) ? a : b;
-  }) : null;
+  return options.length ? maxBy(options, value) : null;
+}
+function canReminisce(monster) {
+  return have41() && reminiscesLeft() > 0 && !!(0, import_kolmafia56.getLocketMonsters)()["".concat(monster)];
 }
 
 // src/resources/2022/GreyGoose.ts

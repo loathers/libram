@@ -8,7 +8,7 @@ import {
 import { CombatParams, have as haveItem } from "../../lib.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
-import { clamp } from "../../utils.js";
+import { clamp, maxBy } from "../../utils.js";
 
 const locket = $item`combat lover's locket`;
 
@@ -99,5 +99,16 @@ export function findMonster(
 
   const options = availableLocketMonsters().filter(criteria);
   if (!options.length) return null;
-  return options.reduce((a, b) => (value(a) > value(b) ? a : b));
+  return maxBy(options, value);
+}
+
+/**
+ * Determine if a monster is currently reminiscible/reminiscable.
+ * @param monster The monster in question
+ * @returns Whether we can currently reminisce that monster
+ */
+export function canReminisce(monster: Monster): boolean {
+  return (
+    have() && reminiscesLeft() > 0 && Boolean(getLocketMonsters()[`${monster}`])
+  );
 }

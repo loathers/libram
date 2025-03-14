@@ -40,7 +40,7 @@ export {
 export { get as getModifier, getTotalModifier } from "./modifier.js";
 export { Session } from "./session.js";
 
-export type { LogLevels } from "./logger.js";
+export { LogLevels } from "./logger.js";
 export type { Modifiers } from "./modifier.js";
 export type {
   NumericModifier,

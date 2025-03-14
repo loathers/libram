@@ -1,5 +1,6 @@
 import {
   autosellPrice,
+  availableAmount,
   buy,
   canInteract,
   cliExecute,
@@ -14,7 +15,9 @@ import {
   itemAmount,
   mallPrice,
   mallPrices,
+  npcPrice,
   retrieveItem,
+  use,
   visitUrl,
 } from "kolmafia";
 import { getAverageAdventures, have as haveItem } from "../../lib.js";
@@ -216,8 +219,24 @@ export function fillTo(targetUnits: number): boolean {
       );
     }
 
-    if (!canInteract()) retrieveItem(count, bestFuel);
-    else if (ceiling) buy(count, bestFuel, ceiling);
+    if (!canInteract()) {
+      // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
+      if (
+        npcPrice($item`wad of dough`) === 0 &&
+        npcPrice($item`all-purpose flower`) > 0
+      ) {
+        const maxTries = Math.ceil(count / 35); // minimum amount of wad of dough created from all-purpose flower is 35
+        for (
+          let i = 0;
+          i < maxTries && availableAmount($item`wad of dough`) < count;
+          i++
+        ) {
+          buy($item`all-purpose flower`);
+          use($item`all-purpose flower`);
+        }
+        retrieveItem(count, bestFuel);
+      } else retrieveItem(count, bestFuel);
+    } else if (ceiling) buy(count, bestFuel, ceiling);
     else buy(count, bestFuel);
 
     if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {

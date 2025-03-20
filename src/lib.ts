@@ -1652,16 +1652,18 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
   ) {
     return quantity * npcPrice(item);
   }
-  if (item.tradeable && mallPrice(item) === mallMinPrice) {
-    return (
-      clamp(currentAmount, 0, quantity) * autosellPrice(item) +
-      amountNeeded * mallPrice(item)
-    );
+  if (item.tradeable) {
+    if (mallPrice(item) === mallMinPrice) {
+      return (
+        clamp(currentAmount, 0, quantity) * autosellPrice(item) +
+        amountNeeded * mallPrice(item)
+      );
+    }
+    if (mallPrice(item) > mallMinPrice) {
+      return quantity * mallPrice(item);
+    }
+    return quantity * autosellPrice(item);
   }
-  if (item.tradeable && mallPrice(item) > mallMinPrice) {
-    return quantity * mallPrice(item);
-  }
-  if (item.tradeable) return quantity * autosellPrice(item);
   if (item.discardable) {
     return have(item, quantity) ? quantity * autosellPrice(item) : Infinity;
   }

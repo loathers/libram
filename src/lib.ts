@@ -1635,6 +1635,7 @@ export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
  */
 export function getAcquirePrice(item: Item, quantity = 1): number {
   if (quantity <= 0) return 0;
+
   const currentAmount = availableAmount(item);
   const amountNeeded = Math.max(0, quantity - currentAmount);
   const retrieveCost =
@@ -1642,25 +1643,44 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
     retrievePrice(item, currentAmount);
   const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
+  // If it's easy to meatpaste, just rely on retrieveCost
   if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
     return retrieveCost;
   }
+
   if (
     isNpcItem(item) &&
     npcPrice(item) > 0 &&
     npcPrice(item) < mallPrice(item)
   ) {
+    // If it's best handled through NPC shops, handle it through NPC shops
     return quantity * npcPrice(item);
   }
-  if (item.tradeable && mallPrice(item) === mallMinPrice) {
-    return currentAmount * autosellPrice(item) + amountNeeded * mallPrice(item);
+
+  if (item.tradeable) {
+    if (mallPrice(item) === mallMinPrice) {
+      // Value the ones you have at autosell, because that's what you'd sell them at
+      // Value the ones you need to buy at the price you'd buy them at
+      return (
+        clamp(currentAmount, 0, quantity) * autosellPrice(item) +
+        amountNeeded * mallPrice(item)
+      );
+    }
+    if (mallPrice(item) > mallMinPrice) {
+      // Value them all at mall price
+      // regardless of whether you already owned them
+      return quantity * mallPrice(item);
+    }
+    // The fallthrough case here is that the mallprice is somehow below mall min
+    // That shouldn't really happen
+    return quantity * autosellPrice(item);
   }
-  if (item.tradeable && mallPrice(item) > mallMinPrice) {
-    return quantity * mallPrice(item);
-  }
-  if (item.tradeable) return quantity * autosellPrice(item);
+
   if (item.discardable) {
     return have(item, quantity) ? quantity * autosellPrice(item) : Infinity;
   }
+  // If it can't be traded or discarded, and we're passing into this function, it's free
+  // There might some day be specific items we don't want to value like this, because you receive only a limited number
+  // We'll burn that bridge when we come to it.
   return 0;
 }

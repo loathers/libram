@@ -1508,7 +1508,7 @@ export function totalFamiliarWeight(
   familiar = myFamiliar(),
   considerAdjustment = true,
 ): number {
-  return Math.min(
+  return clamp(
     clamp(
       familiarWeight(familiar),
       have($effect`Fidoxene`) ? 20 : 0,
@@ -1518,6 +1518,7 @@ export function totalFamiliarWeight(
       (considerAdjustment ? weightAdjustment() : 0) +
       (familiar.feasted ? 10 : 0),
     1,
+    Infinity,
   );
 }
 

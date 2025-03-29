@@ -28,6 +28,15 @@ export function familiarsToday(): Familiar[] {
 }
 
 /**
+ * Determine whether you've obtained the equipment of a given familiar with the TCB today
+ * @param familiar The familiar in question
+ * @returns Whether you've obtained the equipment from that familiar via the TCB today
+ */
+export function doneToday(familiar: Familiar): boolean {
+  return RegExp(`(?:^|,)${familiar.id}(?:$|,)`).test(get("_cupidBowFamiliars"));
+}
+
+/**
  * Calculate the number of fights needed to get a drop
  * @param familiar The familiar in question; defaults to the one currently charged by your bow
  * @returns The number of turns necessary to get this familiar's drop; Infinity if you can't get it today

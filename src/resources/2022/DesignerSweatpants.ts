@@ -4,7 +4,7 @@ import { $item, $skill } from "../../template-string.js";
 import { examine } from "../../lib.js";
 
 /** designer sweatpants */
-export const item = $item`designer sweatpants`;
+const item = $item`designer sweatpants`;
 
 /** designer sweatpants sweat skills */
 export const skills = {

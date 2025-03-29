@@ -69,7 +69,7 @@ export function sweatCost(skill: Skill): number {
  * @returns If this skill can be cast
  */
 export function canUseSkill(skill: Skill): boolean {
-  return have() && skill.dailylimit !== 0 && sweat() <= sweatCost(skill);
+  return have() && skill.dailylimit !== 0 && sweatCost(skill) <= sweat();
 }
 
 /**

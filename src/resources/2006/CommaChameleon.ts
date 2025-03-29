@@ -26,7 +26,7 @@ export function transform(fam: Familiar): boolean {
     return true;
   }
   const equipment = familiarEquipment(fam);
-  if (equipment !== $item.none) return false;
+  if (equipment === $item.none) return false;
   if (!have_(equipment)) return false;
   visitUrl(
     `inv_equip.php?which=2&action=equip&whichitem=${toInt(equipment)}&pwd`,

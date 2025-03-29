@@ -9857,7 +9857,7 @@ function transform(fam) {
   if (currentFamiliar() === fam)
     return !0;
   var equipment = (0, import_kolmafia14.familiarEquipment)(fam);
-  return equipment !== $item.none || !have(equipment) ? !1 : ((0, import_kolmafia14.visitUrl)("inv_equip.php?which=2&action=equip&whichitem=".concat((0, import_kolmafia14.toInt)(equipment), "&pwd")), !0);
+  return equipment === $item.none || !have(equipment) ? !1 : ((0, import_kolmafia14.visitUrl)("inv_equip.php?which=2&action=equip&whichitem=".concat((0, import_kolmafia14.toInt)(equipment), "&pwd")), !0);
 }
 function currentFamiliar() {
   return get("commaFamiliar");

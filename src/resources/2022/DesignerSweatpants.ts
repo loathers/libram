@@ -2,6 +2,7 @@ import { availableAmount, Skill, useSkill as useSkill_ } from "kolmafia";
 import { get } from "../../property.js";
 import { $item, $skill } from "../../template-string.js";
 import { examine } from "../../lib.js";
+import { clamp } from "../../utils.js";
 
 /** designer sweatpants */
 const item = $item`designer sweatpants`;
@@ -69,6 +70,34 @@ export function sweatCost(skill: Skill): number {
  */
 export function canUseSkill(skill: Skill): boolean {
   return have() && skill.dailylimit !== 0 && sweatCost(skill) <= sweat();
+}
+
+/**
+ * Get the available number of times a sweat skill can be cast with current sweat
+ * @param skill The skill to check
+ * @returns The available number of casts
+ */
+export function availableCasts(skill: Skill): number {
+  if (!canUseSkill(skill)) return 0;
+  return clamp(
+    Math.floor(sweat() / sweatCost(skill)),
+    0,
+    skill.dailylimit > -1 ? skill.dailylimit : Infinity,
+  );
+}
+
+/**
+ * Get the potential number of times a sweat skill can be cast, with maximum sweat
+ * @param skill The skill to check
+ * @returns The potential number of casts
+ */
+export function potentialCasts(skill: Skill): number {
+  if (!have() || sweatCost(skill) === 0) return 0;
+  return clamp(
+    Math.floor(100 / sweatCost(skill)),
+    0,
+    skill.dailylimit > -1 ? skill.dailylimit : Infinity,
+  );
 }
 
 /**

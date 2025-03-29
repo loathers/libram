@@ -1,11 +1,7 @@
-import {
-  availableAmount,
-  Skill,
-  useSkill as useSkill_,
-  visitUrl,
-} from "kolmafia";
+import { availableAmount, Skill, useSkill as useSkill_ } from "kolmafia";
 import { get } from "../../property.js";
 import { $item, $skill } from "../../template-string.js";
+import { examine } from "../../lib.js";
 
 /** designer sweatpants */
 export const item = $item`designer sweatpants`;
@@ -54,7 +50,7 @@ export function sweat(): number {
  * Refresh the current sweat amount by visiting the item description
  */
 export function refresh(): void {
-  visitUrl(`desc_item.php?whichitem=${item.descid}`);
+  examine(item);
 }
 
 /**

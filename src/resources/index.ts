@@ -43,6 +43,7 @@ import * as CrystalBall from "./2021/CrystalBall.js";
 import * as DaylightShavings from "./2021/DaylightShavings.js";
 import * as AutumnAton from "./2022/AutumnAton.js";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket.js";
+import * as DesignerSweatpants from "./2022/DesignerSweatpants.js";
 import * as GreyGoose from "./2022/GreyGoose.js";
 import * as JuneCleaver from "./2022/JuneCleaver.js";
 import * as TrainSet from "./2022/TrainSet.js";
@@ -67,9 +68,9 @@ import * as CyberRealm from "./2025/CyberRealm.js";
 
 export {
   AprilingBandHelmet,
+  AsdonMartin,
   AugustScepter,
   AutumnAton,
-  AsdonMartin,
   Bandersnatch,
   BarrelShrine,
   BatWings,
@@ -93,6 +94,7 @@ export {
   CyberRealm,
   DaylightShavings,
   DeckOfEveryCard,
+  DesignerSweatpants,
   Dinseylandfill,
   DNALab,
   EverfullDarts,
@@ -112,8 +114,8 @@ export {
   ObtuseAngel,
   Pantogram,
   PocketProfessor,
-  RainDoh,
   Raffle,
+  RainDoh,
   ReagnimatedGnome,
   RetroCape,
   Robortender,

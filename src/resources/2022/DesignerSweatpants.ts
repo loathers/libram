@@ -7,8 +7,10 @@ import {
 import { get } from "../../property.js";
 import { $item, $skill } from "../../template-string.js";
 
+/** designer sweatpants */
 export const item = $item`designer sweatpants`;
 
+/** designer sweatpants sweat skills */
 export const skills = {
   SweatFlick: $skill`Sweat Flick`,
   SweatSpray: $skill`Sweat Spray`,
@@ -20,15 +22,16 @@ export const skills = {
   MakeSweatAde: $skill`Make Sweat-Ade`,
 } as const;
 
+/** Map of skill to sweat cost */
 const sweatSkillCost = new Map<Skill, number>([
-  [$skill`Sweat Flick`, 1],
-  [$skill`Sweat Spray`, 3],
-  [$skill`Sweat Flood`, 5],
-  [$skill`Sip Some Sweat`, 5],
-  [$skill`Sweat Sip`, 5],
-  [$skill`Drench Yourself in Sweat`, 15],
-  [$skill`Sweat Out Some Booze`, 25],
-  [$skill`Make Sweat-Ade`, 50],
+  [skills.SweatFlick, 1],
+  [skills.SweatSpray, 3],
+  [skills.SweatFlood, 5],
+  [skills.SipSomeSweat, 5],
+  [skills.SweatSip, 5],
+  [skills.DrenchYourselfInSweat, 15],
+  [skills.SweatOutSomeBooze, 25],
+  [skills.MakeSweatAde, 50],
 ]);
 
 /**

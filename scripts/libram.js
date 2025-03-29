@@ -15024,11 +15024,17 @@ function canReminisce(monster) {
 // src/resources/2022/DesignerSweatpants.ts
 var DesignerSweatpants_exports = {};
 __export(DesignerSweatpants_exports, {
+  availableCasts: function() {
+    return availableCasts;
+  },
   canUseSkill: function() {
     return canUseSkill;
   },
   have: function() {
     return have42;
+  },
+  potentialCasts: function() {
+    return potentialCasts;
   },
   refresh: function() {
     return refresh;
@@ -15077,6 +15083,12 @@ function sweatCost(skill) {
 }
 function canUseSkill(skill) {
   return have42() && skill.dailylimit !== 0 && sweatCost(skill) <= sweat();
+}
+function availableCasts(skill) {
+  return canUseSkill(skill) ? clamp(Math.floor(sweat() / sweatCost(skill)), 0, skill.dailylimit > -1 ? skill.dailylimit : 1 / 0) : 0;
+}
+function potentialCasts(skill) {
+  return !have42() || sweatCost(skill) === 0 ? 0 : clamp(Math.floor(100 / sweatCost(skill)), 0, skill.dailylimit > -1 ? skill.dailylimit : 1 / 0);
 }
 function useSkill3(skill) {
   if (!canUseSkill(skill)) return !1;

@@ -33,7 +33,7 @@ export function familiarsToday(): Familiar[] {
  * @returns Whether you've obtained the equipment from that familiar via the TCB today
  */
 export function doneToday(familiar: Familiar): boolean {
-  return RegExp(`(?:^|,)${familiar.id}(?:$|,)`).test(get("_cupidBowFamiliars"));
+  return RegExp(`(?:^|;)${familiar.id}(?:$|;)`).test(get("_cupidBowFamiliars"));
 }
 
 /**

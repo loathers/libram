@@ -1,6 +1,12 @@
 import { $familiar, $item } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
-import { Familiar, familiarEquipment, toInt, visitUrl } from "kolmafia";
+import {
+  Familiar,
+  familiarEquipment,
+  refreshStatus,
+  toInt,
+  visitUrl,
+} from "kolmafia";
 import { get } from "../../property.js";
 
 const familiar = $familiar`Comma Chameleon`;
@@ -31,6 +37,10 @@ export function transform(fam: Familiar): boolean {
   visitUrl(
     `inv_equip.php?which=2&action=equip&whichitem=${toInt(equipment)}&pwd`,
   );
+  refreshStatus();
+  if (currentFamiliar() !== fam) {
+    return false;
+  }
   return true;
 }
 

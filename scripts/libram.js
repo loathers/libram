@@ -16607,6 +16607,9 @@ __export(ToyCupidBow_exports, {
   currentFamiliar: function() {
     return currentFamiliar2;
   },
+  doneToday: function() {
+    return doneToday;
+  },
   familiarsToday: function() {
     return familiarsToday;
   },
@@ -16633,6 +16636,9 @@ function familiarsToday() {
   return get("_cupidBowFamiliars").split(";").map(function(id) {
     return (0, import_kolmafia74.toFamiliar)(Number(id));
   });
+}
+function doneToday(familiar10) {
+  return RegExp("(?:^|;)".concat(familiar10.id, "(?:$|;)")).test(get("_cupidBowFamiliars"));
 }
 function turnsLeft2() {
   var familiar10 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : currentFamiliar2();

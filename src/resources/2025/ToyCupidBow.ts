@@ -42,8 +42,8 @@ export function doneToday(familiar: Familiar): boolean {
  * @returns The number of turns necessary to get this familiar's drop; Infinity if you can't get it today
  */
 export function turnsLeft(familiar = currentFamiliar()): number {
-  if ((familiarsToday() as (Familiar | null)[]).includes(familiar))
-    return Infinity;
+  if (!familiar) return Infinity;
+  if (doneToday(familiar)) return Infinity;
   if (currentFamiliar() !== familiar) return 5;
   return clamp(5 - get("cupidBowFights"), 1, 5);
 }

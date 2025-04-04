@@ -6,7 +6,9 @@ import {
   Effect,
   effectModifier,
   equip,
+  equippedItem,
   haveEffect,
+  haveEquipped,
   haveSkill,
   hpCost,
   Item,
@@ -28,13 +30,22 @@ import {
 import { getActiveSongs, have, isSong, unequip } from "./lib.js";
 import { get } from "./property.js";
 import { AsdonMartin } from "./resources/index.js";
-import { $effect, $item, $skill } from "./template-string.js";
+import { $effect, $item, $skill, $slot } from "./template-string.js";
 import { clamp, sum } from "./utils.js";
 
-const shieldEffects = new Map<Effect, Skill>([
-  [$effect`Thoughtful Empathy`, $skill`Empathy of the Newt`],
-  [$effect`Lubricating Sauce`, $skill`Sauce Contemplation`],
-  [$effect`Tubes of Universal Meat`, $skill`Manicotti Meditation`],
+const shieldEffects = new Map<Effect, { skill: Skill; turnsPerCast: number }>([
+  [
+    $effect`Thoughtful Empathy`,
+    { skill: $skill`Empathy of the Newt`, turnsPerCast: 5 },
+  ],
+  [
+    $effect`Lubricating Sauce`,
+    { skill: $skill`Sauce Contemplation`, turnsPerCast: 5 },
+  ],
+  [
+    $effect`Tubes of Universal Meat`,
+    { skill: $skill`Manicotti Meditation`, turnsPerCast: 5 },
+  ],
 ]);
 
 export abstract class MpSource {
@@ -146,6 +157,12 @@ class SkillMoodElement extends MoodElement {
 
     if (!haveSkill(this.skill)) return false;
     if (initialTurns >= ensureTurns) return true;
+    if (
+      this.skill === $skill`Empathy of the Newt` &&
+      haveEquipped($item`April Shower Thoughts shield`)
+    ) {
+      unequip($item`April Shower Thoughts shield`);
+    }
 
     // Deal with song slots.
     if (
@@ -313,62 +330,63 @@ class AsdonMoodElement extends MoodElement {
 class ShieldMoodElement extends MoodElement {
   effect: Effect;
   skill: Skill;
+  turnsPerCastValue: number;
 
   constructor(effect: Effect) {
     super();
     this.effect = effect;
-    const skill = shieldEffects.get(effect);
-    if (!skill) throw `Invalid shield effect: ${effect}`;
-    this.skill = skill;
+
+    const data = shieldEffects.get(effect);
+    if (!data) throw `Invalid shield effect: ${effect}`;
+
+    this.skill = data.skill;
+    this.turnsPerCastValue = data.turnsPerCast;
   }
 
   mpCostPerTurn(): number {
-    const turns = turnsPerCast(this.skill);
-    return turns > 0 ? mpCost(this.skill) / turns : 0;
+    return this.turnsPerCastValue > 0
+      ? mpCost(this.skill) / this.turnsPerCastValue
+      : 0;
   }
 
   turnIncrement(): number {
-    return turnsPerCast(this.skill);
+    return this.turnsPerCastValue;
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
     const initialTurns = haveEffect(this.effect);
+    const initialOffhand = equippedItem($slot`Offhand`);
 
     if (!haveSkill(this.skill)) return false;
     if (initialTurns >= ensureTurns) return true;
 
     let oldRemainingCasts = -1;
     let remainingCasts = Math.ceil(
-      (ensureTurns - initialTurns) / turnsPerCast(this.skill),
+      (ensureTurns - initialTurns) / this.turnsPerCastValue,
     );
 
     while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
       equip($item`April Shower Thoughts shield`);
 
       let maxCasts;
-      if (hpCost(this.skill) > 0) {
-        // FIXME: restore HP
-        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill)));
-      } else {
-        const cost = mpCost(this.skill);
+
+      const cost = mpCost(this.skill);
+      maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+      if (maxCasts < remainingCasts) {
+        const bestMp = Math.min(remainingCasts * cost, myMaxmp());
+        mood.moreMp(bestMp);
         maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        if (maxCasts < remainingCasts) {
-          const bestMp = Math.min(remainingCasts * cost, myMaxmp());
-          mood.moreMp(bestMp);
-          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        }
       }
 
       const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
       useSkill(casts, this.skill);
 
-      unequip($item`April Shower Thoughts shield`);
-
       oldRemainingCasts = remainingCasts;
       remainingCasts = Math.ceil(
-        (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
+        (ensureTurns - haveEffect(this.effect)) / this.turnsPerCastValue,
       );
     }
+    equip(initialOffhand);
 
     return haveEffect(this.effect) >= ensureTurns;
   }

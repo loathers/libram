@@ -33,19 +33,10 @@ import { AsdonMartin } from "./resources/index.js";
 import { $effect, $item, $skill, $slot } from "./template-string.js";
 import { clamp, sum } from "./utils.js";
 
-const shieldEffects = new Map<Effect, { skill: Skill; turnsPerCast: number }>([
-  [
-    $effect`Thoughtful Empathy`,
-    { skill: $skill`Empathy of the Newt`, turnsPerCast: 5 },
-  ],
-  [
-    $effect`Lubricating Sauce`,
-    { skill: $skill`Sauce Contemplation`, turnsPerCast: 5 },
-  ],
-  [
-    $effect`Tubes of Universal Meat`,
-    { skill: $skill`Manicotti Meditation`, turnsPerCast: 5 },
-  ],
+const shieldEffects = new Map<Effect, Skill>([
+  [$effect`Thoughtful Empathy`, $skill`Empathy of the Newt`],
+  [$effect`Lubricating Sauce`, $skill`Sauce Contemplation`],
+  [$effect`Tubes of Universal Meat`, $skill`Manicotti Meditation`],
 ]);
 
 export abstract class MpSource {
@@ -154,16 +145,15 @@ class SkillMoodElement extends MoodElement {
   execute(mood: Mood, ensureTurns: number): boolean {
     const effect = toEffect(this.skill);
     const initialTurns = haveEffect(effect);
-    let showerShieldUnequipped = false;
+    const initialOffhand = equippedItem($slot`Offhand`); // Right now this only matters for April Shower Thoughts shield
 
     if (!haveSkill(this.skill)) return false;
     if (initialTurns >= ensureTurns) return true;
     if (
       this.skill === $skill`Empathy of the Newt` &&
-      haveEquipped($item`April Shower Thoughts shield`)
+      initialOffhand === $item`April Shower Thoughts shield`
     ) {
       unequip($item`April Shower Thoughts shield`);
-      showerShieldUnequipped = true;
     }
 
     // Deal with song slots.
@@ -210,9 +200,7 @@ class SkillMoodElement extends MoodElement {
         (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
       );
     }
-    if (showerShieldUnequipped) {
-      equip($item`April Shower Thoughts shield`);
-    }
+    if (equippedItem($slot`offhand`) !== initialOffhand) equip(initialOffhand);
     return haveEffect(effect) > ensureTurns;
   }
 }
@@ -335,27 +323,22 @@ class AsdonMoodElement extends MoodElement {
 class ShieldMoodElement extends MoodElement {
   effect: Effect;
   skill: Skill;
-  turnsPerCastValue: number;
 
   constructor(effect: Effect) {
     super();
     this.effect = effect;
-
-    const data = shieldEffects.get(effect);
-    if (!data) throw `Invalid shield effect: ${effect}`;
-
-    this.skill = data.skill;
-    this.turnsPerCastValue = data.turnsPerCast;
+    const skill = shieldEffects.get(effect);
+    if (!skill) throw `Invalid shield effect: ${effect}`;
+    this.skill = skill;
   }
 
   mpCostPerTurn(): number {
-    return this.turnsPerCastValue > 0
-      ? mpCost(this.skill) / this.turnsPerCastValue
-      : 0;
+    const turns = turnsPerCast(this.skill);
+    return turns > 0 ? mpCost(this.skill) / turns : 0;
   }
 
   turnIncrement(): number {
-    return this.turnsPerCastValue;
+    return turnsPerCast(this.skill);
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
@@ -367,7 +350,7 @@ class ShieldMoodElement extends MoodElement {
 
     let oldRemainingCasts = -1;
     let remainingCasts = Math.ceil(
-      (ensureTurns - initialTurns) / this.turnsPerCastValue,
+      (ensureTurns - initialTurns) / turnsPerCast(this.skill),
     );
 
     while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
@@ -388,7 +371,7 @@ class ShieldMoodElement extends MoodElement {
 
       oldRemainingCasts = remainingCasts;
       remainingCasts = Math.ceil(
-        (ensureTurns - haveEffect(this.effect)) / this.turnsPerCastValue,
+        (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
       );
     }
     equip(initialOffhand);

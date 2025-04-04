@@ -154,6 +154,7 @@ class SkillMoodElement extends MoodElement {
   execute(mood: Mood, ensureTurns: number): boolean {
     const effect = toEffect(this.skill);
     const initialTurns = haveEffect(effect);
+    let showerShieldUnequipped = false;
 
     if (!haveSkill(this.skill)) return false;
     if (initialTurns >= ensureTurns) return true;
@@ -162,6 +163,7 @@ class SkillMoodElement extends MoodElement {
       haveEquipped($item`April Shower Thoughts shield`)
     ) {
       unequip($item`April Shower Thoughts shield`);
+      showerShieldUnequipped = true;
     }
 
     // Deal with song slots.
@@ -207,6 +209,9 @@ class SkillMoodElement extends MoodElement {
       remainingCasts = Math.ceil(
         (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
       );
+    }
+    if (showerShieldUnequipped) {
+      equip($item`April Shower Thoughts shield`);
     }
     return haveEffect(effect) > ensureTurns;
   }

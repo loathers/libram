@@ -8,7 +8,6 @@ import {
   equip,
   equippedItem,
   haveEffect,
-  haveEquipped,
   haveSkill,
   hpCost,
   Item,
@@ -21,6 +20,7 @@ import {
   restoreMp,
   retrieveItem,
   Skill,
+  Slot,
   toEffect,
   toSkill,
   turnsPerCast,
@@ -33,10 +33,14 @@ import { AsdonMartin } from "./resources/index.js";
 import { $effect, $item, $skill, $slot } from "./template-string.js";
 import { clamp, sum } from "./utils.js";
 
-const shieldEffects = new Map<Effect, Skill>([
-  [$effect`Thoughtful Empathy`, $skill`Empathy of the Newt`],
-  [$effect`Lubricating Sauce`, $skill`Sauce Contemplation`],
-  [$effect`Tubes of Universal Meat`, $skill`Manicotti Meditation`],
+const aprilShieldEffects = new Map([
+  [$skill`Empathy of the Newt`, $effect`Thoughtful Empathy`],
+  [$skill`Sauce Contemplation`, $effect`Lubricating Sauce`],
+  [$skill`Manicotti Meditation`, $effect`Tubes of Universal Meat`],
+  [$skill`Seal Clubbing Frenzy`, $effect`Slippery as a Seal`],
+  [$skill`Patience of the Tortoise`, $effect`Strength of the Tortoise`],
+  [$skill`Disco Aerobics`, $effect`Disco over Matter`],
+  [$skill`Moxie of the Mariachi`, $effect`Mariachi Moisture`],
 ]);
 
 export abstract class MpSource {
@@ -126,9 +130,7 @@ abstract class MoodElement {
 }
 
 interface SkillEffectOptions {
-  shieldRequired?: boolean;
-  shieldRestricted?: boolean;
-  managesSongs?: boolean;
+  requireAprilShield?: boolean;
 }
 
 class SkillMoodElement extends MoodElement {
@@ -136,11 +138,20 @@ class SkillMoodElement extends MoodElement {
   effect: Effect;
   options: SkillEffectOptions;
 
-  constructor(skill: Skill, options: SkillEffectOptions = {}) {
+  constructor(skill: Skill, options: SkillEffectOptions) {
     super();
     this.skill = skill;
-    this.effect = toEffect(skill);
+    this.effect = options.requireAprilShield
+      ? (aprilShieldEffects.get(skill) ?? $effect.none)
+      : toEffect(skill);
     this.options = options;
+  }
+
+  get aprilShieldRestricted(): boolean {
+    return (
+      !this.options.requireAprilShield &&
+      this.skill === $skill`Empathy of the Newt`
+    );
   }
 
   mpCostPerTurn(): number {
@@ -153,20 +164,22 @@ class SkillMoodElement extends MoodElement {
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
+    if (this.effect === $effect.none) return false;
+
     const initialTurns = haveEffect(this.effect);
-    const initialOffhand = equippedItem($slot`Offhand`);
-
-    if (!haveSkill(this.skill)) return false;
+    // Track these separately because of LHM
+    const shieldSlot = Slot.all().find(
+      (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`,
+    );
+    const initialOffhand = equippedItem($slot`off-hand`);
     if (initialTurns >= ensureTurns) return true;
+    if (!haveSkill(this.skill)) return false;
 
-    if (
-      this.options.shieldRestricted &&
-      initialOffhand === $item`April Shower Thoughts shield`
-    ) {
+    if (this.aprilShieldRestricted && shieldSlot) {
       unequip($item`April Shower Thoughts shield`);
     }
 
-    if (this.options.managesSongs && !have(this.effect)) {
+    if (mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
       const activeSongs = getActiveSongs();
       for (const song of activeSongs) {
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
@@ -182,37 +195,41 @@ class SkillMoodElement extends MoodElement {
       (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
     );
 
-    while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
-      if (this.options.shieldRequired) {
-        equip($item`April Shower Thoughts shield`);
-      }
-
-      let maxCasts = 0;
-
-      if (hpCost(this.skill) > 0) {
-        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill)));
-      } else {
-        const cost = mpCost(this.skill);
-        maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        if (maxCasts < remainingCasts) {
-          const bestMp = Math.min(remainingCasts * cost, myMaxmp());
-          mood.moreMp(bestMp);
-          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+    try {
+      while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
+        if (this.options.requireAprilShield && !shieldSlot) {
+          if (!equip($item`April Shower Thoughts shield`)) return false;
         }
+
+        let maxCasts = 0;
+
+        if (hpCost(this.skill) > 0) {
+          maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill)));
+        } else {
+          const cost = mpCost(this.skill);
+          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+          if (maxCasts < remainingCasts) {
+            const bestMp = Math.min(remainingCasts * cost, myMaxmp());
+            mood.moreMp(bestMp);
+            maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+          }
+        }
+
+        const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
+        useSkill(casts, this.skill);
+
+        oldRemainingCasts = remainingCasts;
+        remainingCasts = Math.ceil(
+          (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
+        );
       }
 
-      const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
-      useSkill(casts, this.skill);
-
-      oldRemainingCasts = remainingCasts;
-      remainingCasts = Math.ceil(
-        (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
-      );
+      return haveEffect(this.effect) >= ensureTurns;
+    } finally {
+      if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
+      if (initialOffhand !== equippedItem($slot`off-hand`))
+        equip(initialOffhand, $slot`off-hand`);
     }
-
-    if (equippedItem($slot`offhand`) !== initialOffhand) equip(initialOffhand);
-
-    return haveEffect(this.effect) >= ensureTurns;
   }
 }
 
@@ -394,19 +411,10 @@ export class Mood {
    * Add a skill to the mood.
    *
    * @param skill Skill to add.
+   * @param options Additional `SkillEffectOptions` to pass to new `SkillMoodElement`
    * @returns This mood to enable chaining
    */
-  skill(skill: Skill): Mood {
-    const options: SkillEffectOptions = {};
-
-    if (skill === $skill`Empathy of the Newt`) {
-      options.shieldRestricted = true;
-    }
-
-    if (isSong(skill)) {
-      options.managesSongs = true;
-    }
-
+  skill(skill: Skill, options: SkillEffectOptions = {}): Mood {
     this.elements.push(new SkillMoodElement(skill, options));
     return this;
   }
@@ -421,7 +429,10 @@ export class Mood {
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
     if (!gainEffect && skill !== $skill.none) {
-      this.skill(skill);
+      const requireAprilShield = aprilShieldEffects
+        .values()
+        .some((ef) => ef === effect);
+      this.skill(skill, { requireAprilShield });
     } else {
       this.elements.push(new CustomMoodElement(effect, gainEffect));
     }
@@ -463,20 +474,6 @@ export class Mood {
       AsdonMartin.installed()
     ) {
       this.elements.push(new AsdonMoodElement(effect));
-    }
-    return this;
-  }
-
-  /**
-   * Add an April Shower Thoughts shield effect to the mood.
-   *
-   * @param effect April Shower Thoughts shield effect to add to the mood.
-   * @returns This mood to enable chaining
-   */
-  shield(effect: Effect): Mood {
-    const skill = shieldEffects.get(effect);
-    if (skill && have($item`April Shower Thoughts shield`)) {
-      this.elements.push(new SkillMoodElement(skill, { shieldRequired: true }));
     }
     return this;
   }

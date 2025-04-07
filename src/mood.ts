@@ -5,6 +5,8 @@ import {
   eat,
   Effect,
   effectModifier,
+  equip,
+  equippedItem,
   haveEffect,
   haveSkill,
   hpCost,
@@ -18,17 +20,28 @@ import {
   restoreMp,
   retrieveItem,
   Skill,
+  Slot,
   toEffect,
   toSkill,
   turnsPerCast,
   use,
   useSkill,
 } from "kolmafia";
-import { getActiveSongs, have, isSong } from "./lib.js";
+import { getActiveSongs, have, isSong, unequip } from "./lib.js";
 import { get } from "./property.js";
 import { AsdonMartin } from "./resources/index.js";
-import { $item, $skill } from "./template-string.js";
+import { $effect, $item, $skill, $slot } from "./template-string.js";
 import { clamp, sum } from "./utils.js";
+
+const aprilShieldEffects = new Map([
+  [$skill`Empathy of the Newt`, $effect`Thoughtful Empathy`],
+  [$skill`Sauce Contemplation`, $effect`Lubricating Sauce`],
+  [$skill`Manicotti Meditation`, $effect`Tubes of Universal Meat`],
+  [$skill`Seal Clubbing Frenzy`, $effect`Slippery as a Seal`],
+  [$skill`Patience of the Tortoise`, $effect`Strength of the Tortoise`],
+  [$skill`Disco Aerobics`, $effect`Disco over Matter`],
+  [$skill`Moxie of the Mariachi`, $effect`Mariachi Moisture`],
+]);
 
 export abstract class MpSource {
   usesRemaining(): number {
@@ -116,12 +129,29 @@ abstract class MoodElement {
   abstract execute(mood: Mood, ensureTurns: number): boolean;
 }
 
+interface SkillEffectOptions {
+  requireAprilShield?: boolean;
+}
+
 class SkillMoodElement extends MoodElement {
   skill: Skill;
+  effect: Effect;
+  options: SkillEffectOptions;
 
-  constructor(skill: Skill) {
+  constructor(skill: Skill, options: SkillEffectOptions) {
     super();
     this.skill = skill;
+    this.effect = options.requireAprilShield
+      ? (aprilShieldEffects.get(skill) ?? $effect.none)
+      : toEffect(skill);
+    this.options = options;
+  }
+
+  get aprilShieldRestricted(): boolean {
+    return (
+      !this.options.requireAprilShield &&
+      this.skill === $skill`Empathy of the Newt`
+    );
   }
 
   mpCostPerTurn(): number {
@@ -134,22 +164,26 @@ class SkillMoodElement extends MoodElement {
   }
 
   execute(mood: Mood, ensureTurns: number): boolean {
-    const effect = toEffect(this.skill);
-    const initialTurns = haveEffect(effect);
+    if (this.effect === $effect.none) return false;
 
-    if (!haveSkill(this.skill)) return false;
+    const initialTurns = haveEffect(this.effect);
+    // Track these separately because of LHM
+    const shieldSlot = Slot.all().find(
+      (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`,
+    );
+    const initialOffhand = equippedItem($slot`off-hand`);
     if (initialTurns >= ensureTurns) return true;
+    if (!haveSkill(this.skill)) return false;
 
-    // Deal with song slots.
-    if (
-      mood.options.songSlots.length > 0 &&
-      isSong(this.skill) &&
-      !have(effect)
-    ) {
+    if (this.aprilShieldRestricted && shieldSlot) {
+      unequip($item`April Shower Thoughts shield`);
+    }
+
+    if (mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
       const activeSongs = getActiveSongs();
       for (const song of activeSongs) {
         const slot = mood.options.songSlots.find((slot) => slot.includes(song));
-        if (!slot || slot.includes(effect)) {
+        if (!slot || slot.includes(this.effect)) {
           cliExecute(`shrug ${song}`);
           break;
         }
@@ -158,33 +192,44 @@ class SkillMoodElement extends MoodElement {
 
     let oldRemainingCasts = -1;
     let remainingCasts = Math.ceil(
-      (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
+      (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
     );
-    while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
-      let maxCasts;
-      if (hpCost(this.skill) > 0) {
-        // FIXME: restore HP
-        maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill))); // Do not allow ourselves to hit 0 hp
-      } else {
-        const cost = mpCost(this.skill);
-        maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
-        if (maxCasts < remainingCasts) {
-          const bestMp = Math.min(
-            remainingCasts * mpCost(this.skill),
-            myMaxmp(),
-          );
-          mood.moreMp(bestMp);
-          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+
+    try {
+      while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
+        if (this.options.requireAprilShield && !shieldSlot) {
+          if (!equip($item`April Shower Thoughts shield`)) return false;
         }
+
+        let maxCasts = 0;
+
+        if (hpCost(this.skill) > 0) {
+          maxCasts = Math.max(0, Math.floor((myHp() - 1) / hpCost(this.skill)));
+        } else {
+          const cost = mpCost(this.skill);
+          maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+          if (maxCasts < remainingCasts) {
+            const bestMp = Math.min(remainingCasts * cost, myMaxmp());
+            mood.moreMp(bestMp);
+            maxCasts = Math.floor(Math.min(mood.availableMp(), myMp()) / cost);
+          }
+        }
+
+        const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
+        useSkill(casts, this.skill);
+
+        oldRemainingCasts = remainingCasts;
+        remainingCasts = Math.ceil(
+          (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
+        );
       }
-      const casts = clamp(remainingCasts, 0, Math.min(100, maxCasts));
-      useSkill(casts, this.skill);
-      oldRemainingCasts = remainingCasts;
-      remainingCasts = Math.ceil(
-        (ensureTurns - haveEffect(effect)) / turnsPerCast(this.skill),
-      );
+
+      return haveEffect(this.effect) >= ensureTurns;
+    } finally {
+      if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
+      if (initialOffhand !== equippedItem($slot`off-hand`))
+        equip(initialOffhand, $slot`off-hand`);
     }
-    return haveEffect(effect) > ensureTurns;
   }
 }
 
@@ -366,10 +411,11 @@ export class Mood {
    * Add a skill to the mood.
    *
    * @param skill Skill to add.
+   * @param options Additional `SkillEffectOptions` to pass to new `SkillMoodElement`
    * @returns This mood to enable chaining
    */
-  skill(skill: Skill): Mood {
-    this.elements.push(new SkillMoodElement(skill));
+  skill(skill: Skill, options: SkillEffectOptions = {}): Mood {
+    this.elements.push(new SkillMoodElement(skill, options));
     return this;
   }
 
@@ -383,7 +429,10 @@ export class Mood {
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
     if (!gainEffect && skill !== $skill.none) {
-      this.skill(skill);
+      const requireAprilShield = aprilShieldEffects
+        .values()
+        .some((ef) => ef === effect);
+      this.skill(skill, { requireAprilShield });
     } else {
       this.elements.push(new CustomMoodElement(effect, gainEffect));
     }

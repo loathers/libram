@@ -20149,17 +20149,12 @@ var MoodElement = /* @__PURE__ */ function() {
   }, {
     key: "effect",
     value: function(_effect, gainEffect) {
-      var skill = (0, import_kolmafia86.toSkill)(_effect);
-      if (!gainEffect && skill !== $skill.none) {
-        var requireAprilShield = aprilShieldEffects.values().some(function(ef) {
-          return ef === _effect;
-        });
-        this.skill(skill, {
-          requireAprilShield: requireAprilShield
-        });
-      } else
-        this.elements.push(new CustomMoodElement(_effect, gainEffect));
-      return this;
+      var skill = (0, import_kolmafia86.toSkill)(_effect), requireAprilShield = aprilShieldEffects.values().some(function(ef) {
+        return ef === _effect;
+      });
+      return !gainEffect && skill !== $skill.none || requireAprilShield ? this.skill(skill, {
+        requireAprilShield: requireAprilShield
+      }) : this.elements.push(new CustomMoodElement(_effect, gainEffect)), this;
     }
     /**
      * Add a potion to the mood.

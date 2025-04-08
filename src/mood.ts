@@ -428,9 +428,9 @@ export class Mood {
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
-    const requireAprilShield = aprilShieldEffects
-      .values()
-      .some((ef) => ef === effect);
+    const requireAprilShield = [...aprilShieldEffects.values()].includes(
+      effect,
+    );
     if ((!gainEffect && skill !== $skill.none) || requireAprilShield) {
       this.skill(skill, { requireAprilShield });
     } else {

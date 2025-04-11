@@ -12,6 +12,7 @@ import {
   Skill,
   splitModifiers,
   stringModifier,
+  stringsModifier,
 } from "kolmafia";
 import { have } from "./lib.js";
 
@@ -19,6 +20,7 @@ import {
   BooleanModifier,
   booleanModifiersSet,
   ModifierType,
+  MultiStringModifier,
   NumericModifier,
   numericModifiersSet,
   StringModifier,
@@ -60,6 +62,17 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
 }
 
 /**
+ * Type guard that determines if a given string is a multistring modifier
+ * @param modifier The modifier in question
+ * @returns Whether the string in question is a valid multistring modifier
+ */
+export function isMultiStringModifier(
+  modifier: string,
+): modifier is MultiStringModifier {
+  return (stringModifiersSet as Set<string>).has(modifier);
+}
+
+/**
  * Type guard that determines if a given string is a valid modifier
  * @param modifier The modifier in question
  * @returns Whether the string in question is a valid modifier
@@ -84,6 +97,10 @@ export function get(
   name: StringModifier,
   subject?: string | Effect | Item,
 ): string;
+export function get(
+  name: MultiStringModifier,
+  subject?: string | Item | Effect | Skill | Familiar,
+): string[];
 /**
  * Get the value of a modifier
  *
@@ -111,6 +128,12 @@ export function get(
     return subject === undefined
       ? stringModifier(name)
       : stringModifier(subject as string, name);
+  }
+
+  if (isMultiStringModifier(name)) {
+    return subject === undefined
+      ? stringsModifier(name)
+      : stringsModifier(subject as string, name);
   }
 }
 

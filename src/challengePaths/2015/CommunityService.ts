@@ -56,14 +56,19 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
+// Use the object arg for situations like Raw Combat Rate
 function hypotheticalModifier(
-  modifier: NumericModifier,
+  modifier: NumericModifier | { main: string; override: string },
   ...effects: Effect[]
 ): number {
+  const { main, override } =
+    typeof modifier === "string"
+      ? { main: modifier, override: modifier }
+      : modifier;
   const newEffects = effects.filter((e) => !have(e));
   return (
-    numericModifier(modifier) +
-    sum(newEffects, (effect) => numericModifier(effect, modifier))
+    numericModifier(override) +
+    sum(newEffects, (effect) => numericModifier(effect, main))
   );
 }
 
@@ -462,9 +467,11 @@ export default class CommunityService {
     "Be a Living Statue",
     (...effects) => {
       const noncombatRate =
-        -1 * hypotheticalModifier("Combat Rate", ...effects);
-      const unsoftcappedRate = (rate: number): number =>
-        rate > 25 ? 25 + (rate - 25) * 5 : rate;
+        -1 *
+        hypotheticalModifier(
+          { override: "Raw Combat Rate", main: "Combat Rate" },
+          ...effects,
+        );
       const currentFamiliarModifier =
         -1 *
         numericModifier(
@@ -483,9 +490,7 @@ export default class CommunityService {
           equippedItem($slot`familiar`),
         );
       const adjustedRate =
-        unsoftcappedRate(noncombatRate) -
-        unsoftcappedRate(currentFamiliarModifier) +
-        unsoftcappedRate(newFamiliarModifier);
+        noncombatRate - currentFamiliarModifier + newFamiliarModifier;
       return 60 - 3 * Math.floor(adjustedRate / 5);
     },
     new Requirement(["-combat"], {}),

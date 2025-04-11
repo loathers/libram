@@ -77,7 +77,7 @@ async function main() {
     string: [],
     boolean: [],
     double: [],
-    multiString: []
+    multiString: [],
   };
 
   for (const type of Object.keys(modifiers)) {

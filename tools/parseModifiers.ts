@@ -77,6 +77,7 @@ async function main() {
     string: [],
     boolean: [],
     double: [],
+    multiString: [],
   };
 
   for (const type of Object.keys(modifiers)) {
@@ -98,7 +99,7 @@ async function main() {
     )}Modifier = typeof ${typeName}Modifiers[number];\n`;
   });
 
-  contents += `export type ModifierType = NumericModifier | StringModifier | BooleanModifier;\n`;
+  contents += `export type ModifierType = NumericModifier | StringModifier | BooleanModifier | MultiStringModifier;\n`;
 
   await writeFile(MODIFIERS_FILE, contents);
 }

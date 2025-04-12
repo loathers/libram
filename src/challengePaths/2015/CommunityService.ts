@@ -58,17 +58,13 @@ const visitCouncil = () => visitUrl("council.php");
 
 // Use the object arg for situations like Raw Combat Rate
 function hypotheticalModifier(
-  modifier: NumericModifier | { main: string; override: string },
+  modifier: NumericModifier,
   ...effects: Effect[]
 ): number {
-  const { main, override } =
-    typeof modifier === "string"
-      ? { main: modifier, override: modifier }
-      : modifier;
   const newEffects = effects.filter((e) => !have(e));
   return (
-    numericModifier(override) +
-    sum(newEffects, (effect) => numericModifier(effect, main))
+    numericModifier(modifier) +
+    sum(newEffects, (effect) => numericModifier(effect, modifier))
   );
 }
 
@@ -467,11 +463,7 @@ export default class CommunityService {
     "Be a Living Statue",
     (...effects) => {
       const noncombatRate =
-        -1 *
-        hypotheticalModifier(
-          { override: "Raw Combat Rate", main: "Combat Rate" },
-          ...effects,
-        );
+        -1 * hypotheticalModifier("Raw Combat Rate", ...effects);
       const currentFamiliarModifier =
         -1 *
         numericModifier(

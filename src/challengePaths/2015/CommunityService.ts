@@ -468,7 +468,7 @@ export default class CommunityService {
         -1 *
         numericModifier(
           myFamiliar(),
-          "Combat Rate",
+          "Raw Combat Rate",
           totalFamiliarWeight(),
           equippedItem($slot`familiar`),
         );
@@ -476,7 +476,7 @@ export default class CommunityService {
         -1 *
         numericModifier(
           myFamiliar(),
-          "Combat Rate",
+          "Raw Combat Rate",
           totalFamiliarWeight(myFamiliar(), false) +
             hypotheticalModifier("Familiar Weight", ...effects),
           equippedItem($slot`familiar`),
@@ -485,7 +485,7 @@ export default class CommunityService {
         noncombatRate - currentFamiliarModifier + newFamiliarModifier;
       return 60 - 3 * Math.floor(adjustedRate / 5);
     },
-    new Requirement(["-combat"], {}),
+    new Requirement(["-Raw Combat Rate"], {}),
   );
 
   static BoozeDrop = new CommunityService(

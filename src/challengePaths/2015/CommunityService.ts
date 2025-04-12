@@ -56,6 +56,7 @@ const statCommunityServicePredictor = (stat: Stat) => {
 
 const visitCouncil = () => visitUrl("council.php");
 
+// Use the object arg for situations like Raw Combat Rate
 function hypotheticalModifier(
   modifier: NumericModifier,
   ...effects: Effect[]
@@ -462,14 +463,12 @@ export default class CommunityService {
     "Be a Living Statue",
     (...effects) => {
       const noncombatRate =
-        -1 * hypotheticalModifier("Combat Rate", ...effects);
-      const unsoftcappedRate = (rate: number): number =>
-        rate > 25 ? 25 + (rate - 25) * 5 : rate;
+        -1 * hypotheticalModifier("Raw Combat Rate", ...effects);
       const currentFamiliarModifier =
         -1 *
         numericModifier(
           myFamiliar(),
-          "Combat Rate",
+          "Raw Combat Rate",
           totalFamiliarWeight(),
           equippedItem($slot`familiar`),
         );
@@ -477,18 +476,16 @@ export default class CommunityService {
         -1 *
         numericModifier(
           myFamiliar(),
-          "Combat Rate",
+          "Raw Combat Rate",
           totalFamiliarWeight(myFamiliar(), false) +
             hypotheticalModifier("Familiar Weight", ...effects),
           equippedItem($slot`familiar`),
         );
       const adjustedRate =
-        unsoftcappedRate(noncombatRate) -
-        unsoftcappedRate(currentFamiliarModifier) +
-        unsoftcappedRate(newFamiliarModifier);
+        noncombatRate - currentFamiliarModifier + newFamiliarModifier;
       return 60 - 3 * Math.floor(adjustedRate / 5);
     },
-    new Requirement(["-combat"], {}),
+    new Requirement(["-Raw Combat Rate"], {}),
   );
 
   static BoozeDrop = new CommunityService(

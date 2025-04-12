@@ -6,10 +6,10 @@ import {
   Item,
   itemAmount,
   Phylum,
+  stringModifier,
   toEffect,
 } from "kolmafia";
 import { have as haveItem } from "../../lib.js";
-import { get as getModifier } from "../../modifier.js";
 import { get } from "../../property.js";
 import { $effect, $item, $phylum } from "../../template-string.js";
 import { clamp } from "../../utils.js";
@@ -93,7 +93,7 @@ export function isHybridized(tonic?: Effect | Phylum | Item): boolean {
       ? tonic
       : tonic instanceof Phylum
         ? getEffect(tonic)
-        : toEffect(getModifier("Effect", tonic));
+        : toEffect(stringModifier(tonic, "Effect"));
   return (
     tonicEffects.includes(tonicEffect) && haveEffect(tonicEffect) === 2147483647
   );
@@ -152,7 +152,7 @@ export function hybridize(): boolean {
   const currentSyringe = get("dnaSyringe");
   if (!currentSyringe) return false;
   const tonicPotion = getTonic(currentSyringe);
-  const expectedEffect = toEffect(getModifier("Effect", tonicPotion));
+  const expectedEffect = toEffect(stringModifier(tonicPotion, "Effect"));
   cliExecute("camp dnainject");
   return isHybridized(expectedEffect);
 }

@@ -21,6 +21,7 @@ import {
   booleanModifiersSet,
   ModifierType,
   MultiStringModifier,
+  multiStringModifiersSet,
   NumericModifier,
   numericModifiersSet,
   StringModifier,
@@ -69,7 +70,7 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
 export function isMultiStringModifier(
   modifier: string,
 ): modifier is MultiStringModifier {
-  return (stringModifiersSet as Set<string>).has(modifier);
+  return (multiStrringModifiersSet as Set<string>).has(modifier);
 }
 
 /**

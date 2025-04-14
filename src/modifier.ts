@@ -352,25 +352,18 @@ function parseModifierString(
 /**
  * Translate a pref into a `Modifiers` object by wrapping mafia's `splitModifiers`
  * @param pref The name of the mafia preference in question
- * @param translator Optional object to help translate fields into their appropriate values
- * @param translator.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
- * @param translator.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
- * @param translator.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @param parsers Optional object to help translate fields into their appropriate values
+ * @param parsers.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
+ * @param parsers.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
+ * @param parsers.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @param parsers.multiString How to translate the values from `splitModifiers` into string[]s for multistring modifiers; defaults to splitting by a comma
  * @returns A `Modifiers` object corresponding to the given preference.
  */
 export function parseModifiers(
   pref: StringProperty,
-  {
-    numeric = Number,
-    str = String,
-    bool = (val) => val === "true",
-  }: Partial<{
-    numeric: (value: string) => number;
-    str: (value: string) => string;
-    bool: (value: string) => boolean;
-  }> = {},
+  parsers: Partial<ModifierParser> = {},
 ): Modifiers {
-  return parseModifierString(getProperty(pref), { numeric, str, bool });
+  return parseModifierString(getProperty(pref), parsers);
 }
 
 const overloadedStringModifier = (

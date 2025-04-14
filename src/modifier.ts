@@ -21,6 +21,7 @@ import {
   booleanModifiersSet,
   ModifierType,
   MultiStringModifier,
+  multiStringModifiersSet,
   NumericModifier,
   numericModifiersSet,
   StringModifier,
@@ -69,7 +70,7 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
 export function isMultiStringModifier(
   modifier: string,
 ): modifier is MultiStringModifier {
-  return (stringModifiersSet as Set<string>).has(modifier);
+  return (multiStringModifiersSet as Set<string>).has(modifier);
 }
 
 /**
@@ -81,7 +82,8 @@ export function isValidModifier(modifier: string): modifier is ModifierType {
   return (
     isNumericModifier(modifier) ||
     isBooleanModifier(modifier) ||
-    isStringModifier(modifier)
+    isStringModifier(modifier) ||
+    isMultiStringModifier(modifier)
   );
 }
 
@@ -141,8 +143,8 @@ export type ModifierValue<T> = T extends BooleanModifier
   ? boolean
   : T extends NumericModifier
     ? number
-    : T extends StringModifier
-      ? string
+    : T extends MultiStringModifier
+      ? string[]
       : string;
 
 export type Modifiers<T extends ModifierType = ModifierType> = Partial<{
@@ -167,6 +169,12 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
       }
+      if (isMultiStringModifier(modifier)) {
+        returnValue[modifier] = [
+          ...(modifiers1[modifier] ?? []),
+          ...(modifiers2[modifier] ?? []),
+        ];
+      }
     }
   }
 
@@ -176,11 +184,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
 /**
  * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
  *
- * @param modifierss Modifiers objects to be merged together.
+ * @param modifiers Modifiers objects to be merged together.
  * @returns A single Modifiers object obtained by merging.
  */
-export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
-  return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
+export function mergeModifiers(...modifiers: Modifiers[]): Modifiers {
+  return modifiers.reduce((a, b) => pairwiseMerge(a, b), {});
 }
 
 /**
@@ -314,6 +322,7 @@ export type ModifierParser = {
   numeric: (value: string) => number;
   str: (value: string) => string;
   bool: (value: string) => boolean;
+  multiString: (value: string) => string[];
 };
 
 function parseModifierString(
@@ -322,6 +331,7 @@ function parseModifierString(
     numeric = Number,
     str = String,
     bool = (val) => val === "true",
+    multiString = (val) => val.split(","),
   }: Partial<ModifierParser> = {},
 ): Modifiers {
   return Object.entries(splitModifiers(modifiers)).reduce(
@@ -331,7 +341,9 @@ function parseModifierString(
         ? bool(value)
         : isNumericModifier(key)
           ? numeric(value)
-          : str(value),
+          : isMultiStringModifier(key)
+            ? multiString(value)
+            : str(value),
     }),
     {} as Modifiers,
   );
@@ -340,25 +352,18 @@ function parseModifierString(
 /**
  * Translate a pref into a `Modifiers` object by wrapping mafia's `splitModifiers`
  * @param pref The name of the mafia preference in question
- * @param translator Optional object to help translate fields into their appropriate values
- * @param translator.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
- * @param translator.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
- * @param translator.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @param parsers Optional object to help translate fields into their appropriate values
+ * @param parsers.numeric How to translate the values from `splitModifiers` into numbers for numeric modifiers; defaults to Number
+ * @param parsers.str How to translate the values from `splitModifiers` into strings for string modifiers; defaults to String
+ * @param parsers.bool How to translate the values from `splitModifiers` into booleans for boolean modifiers; defaults to comparing to the string `"true"`
+ * @param parsers.multiString How to translate the values from `splitModifiers` into string[]s for multistring modifiers; defaults to splitting by a comma
  * @returns A `Modifiers` object corresponding to the given preference.
  */
 export function parseModifiers(
   pref: StringProperty,
-  {
-    numeric = Number,
-    str = String,
-    bool = (val) => val === "true",
-  }: Partial<{
-    numeric: (value: string) => number;
-    str: (value: string) => string;
-    bool: (value: string) => boolean;
-  }> = {},
+  parsers: Partial<ModifierParser> = {},
 ): Modifiers {
-  return parseModifierString(getProperty(pref), { numeric, str, bool });
+  return parseModifierString(getProperty(pref), parsers);
 }
 
 const overloadedStringModifier = (

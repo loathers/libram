@@ -170,7 +170,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
           (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
       }
       if (isMultiStringModifier(modifier)) {
-        returnValue[modifier] = [...(modifiers1[modifier] ?? []), ...(modifiers2[modifier] ?? )];
+        returnValue[modifier] = [
+          ...(modifiers1[modifier] ?? []),
+          ...(modifiers2[modifier] ?? []),
+        ];
+      }
     }
   }
 
@@ -180,11 +184,11 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
 /**
  * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
  *
- * @param modifierss Modifiers objects to be merged together.
+ * @param modifiers Modifiers objects to be merged together.
  * @returns A single Modifiers object obtained by merging.
  */
-export function mergeModifiers(...modifierss: Modifiers[]): Modifiers {
-  return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
+export function mergeModifiers(...modifiers: Modifiers[]): Modifiers {
+  return modifiers.reduce((a, b) => pairwiseMerge(a, b), {});
 }
 
 /**

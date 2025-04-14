@@ -70,7 +70,7 @@ export function isStringModifier(modifier: string): modifier is StringModifier {
 export function isMultiStringModifier(
   modifier: string,
 ): modifier is MultiStringModifier {
-  return (multiStrringModifiersSet as Set<string>).has(modifier);
+  return (multiStringModifiersSet as Set<string>).has(modifier);
 }
 
 /**
@@ -82,7 +82,8 @@ export function isValidModifier(modifier: string): modifier is ModifierType {
   return (
     isNumericModifier(modifier) ||
     isBooleanModifier(modifier) ||
-    isStringModifier(modifier)
+    isStringModifier(modifier) ||
+    isMultiStringModifier(modifier)
   );
 }
 
@@ -142,8 +143,8 @@ export type ModifierValue<T> = T extends BooleanModifier
   ? boolean
   : T extends NumericModifier
     ? number
-    : T extends StringModifier
-      ? string
+    : T extends MultiStringModifier
+      ? string[]
       : string;
 
 export type Modifiers<T extends ModifierType = ModifierType> = Partial<{
@@ -168,6 +169,8 @@ function pairwiseMerge(modifiers1: Modifiers, modifiers2: Modifiers) {
         returnValue[modifier] =
           (modifiers1[modifier] ?? false) || (modifiers2[modifier] ?? false);
       }
+      if (isMultiStringModifier(modifier)) {
+        returnValue[modifier] = [...(modifiers1[modifier] ?? []), ...(modifiers2[modifier] ?? )];
     }
   }
 
@@ -315,6 +318,7 @@ export type ModifierParser = {
   numeric: (value: string) => number;
   str: (value: string) => string;
   bool: (value: string) => boolean;
+  multiString: (value: string) => string[];
 };
 
 function parseModifierString(
@@ -323,6 +327,7 @@ function parseModifierString(
     numeric = Number,
     str = String,
     bool = (val) => val === "true",
+    multiString = (val) => val.split(","),
   }: Partial<ModifierParser> = {},
 ): Modifiers {
   return Object.entries(splitModifiers(modifiers)).reduce(
@@ -332,7 +337,9 @@ function parseModifierString(
         ? bool(value)
         : isNumericModifier(key)
           ? numeric(value)
-          : str(value),
+          : isMultiStringModifier(key)
+            ? multiString(value)
+            : str(value),
     }),
     {} as Modifiers,
   );

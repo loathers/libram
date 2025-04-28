@@ -233,7 +233,7 @@ export default class Kmail {
     let insideText: string | undefined;
     if (this.type === "normal") {
       // strip potential valentine
-      if (text.startsWith("<center>")) {
+      if (text.startsWith("<center><table>")) {
         const endIdx = text.indexOf("</center>");
         text = text.slice(endIdx + 9);
       }

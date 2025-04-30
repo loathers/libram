@@ -20699,7 +20699,7 @@ var Kmail = /* @__PURE__ */ function() {
     value: function() {
       var text = this.rawMessage, insideText;
       if (this.type === "normal") {
-        if (text.startsWith("<center>")) {
+        if (text.startsWith("<center><table>")) {
           var endIdx = text.indexOf("</center>");
           text = text.slice(endIdx + 9);
         }

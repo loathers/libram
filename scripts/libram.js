@@ -11743,9 +11743,11 @@ function have16() {
 }
 function smashParty() {
   if (have16()) {
-    var total = sum(BARRELS, import_kolmafia28.availableAmount);
-    if (!(total <= 0)) {
-      (0, import_kolmafia28.visitUrl)("inv_use.php?pwd&whichitem=8568&choice=1");
+    var total = sum(BARRELS, import_kolmafia28.availableAmount), owned = BARRELS.find(function(b) {
+      return (0, import_kolmafia28.itemAmount)(b);
+    });
+    if (!(total <= 0 || !owned)) {
+      (0, import_kolmafia28.visitUrl)("inv_use.php?pwd&whichitem=".concat(owned.id, "&choice=1"));
       for (var i = 0; i < total / 100; i++)
         (0, import_kolmafia28.runChoice)(2);
     }

@@ -71,6 +71,7 @@ const eudorae = [
   "Xi Receiver Unit",
   "New-You Club Membership Form",
   "Our Daily Candles™ order form",
+  "Black and White Apron Enrollment Form",
 ] as const;
 type Eudora = (typeof eudorae)[number];
 

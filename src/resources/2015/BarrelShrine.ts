@@ -1,4 +1,4 @@
-import { availableAmount, runChoice, visitUrl } from "kolmafia";
+import { availableAmount, itemAmount, runChoice, visitUrl } from "kolmafia";
 import { get } from "../../property.js";
 import { $items } from "../../template-string.js";
 import { sum } from "../../utils.js";
@@ -19,9 +19,10 @@ export function smashParty() {
   if (!have()) return;
 
   const total = sum(BARRELS, availableAmount);
-  if (total <= 0) return;
+  const owned = BARRELS.find((b) => itemAmount(b));
+  if (total <= 0 || !owned) return;
 
-  visitUrl("inv_use.php?pwd&whichitem=8568&choice=1");
+  visitUrl(`inv_use.php?pwd&whichitem=${owned.id}&choice=1`);
 
   for (let i = 0; i < total / 100; i++) {
     runChoice(2);

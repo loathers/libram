@@ -3,7 +3,6 @@ import { have as have_ } from "../../lib.js";
 import {
   Familiar,
   familiarEquipment,
-  refreshStatus,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -37,7 +36,7 @@ export function transform(fam: Familiar): boolean {
   visitUrl(
     `inv_equip.php?which=2&action=equip&whichitem=${toInt(equipment)}&pwd`,
   );
-  refreshStatus();
+  visitUrl("charpane.php"); // This is the only way to get Mafia to update it's pref
   if (currentFamiliar() !== fam) {
     return false;
   }

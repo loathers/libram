@@ -146,7 +146,7 @@ const underscoredQuests = ["_questPartyFair", "_questPirateRealm"]; // Most pref
  * @returns Whether the supplied property should be coerced into a QuestStep
  */
 export function isQuestProperty(property: string): boolean {
-  return property.startsWith('quest') || underscoredQuests.includes(property)
+  return property.startsWith("quest") || underscoredQuests.includes(property);
 }
 
 async function main() {
@@ -168,7 +168,7 @@ async function main() {
     PhylumProperty: [],
     ItemProperty: [],
     ItemNumericProperty: [],
-    QuestProperty: []
+    QuestProperty: [],
   };
 
   for (const prop of props) {
@@ -200,7 +200,9 @@ async function main() {
       if (hasNumericDefault(property, defaultValue)) {
         propTypes.ItemNumericProperty.push(property);
       }
-    }else if (isQuestProperty(property)) { propTypes.QuestProperty.push(property) } else if (isNumericOrStringProperty(property)) {
+    } else if (isQuestProperty(property)) {
+      propTypes.QuestProperty.push(property);
+    } else if (isNumericOrStringProperty(property)) {
       propTypes.NumericOrStringProperty.push(property);
     } else if (!defaultValue) {
       propTypes.StringProperty.push(property);

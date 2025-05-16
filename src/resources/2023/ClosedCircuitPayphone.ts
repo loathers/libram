@@ -8,10 +8,11 @@ import {
   runChoice,
   use,
 } from "kolmafia";
-import { directlyUse, have as have_, questStep } from "../../lib.js";
+import { directlyUse, have as have_ } from "../../lib.js";
 import { get, withChoice } from "../../property.js";
 import { $item, $location, $monster } from "../../template-string.js";
 import { makeByXFunction, maxBy } from "../../utils.js";
+import { QuestState } from "../../propertyTyping.js";
 
 const item = $item`closed-circuit pay phone`;
 
@@ -162,9 +163,9 @@ export const byIngress = makeByXFunction(currentIngress);
  * @returns Whether we successfully submitted your Rufus quest
  */
 export function submitQuest(): boolean {
-  if (questStep("questRufus") === 1) {
+  if (get("questRufus") === 1) {
     withChoice(1498, 1, () => use(item));
-    return questStep("questRufus") === -1;
+    return get("questRufus") === QuestState.UNSTARTED;
   }
   return false;
 }

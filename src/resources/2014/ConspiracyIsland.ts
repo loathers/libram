@@ -1,8 +1,9 @@
 import { visitUrl, runChoice, Location, handlingChoice } from "kolmafia";
-import { questStep } from "../../lib.js";
 import { Requirement } from "../../maximize.js";
 import { get } from "../../property.js";
 import { $location, $item } from "../../template-string.js";
+import { QuestProperty } from "../../propertyTypes.js";
+import { QuestState } from "../../propertyTyping.js";
 
 class ConspiracyQuest {
   prop: string;
@@ -14,7 +15,7 @@ class ConspiracyQuest {
   requirements: Requirement;
 
   constructor(
-    prop: string,
+    prop: QuestProperty,
     reward: number,
     complete: number,
     location: Location,
@@ -32,11 +33,11 @@ class ConspiracyQuest {
   }
 
   isStarted() {
-    return questStep(this.prop) >= 0;
+    return get(this.prop) >= QuestState.STARTED;
   }
 
   isFinished() {
-    return questStep(this.prop) === 999;
+    return get(this.prop) === QuestState.FINISHED;
   }
 
   isActive() {
@@ -44,7 +45,7 @@ class ConspiracyQuest {
   }
 
   isReadyToTurnIn() {
-    return questStep(this.prop) === this.complete;
+    return get(this.prop) === this.complete;
   }
 }
 

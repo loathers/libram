@@ -106,6 +106,7 @@ import {
   ValueOf,
 } from "./utils.js";
 import { BooleanProperty, StringProperty } from "./propertyTypes.js";
+import { QuestState } from "./propertyTyping.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -777,15 +778,16 @@ export function getPlayerFromIdOrName(
 
 /**
  * Determine the step as a number for a given quest property.
- *
+ * @deprecated You can now use `get` for quests!
  * @param questName Name of quest property to check.
  * @returns Quest step
  */
 export function questStep(questName: string): number {
   const stringStep = get(questName);
-  if (stringStep === "unstarted") return -1;
-  else if (stringStep === "started") return 0;
-  else if (stringStep === "finished" || stringStep === "") return 999;
+  if (stringStep === "unstarted") return QuestState.UNSTARTED;
+  else if (stringStep === "started") return QuestState.STARTED;
+  else if (stringStep === "finished") return QuestState.FINISHED;
+  else if (stringStep === "") return QuestState.BLANK;
   else {
     if (stringStep.substring(0, 4) !== "step") {
       throw new Error("Quest state parsing error.");

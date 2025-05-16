@@ -48,6 +48,7 @@ import {
   NumericOrStringProperty,
   NumericProperty,
   PhylumProperty,
+  QuestProperty,
   StatProperty,
   StringProperty,
 } from "./propertyTypes.js";
@@ -60,9 +61,12 @@ import {
   isNumericOrStringProperty,
   isNumericProperty,
   isPhylumProperty,
+  isQuestProperty,
   isStatProperty,
   isStringProperty,
   KnownProperty,
+  QuestState,
+  QuestStep,
 } from "./propertyTyping.js";
 
 const createPropertyGetter =
@@ -128,6 +132,19 @@ export const getCommaSeparated = createPropertyGetter((value) =>
 export const getBoolean = createPropertyGetter((value) => value === "true");
 
 export const getNumber = createPropertyGetter((value) => Number(value));
+
+export const getQuest = createPropertyGetter((value): QuestState => {
+  if (value === "unstarted") return QuestState.UNSTARTED;
+  else if (value === "started") return QuestState.STARTED;
+  else if (value === "finished") return QuestState.FINISHED;
+  else if (value === "") return QuestState.BLANK;
+  else {
+    if (value.substring(0, 4) !== "step") {
+      throw new Error("Quest state parsing error.");
+    }
+    return parseInt(value.substring(4), 10);
+  }
+});
 
 export const getBounty = createMafiaClassPropertyGetter(Bounty, toBounty);
 
@@ -197,6 +214,8 @@ export function get(property: PhylumProperty): Phylum | null;
 export function get(property: PhylumProperty, _default: Phylum): Phylum;
 export function get(property: ItemProperty): Item | null;
 export function get(property: ItemProperty, _default: Item): Item;
+export function get(property: QuestProperty): QuestStep;
+export function get(property: QuestProperty, _default: QuestStep): QuestStep;
 export function get(property: string, _default: Location): Location;
 export function get(property: string, _default: Monster): Monster;
 export function get(property: string, _default: Familiar): Familiar;
@@ -234,6 +253,8 @@ export function get(property: string, _default?: unknown): unknown {
     return getPhylum(property, _default as Phylum | undefined);
   } else if (isItemProperty(property)) {
     return getItem(property, _default as Item | undefined);
+  } else if (isQuestProperty(property)) {
+    return getQuest(property, _default as QuestState | undefined);
   } else if (isStringProperty(property)) {
     return value === "" && _default !== undefined ? _default : value;
   }

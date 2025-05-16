@@ -85,7 +85,7 @@ import {
 } from "kolmafia";
 
 import logger from "./logger.js";
-import { get } from "./property.js";
+import { get, getQuest } from "./property.js";
 import {
   $class,
   $effect,
@@ -105,8 +105,11 @@ import {
   Tuple,
   ValueOf,
 } from "./utils.js";
-import { BooleanProperty, StringProperty } from "./propertyTypes.js";
-import { QuestState } from "./propertyTyping.js";
+import {
+  BooleanProperty,
+  StringProperty,
+  QuestProperty,
+} from "./propertyTypes.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -783,17 +786,7 @@ export function getPlayerFromIdOrName(
  * @returns Quest step
  */
 export function questStep(questName: string): number {
-  const stringStep = get(questName);
-  if (stringStep === "unstarted") return QuestState.UNSTARTED;
-  else if (stringStep === "started") return QuestState.STARTED;
-  else if (stringStep === "finished") return QuestState.FINISHED;
-  else if (stringStep === "") return QuestState.BLANK;
-  else {
-    if (stringStep.substring(0, 4) !== "step") {
-      throw new Error("Quest state parsing error.");
-    }
-    return parseInt(stringStep.substring(4), 10);
-  }
+  return getQuest(questName as QuestProperty);
 }
 
 export class EnsureError extends Error {

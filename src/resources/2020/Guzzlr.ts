@@ -11,6 +11,7 @@ import { have as haveItem } from "../../lib.js";
 import { get, withChoice } from "../../property.js";
 import { $item, $items } from "../../template-string.js";
 import { invertMap, maxBy } from "../../utils.js";
+import { QuestState } from "../../propertyTyping.js";
 
 const item = $item`Guzzlr tablet`;
 /**
@@ -37,7 +38,7 @@ function useTabletWithChoice(option: number) {
  * @returns Whether you currently have an active Guzzlr quest
  */
 export function isQuestActive(): boolean {
-  return get("questGuzzlr") !== "unstarted";
+  return get("questGuzzlr") !== QuestState.UNSTARTED;
 }
 
 /**

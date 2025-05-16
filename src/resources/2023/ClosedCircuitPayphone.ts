@@ -125,7 +125,7 @@ export function chooseQuest(
     items: Item;
   }) => 1 | 2 | 3 | 4,
 ): boolean {
-  if (get("questRufus") !== "unstarted") return false;
+  if (get("questRufus") !== QuestState.UNSTARTED) return false;
   if (!have()) return false;
   withChoice(1497, "", () => {
     directlyUse(item);
@@ -138,7 +138,7 @@ export function chooseQuest(
     );
   });
 
-  return get("questRufus") !== "unstarted";
+  return get("questRufus") !== QuestState.UNSTARTED;
 }
 
 /**

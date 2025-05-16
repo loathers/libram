@@ -6,7 +6,7 @@ import { QuestProperty } from "../../propertyTypes.js";
 import { QuestState } from "../../propertyTyping.js";
 
 class ConspiracyQuest {
-  prop: string;
+  prop: QuestProperty;
   reward: number;
   complete: number;
   /** Location in which quest is completed */

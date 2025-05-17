@@ -149,7 +149,7 @@ export const getQuest = createPropertyGetter((value, property): QuestState => {
           `Quest state parsing error: ${property} was ${value}, which is an unexpected format!`,
         );
       }
-      return parseInt(value.substring(4), 10);
+      return Number(value.substring(4));
     }
   }
 });

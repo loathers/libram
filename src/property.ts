@@ -134,15 +134,21 @@ export const getBoolean = createPropertyGetter((value) => value === "true");
 export const getNumber = createPropertyGetter((value) => Number(value));
 
 export const getQuest = createPropertyGetter((value): QuestState => {
-  if (value === "unstarted") return QuestState.UNSTARTED;
-  else if (value === "started") return QuestState.STARTED;
-  else if (value === "finished") return QuestState.FINISHED;
-  else if (value === "") return QuestState.BLANK;
-  else {
-    if (value.substring(0, 4) !== "step") {
-      throw new Error("Quest state parsing error.");
+  switch (value) {
+    case "unstarted":
+      return QuestState.UNSTARTED;
+    case "started":
+      return QuestState.STARTED;
+    case "finished":
+      return QuestState.FINISHED;
+    case "":
+      return QuestState.BLANK;
+    default: {
+      if (value.substring(0, 4) !== "step") {
+        throw new Error("Quest state parsing error.");
+      }
+      return parseInt(value.substring(4), 10);
     }
-    return parseInt(value.substring(4), 10);
   }
 });
 

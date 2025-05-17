@@ -133,7 +133,7 @@ export const getBoolean = createPropertyGetter((value) => value === "true");
 
 export const getNumber = createPropertyGetter((value) => Number(value));
 
-export const getQuest = createPropertyGetter((value): QuestState => {
+export const getQuest = createPropertyGetter((value, property): QuestState => {
   switch (value) {
     case "unstarted":
       return QuestState.UNSTARTED;
@@ -145,7 +145,9 @@ export const getQuest = createPropertyGetter((value): QuestState => {
       return QuestState.BLANK;
     default: {
       if (value.substring(0, 4) !== "step") {
-        throw new Error("Quest state parsing error.");
+        throw new Error(
+          `Quest state parsing error: ${property} was ${value}, which is an unexpected format!`,
+        );
       }
       return parseInt(value.substring(4), 10);
     }

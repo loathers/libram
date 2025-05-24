@@ -19744,36 +19744,6 @@ function countFreeMines() {
 init_kolmafia_polyfill();
 var import_kolmafia86 = require("kolmafia");
 var _templateObject576, _templateObject2143, _templateObject3131, _templateObject4115, _templateObject577, _templateObject659, _templateObject754, _templateObject845, _templateObject935, _templateObject1029, _templateObject1127, _templateObject1226, _templateObject1324, _templateObject1422, _OscusSoda, _templateObject1520, _templateObject1620, _MagicalSausages, _templateObject1720, _templateObject1820, _templateObject1917, _templateObject2017, _templateObject2144, _templateObject2219, _templateObject2318, _templateObject2417, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2813, _templateObject2913, _templateObject3013, _templateObject3132, _templateObject3215;
-function _slicedToArray26(r, e) {
-  return _arrayWithHoles26(r) || _iterableToArrayLimit26(r, e) || _unsupportedIterableToArray39(r, e) || _nonIterableRest26();
-}
-function _nonIterableRest26() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _iterableToArrayLimit26(r, l) {
-  var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
-  if (t != null) {
-    var e, n, i, u, a = [], f = !0, o = !1;
-    try {
-      if (i = (t = t.call(r)).next, l === 0) {
-        if (Object(t) !== t) return;
-        f = !1;
-      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0) ;
-    } catch (r2) {
-      o = !0, n = r2;
-    } finally {
-      try {
-        if (!f && t.return != null && (u = t.return(), Object(u) !== u)) return;
-      } finally {
-        if (o) throw n;
-      }
-    }
-    return a;
-  }
-}
-function _arrayWithHoles26(r) {
-  if (Array.isArray(r)) return r;
-}
 function _toConsumableArray25(r) {
   return _arrayWithoutHoles25(r) || _iterableToArray25(r) || _unsupportedIterableToArray39(r) || _nonIterableSpread25();
 }
@@ -20209,18 +20179,9 @@ var MoodElement = /* @__PURE__ */ function() {
     key: "effect",
     value: function(_effect, gainEffect) {
       var skill = (0, import_kolmafia86.toSkill)(_effect);
-      if (!gainEffect && skill !== $skill.none)
-        this.skill(skill);
-      else {
-        var _find, aprilSkill = (_find = _toConsumableArray25(aprilShieldEffects.entries()).find(function(_ref) {
-          var _ref2 = _slicedToArray26(_ref, 2), ef = _ref2[1];
-          return ef === _effect;
-        })) === null || _find === void 0 ? void 0 : _find[0];
-        aprilSkill ? this.skill(aprilSkill, {
-          requireAprilShield: !0
-        }) : this.elements.push(new CustomMoodElement(_effect, gainEffect));
-      }
-      return this;
+      return _toConsumableArray25(aprilShieldEffects.values()).includes(_effect) ? this.skill(skill, {
+        requireAprilShield: !0
+      }) : gainEffect ? (this.elements.push(new CustomMoodElement(_effect, gainEffect)), this) : this.skill(skill);
     }
     /**
      * Add a potion to the mood.
@@ -20454,13 +20415,13 @@ function _iterableToArray26(r) {
 function _arrayWithoutHoles26(r) {
   if (Array.isArray(r)) return _arrayLikeToArray40(r);
 }
-function _slicedToArray27(r, e) {
-  return _arrayWithHoles27(r) || _iterableToArrayLimit27(r, e) || _unsupportedIterableToArray40(r, e) || _nonIterableRest27();
+function _slicedToArray26(r, e) {
+  return _arrayWithHoles26(r) || _iterableToArrayLimit26(r, e) || _unsupportedIterableToArray40(r, e) || _nonIterableRest26();
 }
-function _nonIterableRest27() {
+function _nonIterableRest26() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit27(r, l) {
+function _iterableToArrayLimit26(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -20481,7 +20442,7 @@ function _iterableToArrayLimit27(r, l) {
     return a;
   }
 }
-function _arrayWithHoles27(r) {
+function _arrayWithHoles26(r) {
   if (Array.isArray(r)) return r;
 }
 function _createForOfIteratorHelper14(r, e) {
@@ -20542,7 +20503,7 @@ function buildUrl(path3) {
       var param = _step.value;
       if (param.length !== 2)
         throw new Error("Query parameter array may only contain pair elements");
-      var _param = _slicedToArray27(param, 2), _key = _param[0], _value = _param[1];
+      var _param = _slicedToArray26(param, 2), _key = _param[0], _value = _param[1];
       chunks.push(sep), sep = "&", chunks.push(encodeURIComponent(_key)), _value !== EMPTY_VALUE && (chunks.push("="), chunks.push(encodeURIComponent(_value)));
     }
   } catch (err) {
@@ -20608,10 +20569,10 @@ function _iterableToArray27(r) {
 function _arrayWithoutHoles27(r) {
   if (Array.isArray(r)) return _arrayLikeToArray41(r);
 }
-function _slicedToArray28(r, e) {
-  return _arrayWithHoles28(r) || _iterableToArrayLimit28(r, e) || _unsupportedIterableToArray41(r, e) || _nonIterableRest28();
+function _slicedToArray27(r, e) {
+  return _arrayWithHoles27(r) || _iterableToArrayLimit27(r, e) || _unsupportedIterableToArray41(r, e) || _nonIterableRest27();
 }
-function _nonIterableRest28() {
+function _nonIterableRest27() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _unsupportedIterableToArray41(r, a) {
@@ -20626,7 +20587,7 @@ function _arrayLikeToArray41(r, a) {
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _iterableToArrayLimit28(r, l) {
+function _iterableToArrayLimit27(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -20647,7 +20608,7 @@ function _iterableToArrayLimit28(r, l) {
     return a;
   }
 }
-function _arrayWithHoles28(r) {
+function _arrayWithHoles27(r) {
   if (Array.isArray(r)) return r;
 }
 function _classCallCheck19(a, n) {
@@ -20704,13 +20665,13 @@ var Kmail = /* @__PURE__ */ function() {
           text = text.slice(endIdx + 9);
         }
       } else if (this.type === "giftshop") {
-        var _text$split = text.split("<p>Inside Note:<p>"), _text$split2 = _slicedToArray28(_text$split, 2);
+        var _text$split = text.split("<p>Inside Note:<p>"), _text$split2 = _slicedToArray27(_text$split, 2);
         text = _text$split2[0], insideText = _text$split2[1];
       }
       var split = function(s) {
         var idx = s.indexOf("<");
         return idx === -1 ? [s] : [s.slice(0, idx), s.slice(idx)];
-      }, _split = split(text), _split2 = _slicedToArray28(_split, 2), outsideNote = _split2[0], _split2$ = _split2[1], outsideAttachments = _split2$ === void 0 ? null : _split2$, _ref = insideText !== void 0 ? split(insideText) : [], _ref2 = _slicedToArray28(_ref, 2), _ref2$ = _ref2[0], insideNote = _ref2$ === void 0 ? null : _ref2$, _ref2$2 = _ref2[1], insideAttachments = _ref2$2 === void 0 ? null : _ref2$2;
+      }, _split = split(text), _split2 = _slicedToArray27(_split, 2), outsideNote = _split2[0], _split2$ = _split2[1], outsideAttachments = _split2$ === void 0 ? null : _split2$, _ref = insideText !== void 0 ? split(insideText) : [], _ref2 = _slicedToArray27(_ref, 2), _ref2$ = _ref2[0], insideNote = _ref2$ === void 0 ? null : _ref2$, _ref2$2 = _ref2[1], insideAttachments = _ref2$2 === void 0 ? null : _ref2$2;
       return {
         outsideNote: (0, import_html_entities2.decode)(outsideNote),
         outsideAttachments: outsideAttachments,
@@ -20853,14 +20814,14 @@ var Kmail = /* @__PURE__ */ function() {
     key: "_genericSend",
     value: function(to, message, items, meat, chunkSize, constructUrl, successString) {
       var m = meat, sendableItems = _toConsumableArray27(arrayToCountedMap(items).entries()).filter(function(_ref3) {
-        var _ref4 = _slicedToArray28(_ref3, 1), item15 = _ref4[0];
+        var _ref4 = _slicedToArray27(_ref3, 1), item15 = _ref4[0];
         return (0, import_kolmafia89.isGiftable)(item15);
       }), result = !0, chunks = chunk(sendableItems, chunkSize), _iterator = _createForOfIteratorHelper15(chunks.length > 0 ? chunks : [null]), _step;
       try {
         var _loop = function() {
           var _c$length, c = _step.value, itemsQuery = {};
           c !== null && c.forEach(function(_ref5, i) {
-            var _ref6 = _slicedToArray28(_ref5, 2), item15 = _ref6[0], quantity = _ref6[1];
+            var _ref6 = _slicedToArray27(_ref5, 2), item15 = _ref6[0], quantity = _ref6[1];
             itemsQuery["whichitem".concat(i + 1)] = item15.id, itemsQuery["howmany".concat(i + 1)] = quantity;
           });
           var _constructUrl = constructUrl({
@@ -21042,13 +21003,13 @@ function _createForOfIteratorHelper16(r, e) {
     }
   } };
 }
-function _slicedToArray29(r, e) {
-  return _arrayWithHoles29(r) || _iterableToArrayLimit29(r, e) || _unsupportedIterableToArray42(r, e) || _nonIterableRest29();
+function _slicedToArray28(r, e) {
+  return _arrayWithHoles28(r) || _iterableToArrayLimit28(r, e) || _unsupportedIterableToArray42(r, e) || _nonIterableRest28();
 }
-function _nonIterableRest29() {
+function _nonIterableRest28() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit29(r, l) {
+function _iterableToArrayLimit28(r, l) {
   var t = r == null ? null : typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (t != null) {
     var e, n, i, u, a = [], f = !0, o = !1;
@@ -21069,7 +21030,7 @@ function _iterableToArrayLimit29(r, l) {
     return a;
   }
 }
-function _arrayWithHoles29(r) {
+function _arrayWithHoles28(r) {
   if (Array.isArray(r)) return r;
 }
 function _taggedTemplateLiteral80(e, t) {
@@ -21109,7 +21070,7 @@ function mySessionItemsWrapper() {
   }, itemMappings = new Map([].concat(_toConsumableArray28(foldable($item(_templateObject578 || (_templateObject578 = _taggedTemplateLiteral80(["liar's pants"]))))), _toConsumableArray28(foldable($item(_templateObject2145 || (_templateObject2145 = _taggedTemplateLiteral80(["ice pick"]))))), _toConsumableArray28(manyToOne($item(_templateObject3133 || (_templateObject3133 = _taggedTemplateLiteral80(["Spooky Putty sheet"]))), [$item(_templateObject4116 || (_templateObject4116 = _taggedTemplateLiteral80(["Spooky Putty monster"])))].concat(_toConsumableArray28(getFoldGroup($item(_templateObject579 || (_templateObject579 = _taggedTemplateLiteral80(["Spooky Putty sheet"])))))))), _toConsumableArray28(foldable($item(_templateObject660 || (_templateObject660 = _taggedTemplateLiteral80(["stinky cheese sword"]))))), _toConsumableArray28(foldable($item(_templateObject755 || (_templateObject755 = _taggedTemplateLiteral80(["naughty paper shuriken"]))))), _toConsumableArray28(foldable($item(_templateObject846 || (_templateObject846 = _taggedTemplateLiteral80(["Loathing Legion knife"]))))), _toConsumableArray28(foldable($item(_templateObject936 || (_templateObject936 = _taggedTemplateLiteral80(["deceased crimbo tree"]))))), _toConsumableArray28(foldable($item(_templateObject1030 || (_templateObject1030 = _taggedTemplateLiteral80(["makeshift turban"]))))), _toConsumableArray28(foldable($item(_templateObject1128 || (_templateObject1128 = _taggedTemplateLiteral80(["turtle wax shield"]))))), _toConsumableArray28(foldable($item(_templateObject1227 || (_templateObject1227 = _taggedTemplateLiteral80(["metallic foil bow"]))))), _toConsumableArray28(foldable($item(_templateObject1325 || (_templateObject1325 = _taggedTemplateLiteral80(["ironic moustache"]))))), _toConsumableArray28(foldable($item(_templateObject1423 || (_templateObject1423 = _taggedTemplateLiteral80(["bugged balaclava"]))))), _toConsumableArray28(foldable($item(_templateObject1521 || (_templateObject1521 = _taggedTemplateLiteral80(["toggle switch (Bartend)"]))))), _toConsumableArray28(foldable($item(_templateObject1621 || (_templateObject1621 = _taggedTemplateLiteral80(["mushroom cap"]))))), _toConsumableArray28(manyToOne($item(_templateObject1721 || (_templateObject1721 = _taggedTemplateLiteral80(["can of Rain-Doh"]))), $items(_templateObject1821 || (_templateObject1821 = _taggedTemplateLiteral80(["empty Rain-Doh can"]))))), _toConsumableArray28(manyToOne($item(_templateObject1918 || (_templateObject1918 = _taggedTemplateLiteral80(["meteorite fragment"]))), $items(_templateObject2018 || (_templateObject2018 = _taggedTemplateLiteral80(["meteorite earring, meteorite necklace, meteorite ring"]))))), _toConsumableArray28(manyToOne($item(_templateObject2146 || (_templateObject2146 = _taggedTemplateLiteral80(["Sneaky Pete's leather jacket"]))), $items(_templateObject2220 || (_templateObject2220 = _taggedTemplateLiteral80(["Sneaky Pete's leather jacket (collar popped)"]))))), _toConsumableArray28(manyToOne($item(_templateObject2319 || (_templateObject2319 = _taggedTemplateLiteral80(["Boris's Helm"]))), $items(_templateObject2418 || (_templateObject2418 = _taggedTemplateLiteral80(["Boris's Helm (askew)"]))))), _toConsumableArray28(manyToOne($item(_templateObject2516 || (_templateObject2516 = _taggedTemplateLiteral80(["Jarlsberg's pan"]))), $items(_templateObject2616 || (_templateObject2616 = _taggedTemplateLiteral80(["Jarlsberg's pan (Cosmic portal mode)"]))))), _toConsumableArray28(manyToOne($item(_templateObject2716 || (_templateObject2716 = _taggedTemplateLiteral80(["tiny plastic sword"]))), $items(_templateObject2814 || (_templateObject2814 = _taggedTemplateLiteral80(["grogtini, bodyslam, dirty martini, vesper, cherry bomb, sangria del diablo"]))))), _toConsumableArray28(manyToOne($item(_templateObject2914 || (_templateObject2914 = _taggedTemplateLiteral80(["earthenware muffin tin"]))), $items(_templateObject3014 || (_templateObject3014 = _taggedTemplateLiteral80(["blueberry muffin, bran muffin, chocolate chip muffin"]))))), _toConsumableArray28(manyToOne($item(_templateObject3134 || (_templateObject3134 = _taggedTemplateLiteral80(["ChibiBuddy\u2122 (on)"]))), $items(_templateObject3216 || (_templateObject3216 = _taggedTemplateLiteral80(["ChibiBuddy\u2122 (off)"]))))))), inventory = /* @__PURE__ */ new Map(), invLocations = sessionOnly ? [import_kolmafia91.mySessionItems] : [import_kolmafia91.mySessionItems, import_kolmafia91.getCloset, import_kolmafia91.getDisplay, import_kolmafia91.getStorage];
   if (!sessionOnly)
     for (var _i = 0, _Object$entries = Object.entries((0, import_kolmafia91.getCampground)()); _i < _Object$entries.length; _i++) {
-      var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray29(_Object$entries[_i], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1];
+      var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray28(_Object$entries[_i], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1];
       if (quantity) {
         var item15 = (0, import_kolmafia91.toItem)(itemStr);
         if (item15 !== $item(_templateObject3314 || (_templateObject3314 = _taggedTemplateLiteral80(["big rock"])))) {
@@ -21120,7 +21081,7 @@ function mySessionItemsWrapper() {
     }
   for (var _i2 = 0, _invLocations = invLocations; _i2 < _invLocations.length; _i2++)
     for (var inventoryFunc = _invLocations[_i2], _i3 = 0, _Object$entries2 = Object.entries(inventoryFunc()); _i3 < _Object$entries2.length; _i3++) {
-      var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray29(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1];
+      var _itemMappings$get2, _inventory$get2, _Object$entries2$_i = _slicedToArray28(_Object$entries2[_i3], 2), _itemStr = _Object$entries2$_i[0], _quantity = _Object$entries2$_i[1];
       if (_quantity) {
         var _item = (0, import_kolmafia91.toItem)(_itemStr), _mappedItem = (_itemMappings$get2 = itemMappings.get(_item)) !== null && _itemMappings$get2 !== void 0 ? _itemMappings$get2 : _item;
         inventory.set(_mappedItem, _quantity + ((_inventory$get2 = inventory.get(_mappedItem)) !== null && _inventory$get2 !== void 0 ? _inventory$get2 : 0)), inventory.get(_mappedItem) === 0 && inventory.delete(_mappedItem);
@@ -21142,7 +21103,7 @@ function inventoryOperation(a, b, op) {
   }
   var diffEntries = _toConsumableArray28(difference.entries());
   return new Map(diffEntries.filter(function(_ref) {
-    var _ref2 = _slicedToArray29(_ref, 2), value = _ref2[1];
+    var _ref2 = _slicedToArray28(_ref, 2), value = _ref2[1];
     return value !== 0;
   }));
 }
@@ -21170,7 +21131,7 @@ var Session = /* @__PURE__ */ function() {
     key: "value",
     value: function(itemValue) {
       var turns2 = this.totalTurns, meat = Math.floor(this.meat), itemDetails = _toConsumableArray28(this.items.entries()).map(function(_ref3) {
-        var _ref4 = _slicedToArray29(_ref3, 2), item15 = _ref4[0], quantity = _ref4[1];
+        var _ref4 = _slicedToArray28(_ref3, 2), item15 = _ref4[0], quantity = _ref4[1];
         return {
           item: item15,
           quantity: quantity,
@@ -21294,7 +21255,7 @@ var Session = /* @__PURE__ */ function() {
       var fileValue = (0, import_kolmafia91.fileToBuffer)(Session2.getFilepath(filename));
       if (fileValue.length > 0) {
         var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref5) {
-          var _ref6 = _slicedToArray29(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
+          var _ref6 = _slicedToArray28(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
           return [(0, import_kolmafia91.toItem)(itemStr), quantity];
         });
         return new Session2(val.meat, new Map(parsedItems), (_val$totalTurns = val.totalTurns) !== null && _val$totalTurns !== void 0 ? _val$totalTurns : 0);

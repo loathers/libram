@@ -428,15 +428,12 @@ export class Mood {
    */
   effect(effect: Effect, gainEffect?: () => void): Mood {
     const skill = toSkill(effect);
-    if (!gainEffect && skill !== $skill.none) {
-      this.skill(skill);
-    } else {
-      const aprilSkill = [...aprilShieldEffects.entries()].find(
-        ([, ef]) => ef === effect,
-      )?.[0];
-      if (aprilSkill) this.skill(aprilSkill, { requireAprilShield: true });
-      else this.elements.push(new CustomMoodElement(effect, gainEffect));
+
+    if ([...aprilShieldEffects.values()].includes(effect)) {
+      return this.skill(skill, { requireAprilShield: true });
     }
+    if (!gainEffect) return this.skill(skill);
+    this.elements.push(new CustomMoodElement(effect, gainEffect));
     return this;
   }
 

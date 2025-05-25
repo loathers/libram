@@ -432,7 +432,7 @@ export class Mood {
     if ([...aprilShieldEffects.values()].includes(effect)) {
       return this.skill(skill, { requireAprilShield: true });
     }
-    if (!gainEffect) return this.skill(skill);
+    if (!gainEffect && skill !== $skill.none) return this.skill(skill);
     this.elements.push(new CustomMoodElement(effect, gainEffect));
     return this;
   }

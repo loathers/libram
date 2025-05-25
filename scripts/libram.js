@@ -20181,7 +20181,7 @@ var MoodElement = /* @__PURE__ */ function() {
       var skill = (0, import_kolmafia86.toSkill)(_effect);
       return _toConsumableArray25(aprilShieldEffects.values()).includes(_effect) ? this.skill(skill, {
         requireAprilShield: !0
-      }) : gainEffect ? (this.elements.push(new CustomMoodElement(_effect, gainEffect)), this) : this.skill(skill);
+      }) : !gainEffect && skill !== $skill.none ? this.skill(skill) : (this.elements.push(new CustomMoodElement(_effect, gainEffect)), this);
     }
     /**
      * Add a potion to the mood.

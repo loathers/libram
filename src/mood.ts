@@ -26,6 +26,7 @@ import {
   turnsPerCast,
   use,
   useSkill,
+  weaponHands,
 } from "kolmafia";
 import { getActiveSongs, have, isSong, unequip } from "./lib.js";
 import { get } from "./property.js";
@@ -172,6 +173,7 @@ class SkillMoodElement extends MoodElement {
       (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`,
     );
     const initialOffhand = equippedItem($slot`off-hand`);
+    const initialWeapon = equippedItem($slot`weapon`);
     if (initialTurns >= ensureTurns) return true;
     if (!haveSkill(this.skill)) return false;
 
@@ -198,6 +200,7 @@ class SkillMoodElement extends MoodElement {
     try {
       while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
         if (this.options.requireAprilShield && !shieldSlot) {
+          if (weaponHands(initialWeapon) > 1) unequip(initialWeapon);
           if (!equip($item`April Shower Thoughts shield`)) return false;
         }
 
@@ -229,6 +232,8 @@ class SkillMoodElement extends MoodElement {
       if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
       if (initialOffhand !== equippedItem($slot`off-hand`))
         equip(initialOffhand, $slot`off-hand`);
+      if (initialWeapon !== equippedItem($slot`weapon`))
+        equip(initialWeapon, $slot`weapon`);
     }
   }
 }

@@ -19743,7 +19743,7 @@ function countFreeMines() {
 // src/mood.ts
 init_kolmafia_polyfill();
 var import_kolmafia86 = require("kolmafia");
-var _templateObject576, _templateObject2143, _templateObject3131, _templateObject4115, _templateObject577, _templateObject659, _templateObject754, _templateObject845, _templateObject935, _templateObject1029, _templateObject1127, _templateObject1226, _templateObject1324, _templateObject1422, _OscusSoda, _templateObject1520, _templateObject1620, _MagicalSausages, _templateObject1720, _templateObject1820, _templateObject1917, _templateObject2017, _templateObject2144, _templateObject2219, _templateObject2318, _templateObject2417, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2813, _templateObject2913, _templateObject3013, _templateObject3132, _templateObject3215;
+var _templateObject576, _templateObject2143, _templateObject3131, _templateObject4115, _templateObject577, _templateObject659, _templateObject754, _templateObject845, _templateObject935, _templateObject1029, _templateObject1127, _templateObject1226, _templateObject1324, _templateObject1422, _OscusSoda, _templateObject1520, _templateObject1620, _MagicalSausages, _templateObject1720, _templateObject1820, _templateObject1917, _templateObject2017, _templateObject2144, _templateObject2219, _templateObject2318, _templateObject2417, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2813, _templateObject2913, _templateObject3013, _templateObject3132, _templateObject3215, _templateObject3314, _templateObject3413, _templateObject3512;
 function _toConsumableArray25(r) {
   return _arrayWithoutHoles25(r) || _iterableToArray25(r) || _unsupportedIterableToArray39(r) || _nonIterableSpread25();
 }
@@ -20012,10 +20012,10 @@ var MoodElement = /* @__PURE__ */ function() {
       if (this.effect === $effect.none) return !1;
       var initialTurns = (0, import_kolmafia86.haveEffect)(this.effect), shieldSlot = import_kolmafia86.Slot.all().find(function(slot) {
         return (0, import_kolmafia86.equippedItem)(slot) === $item(_templateObject2318 || (_templateObject2318 = _taggedTemplateLiteral79(["April Shower Thoughts shield"])));
-      }), initialOffhand = (0, import_kolmafia86.equippedItem)($slot(_templateObject2417 || (_templateObject2417 = _taggedTemplateLiteral79(["off-hand"]))));
+      }), initialOffhand = (0, import_kolmafia86.equippedItem)($slot(_templateObject2417 || (_templateObject2417 = _taggedTemplateLiteral79(["off-hand"])))), initialWeapon = (0, import_kolmafia86.equippedItem)($slot(_templateObject2515 || (_templateObject2515 = _taggedTemplateLiteral79(["weapon"]))));
       if (initialTurns >= ensureTurns) return !0;
       if (!(0, import_kolmafia86.haveSkill)(this.skill)) return !1;
-      if (this.aprilShieldRestricted && shieldSlot && unequip($item(_templateObject2515 || (_templateObject2515 = _taggedTemplateLiteral79(["April Shower Thoughts shield"])))), mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
+      if (this.aprilShieldRestricted && shieldSlot && unequip($item(_templateObject2615 || (_templateObject2615 = _taggedTemplateLiteral79(["April Shower Thoughts shield"])))), mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
         var activeSongs = getActiveSongs(), _iterator = _createForOfIteratorHelper13(activeSongs), _step;
         try {
           var _loop = function() {
@@ -20036,7 +20036,7 @@ var MoodElement = /* @__PURE__ */ function() {
       var oldRemainingCasts = -1, remainingCasts = Math.ceil((ensureTurns - (0, import_kolmafia86.haveEffect)(this.effect)) / (0, import_kolmafia86.turnsPerCast)(this.skill));
       try {
         for (; remainingCasts > 0 && oldRemainingCasts !== remainingCasts; ) {
-          if (this.options.requireAprilShield && !shieldSlot && !(0, import_kolmafia86.equip)($item(_templateObject2615 || (_templateObject2615 = _taggedTemplateLiteral79(["April Shower Thoughts shield"])))))
+          if (this.options.requireAprilShield && !shieldSlot && ((0, import_kolmafia86.weaponHands)(initialWeapon) > 1 && unequip(initialWeapon), !(0, import_kolmafia86.equip)($item(_templateObject2715 || (_templateObject2715 = _taggedTemplateLiteral79(["April Shower Thoughts shield"]))))))
             return !1;
           var maxCasts = 0;
           if ((0, import_kolmafia86.hpCost)(this.skill) > 0)
@@ -20053,7 +20053,7 @@ var MoodElement = /* @__PURE__ */ function() {
         }
         return (0, import_kolmafia86.haveEffect)(this.effect) >= ensureTurns;
       } finally {
-        shieldSlot && (0, import_kolmafia86.equip)($item(_templateObject2715 || (_templateObject2715 = _taggedTemplateLiteral79(["April Shower Thoughts shield"]))), shieldSlot), initialOffhand !== (0, import_kolmafia86.equippedItem)($slot(_templateObject2813 || (_templateObject2813 = _taggedTemplateLiteral79(["off-hand"])))) && (0, import_kolmafia86.equip)(initialOffhand, $slot(_templateObject2913 || (_templateObject2913 = _taggedTemplateLiteral79(["off-hand"]))));
+        shieldSlot && (0, import_kolmafia86.equip)($item(_templateObject2813 || (_templateObject2813 = _taggedTemplateLiteral79(["April Shower Thoughts shield"]))), shieldSlot), initialOffhand !== (0, import_kolmafia86.equippedItem)($slot(_templateObject2913 || (_templateObject2913 = _taggedTemplateLiteral79(["off-hand"])))) && (0, import_kolmafia86.equip)(initialOffhand, $slot(_templateObject3013 || (_templateObject3013 = _taggedTemplateLiteral79(["off-hand"])))), initialWeapon !== (0, import_kolmafia86.equippedItem)($slot(_templateObject3132 || (_templateObject3132 = _taggedTemplateLiteral79(["weapon"])))) && (0, import_kolmafia86.equip)(initialWeapon, $slot(_templateObject3215 || (_templateObject3215 = _taggedTemplateLiteral79(["weapon"]))));
       }
     }
   }]);
@@ -20091,9 +20091,9 @@ var MoodElement = /* @__PURE__ */ function() {
     key: "execute",
     value: function(mood, ensureTurns) {
       if ((0, import_kolmafia86.haveEffect)(this.effect) >= ensureTurns) return !0;
-      var neededWishes = Math.ceil(((0, import_kolmafia86.haveEffect)(this.effect) - ensureTurns) / 20), wishesToBuy = clamp(neededWishes - (0, import_kolmafia86.availableAmount)($item(_templateObject3013 || (_templateObject3013 = _taggedTemplateLiteral79(["pocket wish"])))), 0, 20);
-      (0, import_kolmafia86.buy)(wishesToBuy, $item(_templateObject3132 || (_templateObject3132 = _taggedTemplateLiteral79(["pocket wish"]))), 5e4);
-      for (var wishesToUse = clamp(neededWishes, 0, (0, import_kolmafia86.availableAmount)($item(_templateObject3215 || (_templateObject3215 = _taggedTemplateLiteral79(["pocket wish"]))))); wishesToUse > 0; wishesToUse--)
+      var neededWishes = Math.ceil(((0, import_kolmafia86.haveEffect)(this.effect) - ensureTurns) / 20), wishesToBuy = clamp(neededWishes - (0, import_kolmafia86.availableAmount)($item(_templateObject3314 || (_templateObject3314 = _taggedTemplateLiteral79(["pocket wish"])))), 0, 20);
+      (0, import_kolmafia86.buy)(wishesToBuy, $item(_templateObject3413 || (_templateObject3413 = _taggedTemplateLiteral79(["pocket wish"]))), 5e4);
+      for (var wishesToUse = clamp(neededWishes, 0, (0, import_kolmafia86.availableAmount)($item(_templateObject3512 || (_templateObject3512 = _taggedTemplateLiteral79(["pocket wish"]))))); wishesToUse > 0; wishesToUse--)
         (0, import_kolmafia86.cliExecute)("genie effect ".concat(this.effect.name));
       return (0, import_kolmafia86.haveEffect)(this.effect) >= ensureTurns;
     }
@@ -20942,7 +20942,7 @@ var import_kolmafia90 = require("kolmafia"), logColor = function(color) {
 // src/session.ts
 init_kolmafia_polyfill();
 var import_kolmafia91 = require("kolmafia");
-var _templateObject578, _templateObject2145, _templateObject3133, _templateObject4116, _templateObject579, _templateObject660, _templateObject755, _templateObject846, _templateObject936, _templateObject1030, _templateObject1128, _templateObject1227, _templateObject1325, _templateObject1423, _templateObject1521, _templateObject1621, _templateObject1721, _templateObject1821, _templateObject1918, _templateObject2018, _templateObject2146, _templateObject2220, _templateObject2319, _templateObject2418, _templateObject2516, _templateObject2616, _templateObject2716, _templateObject2814, _templateObject2914, _templateObject3014, _templateObject3134, _templateObject3216, _templateObject3314;
+var _templateObject578, _templateObject2145, _templateObject3133, _templateObject4116, _templateObject579, _templateObject660, _templateObject755, _templateObject846, _templateObject936, _templateObject1030, _templateObject1128, _templateObject1227, _templateObject1325, _templateObject1423, _templateObject1521, _templateObject1621, _templateObject1721, _templateObject1821, _templateObject1918, _templateObject2018, _templateObject2146, _templateObject2220, _templateObject2319, _templateObject2418, _templateObject2516, _templateObject2616, _templateObject2716, _templateObject2814, _templateObject2914, _templateObject3014, _templateObject3134, _templateObject3216, _templateObject3315;
 function _classCallCheck20(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -21073,7 +21073,7 @@ function mySessionItemsWrapper() {
       var _itemMappings$get, _inventory$get, _Object$entries$_i = _slicedToArray28(_Object$entries[_i], 2), itemStr = _Object$entries$_i[0], quantity = _Object$entries$_i[1];
       if (quantity) {
         var item15 = (0, import_kolmafia91.toItem)(itemStr);
-        if (item15 !== $item(_templateObject3314 || (_templateObject3314 = _taggedTemplateLiteral80(["big rock"])))) {
+        if (item15 !== $item(_templateObject3315 || (_templateObject3315 = _taggedTemplateLiteral80(["big rock"])))) {
           var mappedItem = (_itemMappings$get = itemMappings.get(item15)) !== null && _itemMappings$get !== void 0 ? _itemMappings$get : item15;
           inventory.set(mappedItem, quantity + ((_inventory$get = inventory.get(mappedItem)) !== null && _inventory$get !== void 0 ? _inventory$get : 0));
         }

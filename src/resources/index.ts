@@ -65,6 +65,7 @@ import * as ToyCupidBow from "./2025/ToyCupidBow.js";
 import * as Leprecondo from "./2025/Leprecondo.js";
 import * as Raffle from "./evergreen/Raffle.js";
 import * as CyberRealm from "./2025/CyberRealm.js";
+import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
 
 export {
   AprilingBandHelmet,
@@ -113,6 +114,7 @@ export {
   MummingTrunk,
   ObtuseAngel,
   Pantogram,
+  PeridotOfPeril,
   PocketProfessor,
   Raffle,
   RainDoh,

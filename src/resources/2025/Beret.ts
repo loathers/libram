@@ -9,6 +9,7 @@ import {
   getPower,
   Item,
   toSlot,
+  npcPrice,
 } from "kolmafia";
 import {
   $effects,
@@ -37,7 +38,7 @@ function beretPowerSum(buyitem: boolean): number[] {
 
   const allItems = Item.all().filter((i) => have_(i));
   const shopItems = buyitem
-    ? $items`snorkel, Kentucky-style derby, pentacorn hat, goofily-plumed helmet, yellow plastic hard hat, wooden salad bowl, football helmet, fishin' hat, studded leather boxer shorts, chain-mail monokini, union scalemail pants, paper-plate-mail pants, troutpiece, alpha-mail pants`
+    ? Item.all().filter((i) => npcPrice(i) > 0)
     : $items``;
   allItems.push(...shopItems);
   const allHats = have_($familiar`Mad Hatrack`)

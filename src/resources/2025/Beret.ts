@@ -24,7 +24,6 @@ import {
 import { have as have_ } from "../../lib.js";
 
 const beret = $item`prismatic beret`;
-const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
 
 /**
  * @returns Whether or not you have the prismatic beret
@@ -34,6 +33,8 @@ export function have(): boolean {
 }
 
 function beretPowerSum(): number[] {
+  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
+
   const allItems = Item.all().filter((i) => have_(i));
   const shopItems = $items`snorkel, Kentucky-style derby, pentacorn hat, goofily-plumed helmet, yellow plastic hard hat, wooden salad bowl, football helmet, fishin' hat, studded leather boxer shorts, chain-mail monokini, union scalemail pants, paper-plate-mail pants, troutpiece, alpha-mail pants`;
   allItems.push(...shopItems);

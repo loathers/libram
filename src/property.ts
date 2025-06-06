@@ -367,7 +367,7 @@ export function decrement(
   return set(property, nextValue);
 }
 
-type Properties = Partial<{
+export type Properties = Partial<{
   [P in KnownProperty]: unknown;
 }> & { [x in string]: unknown };
 

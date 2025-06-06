@@ -91,7 +91,7 @@ const INGREDIENTS = {
   },
   diet: {
     modifier: { Initiative: 50 },
-    location: $location`Battlefield (No Uniform)`,
+    location: $location`The Cola Wars Battlefield`,
   },
   dwarf: {
     modifier: { Muscle: 30 },
@@ -99,7 +99,7 @@ const INGREDIENTS = {
   },
   dyspepsi: {
     modifier: { Initiative: 25 },
-    location: $location`Battlefield (Dyspepsi Uniform)`,
+    location: $location`Cola Wars Battlefield (Dyspepsi Uniform)`,
   },
   filth: {
     modifier: { "Damage Reduction": 20 },

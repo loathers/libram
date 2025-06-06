@@ -32,11 +32,13 @@ export function have(): boolean {
   return have_(beret);
 }
 
-function beretPowerSum(): number[] {
+function beretPowerSum(buyitem: boolean): number[] {
   const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
 
   const allItems = Item.all().filter((i) => have_(i));
-  const shopItems = $items`snorkel, Kentucky-style derby, pentacorn hat, goofily-plumed helmet, yellow plastic hard hat, wooden salad bowl, football helmet, fishin' hat, studded leather boxer shorts, chain-mail monokini, union scalemail pants, paper-plate-mail pants, troutpiece, alpha-mail pants`;
+  const shopItems = buyitem
+    ? $items`snorkel, Kentucky-style derby, pentacorn hat, goofily-plumed helmet, yellow plastic hard hat, wooden salad bowl, football helmet, fishin' hat, studded leather boxer shorts, chain-mail monokini, union scalemail pants, paper-plate-mail pants, troutpiece, alpha-mail pants`
+    : $items``;
   allItems.push(...shopItems);
   const allHats = have_($familiar`Mad Hatrack`)
     ? allItems.filter((i) => toSlot(i) === $slot`hat`)
@@ -77,11 +79,13 @@ function scoreBusk(
  * @param weightedModifiers accepts an input of [Modifier, number][] to determine how to optimize for buffs and which to prioritize
  * @param start accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
  * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
+ * @param buyitem boolean, determines if we should check shop available equipment; defaults to true
  */
 export function findOptimalBusks(
   weightedModifiers: [Modifier, number][],
   start?: number,
   uselessEffects: Effect[] = $effects``,
+  buyitem: boolean = true,
 ): number {
   const buskUses = clamp(toInt(get("_beretBuskingUses")), 0, 5);
 
@@ -89,7 +93,7 @@ export function findOptimalBusks(
   let bestScore = 0;
   let bestPower = 0;
 
-  for (const power of beretPowerSum()) {
+  for (const power of beretPowerSum(buyitem)) {
     const rawEffects = beretBuskingEffects(power, targetBuskIndex);
     const effects: Effect[] = Array.from(
       new Set(

@@ -85,7 +85,7 @@ import {
 } from "kolmafia";
 
 import logger from "./logger.js";
-import { get } from "./property.js";
+import { get, getQuest } from "./property.js";
 import {
   $class,
   $effect,
@@ -105,7 +105,12 @@ import {
   Tuple,
   ValueOf,
 } from "./utils.js";
-import { BooleanProperty, StringProperty } from "./propertyTypes.js";
+import {
+  BooleanProperty,
+  StringProperty,
+  QuestProperty,
+} from "./propertyTypes.js";
+import { QuestState, QuestStep } from "./propertyTyping.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -777,21 +782,50 @@ export function getPlayerFromIdOrName(
 
 /**
  * Determine the step as a number for a given quest property.
- *
+ * @deprecated You can now use `get` for quests!
  * @param questName Name of quest property to check.
  * @returns Quest step
  */
 export function questStep(questName: string): number {
-  const stringStep = get(questName);
-  if (stringStep === "unstarted") return -1;
-  else if (stringStep === "started") return 0;
-  else if (stringStep === "finished" || stringStep === "") return 999;
-  else {
-    if (stringStep.substring(0, 4) !== "step") {
-      throw new Error("Quest state parsing error.");
-    }
-    return parseInt(stringStep.substring(4), 10);
-  }
+  return getQuest(questName as QuestProperty);
+}
+
+/**
+ * Determine if a given quest is specifically finished; returns `false` for blank quests
+ * @param quest The quest in _quest_ion
+ * @returns Whether the quest is completed.
+ */
+export function questComplete(quest: QuestProperty): boolean {
+  return get(quest) === QuestState.FINISHED;
+}
+
+/**
+ * Determine if a quest is between two particular steps (defaults to inclusive)
+ * @param quest The quest in _quest_ion
+ * @param lower The lower bound
+ * @param upper The upper bound
+ * @param inclusive Whether we should use soft inequalities (>=) over strict inequalities (>)
+ * @returns Whether the quest is currently between the given steps
+ */
+export function questBetween(
+  quest: QuestProperty,
+  lower: QuestStep,
+  upper: QuestStep,
+  inclusive = true,
+) {
+  const step = get(quest);
+  return inclusive
+    ? step <= upper && step >= lower
+    : step < upper && step > lower;
+}
+
+/**
+ * Determine if a quest is currently in progress
+ * @param quest The quest in _quest_ion
+ * @returns False if the quest is completed, blank, or unstarted; true otherwise
+ */
+export function questActive(quest: QuestProperty): boolean {
+  return questBetween(quest, QuestState.UNSTARTED, QuestState.FINISHED, false);
 }
 
 export class EnsureError extends Error {

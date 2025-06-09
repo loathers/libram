@@ -17057,6 +17057,9 @@ __export(PeridotOfPeril_exports, {
   canImperil: function() {
     return canImperil;
   },
+  getChoiceObject: function() {
+    return getChoiceObject;
+  },
   getChoiceProperty: function() {
     return getChoiceProperty;
   },
@@ -17092,15 +17095,23 @@ function periledToday(location) {
   return RegExp("(?:^|,)".concat(location.id, "(?:$|,)")).test(get("_perilLocations"));
 }
 function canImperil(location) {
-  return location.wanderers && location.combatPercent >= 0 && (0, import_kolmafia78.getMonsters)(location).length > 0 && !periledToday(location);
+  return have63() && location.wanderers && location.combatPercent >= 0 && (0, import_kolmafia78.getMonsters)(location).length > 0 && !periledToday(location);
 }
+var toChoiceOption = function(m) {
+  return "1&bandersnatch=".concat(m.id);
+};
 function getChoiceProperty(monster) {
   return {
-    1557: "1&bandersnatch=".concat(monster.id)
+    choiceAdventure1557: toChoiceOption(monster)
+  };
+}
+function getChoiceObject(monster) {
+  return {
+    1557: toChoiceOption(monster)
   };
 }
 function setChoice(monster) {
-  (0, import_kolmafia78.setProperty)("choiceAdventure1557", "1&bandersnatch=".concat(monster.id));
+  (0, import_kolmafia78.setProperty)("choiceAdventure1557", toChoiceOption(monster));
 }
 
 // src/resources/putty-likes.ts

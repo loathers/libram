@@ -26,14 +26,17 @@ const beret = $item`prismatic beret`;
 
 export type EffectValuer =
   | Partial<Record<NumericModifier, number>>
-  | ((effect: Effect) => number);
+  | ((effect: Effect) => number)
+  | Effect[];
 const valueEffect = (effect: Effect, valuer: EffectValuer) =>
   typeof valuer === "function"
     ? valuer(effect)
-    : sum(
-        Object.entries(valuer),
-        ([modifier, weight]) => weight * numericModifier(effect, modifier),
-      );
+    : Array.isArray(valuer)
+      ? Number(valuer.includes(effect))
+      : sum(
+          Object.entries(valuer),
+          ([modifier, weight]) => weight * numericModifier(effect, modifier),
+        );
 
 /**
  * @returns Whether or not you have the prismatic beret
@@ -84,6 +87,48 @@ function scoreBusk(
   return sum(usefulEffects, (ef) => valueEffect(ef, effectValuer));
 }
 
+/**
+ * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
+ * @param wantedEffects An array of Effects we care about; maximizes the number of those effects we end up with
+ * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
+ * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
+ * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @returns The power-sum at which you'll find the optimal busk for this situation.
+ */
+export function findOptimalCasts(
+  wantedEffects: Effect[],
+  buskUses?: number,
+  uselessEffects?: Effect[],
+  buyItem?: boolean,
+): number;
+/**
+ * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
+ * @param weightedModifiers An object keyed by Numeric Modifiers, with their values representing weights
+ * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
+ * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
+ * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @returns The power-sum at which you'll find the optimal busk for this situation.
+ */
+export function findOptimalCasts(
+  weightedModifiers: Partial<Record<NumericModifier, number>>,
+  buskUses?: number,
+  uselessEffects?: Effect[],
+  buyItem?: boolean,
+): number;
+/**
+ * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
+ * @param effectValue A function that maps effects to values
+ * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
+ * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
+ * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @returns The power-sum at which you'll find the optimal busk for this situation.
+ */
+export function findOptimalCasts(
+  effectValue: (effect: Effect) => number,
+  buskUses?: number,
+  uselessEffects?: Effect[],
+  buyItem?: boolean,
+): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param effectValuer Either a function that maps effects to values, or an object keyed by numeric modifiers with weights as values

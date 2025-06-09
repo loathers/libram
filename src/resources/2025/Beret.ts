@@ -8,6 +8,11 @@ import {
   toSlot,
   npcPrice,
   canEquip,
+  equippedItem,
+  myFamiliar,
+  equip,
+  useFamiliar,
+  useSkill,
 } from "kolmafia";
 import {
   $effect,
@@ -15,6 +20,7 @@ import {
   $item,
   $skill,
   $slot,
+  $slots,
   get,
   maxBy,
   NumericModifier,
@@ -45,19 +51,33 @@ export function have(): boolean {
   return have_(beret);
 }
 
-function availablePowersums(buyItem: boolean): number[] {
-  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
-
+function getUseableClothes(buyItem = true): {
+  useableHats: Item[];
+  useablePants: Item[];
+  useableShirts: Item[];
+} {
   const availableItems = Item.all().filter(
     (i) => canEquip(i) && (have_(i) || (buyItem && npcPrice(i) > 0)),
   );
   const useableHats = have_($familiar`Mad Hatrack`)
-    ? availableItems.filter((i) => toSlot(i) === $slot`hat`)
+    ? [...availableItems.filter((i) => toSlot(i) === $slot`hat`), $item.none]
     : [beret];
-  const useablePants = availableItems.filter((i) => toSlot(i) === $slot`pants`);
-  const useableShirts = availableItems.filter(
-    (i) => toSlot(i) === $slot`shirt`,
-  );
+  const useablePants = [
+    ...availableItems.filter((i) => toSlot(i) === $slot`pants`),
+    $item.none,
+  ];
+  const useableShirts = [
+    ...availableItems.filter((i) => toSlot(i) === $slot`shirt`),
+    $item.none,
+  ];
+  return { useableHats, useablePants, useableShirts };
+}
+
+function availablePowersums(buyItem: boolean): number[] {
+  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
+
+  const { useableHats, useablePants, useableShirts } =
+    getUseableClothes(buyItem);
 
   const hatPowers = [
     ...new Set(useableHats.map((i) => taoMultiplier * getPower(i))),
@@ -141,7 +161,7 @@ export function findOptimalCasts(
   effectValuer: EffectValuer,
   buskUses = get("_beretBuskingUses"),
   uselessEffects: Effect[] = [],
-  buyItem: boolean = true,
+  buyItem = true,
 ): number {
   const uselessEffectSet = new Set(uselessEffects);
   const powersums = availablePowersums(buyItem);
@@ -155,4 +175,89 @@ export function findOptimalCasts(
       uselessEffectSet,
     ),
   );
+}
+
+const populateMap = (arr: Item[], max: number, double: boolean) => {
+  const map = new Map<number, Item>();
+  for (const it of arr) {
+    const power = getPower(it) * (double ? 2 : 1);
+    if (power > max) continue;
+    if (!map.has(power)) map.set(power, it);
+  }
+  return map;
+};
+
+function findOutfit(power: number, buyItem: boolean) {
+  const { useableHats, useablePants, useableShirts } =
+    getUseableClothes(buyItem);
+  const hatPowers = populateMap(
+    useableHats,
+    power,
+    have_($skill`Tao of the Terrapin`),
+  );
+  const pantsPowers = populateMap(
+    useablePants,
+    power,
+    have_($skill`Tao of the Terrapin`),
+  );
+  const shirtPowers = populateMap(useableShirts, power, false);
+
+  for (const [hatPower, hat] of hatPowers) {
+    for (const [pantPower, pant] of pantsPowers) {
+      if (pantPower + hatPower > power) continue;
+      for (const [shirtPower, shirt] of shirtPowers) {
+        if (hatPower + shirtPower + pantPower === power)
+          return { hat, pant, shirt };
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Attempt to busk at a particular power
+ * @param power The power in question
+ * @param buyItem Whether to buy items from NPC shops to create an outfit
+ * @returns If we successfully busked at that power
+ */
+export function buskAt(power: number, buyItem = true): boolean {
+  if (!have()) return false;
+  const initialUses = get("_beretBuskingUses");
+  if (initialUses >= 5) return false;
+  const outfit = findOutfit(power, buyItem);
+  if (!outfit) return false;
+  const initialEquips = $slots`hat, shirt, pants`.map((slot) =>
+    equippedItem(slot),
+  );
+  const initialFamiliar = myFamiliar();
+  const initialFamequip = equippedItem($slot`familiar equipment`);
+  const { hat, pant, shirt } = outfit;
+  equip($slot`hat`, hat);
+  if (hat !== beret) {
+    useFamiliar($familiar`Mad Hatrack`);
+    equip($slot`familiar`, beret);
+  }
+  equip($slot`shirt`, shirt);
+  equip($slot`pants`, pant);
+  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
+  try {
+    if (
+      taoMultiplier *
+        (getPower(equippedItem($slot`hat`)) +
+          getPower(equippedItem($slot`pants`))) +
+        getPower(equippedItem($slot`shirt`)) !==
+      power
+    ) {
+      return false;
+    }
+    useSkill($skill`Beret Busking`);
+    return initialUses !== get("_beretBuskingUses");
+  } finally {
+    $slots`hat, shirt, pants`.forEach((slot, index) =>
+      equip(slot, initialEquips[index]),
+    );
+    useFamiliar(initialFamiliar);
+    equip($slot`familiar`, initialFamequip);
+  }
 }

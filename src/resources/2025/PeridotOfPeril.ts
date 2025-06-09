@@ -46,12 +46,15 @@ export function periledToday(location: Location): boolean {
  */
 export function canImperil(location: Location): boolean {
   return (
+    have() &&
     location.wanderers &&
     location.combatPercent >= 0 &&
     getMonsters(location).length > 0 &&
     !periledToday(location)
   );
 }
+
+const toChoiceOption = (m: Monster) => `1&bandersnatch=${m.id}`;
 
 /**
  * Create a `Properties` object for handling the peridot choice for a given monster.
@@ -60,13 +63,21 @@ export function canImperil(location: Location): boolean {
  * @returns A `Properties` object to handle the peridot choice for the given monster.
  */
 export function getChoiceProperty(monster: Monster): Properties {
-  return { 1557: `1&bandersnatch=${monster.id}` };
+  return { choiceAdventure1557: toChoiceOption(monster) };
 }
 
+/**
+ * Create a choices object keyed by choice id, instead of property name.
+ * @param monster The monster in question.
+ * @returns An object keyed by choice id, with values of choice options.
+ */
+export function getChoiceObject(monster: Monster): Record<number, string> {
+  return { 1557: toChoiceOption(monster) };
+}
 /**
  * Set the `choiceAdventure1557` pref to fight the given monster.
  * @param monster The monster in question.
  */
 export function setChoice(monster: Monster) {
-  setProperty("choiceAdventure1557", `1&bandersnatch=${monster.id}`);
+  setProperty("choiceAdventure1557", toChoiceOption(monster));
 }

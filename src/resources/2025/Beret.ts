@@ -23,6 +23,17 @@ import { have as have_ } from "../../lib.js";
 
 const beret = $item`prismatic beret`;
 
+export type EffectValuer =
+  | Partial<Record<NumericModifier, number>>
+  | ((effect: Effect) => number);
+const valueEffect = (effect: Effect, valuer: EffectValuer) =>
+  typeof valuer === "function"
+    ? valuer(effect)
+    : sum(
+        Object.entries(valuer),
+        ([modifier, weight]) => weight * numericModifier(effect, modifier),
+      );
+
 /**
  * @returns Whether or not you have the prismatic beret
  */
@@ -58,28 +69,23 @@ function beretPowerSum(buyItem: boolean): number[] {
 
 function scoreBusk(
   effects: Effect[],
-  weightedModifiers: Partial<Record<NumericModifier, number>>,
+  effectValuer: EffectValuer,
   uselessEffects: Set<Effect>,
 ): number {
   const usefulEffects = effects.filter((ef) => !uselessEffects.has(ef));
-
-  return sum(
-    Object.entries(weightedModifiers),
-    ([modifier, weight]) =>
-      weight * sum(usefulEffects, (ef) => numericModifier(ef, modifier)),
-  );
+  return sum(usefulEffects, (ef) => valueEffect(ef, effectValuer));
 }
 
 /**
  * Calculate the optimal power at which to busk, given a weighted set of modifiers.
- * @param weightedModifiers accepts an input of [Modifier, number][] to determine how to optimize for buffs and which to prioritize
+ * @param effectValuer Either a function that maps effects to values, or an object keyed by numeric modifiers with weights as values
  * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
  * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
  * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
  * @returns The power at which you'll find the optimal busk for this situation.
  */
 export function findOptimalBusks(
-  weightedModifiers: Partial<Record<NumericModifier, number>>,
+  effectValuer: EffectValuer,
   buskUses = get("_beretBuskingUses"),
   uselessEffects: Effect[] = [],
   buyItem: boolean = true,
@@ -92,7 +98,7 @@ export function findOptimalBusks(
       Object.keys(beretBuskingEffects(power, buskUses))
         .map((e) => toEffect(e))
         .filter((e) => e !== $effect.none),
-      weightedModifiers,
+      effectValuer,
       uselessEffectSet,
     ),
   );

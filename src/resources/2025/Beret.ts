@@ -14,6 +14,7 @@ import {
   useFamiliar,
   useSkill,
   buy,
+  myMeat,
 } from "kolmafia";
 import {
   $effect,
@@ -213,8 +214,20 @@ function findOutfit(power: number, buyItem: boolean) {
       for (const [shirtPower, shirt] of shirtPowers) {
         if (hatPower + shirtPower + pantPower === power)
           if (buyItem) {
-            [hat, pant, shirt].forEach((i) => {
-              if (!have_(i) && npcPrice(i) > 0) buy(i);
+            const equips = [hat, pant, shirt];
+            const equipPrice = equips
+              .filter((i) => !have_(i))
+              .map((i) => npcPrice(i))
+              .reduce((a, b) => a + b, 0);
+
+            if (myMeat() < equipPrice) {
+              return null;
+            }
+
+            equips.forEach((i) => {
+              if (!have_(i) && npcPrice(i) > 0) {
+                buy(i);
+              }
             });
           }
         return { hat, pant, shirt };

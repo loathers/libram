@@ -13,6 +13,7 @@ import {
   equip,
   useFamiliar,
   useSkill,
+  buy,
 } from "kolmafia";
 import {
   $effect,
@@ -182,7 +183,11 @@ const populateMap = (arr: Item[], max: number, double: boolean) => {
   for (const it of arr) {
     const power = getPower(it) * (double ? 2 : 1);
     if (power > max) continue;
-    if (!map.has(power)) map.set(power, it);
+
+    const existing = map.get(power);
+    if (!existing || (!have_(it) && npcPrice(it) < npcPrice(existing))) {
+      map.set(power, it);
+    }
   }
   return map;
 };
@@ -207,7 +212,12 @@ function findOutfit(power: number, buyItem: boolean) {
       if (pantPower + hatPower > power) continue;
       for (const [shirtPower, shirt] of shirtPowers) {
         if (hatPower + shirtPower + pantPower === power)
-          return { hat, pant, shirt };
+          if (buyItem) {
+            [hat, pant, shirt].forEach((i) => {
+              if (!have_(i) && npcPrice(i) > 0) buy(i);
+            });
+          }
+        return { hat, pant, shirt };
       }
     }
   }

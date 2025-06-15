@@ -195,7 +195,10 @@ const populateMap = (arr: Item[], max: number, double: boolean) => {
   }
   return map;
 };
-
+const relevantSlots = ["hat", "pants", "shirt"] as const;
+const functionalPrice = (item: Item) => (have_(item) ? 0 : npcPrice(item));
+const outfitPrice = (outfit: { hat: Item; pants: Item; shirt: Item }) =>
+  sum(relevantSlots, (slot) => functionalPrice(outfit[slot]));
 function findOutfit(power: number, buyItem: boolean) {
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItem);
@@ -211,34 +214,25 @@ function findOutfit(power: number, buyItem: boolean) {
   );
   const shirtPowers = populateMap(useableShirts, power, false);
 
-  for (const [hatPower, hat] of hatPowers) {
-    for (const [pantPower, pant] of pantsPowers) {
-      if (pantPower + hatPower > power) continue;
-      for (const [shirtPower, shirt] of shirtPowers) {
-        if (hatPower + shirtPower + pantPower === power)
-          if (buyItem) {
-            const equips = [hat, pant, shirt];
-            const equipPrice = sum(
-              equips.filter((i) => !have_(i)),
-              npcPrice,
-            );
+  const outfits = [...hatPowers].flatMap(([hatPower, hat]) =>
+    [...pantsPowers].flatMap(([pantsPower, pants]) =>
+      [...shirtPowers].flatMap(([shirtPower, shirt]) =>
+        hatPower + pantsPower + shirtPower === power
+          ? { hat, pants, shirt }
+          : [],
+      ),
+    ),
+  );
+  if (!outfits.length) return null;
+  const outfit = maxBy(outfits, outfitPrice, true);
+  if (outfitPrice(outfit) > myMeat()) return null;
 
-            if (myMeat() < equipPrice) {
-              return null;
-            }
-
-            equips.forEach((i) => {
-              if (!have_(i) && npcPrice(i) > 0) {
-                buy(i);
-              }
-            });
-          }
-        return { hat, pant, shirt };
-      }
-    }
+  for (const slot of relevantSlots) {
+    const item = outfit[slot];
+    if (have_(item)) continue;
+    if (!buy(item)) return null;
   }
-
-  return null;
+  return outfit;
 }
 
 /**
@@ -258,14 +252,14 @@ export function buskAt(power: number, buyItem = true): boolean {
   );
   const initialFamiliar = myFamiliar();
   const initialFamequip = equippedItem($slot`familiar equipment`);
-  const { hat, pant, shirt } = outfit;
+  const { hat, pants, shirt } = outfit;
   equip($slot`hat`, hat);
   if (hat !== beret) {
     useFamiliar($familiar`Mad Hatrack`);
     equip($slot`familiar`, beret);
   }
   equip($slot`shirt`, shirt);
-  equip($slot`pants`, pant);
+  equip($slot`pants`, pants);
   const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
   try {
     if (

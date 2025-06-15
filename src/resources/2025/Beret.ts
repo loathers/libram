@@ -16,6 +16,7 @@ import {
   buy,
   myMeat,
 } from "kolmafia";
+import { have as have_ } from "../../lib.js";
 import {
   $effect,
   $familiar,
@@ -23,12 +24,11 @@ import {
   $skill,
   $slot,
   $slots,
-  get,
-  maxBy,
-  NumericModifier,
-  sum,
-} from "../../index.js";
-import { have as have_ } from "../../lib.js";
+} from "../../template-string.js";
+import { NumericModifier } from "../../modifierTypes.js";
+import { maxBy, sum } from "../../utils.js";
+import logger from "../../logger.js";
+import { get } from "../../property.js";
 
 const beret = $item`prismatic beret`;
 
@@ -225,12 +225,16 @@ function findOutfit(power: number, buyItem: boolean) {
   );
   if (!outfits.length) return null;
   const outfit = maxBy(outfits, outfitPrice, true);
+  logger.debug(`Chose outfit ${outfit.hat} ${outfit.shirt} ${outfit.pants}`);
   if (outfitPrice(outfit) > myMeat()) return null;
 
   for (const slot of relevantSlots) {
     const item = outfit[slot];
     if (have_(item)) continue;
-    if (!buy(item)) return null;
+    if (!buy(item)) {
+      logger.debug(`Failed to purchase ${item}`);
+      return null;
+    }
   }
   return outfit;
 }

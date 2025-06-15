@@ -186,7 +186,10 @@ const populateMap = (arr: Item[], max: number, double: boolean) => {
     if (power > max) continue;
 
     const existing = map.get(power);
-    if (!existing && (have_(it) || npcPrice(it) < npcPrice(existing))) {
+    if (
+      !existing ||
+      (!have_(existing) && (have_(it) || npcPrice(it) < npcPrice(existing)))
+    ) {
       map.set(power, it);
     }
   }
@@ -215,9 +218,10 @@ function findOutfit(power: number, buyItem: boolean) {
         if (hatPower + shirtPower + pantPower === power)
           if (buyItem) {
             const equips = [hat, pant, shirt];
-            const equipPrice = sum(equips
-              .filter((i) => !have_(i)),
-              npcPrice);
+            const equipPrice = sum(
+              equips.filter((i) => !have_(i)),
+              npcPrice,
+            );
 
             if (myMeat() < equipPrice) {
               return null;

@@ -117,7 +117,7 @@ function scoreBusk(
  * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
-export function findOptimalCasts(
+export function findOptimalOutfitPower(
   wantedEffects: Effect[],
   buskUses?: number,
   uselessEffects?: Effect[],
@@ -131,7 +131,7 @@ export function findOptimalCasts(
  * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
-export function findOptimalCasts(
+export function findOptimalOutfitPower(
   weightedModifiers: Partial<Record<NumericModifier, number>>,
   buskUses?: number,
   uselessEffects?: Effect[],
@@ -145,7 +145,7 @@ export function findOptimalCasts(
  * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
-export function findOptimalCasts(
+export function findOptimalOutfitPower(
   effectValue: (effect: Effect) => number,
   buskUses?: number,
   uselessEffects?: Effect[],
@@ -159,7 +159,7 @@ export function findOptimalCasts(
  * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
-export function findOptimalCasts(
+export function findOptimalOutfitPower(
   effectValuer: EffectValuer,
   buskUses = get("_beretBuskingUses"),
   uselessEffects: Effect[] = [],

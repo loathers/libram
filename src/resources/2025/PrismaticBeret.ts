@@ -116,9 +116,9 @@ function scoreBusk(
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param wantedEffects An array of Effects we care about; maximizes the number of those effects we end up with
- * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
- * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
- * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
@@ -130,9 +130,9 @@ export function findOptimalOutfitPower(
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param weightedModifiers An object keyed by Numeric Modifiers, with their values representing weights
- * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
- * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
- * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
@@ -143,24 +143,38 @@ export function findOptimalOutfitPower(
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
- * @param effectValue A function that maps effects to values
- * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
- * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
- * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @param valueFunction A function that maps effects to values
+ * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
-  effectValue: (effect: Effect) => number,
+  valueFunction: (effect: Effect, duration: number) => number,
   buskUses?: number,
   uselessEffects?: Effect[],
   buyItem?: boolean,
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
- * @param effectValuer Either a function that maps effects to values, or an object keyed by numeric modifiers with weights as values
- * @param buskUses accepts an input of number (0-5) to determine which busk to check; default behavior is to check the next available busk
- * @param uselessEffects accepts an input of Effect[] and values those effects at 0 for scoring
- * @param buyItem boolean, determines if we should check shop available equipment; defaults to true
+ * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
+ * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @returns The power-sum at which you'll find the optimal busk for this situation.
+ */
+export function findOptimalOutfitPower(
+  effectValuer: EffectValuer,
+  buskUses?: number,
+  uselessEffects?: Effect[],
+  buyItem?: boolean,
+): number;
+/**
+ * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
+ * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
+ * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
@@ -291,4 +305,40 @@ export function buskAt(power: number, buyItem = true): boolean {
     useFamiliar(initialFamiliar);
     equip($slot`familiar`, initialFamequip);
   }
+}
+
+export function buskFor(
+  weightedModifiers: Partial<Record<NumericModifier, number>>,
+  buyItem?: boolean,
+  uselessEffects?: Effect[],
+): boolean;
+export function buskFor(
+  effects: Effect[],
+  buyItem?: boolean,
+  uselessEffects?: Effect[],
+): boolean;
+export function buskFor(
+  valueFunction: (effect: Effect, duration: number) => number,
+  buyItem?: boolean,
+  uselessEffects?: Effect[],
+): boolean;
+/**
+ * Calculate the best outfit-power you can achieve for a given busk valuation, and then busks.
+ * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
+ * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @returns Whether we were successful in our endeavor
+ */
+export function buskFor(
+  effectValuer: EffectValuer,
+  buyItem = true,
+  uselessEffects: Effect[] = [],
+): boolean {
+  const outfitPower = findOptimalOutfitPower(
+    effectValuer,
+    get("_beretBuskingUses"),
+    uselessEffects,
+    buyItem,
+  );
+  return buskAt(outfitPower, buyItem);
 }

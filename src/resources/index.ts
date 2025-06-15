@@ -66,7 +66,7 @@ import * as Leprecondo from "./2025/Leprecondo.js";
 import * as Raffle from "./evergreen/Raffle.js";
 import * as CyberRealm from "./2025/CyberRealm.js";
 import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
-import * as PrismaticBeret from "./2025/Beret.js";
+import * as PrismaticBeret from "./2025/PrismaticBeret.js";
 
 export {
   AprilingBandHelmet,

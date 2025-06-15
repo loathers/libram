@@ -34,13 +34,13 @@ const beret = $item`prismatic beret`;
 
 export type EffectValuer =
   | Partial<Record<NumericModifier, number>>
-  | ((effect: Effect) => number)
+  | ((effect: Effect, duration: number) => number)
   | Effect[];
-const valueEffect = (effect: Effect, valuer: EffectValuer) =>
+const valueEffect = (effect: Effect, duration: number, valuer: EffectValuer) =>
   typeof valuer === "function"
-    ? valuer(effect)
+    ? valuer(effect, duration)
     : Array.isArray(valuer)
-      ? Number(valuer.includes(effect))
+      ? Number(valuer.includes(effect)) * duration
       : sum(
           Object.entries(valuer),
           ([modifier, weight]) => weight * numericModifier(effect, modifier),
@@ -101,12 +101,16 @@ function availablePowersums(buyItem: boolean): number[] {
 }
 
 function scoreBusk(
-  effects: Effect[],
+  effects: [Effect, number][],
   effectValuer: EffectValuer,
   uselessEffects: Set<Effect>,
 ): number {
-  const usefulEffects = effects.filter((ef) => !uselessEffects.has(ef));
-  return sum(usefulEffects, (ef) => valueEffect(ef, effectValuer));
+  const usefulEffects = effects.filter(
+    ([effect]) => !uselessEffects.has(effect),
+  );
+  return sum(usefulEffects, ([effect, duration]) =>
+    valueEffect(effect, duration, effectValuer),
+  );
 }
 
 /**
@@ -170,9 +174,12 @@ export function findOptimalOutfitPower(
   if (!powersums.length) return 0;
   return maxBy(powersums, (power) =>
     scoreBusk(
-      Object.keys(beretBuskingEffects(power, buskUses))
-        .map((e) => toEffect(e))
-        .filter((e) => e !== $effect.none),
+      Object.entries(beretBuskingEffects(power, buskUses))
+        .map(([effect, duration]): [Effect, number] => [
+          toEffect(effect),
+          duration,
+        ])
+        .filter(([e]) => e !== $effect.none),
       effectValuer,
       uselessEffectSet,
     ),

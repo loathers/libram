@@ -46,6 +46,12 @@ const valueEffect = (effect: Effect, duration: number, valuer: EffectValuer) =>
           ([modifier, weight]) => weight * numericModifier(effect, modifier),
         );
 
+export type BuskOptions = Partial<{
+  uselessEffects: Effect[];
+  hammerTime: boolean;
+  buyItems: boolean;
+}>;
+
 /**
  * @returns Whether or not you have the prismatic beret
  */
@@ -53,13 +59,13 @@ export function have(): boolean {
   return have_(beret);
 }
 
-function getUseableClothes(buyItem = true): {
+function getUseableClothes(buyItems = true): {
   useableHats: Item[];
   useablePants: Item[];
   useableShirts: Item[];
 } {
   const availableItems = Item.all().filter(
-    (i) => canEquip(i) && (have_(i) || (buyItem && npcPrice(i) > 0)),
+    (i) => canEquip(i) && (have_(i) || (buyItems && npcPrice(i) > 0)),
   );
   const useableHats = have_($familiar`Mad Hatrack`)
     ? [...availableItems.filter((i) => toSlot(i) === $slot`hat`), $item.none]
@@ -75,17 +81,21 @@ function getUseableClothes(buyItem = true): {
   return { useableHats, useablePants, useableShirts };
 }
 
-function availablePowersums(buyItem: boolean): number[] {
-  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
+function availablePowersums({
+  buyItems = true,
+  hammerTime = have_($effect`Hammertime`),
+}: BuskOptions): number[] {
+  const tao = have_($skill`Tao of the Terrapin`) ? 1 : 0;
+  const hammer = hammerTime ? 3 : 0;
 
   const { useableHats, useablePants, useableShirts } =
-    getUseableClothes(buyItem);
+    getUseableClothes(buyItems);
 
   const hatPowers = [
-    ...new Set(useableHats.map((i) => taoMultiplier * getPower(i))),
+    ...new Set(useableHats.map((i) => (1 + tao) * getPower(i))),
   ];
   const pantPowers = [
-    ...new Set(useablePants.map((i) => taoMultiplier * getPower(i))),
+    ...new Set(useablePants.map((i) => (1 + tao + hammer) * getPower(i))),
   ];
   const shirtPowers = [...new Set(useableShirts.map((i) => getPower(i)))];
 
@@ -116,75 +126,84 @@ function scoreBusk(
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param wantedEffects An array of Effects we care about; maximizes the number of those effects we end up with
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
   wantedEffects: Effect[],
+  options?: BuskOptions,
   buskUses?: number,
-  uselessEffects?: Effect[],
-  buyItem?: boolean,
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param weightedModifiers An object keyed by Numeric Modifiers, with their values representing weights
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
   weightedModifiers: Partial<Record<NumericModifier, number>>,
+  options?: BuskOptions,
   buskUses?: number,
-  uselessEffects?: Effect[],
-  buyItem?: boolean,
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param valueFunction A function that maps effects to values
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
   valueFunction: (effect: Effect, duration: number) => number,
+  options?: BuskOptions,
   buskUses?: number,
-  uselessEffects?: Effect[],
-  buyItem?: boolean,
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
   effectValuer: EffectValuer,
+  options?: BuskOptions,
   buskUses?: number,
-  uselessEffects?: Effect[],
-  buyItem?: boolean,
 ): number;
 /**
  * Calculate the optimal power-sum at which to busk, given a weighted set of modifiers.
  * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @param buskUses How many busks should we assume we've cast? Defaults to the current number.
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns The power-sum at which you'll find the optimal busk for this situation.
  */
 export function findOptimalOutfitPower(
   effectValuer: EffectValuer,
+  {
+    buyItems = true,
+    uselessEffects = [],
+    hammerTime = have_($effect`Hammertime`),
+  }: BuskOptions = {},
   buskUses = get("_beretBuskingUses"),
-  uselessEffects: Effect[] = [],
-  buyItem = true,
 ): number {
   const uselessEffectSet = new Set(uselessEffects);
-  const powersums = availablePowersums(buyItem);
+  const powersums = availablePowersums({ buyItems, hammerTime });
   if (!powersums.length) return 0;
   return maxBy(powersums, (power) =>
     scoreBusk(
@@ -200,10 +219,10 @@ export function findOptimalOutfitPower(
   );
 }
 
-const populateMap = (arr: Item[], max: number, double: boolean) => {
+const populateMap = (arr: Item[], max: number, multiplier: number) => {
   const map = new Map<number, Item>();
   for (const it of arr) {
-    const power = getPower(it) * (double ? 2 : 1);
+    const power = getPower(it) * multiplier;
     if (power > max) continue;
 
     const existing = map.get(power);
@@ -220,20 +239,20 @@ const relevantSlots = ["hat", "pants", "shirt"] as const;
 const functionalPrice = (item: Item) => (have_(item) ? 0 : npcPrice(item));
 const outfitPrice = (outfit: { hat: Item; pants: Item; shirt: Item }) =>
   sum(relevantSlots, (slot) => functionalPrice(outfit[slot]));
-function findOutfit(power: number, buyItem: boolean) {
+function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
   const { useableHats, useablePants, useableShirts } =
-    getUseableClothes(buyItem);
+    getUseableClothes(buyItems);
   const hatPowers = populateMap(
     useableHats,
     power,
-    have_($skill`Tao of the Terrapin`),
+    have_($skill`Tao of the Terrapin`) ? 2 : 1,
   );
   const pantsPowers = populateMap(
     useablePants,
     power,
-    have_($skill`Tao of the Terrapin`),
+    1 + (have_($skill`Tao of the Terrapin`) ? 1 : 0) + (hammerTime ? 3 : 0),
   );
-  const shirtPowers = populateMap(useableShirts, power, false);
+  const shirtPowers = populateMap(useableShirts, power, 1);
 
   const outfits = [...hatPowers].flatMap(([hatPower, hat]) =>
     [...pantsPowers].flatMap(([pantsPower, pants]) =>
@@ -263,14 +282,22 @@ function findOutfit(power: number, buyItem: boolean) {
 /**
  * Attempt to busk at a particular power
  * @param power The power in question
- * @param buyItem Whether to buy items from NPC shops to create an outfit
+ * @param options An object containing the following optional keys:
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
+ * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
  * @returns If we successfully busked at that power
  */
-export function buskAt(power: number, buyItem = true): boolean {
+export function buskAt(
+  power: number,
+  {
+    buyItems = true,
+    hammerTime = have_($effect`Hammertime`),
+  }: BuskOptions = {},
+): boolean {
   if (!have()) return false;
   const initialUses = get("_beretBuskingUses");
   if (initialUses >= 5) return false;
-  const outfit = findOutfit(power, buyItem);
+  const outfit = findOutfit(power, buyItems, hammerTime);
   if (!outfit) return false;
   const initialEquips = $slots`hat, shirt, pants`.map((slot) =>
     equippedItem(slot),
@@ -309,36 +336,32 @@ export function buskAt(power: number, buyItem = true): boolean {
 
 export function buskFor(
   weightedModifiers: Partial<Record<NumericModifier, number>>,
-  buyItem?: boolean,
-  uselessEffects?: Effect[],
+  { buyItems, uselessEffects }: BuskOptions,
 ): boolean;
 export function buskFor(
   effects: Effect[],
-  buyItem?: boolean,
-  uselessEffects?: Effect[],
+  { buyItems, uselessEffects }: BuskOptions,
 ): boolean;
 export function buskFor(
   valueFunction: (effect: Effect, duration: number) => number,
-  buyItem?: boolean,
-  uselessEffects?: Effect[],
+  { buyItems, uselessEffects }: BuskOptions,
 ): boolean;
 /**
  * Calculate the best outfit-power you can achieve for a given busk valuation, and then busks.
  * @param effectValuer Either a function that maps effect-duration pairs to values, or an object keyed by numeric modifiers with weights as values, or an array of desired effects
- * @param buyItem Whether or not we should consider purchasing items from NPC stores; defaults to true
- * @param uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options An object containing the following optional keys:
+ * @param options.uselessEffects An array (defaults to empty) of effects not to consider for the purposes of busk valuation
+ * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns Whether we were successful in our endeavor
  */
 export function buskFor(
   effectValuer: EffectValuer,
-  buyItem = true,
-  uselessEffects: Effect[] = [],
+  { buyItems = true, uselessEffects = [] }: BuskOptions = {},
 ): boolean {
   const outfitPower = findOptimalOutfitPower(
     effectValuer,
+    { buyItems, uselessEffects },
     get("_beretBuskingUses"),
-    uselessEffects,
-    buyItem,
   );
-  return buskAt(outfitPower, buyItem);
+  return buskAt(outfitPower, { buyItems });
 }

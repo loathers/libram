@@ -303,7 +303,7 @@ export function buskAt(
     equippedItem(slot),
   );
   const initialFamiliar = myFamiliar();
-  const initialFamequip = equippedItem($slot`familiar equipment`);
+  const initialFamequip = equippedItem($slot`familiar`);
   const { hat, pants, shirt } = outfit;
   equip($slot`hat`, hat);
   if (hat !== beret) {

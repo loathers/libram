@@ -26,14 +26,20 @@ export function have(): boolean {
   return have_(familiar);
 }
 
-const switchFamiliar = () => {
+const withBank = <T>(action: (page: string) => T): T => {
   const initial = myFamiliar();
   useFamiliar(familiar);
-  return initial;
+  try {
+    const page = visitUrl(
+      "place.php?whichplace=town_right&action=townright_dna",
+      false,
+    );
+    return action(page);
+  } finally {
+    visitUrl("main.php");
+    useFamiliar(initial);
+  }
 };
-
-const visitBank = () =>
-  visitUrl("place.php?whichplace=town_right&action=townright_dna", false);
 
 const canDonate = () => have_($item`mimic egg`) && get("_mimicEggsDonated") < 3;
 const canReceive = () =>
@@ -56,14 +62,7 @@ function getMonsters(selectNumber: number, page: string): Monster[] {
 export function getDonableMonsters(): Monster[] {
   if (!canDonate()) return [];
   const selectNumber = canReceive() ? 2 : 1;
-  const fam = switchFamiliar();
-  try {
-    const page = visitBank();
-    return getMonsters(selectNumber, page);
-  } finally {
-    visitUrl("main.php");
-    useFamiliar(fam);
-  }
+  return withBank((page) => getMonsters(selectNumber, page));
 }
 
 /**
@@ -71,15 +70,7 @@ export function getDonableMonsters(): Monster[] {
  */
 export function getReceivableMonsters(): Monster[] {
   if (!canReceive()) return [];
-  const fam = switchFamiliar();
-
-  try {
-    const page = visitBank();
-    return getMonsters(1, page);
-  } finally {
-    visitUrl("main.php");
-    useFamiliar(fam);
-  }
+  return withBank((page) => getMonsters(1, page));
 }
 
 /**
@@ -90,20 +81,14 @@ export function getReceivableMonsters(): Monster[] {
  */
 export function donate(monster: Monster): boolean {
   if (!canDonate()) return false;
-  const fam = switchFamiliar();
-
-  try {
-    const selectNumber = canReceive() ? 2 : 1;
-    const page = visitBank();
+  const selectNumber = canReceive() ? 2 : 1;
+  return withBank((page) => {
     const available = getMonsters(selectNumber, page);
     if (!available.includes(monster)) return false;
     return runChoice(1, `mid=${monster.id}`).includes(
       "You donate your egg to science.",
     );
-  } finally {
-    visitUrl("main.php");
-    useFamiliar(fam);
-  }
+  });
 }
 
 /**
@@ -114,20 +99,14 @@ export function donate(monster: Monster): boolean {
  */
 export function receive(monster: Monster): boolean {
   if (!canReceive()) return false;
-  const fam = switchFamiliar();
-
-  try {
-    const page = visitBank();
+  return withBank((page) => {
     const available = getMonsters(1, page);
 
     if (!available.includes(monster)) return false;
     return runChoice(2, `mid=${monster.id}`).includes(
       "Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!",
     );
-  } finally {
-    visitUrl("main.php");
-    useFamiliar(fam);
-  }
+  });
 }
 
 /**

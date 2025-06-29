@@ -16,7 +16,7 @@ import {
   buy,
   myMeat,
 } from "kolmafia";
-import { have as have_ } from "../../lib.js";
+import { have as have_, unequip } from "../../lib.js";
 import {
   $effect,
   $familiar,
@@ -329,6 +329,12 @@ export function buskAt(
     $slots`hat, shirt, pants`.forEach((slot, index) =>
       equip(slot, initialEquips[index]),
     );
+    if (
+      initialFamiliar !== $familiar`Mad Hatrack` &&
+      myFamiliar() === $familiar`Mad Hatrack`
+    ) {
+      unequip($slot`familiar`);
+    }
     useFamiliar(initialFamiliar);
     equip($slot`familiar`, initialFamequip);
   }

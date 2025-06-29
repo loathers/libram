@@ -16049,8 +16049,15 @@ var familiar9 = $familiar(_templateObject468 || (_templateObject468 = _taggedTem
 function have53() {
   return have(familiar9);
 }
-var visitBank = function() {
-  return (0, import_kolmafia68.visitUrl)("place.php?whichplace=town_right&action=townright_dna", !1);
+var withBank = function(action) {
+  var initial = (0, import_kolmafia68.myFamiliar)();
+  (0, import_kolmafia68.useFamiliar)(familiar9);
+  try {
+    var page = (0, import_kolmafia68.visitUrl)("place.php?whichplace=town_right&action=townright_dna", !1);
+    return action(page);
+  } finally {
+    (0, import_kolmafia68.visitUrl)("main.php"), (0, import_kolmafia68.useFamiliar)(initial);
+  }
 }, canDonate = function() {
   return have($item(_templateObject2118 || (_templateObject2118 = _taggedTemplateLiteral54(["mimic egg"])))) && get("_mimicEggsDonated") < 3;
 }, canReceive = function() {
@@ -16069,39 +16076,28 @@ function getMonsters3(selectNumber, page) {
 function getDonableMonsters() {
   if (!canDonate()) return [];
   var selectNumber = canReceive() ? 2 : 1;
-  try {
-    var page = visitBank();
+  return withBank(function(page) {
     return getMonsters3(selectNumber, page);
-  } finally {
-    (0, import_kolmafia68.visitUrl)("main.php");
-  }
+  });
 }
 function getReceivableMonsters() {
-  if (!canReceive()) return [];
-  try {
-    var page = visitBank();
+  return canReceive() ? withBank(function(page) {
     return getMonsters3(1, page);
-  } finally {
-    (0, import_kolmafia68.visitUrl)("main.php");
-  }
+  }) : [];
 }
 function donate(monster) {
   if (!canDonate()) return !1;
-  try {
-    var selectNumber = canReceive() ? 2 : 1, page = visitBank(), available7 = getMonsters3(selectNumber, page);
+  var selectNumber = canReceive() ? 2 : 1;
+  return withBank(function(page) {
+    var available7 = getMonsters3(selectNumber, page);
     return available7.includes(monster) ? (0, import_kolmafia68.runChoice)(1, "mid=".concat(monster.id)).includes("You donate your egg to science.") : !1;
-  } finally {
-    (0, import_kolmafia68.visitUrl)("main.php");
-  }
+  });
 }
 function receive(monster) {
-  if (!canReceive()) return !1;
-  try {
-    var page = visitBank(), available7 = getMonsters3(1, page);
+  return canReceive() ? withBank(function(page) {
+    var available7 = getMonsters3(1, page);
     return available7.includes(monster) ? (0, import_kolmafia68.runChoice)(2, "mid=".concat(monster.id)).includes("Your mimic pops into a backroom and returns a few moments later with a fresh mimic egg!") : !1;
-  } finally {
-    (0, import_kolmafia68.visitUrl)("main.php");
-  }
+  }) : !1;
 }
 function differentiate(monster) {
   var page = directlyUse($item(_templateObject3102 || (_templateObject3102 = _taggedTemplateLiteral54(["mimic egg"])))), monsters = getMonsters3(1, page);

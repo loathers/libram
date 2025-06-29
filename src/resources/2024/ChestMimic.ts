@@ -1,8 +1,10 @@
 import {
   Monster,
+  myFamiliar,
   runChoice,
   runCombat,
   toMonster,
+  useFamiliar,
   visitUrl,
   xpath,
 } from "kolmafia";
@@ -23,6 +25,12 @@ const familiar = $familiar`Chest Mimic`;
 export function have(): boolean {
   return have_(familiar);
 }
+
+const switchFamiliar = () => {
+  const initial = myFamiliar();
+  useFamiliar(familiar);
+  return initial;
+};
 
 const visitBank = () =>
   visitUrl("place.php?whichplace=town_right&action=townright_dna", false);
@@ -48,12 +56,13 @@ function getMonsters(selectNumber: number, page: string): Monster[] {
 export function getDonableMonsters(): Monster[] {
   if (!canDonate()) return [];
   const selectNumber = canReceive() ? 2 : 1;
-
+  const fam = switchFamiliar();
   try {
     const page = visitBank();
     return getMonsters(selectNumber, page);
   } finally {
     visitUrl("main.php");
+    useFamiliar(fam);
   }
 }
 
@@ -62,11 +71,14 @@ export function getDonableMonsters(): Monster[] {
  */
 export function getReceivableMonsters(): Monster[] {
   if (!canReceive()) return [];
+  const fam = switchFamiliar();
+
   try {
     const page = visitBank();
     return getMonsters(1, page);
   } finally {
     visitUrl("main.php");
+    useFamiliar(fam);
   }
 }
 
@@ -78,6 +90,7 @@ export function getReceivableMonsters(): Monster[] {
  */
 export function donate(monster: Monster): boolean {
   if (!canDonate()) return false;
+  const fam = switchFamiliar();
 
   try {
     const selectNumber = canReceive() ? 2 : 1;
@@ -89,6 +102,7 @@ export function donate(monster: Monster): boolean {
     );
   } finally {
     visitUrl("main.php");
+    useFamiliar(fam);
   }
 }
 
@@ -100,6 +114,7 @@ export function donate(monster: Monster): boolean {
  */
 export function receive(monster: Monster): boolean {
   if (!canReceive()) return false;
+  const fam = switchFamiliar();
 
   try {
     const page = visitBank();
@@ -111,6 +126,7 @@ export function receive(monster: Monster): boolean {
     );
   } finally {
     visitUrl("main.php");
+    useFamiliar(fam);
   }
 }
 

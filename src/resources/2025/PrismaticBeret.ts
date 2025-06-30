@@ -236,7 +236,8 @@ const populateMap = (arr: Item[], max: number, multiplier: number) => {
   return map;
 };
 const relevantSlots = ["hat", "pants", "shirt"] as const;
-const functionalPrice = (item: Item) => (have_(item) ? 0 : npcPrice(item));
+const functionalPrice = (item: Item) =>
+  have_(item) || item === Item.none ? 0 : npcPrice(item);
 const outfitPrice = (outfit: { hat: Item; pants: Item; shirt: Item }) =>
   sum(relevantSlots, (slot) => functionalPrice(outfit[slot]));
 function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
@@ -271,7 +272,7 @@ function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
   for (const slot of relevantSlots) {
     const item = outfit[slot];
     if (have_(item)) continue;
-    if (!buy(item)) {
+    if (!buy(item) || item === Item.none) {
       logger.debug(`Failed to purchase ${item}`);
       return null;
     }

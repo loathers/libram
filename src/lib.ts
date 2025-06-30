@@ -568,6 +568,14 @@ export function getBanishedMonsters(): Map<Item | Skill, Monster> {
 export function canUse(item: Item): boolean {
   const path = myPath();
 
+  if (path === Path.get("G-Lover")) {
+    if (!item.name.toLowerCase().includes("g")) return false;
+  }
+
+  if (path === Path.get("Bees Hate You")) {
+    if (item.name.toLowerCase().includes("b")) return false;
+  }
+
   if (path !== Path.get("Nuclear Autumn")) {
     if (
       $items`Shrieking Weasel holo-record, Power-Guy 2000 holo-record, Lucky Strikes holo-record, EMD holo-record, Superdrifter holo-record, The Pigs holo-record, Drunk Uncles holo-record`.includes(
@@ -576,14 +584,6 @@ export function canUse(item: Item): boolean {
     ) {
       return false;
     }
-  }
-
-  if (path === Path.get("G-Lover")) {
-    if (!item.name.toLowerCase().includes("g")) return false;
-  }
-
-  if (path === Path.get("Bees Hate You")) {
-    if (item.name.toLowerCase().includes("b")) return false;
   }
 
   return true;

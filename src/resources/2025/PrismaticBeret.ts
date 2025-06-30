@@ -271,8 +271,9 @@ function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
 
   for (const slot of relevantSlots) {
     const item = outfit[slot];
+    if (item === Item.none) continue;
     if (have_(item)) continue;
-    if (!buy(item) || item === Item.none) {
+    if (!buy(item)) {
       logger.debug(`Failed to purchase ${item}`);
       return null;
     }

@@ -1,7 +1,8 @@
 import { myClass, cliExecute, equip, visitUrl } from "kolmafia";
-import { have as have_, questStep } from "../../lib.js";
+import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
 import { $classes, $item, $slot } from "../../template-string.js";
+import { QuestState } from "../../propertyTyping.js";
 
 const item = $item`tearaway pants`;
 /**
@@ -49,7 +50,7 @@ export function expectedTotalAdventures(
 export function unlockGuild(): boolean {
   if (!$classes`Disco Bandit, Accordion Thief`.includes(myClass()))
     return false;
-  if (questStep("questG08Moxie") >= 999) return true;
+  if (get("questG08Moxie") >= QuestState.FINISHED) return true;
   if (!have()) return false;
   try {
     cliExecute("checkpoint");
@@ -59,5 +60,5 @@ export function unlockGuild(): boolean {
     cliExecute("outfit checkpoint");
   }
 
-  return questStep("questG08Moxie") >= 999;
+  return get("questG08Moxie") >= QuestState.FINISHED;
 }

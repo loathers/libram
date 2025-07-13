@@ -344,15 +344,15 @@ export function buskAt(
 
 export function buskFor(
   weightedModifiers: Partial<Record<NumericModifier, number>>,
-  { buyItems, uselessEffects }: BuskOptions,
+  { buyItems, uselessEffects }?: BuskOptions,
 ): boolean;
 export function buskFor(
   effects: Effect[],
-  { buyItems, uselessEffects }: BuskOptions,
+  { buyItems, uselessEffects }?: BuskOptions,
 ): boolean;
 export function buskFor(
   valueFunction: (effect: Effect, duration: number) => number,
-  { buyItems, uselessEffects }: BuskOptions,
+  { buyItems, uselessEffects }?: BuskOptions,
 ): boolean;
 /**
  * Calculate the best outfit-power you can achieve for a given busk valuation, and then busks.

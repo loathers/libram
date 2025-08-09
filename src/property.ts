@@ -41,7 +41,6 @@ import {
 import {
   BooleanProperty,
   DeprecatedBooleanProperty,
-  DeprecatedFamiliarNumericProperty,
   DeprecatedFamiliarProperty,
   DeprecatedItemProperty,
   DeprecatedLocationProperty,

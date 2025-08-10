@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-param */
+/* eslint-disable jsdoc/require-returns */
 import {
   Bounty,
   Class,
@@ -38,6 +40,16 @@ import {
 
 import {
   BooleanProperty,
+  DeprecatedBooleanProperty,
+  DeprecatedFamiliarProperty,
+  DeprecatedItemProperty,
+  DeprecatedLocationProperty,
+  DeprecatedMonsterProperty,
+  DeprecatedNumericOrStringProperty,
+  DeprecatedNumericProperty,
+  DeprecatedPhylumProperty,
+  DeprecatedStatProperty,
+  DeprecatedStringProperty,
   familiarNumericProperties,
   FamiliarProperty,
   itemNumericProperties,
@@ -174,27 +186,47 @@ export const getStat = createMafiaClassPropertyGetter(Stat, toStat);
 
 export const getThrall = createMafiaClassPropertyGetter(Thrall, toThrall);
 
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedBooleanProperty): boolean;
 export function get(property: BooleanProperty): boolean;
 export function get(property: BooleanProperty, _default: boolean): boolean;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedNumericProperty): boolean;
 export function get(property: NumericProperty): number;
 export function get(property: NumericProperty, _default: number): number;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedNumericOrStringProperty): boolean;
 export function get(property: NumericOrStringProperty): number | string;
 export function get(
   property: NumericOrStringProperty,
   _default: number | string,
 ): number | string;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedStringProperty): boolean;
 export function get(property: StringProperty): string;
 export function get(property: StringProperty, _default: string): string;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedLocationProperty): boolean;
 export function get(property: LocationProperty): Location | null;
 export function get(property: LocationProperty, _default: Location): Location;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedMonsterProperty): boolean;
 export function get(property: MonsterProperty): Monster | null;
 export function get(property: MonsterProperty, _default: Monster): Monster;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedFamiliarProperty): boolean;
 export function get(property: FamiliarProperty): Familiar | null;
 export function get(property: FamiliarProperty, _default: Familiar): Familiar;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedStatProperty): boolean;
 export function get(property: StatProperty): Stat | null;
 export function get(property: StatProperty, _default: Stat): Stat;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedPhylumProperty): boolean;
 export function get(property: PhylumProperty): Phylum | null;
 export function get(property: PhylumProperty, _default: Phylum): Phylum;
+/** @deprecated This property is deprecated */
+export function get(property: DeprecatedItemProperty): boolean;
 export function get(property: ItemProperty): Item | null;
 export function get(property: ItemProperty, _default: Item): Item;
 export function get(property: string, _default: Location): Location;
@@ -262,17 +294,50 @@ export function get(property: string, _default?: unknown): unknown {
   }
 }
 
+/** @deprecated This property is deprecated */
+export function set(
+  property: DeprecatedBooleanProperty,
+  value: boolean,
+): boolean;
 export function set(property: BooleanProperty, value: boolean): boolean;
+/** @deprecated This property is deprecated */
+export function set(property: DeprecatedNumericProperty, value: number): number;
 export function set(property: NumericProperty, value: number): number;
+/** @deprecated This property is deprecated */
+export function set<T extends number | string>(
+  property: DeprecatedNumericOrStringProperty,
+  value: T,
+): T;
 export function set<T extends number | string>(
   property: NumericOrStringProperty,
   value: T,
 ): T;
+/** @deprecated This property is deprecated */
+export function set(property: DeprecatedStringProperty, value: string): string;
 export function set(property: StringProperty, value: string): string;
+/** @deprecated This property is deprecated */
+export function set(
+  property: DeprecatedLocationProperty,
+  value: Location,
+): Location;
 export function set(property: LocationProperty, value: Location): Location;
+/** @deprecated This property is deprecated */
+export function set(
+  property: DeprecatedMonsterProperty,
+  value: Monster,
+): Monster;
 export function set(property: MonsterProperty, value: Monster): Monster;
+/** @deprecated This property is deprecated */
+export function set(
+  property: DeprecatedFamiliarProperty,
+  value: Familiar,
+): Familiar;
 export function set(property: FamiliarProperty, value: Familiar): Familiar;
+/** @deprecated This property is deprecated */
+export function set(property: DeprecatedStatProperty, value: Stat): Stat;
 export function set(property: StatProperty, value: Stat): Stat;
+/** @deprecated This property is deprecated */
+export function set(property: DeprecatedPhylumProperty, value: Phylum): Phylum;
 export function set(property: PhylumProperty, value: Phylum): Phylum;
 export function set<D extends { toString(): string }>(
   property: string,

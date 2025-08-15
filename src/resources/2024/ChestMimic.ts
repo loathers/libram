@@ -46,7 +46,7 @@ const canReceive = () =>
   familiar.experience >= 100 && get("_mimicEggsObtained") < 11;
 
 const makeXpath = (selectNumber: number, disabled: boolean): string =>
-  `//select[@name="mid"][${selectNumber}]/option[position()>0]${
+  `(//select[@name="mid"])[${selectNumber}]/option[position()>0]${
     disabled ? "[@disabled]" : ""
   }/@value`;
 

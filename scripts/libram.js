@@ -16066,12 +16066,12 @@ var withBank = function(action) {
 }, canReceive = function() {
   return familiar9.experience >= 100 && get("_mimicEggsObtained") < 11;
 }, makeXpath = function(selectNumber, disabled) {
-  return '//select[@name="mid"]['.concat(selectNumber, "]/option[position()>0]").concat(disabled ? "[@disabled]" : "", "/@value");
+  return '(//select[@name="mid"])['.concat(selectNumber, "]/option").concat(disabled ? "[@disabled]" : "", "/@value");
 };
 function getMonsters3(selectNumber, page) {
   var total = (0, import_kolmafia68.xpath)(page, makeXpath(selectNumber, !1)), disabled = new Set((0, import_kolmafia68.xpath)(page, makeXpath(selectNumber, !0)));
   return total.filter(function(m) {
-    return !disabled.has(m);
+    return m != "" && !disabled.has(m);
   }).map(function(id) {
     return (0, import_kolmafia68.toMonster)(id);
   });

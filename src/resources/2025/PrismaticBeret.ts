@@ -317,9 +317,9 @@ export function buskAt(
   const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
   try {
     if (
-      taoMultiplier *
-        (getPower(equippedItem($slot`hat`)) +
-          getPower(equippedItem($slot`pants`))) +
+      getPower(equippedItem($slot`hat`)) * taoMultiplier +
+        getPower(equippedItem($slot`pants`)) *
+          (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
         getPower(equippedItem($slot`shirt`)) !==
       power
     ) {

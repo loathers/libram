@@ -60,6 +60,29 @@ export function have(): boolean {
 }
 
 function getEffectivePower(
+  item: Item,
+  hammerTime = have_($effect`Hammertime`),
+): number {
+  switch (toSlot(item)) {
+    case $slot`hat`:
+      return (
+        getPower(item) * (1 + (have_($skill`Tao of the Terrapin`) ? 1 : 0))
+      );
+    case $slot`shirt`:
+      return getPower(item);
+    case $slot`pants`:
+      return (
+        getPower(item) *
+        (1 +
+          (1 + (have_($skill`Tao of the Terrapin`) ? 1 : 0)) +
+          (hammerTime ? 3 : 0))
+      );
+    default:
+      return 0;
+  }
+}
+
+function sumEquipmentPower(
   overrideEquipment = {
     hat: equippedItem($slot`hat`),
     pants: equippedItem($slot`pants`),
@@ -67,12 +90,10 @@ function getEffectivePower(
     hammerTime: have_($effect`Hammertime`),
   },
 ): number {
-  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
   return (
-    getPower(overrideEquipment.hat) * taoMultiplier +
-    getPower(overrideEquipment.pants) *
-      (taoMultiplier + (overrideEquipment.hammerTime ? 3 : 0)) +
-    getPower(overrideEquipment.shirt)
+    getEffectivePower(overrideEquipment.hat, overrideEquipment.hammerTime) +
+    getEffectivePower(overrideEquipment.pants, overrideEquipment.hammerTime) +
+    getEffectivePower(overrideEquipment.shirt, overrideEquipment.hammerTime)
   );
 }
 
@@ -110,7 +131,7 @@ function availablePowersums({
       useableHats.flatMap((hat) =>
         useablePants.flatMap((pants) =>
           useableShirts.flatMap((shirt) =>
-            getEffectivePower({ hat, pants, shirt, hammerTime }),
+            sumEquipmentPower({ hat, pants, shirt, hammerTime }),
           ),
         ),
       ),
@@ -227,6 +248,22 @@ export function findOptimalOutfitPower(
   );
 }
 
+const validateItems = (arr: Item[], maxPower: number) => {
+  const map = new Map<number, Item>();
+  for (const it of arr) {
+    const power = getEffectivePower(it);
+    if (power > maxPower) continue;
+
+    const existing = map.get(power);
+    if (
+      !existing ||
+      (!have_(existing) && (have_(it) || npcPrice(it) < npcPrice(existing)))
+    ) {
+      map.set(power, it);
+    }
+  }
+  return [...map.values()];
+};
 const relevantSlots = ["hat", "pants", "shirt"] as const;
 const functionalPrice = (item: Item) =>
   have_(item) || item === Item.none ? 0 : npcPrice(item);
@@ -236,10 +273,10 @@ function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItems);
 
-  const outfits = useableHats.flatMap((hat) =>
-    useablePants.flatMap((pants) =>
-      useableShirts.flatMap((shirt) =>
-        getEffectivePower({ hat, pants, shirt, hammerTime }) === power
+  const outfits = validateItems(useableHats, power).flatMap((hat) =>
+    validateItems(useablePants, power).flatMap((pants) =>
+      validateItems(useableShirts, power).flatMap((shirt) =>
+        sumEquipmentPower({ hat, pants, shirt, hammerTime }) === power
           ? { hat, pants, shirt }
           : [],
       ),
@@ -296,7 +333,7 @@ export function buskAt(
   equip($slot`shirt`, shirt);
   equip($slot`pants`, pants);
   try {
-    if (getEffectivePower() !== power) {
+    if (sumEquipmentPower() !== power) {
       return false;
     }
     useSkill($skill`Beret Busking`);

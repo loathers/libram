@@ -59,28 +59,21 @@ export function have(): boolean {
   return have_(beret);
 }
 
-function getEffectivePower(overrideEquipment?: {
-  hat: Item;
-  pants: Item;
-  shirt: Item;
-  hammerTime: boolean;
-}): number {
+function getEffectivePower(
+  overrideEquipment = {
+    hat: equippedItem($slot`hat`),
+    pants: equippedItem($slot`pants`),
+    shirt: equippedItem($slot`shirt`),
+    hammerTime: have_($effect`Hammertime`),
+  },
+): number {
   const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
-  if (overrideEquipment === undefined) {
-    return (
-      getPower(equippedItem($slot`hat`)) * taoMultiplier +
-      getPower(equippedItem($slot`pants`)) *
-        (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
-      getPower(equippedItem($slot`shirt`))
-    );
-  } else {
-    return (
-      getPower(overrideEquipment.hat) * taoMultiplier +
-      getPower(overrideEquipment.pants) *
-        (taoMultiplier + (overrideEquipment.hammerTime ? 3 : 0)) +
-      getPower(overrideEquipment.shirt)
-    );
-  }
+  return (
+    getPower(overrideEquipment.hat) * taoMultiplier +
+    getPower(overrideEquipment.pants) *
+      (taoMultiplier + (overrideEquipment.hammerTime ? 3 : 0)) +
+    getPower(overrideEquipment.shirt)
+  );
 }
 
 function getUseableClothes(buyItems = true): {

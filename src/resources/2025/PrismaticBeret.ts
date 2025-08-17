@@ -59,14 +59,28 @@ export function have(): boolean {
   return have_(beret);
 }
 
-function getEffectivePower(): number {
+function getEffectivePower(overrideEquipment?: {
+  hat: Item;
+  pants: Item;
+  shirt: Item;
+  hammerTime: boolean;
+}): number {
   const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
-  return (
-    getPower(equippedItem($slot`hat`)) * taoMultiplier +
-    getPower(equippedItem($slot`pants`)) *
-      (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
-    getPower(equippedItem($slot`shirt`))
-  );
+  if (overrideEquipment === undefined) {
+    return (
+      getPower(equippedItem($slot`hat`)) * taoMultiplier +
+      getPower(equippedItem($slot`pants`)) *
+        (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
+      getPower(equippedItem($slot`shirt`))
+    );
+  } else {
+    return (
+      getPower(overrideEquipment.hat) * taoMultiplier +
+      getPower(overrideEquipment.pants) *
+        (taoMultiplier + (overrideEquipment.hammerTime ? 3 : 0)) +
+      getPower(overrideEquipment.shirt)
+    );
+  }
 }
 
 function getUseableClothes(buyItems = true): {
@@ -95,25 +109,16 @@ function availablePowersums({
   buyItems = true,
   hammerTime = have_($effect`Hammertime`),
 }: BuskOptions): number[] {
-  const tao = have_($skill`Tao of the Terrapin`) ? 1 : 0;
-  const hammer = hammerTime ? 3 : 0;
-
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItems);
 
-  const hatPowers = [
-    ...new Set(useableHats.map((i) => (1 + tao) * getPower(i))),
-  ];
-  const pantPowers = [
-    ...new Set(useablePants.map((i) => (1 + tao + hammer) * getPower(i))),
-  ];
-  const shirtPowers = [...new Set(useableShirts.map((i) => getPower(i)))];
-
   return [
     ...new Set(
-      hatPowers.flatMap((hat) =>
-        pantPowers.flatMap((pant) =>
-          shirtPowers.flatMap((shirt) => hat + pant + shirt),
+      useableHats.flatMap((hat) =>
+        useablePants.flatMap((pants) =>
+          useableShirts.flatMap((shirt) =>
+            getEffectivePower({ hat, pants, shirt, hammerTime }),
+          ),
         ),
       ),
     ),

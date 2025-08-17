@@ -234,22 +234,6 @@ export function findOptimalOutfitPower(
   );
 }
 
-const populateMap = (arr: Item[], max: number, multiplier: number) => {
-  const map = new Map<number, Item>();
-  for (const it of arr) {
-    const power = getPower(it) * multiplier;
-    if (power > max) continue;
-
-    const existing = map.get(power);
-    if (
-      !existing ||
-      (!have_(existing) && (have_(it) || npcPrice(it) < npcPrice(existing)))
-    ) {
-      map.set(power, it);
-    }
-  }
-  return map;
-};
 const relevantSlots = ["hat", "pants", "shirt"] as const;
 const functionalPrice = (item: Item) =>
   have_(item) || item === Item.none ? 0 : npcPrice(item);
@@ -258,22 +242,11 @@ const outfitPrice = (outfit: { hat: Item; pants: Item; shirt: Item }) =>
 function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItems);
-  const hatPowers = populateMap(
-    useableHats,
-    power,
-    have_($skill`Tao of the Terrapin`) ? 2 : 1,
-  );
-  const pantsPowers = populateMap(
-    useablePants,
-    power,
-    1 + (have_($skill`Tao of the Terrapin`) ? 1 : 0) + (hammerTime ? 3 : 0),
-  );
-  const shirtPowers = populateMap(useableShirts, power, 1);
 
-  const outfits = [...hatPowers].flatMap(([hatPower, hat]) =>
-    [...pantsPowers].flatMap(([pantsPower, pants]) =>
-      [...shirtPowers].flatMap(([shirtPower, shirt]) =>
-        hatPower + pantsPower + shirtPower === power
+  const outfits = useableHats.flatMap((hat) =>
+    useablePants.flatMap((pants) =>
+      useableShirts.flatMap((shirt) =>
+        getEffectivePower({ hat, pants, shirt, hammerTime }) === power
           ? { hat, pants, shirt }
           : [],
       ),

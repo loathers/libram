@@ -140,12 +140,33 @@ export function isItemProperty(property: string): boolean {
   );
 }
 
+function isDeprecated(attrs: string | undefined): boolean {
+  if (!attrs) return false;
+  return attrs.includes("deprecated");
+}
+
 async function main() {
   const response = await nodeFetch(PROPS_FILE);
   const text = await response.text();
   const props = text.split("\n");
 
-  const propTypes: { [key: string]: string[] } = {
+  const propTypes = {
+    BooleanProperty: [] as string[],
+    NumericProperty: [] as string[],
+    MonsterProperty: [] as string[],
+    MonsterNumericProperty: [] as string[],
+    LocationProperty: [] as string[],
+    StringProperty: [] as string[],
+    NumericOrStringProperty: [] as string[],
+    FamiliarProperty: [] as string[],
+    FamiliarNumericProperty: [] as string[],
+    StatProperty: [] as string[],
+    PhylumProperty: [] as string[],
+    ItemProperty: [] as string[],
+    ItemNumericProperty: [] as string[],
+  };
+
+  const deprecatedProps: Record<keyof typeof propTypes, string[]> = {
     BooleanProperty: [],
     NumericProperty: [],
     MonsterProperty: [],
@@ -166,40 +187,50 @@ async function main() {
     if (prop.startsWith("#")) continue;
 
     // Skip lines with fewer than 2 columns
-    const [, property, defaultValue] = prop.split("\t");
+    const [, property, defaultValue, attrs] = prop.split("\t");
     if (!property) continue;
 
+    const deprecated = isDeprecated(attrs);
+    const keys: (keyof typeof propTypes)[] = [];
+
     if (isMonsterProperty(property)) {
-      propTypes.MonsterProperty.push(property);
+      keys.push("MonsterProperty");
       if (hasNumericDefault(property, defaultValue)) {
-        propTypes.MonsterNumericProperty.push(property);
+        keys.push("MonsterNumericProperty");
       }
     } else if (isLocationProperty(property)) {
-      propTypes.LocationProperty.push(property);
+      keys.push("LocationProperty");
     } else if (isStatProperty(property)) {
-      propTypes.StatProperty.push(property);
+      keys.push("StatProperty");
     } else if (isFamiliarProperty(property)) {
-      propTypes.FamiliarProperty.push(property);
+      keys.push("FamiliarProperty");
       if (hasNumericDefault(property, defaultValue)) {
-        propTypes.FamiliarNumericProperty.push(property);
+        keys.push("FamiliarNumericProperty");
       }
     } else if (isPhylumProperty(property)) {
-      propTypes.PhylumProperty.push(property);
+      keys.push("PhylumProperty");
     } else if (isItemProperty(property)) {
-      propTypes.ItemProperty.push(property);
+      keys.push("ItemProperty");
       if (hasNumericDefault(property, defaultValue)) {
-        propTypes.ItemNumericProperty.push(property);
+        keys.push("ItemNumericProperty");
       }
     } else if (isNumericOrStringProperty(property)) {
-      propTypes.NumericOrStringProperty.push(property);
+      keys.push("NumericOrStringProperty");
     } else if (!defaultValue) {
-      propTypes.StringProperty.push(property);
+      keys.push("StringProperty");
     } else if (hasBooleanDefault(property, defaultValue)) {
-      propTypes.BooleanProperty.push(property);
+      keys.push("BooleanProperty");
     } else if (hasNumericDefault(property, defaultValue)) {
-      propTypes.NumericProperty.push(property);
+      keys.push("NumericProperty");
     } else {
-      propTypes.StringProperty.push(property);
+      keys.push("StringProperty");
+    }
+
+    for (const key of keys) {
+      propTypes[key].push(property);
+      if (deprecated) {
+        deprecatedProps[key].push(property);
+      }
     }
   }
 
@@ -223,6 +254,8 @@ async function main() {
       .map((v) => `"${v}"`)
       .join(", ")}] as const;\n`;
     contents += `export type ${type} = typeof ${typeLower}[number];\n`;
+    const deprecated = deprecatedProps[type as keyof typeof propTypes];
+    contents += `export type Deprecated${type} = ${deprecated.length > 0 ? deprecated.map((v) => `"${v}"`).join(" | ") : "never"};\n`;
   });
 
   await writeFile(TYPES_FILE, contents);

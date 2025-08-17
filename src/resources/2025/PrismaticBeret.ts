@@ -59,6 +59,16 @@ export function have(): boolean {
   return have_(beret);
 }
 
+function getEffectivePower(): number {
+  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
+  return (
+    getPower(equippedItem($slot`hat`)) * taoMultiplier +
+    getPower(equippedItem($slot`pants`)) *
+      (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
+    getPower(equippedItem($slot`shirt`))
+  );
+}
+
 function getUseableClothes(buyItems = true): {
   useableHats: Item[];
   useablePants: Item[];
@@ -314,15 +324,8 @@ export function buskAt(
   }
   equip($slot`shirt`, shirt);
   equip($slot`pants`, pants);
-  const taoMultiplier = have_($skill`Tao of the Terrapin`) ? 2 : 1;
   try {
-    if (
-      getPower(equippedItem($slot`hat`)) * taoMultiplier +
-        getPower(equippedItem($slot`pants`)) *
-          (taoMultiplier + (have_($effect`Hammertime`) ? 3 : 0)) +
-        getPower(equippedItem($slot`shirt`)) !==
-      power
-    ) {
+    if (getEffectivePower() !== power) {
       return false;
     }
     useSkill($skill`Beret Busking`);

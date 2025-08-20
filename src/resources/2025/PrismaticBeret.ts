@@ -126,13 +126,21 @@ function availablePowersums({
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItems);
 
+  const hatPowers = [
+    ...new Set(useableHats.map((i) => getEffectivePower(i, hammerTime))),
+  ];
+  const pantPowers = [
+    ...new Set(useablePants.map((i) => getEffectivePower(i, hammerTime))),
+  ];
+  const shirtPowers = [
+    ...new Set(useableShirts.map((i) => getEffectivePower(i, hammerTime))),
+  ];
+
   return [
     ...new Set(
-      useableHats.flatMap((hat) =>
-        useablePants.flatMap((pants) =>
-          useableShirts.flatMap((shirt) =>
-            sumEquipmentPower({ hat, pants, shirt, hammerTime }),
-          ),
+      hatPowers.flatMap((hat) =>
+        pantPowers.flatMap((pant) =>
+          shirtPowers.flatMap((shirt) => hat + pant + shirt),
         ),
       ),
     ),
@@ -264,24 +272,34 @@ const validateItems = (arr: Item[], maxPower: number) => {
   }
   return [...map.values()];
 };
+
 const relevantSlots = ["hat", "pants", "shirt"] as const;
 const functionalPrice = (item: Item) =>
   have_(item) || item === Item.none ? 0 : npcPrice(item);
 const outfitPrice = (outfit: { hat: Item; pants: Item; shirt: Item }) =>
   sum(relevantSlots, (slot) => functionalPrice(outfit[slot]));
-function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
+function findOutfit(power: number, buyItems: boolean) {
   const { useableHats, useablePants, useableShirts } =
     getUseableClothes(buyItems);
 
-  const outfits = validateItems(useableHats, power).flatMap((hat) =>
-    validateItems(useablePants, power).flatMap((pants) =>
-      validateItems(useableShirts, power).flatMap((shirt) =>
-        sumEquipmentPower({ hat, pants, shirt, hammerTime }) === power
+  const hats = validateItems(useableHats, power);
+  const pantses = validateItems(useablePants, power);
+  const shirts = validateItems(useableShirts, power);
+  const outfits = hats.flatMap((hat) =>
+    shirts.flatMap((shirt) =>
+      pantses.flatMap((pants) =>
+        sumEquipmentPower({
+          hat,
+          pants,
+          shirt,
+          hammerTime: have_($effect`Hammertime`),
+        }) === power
           ? { hat, pants, shirt }
           : [],
       ),
     ),
   );
+
   if (!outfits.length) return null;
   const outfit = maxBy(outfits, outfitPrice, true);
   logger.debug(`Chose outfit ${outfit.hat} ${outfit.shirt} ${outfit.pants}`);
@@ -302,22 +320,14 @@ function findOutfit(power: number, buyItems: boolean, hammerTime: boolean) {
 /**
  * Attempt to busk at a particular power
  * @param power The power in question
- * @param options An object containing the following optional keys:
- * @param options.buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
- * @param options.hammerTime Whether or not to assume you have Hammertime--defaults to whether you currently have it
+ * @param buyItems Whether or not we should consider purchasing items from NPC stores; defaults to true
  * @returns If we successfully busked at that power
  */
-export function buskAt(
-  power: number,
-  {
-    buyItems = true,
-    hammerTime = have_($effect`Hammertime`),
-  }: BuskOptions = {},
-): boolean {
+export function buskAt(power: number, buyItems = true): boolean {
   if (!have()) return false;
   const initialUses = get("_beretBuskingUses");
   if (initialUses >= 5) return false;
-  const outfit = findOutfit(power, buyItems, hammerTime);
+  const outfit = findOutfit(power, buyItems);
   if (!outfit) return false;
   const initialEquips = $slots`hat, shirt, pants`.map((slot) =>
     equippedItem(slot),
@@ -382,5 +392,5 @@ export function buskFor(
     { buyItems, uselessEffects },
     get("_beretBuskingUses"),
   );
-  return buskAt(outfitPower, { buyItems });
+  return buskAt(outfitPower, buyItems);
 }

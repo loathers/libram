@@ -74,7 +74,7 @@ function getEffectivePower(
       return (
         getPower(item) *
         (1 +
-          (1 + (have_($skill`Tao of the Terrapin`) ? 1 : 0)) +
+          (have_($skill`Tao of the Terrapin`) ? 1 : 0) +
           (hammerTime ? 3 : 0))
       );
     default:

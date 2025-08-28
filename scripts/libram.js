@@ -17237,7 +17237,7 @@ function getEffectivePower(item15) {
     case $slot(_templateObject549 || (_templateObject549 = _taggedTemplateLiteral65(["shirt"]))):
       return (0, import_kolmafia79.getPower)(item15);
     case $slot(_templateObject644 || (_templateObject644 = _taggedTemplateLiteral65(["pants"]))):
-      return (0, import_kolmafia79.getPower)(item15) * (1 + (1 + (have($skill(_templateObject738 || (_templateObject738 = _taggedTemplateLiteral65(["Tao of the Terrapin"])))) ? 1 : 0)) + (hammerTime ? 3 : 0));
+      return (0, import_kolmafia79.getPower)(item15) * (1 + (have($skill(_templateObject738 || (_templateObject738 = _taggedTemplateLiteral65(["Tao of the Terrapin"])))) ? 1 : 0) + (hammerTime ? 3 : 0));
     default:
       return 0;
   }

@@ -159,6 +159,28 @@ function skillBallsMacroName(skillOrName: SkillOrName) {
     : skill.id;
 }
 
+/**
+ * Reduces a list of items into pairs to funksling.
+ *
+ * @param items - The items to be reduced.
+ * @returns The reduced list of items or item pairs.
+ */
+function funkslingReduce(
+  ...items: ItemOrName[]
+): (ItemOrName | [ItemOrName, ItemOrName])[] {
+  return items.reduce<(ItemOrName | [ItemOrName, ItemOrName])[]>(
+    (acc, item, i, arr) =>
+      i % 2 === 0
+        ? acc.concat(
+            i + 1 < arr.length
+              ? [[item, arr[i + 1]] as [ItemOrName, ItemOrName]]
+              : [item],
+          )
+        : acc,
+    [],
+  );
+}
+
 type Constructor<T> = { new (): T };
 
 export class InvalidMacroError extends Error {}
@@ -716,6 +738,58 @@ export class Macro {
   }
 
   /**
+   * Add one or more item steps to the macro, and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  funkslingItem(...items: ItemOrName[]): this {
+    return this.item(...funkslingReduce(...items));
+  }
+
+  /**
+   * Create a new macro with one or more item steps, and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  static funkslingItem<T extends Macro>(
+    this: Constructor<T>,
+    ...items: ItemOrName[]
+  ): T {
+    return new this().funkslingItem(...items);
+  }
+
+  /**
+   * Add one or more item steps to the macro, where each step checks to see if you have the item first,
+   * and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  tryFunkslingItem(...items: ItemOrName[]): this {
+    return this.tryItem(...funkslingReduce(...items));
+  }
+
+  /**
+   * Create a new macro with one or more item steps, where each step checks to see if you have the item first,
+   * and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  static tryFunkslingItem<T extends Macro>(
+    this: Constructor<T>,
+    ...items: ItemOrName[]
+  ): T {
+    return new this().tryFunkslingItem(...items);
+  }
+
+  /**
    * Add an attack step to the macro.
    *
    * @returns {Macro} This object itself.
@@ -927,6 +1001,58 @@ export class StrictMacro extends Macro {
     ...items: (Item | [Item, Item])[]
   ): T {
     return new this().tryItem(...items);
+  }
+
+  /**
+   * Add one or more item steps to the macro, and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {StrictMacro} This object itself.
+   */
+  funkslingItem(...items: Item[]): this {
+    return super.funkslingItem(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps, and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {StrictMacro} This object itself.
+   */
+  static funkslingItem<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: Item[]
+  ): T {
+    return new this().funkslingItem(...items);
+  }
+
+  /**
+   * Add one or more item steps to the macro, where each step checks to see if you have the item first,
+   * and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {StrictMacro} This object itself.
+   */
+  tryFunkslingItem(...items: Item[]): this {
+    return super.tryFunkslingItem(...items);
+  }
+
+  /**
+   * Create a new macro with one or more item steps, where each step checks to see if you have the item first,
+   * and automatically attempting to funksling as many of the items as possible.
+   * This function does not check if you can funksling or not.
+   *
+   * @param items Items to use.
+   * @returns {StrictMacro} This object itself.
+   */
+  static tryFunkslingItem<T extends StrictMacro>(
+    this: Constructor<T>,
+    ...items: Item[]
+  ): T {
+    return new this().tryFunkslingItem(...items);
   }
 
   /**

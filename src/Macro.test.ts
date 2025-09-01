@@ -114,10 +114,121 @@ describe(Macro, () => {
     expect(Macro.item(mock).toString()).toEqual(`use ${mock.name};`);
   });
 
+  it("item pair", () => {
+    const mock = $item`mock item`;
+    expect(Macro.item([mock, mock]).toString()).toEqual(
+      `use ${mock.name}, ${mock.name};`,
+    );
+  });
+
+  it("item pair + single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.item([mock, mock], mock).toString()).toEqual(
+      `${Macro.item([mock, mock]).toString()}${Macro.item(mock).toString()}`,
+    );
+  });
+
+  it("item pair + pair", () => {
+    const mock = $item`mock item`;
+    expect(Macro.item([mock, mock], [mock, mock]).toString()).toEqual(
+      `use ${mock.name}, ${mock.name};use ${mock.name}, ${mock.name};`,
+    );
+  });
+
   it("tryItem", () => {
     const mock = $item`mock item`;
     expect(Macro.tryItem(mock).toString()).toEqual(
       `if hascombatitem mock item;use ${mock.name};endif;`,
+    );
+  });
+
+  it("tryItem same pair", () => {
+    const mock = $item`mock item`;
+    expect(Macro.tryItem([mock, mock]).toString()).toEqual(
+      `if hastwocombatitems mock item;use mock item, mock item;endif;`,
+    );
+  });
+
+  it("tryItem different pair", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.tryItem([mock1, mock2]).toString()).toEqual(
+      `if hascombatitem mock item && hascombatitem mock item two;use mock item, mock item two;endif;`,
+    );
+  });
+
+  it("tryItem same pair + single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.tryItem([mock, mock], mock).toString()).toEqual(
+      `${Macro.tryItem([mock, mock]).toString()}${Macro.tryItem(mock).toString()}`,
+    );
+  });
+
+  it("tryItem different pair + single", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.tryItem([mock1, mock2], mock1).toString()).toEqual(
+      `${Macro.tryItem([mock1, mock2]).toString()}${Macro.tryItem(mock1).toString()}`,
+    );
+  });
+
+  it("funkslingItem same items", () => {
+    const mock = $item`mock item`;
+    expect(Macro.funkslingItem(mock, mock).toString()).toEqual(
+      Macro.item([mock, mock]).toString(),
+    );
+  });
+
+  it("funkslingItem different items", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.funkslingItem(mock1, mock2).toString()).toEqual(
+      Macro.item([mock1, mock2]).toString(),
+    );
+  });
+
+  it("funklingItem same pair + single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.funkslingItem(mock, mock, mock).toString()).toEqual(
+      Macro.item([mock, mock], mock).toString(),
+    );
+  });
+
+  it("funklingItem different pair + single", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.funkslingItem(mock1, mock2, mock1).toString()).toEqual(
+      Macro.item([mock1, mock2], mock1).toString(),
+    );
+  });
+
+  it("tryFunklingItem same", () => {
+    const mock = $item`mock item`;
+    expect(Macro.tryFunkslingItem(mock, mock).toString()).toEqual(
+      Macro.tryItem([mock, mock]).toString(),
+    );
+  });
+
+  it("tryFunklingItem different", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.tryFunkslingItem(mock1, mock2).toString()).toEqual(
+      Macro.tryItem([mock1, mock2]).toString(),
+    );
+  });
+
+  it("tryFunklingItem same pair + single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.tryFunkslingItem(mock, mock, mock).toString()).toEqual(
+      Macro.tryItem([mock, mock], mock).toString(),
+    );
+  });
+
+  it("tryFunklingItem different pair + single", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    expect(Macro.tryFunkslingItem(mock1, mock2, mock1).toString()).toEqual(
+      Macro.tryItem([mock1, mock2], mock1).toString(),
     );
   });
 
@@ -162,6 +273,21 @@ describe(Macro.makeBALLSPredicate, () => {
     const mock = $item`mock combat item`;
     expect(Macro.makeBALLSPredicate(mock)).toEqual(
       `hascombatitem ${mock.name}`,
+    );
+  });
+
+  it("Item Pair Same", () => {
+    const mock = $item`mock combat item`;
+    expect(Macro.makeBALLSPredicate([mock, mock])).toEqual(
+      `hastwocombatitems ${mock.name}`,
+    );
+  });
+
+  it("Item Pair Different", () => {
+    const mock1 = $item`mock combat item`;
+    const mock2 = $item`mock combat item two`;
+    expect(Macro.makeBALLSPredicate([mock1, mock2])).toEqual(
+      `hascombatitem ${mock1.name} && hascombatitem ${mock2.name}`,
     );
   });
 

@@ -24,6 +24,7 @@ export const overlappingItemNames = [
 ];
 
 export const overlappingSkillNames = [
+  "Lightning Bolt",
   "Shoot",
   "Thrust-Smack",
   "Headbutt",
@@ -43,4 +44,5 @@ export const overlappingSkillNames = [
   "Boil",
   "Slice",
   "Rainbow",
+  "Lightning Bolt",
 ];

@@ -7439,6 +7439,13 @@ function skillBallsMacroName(skillOrName) {
   var skill = skillOrNameToSkill(skillOrName);
   return skill.name.match(/^[A-Za-z ]+$/) && !overlappingSkillNames.includes(skill.name) ? skill.name : skill.id;
 }
+function funkslingReduce() {
+  for (var _len = arguments.length, items = new Array(_len), _key = 0; _key < _len; _key++)
+    items[_key] = arguments[_key];
+  return items.reduce(function(acc, item15, i, arr) {
+    return i % 2 === 0 ? acc.concat(i + 1 < arr.length ? [[item15, arr[i + 1]]] : [item15]) : acc;
+  }, []);
+}
 var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   function InvalidMacroError2() {
     return _classCallCheck4(this, InvalidMacroError2), _callSuper2(this, InvalidMacroError2, arguments);
@@ -7502,8 +7509,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function() {
-        for (var _ref, _this$components, _len = arguments.length, nextSteps = new Array(_len), _key = 0; _key < _len; _key++)
-          nextSteps[_key] = arguments[_key];
+        for (var _ref, _this$components, _len2 = arguments.length, nextSteps = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
+          nextSteps[_key2] = arguments[_key2];
         var nextStepsStrings = (_ref = []).concat.apply(_ref, _toConsumableArray4(nextSteps.map(function(x) {
           return x instanceof Macro2 ? x.components : [x];
         })));
@@ -7712,8 +7719,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   }, {
     key: "skill",
     value: function() {
-      for (var _len2 = arguments.length, skills4 = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
-        skills4[_key2] = arguments[_key2];
+      for (var _len3 = arguments.length, skills4 = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++)
+        skills4[_key3] = arguments[_key3];
       return this.step.apply(this, _toConsumableArray4(skills4.map(function(skill2) {
         return "skill ".concat(skillBallsMacroName(skill2));
       })));
@@ -7734,8 +7741,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function() {
-        for (var _len3 = arguments.length, skills4 = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++)
-          skills4[_key3] = arguments[_key3];
+        for (var _len4 = arguments.length, skills4 = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++)
+          skills4[_key4] = arguments[_key4];
         return this.step.apply(this, _toConsumableArray4(skills4.map(function(skillOrName) {
           return skillOrNameToSkill(skillOrName);
         }).map(function(skill) {
@@ -7759,8 +7766,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function() {
-        for (var _len4 = arguments.length, skills4 = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++)
-          skills4[_key4] = arguments[_key4];
+        for (var _len5 = arguments.length, skills4 = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++)
+          skills4[_key5] = arguments[_key5];
         return this.step.apply(this, _toConsumableArray4(skills4.map(function(skillOrName) {
           return skillOrNameToSkill(skillOrName);
         }).map(function(skill) {
@@ -7784,8 +7791,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function() {
-        for (var _len5 = arguments.length, items = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++)
-          items[_key5] = arguments[_key5];
+        for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++)
+          items[_key6] = arguments[_key6];
         return this.step.apply(this, _toConsumableArray4(items.map(function(itemOrItems) {
           return "use ".concat(itemOrItemsBallsMacroName(itemOrItems));
         })));
@@ -7807,8 +7814,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * @returns {Macro} This object itself.
        */
       function() {
-        for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++)
-          items[_key6] = arguments[_key6];
+        for (var _len7 = arguments.length, items = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
+          items[_key7] = arguments[_key7];
         return this.step.apply(this, _toConsumableArray4(items.map(function(item15) {
           return Macro2.if_(itemOrItemsBallsMacroPredicate(item15), Macro2.item(item15));
         })));
@@ -7818,6 +7825,50 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
      *
      * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "funkslingItem",
+    value: (
+      /**
+       * Add one or more item steps to the macro, and automatically attempting to funksling as many of the items as possible.
+       * This function does not check if you can funksling or not.
+       *
+       * @param items Items to use.
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.item.apply(this, _toConsumableArray4(funkslingReduce.apply(void 0, arguments)));
+      }
+    )
+    /**
+     * Create a new macro with one or more item steps, and automatically attempting to funksling as many of the items as possible.
+     * This function does not check if you can funksling or not.
+     *
+     * @param items Items to use.
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "tryFunkslingItem",
+    value: (
+      /**
+       * Add one or more item steps to the macro, where each step checks to see if you have the item first,
+       * and automatically attempting to funksling as many of the items as possible.
+       * This function does not check if you can funksling or not.
+       *
+       * @param items Items to use.
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.tryItem.apply(this, _toConsumableArray4(funkslingReduce.apply(void 0, arguments)));
+      }
+    )
+    /**
+     * Create a new macro with one or more item steps, where each step checks to see if you have the item first,
+     * and automatically attempting to funksling as many of the items as possible.
+     * This function does not check if you can funksling or not.
+     *
+     * @param items Items to use.
      * @returns {Macro} This object itself.
      */
   }, {
@@ -8028,6 +8079,18 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       return (_this7 = new this()).tryItem.apply(_this7, arguments);
     }
   }, {
+    key: "funkslingItem",
+    value: function() {
+      var _this8;
+      return (_this8 = new this()).funkslingItem.apply(_this8, arguments);
+    }
+  }, {
+    key: "tryFunkslingItem",
+    value: function() {
+      var _this9;
+      return (_this9 = new this()).tryFunkslingItem.apply(_this9, arguments);
+    }
+  }, {
     key: "attack",
     value: function() {
       return new this().attack();
@@ -8080,8 +8143,8 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _len7 = arguments.length, skills4 = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
-          skills4[_key7] = arguments[_key7];
+        for (var _len8 = arguments.length, skills4 = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++)
+          skills4[_key8] = arguments[_key8];
         return _superPropGet(StrictMacro2, "skill", this, 3)(skills4);
       }
     )
@@ -8101,8 +8164,8 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _len8 = arguments.length, items = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++)
-          items[_key8] = arguments[_key8];
+        for (var _len9 = arguments.length, items = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++)
+          items[_key9] = arguments[_key9];
         return _superPropGet(StrictMacro2, "item", this, 3)(items);
       }
     )
@@ -8122,8 +8185,8 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _len9 = arguments.length, skills4 = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++)
-          skills4[_key9] = arguments[_key9];
+        for (var _len10 = arguments.length, skills4 = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++)
+          skills4[_key10] = arguments[_key10];
         return _superPropGet(StrictMacro2, "trySkill", this, 3)(skills4);
       }
     )
@@ -8143,8 +8206,8 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _len10 = arguments.length, items = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++)
-          items[_key10] = arguments[_key10];
+        for (var _len11 = arguments.length, items = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++)
+          items[_key11] = arguments[_key11];
         return _superPropGet(StrictMacro2, "tryItem", this, 3)(items);
       }
     )
@@ -8152,6 +8215,54 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
      * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
      *
      * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+     * @returns {StrictMacro} This object itself.
+     */
+  }, {
+    key: "funkslingItem",
+    value: (
+      /**
+       * Add one or more item steps to the macro, and automatically attempting to funksling as many of the items as possible.
+       * This function does not check if you can funksling or not.
+       *
+       * @param items Items to use.
+       * @returns {StrictMacro} This object itself.
+       */
+      function() {
+        for (var _len12 = arguments.length, items = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++)
+          items[_key12] = arguments[_key12];
+        return _superPropGet(StrictMacro2, "funkslingItem", this, 3)(items);
+      }
+    )
+    /**
+     * Create a new macro with one or more item steps, and automatically attempting to funksling as many of the items as possible.
+     * This function does not check if you can funksling or not.
+     *
+     * @param items Items to use.
+     * @returns {StrictMacro} This object itself.
+     */
+  }, {
+    key: "tryFunkslingItem",
+    value: (
+      /**
+       * Add one or more item steps to the macro, where each step checks to see if you have the item first,
+       * and automatically attempting to funksling as many of the items as possible.
+       * This function does not check if you can funksling or not.
+       *
+       * @param items Items to use.
+       * @returns {StrictMacro} This object itself.
+       */
+      function() {
+        for (var _len13 = arguments.length, items = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++)
+          items[_key13] = arguments[_key13];
+        return _superPropGet(StrictMacro2, "tryFunkslingItem", this, 3)(items);
+      }
+    )
+    /**
+     * Create a new macro with one or more item steps, where each step checks to see if you have the item first,
+     * and automatically attempting to funksling as many of the items as possible.
+     * This function does not check if you can funksling or not.
+     *
+     * @param items Items to use.
      * @returns {StrictMacro} This object itself.
      */
   }, {
@@ -8164,8 +8275,8 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
        * @returns {StrictMacro} This object itself.
        */
       function() {
-        for (var _len11 = arguments.length, skills4 = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++)
-          skills4[_key11] = arguments[_key11];
+        for (var _len14 = arguments.length, skills4 = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++)
+          skills4[_key14] = arguments[_key14];
         return _superPropGet(StrictMacro2, "trySkillRepeat", this, 3)(skills4);
       }
     )
@@ -8178,32 +8289,44 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
   }], [{
     key: "skill",
     value: function() {
-      var _this8;
-      return (_this8 = new this()).skill.apply(_this8, arguments);
+      var _this10;
+      return (_this10 = new this()).skill.apply(_this10, arguments);
     }
   }, {
     key: "item",
     value: function() {
-      var _this9;
-      return (_this9 = new this()).item.apply(_this9, arguments);
+      var _this11;
+      return (_this11 = new this()).item.apply(_this11, arguments);
     }
   }, {
     key: "trySkill",
     value: function() {
-      var _this10;
-      return (_this10 = new this()).trySkill.apply(_this10, arguments);
+      var _this12;
+      return (_this12 = new this()).trySkill.apply(_this12, arguments);
     }
   }, {
     key: "tryItem",
     value: function() {
-      var _this11;
-      return (_this11 = new this()).tryItem.apply(_this11, arguments);
+      var _this13;
+      return (_this13 = new this()).tryItem.apply(_this13, arguments);
+    }
+  }, {
+    key: "funkslingItem",
+    value: function() {
+      var _this14;
+      return (_this14 = new this()).funkslingItem.apply(_this14, arguments);
+    }
+  }, {
+    key: "tryFunkslingItem",
+    value: function() {
+      var _this15;
+      return (_this15 = new this()).tryFunkslingItem.apply(_this15, arguments);
     }
   }, {
     key: "trySkillRepeat",
     value: function() {
-      var _this12;
-      return (_this12 = new this()).trySkillRepeat.apply(_this12, arguments);
+      var _this16;
+      return (_this16 = new this()).trySkillRepeat.apply(_this16, arguments);
     }
   }]);
 }(Macro);

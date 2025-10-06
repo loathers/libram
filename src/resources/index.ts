@@ -67,6 +67,7 @@ import * as Raffle from "./evergreen/Raffle.js";
 import * as CyberRealm from "./2025/CyberRealm.js";
 import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
 import * as PrismaticBeret from "./2025/PrismaticBeret.js";
+import * as BloodCubicZirconia from "./2025/BloodCubicZirconia.js";
 
 export {
   AprilingBandHelmet,
@@ -77,6 +78,7 @@ export {
   BarrelShrine,
   BatWings,
   BeachComb,
+  BloodCubicZirconia,
   BoxingDaycare,
   BurningLeaves,
   CampAway,

@@ -59,7 +59,13 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   const stat = BCZCOSTS.get(skill);
   if (!stat) return 0;
 
-  const currentStat = myBasestat(stat);
+  // const currentStat = myBasestat(stat);
+  const currentStat =
+    stat === $stat`Moxie`
+      ? myBasestat($stat`SubMoxie`)
+      : stat === $stat`Mysticality`
+        ? myBasestat($stat`SubMysticality`)
+        : myBasestat($stat`SubMuscle`);
   const timesCast = skill.timescast ?? 0;
 
   let casts = 0;

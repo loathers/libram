@@ -1,5 +1,5 @@
 import { myBasestat, Skill, Stat } from "kolmafia";
-import { $item, $skill, $skills, $stat } from "../../index.js";
+import { $item, $skill, $skills, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 
 /**

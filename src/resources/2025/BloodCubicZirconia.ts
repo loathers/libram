@@ -1,5 +1,5 @@
 import { myBasestat, Skill, Stat } from "kolmafia";
-import { $item, $skill, $skills, $stat } from "../../template-string.js";
+import { $item, $skill, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 
 /**
@@ -34,7 +34,6 @@ const BCZSKILLCOST = new Map<number, number>([
   [21, 370000000],
 ]);
 
-const BCZSKILLS = $skills`BCZ: Blood Geyser, BCZ: Refracted Gaze, BCZ: Sweat Bullets, BCZ: Blood Bath, BCZ: Craft a Pheromone Cocktail, BCZ: Create Blood Thinner, BCZ: Dial it up to 11, BCZ: Prepare Spinal Tapas, BCZ: Sweat Equity`;
 export const BCZCOSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Blood Geyser`, $stat`SubMuscle`],
   [$skill`BCZ: Refracted Gaze`, $stat`SubMysticality`],
@@ -54,7 +53,6 @@ export const BCZCOSTS = new Map<Skill, Stat>([
  */
 export function availableCasts(skill: Skill, statFloor: number): number {
   if (!have()) return 0;
-  if (!BCZSKILLS.includes(skill)) return 0;
 
   const stat = BCZCOSTS.get(skill);
   if (!stat) return 0;

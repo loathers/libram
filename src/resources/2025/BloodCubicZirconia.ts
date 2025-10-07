@@ -36,15 +36,15 @@ const BCZSKILLCOST = new Map<number, number>([
 
 const BCZSKILLS = $skills`BCZ: Blood Geyser, BCZ: Refracted Gaze, BCZ: Sweat Bullets, BCZ: Blood Bath, BCZ: Craft a Pheromone Cocktail, BCZ: Create Blood Thinner, BCZ: Dial it up to 11, BCZ: Prepare Spinal Tapas, BCZ: Sweat Equity`;
 export const BCZCOSTS = new Map<Skill, Stat>([
-  [$skill`BCZ: Blood Geyser`, $stat`Muscle`],
-  [$skill`BCZ: Refracted Gaze`, $stat`Mysticality`],
-  [$skill`BCZ: Sweat Bullets`, $stat`Moxie`],
-  [$skill`BCZ: Blood Bath`, $stat`Muscle`],
-  [$skill`BCZ: Craft a Pheromone Cocktail`, $stat`Moxie`],
-  [$skill`BCZ: Create Blood Thinner`, $stat`Muscle`],
-  [$skill`BCZ: Dial it up to 11`, $stat`Mysticality`],
-  [$skill`BCZ: Prepare Spinal Tapas`, $stat`Mysticality`],
-  [$skill`BCZ: Sweat Equity`, $stat`Moxie`],
+  [$skill`BCZ: Blood Geyser`, $stat`SubMuscle`],
+  [$skill`BCZ: Refracted Gaze`, $stat`SubMysticality`],
+  [$skill`BCZ: Sweat Bullets`, $stat`SubMoxie`],
+  [$skill`BCZ: Blood Bath`, $stat`SubMuscle`],
+  [$skill`BCZ: Craft a Pheromone Cocktail`, $stat`SubMoxie`],
+  [$skill`BCZ: Create Blood Thinner`, $stat`SubMuscle`],
+  [$skill`BCZ: Dial it up to 11`, $stat`SubMysticality`],
+  [$skill`BCZ: Prepare Spinal Tapas`, $stat`SubMysticality`],
+  [$skill`BCZ: Sweat Equity`, $stat`SubMoxie`],
 ]);
 
 /**
@@ -60,13 +60,9 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   if (!stat) return 0;
 
   // const currentStat = myBasestat(stat);
-  const currentStat =
-    stat === $stat`Moxie`
-      ? myBasestat($stat`SubMoxie`)
-      : stat === $stat`Mysticality`
-        ? myBasestat($stat`SubMysticality`)
-        : myBasestat($stat`SubMuscle`);
+  const currentStat = myBasestat(stat);
   const timesCast = skill.timescast ?? 0;
+  const subStatFloor = statFloor ** 2;
 
   let casts = 0;
   let remainingStat = currentStat;
@@ -74,7 +70,7 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   for (let i = timesCast; i < BCZSKILLCOST.size; i++) {
     const nextCost = BCZSKILLCOST.get(i);
     if (nextCost === undefined) break;
-    if (remainingStat - nextCost < statFloor) break;
+    if (remainingStat - nextCost < subStatFloor) break;
     remainingStat -= nextCost;
     casts++;
   }

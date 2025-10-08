@@ -1,4 +1,4 @@
-import { myBasestat, Skill, Stat } from "kolmafia";
+import { myBasestat, Skill, Stat, useSkill } from "kolmafia";
 import { $item, $skill, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 
@@ -74,4 +74,17 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   }
 
   return casts;
+}
+
+/**
+ * @param skill The BCZ skill to cast.
+ * @param statFloor Minimum base stat you want to keep.
+ * @returns Whether you successfully cast the spell.
+ */
+export function castDownTo(skill: Skill, statFloor: number): boolean {
+  if (!have() || !BCZCOSTS.get(skill)) return false;
+  const available = availableCasts(skill, statFloor);
+  if (available === 0) return false;
+
+  return useSkill(skill, available);
 }

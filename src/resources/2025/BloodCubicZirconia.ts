@@ -1,6 +1,7 @@
 import { myBasestat, Skill, Stat, useSkill } from "kolmafia";
 import { $item, $skill, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
 
 /**
  * @returns Whether or not you have the blood cubic zirconia
@@ -46,6 +47,24 @@ export const BCZCOSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Sweat Equity`, $stat`SubMoxie`],
 ]);
 
+export const BCZPREFS = new Map<Skill, string>([
+  [$skill`BCZ: Blood Geyser`, "_bczBloodGeyserCasts"],
+  [$skill`BCZ: Refracted Gaze`, "_bczRefractedGazeCasts"],
+  [$skill`BCZ: Sweat Bullets`, "_bczSweatBulletsCasts"],
+  [$skill`BCZ: Blood Bath`, "_bczBloodBathCasts"],
+  [$skill`BCZ: Dial it up to 11`, "_bczDialitupCasts"],
+  [$skill`BCZ: Sweat Equity`, "_bczSweatEquityCasts"],
+  [$skill`BCZ: Create Blood Thinner`, "_bczBloodThinnerCasts"],
+  [$skill`BCZ: Prepare Spinal Tapas`, "_bczSpinalTapasCasts"],
+  [$skill`BCZ: Craft a Pheromone Cocktail`, "_bczPheromoneCocktailCasts"],
+]);
+
+function getBCZTimesCast(skill: Skill): number {
+  const pref = BCZPREFS.get(skill);
+  if (!pref) return 0;
+  return get(pref, 0);
+}
+
 /**
  * @param skill The BCZ skill to check.
  * @param statFloor Minimum base stat you want to keep.
@@ -59,7 +78,7 @@ export function availableCasts(skill: Skill, statFloor: number): number {
 
   // const currentStat = myBasestat(stat);
   const currentStat = myBasestat(stat);
-  const timesCast = skill.timescast ?? 0;
+  const timesCast = getBCZTimesCast(skill);
   const subStatFloor = statFloor ** 2;
 
   let casts = 0;

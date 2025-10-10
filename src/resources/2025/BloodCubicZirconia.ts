@@ -102,8 +102,9 @@ export function availableCasts(skill: Skill, statFloor: number): number {
  */
 export function castDownTo(skill: Skill, statFloor: number): boolean {
   if (!have() || !BCZCOSTS.get(skill)) return false;
-  const available = availableCasts(skill, statFloor);
-  if (available === 0) return false;
+  const available = () => availableCasts(skill, statFloor);
+  if (available() === 0) return false;
+  while (available()) useSkill(skill, available());
 
-  return useSkill(skill, available);
+  return !useSkill(skill, available());
 }

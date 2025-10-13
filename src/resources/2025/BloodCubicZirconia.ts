@@ -10,30 +10,19 @@ export function have(): boolean {
   return have_($item`blood cubic zirconia`);
 }
 
-const BCZSKILLCOST = new Map<number, number>([
-  [0, 11],
-  [1, 23],
-  [2, 37],
-  [3, 110],
-  [4, 230],
-  [5, 370],
-  [6, 1100],
-  [7, 2300],
-  [8, 3700],
-  [9, 11000],
-  [10, 23000],
-  [11, 37000],
-  [12, 420000],
-  [13, 1100000],
-  [14, 2300000],
-  [15, 3700000],
-  [16, 11000000],
-  [17, 23000000],
-  [18, 37000000],
-  [19, 110000000],
-  [20, 230000000],
-  [21, 370000000],
-]);
+function skillCost(castNumber: number): number {
+  if (castNumber <= 11) {
+    const cycle = Math.floor(castNumber / 3);
+    const position = castNumber % 3;
+    return [11, 23, 37][position] * (10 ** cycle);
+  } else if (castNumber === 12) {
+    return 420_000
+  } else {
+    const cycle = Math.floor((castNumber - 13) / 3);
+    const position = (castNumber - 13) % 3;
+    return [11, 23, 37][position] * (10 ** (cycle + 5));
+  }
+}
 
 export const BCZCOSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Blood Geyser`, $stat`SubMuscle`],

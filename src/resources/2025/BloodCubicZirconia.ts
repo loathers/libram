@@ -36,7 +36,7 @@ export const BCZCOSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Sweat Equity`, $stat`SubMoxie`],
 ]);
 
-export const BCZPREFS = new Map<Skill, string>([
+export const BCZPREFS = new Map<Skill, NumericProperty>([
   [$skill`BCZ: Blood Geyser`, "_bczBloodGeyserCasts"],
   [$skill`BCZ: Refracted Gaze`, "_bczRefractedGazeCasts"],
   [$skill`BCZ: Sweat Bullets`, "_bczSweatBulletsCasts"],

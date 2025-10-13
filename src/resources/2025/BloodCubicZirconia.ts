@@ -5,13 +5,18 @@ import { get } from "../../property.js";
 import { NumericProperty } from "../../propertyTypes.js";
 
 /**
- * @returns Whether or not you have the blood cubic zirconia
+ * @returns Whether or not you have the blood cubic zirconia.
  */
 export function have(): boolean {
   return have_($item`blood cubic zirconia`);
 }
 
-function skillCost(castNumber: number): number {
+/**
+ * @param skill The BCZ skill to check.
+ * @returns The subtat cost to cast the skill.
+ */
+export function skillCost(skill: Skill): number {
+  const castNumber = timesCast(skill);
   if (castNumber <= 11) {
     const cycle = Math.floor(castNumber / 3);
     const position = castNumber % 3;
@@ -49,7 +54,11 @@ export const BCZPREFS = new Map<Skill, NumericProperty>([
   [$skill`BCZ: Craft a Pheromone Cocktail`, "_bczPheromoneCocktailCasts"],
 ]);
 
-function getBCZTimesCast(skill: Skill): number {
+/**
+ * @param skill The BCZ skill to check.
+ * @returns The number of casts of the skill already used, parsing the pref.
+ */
+export function timesCast(skill: Skill): number {
   const pref = BCZPREFS.get(skill);
   if (!pref) return 0;
   return get(pref, 0);
@@ -68,15 +77,14 @@ export function availableCasts(skill: Skill, statFloor: number): number {
 
   // const currentStat = myBasestat(stat);
   const currentStat = myBasestat(stat);
-  const timesCast = getBCZTimesCast(skill);
   const subStatFloor = statFloor ** 2;
 
   let casts = 0;
   let remainingStat = currentStat;
 
-  for (let i = timesCast; i < 25; i++) {
+  for (let i = timesCast(skill); i < 25; i++) {
     // 25 is abritrary
-    const nextCost = skillCost(getBCZTimesCast(skill));
+    const nextCost = skillCost(skill);
     if (nextCost === undefined) break;
     if (remainingStat - nextCost < subStatFloor) break;
     remainingStat -= nextCost;

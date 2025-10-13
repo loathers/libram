@@ -2,6 +2,7 @@ import { myBasestat, Skill, Stat, useSkill } from "kolmafia";
 import { $item, $skill, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
+import { NumericProperty } from "../../propertyTypes.js";
 
 /**
  * @returns Whether or not you have the blood cubic zirconia
@@ -14,13 +15,13 @@ function skillCost(castNumber: number): number {
   if (castNumber <= 11) {
     const cycle = Math.floor(castNumber / 3);
     const position = castNumber % 3;
-    return [11, 23, 37][position] * (10 ** cycle);
+    return [11, 23, 37][position] * 10 ** cycle;
   } else if (castNumber === 12) {
-    return 420_000
+    return 420_000;
   } else {
     const cycle = Math.floor((castNumber - 13) / 3);
     const position = (castNumber - 13) % 3;
-    return [11, 23, 37][position] * (10 ** (cycle + 5));
+    return [11, 23, 37][position] * 10 ** (cycle + 5);
   }
 }
 
@@ -73,8 +74,9 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   let casts = 0;
   let remainingStat = currentStat;
 
-  for (let i = timesCast; i < BCZSKILLCOST.size; i++) {
-    const nextCost = BCZSKILLCOST.get(i);
+  for (let i = timesCast; i < 25; i++) {
+    // 25 is abritrary
+    const nextCost = skillCost(getBCZTimesCast(skill));
     if (nextCost === undefined) break;
     if (remainingStat - nextCost < subStatFloor) break;
     remainingStat -= nextCost;

@@ -30,7 +30,7 @@ export function skillCost(skill: Skill): number {
   }
 }
 
-export const BCZCOSTS = new Map<Skill, Stat>([
+const COSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Blood Geyser`, $stat`SubMuscle`],
   [$skill`BCZ: Refracted Gaze`, $stat`SubMysticality`],
   [$skill`BCZ: Sweat Bullets`, $stat`SubMoxie`],
@@ -42,7 +42,7 @@ export const BCZCOSTS = new Map<Skill, Stat>([
   [$skill`BCZ: Sweat Equity`, $stat`SubMoxie`],
 ]);
 
-export const BCZPREFS = new Map<Skill, NumericProperty>([
+const PREFS = new Map<Skill, NumericProperty>([
   [$skill`BCZ: Blood Geyser`, "_bczBloodGeyserCasts"],
   [$skill`BCZ: Refracted Gaze`, "_bczRefractedGazeCasts"],
   [$skill`BCZ: Sweat Bullets`, "_bczSweatBulletsCasts"],
@@ -59,9 +59,19 @@ export const BCZPREFS = new Map<Skill, NumericProperty>([
  * @returns The number of casts of the skill already used, parsing the pref.
  */
 export function timesCast(skill: Skill): number {
-  const pref = BCZPREFS.get(skill);
+  const pref = PREFS.get(skill);
   if (!pref) return 0;
   return get(pref, 0);
+}
+
+/**
+ * @param skill The BCZ skill to check.
+ * @returns The substat used to cast the skill.
+ */
+export function subtatCost(skill: Skill): Stat | boolean {
+  const cost = COSTS.get(skill);
+  if (!cost) return false;
+  return cost;
 }
 
 /**
@@ -72,7 +82,7 @@ export function timesCast(skill: Skill): number {
 export function availableCasts(skill: Skill, statFloor: number): number {
   if (!have()) return 0;
 
-  const stat = BCZCOSTS.get(skill);
+  const stat = COSTS.get(skill);
   if (!stat) return 0;
 
   // const currentStat = myBasestat(stat);
@@ -100,7 +110,7 @@ export function availableCasts(skill: Skill, statFloor: number): number {
  * @returns Whether you successfully cast the spell.
  */
 export function castDownTo(skill: Skill, statFloor: number): boolean {
-  if (!have() || !BCZCOSTS.get(skill)) return false;
+  if (!have() || !COSTS.get(skill)) return false;
   const available = () => availableCasts(skill, statFloor);
   if (available() === 0) return false;
   while (available()) useSkill(skill, available());

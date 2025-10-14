@@ -68,9 +68,9 @@ export function timesCast(skill: Skill): number {
  * @param skill The BCZ skill to check.
  * @returns The substat used to cast the skill.
  */
-export function subtatUsed(skill: Skill): Stat | boolean {
+export function substatUsed(skill: Skill): Stat | null {
   const cost = COSTS.get(skill);
-  if (!cost) return false;
+  if (!cost) return null;
   return cost;
 }
 

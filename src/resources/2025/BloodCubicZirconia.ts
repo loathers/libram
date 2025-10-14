@@ -110,9 +110,11 @@ export function availableCasts(skill: Skill, statFloor: number): number {
  */
 export function castDownTo(skill: Skill, statFloor: number): boolean {
   if (!have() || !COSTS.get(skill)) return false;
-  const available = () => availableCasts(skill, statFloor);
-  if (available() === 0) return false;
-  while (available()) useSkill(skill, available());
-
-  return !useSkill(skill, available());
+  let casts = availableCasts(skill, statFloor);
+  while (casts) {
+    if (!useSkill(skill, casts)) return false;
+    casts = availableCasts(skill, statFloor);
+  }
+  
+  return true;
 }

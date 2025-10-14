@@ -82,7 +82,7 @@ export function substatUsed(skill: Skill): Stat | null {
 export function availableCasts(skill: Skill, statFloor: number): number {
   if (!have()) return 0;
 
-  const stat = COSTS.get(skill);
+  const stat = subtatUsed(skill);
   if (!stat) return 0;
 
   // const currentStat = myBasestat(stat);

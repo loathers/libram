@@ -95,7 +95,6 @@ export function availableCasts(skill: Skill, statFloor: number): number {
   for (let i = timesCast(skill); i < 25; i++) {
     // 25 is abritrary
     const nextCost = skillCost(skill);
-    if (nextCost === undefined) break;
     if (remainingStat - nextCost < subStatFloor) break;
     remainingStat -= nextCost;
     casts++;

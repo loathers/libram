@@ -25,7 +25,7 @@ export function skillCost(skill: Skill): number {
     return 420_000;
   } else {
     const cycle = Math.floor((castNumber - 13) / 3);
-    const position = (castNumber - 13) % 3;
+    const position = (castNumber + 2) % 3;
     return [11, 23, 37][position] * 10 ** (cycle + 5);
   }
 }

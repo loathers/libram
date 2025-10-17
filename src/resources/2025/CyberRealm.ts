@@ -1,6 +1,7 @@
 import { gamedayToInt, Item } from "kolmafia";
 import { realmAvailable } from "../../lib.js";
-import { $item, get } from "../../index.js";
+import { get } from "../../property.js";
+import { $item } from "../../template-string.js";
 
 /**
  * @returns Whether or not you have Cyber Realm

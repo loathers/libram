@@ -1,4 +1,4 @@
-import { myBasestat, Skill, Stat, useSkill } from "kolmafia";
+import { cliExecute, equip, myBasestat, Skill, Stat, useSkill } from "kolmafia";
 import { $item, $skill, $stat } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
@@ -110,11 +110,30 @@ export function availableCasts(skill: Skill, statFloor: number): number {
  */
 export function castDownTo(skill: Skill, statFloor: number): boolean {
   if (!have() || !COSTS.get(skill)) return false;
-  let casts = availableCasts(skill, statFloor);
-  while (casts) {
-    if (!useSkill(skill, casts)) return false;
-    casts = availableCasts(skill, statFloor);
+
+  if (!cast(skill, availableCasts(skill, statFloor))) return false;
+
+  return true;
+}
+
+/**
+ * @param skill The BCZ skill to cast.
+ * @param count How many times you want to cast the spell
+ * @returns Whether you successfully cast the spell.
+ */
+export function cast(skill: Skill, count: number): boolean {
+  if (!have() || !COSTS.get(skill) || count <= 0) return false;
+  cliExecute("checkpoint");
+  equip($item`blood cubic zirconia`);
+  let casts = count;
+  while (casts > 0) {
+    if (!useSkill(skill)) {
+      cliExecute("outfit checkpoint");
+      return false;
+    }
+    --casts;
   }
 
+  cliExecute("outfit checkpoint");
   return true;
 }

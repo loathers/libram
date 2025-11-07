@@ -17550,7 +17550,7 @@ function have65() {
   return have($item(_templateObject499 || (_templateObject499 = _taggedTemplateLiteral66(["blood cubic zirconia"]))));
 }
 function skillCost(skill) {
-  var castNumber = timesCast(skill);
+  var castNumber = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : timesCast(skill);
   if (castNumber <= 11) {
     var cycle2 = Math.floor(castNumber / 3), position = castNumber % 3;
     return [11, 23, 37][position] * 10 ** cycle2;
@@ -17572,12 +17572,12 @@ function substatUsed(skill) {
 }
 function availableCasts2(skill, statFloor) {
   if (!have65()) return 0;
-  var stat = substatUsed(skill);
-  if (!stat) return 0;
-  for (var currentStat = (0, import_kolmafia80.myBasestat)(stat), subStatFloor = statFloor ** 2, casts = 0, remainingStat = currentStat, i = timesCast(skill); i < 25; i++) {
-    var nextCost = skillCost(skill);
-    if (remainingStat - nextCost < subStatFloor) break;
-    remainingStat -= nextCost, casts++;
+  var subStat = substatUsed(skill);
+  if (!subStat) return 0;
+  for (var currentSubStat = (0, import_kolmafia80.myBasestat)(subStat), subStatFloor = statFloor ** 2, casts = 0, remainingSubStat = currentSubStat, i = timesCast(skill); i < 25; i++) {
+    var nextCost = skillCost(skill, i);
+    if (remainingSubStat - nextCost < subStatFloor) break;
+    remainingSubStat -= nextCost, casts++;
   }
   return casts;
 }

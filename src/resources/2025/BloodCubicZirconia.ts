@@ -124,16 +124,18 @@ export function castDownTo(skill: Skill, statFloor: number): boolean {
 export function cast(skill: Skill, count: number): boolean {
   if (!have() || !COSTS.get(skill) || count <= 0) return false;
   cliExecute("checkpoint");
-  equip($item`blood cubic zirconia`);
-  let casts = count;
-  while (casts > 0) {
-    if (!useSkill(skill)) {
-      cliExecute("outfit checkpoint");
-      return false;
+  try {
+    equip($item`blood cubic zirconia`);
+    let casts = count;
+    while (casts > 0) {
+      if (!useSkill(skill)) {
+        return false;
+      }
+      --casts;
     }
-    --casts;
-  }
 
-  cliExecute("outfit checkpoint");
-  return true;
+    return true;
+  } finally {
+    cliExecute("outfit checkpoint");
+  }
 }

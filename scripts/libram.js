@@ -5561,6 +5561,9 @@ __export(src_exports, {
   withCombatFlags: function() {
     return withCombatFlags;
   },
+  withFamiliar: function() {
+    return withFamiliar;
+  },
   withProperties: function() {
     return withProperties;
   },
@@ -7236,6 +7239,14 @@ function getAcquirePrice(item15) {
   if (quantity <= 0) return 0;
   var currentAmount = (0, import_kolmafia4.availableAmount)(item15), amountNeeded = Math.max(0, quantity - currentAmount), retrieveCost = (0, import_kolmafia4.retrievePrice)(item15, currentAmount + quantity) - (0, import_kolmafia4.retrievePrice)(item15, currentAmount), mallMinPrice = Math.max(100, 2 * (0, import_kolmafia4.autosellPrice)(item15));
   return (0, import_kolmafia4.craftType)(item15) === "Meatpasting" && retrieveCost > 0 ? retrieveCost : (0, import_kolmafia4.isNpcItem)(item15) && (0, import_kolmafia4.npcPrice)(item15) > 0 && (0, import_kolmafia4.npcPrice)(item15) < (0, import_kolmafia4.mallPrice)(item15) ? quantity * (0, import_kolmafia4.npcPrice)(item15) : item15.tradeable ? (0, import_kolmafia4.mallPrice)(item15) === mallMinPrice ? clamp(currentAmount, 0, quantity) * (0, import_kolmafia4.autosellPrice)(item15) + amountNeeded * (0, import_kolmafia4.mallPrice)(item15) : (0, import_kolmafia4.mallPrice)(item15) > mallMinPrice ? quantity * (0, import_kolmafia4.mallPrice)(item15) : quantity * (0, import_kolmafia4.autosellPrice)(item15) : item15.discardable ? have(item15, quantity) ? quantity * (0, import_kolmafia4.autosellPrice)(item15) : 1 / 0 : 0;
+}
+function withFamiliar(familiar10, action) {
+  var initial = (0, import_kolmafia4.myFamiliar)();
+  try {
+    return action((0, import_kolmafia4.useFamiliar)(familiar10));
+  } finally {
+    (0, import_kolmafia4.useFamiliar)(initial);
+  }
 }
 
 // src/overlappingNames.ts
@@ -22170,6 +22181,7 @@ var Session = /* @__PURE__ */ function() {
   withChoice,
   withChoices,
   withCombatFlags,
+  withFamiliar,
   withProperties,
   withProperty
 });

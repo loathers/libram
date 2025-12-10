@@ -863,6 +863,58 @@ export class Macro {
 }
 
 /**
+ * Do something and handle all combats with a given macro.
+ * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
+ * See examples/consult.ts for an example.
+ *
+ * @category Combat
+ * @param macro Macro to execute.
+ * @param func Function to execute.
+ */
+export function withMacro(macro: Macro, func: () => void): void;
+/**
+ * Do something and handle all combats with a given autoattack and manual macro.
+ * To use the nextMacro parameter you will need to create a consult script that runs Macro.load().submit()
+ * and a CCS that calls that consult script.
+ * See examples/consult.ts for an example.
+ *
+ * @category Combat
+ * @param autoMacro Macro to execute via KoL autoattack.
+ * @param nextMacro Macro to execute manually after autoattack completes.
+ * @param func Function to execute.
+ */
+export function withMacro(
+  autoMacro: Macro,
+  nextMacro: Macro | null,
+  func: () => void,
+): void;
+// eslint-disable-next-line jsdoc/require-jsdoc
+export function withMacro(
+  macro: Macro,
+  funcOrNextMacro: Macro | null | (() => void),
+  maybeFunc?: () => void,
+): void {
+  if (typeof funcOrNextMacro === "function") {
+    setAutoAttack(0);
+    macro.save();
+  } else {
+    // Overload: withMacro(autoMacro, nextMacro, func)
+    macro.setAutoAttack();
+  }
+
+  const func =
+    typeof funcOrNextMacro === "function" ? funcOrNextMacro : maybeFunc;
+
+  try {
+    func?.();
+    while (inMultiFight()) runCombat();
+    if (choiceFollowsFight()) visitUrl("choice.php");
+  } finally {
+    Macro.clearSaved();
+  }
+}
+
+/**
  * Adventure in a location and handle all combats with a given macro.
  * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
@@ -872,15 +924,7 @@ export class Macro {
  * @param macro Macro to execute.
  */
 export function adventureMacro(loc: Location, macro: Macro): void {
-  macro.save();
-  setAutoAttack(0);
-  try {
-    adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
-  } finally {
-    Macro.clearSaved();
-  }
+  withMacro(macro, () => adv1(loc, 0, ""));
 }
 
 /**
@@ -898,16 +942,7 @@ export function adventureMacroAuto(
   autoMacro: Macro,
   nextMacro: Macro | null = null,
 ): void {
-  nextMacro = nextMacro ?? Macro.abort();
-  autoMacro.setAutoAttack();
-  nextMacro.save();
-  try {
-    adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
-  } finally {
-    Macro.clearSaved();
-  }
+  withMacro(autoMacro, nextMacro, () => adv1(loc, 0, ""));
 }
 
 export class StrictMacro extends Macro {

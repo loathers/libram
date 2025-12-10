@@ -13,10 +13,12 @@ import {
   removeProperty,
   runCombat,
   setAutoAttack,
+  setCcs,
   Skill,
   Stat,
   urlEncode,
   visitUrl,
+  writeCcs,
   xpath,
 } from "kolmafia";
 import { getTodaysHolidayWanderers } from "./lib.js";
@@ -863,54 +865,85 @@ export class Macro {
 }
 
 /**
- * Do something and handle all combats with a given macro.
- * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
- * See examples/consult.ts for an example.
- *
- * @category Combat
- * @param macro Macro to execute.
- * @param func Function to execute.
+ * Create and set a CCS file from a given Macro
+ * @param macro Macro to set as CSS
  */
-export function withMacro(macro: Macro, func: () => void): void;
+export function makeCcs<M extends StrictMacro>(macro: M) {
+  writeCcs(`[default]\n"${macro.toString()}"`, "libram");
+  setCcs("libram");
+}
+
 /**
- * Do something and handle all combats with a given autoattack and manual macro.
- * To use the nextMacro parameter you will need to create a consult script that runs Macro.load().submit()
- * and a CCS that calls that consult script.
- * See examples/consult.ts for an example.
- *
- * @category Combat
- * @param autoMacro Macro to execute via KoL autoattack.
- * @param nextMacro Macro to execute manually after autoattack completes.
- * @param func Function to execute.
+ * Run a combat initiated by a given action, handling multi-fights and choice adventures after combat.
+ * @param initiateCombatAction Callback that initiates the combat to be run.
+ * @returns Passed-through value from the callback.
  */
-export function withMacro(
-  autoMacro: Macro,
-  nextMacro: Macro | null,
-  func: () => void,
-): void;
+export function runCombatBy<T>(initiateCombatAction: () => T) {
+  try {
+    const result = initiateCombatAction();
+    while (inMultiFight()) runCombat();
+    if (choiceFollowsFight()) visitUrl("choice.php");
+    return result;
+  } catch (e) {
+    throw `Combat exception! Last macro error: ${get(
+      "lastMacroError",
+    )}. Exception ${e}.`;
+  }
+}
+
+/**
+ * Attempt to perform a nonstandard combat-starting Action with a Macro
+ * @param autoMacro The macro to use as an autoattack.
+ * @param macro The macro to use if the autoattack fails or finishes.
+ * @param action The combat-starting action to attempt
+ * @returns The output of your specified action function (typically void)
+ */
+export function withMacro<T, M extends StrictMacro>(
+  autoMacro: M,
+  macro: M,
+  action: () => T,
+): T;
+/**
+ * Attempt to perform a nonstandard combat-starting Action with a Macro
+ * @param macro The Macro to attempt to use
+ * @param action The combat-starting action to attempt
+ * @param tryAuto Whether or not we should try to resolve the combat with an autoattack; autoattack macros can fail against special monsters, and thus we have to submit a macro via CCS regardless.
+ * @returns The output of your specified action function (typically void)
+ */
+export function withMacro<T, M extends StrictMacro>(
+  macro: M,
+  action: () => T,
+  tryAuto?: boolean,
+): T;
 // eslint-disable-next-line jsdoc/require-jsdoc
-export function withMacro(
-  macro: Macro,
-  funcOrNextMacro: Macro | null | (() => void),
-  maybeFunc?: () => void,
-): void {
-  if (typeof funcOrNextMacro === "function") {
-    setAutoAttack(0);
-    macro.save();
-  } else {
-    // Overload: withMacro(autoMacro, nextMacro, func)
+export function withMacro<T, M extends StrictMacro>(
+  macro: M,
+  macroOrAction: M | (() => T),
+  actionOrTryAuto: (() => T) | boolean = false,
+): T {
+  if (getAutoAttack() !== 0) setAutoAttack(0);
+
+  // If we have two macros set, or if we have tryAuto, set an autoattack
+  if (macroOrAction instanceof Macro || actionOrTryAuto === true) {
     macro.setAutoAttack();
   }
 
-  const func =
-    typeof funcOrNextMacro === "function" ? funcOrNextMacro : maybeFunc;
+  // Make a CCS of the macro or, if we have two, the second macro.
+  makeCcs(macroOrAction instanceof Macro ? macroOrAction : macro);
 
+  // Determine the action from the overload
+  let action;
+  if (typeof macroOrAction === "function") {
+    action = macroOrAction;
+  } else if (typeof actionOrTryAuto === "function") {
+    action = actionOrTryAuto;
+  } else {
+    throw new Error("No action provided to withMacro");
+  }
   try {
-    func?.();
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
+    return runCombatBy(action);
   } finally {
-    Macro.clearSaved();
+    setAutoAttack(0);
   }
 }
 
@@ -942,7 +975,11 @@ export function adventureMacroAuto(
   autoMacro: Macro,
   nextMacro: Macro | null = null,
 ): void {
-  withMacro(autoMacro, nextMacro, () => adv1(loc, 0, ""));
+  if (nextMacro) {
+    withMacro(autoMacro, nextMacro, () => adv1(loc, 0, ""));
+    return;
+  }
+  withMacro(autoMacro, () => adv1(loc, 0, ""));
 }
 
 export class StrictMacro extends Macro {

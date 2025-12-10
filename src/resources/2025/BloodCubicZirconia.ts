@@ -13,10 +13,10 @@ export function have(): boolean {
 
 /**
  * @param skill The BCZ skill to check.
+ * @param castNumber The number of times you've cast the skill
  * @returns The subtat cost to cast the skill.
  */
-export function skillCost(skill: Skill): number {
-  const castNumber = timesCast(skill);
+export function skillCost(skill: Skill, castNumber = timesCast(skill)): number {
   if (castNumber <= 11) {
     const cycle = Math.floor(castNumber / 3);
     const position = castNumber % 3;
@@ -82,21 +82,21 @@ export function substatUsed(skill: Skill): Stat | null {
 export function availableCasts(skill: Skill, statFloor: number): number {
   if (!have()) return 0;
 
-  const stat = substatUsed(skill);
-  if (!stat) return 0;
+  const subStat = substatUsed(skill);
+  if (!subStat) return 0;
 
   // const currentStat = myBasestat(stat);
-  const currentStat = myBasestat(stat);
+  const currentSubStat = myBasestat(subStat);
   const subStatFloor = statFloor ** 2;
 
   let casts = 0;
-  let remainingStat = currentStat;
+  let remainingSubStat = currentSubStat;
 
   for (let i = timesCast(skill); i < 25; i++) {
     // 25 is abritrary
-    const nextCost = skillCost(skill);
-    if (remainingStat - nextCost < subStatFloor) break;
-    remainingStat -= nextCost;
+    const nextCost = skillCost(skill, i);
+    if (remainingSubStat - nextCost < subStatFloor) break;
+    remainingSubStat -= nextCost;
     casts++;
   }
 

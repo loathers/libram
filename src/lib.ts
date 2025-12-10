@@ -82,6 +82,7 @@ import {
   craftType,
   isNpcItem,
   npcPrice,
+  useFamiliar,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1685,4 +1686,22 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
   // There might some day be specific items we don't want to value like this, because you receive only a limited number
   // We'll burn that bridge when we come to it.
   return 0;
+}
+
+/**
+ * Perform an action while using a particular familiar
+ * @param familiar The familiar you'd like to use
+ * @param action A function that takes one argument--whether or not we successfully swapped to the requested familiar--and performs an action
+ * @returns The return value of `action`
+ */
+export function withFamiliar<T>(
+  familiar: Familiar,
+  action: (success: boolean) => T,
+): T {
+  const initial = myFamiliar();
+  try {
+    return action(useFamiliar(familiar));
+  } finally {
+    useFamiliar(initial);
+  }
 }

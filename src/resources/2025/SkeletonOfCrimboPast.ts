@@ -36,7 +36,7 @@ export function have(): boolean {
  */
 export function expectedBones(target: AdventureTarget): number {
   if (!have()) return 0;
-  if (get("_knuckleboneDrops", 0) >= 100) return 0;
+  if (get("_knuckleboneDrops") >= 100) return 0;
   if (target instanceof Location) {
     return expectedBones(adventureTargetToWeightedMap(target));
   }
@@ -55,4 +55,4 @@ export function expectedBones(target: AdventureTarget): number {
 /**
  * Returns the standard 10% improvement the can adds; in case scripts find this helpful over a magic number
  */
-export const caneBonus = 0.1;
+export const CANE_BONUS = 0.1;

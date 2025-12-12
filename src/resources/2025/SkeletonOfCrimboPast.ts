@@ -22,7 +22,7 @@ const BONE_PHYLA = new Map([
   [$phylum`penguin`, 0.2],
   [$phylum`pirate`, 0.7],
   [$phylum`dude`, 0.5],
-  [$phylum`undead`, 0.5],
+  [$phylum`undead`, 0.3],
   [$phylum`weird`, 0.2],
 ]);
 

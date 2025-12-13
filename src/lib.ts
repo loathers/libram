@@ -105,6 +105,7 @@ import {
   chunk,
   Tuple,
   ValueOf,
+  tuple,
 } from "./utils.js";
 import { BooleanProperty, StringProperty } from "./propertyTypes.js";
 
@@ -1704,4 +1705,25 @@ export function withFamiliar<T>(
   } finally {
     useFamiliar(initial);
   }
+}
+
+export type AdventureTarget = Monster | Location | Map<Monster, number>;
+
+/**
+ *
+ * @param target The place or Monster you expect to fight; accepts Monster, Location, or map of <Monster, number>
+ * @returns A map of <Monster, number> defining for each Monster how many are present in target location
+ */
+export function adventureTargetToWeightedMap(
+  target: AdventureTarget,
+): Map<Monster, number> {
+  if (target instanceof Monster) return new Map([[target, 1]]);
+  if (target instanceof Location) {
+    return new Map(
+      Object.entries(target).map(([monster, rate]) =>
+        tuple(toMonster(monster), rate),
+      ),
+    );
+  }
+  return target;
 }

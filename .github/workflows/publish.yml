@@ -17,4 +17,5 @@ jobs:
           node-version: "18.x"
           registry-url: "https://registry.npmjs.org"
       - run: yarn install --immutable
+      - run: npm install -g npm@latest
       - run: npm publish

@@ -7263,7 +7263,7 @@ function withFamiliar(familiar10, action) {
 function adventureTargetToWeightedMap(target) {
   return target instanceof import_kolmafia4.Monster ? /* @__PURE__ */ new Map([[target, 1]]) : target instanceof import_kolmafia4.Location ? new Map(Object.entries((0, import_kolmafia4.appearanceRates)(target, !0)).map(function(_ref17) {
     var _ref18 = _slicedToArray3(_ref17, 2), monster = _ref18[0], rate = _ref18[1];
-    return tuple((0, import_kolmafia4.toMonster)(monster), rate);
+    return tuple((0, import_kolmafia4.toMonster)(monster), rate / 100);
   })) : target;
 }
 

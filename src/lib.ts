@@ -1727,7 +1727,7 @@ export function adventureTargetToWeightedMap(
   if (target instanceof Location) {
     return new Map(
       Object.entries(appearanceRates(target, true)).map(([monster, rate]) =>
-        tuple(toMonster(monster), rate),
+        tuple(toMonster(monster), rate / 100),
       ),
     );
   }

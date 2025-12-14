@@ -502,8 +502,14 @@ export function getZapGroup(item: Item): Item[] {
 }
 
 const banishSource = (banisher: string) => {
-  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
-  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+  switch (banisher.toLowerCase()) {
+    case "saber force":
+      return $skill`Use the Force`;
+    case "nanorhino":
+      return $skill`Unleash Nanites`;
+    case "sea *dent":
+      return $skill`Sea *dent: Throw a Lightning Bolt`;
+  }
 
   const item = toItem(banisher);
   if (

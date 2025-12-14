@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.11.11",
+  "version": "0.11.14",
   "description": "JavaScript helper library for KoLmafia",
   "type": "module",
   "main": "dist/index.js",
@@ -48,7 +48,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-jsdoc": "^50.2.3",
-    "eslint-plugin-libram": "^0.4.33",
+    "eslint-plugin-libram": "^0.4.34",
     "husky": "^9.1.6",
     "java-parser": "^2.3.2",
     "kolmafia": "^5.28549.0",

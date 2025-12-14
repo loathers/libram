@@ -105,6 +105,7 @@ import {
   chunk,
   Tuple,
   ValueOf,
+  tuple,
 } from "./utils.js";
 import { BooleanProperty, StringProperty } from "./propertyTypes.js";
 
@@ -501,8 +502,14 @@ export function getZapGroup(item: Item): Item[] {
 }
 
 const banishSource = (banisher: string) => {
-  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
-  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+  switch (banisher.toLowerCase()) {
+    case "saber force":
+      return $skill`Use the Force`;
+    case "nanorhino":
+      return $skill`Unleash Nanites`;
+    case "sea *dent":
+      return $skill`Sea *dent: Throw a Lightning Bolt`;
+  }
 
   const item = toItem(banisher);
   if (
@@ -1704,4 +1711,25 @@ export function withFamiliar<T>(
   } finally {
     useFamiliar(initial);
   }
+}
+
+export type AdventureTarget = Monster | Location | Map<Monster, number>;
+
+/**
+ *
+ * @param target The place or Monster you expect to fight; accepts Monster, Location, or map of <Monster, number>
+ * @returns A map of <Monster, number> defining for each Monster how many are present in target location
+ */
+export function adventureTargetToWeightedMap(
+  target: AdventureTarget,
+): Map<Monster, number> {
+  if (target instanceof Monster) return new Map([[target, 1]]);
+  if (target instanceof Location) {
+    return new Map(
+      Object.entries(appearanceRates(target, true)).map(([monster, rate]) =>
+        tuple(toMonster(monster), rate / 100),
+      ),
+    );
+  }
+  return target;
 }

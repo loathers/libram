@@ -4,21 +4,14 @@ import eslint from "@eslint/js";
 import jsdoc from "eslint-plugin-jsdoc";
 import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
-import * as libram from "eslint-plugin-libram";
+import libram from "eslint-plugin-libram";
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   jsdoc.configs["flat/recommended-error"],
   prettier,
-  {
-    plugins: {
-      libram,
-    },
-    rules: {
-      "libram/verify-constants": "error",
-    },
-  },
+  ...libram.configs.recommended,
   {
     rules: {
       "@typescript-eslint/no-unused-vars": [

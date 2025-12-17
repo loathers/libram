@@ -4230,13 +4230,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-entities@npm:^2.5.2":
-  version: 2.5.2
-  resolution: "html-entities@npm:2.5.2"
-  checksum: 10c0/f20ffb4326606245c439c231de40a7c560607f639bf40ffbfb36b4c70729fd95d7964209045f1a4e62fe17f2364cef3d6e49b02ea09016f207fde51c2211e481
-  languageName: node
-  linkType: hard
-
 "html-entities@npm:^2.6.0":
   version: 2.6.0
   resolution: "html-entities@npm:2.6.0"
@@ -4594,6 +4587,7 @@ __metadata:
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:^22.5.4"
+    entities: "npm:^7.0.0"
     esbuild: "npm:^0.23.1"
     esbuild-plugin-babel: "npm:^0.2.3"
     eslint: "npm:^9.39.2"
@@ -4601,7 +4595,6 @@ __metadata:
     eslint-import-resolver-typescript: "npm:^4.4.4"
     eslint-plugin-jsdoc: "npm:^61.5.0"
     eslint-plugin-libram: "npm:^0.5.3"
-    html-entities: "npm:^2.5.2"
     husky: "npm:^9.1.6"
     java-parser: "npm:^2.3.2"
     kolmafia: "npm:^5.28549.0"

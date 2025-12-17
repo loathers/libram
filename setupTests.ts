@@ -1,4 +1,4 @@
-import { decode as decodeEntities } from "html-entities";
+import { decodeHTML } from "entities";
 
 import * as kolmafia from "kolmafia";
 import { vi } from "vitest";
@@ -81,12 +81,12 @@ vi.mocked(kolmafia).extractItems.mockImplementation((s) => {
   const items: Record<string, number> = {};
 
   for (const match of s.matchAll(/You acquire an item: <b>([^<]+)<\/b>/g)) {
-    const name = decodeEntities(match[1]);
+    const name = decodeHTML(match[1]);
     items[name] = (items[name] ?? 0) + 1;
   }
   for (const match of s.matchAll(/You acquire <b>(\d+) ([^<]+)<\/b>/g)) {
     const count = parseInt(match[1], 10);
-    const plural = decodeEntities(match[2]);
+    const plural = decodeHTML(match[2]);
     const item = findItemByPlural(plural) ?? kolmafia.Item.get(plural);
     const name = item.name;
     items[name] = (items[name] ?? 0) + count;

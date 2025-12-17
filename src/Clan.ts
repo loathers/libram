@@ -1,4 +1,4 @@
-import { decode as decodeEntities } from "html-entities";
+import { decodeHTML } from "entities";
 import {
   availableAmount,
   cliExecute,
@@ -209,7 +209,7 @@ export class Clan {
     return xpath(page, '//select[@name="whichclan"]//option').map((option) => {
       const validHtml = `<select>${option}</select>`;
       const id = Number.parseInt(xpath(validHtml, "//@value")[0]);
-      const name = decodeEntities(xpath(validHtml, "//text()")[0]);
+      const name = decodeHTML(xpath(validHtml, "//text()")[0]);
       return new Clan(id, name);
     });
   }
@@ -287,7 +287,7 @@ export class Clan {
         const [, encodedName, degree] = match;
 
         return {
-          name: decodeEntities(encodedName),
+          name: decodeHTML(encodedName),
           degree: Number.parseInt(degree),
           id: Number.parseInt(id),
         };

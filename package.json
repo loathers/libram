@@ -28,9 +28,6 @@
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
-  "dependencies": {
-    "html-entities": "^2.5.2"
-  },
   "devDependencies": {
     "@babel/compat-data": "^7.25.4",
     "@babel/core": "^7.25.2",
@@ -71,5 +68,8 @@
     "src/**/*.{ts,js}": "yarn run format"
   },
   "sideEffects": false,
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "yarn@4.4.1",
+  "dependencies": {
+    "entities": "^7.0.0"
+  }
 }

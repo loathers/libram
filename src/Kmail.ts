@@ -1,4 +1,4 @@
-import { decode as decodeEntities } from "html-entities";
+import { decodeHTML } from "entities";
 import { extractMeat, isGiftable, Item, visitUrl } from "kolmafia";
 import { extractItems } from "./lib.js";
 import { combineQuery, EMPTY_VALUE, fetchUrl, Query } from "./url.js";
@@ -250,9 +250,9 @@ export default class Kmail {
       insideText !== undefined ? split(insideText) : [];
 
     return {
-      outsideNote: decodeEntities(outsideNote),
+      outsideNote: decodeHTML(outsideNote),
       outsideAttachments,
-      insideNote: insideNote && decodeEntities(insideNote),
+      insideNote: insideNote && decodeHTML(insideNote),
       insideAttachments,
     };
   }

@@ -82,6 +82,7 @@ import {
   craftType,
   isNpcItem,
   npcPrice,
+  useFamiliar,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -104,6 +105,7 @@ import {
   chunk,
   Tuple,
   ValueOf,
+  tuple,
 } from "./utils.js";
 import { BooleanProperty, StringProperty } from "./propertyTypes.js";
 
@@ -500,8 +502,14 @@ export function getZapGroup(item: Item): Item[] {
 }
 
 const banishSource = (banisher: string) => {
-  if (banisher.toLowerCase() === "saber force") return $skill`Use the Force`;
-  if (banisher.toLowerCase() === "nanorhino") return $skill`Unleash Nanites`;
+  switch (banisher.toLowerCase()) {
+    case "saber force":
+      return $skill`Use the Force`;
+    case "nanorhino":
+      return $skill`Unleash Nanites`;
+    case "sea *dent":
+      return $skill`Sea *dent: Throw a Lightning Bolt`;
+  }
 
   const item = toItem(banisher);
   if (
@@ -1685,4 +1693,43 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
   // There might some day be specific items we don't want to value like this, because you receive only a limited number
   // We'll burn that bridge when we come to it.
   return 0;
+}
+
+/**
+ * Perform an action while using a particular familiar
+ * @param familiar The familiar you'd like to use
+ * @param action A function that takes one argument--whether or not we successfully swapped to the requested familiar--and performs an action
+ * @returns The return value of `action`
+ */
+export function withFamiliar<T>(
+  familiar: Familiar,
+  action: (success: boolean) => T,
+): T {
+  const initial = myFamiliar();
+  try {
+    return action(useFamiliar(familiar));
+  } finally {
+    useFamiliar(initial);
+  }
+}
+
+export type AdventureTarget = Monster | Location | Map<Monster, number>;
+
+/**
+ *
+ * @param target The place or Monster you expect to fight; accepts Monster, Location, or map of <Monster, number>
+ * @returns A map of <Monster, number> defining for each Monster how many are present in target location
+ */
+export function adventureTargetToWeightedMap(
+  target: AdventureTarget,
+): Map<Monster, number> {
+  if (target instanceof Monster) return new Map([[target, 1]]);
+  if (target instanceof Location) {
+    return new Map(
+      Object.entries(appearanceRates(target, true)).map(([monster, rate]) =>
+        tuple(toMonster(monster), rate / 100),
+      ),
+    );
+  }
+  return target;
 }

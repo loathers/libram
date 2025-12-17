@@ -68,6 +68,7 @@ import * as CyberRealm from "./2025/CyberRealm.js";
 import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
 import * as PrismaticBeret from "./2025/PrismaticBeret.js";
 import * as BloodCubicZirconia from "./2025/BloodCubicZirconia.js";
+import * as SkeletonOfCrimboPast from "./2025/SkeletonOfCrimboPast.js";
 
 export {
   AprilingBandHelmet,
@@ -125,6 +126,7 @@ export {
   ReagnimatedGnome,
   RetroCape,
   Robortender,
+  SkeletonOfCrimboPast,
   Snapper,
   SongBoom,
   SourceTerminal,

@@ -1,4 +1,7 @@
 name: Publish package to NPM
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
 on:
   release:
     types: [created]
@@ -11,9 +14,8 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: 20
           registry-url: "https://registry.npmjs.org"
       - run: yarn install --immutable
-      - run: yarn npm publish
-        env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm install -g npm@latest
+      - run: npm publish

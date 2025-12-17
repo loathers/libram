@@ -1,7 +1,7 @@
 import { decodeHTML } from "entities";
 
 import * as kolmafia from "kolmafia";
-import { Mock, MockedFunction, vi } from "vitest";
+import { vi } from "vitest";
 
 vi.mock("kolmafia");
 

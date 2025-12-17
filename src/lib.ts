@@ -703,7 +703,7 @@ export function getPlayerNameFromId(id: number, onMissing?: "throw"): string;
 /**
  * Get the player id from a player name (if it exists)
  * @param id the id of the player
- * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null * @returns the player id, or null if no such player exists
+ * @param onMissing Pass "throw" to throw an error if the player is not found, or "return-null" to return null
  * @returns the player id if the player exists, or handles according to onMissing
  */
 export function getPlayerNameFromId(

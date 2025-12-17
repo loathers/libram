@@ -1,7 +1,7 @@
 import { decodeHTML } from "entities";
 
 import * as kolmafia from "kolmafia";
-import { vi } from "vitest";
+import { Mock, MockedFunction, vi } from "vitest";
 
 vi.mock("kolmafia");
 
@@ -48,20 +48,26 @@ for (const [key, value] of Object.entries(kolmafia)) {
     continue;
   }
 
-  const mockedClass = vi.mocked(kolmafia)[key];
+  const mockedClass = vi.mocked(kolmafia)[key as keyof typeof kolmafia];
+
+  if (!("prototype" in mockedClass) || !("get" in mockedClass)) continue;
+
   knownInstances[key] = [];
   knownIds[key] = 11;
-  mockedClass.prototype.constructor.mockImplementation(function (name) {
-    this.name = name;
-    this.id = knownIds[key]++;
+  vi.mocked(
+    mockedClass.prototype.constructor as (name: string) => void,
+  ).mockImplementation(function (this: unknown, name: string) {
+    const self = this as { name: string; id: number };
+    self.name = name;
+    self.id = knownIds[key]++;
   });
-  mockedClass.prototype.toString = function () {
+  mockedClass.prototype.toString = function (this: { name: string }) {
     return this.name;
   };
-  mockedClass.get.mockImplementation((n: N) =>
-    mockOneOrMany(mockedClass, n, knownInstances[key]),
-  );
-  mockedClass.all.mockImplementation(() => knownInstances[key]);
+  vi.mocked(mockedClass.get).mockImplementation(((n: N) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockOneOrMany(mockedClass as any, n, knownInstances[key])) as any);
+  vi.mocked(mockedClass.all).mockImplementation(() => knownInstances[key]);
 }
 
 function findItemByPlural(plural: string) {

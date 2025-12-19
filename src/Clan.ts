@@ -1,3 +1,4 @@
+import "core-js/stable/atob";
 import { decodeHTML } from "entities";
 import {
   availableAmount,

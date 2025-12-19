@@ -1,3 +1,4 @@
+import "core-js/stable/atob";
 import { decodeHTML } from "entities";
 import { extractMeat, isGiftable, Item, visitUrl } from "kolmafia";
 import { extractItems } from "./lib.js";

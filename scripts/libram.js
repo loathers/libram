@@ -1,8 +1,19 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = function(fn, res) {
+  return function() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
+};
+var __commonJS = function(cb, mod) {
+  return function() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  };
+};
 var __export = function(target, all2) {
   for (var name in all2)
     __defProp(target, name, { get: all2[name], enumerable: !0 });
@@ -14,9 +25,1677 @@ var __export = function(target, all2) {
       }.bind(null, key), enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   return to;
 };
-var __toCommonJS = function(mod) {
+var __toESM = function(mod, isNodeMode, target) {
+  return target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: !0 }) : target,
+    mod
+  );
+}, __toCommonJS = function(mod) {
   return __copyProps(__defProp({}, "__esModule", { value: !0 }), mod);
 };
+
+// kolmafia-polyfill.js
+var kolmafia, console, init_kolmafia_polyfill = __esm({
+  "kolmafia-polyfill.js": function() {
+    "use strict";
+    kolmafia = require("kolmafia"), console = {
+      log: kolmafia.print
+    };
+  }
+});
+
+// node_modules/core-js/internals/is-callable.js
+var require_is_callable = __commonJS({
+  "node_modules/core-js/internals/is-callable.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var documentAll = typeof document == "object" && document.all;
+    module2.exports = typeof documentAll > "u" && documentAll !== void 0 ? function(argument) {
+      return typeof argument == "function" || argument === documentAll;
+    } : function(argument) {
+      return typeof argument == "function";
+    };
+  }
+});
+
+// node_modules/core-js/internals/fails.js
+var require_fails = __commonJS({
+  "node_modules/core-js/internals/fails.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = function(exec) {
+      try {
+        return !!exec();
+      } catch (error2) {
+        return !0;
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/descriptors.js
+var require_descriptors = __commonJS({
+  "node_modules/core-js/internals/descriptors.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var fails = require_fails();
+    module2.exports = !fails(function() {
+      return Object.defineProperty({}, 1, {
+        get: function() {
+          return 7;
+        }
+      })[1] !== 7;
+    });
+  }
+});
+
+// node_modules/core-js/internals/global-this.js
+var require_global_this = __commonJS({
+  "node_modules/core-js/internals/global-this.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var check = function(it) {
+      return it && it.Math === Math && it;
+    };
+    module2.exports = // eslint-disable-next-line es/no-global-this -- safe
+    check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || // eslint-disable-next-line no-restricted-globals -- safe
+    check(typeof self == "object" && self) || check(typeof global == "object" && global) || check(typeof exports2 == "object" && exports2) || // eslint-disable-next-line no-new-func -- fallback
+    /* @__PURE__ */ function() {
+      return this;
+    }() || Function("return this")();
+  }
+});
+
+// node_modules/core-js/internals/is-object.js
+var require_is_object = __commonJS({
+  "node_modules/core-js/internals/is-object.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isCallable = require_is_callable();
+    module2.exports = function(it) {
+      return typeof it == "object" ? it !== null : isCallable(it);
+    };
+  }
+});
+
+// node_modules/core-js/internals/document-create-element.js
+var require_document_create_element = __commonJS({
+  "node_modules/core-js/internals/document-create-element.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), isObject = require_is_object(), document2 = globalThis2.document, EXISTS = isObject(document2) && isObject(document2.createElement);
+    module2.exports = function(it) {
+      return EXISTS ? document2.createElement(it) : {};
+    };
+  }
+});
+
+// node_modules/core-js/internals/ie8-dom-define.js
+var require_ie8_dom_define = __commonJS({
+  "node_modules/core-js/internals/ie8-dom-define.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), fails = require_fails(), createElement = require_document_create_element();
+    module2.exports = !DESCRIPTORS && !fails(function() {
+      return Object.defineProperty(createElement("div"), "a", {
+        get: function() {
+          return 7;
+        }
+      }).a !== 7;
+    });
+  }
+});
+
+// node_modules/core-js/internals/v8-prototype-define-bug.js
+var require_v8_prototype_define_bug = __commonJS({
+  "node_modules/core-js/internals/v8-prototype-define-bug.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), fails = require_fails();
+    module2.exports = DESCRIPTORS && fails(function() {
+      return Object.defineProperty(function() {
+      }, "prototype", {
+        value: 42,
+        writable: !1
+      }).prototype !== 42;
+    });
+  }
+});
+
+// node_modules/core-js/internals/an-object.js
+var require_an_object = __commonJS({
+  "node_modules/core-js/internals/an-object.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isObject = require_is_object(), $String = String, $TypeError = TypeError;
+    module2.exports = function(argument) {
+      if (isObject(argument)) return argument;
+      throw new $TypeError($String(argument) + " is not an object");
+    };
+  }
+});
+
+// node_modules/core-js/internals/function-bind-native.js
+var require_function_bind_native = __commonJS({
+  "node_modules/core-js/internals/function-bind-native.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var fails = require_fails();
+    module2.exports = !fails(function() {
+      var test = function() {
+      }.bind();
+      return typeof test != "function" || test.hasOwnProperty("prototype");
+    });
+  }
+});
+
+// node_modules/core-js/internals/function-call.js
+var require_function_call = __commonJS({
+  "node_modules/core-js/internals/function-call.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var NATIVE_BIND = require_function_bind_native(), call = Function.prototype.call;
+    module2.exports = NATIVE_BIND ? call.bind(call) : function() {
+      return call.apply(call, arguments);
+    };
+  }
+});
+
+// node_modules/core-js/internals/get-built-in.js
+var require_get_built_in = __commonJS({
+  "node_modules/core-js/internals/get-built-in.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), isCallable = require_is_callable(), aFunction = function(argument) {
+      return isCallable(argument) ? argument : void 0;
+    };
+    module2.exports = function(namespace, method) {
+      return arguments.length < 2 ? aFunction(globalThis2[namespace]) : globalThis2[namespace] && globalThis2[namespace][method];
+    };
+  }
+});
+
+// node_modules/core-js/internals/function-uncurry-this.js
+var require_function_uncurry_this = __commonJS({
+  "node_modules/core-js/internals/function-uncurry-this.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var NATIVE_BIND = require_function_bind_native(), FunctionPrototype = Function.prototype, call = FunctionPrototype.call, uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
+    module2.exports = NATIVE_BIND ? uncurryThisWithBind : function(fn) {
+      return function() {
+        return call.apply(fn, arguments);
+      };
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-is-prototype-of.js
+var require_object_is_prototype_of = __commonJS({
+  "node_modules/core-js/internals/object-is-prototype-of.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this();
+    module2.exports = uncurryThis({}.isPrototypeOf);
+  }
+});
+
+// node_modules/core-js/internals/environment-user-agent.js
+var require_environment_user_agent = __commonJS({
+  "node_modules/core-js/internals/environment-user-agent.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), navigator = globalThis2.navigator, userAgent = navigator && navigator.userAgent;
+    module2.exports = userAgent ? String(userAgent) : "";
+  }
+});
+
+// node_modules/core-js/internals/environment-v8-version.js
+var require_environment_v8_version = __commonJS({
+  "node_modules/core-js/internals/environment-v8-version.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), userAgent = require_environment_user_agent(), process = globalThis2.process, Deno2 = globalThis2.Deno, versions = process && process.versions || Deno2 && Deno2.version, v8 = versions && versions.v8, match, version;
+    v8 && (match = v8.split("."), version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]));
+    !version && userAgent && (match = userAgent.match(/Edge\/(\d+)/), (!match || match[1] >= 74) && (match = userAgent.match(/Chrome\/(\d+)/), match && (version = +match[1])));
+    module2.exports = version;
+  }
+});
+
+// node_modules/core-js/internals/symbol-constructor-detection.js
+var require_symbol_constructor_detection = __commonJS({
+  "node_modules/core-js/internals/symbol-constructor-detection.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var V8_VERSION = require_environment_v8_version(), fails = require_fails(), globalThis2 = require_global_this(), $String = globalThis2.String;
+    module2.exports = !!Object.getOwnPropertySymbols && !fails(function() {
+      var symbol = Symbol("symbol detection");
+      return !$String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+      !Symbol.sham && V8_VERSION && V8_VERSION < 41;
+    });
+  }
+});
+
+// node_modules/core-js/internals/use-symbol-as-uid.js
+var require_use_symbol_as_uid = __commonJS({
+  "node_modules/core-js/internals/use-symbol-as-uid.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var NATIVE_SYMBOL = require_symbol_constructor_detection();
+    module2.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == "symbol";
+  }
+});
+
+// node_modules/core-js/internals/is-symbol.js
+var require_is_symbol = __commonJS({
+  "node_modules/core-js/internals/is-symbol.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var getBuiltIn = require_get_built_in(), isCallable = require_is_callable(), isPrototypeOf = require_object_is_prototype_of(), USE_SYMBOL_AS_UID = require_use_symbol_as_uid(), $Object = Object;
+    module2.exports = USE_SYMBOL_AS_UID ? function(it) {
+      return typeof it == "symbol";
+    } : function(it) {
+      var $Symbol = getBuiltIn("Symbol");
+      return isCallable($Symbol) && isPrototypeOf($Symbol.prototype, $Object(it));
+    };
+  }
+});
+
+// node_modules/core-js/internals/try-to-string.js
+var require_try_to_string = __commonJS({
+  "node_modules/core-js/internals/try-to-string.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $String = String;
+    module2.exports = function(argument) {
+      try {
+        return $String(argument);
+      } catch (error2) {
+        return "Object";
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/a-callable.js
+var require_a_callable = __commonJS({
+  "node_modules/core-js/internals/a-callable.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isCallable = require_is_callable(), tryToString = require_try_to_string(), $TypeError = TypeError;
+    module2.exports = function(argument) {
+      if (isCallable(argument)) return argument;
+      throw new $TypeError(tryToString(argument) + " is not a function");
+    };
+  }
+});
+
+// node_modules/core-js/internals/is-null-or-undefined.js
+var require_is_null_or_undefined = __commonJS({
+  "node_modules/core-js/internals/is-null-or-undefined.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = function(it) {
+      return it == null;
+    };
+  }
+});
+
+// node_modules/core-js/internals/get-method.js
+var require_get_method = __commonJS({
+  "node_modules/core-js/internals/get-method.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var aCallable = require_a_callable(), isNullOrUndefined = require_is_null_or_undefined();
+    module2.exports = function(V, P) {
+      var func = V[P];
+      return isNullOrUndefined(func) ? void 0 : aCallable(func);
+    };
+  }
+});
+
+// node_modules/core-js/internals/ordinary-to-primitive.js
+var require_ordinary_to_primitive = __commonJS({
+  "node_modules/core-js/internals/ordinary-to-primitive.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var call = require_function_call(), isCallable = require_is_callable(), isObject = require_is_object(), $TypeError = TypeError;
+    module2.exports = function(input, pref) {
+      var fn, val;
+      if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input)) || isCallable(fn = input.valueOf) && !isObject(val = call(fn, input)) || pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
+      throw new $TypeError("Can't convert object to primitive value");
+    };
+  }
+});
+
+// node_modules/core-js/internals/is-pure.js
+var require_is_pure = __commonJS({
+  "node_modules/core-js/internals/is-pure.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = !1;
+  }
+});
+
+// node_modules/core-js/internals/define-global-property.js
+var require_define_global_property = __commonJS({
+  "node_modules/core-js/internals/define-global-property.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), defineProperty = Object.defineProperty;
+    module2.exports = function(key, value) {
+      try {
+        defineProperty(globalThis2, key, {
+          value: value,
+          configurable: !0,
+          writable: !0
+        });
+      } catch (error2) {
+        globalThis2[key] = value;
+      }
+      return value;
+    };
+  }
+});
+
+// node_modules/core-js/internals/shared-store.js
+var require_shared_store = __commonJS({
+  "node_modules/core-js/internals/shared-store.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var IS_PURE = require_is_pure(), globalThis2 = require_global_this(), defineGlobalProperty = require_define_global_property(), SHARED = "__core-js_shared__", store = module2.exports = globalThis2[SHARED] || defineGlobalProperty(SHARED, {});
+    (store.versions || (store.versions = [])).push({
+      version: "3.47.0",
+      mode: IS_PURE ? "pure" : "global",
+      copyright: "\xA9 2014-2025 Denis Pushkarev (zloirock.ru), 2025 CoreJS Company (core-js.io)",
+      license: "https://github.com/zloirock/core-js/blob/v3.47.0/LICENSE",
+      source: "https://github.com/zloirock/core-js"
+    });
+  }
+});
+
+// node_modules/core-js/internals/shared.js
+var require_shared = __commonJS({
+  "node_modules/core-js/internals/shared.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var store = require_shared_store();
+    module2.exports = function(key, value) {
+      return store[key] || (store[key] = value || {});
+    };
+  }
+});
+
+// node_modules/core-js/internals/require-object-coercible.js
+var require_require_object_coercible = __commonJS({
+  "node_modules/core-js/internals/require-object-coercible.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isNullOrUndefined = require_is_null_or_undefined(), $TypeError = TypeError;
+    module2.exports = function(it) {
+      if (isNullOrUndefined(it)) throw new $TypeError("Can't call method on " + it);
+      return it;
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-object.js
+var require_to_object = __commonJS({
+  "node_modules/core-js/internals/to-object.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var requireObjectCoercible = require_require_object_coercible(), $Object = Object;
+    module2.exports = function(argument) {
+      return $Object(requireObjectCoercible(argument));
+    };
+  }
+});
+
+// node_modules/core-js/internals/has-own-property.js
+var require_has_own_property = __commonJS({
+  "node_modules/core-js/internals/has-own-property.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), toObject = require_to_object(), hasOwnProperty = uncurryThis({}.hasOwnProperty);
+    module2.exports = Object.hasOwn || function(it, key) {
+      return hasOwnProperty(toObject(it), key);
+    };
+  }
+});
+
+// node_modules/core-js/internals/uid.js
+var require_uid = __commonJS({
+  "node_modules/core-js/internals/uid.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), id = 0, postfix = Math.random(), toString = uncurryThis(1.1.toString);
+    module2.exports = function(key) {
+      return "Symbol(" + (key === void 0 ? "" : key) + ")_" + toString(++id + postfix, 36);
+    };
+  }
+});
+
+// node_modules/core-js/internals/well-known-symbol.js
+var require_well_known_symbol = __commonJS({
+  "node_modules/core-js/internals/well-known-symbol.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), shared = require_shared(), hasOwn = require_has_own_property(), uid = require_uid(), NATIVE_SYMBOL = require_symbol_constructor_detection(), USE_SYMBOL_AS_UID = require_use_symbol_as_uid(), Symbol2 = globalThis2.Symbol, WellKnownSymbolsStore = shared("wks"), createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol2.for || Symbol2 : Symbol2 && Symbol2.withoutSetter || uid;
+    module2.exports = function(name) {
+      return hasOwn(WellKnownSymbolsStore, name) || (WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol2, name) ? Symbol2[name] : createWellKnownSymbol("Symbol." + name)), WellKnownSymbolsStore[name];
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-primitive.js
+var require_to_primitive = __commonJS({
+  "node_modules/core-js/internals/to-primitive.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var call = require_function_call(), isObject = require_is_object(), isSymbol = require_is_symbol(), getMethod = require_get_method(), ordinaryToPrimitive = require_ordinary_to_primitive(), wellKnownSymbol = require_well_known_symbol(), $TypeError = TypeError, TO_PRIMITIVE = wellKnownSymbol("toPrimitive");
+    module2.exports = function(input, pref) {
+      if (!isObject(input) || isSymbol(input)) return input;
+      var exoticToPrim = getMethod(input, TO_PRIMITIVE), result;
+      if (exoticToPrim) {
+        if (pref === void 0 && (pref = "default"), result = call(exoticToPrim, input, pref), !isObject(result) || isSymbol(result)) return result;
+        throw new $TypeError("Can't convert object to primitive value");
+      }
+      return pref === void 0 && (pref = "number"), ordinaryToPrimitive(input, pref);
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-property-key.js
+var require_to_property_key = __commonJS({
+  "node_modules/core-js/internals/to-property-key.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toPrimitive = require_to_primitive(), isSymbol = require_is_symbol();
+    module2.exports = function(argument) {
+      var key = toPrimitive(argument, "string");
+      return isSymbol(key) ? key : key + "";
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-define-property.js
+var require_object_define_property = __commonJS({
+  "node_modules/core-js/internals/object-define-property.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), IE8_DOM_DEFINE = require_ie8_dom_define(), V8_PROTOTYPE_DEFINE_BUG = require_v8_prototype_define_bug(), anObject = require_an_object(), toPropertyKey = require_to_property_key(), $TypeError = TypeError, $defineProperty = Object.defineProperty, $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor, ENUMERABLE = "enumerable", CONFIGURABLE = "configurable", WRITABLE = "writable";
+    exports2.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function(O, P, Attributes) {
+      if (anObject(O), P = toPropertyKey(P), anObject(Attributes), typeof O == "function" && P === "prototype" && "value" in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
+        var current2 = $getOwnPropertyDescriptor(O, P);
+        current2 && current2[WRITABLE] && (O[P] = Attributes.value, Attributes = {
+          configurable: CONFIGURABLE in Attributes ? Attributes[CONFIGURABLE] : current2[CONFIGURABLE],
+          enumerable: ENUMERABLE in Attributes ? Attributes[ENUMERABLE] : current2[ENUMERABLE],
+          writable: !1
+        });
+      }
+      return $defineProperty(O, P, Attributes);
+    } : $defineProperty : function(O, P, Attributes) {
+      if (anObject(O), P = toPropertyKey(P), anObject(Attributes), IE8_DOM_DEFINE) try {
+        return $defineProperty(O, P, Attributes);
+      } catch (error2) {
+      }
+      if ("get" in Attributes || "set" in Attributes) throw new $TypeError("Accessors not supported");
+      return "value" in Attributes && (O[P] = Attributes.value), O;
+    };
+  }
+});
+
+// node_modules/core-js/internals/function-name.js
+var require_function_name = __commonJS({
+  "node_modules/core-js/internals/function-name.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), hasOwn = require_has_own_property(), FunctionPrototype = Function.prototype, getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor, EXISTS = hasOwn(FunctionPrototype, "name"), PROPER = EXISTS && function() {
+    }.name === "something", CONFIGURABLE = EXISTS && (!DESCRIPTORS || DESCRIPTORS && getDescriptor(FunctionPrototype, "name").configurable);
+    module2.exports = {
+      EXISTS: EXISTS,
+      PROPER: PROPER,
+      CONFIGURABLE: CONFIGURABLE
+    };
+  }
+});
+
+// node_modules/core-js/internals/inspect-source.js
+var require_inspect_source = __commonJS({
+  "node_modules/core-js/internals/inspect-source.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), isCallable = require_is_callable(), store = require_shared_store(), functionToString = uncurryThis(Function.toString);
+    isCallable(store.inspectSource) || (store.inspectSource = function(it) {
+      return functionToString(it);
+    });
+    module2.exports = store.inspectSource;
+  }
+});
+
+// node_modules/core-js/internals/weak-map-basic-detection.js
+var require_weak_map_basic_detection = __commonJS({
+  "node_modules/core-js/internals/weak-map-basic-detection.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), isCallable = require_is_callable(), WeakMap2 = globalThis2.WeakMap;
+    module2.exports = isCallable(WeakMap2) && /native code/.test(String(WeakMap2));
+  }
+});
+
+// node_modules/core-js/internals/create-property-descriptor.js
+var require_create_property_descriptor = __commonJS({
+  "node_modules/core-js/internals/create-property-descriptor.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = function(bitmap, value) {
+      return {
+        enumerable: !(bitmap & 1),
+        configurable: !(bitmap & 2),
+        writable: !(bitmap & 4),
+        value: value
+      };
+    };
+  }
+});
+
+// node_modules/core-js/internals/create-non-enumerable-property.js
+var require_create_non_enumerable_property = __commonJS({
+  "node_modules/core-js/internals/create-non-enumerable-property.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), definePropertyModule = require_object_define_property(), createPropertyDescriptor = require_create_property_descriptor();
+    module2.exports = DESCRIPTORS ? function(object, key, value) {
+      return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
+    } : function(object, key, value) {
+      return object[key] = value, object;
+    };
+  }
+});
+
+// node_modules/core-js/internals/shared-key.js
+var require_shared_key = __commonJS({
+  "node_modules/core-js/internals/shared-key.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var shared = require_shared(), uid = require_uid(), keys = shared("keys");
+    module2.exports = function(key) {
+      return keys[key] || (keys[key] = uid(key));
+    };
+  }
+});
+
+// node_modules/core-js/internals/hidden-keys.js
+var require_hidden_keys = __commonJS({
+  "node_modules/core-js/internals/hidden-keys.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = {};
+  }
+});
+
+// node_modules/core-js/internals/internal-state.js
+var require_internal_state = __commonJS({
+  "node_modules/core-js/internals/internal-state.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var NATIVE_WEAK_MAP = require_weak_map_basic_detection(), globalThis2 = require_global_this(), isObject = require_is_object(), createNonEnumerableProperty = require_create_non_enumerable_property(), hasOwn = require_has_own_property(), shared = require_shared_store(), sharedKey = require_shared_key(), hiddenKeys = require_hidden_keys(), OBJECT_ALREADY_INITIALIZED = "Object already initialized", TypeError2 = globalThis2.TypeError, WeakMap2 = globalThis2.WeakMap, set3, get4, has, enforce = function(it) {
+      return has(it) ? get4(it) : set3(it, {});
+    }, getterFor = function(TYPE) {
+      return function(it) {
+        var state;
+        if (!isObject(it) || (state = get4(it)).type !== TYPE)
+          throw new TypeError2("Incompatible receiver, " + TYPE + " required");
+        return state;
+      };
+    };
+    NATIVE_WEAK_MAP || shared.state ? (store = shared.state || (shared.state = new WeakMap2()), store.get = store.get, store.has = store.has, store.set = store.set, set3 = function(it, metadata) {
+      if (store.has(it)) throw new TypeError2(OBJECT_ALREADY_INITIALIZED);
+      return metadata.facade = it, store.set(it, metadata), metadata;
+    }, get4 = function(it) {
+      return store.get(it) || {};
+    }, has = function(it) {
+      return store.has(it);
+    }) : (STATE = sharedKey("state"), hiddenKeys[STATE] = !0, set3 = function(it, metadata) {
+      if (hasOwn(it, STATE)) throw new TypeError2(OBJECT_ALREADY_INITIALIZED);
+      return metadata.facade = it, createNonEnumerableProperty(it, STATE, metadata), metadata;
+    }, get4 = function(it) {
+      return hasOwn(it, STATE) ? it[STATE] : {};
+    }, has = function(it) {
+      return hasOwn(it, STATE);
+    });
+    var store, STATE;
+    module2.exports = {
+      set: set3,
+      get: get4,
+      has: has,
+      enforce: enforce,
+      getterFor: getterFor
+    };
+  }
+});
+
+// node_modules/core-js/internals/make-built-in.js
+var require_make_built_in = __commonJS({
+  "node_modules/core-js/internals/make-built-in.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), fails = require_fails(), isCallable = require_is_callable(), hasOwn = require_has_own_property(), DESCRIPTORS = require_descriptors(), CONFIGURABLE_FUNCTION_NAME = require_function_name().CONFIGURABLE, inspectSource = require_inspect_source(), InternalStateModule = require_internal_state(), enforceInternalState = InternalStateModule.enforce, getInternalState = InternalStateModule.get, $String = String, defineProperty = Object.defineProperty, stringSlice = uncurryThis("".slice), replace = uncurryThis("".replace), join = uncurryThis([].join), CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function() {
+      return defineProperty(function() {
+      }, "length", {
+        value: 8
+      }).length !== 8;
+    }), TEMPLATE = String(String).split("String"), makeBuiltIn = module2.exports = function(value, name, options) {
+      stringSlice($String(name), 0, 7) === "Symbol(" && (name = "[" + replace($String(name), /^Symbol\(([^)]*)\).*$/, "$1") + "]"), options && options.getter && (name = "get " + name), options && options.setter && (name = "set " + name), (!hasOwn(value, "name") || CONFIGURABLE_FUNCTION_NAME && value.name !== name) && (DESCRIPTORS ? defineProperty(value, "name", {
+        value: name,
+        configurable: !0
+      }) : value.name = name), CONFIGURABLE_LENGTH && options && hasOwn(options, "arity") && value.length !== options.arity && defineProperty(value, "length", {
+        value: options.arity
+      });
+      try {
+        options && hasOwn(options, "constructor") && options.constructor ? DESCRIPTORS && defineProperty(value, "prototype", {
+          writable: !1
+        }) : value.prototype && (value.prototype = void 0);
+      } catch (error2) {
+      }
+      var state = enforceInternalState(value);
+      return hasOwn(state, "source") || (state.source = join(TEMPLATE, typeof name == "string" ? name : "")), value;
+    };
+    Function.prototype.toString = makeBuiltIn(function() {
+      return isCallable(this) && getInternalState(this).source || inspectSource(this);
+    }, "toString");
+  }
+});
+
+// node_modules/core-js/internals/define-built-in.js
+var require_define_built_in = __commonJS({
+  "node_modules/core-js/internals/define-built-in.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isCallable = require_is_callable(), definePropertyModule = require_object_define_property(), makeBuiltIn = require_make_built_in(), defineGlobalProperty = require_define_global_property();
+    module2.exports = function(O, key, value, options) {
+      options || (options = {});
+      var simple = options.enumerable, name = options.name !== void 0 ? options.name : key;
+      if (isCallable(value) && makeBuiltIn(value, name, options), options.global)
+        simple ? O[key] = value : defineGlobalProperty(key, value);
+      else {
+        try {
+          options.unsafe ? O[key] && (simple = !0) : delete O[key];
+        } catch (error2) {
+        }
+        simple ? O[key] = value : definePropertyModule.f(O, key, {
+          value: value,
+          enumerable: !1,
+          configurable: !options.nonConfigurable,
+          writable: !options.nonWritable
+        });
+      }
+      return O;
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-string-tag-support.js
+var require_to_string_tag_support = __commonJS({
+  "node_modules/core-js/internals/to-string-tag-support.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var wellKnownSymbol = require_well_known_symbol(), TO_STRING_TAG = wellKnownSymbol("toStringTag"), test = {};
+    test[TO_STRING_TAG] = "z";
+    module2.exports = String(test) === "[object z]";
+  }
+});
+
+// node_modules/core-js/internals/classof-raw.js
+var require_classof_raw = __commonJS({
+  "node_modules/core-js/internals/classof-raw.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), toString = uncurryThis({}.toString), stringSlice = uncurryThis("".slice);
+    module2.exports = function(it) {
+      return stringSlice(toString(it), 8, -1);
+    };
+  }
+});
+
+// node_modules/core-js/internals/classof.js
+var require_classof = __commonJS({
+  "node_modules/core-js/internals/classof.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var TO_STRING_TAG_SUPPORT = require_to_string_tag_support(), isCallable = require_is_callable(), classofRaw = require_classof_raw(), wellKnownSymbol = require_well_known_symbol(), TO_STRING_TAG = wellKnownSymbol("toStringTag"), $Object = Object, CORRECT_ARGUMENTS = classofRaw(/* @__PURE__ */ function() {
+      return arguments;
+    }()) === "Arguments", tryGet = function(it, key) {
+      try {
+        return it[key];
+      } catch (error2) {
+      }
+    };
+    module2.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function(it) {
+      var O, tag, result;
+      return it === void 0 ? "Undefined" : it === null ? "Null" : typeof (tag = tryGet(O = $Object(it), TO_STRING_TAG)) == "string" ? tag : CORRECT_ARGUMENTS ? classofRaw(O) : (result = classofRaw(O)) === "Object" && isCallable(O.callee) ? "Arguments" : result;
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-string.js
+var require_to_string = __commonJS({
+  "node_modules/core-js/internals/to-string.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var classof = require_classof(), $String = String;
+    module2.exports = function(argument) {
+      if (classof(argument) === "Symbol") throw new TypeError("Cannot convert a Symbol value to a string");
+      return $String(argument);
+    };
+  }
+});
+
+// node_modules/core-js/internals/normalize-string-argument.js
+var require_normalize_string_argument = __commonJS({
+  "node_modules/core-js/internals/normalize-string-argument.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toString = require_to_string();
+    module2.exports = function(argument, $default) {
+      return argument === void 0 ? arguments.length < 2 ? "" : $default : toString(argument);
+    };
+  }
+});
+
+// node_modules/core-js/internals/error-to-string.js
+var require_error_to_string = __commonJS({
+  "node_modules/core-js/internals/error-to-string.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), fails = require_fails(), anObject = require_an_object(), normalizeStringArgument = require_normalize_string_argument(), nativeErrorToString = Error.prototype.toString, INCORRECT_TO_STRING = fails(function() {
+      if (DESCRIPTORS) {
+        var object = Object.create(Object.defineProperty({}, "name", {
+          get: function() {
+            return this === object;
+          }
+        }));
+        if (nativeErrorToString.call(object) !== "true") return !0;
+      }
+      return nativeErrorToString.call({
+        message: 1,
+        name: 2
+      }) !== "2: 1" || nativeErrorToString.call({}) !== "Error";
+    });
+    module2.exports = INCORRECT_TO_STRING ? function() {
+      var O = anObject(this), name = normalizeStringArgument(O.name, "Error"), message = normalizeStringArgument(O.message);
+      return name ? message ? name + ": " + message : name : message;
+    } : nativeErrorToString;
+  }
+});
+
+// node_modules/core-js/modules/es.error.to-string.js
+var require_es_error_to_string = __commonJS({
+  "node_modules/core-js/modules/es.error.to-string.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var defineBuiltIn = require_define_built_in(), errorToString = require_error_to_string(), ErrorPrototype = Error.prototype;
+    ErrorPrototype.toString !== errorToString && defineBuiltIn(ErrorPrototype, "toString", errorToString);
+  }
+});
+
+// node_modules/core-js/internals/object-to-string.js
+var require_object_to_string = __commonJS({
+  "node_modules/core-js/internals/object-to-string.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var TO_STRING_TAG_SUPPORT = require_to_string_tag_support(), classof = require_classof();
+    module2.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function() {
+      return "[object " + classof(this) + "]";
+    };
+  }
+});
+
+// node_modules/core-js/modules/es.object.to-string.js
+var require_es_object_to_string = __commonJS({
+  "node_modules/core-js/modules/es.object.to-string.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var TO_STRING_TAG_SUPPORT = require_to_string_tag_support(), defineBuiltIn = require_define_built_in(), toString = require_object_to_string();
+    TO_STRING_TAG_SUPPORT || defineBuiltIn(Object.prototype, "toString", toString, {
+      unsafe: !0
+    });
+  }
+});
+
+// node_modules/core-js/internals/object-property-is-enumerable.js
+var require_object_property_is_enumerable = __commonJS({
+  "node_modules/core-js/internals/object-property-is-enumerable.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $propertyIsEnumerable = {}.propertyIsEnumerable, getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor, NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({
+      1: 2
+    }, 1);
+    exports2.f = NASHORN_BUG ? function(V) {
+      var descriptor = getOwnPropertyDescriptor(this, V);
+      return !!descriptor && descriptor.enumerable;
+    } : $propertyIsEnumerable;
+  }
+});
+
+// node_modules/core-js/internals/indexed-object.js
+var require_indexed_object = __commonJS({
+  "node_modules/core-js/internals/indexed-object.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), fails = require_fails(), classof = require_classof_raw(), $Object = Object, split = uncurryThis("".split);
+    module2.exports = fails(function() {
+      return !$Object("z").propertyIsEnumerable(0);
+    }) ? function(it) {
+      return classof(it) === "String" ? split(it, "") : $Object(it);
+    } : $Object;
+  }
+});
+
+// node_modules/core-js/internals/to-indexed-object.js
+var require_to_indexed_object = __commonJS({
+  "node_modules/core-js/internals/to-indexed-object.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var IndexedObject = require_indexed_object(), requireObjectCoercible = require_require_object_coercible();
+    module2.exports = function(it) {
+      return IndexedObject(requireObjectCoercible(it));
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-get-own-property-descriptor.js
+var require_object_get_own_property_descriptor = __commonJS({
+  "node_modules/core-js/internals/object-get-own-property-descriptor.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), call = require_function_call(), propertyIsEnumerableModule = require_object_property_is_enumerable(), createPropertyDescriptor = require_create_property_descriptor(), toIndexedObject = require_to_indexed_object(), toPropertyKey = require_to_property_key(), hasOwn = require_has_own_property(), IE8_DOM_DEFINE = require_ie8_dom_define(), $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    exports2.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function(O, P) {
+      if (O = toIndexedObject(O), P = toPropertyKey(P), IE8_DOM_DEFINE) try {
+        return $getOwnPropertyDescriptor(O, P);
+      } catch (error2) {
+      }
+      if (hasOwn(O, P)) return createPropertyDescriptor(!call(propertyIsEnumerableModule.f, O, P), O[P]);
+    };
+  }
+});
+
+// node_modules/core-js/internals/math-trunc.js
+var require_math_trunc = __commonJS({
+  "node_modules/core-js/internals/math-trunc.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var ceil = Math.ceil, floor = Math.floor;
+    module2.exports = Math.trunc || function(x) {
+      var n = +x;
+      return (n > 0 ? floor : ceil)(n);
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-integer-or-infinity.js
+var require_to_integer_or_infinity = __commonJS({
+  "node_modules/core-js/internals/to-integer-or-infinity.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var trunc = require_math_trunc();
+    module2.exports = function(argument) {
+      var number = +argument;
+      return number !== number || number === 0 ? 0 : trunc(number);
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-absolute-index.js
+var require_to_absolute_index = __commonJS({
+  "node_modules/core-js/internals/to-absolute-index.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toIntegerOrInfinity = require_to_integer_or_infinity(), max = Math.max, min = Math.min;
+    module2.exports = function(index, length) {
+      var integer = toIntegerOrInfinity(index);
+      return integer < 0 ? max(integer + length, 0) : min(integer, length);
+    };
+  }
+});
+
+// node_modules/core-js/internals/to-length.js
+var require_to_length = __commonJS({
+  "node_modules/core-js/internals/to-length.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toIntegerOrInfinity = require_to_integer_or_infinity(), min = Math.min;
+    module2.exports = function(argument) {
+      var len = toIntegerOrInfinity(argument);
+      return len > 0 ? min(len, 9007199254740991) : 0;
+    };
+  }
+});
+
+// node_modules/core-js/internals/length-of-array-like.js
+var require_length_of_array_like = __commonJS({
+  "node_modules/core-js/internals/length-of-array-like.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toLength = require_to_length();
+    module2.exports = function(obj) {
+      return toLength(obj.length);
+    };
+  }
+});
+
+// node_modules/core-js/internals/array-includes.js
+var require_array_includes = __commonJS({
+  "node_modules/core-js/internals/array-includes.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var toIndexedObject = require_to_indexed_object(), toAbsoluteIndex = require_to_absolute_index(), lengthOfArrayLike = require_length_of_array_like(), createMethod = function(IS_INCLUDES) {
+      return function($this, el, fromIndex) {
+        var O = toIndexedObject($this), length = lengthOfArrayLike(O);
+        if (length === 0) return !IS_INCLUDES && -1;
+        var index = toAbsoluteIndex(fromIndex, length), value;
+        if (IS_INCLUDES && el !== el) {
+          for (; length > index; )
+            if (value = O[index++], value !== value) return !0;
+        } else for (; length > index; index++)
+          if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
+        return !IS_INCLUDES && -1;
+      };
+    };
+    module2.exports = {
+      // `Array.prototype.includes` method
+      // https://tc39.es/ecma262/#sec-array.prototype.includes
+      includes: createMethod(!0),
+      // `Array.prototype.indexOf` method
+      // https://tc39.es/ecma262/#sec-array.prototype.indexof
+      indexOf: createMethod(!1)
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-keys-internal.js
+var require_object_keys_internal = __commonJS({
+  "node_modules/core-js/internals/object-keys-internal.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), hasOwn = require_has_own_property(), toIndexedObject = require_to_indexed_object(), indexOf2 = require_array_includes().indexOf, hiddenKeys = require_hidden_keys(), push = uncurryThis([].push);
+    module2.exports = function(object, names) {
+      var O = toIndexedObject(object), i = 0, result = [], key;
+      for (key in O) !hasOwn(hiddenKeys, key) && hasOwn(O, key) && push(result, key);
+      for (; names.length > i; ) hasOwn(O, key = names[i++]) && (~indexOf2(result, key) || push(result, key));
+      return result;
+    };
+  }
+});
+
+// node_modules/core-js/internals/enum-bug-keys.js
+var require_enum_bug_keys = __commonJS({
+  "node_modules/core-js/internals/enum-bug-keys.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = ["constructor", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable", "toLocaleString", "toString", "valueOf"];
+  }
+});
+
+// node_modules/core-js/internals/object-get-own-property-names.js
+var require_object_get_own_property_names = __commonJS({
+  "node_modules/core-js/internals/object-get-own-property-names.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var internalObjectKeys = require_object_keys_internal(), enumBugKeys = require_enum_bug_keys(), hiddenKeys = enumBugKeys.concat("length", "prototype");
+    exports2.f = Object.getOwnPropertyNames || function(O) {
+      return internalObjectKeys(O, hiddenKeys);
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-get-own-property-symbols.js
+var require_object_get_own_property_symbols = __commonJS({
+  "node_modules/core-js/internals/object-get-own-property-symbols.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    exports2.f = Object.getOwnPropertySymbols;
+  }
+});
+
+// node_modules/core-js/internals/own-keys.js
+var require_own_keys = __commonJS({
+  "node_modules/core-js/internals/own-keys.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var getBuiltIn = require_get_built_in(), uncurryThis = require_function_uncurry_this(), getOwnPropertyNamesModule = require_object_get_own_property_names(), getOwnPropertySymbolsModule = require_object_get_own_property_symbols(), anObject = require_an_object(), concat = uncurryThis([].concat);
+    module2.exports = getBuiltIn("Reflect", "ownKeys") || function(it) {
+      var keys = getOwnPropertyNamesModule.f(anObject(it)), getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
+      return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
+    };
+  }
+});
+
+// node_modules/core-js/internals/copy-constructor-properties.js
+var require_copy_constructor_properties = __commonJS({
+  "node_modules/core-js/internals/copy-constructor-properties.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var hasOwn = require_has_own_property(), ownKeys12 = require_own_keys(), getOwnPropertyDescriptorModule = require_object_get_own_property_descriptor(), definePropertyModule = require_object_define_property();
+    module2.exports = function(target, source, exceptions) {
+      for (var keys = ownKeys12(source), defineProperty = definePropertyModule.f, getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f, i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        !hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key)) && defineProperty(target, key, getOwnPropertyDescriptor(source, key));
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/is-forced.js
+var require_is_forced = __commonJS({
+  "node_modules/core-js/internals/is-forced.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var fails = require_fails(), isCallable = require_is_callable(), replacement = /#|\.prototype\./, isForced = function(feature, detection) {
+      var value = data[normalize(feature)];
+      return value === POLYFILL ? !0 : value === NATIVE ? !1 : isCallable(detection) ? fails(detection) : !!detection;
+    }, normalize = isForced.normalize = function(string) {
+      return String(string).replace(replacement, ".").toLowerCase();
+    }, data = isForced.data = {}, NATIVE = isForced.NATIVE = "N", POLYFILL = isForced.POLYFILL = "P";
+    module2.exports = isForced;
+  }
+});
+
+// node_modules/core-js/internals/export.js
+var require_export = __commonJS({
+  "node_modules/core-js/internals/export.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), getOwnPropertyDescriptor = require_object_get_own_property_descriptor().f, createNonEnumerableProperty = require_create_non_enumerable_property(), defineBuiltIn = require_define_built_in(), defineGlobalProperty = require_define_global_property(), copyConstructorProperties = require_copy_constructor_properties(), isForced = require_is_forced();
+    module2.exports = function(options, source) {
+      var TARGET = options.target, GLOBAL = options.global, STATIC = options.stat, FORCED, target, key, targetProperty, sourceProperty, descriptor;
+      if (GLOBAL ? target = globalThis2 : STATIC ? target = globalThis2[TARGET] || defineGlobalProperty(TARGET, {}) : target = globalThis2[TARGET] && globalThis2[TARGET].prototype, target) for (key in source) {
+        if (sourceProperty = source[key], options.dontCallGetSet ? (descriptor = getOwnPropertyDescriptor(target, key), targetProperty = descriptor && descriptor.value) : targetProperty = target[key], FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced), !FORCED && targetProperty !== void 0) {
+          if (typeof sourceProperty == typeof targetProperty) continue;
+          copyConstructorProperties(sourceProperty, targetProperty);
+        }
+        (options.sham || targetProperty && targetProperty.sham) && createNonEnumerableProperty(sourceProperty, "sham", !0), defineBuiltIn(target, key, sourceProperty, options);
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/validate-arguments-length.js
+var require_validate_arguments_length = __commonJS({
+  "node_modules/core-js/internals/validate-arguments-length.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $TypeError = TypeError;
+    module2.exports = function(passed, required) {
+      if (passed < required) throw new $TypeError("Not enough arguments");
+      return passed;
+    };
+  }
+});
+
+// node_modules/core-js/internals/base64-map.js
+var require_base64_map = __commonJS({
+  "node_modules/core-js/internals/base64-map.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var commonAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", base64Alphabet = commonAlphabet + "+/", base64UrlAlphabet = commonAlphabet + "-_", inverse = function(characters) {
+      for (var result = {}, index = 0; index < 64; index++) result[characters.charAt(index)] = index;
+      return result;
+    };
+    module2.exports = {
+      i2c: base64Alphabet,
+      c2i: inverse(base64Alphabet),
+      i2cUrl: base64UrlAlphabet,
+      c2iUrl: inverse(base64UrlAlphabet)
+    };
+  }
+});
+
+// node_modules/core-js/modules/web.atob.js
+var require_web_atob = __commonJS({
+  "node_modules/core-js/modules/web.atob.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $ = require_export(), globalThis2 = require_global_this(), getBuiltIn = require_get_built_in(), uncurryThis = require_function_uncurry_this(), call = require_function_call(), fails = require_fails(), toString = require_to_string(), validateArgumentsLength = require_validate_arguments_length(), c2i = require_base64_map().c2i, disallowed = /[^\d+/a-z]/i, whitespaces = /[\t\n\f\r ]+/g, finalEq = /[=]{1,2}$/, $atob = getBuiltIn("atob"), fromCharCode = String.fromCharCode, charAt = uncurryThis("".charAt), replace = uncurryThis("".replace), exec = uncurryThis(disallowed.exec), BASIC = !!$atob && !fails(function() {
+      return $atob("aGk=") !== "hi";
+    }), NO_SPACES_IGNORE = BASIC && fails(function() {
+      return $atob(" ") !== "";
+    }), NO_ENCODING_CHECK = BASIC && !fails(function() {
+      $atob("a");
+    }), NO_ARG_RECEIVING_CHECK = BASIC && !fails(function() {
+      $atob();
+    }), WRONG_ARITY = BASIC && $atob.length !== 1, FORCED = !BASIC || NO_SPACES_IGNORE || NO_ENCODING_CHECK || NO_ARG_RECEIVING_CHECK || WRONG_ARITY;
+    $({
+      global: !0,
+      bind: !0,
+      enumerable: !0,
+      forced: FORCED
+    }, {
+      atob: function(data) {
+        if (validateArgumentsLength(arguments.length, 1), BASIC && !NO_SPACES_IGNORE && !NO_ENCODING_CHECK) return call($atob, globalThis2, data);
+        var string = replace(toString(data), whitespaces, ""), output = "", position = 0, bc = 0, length, chr, bs;
+        if (string.length % 4 === 0 && (string = replace(string, finalEq, "")), length = string.length, length % 4 === 1 || exec(disallowed, string))
+          throw new (getBuiltIn("DOMException"))("The string is not correctly encoded", "InvalidCharacterError");
+        for (; position < length; )
+          chr = charAt(string, position++), bs = bc % 4 ? bs * 64 + c2i[chr] : c2i[chr], bc++ % 4 && (output += fromCharCode(255 & bs >> (-2 * bc & 6)));
+        return output;
+      }
+    });
+  }
+});
+
+// node_modules/core-js/internals/environment.js
+var require_environment = __commonJS({
+  "node_modules/core-js/internals/environment.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), userAgent = require_environment_user_agent(), classof = require_classof_raw(), userAgentStartsWith = function(string) {
+      return userAgent.slice(0, string.length) === string;
+    };
+    module2.exports = function() {
+      return userAgentStartsWith("Bun/") ? "BUN" : userAgentStartsWith("Cloudflare-Workers") ? "CLOUDFLARE" : userAgentStartsWith("Deno/") ? "DENO" : userAgentStartsWith("Node.js/") ? "NODE" : globalThis2.Bun && typeof Bun.version == "string" ? "BUN" : globalThis2.Deno && typeof Deno.version == "object" ? "DENO" : classof(globalThis2.process) === "process" ? "NODE" : globalThis2.window && globalThis2.document ? "BROWSER" : "REST";
+    }();
+  }
+});
+
+// node_modules/core-js/internals/environment-is-node.js
+var require_environment_is_node = __commonJS({
+  "node_modules/core-js/internals/environment-is-node.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var ENVIRONMENT = require_environment();
+    module2.exports = ENVIRONMENT === "NODE";
+  }
+});
+
+// node_modules/core-js/internals/get-built-in-node-module.js
+var require_get_built_in_node_module = __commonJS({
+  "node_modules/core-js/internals/get-built-in-node-module.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this(), IS_NODE = require_environment_is_node();
+    module2.exports = function(name) {
+      if (IS_NODE) {
+        try {
+          return globalThis2.process.getBuiltinModule(name);
+        } catch (error2) {
+        }
+        try {
+          return Function('return require("' + name + '")')();
+        } catch (error2) {
+        }
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-keys.js
+var require_object_keys = __commonJS({
+  "node_modules/core-js/internals/object-keys.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var internalObjectKeys = require_object_keys_internal(), enumBugKeys = require_enum_bug_keys();
+    module2.exports = Object.keys || function(O) {
+      return internalObjectKeys(O, enumBugKeys);
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-define-properties.js
+var require_object_define_properties = __commonJS({
+  "node_modules/core-js/internals/object-define-properties.js": function(exports2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var DESCRIPTORS = require_descriptors(), V8_PROTOTYPE_DEFINE_BUG = require_v8_prototype_define_bug(), definePropertyModule = require_object_define_property(), anObject = require_an_object(), toIndexedObject = require_to_indexed_object(), objectKeys = require_object_keys();
+    exports2.f = DESCRIPTORS && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function(O, Properties) {
+      anObject(O);
+      for (var props = toIndexedObject(Properties), keys = objectKeys(Properties), length = keys.length, index = 0, key; length > index; ) definePropertyModule.f(O, key = keys[index++], props[key]);
+      return O;
+    };
+  }
+});
+
+// node_modules/core-js/internals/html.js
+var require_html = __commonJS({
+  "node_modules/core-js/internals/html.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var getBuiltIn = require_get_built_in();
+    module2.exports = getBuiltIn("document", "documentElement");
+  }
+});
+
+// node_modules/core-js/internals/object-create.js
+var require_object_create = __commonJS({
+  "node_modules/core-js/internals/object-create.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var anObject = require_an_object(), definePropertiesModule = require_object_define_properties(), enumBugKeys = require_enum_bug_keys(), hiddenKeys = require_hidden_keys(), html = require_html(), documentCreateElement = require_document_create_element(), sharedKey = require_shared_key(), GT = ">", LT = "<", PROTOTYPE = "prototype", SCRIPT = "script", IE_PROTO = sharedKey("IE_PROTO"), EmptyConstructor = function() {
+    }, scriptTag = function(content) {
+      return LT + SCRIPT + GT + content + LT + "/" + SCRIPT + GT;
+    }, NullProtoObjectViaActiveX = function(activeXDocument2) {
+      activeXDocument2.write(scriptTag("")), activeXDocument2.close();
+      var temp = activeXDocument2.parentWindow.Object;
+      return activeXDocument2 = null, temp;
+    }, NullProtoObjectViaIFrame = function() {
+      var iframe = documentCreateElement("iframe"), JS = "java" + SCRIPT + ":", iframeDocument;
+      return iframe.style.display = "none", html.appendChild(iframe), iframe.src = String(JS), iframeDocument = iframe.contentWindow.document, iframeDocument.open(), iframeDocument.write(scriptTag("document.F=Object")), iframeDocument.close(), iframeDocument.F;
+    }, activeXDocument, _NullProtoObject = function() {
+      try {
+        activeXDocument = new ActiveXObject("htmlfile");
+      } catch (error2) {
+      }
+      _NullProtoObject = typeof document < "u" ? document.domain && activeXDocument ? NullProtoObjectViaActiveX(activeXDocument) : NullProtoObjectViaIFrame() : NullProtoObjectViaActiveX(activeXDocument);
+      for (var length = enumBugKeys.length; length--; ) delete _NullProtoObject[PROTOTYPE][enumBugKeys[length]];
+      return _NullProtoObject();
+    };
+    hiddenKeys[IE_PROTO] = !0;
+    module2.exports = Object.create || function(O, Properties) {
+      var result;
+      return O !== null ? (EmptyConstructor[PROTOTYPE] = anObject(O), result = new EmptyConstructor(), EmptyConstructor[PROTOTYPE] = null, result[IE_PROTO] = O) : result = _NullProtoObject(), Properties === void 0 ? result : definePropertiesModule.f(result, Properties);
+    };
+  }
+});
+
+// node_modules/core-js/internals/define-built-in-accessor.js
+var require_define_built_in_accessor = __commonJS({
+  "node_modules/core-js/internals/define-built-in-accessor.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var makeBuiltIn = require_make_built_in(), defineProperty = require_object_define_property();
+    module2.exports = function(target, name, descriptor) {
+      return descriptor.get && makeBuiltIn(descriptor.get, name, {
+        getter: !0
+      }), descriptor.set && makeBuiltIn(descriptor.set, name, {
+        setter: !0
+      }), defineProperty.f(target, name, descriptor);
+    };
+  }
+});
+
+// node_modules/core-js/internals/an-instance.js
+var require_an_instance = __commonJS({
+  "node_modules/core-js/internals/an-instance.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isPrototypeOf = require_object_is_prototype_of(), $TypeError = TypeError;
+    module2.exports = function(it, Prototype) {
+      if (isPrototypeOf(Prototype, it)) return it;
+      throw new $TypeError("Incorrect invocation");
+    };
+  }
+});
+
+// node_modules/core-js/internals/dom-exception-constants.js
+var require_dom_exception_constants = __commonJS({
+  "node_modules/core-js/internals/dom-exception-constants.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    module2.exports = {
+      IndexSizeError: {
+        s: "INDEX_SIZE_ERR",
+        c: 1,
+        m: 1
+      },
+      DOMStringSizeError: {
+        s: "DOMSTRING_SIZE_ERR",
+        c: 2,
+        m: 0
+      },
+      HierarchyRequestError: {
+        s: "HIERARCHY_REQUEST_ERR",
+        c: 3,
+        m: 1
+      },
+      WrongDocumentError: {
+        s: "WRONG_DOCUMENT_ERR",
+        c: 4,
+        m: 1
+      },
+      InvalidCharacterError: {
+        s: "INVALID_CHARACTER_ERR",
+        c: 5,
+        m: 1
+      },
+      NoDataAllowedError: {
+        s: "NO_DATA_ALLOWED_ERR",
+        c: 6,
+        m: 0
+      },
+      NoModificationAllowedError: {
+        s: "NO_MODIFICATION_ALLOWED_ERR",
+        c: 7,
+        m: 1
+      },
+      NotFoundError: {
+        s: "NOT_FOUND_ERR",
+        c: 8,
+        m: 1
+      },
+      NotSupportedError: {
+        s: "NOT_SUPPORTED_ERR",
+        c: 9,
+        m: 1
+      },
+      InUseAttributeError: {
+        s: "INUSE_ATTRIBUTE_ERR",
+        c: 10,
+        m: 1
+      },
+      InvalidStateError: {
+        s: "INVALID_STATE_ERR",
+        c: 11,
+        m: 1
+      },
+      SyntaxError: {
+        s: "SYNTAX_ERR",
+        c: 12,
+        m: 1
+      },
+      InvalidModificationError: {
+        s: "INVALID_MODIFICATION_ERR",
+        c: 13,
+        m: 1
+      },
+      NamespaceError: {
+        s: "NAMESPACE_ERR",
+        c: 14,
+        m: 1
+      },
+      InvalidAccessError: {
+        s: "INVALID_ACCESS_ERR",
+        c: 15,
+        m: 1
+      },
+      ValidationError: {
+        s: "VALIDATION_ERR",
+        c: 16,
+        m: 0
+      },
+      TypeMismatchError: {
+        s: "TYPE_MISMATCH_ERR",
+        c: 17,
+        m: 1
+      },
+      SecurityError: {
+        s: "SECURITY_ERR",
+        c: 18,
+        m: 1
+      },
+      NetworkError: {
+        s: "NETWORK_ERR",
+        c: 19,
+        m: 1
+      },
+      AbortError: {
+        s: "ABORT_ERR",
+        c: 20,
+        m: 1
+      },
+      URLMismatchError: {
+        s: "URL_MISMATCH_ERR",
+        c: 21,
+        m: 1
+      },
+      QuotaExceededError: {
+        s: "QUOTA_EXCEEDED_ERR",
+        c: 22,
+        m: 1
+      },
+      TimeoutError: {
+        s: "TIMEOUT_ERR",
+        c: 23,
+        m: 1
+      },
+      InvalidNodeTypeError: {
+        s: "INVALID_NODE_TYPE_ERR",
+        c: 24,
+        m: 1
+      },
+      DataCloneError: {
+        s: "DATA_CLONE_ERR",
+        c: 25,
+        m: 1
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/error-stack-clear.js
+var require_error_stack_clear = __commonJS({
+  "node_modules/core-js/internals/error-stack-clear.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), $Error = Error, replace = uncurryThis("".replace), TEST = function(arg) {
+      return String(new $Error(arg).stack);
+    }("zxcasd"), V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/, IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
+    module2.exports = function(stack, dropEntries) {
+      if (IS_V8_OR_CHAKRA_STACK && typeof stack == "string" && !$Error.prepareStackTrace)
+        for (; dropEntries--; ) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, "");
+      return stack;
+    };
+  }
+});
+
+// node_modules/core-js/modules/web.dom-exception.constructor.js
+var require_web_dom_exception_constructor = __commonJS({
+  "node_modules/core-js/modules/web.dom-exception.constructor.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $ = require_export(), getBuiltIn = require_get_built_in(), getBuiltInNodeModule = require_get_built_in_node_module(), fails = require_fails(), create2 = require_object_create(), createPropertyDescriptor = require_create_property_descriptor(), defineProperty = require_object_define_property().f, defineBuiltIn = require_define_built_in(), defineBuiltInAccessor = require_define_built_in_accessor(), hasOwn = require_has_own_property(), anInstance = require_an_instance(), anObject = require_an_object(), errorToString = require_error_to_string(), normalizeStringArgument = require_normalize_string_argument(), DOMExceptionConstants = require_dom_exception_constants(), clearErrorStack = require_error_stack_clear(), InternalStateModule = require_internal_state(), DESCRIPTORS = require_descriptors(), IS_PURE = require_is_pure(), DOM_EXCEPTION = "DOMException", DATA_CLONE_ERR = "DATA_CLONE_ERR", Error2 = getBuiltIn("Error"), NativeDOMException = getBuiltIn(DOM_EXCEPTION) || function() {
+      try {
+        var MessageChannel = getBuiltIn("MessageChannel") || getBuiltInNodeModule("worker_threads").MessageChannel;
+        new MessageChannel().port1.postMessage(/* @__PURE__ */ new WeakMap());
+      } catch (error2) {
+        if (error2.name === DATA_CLONE_ERR && error2.code === 25) return error2.constructor;
+      }
+    }(), NativeDOMExceptionPrototype = NativeDOMException && NativeDOMException.prototype, ErrorPrototype = Error2.prototype, setInternalState = InternalStateModule.set, getInternalState = InternalStateModule.getterFor(DOM_EXCEPTION), HAS_STACK = "stack" in new Error2(DOM_EXCEPTION), codeFor = function(name) {
+      return hasOwn(DOMExceptionConstants, name) && DOMExceptionConstants[name].m ? DOMExceptionConstants[name].c : 0;
+    }, $DOMException = function() {
+      anInstance(this, DOMExceptionPrototype);
+      var argumentsLength = arguments.length, message = normalizeStringArgument(argumentsLength < 1 ? void 0 : arguments[0]), name = normalizeStringArgument(argumentsLength < 2 ? void 0 : arguments[1], "Error"), code = codeFor(name);
+      if (setInternalState(this, {
+        type: DOM_EXCEPTION,
+        name: name,
+        message: message,
+        code: code
+      }), DESCRIPTORS || (this.name = name, this.message = message, this.code = code), HAS_STACK) {
+        var error2 = new Error2(message);
+        error2.name = DOM_EXCEPTION, defineProperty(this, "stack", createPropertyDescriptor(1, clearErrorStack(error2.stack, 1)));
+      }
+    }, DOMExceptionPrototype = $DOMException.prototype = create2(ErrorPrototype), createGetterDescriptor = function(get4) {
+      return {
+        enumerable: !0,
+        configurable: !0,
+        get: get4
+      };
+    }, getterFor = function(key2) {
+      return createGetterDescriptor(function() {
+        return getInternalState(this)[key2];
+      });
+    };
+    DESCRIPTORS && (defineBuiltInAccessor(DOMExceptionPrototype, "code", getterFor("code")), defineBuiltInAccessor(DOMExceptionPrototype, "message", getterFor("message")), defineBuiltInAccessor(DOMExceptionPrototype, "name", getterFor("name")));
+    defineProperty(DOMExceptionPrototype, "constructor", createPropertyDescriptor(1, $DOMException));
+    var INCORRECT_CONSTRUCTOR = fails(function() {
+      return !(new NativeDOMException() instanceof Error2);
+    }), INCORRECT_TO_STRING = INCORRECT_CONSTRUCTOR || fails(function() {
+      return ErrorPrototype.toString !== errorToString || String(new NativeDOMException(1, 2)) !== "2: 1";
+    }), INCORRECT_CODE = INCORRECT_CONSTRUCTOR || fails(function() {
+      return new NativeDOMException(1, "DataCloneError").code !== 25;
+    }), MISSED_CONSTANTS = INCORRECT_CONSTRUCTOR || NativeDOMException[DATA_CLONE_ERR] !== 25 || NativeDOMExceptionPrototype[DATA_CLONE_ERR] !== 25, FORCED_CONSTRUCTOR = IS_PURE ? INCORRECT_TO_STRING || INCORRECT_CODE || MISSED_CONSTANTS : INCORRECT_CONSTRUCTOR;
+    $({
+      global: !0,
+      constructor: !0,
+      forced: FORCED_CONSTRUCTOR
+    }, {
+      DOMException: FORCED_CONSTRUCTOR ? $DOMException : NativeDOMException
+    });
+    var PolyfilledDOMException = getBuiltIn(DOM_EXCEPTION), PolyfilledDOMExceptionPrototype = PolyfilledDOMException.prototype;
+    INCORRECT_TO_STRING && (IS_PURE || NativeDOMException === PolyfilledDOMException) && defineBuiltIn(PolyfilledDOMExceptionPrototype, "toString", errorToString);
+    INCORRECT_CODE && DESCRIPTORS && NativeDOMException === PolyfilledDOMException && defineBuiltInAccessor(PolyfilledDOMExceptionPrototype, "code", createGetterDescriptor(function() {
+      return codeFor(anObject(this).name);
+    }));
+    for (key in DOMExceptionConstants) hasOwn(DOMExceptionConstants, key) && (constant = DOMExceptionConstants[key], constantName = constant.s, descriptor = createPropertyDescriptor(6, constant.c), hasOwn(PolyfilledDOMException, constantName) || defineProperty(PolyfilledDOMException, constantName, descriptor), hasOwn(PolyfilledDOMExceptionPrototype, constantName) || defineProperty(PolyfilledDOMExceptionPrototype, constantName, descriptor));
+    var constant, constantName, descriptor, key;
+  }
+});
+
+// node_modules/core-js/internals/function-uncurry-this-accessor.js
+var require_function_uncurry_this_accessor = __commonJS({
+  "node_modules/core-js/internals/function-uncurry-this-accessor.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThis = require_function_uncurry_this(), aCallable = require_a_callable();
+    module2.exports = function(object, key, method) {
+      try {
+        return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+      } catch (error2) {
+      }
+    };
+  }
+});
+
+// node_modules/core-js/internals/is-possible-prototype.js
+var require_is_possible_prototype = __commonJS({
+  "node_modules/core-js/internals/is-possible-prototype.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isObject = require_is_object();
+    module2.exports = function(argument) {
+      return isObject(argument) || argument === null;
+    };
+  }
+});
+
+// node_modules/core-js/internals/a-possible-prototype.js
+var require_a_possible_prototype = __commonJS({
+  "node_modules/core-js/internals/a-possible-prototype.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isPossiblePrototype = require_is_possible_prototype(), $String = String, $TypeError = TypeError;
+    module2.exports = function(argument) {
+      if (isPossiblePrototype(argument)) return argument;
+      throw new $TypeError("Can't set " + $String(argument) + " as a prototype");
+    };
+  }
+});
+
+// node_modules/core-js/internals/object-set-prototype-of.js
+var require_object_set_prototype_of = __commonJS({
+  "node_modules/core-js/internals/object-set-prototype-of.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var uncurryThisAccessor = require_function_uncurry_this_accessor(), isObject = require_is_object(), requireObjectCoercible = require_require_object_coercible(), aPossiblePrototype = require_a_possible_prototype();
+    module2.exports = Object.setPrototypeOf || ("__proto__" in {} ? function() {
+      var CORRECT_SETTER = !1, test = {}, setter;
+      try {
+        setter = uncurryThisAccessor(Object.prototype, "__proto__", "set"), setter(test, []), CORRECT_SETTER = test instanceof Array;
+      } catch (error2) {
+      }
+      return function(O, proto) {
+        return requireObjectCoercible(O), aPossiblePrototype(proto), isObject(O) && (CORRECT_SETTER ? setter(O, proto) : O.__proto__ = proto), O;
+      };
+    }() : void 0);
+  }
+});
+
+// node_modules/core-js/internals/inherit-if-required.js
+var require_inherit_if_required = __commonJS({
+  "node_modules/core-js/internals/inherit-if-required.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var isCallable = require_is_callable(), isObject = require_is_object(), setPrototypeOf = require_object_set_prototype_of();
+    module2.exports = function($this, dummy, Wrapper) {
+      var NewTarget, NewTargetPrototype;
+      return (
+        // it can work only with native `setPrototypeOf`
+        setPrototypeOf && // we haven't completely correct pre-ES6 way for getting `new.target`, so use this
+        isCallable(NewTarget = dummy.constructor) && NewTarget !== Wrapper && isObject(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype && setPrototypeOf($this, NewTargetPrototype), $this
+      );
+    };
+  }
+});
+
+// node_modules/core-js/modules/web.dom-exception.stack.js
+var require_web_dom_exception_stack = __commonJS({
+  "node_modules/core-js/modules/web.dom-exception.stack.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var $ = require_export(), globalThis2 = require_global_this(), getBuiltIn = require_get_built_in(), createPropertyDescriptor = require_create_property_descriptor(), defineProperty = require_object_define_property().f, hasOwn = require_has_own_property(), anInstance = require_an_instance(), inheritIfRequired = require_inherit_if_required(), normalizeStringArgument = require_normalize_string_argument(), DOMExceptionConstants = require_dom_exception_constants(), clearErrorStack = require_error_stack_clear(), DESCRIPTORS = require_descriptors(), IS_PURE = require_is_pure(), DOM_EXCEPTION = "DOMException", Error2 = getBuiltIn("Error"), NativeDOMException = getBuiltIn(DOM_EXCEPTION), $DOMException = function() {
+      anInstance(this, DOMExceptionPrototype);
+      var argumentsLength = arguments.length, message = normalizeStringArgument(argumentsLength < 1 ? void 0 : arguments[0]), name = normalizeStringArgument(argumentsLength < 2 ? void 0 : arguments[1], "Error"), that = new NativeDOMException(message, name), error2 = new Error2(message);
+      return error2.name = DOM_EXCEPTION, defineProperty(that, "stack", createPropertyDescriptor(1, clearErrorStack(error2.stack, 1))), inheritIfRequired(that, this, $DOMException), that;
+    }, DOMExceptionPrototype = $DOMException.prototype = NativeDOMException.prototype, ERROR_HAS_STACK = "stack" in new Error2(DOM_EXCEPTION), DOM_EXCEPTION_HAS_STACK = "stack" in new NativeDOMException(1, 2), descriptor = NativeDOMException && DESCRIPTORS && Object.getOwnPropertyDescriptor(globalThis2, DOM_EXCEPTION), BUGGY_DESCRIPTOR = !!descriptor && !(descriptor.writable && descriptor.configurable), FORCED_CONSTRUCTOR = ERROR_HAS_STACK && !BUGGY_DESCRIPTOR && !DOM_EXCEPTION_HAS_STACK;
+    $({
+      global: !0,
+      constructor: !0,
+      forced: IS_PURE || FORCED_CONSTRUCTOR
+    }, {
+      // TODO: fix export logic
+      DOMException: FORCED_CONSTRUCTOR ? $DOMException : NativeDOMException
+    });
+    var PolyfilledDOMException = getBuiltIn(DOM_EXCEPTION), PolyfilledDOMExceptionPrototype = PolyfilledDOMException.prototype;
+    if (PolyfilledDOMExceptionPrototype.constructor !== PolyfilledDOMException) {
+      IS_PURE || defineProperty(PolyfilledDOMExceptionPrototype, "constructor", createPropertyDescriptor(1, PolyfilledDOMException));
+      for (key in DOMExceptionConstants) hasOwn(DOMExceptionConstants, key) && (constant = DOMExceptionConstants[key], constantName = constant.s, hasOwn(PolyfilledDOMException, constantName) || defineProperty(PolyfilledDOMException, constantName, createPropertyDescriptor(6, constant.c)));
+    }
+    var constant, constantName, key;
+  }
+});
+
+// node_modules/core-js/internals/set-to-string-tag.js
+var require_set_to_string_tag = __commonJS({
+  "node_modules/core-js/internals/set-to-string-tag.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var defineProperty = require_object_define_property().f, hasOwn = require_has_own_property(), wellKnownSymbol = require_well_known_symbol(), TO_STRING_TAG = wellKnownSymbol("toStringTag");
+    module2.exports = function(target, TAG, STATIC) {
+      target && !STATIC && (target = target.prototype), target && !hasOwn(target, TO_STRING_TAG) && defineProperty(target, TO_STRING_TAG, {
+        configurable: !0,
+        value: TAG
+      });
+    };
+  }
+});
+
+// node_modules/core-js/modules/web.dom-exception.to-string-tag.js
+var require_web_dom_exception_to_string_tag = __commonJS({
+  "node_modules/core-js/modules/web.dom-exception.to-string-tag.js": function() {
+    "use strict";
+    init_kolmafia_polyfill();
+    var getBuiltIn = require_get_built_in(), setToStringTag = require_set_to_string_tag(), DOM_EXCEPTION = "DOMException";
+    setToStringTag(getBuiltIn(DOM_EXCEPTION), DOM_EXCEPTION);
+  }
+});
+
+// node_modules/core-js/internals/path.js
+var require_path = __commonJS({
+  "node_modules/core-js/internals/path.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    var globalThis2 = require_global_this();
+    module2.exports = globalThis2;
+  }
+});
+
+// node_modules/core-js/stable/atob.js
+var require_atob = __commonJS({
+  "node_modules/core-js/stable/atob.js": function(exports2, module2) {
+    "use strict";
+    init_kolmafia_polyfill();
+    require_es_error_to_string();
+    require_es_object_to_string();
+    require_web_atob();
+    require_web_dom_exception_constructor();
+    require_web_dom_exception_stack();
+    require_web_dom_exception_to_string_tag();
+    var path3 = require_path();
+    module2.exports = path3.atob;
+  }
+});
 
 // src/index.ts
 var src_exports = {};
@@ -971,17 +2650,22 @@ __export(src_exports, {
   }
 });
 module.exports = __toCommonJS(src_exports);
+init_kolmafia_polyfill();
 
 // src/actions/ActionSource.ts
+init_kolmafia_polyfill();
 var import_kolmafia7 = require("kolmafia");
 
 // src/combat.ts
+init_kolmafia_polyfill();
 var import_kolmafia5 = require("kolmafia");
 
 // src/lib.ts
+init_kolmafia_polyfill();
 var import_kolmafia4 = require("kolmafia");
 
 // src/logger.ts
+init_kolmafia_polyfill();
 var import_kolmafia = require("kolmafia");
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -1165,6 +2849,7 @@ __export(property_exports, {
     return withProperty;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia2 = require("kolmafia");
 
 // src/propertyTypes.ts
@@ -1210,9 +2895,11 @@ __export(propertyTypes_exports, {
     return stringProperties;
   }
 });
+init_kolmafia_polyfill();
 var booleanProperties = ["abortOnChoiceWhenNotInChoice", "addChatCommandLine", "addCreationQueue", "addStatusBarToFrames", "allowCloseableDesktopTabs", "allowNegativeTally", "allowNonMoodBurning", "allowSummonBurning", "autoHighlightOnFocus", "broadcastEvents", "cacheMallSearches", "chatBeep", "chatLinksUseRelay", "compactChessboard", "copyAsHTML", "customizedTabs", "debugBuy", "debugConsequences", "debugFoxtrotRemoval", "debugPathnames", "debugTopMenuStyle", "gapProtection", "gitInstallDependencies", "gitShowCommitMessages", "gitUpdateOnLogin", "greenScreenProtection", "guiUsesOneWindow", "hideServerDebugText", "logAcquiredItems", "logBattleAction", "logBrowserInteractions", "logChatMessages", "logChatRequests", "logCleanedHTML", "logDecoratedResponses", "logFamiliarActions", "logGainMessages", "logReadableHTML", "logPreferenceChange", "logMonsterHealth", "logReverseOrder", "logStatGains", "logStatusEffects", "logStatusOnLogin", "macroDebug", "macroLens", "mementoListActive", "mergeHobopolisChat", "pingLogin", "pingStealthyTimein", "printStackOnAbort", "proxySet", "relayAddSounds", "relayAddsCustomCombat", "relayAddsDiscoHelper", "relayAddsGraphicalCLI", "relayAddsQuickScripts", "relayAddsRestoreLinks", "relayAddsUpArrowLinks", "relayAddsUseLinks", "relayAddsWikiLinks", "relayAllowRemoteAccess", "relayBrowserOnly", "relayCacheUncacheable", "relayFormatsChatText", "relayHidesJunkMallItems", "relayMaintainsEffects", "relayMaintainsHealth", "relayMaintainsMana", "relayOverridesImages", "relayRunsAfterAdventureScript", "relayRunsBeforeBattleScript", "relayRunsBeforePVPScript", "relayScriptButtonFirst", "relayTextualizesEffects", "relayTrimsZapList", "relayUsesInlineLinks", "relayUsesIntegratedChat", "relayWarnOnRecoverFailure", "removeMalignantEffects", "saveSettingsOnSet", "sharePriceData", "showAllRequests", "showExceptionalRequests", "stealthLogin", "svnAlwaysAdd", "svnAlwaysOverwrite", "svnInstallDependencies", "svnShowCommitMessages", "svnUpdateOnLogin", "switchEquipmentForBuffs", "syncAfterSvnUpdate", "useChatToolbar", "useContactsFrame", "useDevServer", "useDockIconBadge", "useHugglerChannel", "useImageCache", "useLastUserAgent", "useSystemTrayIcon", "useTabbedChatFrame", "useToolbars", "useCachedVolcanoMaps", "useZoneComboBox", "verboseSpeakeasy", "verboseFloundry", "wrapLongLines", "_faxDataChanged", "_gitUpdated", "_svnRepoFileFetched", "_svnUpdated", "antagonisticSnowmanKitAvailable", "arcadeGameHints", "armoryUnlocked", "autoForbidIgnoringStores", "autoCraft", "autoQuest", "autoEntangle", "autoGarish", "autoManaRestore", "autoFillMayoMinder", "autoPinkyRing", "autoPlantHardcore", "autoPlantSoftcore", "autoPotionID", "autoRepairBoxServants", "autoSatisfyWithCloset", "autoSatisfyWithCoinmasters", "autoSatisfyWithMall", "autoSatisfyWithNPCs", "autoSatisfyWithStash", "autoSatisfyWithStorage", "autoSatisfyWithShop", "autoSetConditions", "autoSteal", "autoTuxedo", "backupCameraReverserEnabled", "badMoonEncounter01", "badMoonEncounter02", "badMoonEncounter03", "badMoonEncounter04", "badMoonEncounter05", "badMoonEncounter06", "badMoonEncounter07", "badMoonEncounter08", "badMoonEncounter09", "badMoonEncounter10", "badMoonEncounter11", "badMoonEncounter12", "badMoonEncounter13", "badMoonEncounter14", "badMoonEncounter15", "badMoonEncounter16", "badMoonEncounter17", "badMoonEncounter18", "badMoonEncounter19", "badMoonEncounter20", "badMoonEncounter21", "badMoonEncounter22", "badMoonEncounter23", "badMoonEncounter24", "badMoonEncounter25", "badMoonEncounter26", "badMoonEncounter27", "badMoonEncounter28", "badMoonEncounter29", "badMoonEncounter30", "badMoonEncounter31", "badMoonEncounter32", "badMoonEncounter33", "badMoonEncounter34", "badMoonEncounter35", "badMoonEncounter36", "badMoonEncounter37", "badMoonEncounter38", "badMoonEncounter39", "badMoonEncounter40", "badMoonEncounter41", "badMoonEncounter42", "badMoonEncounter43", "badMoonEncounter44", "badMoonEncounter45", "badMoonEncounter46", "badMoonEncounter47", "badMoonEncounter48", "barrelShrineUnlocked", "batWingsBatHoleEntrance", "batWingsBatratBurrow", "batWingsBeanbatChamber", "batWingsGuanoJunction", "bigBrotherRescued", "blackBartsBootyAvailable", "bondAdv", "bondBeach", "bondBeat", "bondBooze", "bondBridge", "bondDesert", "bondDR", "bondDrunk1", "bondDrunk2", "bondHoney", "bondHP", "bondInit", "bondItem1", "bondItem2", "bondItem3", "bondJetpack", "bondMartiniDelivery", "bondMartiniPlus", "bondMartiniTurn", "bondMeat", "bondMox1", "bondMox2", "bondMPregen", "bondMus1", "bondMus2", "bondMys1", "bondMys2", "bondSpleen", "bondStat", "bondStat2", "bondStealth", "bondStealth2", "bondSymbols", "bondWar", "bondWeapon2", "bondWpn", "bookOfIronyAvailable", "booPeakLit", "bootsCharged", "breakfastCompleted", "burlyBodyguardReceivedBonus", "burrowgrubHiveUsed", "calzoneOfLegendEaten", "candyCaneSwordApartmentBuilding", "candyCaneSwordBlackForest", "candyCaneSwordBowlingAlley", "candyCaneSwordCopperheadClub", "candyCaneSwordDailyDungeon", "candyCaneSwordDefiledCranny", "candyCaneSwordFunHouse", "candyCaneSwordShore", "candyCaneSwordWarFratRoom", "candyCaneSwordWarFratZetas", "candyCaneSwordWarHippyBait", "candyCaneSwordWarHippyLine", "canteenUnlocked", "chaosButterflyThrown", "chatbotScriptExecuted", "chateauAvailable", "chatLiterate", "chatServesUpdates", "checkJackassHardcore", "checkJackassSoftcore", "clanAttacksEnabled", "coldAirportAlways", "considerShadowNoodles", "controlRoomUnlock", "concertVisited", "controlPanel1", "controlPanel2", "controlPanel3", "controlPanel4", "controlPanel5", "controlPanel6", "controlPanel7", "controlPanel8", "controlPanel9", "corralUnlocked", "crAlways", "crimbo23ArmoryAtWar", "crimbo23BarAtWar", "crimbo23CafeAtWar", "crimbo23CottageAtWar", "crimbo23FoundryAtWar", "cyberDatastickCollected", "dailyDungeonDone", "dampOldBootPurchased", "daycareOpen", "deepDishOfLegendEaten", "demonSummoned", "dinseyAudienceEngagement", "dinseyGarbagePirate", "dinseyRapidPassEnabled", "dinseyRollercoasterNext", "dinseySafetyProtocolsLoose", "doghouseBoarded", "dontStopForCounters", "drippingHallUnlocked", "drippyShieldUnlocked", "edUsedLash", "eldritchFissureAvailable", "eldritchHorrorAvailable", "enqueueForConsumption", "errorOnAmbiguousFold", "essenceOfAnnoyanceAvailable", "essenceOfBearAvailable", "expressCardUsed", "falloutShelterChronoUsed", "falloutShelterCoolingTankUsed", "fireExtinguisherBatHoleUsed", "fireExtinguisherChasmUsed", "fireExtinguisherCyrptUsed", "fireExtinguisherDesertUsed", "fireExtinguisherHaremUsed", "fistTeachingsHaikuDungeon", "fistTeachingsPokerRoom", "fistTeachingsBarroomBrawl", "fistTeachingsConservatory", "fistTeachingsBatHole", "fistTeachingsFunHouse", "fistTeachingsMenagerie", "fistTeachingsSlums", "fistTeachingsFratHouse", "fistTeachingsRoad", "fistTeachingsNinjaSnowmen", "flickeringPixel1", "flickeringPixel2", "flickeringPixel3", "flickeringPixel4", "flickeringPixel5", "flickeringPixel6", "flickeringPixel7", "flickeringPixel8", "floristFriarAvailable", "floristFriarChecked", "frAlways", "frCemetaryUnlocked", "friarsBlessingReceived", "frMountainsUnlocked", "frSwampUnlocked", "frVillageUnlocked", "frWoodUnlocked", "getawayCampsiteUnlocked", "ghostPencil1", "ghostPencil2", "ghostPencil3", "ghostPencil4", "ghostPencil5", "ghostPencil6", "ghostPencil7", "ghostPencil8", "ghostPencil9", "gingerAdvanceClockUnlocked", "gingerBlackmailAccomplished", "gingerbreadCityAvailable", "gingerExtraAdventures", "gingerNegativesDropped", "gingerSewersUnlocked", "gingerSubwayLineUnlocked", "gingerRetailUnlocked", "glitchItemAvailable", "grabCloversHardcore", "grabCloversSoftcore", "grandpaUnlockedBlankPrescriptionSheet", "grandpaUnlockedEelSauce", "grandpaUnlockedFishyWand", "grandpaUnlockedGlowingSyringe", "grandpaUnlockedGroupieSpangles", "grandpaUnlockedHairOfTheFish", "grandpaUnlockedHalibut", "grandpaUnlockedHeavilyInvestedInPunFutures", "grandpaUnlockedJellyfishGel", "grandpaUnlockedMarineAquamarine", "grandpaUnlockedMidgetClownfish", "grandpaUnlockedSeaRadish", "grandpaUnlockedTrophyFish", "grandpaUnlockedWaterPoloCap", "grandpaUnlockedWaterPoloMitt", "guideToSafariAvailable", "guyMadeOfBeesDefeated", "hallowienerDefiledNook", "hallowienerGuanoJunction", "hallowienerKnollGym", "hallowienerMadnessBakery", "hallowienerMiddleChamber", "hallowienerOvergrownLot", "hallowienerSkeletonStore", "hallowienerSmutOrcs", "hallowienerSonofaBeach", "hallowienerVolcoino", "hardcorePVPWarning", "harvestBatteriesHardcore", "harvestBatteriesSoftcore", "hasAutumnaton", "hasBartender", "hasChef", "hasCocktailKit", "hasCosmicBowlingBall", "hasDetectiveSchool", "hasMaydayContract", "hasOven", "hasRange", "hasShaker", "hasShrunkenHead", "hasSushiMat", "hasTwinkleVision", "haveBoxingDaydreamHardcore", "haveBoxingDaydreamSoftcore", "hermitHax0red", "holidayHalsBookAvailable", "horseryAvailable", "hotAirportAlways", "intenseCurrents", "isMerkinGladiatorChampion", "isMerkinHighPriest", "itemBoughtPerAscension637", "itemBoughtPerAscension8266", "itemBoughtPerAscension10790", "itemBoughtPerAscension10794", "itemBoughtPerAscension10795", "itemBoughtPerCharacter6423", "itemBoughtPerCharacter6428", "itemBoughtPerCharacter6429", "kingLiberated", "lastPirateInsult1", "lastPirateInsult2", "lastPirateInsult3", "lastPirateInsult4", "lastPirateInsult5", "lastPirateInsult6", "lastPirateInsult7", "lastPirateInsult8", "lawOfAveragesAvailable", "leafletCompleted", "ledCandleDropped", "libraryCardUsed", "lockPicked", "logBastilleBattalionBattles", "loginRecoveryHardcore", "loginRecoverySoftcore", "lovebugsUnlocked", "loveTunnelAvailable", "lowerChamberUnlock", "madnessBakeryAvailable", "makeHandheldRadiosHardcore", "makeHandheldRadiosSoftcore", "makePocketWishesHardcore", "makePocketWishesSoftcore", "manualOfNumberologyAvailable", "mappingMonsters", "mapToAnemoneMinePurchased", "mapToKokomoAvailable", "mapToMadnessReefPurchased", "mapToTheDiveBarPurchased", "mapToTheMarinaraTrenchPurchased", "mapToTheSkateParkPurchased", "maraisBeaverUnlock", "maraisCorpseUnlock", "maraisDarkUnlock", "maraisVillageUnlock", "maraisWildlifeUnlock", "maraisWizardUnlock", "maximizerAlwaysCurrent", "maximizerCreateOnHand", "maximizerCurrentMallPrices", "maximizerFoldables", "maximizerIncludeAll", "maximizerNoAdventures", "maximizerUseScope", "merkinElementaryBathroomUnlock", "merkinElementaryJanitorUnlock", "merkinElementaryTeacherUnlock", "middleChamberUnlock", "milkOfMagnesiumActive", "moonTuned", "neverendingPartyAlways", "noncombatForcerActive", "oasisAvailable", "odeBuffbotCheck", "oilPeakLit", "oscusSodaUsed", "outrageousSombreroUsed", "overgrownLotAvailable", "ownsFloristFriar", "ownsSpeakeasy", "pathedSummonsHardcore", "pathedSummonsSoftcore", "pirateRealmUnlockedAnemometer", "pirateRealmUnlockedBlunderbuss", "pirateRealmUnlockedBreastplate", "pirateRealmUnlockedClipper", "pirateRealmUnlockedCrabsicle", "pirateRealmUnlockedFlag", "pirateRealmUnlockedFork", "pirateRealmUnlockedGoldRing", "pirateRealmUnlockedManOWar", "pirateRealmUnlockedPlushie", "pirateRealmUnlockedRadioRing", "pirateRealmUnlockedRhum", "pirateRealmUnlockedScurvySkillbook", "pirateRealmUnlockedShavingCream", "pirateRealmUnlockedSpyglass", "pirateRealmUnlockedTattoo", "pirateRealmUnlockedThirdCrewmate", "pirateRealmUnlockedTikiSkillbook", "pizzaOfLegendEaten", "popularTartUnlocked", "potatoAlarmClockUsed", "prAlways", "prayedForGlamour", "prayedForProtection", "prayedForVigor", "primaryLabCheerCoreGrabbed", "pumpkinSpiceWhorlUsed", "pyramidBombUsed", "rageGlandVented", "readManualHardcore", "readManualSoftcore", "relayDecorateJsCommands", "relayShowSpoilers", "relayShowWarnings", "rememberDesktopSize", "replicaChateauAvailable", "replicaNeverendingPartyAlways", "replicaWitchessSetAvailable", "requireBoxServants", "requireSewerTestItems", "restUsingCampAwayTent", "restUsingChateau", "ROMOfOptimalityAvailable", "safePickpocket", "schoolOfHardKnocksDiplomaAvailable", "scriptCascadingMenus", "serverAddsCustomCombat", "serverAddsBothCombat", "SHAWARMAInitiativeUnlocked", "showForbiddenStores", "showGainsPerUnit", "showIgnoringStorePrices", "showNoSummonOnly", "showTurnFreeOnly", "shubJigguwattDefeated", "skeletonStoreAvailable", "sleazeAirportAlways", "snojoAvailable", "sortByEffect", "sortByRoom", "spacegateAlways", "spacegateVaccine1", "spacegateVaccine2", "spacegateVaccine3", "spaceInvaderDefeated", "spelunkyHints", "spiceMelangeUsed", "spookyAirportAlways", "stenchAirportAlways", "stopForFixedWanderer", "stopForUltraRare", "styxPixieVisited", "superconductorDefeated", "suppressCyberRealmDarkMode", "suppressCyberRealmGreenImages", "suppressInappropriateNags", "suppressPowerPixellation", "suppressMallPriceCacheMessages", "telegraphOfficeAvailable", "telescopeLookedHigh", "timeTowerAvailable", "trackLightsOut", "uneffectWithHotTub", "universalSeasoningActive", "universalSeasoningAvailable", "useBookOfEverySkillHardcore", "useBookOfEverySkillSoftcore", "useCrimboToysHardcore", "useCrimboToysSoftcore", "verboseMaximizer", "visitLoungeHardcore", "visitLoungeSoftcore", "visitRumpusHardcore", "visitRumpusSoftcore", "voteAlways", "wildfireBarrelCaulked", "wildfireDusted", "wildfireFracked", "wildfirePumpGreased", "wildfireSprinkled", "yearbookCameraPending", "yogUrtDefeated", "youRobotScavenged", "_2002MrStoreCreditsCollected", "_affirmationCookieEaten", "_affirmationHateUsed", "_airFryerUsed", "_akgyxothUsed", "_alienAnimalMilkUsed", "_alienPlantPodUsed", "_allYearSucker", "_alliedRadioMaterielIntel", "_alliedRadioWildsunBoon", "_aprilShower", "_aprilShowerGlobsCollected", "_aprilShowerLungingThrustSmack", "_aprilShowerNorthernExplosion", "_aprilShowerSimmer", "_armyToddlerCast", "_aug1Cast", "_aug2Cast", "_aug3Cast", "_aug4Cast", "_aug5Cast", "_aug6Cast", "_aug7Cast", "_aug8Cast", "_aug9Cast", "_aug10Cast", "_aug11Cast", "_aug12Cast", "_aug13Cast", "_aug14Cast", "_aug15Cast", "_aug16Cast", "_aug17Cast", "_aug18Cast", "_aug19Cast", "_aug20Cast", "_aug21Cast", "_aug22Cast", "_aug23Cast", "_aug24Cast", "_aug25Cast", "_aug26Cast", "_aug27Cast", "_aug28Cast", "_aug29Cast", "_aug30Cast", "_aug31Cast", "_augTodayCast", "_authorsInkUsed", "_baconMachineUsed", "_bagOfCandy", "_bagOfCandyUsed", "_bagOTricksUsed", "_ballastTurtleUsed", "_ballInACupUsed", "_ballpit", "_barrelPrayer", "_bastilleLastBattleWon", "_beachCombing", "_bendHellUsed", "_blackMonolithUsed", "_blankoutUsed", "_bloodBagDoctorBag", "_bloodBagCloake", "_bloodBankIntimidated", "_bloodBankVisited", "_bonersSummoned", "_bookOfEverySkillUsed", "_borrowedTimeUsed", "_bowleggedSwaggerUsed", "_bowlFullOfJellyUsed", "_boxOfHammersUsed", "_brainPreservationFluidUsed", "_brassDreadFlaskUsed", "_cameraUsed", "_canSeekBirds", "_candyCaneSwordBackAlley", "_candyCaneSwordHauntedBedroom", "_candyCaneSwordHauntedLibrary", "_candyCaneSwordLyle", "_candyCaneSwordMadnessBakery", "_candyCaneSwordOvergrownLot", "_candyCaneSwordOvergrownShrine", "_candyCaneSwordPalindome", "_candyCaneSwordSouthOfTheBorder", "_candyCaneSwordSpookyForest", "_carboLoaded", "_cargoPocketEmptied", "_ceciHatUsed", "_chateauDeskHarvested", "_chateauMonsterFought", "_chibiChanged", "_chronerCrossUsed", "_chronerTriggerUsed", "_chubbyAndPlumpUsed", "_circadianRhythmsRecalled", "_circleDrumUsed", "_clanFortuneBuffUsed", "_claraBellUsed", "_coalPaperweightUsed", "_cocoaDispenserUsed", "_cocktailShakerUsed", "_coldAirportToday", "_coldOne", "_communismUsed", "_confusingLEDClockUsed", "_controlPanelUsed", "_cookbookbatRecipeDrops", "_coolerYetiAdventures", "_corruptedStardustUsed", "_cosmicSixPackConjured", "_crappyCameraUsed", "_creepyVoodooDollUsed", "_crimboPastDailySpecial", "_crimboPastMedicalGruel", "_crimboPastPrizeTurkey", "_crimboPastSmokingPope", "_crimboTraining", "_crimboTree", "_crToday", "_cursedKegUsed", "_cursedMicrowaveUsed", "_cyberTrashCollected", "_dailyDungeonMalwareUsed", "_darkChocolateHeart", "_daycareFights", "_daycareNap", "_daycareSpa", "_daycareToday", "_defectiveTokenChecked", "_defectiveTokenUsed", "_dinseyGarbageDisposed", "_discoKnife", "_distentionPillUsed", "_dnaHybrid", "_docClocksThymeCocktailDrunk", "_douseFoeSuccess", "_drippingHallDoor1", "_drippingHallDoor2", "_drippingHallDoor3", "_drippingHallDoor4", "_drippyCaviarUsed", "_drippyNuggetUsed", "_drippyPilsnerUsed", "_drippyPlumUsed", "_drippyWineUsed", "_eldritchHorrorEvoked", "_eldritchTentacleFought", "_emberingHulkFought", "_entauntaunedToday", "_envyfishEggUsed", "_epicMcTwistUsed", "_essentialTofuUsed", "_etchedHourglassUsed", "_eternalCarBatteryUsed", "_everfullGlassUsed", "_extraGreasySliderEaten", "_eyeAndATwistUsed", "_fancyChessSetUsed", "_falloutShelterSpaUsed", "_fancyHotDogEaten", "_farmerItemsCollected", "_favoriteBirdVisited", "_firedJokestersGun", "_fireExtinguisherRefilled", "_fireStartingKitUsed", "_fireworksShop", "_fireworksShopHatBought", "_fireworksShopEquipmentBought", "_fireworkUsed", "_fishyPipeUsed", "_flagellateFlagonUsed", "_floundryItemCreated", "_floundryItemUsed", "_freePillKeeperUsed", "_frToday", "_frostyMugUsed", "_fudgeSporkUsed", "_garbageItemChanged", "_gingerBiggerAlligators", "_gingerbreadCityToday", "_gingerbreadClockAdvanced", "_gingerbreadClockVisited", "_gingerbreadColumnDestroyed", "_gingerbreadMobHitUsed", "_glennGoldenDiceUsed", "_glitchItemImplemented", "_gnollEyeUsed", "_gnomePart", "_governmentPerDiemUsed", "_grimBuff", "_guildManualUsed", "_guzzlrQuestAbandoned", "_hardKnocksDiplomaUsed", "_hippyMeatCollected", "_hobbyHorseUsed", "_hodgmansBlanketDrunk", "_holidayFunUsed", "_holoWristCrystal", "_hotAirportToday", "_hungerSauceUsed", "_hyperinflatedSealLungUsed", "_iceHotelRoomsRaided", "_iceSculptureUsed", "_incredibleSelfEsteemCast", "_infernoDiscoVisited", "_infiniteJellyUsed", "_internetDailyDungeonMalwareBought", "_internetGallonOfMilkBought", "_internetPlusOneBought", "_internetPrintScreenButtonBought", "_internetViralVideoBought", "_interviewIsabella", "_interviewMasquerade", "_interviewVlad", "_inquisitorsUnidentifiableObjectUsed", "_ironicMoustache", "_jackassPlumberGame", "_jarlsCheeseSummoned", "_jarlsCreamSummoned", "_jarlsDoughSummoned", "_jarlsEggsSummoned", "_jarlsFruitSummoned", "_jarlsMeatSummoned", "_jarlsPotatoSummoned", "_jarlsVeggiesSummoned", "_jingleBellUsed", "_jukebox", "_kgbFlywheelCharged", "_kgbLeftDrawerUsed", "_kgbOpened", "_kgbRightDrawerUsed", "_kolConSixPackUsed", "_kolhsCutButNotDried", "_kolhsIsskayLikeAnAshtray", "_kolhsPoeticallyLicenced", "_kolhsSchoolSpirited", "_kudzuSaladEaten", "_lastCombatLost", "_lastCombatWon", "_latteBanishUsed", "_latteCopyUsed", "_latteDrinkUsed", "_leafAntEggCrafted", "_leafDayShortenerCrafted", "_leafTattooCrafted", "_leavesJumped", "_legendaryBeat", "_licenseToChillUsed", "_lodestoneUsed", "_lookingGlass", "_loveTunnelToday", "_loveTunnelUsed", "_luckyGoldRingVolcoino", "_lunchBreak", "_lupineHormonesUsed", "_lyleFavored", "_madLiquorDrunk", "_madTeaParty", "_mafiaMiddleFingerRingUsed", "_managerialManipulationUsed", "_mansquitoSerumUsed", "_mapToACandyRichBlockUsed", "_maydayDropped", "_mayoDeviceRented", "_mayoTankSoaked", "_meatballMachineUsed", "_meatifyMatterUsed", "_milkOfMagnesiumUsed", "_mimeArmyShotglassUsed", "_miniKiwiIntoxicatingSpiritsBought", "_miniKiwiTipiDrop", "_missGravesVermouthDrunk", "_missileLauncherUsed", "_molehillMountainUsed", "_momFoodReceived", "_mrBurnsgerEaten", "_muffinOrderedToday", "_mulliganStewEaten", "_mushroomGardenVisited", "_neverendingPartyToday", "_newYouQuestCompleted", "_olympicSwimmingPool", "_olympicSwimmingPoolItemFound", "_overflowingGiftBasketUsed", "_partyHard", "_pastaAdditive", "_perfectFreezeUsed", "_perfectlyFairCoinUsed", "_petePartyThrown", "_peteRiotIncited", "_photocopyUsed", "_pickyTweezersUsed", "_pickleJuiceDrunk", "_pingPongGame", "_pirateBellowUsed", "_pirateDinghyUsed", "_pirateForkUsed", "_pirateRealmSoldCompass", "_pirateRealmWindicleUsed", "_pixelOrbUsed", "_plumbersMushroomStewEaten", "_pneumaticityPotionUsed", "_portableSteamUnitUsed", "_pottedTeaTreeUsed", "_prToday", "_psychoJarFilled", "_psychoJarUsed", "_psychokineticHugUsed", "_punchingMirrorUsed", "_rainStickUsed", "_redwoodRainStickUsed", "_replicaSnowconeTomeUsed", "_replicaResolutionLibramUsed", "_replicaSmithsTomeUsed", "_requestSandwichSucceeded", "_rhinestonesAcquired", "_saladForkUsed", "_seadentWaveUsed", "_seaJellyHarvested", "_septEmberBalanceChecked", "_setOfJacksUsed", "_sewingKitUsed", "_sexChanged", "_shadowAffinityToday", "_shadowForestLooted", "_shrubDecorated", "_silverDreadFlaskUsed", "_sitCourseCompleted", "_skateBuff1", "_skateBuff2", "_skateBuff3", "_skateBuff4", "_skateBuff5", "_sleazeAirportToday", "_snowballFactoryUsed", "_sobrieTeaUsed", "_softwareGlitchTurnReceived", "_sotParcelReturned", "_spacegateMurderbot", "_spacegateRuins", "_spacegateSpant", "_spacegateToday", "_spacegateVaccine", "_spaghettiBreakfast", "_spaghettiBreakfastEaten", "_spinmasterLatheVisited", "_spinningWheel", "_spookyAirportToday", "_stabonicScrollUsed", "_steelyEyedSquintUsed", "_stenchAirportToday", "_stinkyCheeseBanisherUsed", "_strangeStalagmiteUsed", "_streamsCrossed", "_structuralEmberUsed", "_stuffedPocketwatchUsed", "_styxSprayUsed", "_summonAnnoyanceUsed", "_summonCarrotUsed", "_summonResortPassUsed", "_sweetToothUsed", "_syntheticDogHairPillUsed", "_tacoFlierUsed", "_takerSpaceSuppliesDelivered", "_telegraphOfficeToday", "_templeHiddenPower", "_tempuraAirUsed", "_thesisDelivered", "_tiedUpFlamingLeafletFought", "_tiedUpFlamingMonsteraFought", "_tiedUpLeaviathanFought", "_timeSpinnerReplicatorUsed", "_toastSummoned", "_tonicDjinn", "_treasuryEliteMeatCollected", "_treasuryHaremMeatCollected", "_trivialAvocationsGame", "_tryptophanDartUsed", "_turtlePowerCast", "_twelveNightEnergyUsed", "_ultraMegaSourBallUsed", "_unblemishedPearlAnemoneMine", "_unblemishedPearlDiveBar", "_unblemishedPearlMadnessReef", "_unblemishedPearlMarinaraTrench", "_unblemishedPearlTheBriniestDeepests", "_victorSpoilsUsed", "_villainLairCanLidUsed", "_villainLairColorChoiceUsed", "_villainLairDoorChoiceUsed", "_villainLairFirecrackerUsed", "_villainLairSymbologyChoiceUsed", "_villainLairWebUsed", "_vmaskBanisherUsed", "_voraciTeaUsed", "_volcanoItemRedeemed", "_volcanoSuperduperheatedMetal", "_voodooSnuffUsed", "_voteToday", "_VYKEACafeteriaRaided", "_VYKEALoungeRaided", "_walfordQuestStartedToday", "_warbearBankUsed", "_warbearBreakfastMachineUsed", "_warbearGyrocopterUsed", "_warbearSodaMachineUsed", "_wildfireBarrelHarvested", "_witchessBuff", "_workshedItemUsed", "_yamBatteryUsed", "_zombieClover", "_preventScurvy", "lockedItem4637", "lockedItem4638", "lockedItem4639", "lockedItem4646", "lockedItem4647", "unknownRecipe3542", "unknownRecipe3543", "unknownRecipe3544", "unknownRecipe3545", "unknownRecipe3546", "unknownRecipe3547", "unknownRecipe3548", "unknownRecipe3749", "unknownRecipe3751", "unknownRecipe4172", "unknownRecipe4173", "unknownRecipe4174", "unknownRecipe5060", "unknownRecipe5061", "unknownRecipe5062", "unknownRecipe5063", "unknownRecipe5064", "unknownRecipe5066", "unknownRecipe5067", "unknownRecipe5069", "unknownRecipe5070", "unknownRecipe5072", "unknownRecipe5073", "unknownRecipe5670", "unknownRecipe5671", "unknownRecipe6501", "unknownRecipe6564", "unknownRecipe6565", "unknownRecipe6566", "unknownRecipe6567", "unknownRecipe6568", "unknownRecipe6569", "unknownRecipe6570", "unknownRecipe6571", "unknownRecipe6572", "unknownRecipe6573", "unknownRecipe6574", "unknownRecipe6575", "unknownRecipe6576", "unknownRecipe6577", "unknownRecipe6578", "unknownRecipe7752", "unknownRecipe7753", "unknownRecipe7754", "unknownRecipe7755", "unknownRecipe7756", "unknownRecipe7757", "unknownRecipe7758", "unknownRecipe10970", "unknownRecipe10971", "unknownRecipe10972", "unknownRecipe10973", "unknownRecipe10974", "unknownRecipe10975", "unknownRecipe10976", "unknownRecipe10977", "unknownRecipe10978", "unknownRecipe10988", "unknownRecipe10989", "unknownRecipe10990", "unknownRecipe10991", "unknownRecipe10992", "unknownRecipe11000"], numericProperties = ["coinMasterIndex", "dailyDeedsVersion", "defaultDropdown1", "defaultDropdown2", "defaultDropdownSplit", "defaultLimit", "fixedThreadPoolSize", "itemManagerIndex", "lastBuffRequestType", "lastGlobalCounterDay", "lastImageCacheClear", "pingDefaultTestPings", "pingLoginCount", "pingLoginGoal", "pingLoginThreshold", "pingTestPings", "previousUpdateRevision", "relayDelayForSVN", "relaySkillButtonCount", "scriptButtonPosition", "statusDropdown", "svnThreadPoolSize", "toolbarPosition", "_beachTides", "_g9Effect", "8BitBonusTurns", "8BitScore", "addingScrolls", "affirmationCookiesEaten", "aminoAcidsUsed", "antagonisticSnowmanKitCost", "ascensionsToday", "asolDeferredPoints", "asolPointsPigSkinner", "asolPointsCheeseWizard", "asolPointsJazzAgent", "autoAbortThreshold", "autoAntidote", "autoBuyPriceLimit", "autopsyTweezersUsed", "autumnatonQuestTurn", "availableCandyCredits", "availableDimes", "availableFunPoints", "availableMrStore2002Credits", "availableQuarters", "availableSeptEmbers", "availableStoreCredits", "availableSwagger", "avantGuardPoints", "averageSwagger", "awolMedicine", "awolPointsBeanslinger", "awolPointsCowpuncher", "awolPointsSnakeoiler", "awolDeferredPointsBeanslinger", "awolDeferredPointsCowpuncher", "awolDeferredPointsSnakeoiler", "awolVenom", "bagOTricksCharges", "ballpitBonus", "bankedKarma", "bartenderTurnsUsed", "basementMallPrices", "basementSafetyMargin", "batmanFundsAvailable", "batmanBonusInitialFunds", "batmanTimeLeft", "bearSwagger", "beeCounter", "beGregariousCharges", "beGregariousFightsLeft", "birdformCold", "birdformHot", "birdformRoc", "birdformSleaze", "birdformSpooky", "birdformStench", "blackBartsBootyCost", "blackPuddingsDefeated", "blackForestProgress", "blankOutUsed", "bloodweiserDrunk", "bodyguardCharge", "bondPoints", "bondVillainsDefeated", "boneAbacusVictories", "bookOfFactsGummi", "bookOfFactsPinata", "bookOfIronyCost", "booPeakProgress", "borisPoints", "breakableHandling", "breakableHandling1964", "breakableHandling9691", "breakableHandling9692", "breakableHandling9699", "breathitinCharges", "brodenBacteria", "brodenSprinkles", "buffBotMessageDisposal", "buffBotPhilanthropyType", "buffJimmyIngredients", "burnoutsDefeated", "burrowgrubSummonsRemaining", "bwApronMealsEaten", "camelSpit", "camerasUsed", "campAwayDecoration", "candyWitchTurnsUsed", "candyWitchCandyTotal", "carboLoading", "catBurglarBankHeists", "cellarLayout", "charitableDonations", "chasmBridgeProgress", "chefTurnsUsed", "chessboardsCleared", "chibiAlignment", "chibiBirthday", "chibiFitness", "chibiIntelligence", "chibiLastVisit", "chibiSocialization", "chilledToTheBone", "cinchoSaltAndLime", "cinderellaMinutesToMidnight", "cinderellaScore", "cocktailSummons", "commerceGhostCombats", "cookbookbatIngredientsCharge", "controlPanelOmega", "cornucopiasOpened", "cosmicBowlingBallReturnCombats", "cozyCounter6332", "cozyCounter6333", "cozyCounter6334", "craftingClay", "craftingLeather", "craftingPlansCharges", "craftingStraw", "crimbo16BeardChakraCleanliness", "crimbo16BootsChakraCleanliness", "crimbo16BungChakraCleanliness", "crimbo16CrimboHatChakraCleanliness", "crimbo16GutsChakraCleanliness", "crimbo16HatChakraCleanliness", "crimbo16JellyChakraCleanliness", "crimbo16LiverChakraCleanliness", "crimbo16NippleChakraCleanliness", "crimbo16NoseChakraCleanliness", "crimbo16ReindeerChakraCleanliness", "crimbo16SackChakraCleanliness", "crimboTrainingSkill", "crimboTreeDays", "cubelingProgress", "cupidBowFights", "currentExtremity", "currentHedgeMazeRoom", "currentMojoFilters", "currentNunneryMeat", "currentPortalEnergy", "currentReplicaStoreYear", "cursedMagnifyingGlassCount", "cyrptAlcoveEvilness", "cyrptCrannyEvilness", "cyrptNicheEvilness", "cyrptNookEvilness", "cyrptTotalEvilness", "darkGyfftePoints", "dartsThrown", "daycareEquipment", "daycareInstructorItemQuantity", "daycareInstructors", "daycareLastScavenge", "daycareToddlers", "dbNemesisSkill1", "dbNemesisSkill2", "dbNemesisSkill3", "desertExploration", "desktopHeight", "desktopWidth", "dinseyFilthLevel", "dinseyFunProgress", "dinseyNastyBearsDefeated", "dinseySocialJusticeIProgress", "dinseySocialJusticeIIProgress", "dinseyTouristsFed", "dinseyToxicMultiplier", "doctorBagQuestLights", "doctorBagUpgrades", "dreadScroll1", "dreadScroll2", "dreadScroll3", "dreadScroll4", "dreadScroll5", "dreadScroll6", "dreadScroll7", "dreadScroll8", "dripAdventuresSinceAscension", "drippingHallAdventuresSinceAscension", "drippingTreesAdventuresSinceAscension", "drippyBatsUnlocked", "drippyJuice", "drippyOrbsClaimed", "droneSelfDestructChipsUsed", "drunkenSwagger", "edDefeatAbort", "edPoints", "eldritchTentaclesFought", "electricKoolAidEaten", "elfGratitude", "encountersUntilDMTChoice", "encountersUntilYachtzeeChoice", "encountersUntilNEPChoice", "encountersUntilSRChoice", "ensorceleeLevel", "entauntaunedColdRes", "essenceOfAnnoyanceCost", "essenceOfBearCost", "extraRolloverAdventures", "falloutShelterLevel", "familiarSweat", "fingernailsClipped", "fistSkillsKnown", "flyeredML", "fossilB", "fossilD", "fossilN", "fossilP", "fossilS", "fossilW", "fratboysDefeated", "frenchGuardTurtlesFreed", "funGuyMansionKills", "garbageChampagneCharge", "garbageFireProgress", "garbageShirtCharge", "garbageTreeCharge", "garlandUpgrades", "getsYouDrunkTurnsLeft", "ghostPepperTurnsLeft", "gingerDigCount", "gingerLawChoice", "gingerMuscleChoice", "gingerTrainScheduleStudies", "gladiatorBallMovesKnown", "gladiatorBladeMovesKnown", "gladiatorNetMovesKnown", "glitchItemCost", "glitchItemImplementationCount", "glitchItemImplementationLevel", "glitchSwagger", "gloverPoints", "gnasirProgress", "goldenMrAccessories", "gongPath", "gooseDronesRemaining", "goreCollected", "gourdItemCount", "greyYouPoints", "grimoire1Summons", "grimoire2Summons", "grimoire3Summons", "grimstoneCharge", "guardTurtlesFreed", "guideToSafariCost", "guyMadeOfBeesCount", "guzzlrBronzeDeliveries", "guzzlrDeliveryProgress", "guzzlrGoldDeliveries", "guzzlrPlatinumDeliveries", "haciendaLayout", "hallowiener8BitRealm", "hallowienerCoinspiracy", "hareMillisecondsSaved", "hareTurnsUsed", "heavyRainsStartingThunder", "heavyRainsStartingRain", "heavyRainsStartingLightning", "heroDonationBoris", "heroDonationJarlsberg", "heroDonationSneakyPete", "hiddenApartmentProgress", "hiddenBowlingAlleyProgress", "hiddenHospitalProgress", "hiddenOfficeProgress", "hiddenTavernUnlock", "highTopPumped", "hippiesDefeated", "holidayHalsBookCost", "holidaySwagger", "homemadeRobotUpgrades", "homebodylCharges", "hpAutoRecovery", "hpAutoRecoveryTarget", "iceSwagger", "ironicSwagger", "jarlsbergPoints", "juicyGarbageUsed", "jungCharge", "junglePuns", "knownAscensions", "kolhsTotalSchoolSpirited", "lassoTrainingCount", "lastAnticheeseDay", "lastArcadeAscension", "lastBadMoonReset", "lastBangPotionReset", "lastBattlefieldReset", "lastBeardBuff", "lastBreakfast", "lastCartographyBooPeak", "lastCartographyCastleTop", "lastCartographyDarkNeck", "lastCartographyDefiledNook", "lastCartographyFratHouse", "lastCartographyFratHouseVerge", "lastCartographyGuanoJunction", "lastCartographyHauntedBilliards", "lastCartographyHippyCampVerge", "lastCartographyZeppelinProtesters", "lastCastleGroundUnlock", "lastCastleTopUnlock", "lastCellarReset", "lastChanceThreshold", "lastChasmReset", "lastColosseumRoundWon", "lastCouncilVisit", "lastCounterDay", "lastDesertUnlock", "lastDispensaryOpen", "lastDMTDuplication", "lastDwarfFactoryReset", "lastEVHelmetValue", "lastEVHelmetReset", "lastEmptiedStorage", "lastFilthClearance", "lastGoofballBuy", "lastGuildStoreOpen", "lastGuyMadeOfBeesReset", "lastFratboyCall", "lastFriarCeremonyAscension", "lastFriarsElbowNC", "lastFriarsHeartNC", "lastFriarsNeckNC", "lastHippyCall", "lastIslandUnlock", "lastKeyotronUse", "lastKingLiberation", "lastLightsOutTurn", "lastMushroomPlot", "lastMiningReset", "lastNemesisReset", "lastPaperStripReset", "lastPirateEphemeraReset", "lastPirateInsultReset", "lastPlusSignUnlock", "lastQuartetAscension", "lastQuartetRequest", "lastSecondFloorUnlock", "lastShadowForgeUnlockAdventure", "lastKOLHSArtClassUnlockAdventure", "lastKOLHSChemClassUnlockAdventure", "lastKOLHSShopClassUnlockAdventure", "lastSkateParkReset", "lastStillBeatingSpleen", "lastTavernAscension", "lastTavernSquare", "lastTelescopeReset", "lastTempleAdventures", "lastTempleButtonsUnlock", "lastTempleUnlock", "lastThingWithNoNameDefeated", "lastTowelAscension", "lastTr4pz0rQuest", "lastTrainsetConfiguration", "lastVioletFogMap", "lastVoteMonsterTurn", "lastWartDinseyDefeated", "lastWuTangDefeated", "lastYearbookCameraAscension", "lastZapperWand", "lastZapperWandExplosionDay", "lawOfAveragesCost", "legacyPoints", "leprecondoLastNeedChange", "libramSummons", "lightsOutAutomation", "louvreDesiredGoal", "louvreGoal", "lovebugsAridDesert", "lovebugsBeachBuck", "lovebugsBooze", "lovebugsChroner", "lovebugsCoinspiracy", "lovebugsCyrpt", "lovebugsFreddy", "lovebugsFunFunds", "lovebugsHoboNickel", "lovebugsItemDrop", "lovebugsMeat", "lovebugsMeatDrop", "lovebugsMoxie", "lovebugsMuscle", "lovebugsMysticality", "lovebugsOilPeak", "lovebugsOrcChasm", "lovebugsPowder", "lovebugsWalmart", "lttQuestDifficulty", "lttQuestStageCount", "manaBurnSummonThreshold", "manaBurningThreshold", "manaBurningTrigger", "manorDrawerCount", "manualOfNumberologyCost", "mapToKokomoCost", "markYourTerritoryCharges", "masksUnlocked", "maximizerMRUSize", "maximizerCombinationLimit", "maximizerEquipmentLevel", "maximizerEquipmentScope", "maximizerMaxPrice", "maximizerPriceLevel", "maxManaBurn", "mayflyExperience", "mayoLevel", "meansuckerPrice", "merkinVocabularyMastery", "miniAdvClass", "miniKiwiAiolisUsed", "miniMartinisDrunk", "mixedBerryJellyUses", "moleTunnelLevel", "momSeaMonkeeProgress", "mothershipProgress", "mpAutoRecovery", "mpAutoRecoveryTarget", "munchiesPillsUsed", "mushroomGardenCropLevel", "nanopolymerSpiderWebsUsed", "nextAprilBandTurn", "nextParanormalActivity", "nextQuantumFamiliarOwnerId", "nextQuantumFamiliarTurn", "noobPoints", "noobDeferredPoints", "noodleSummons", "nsContestants1", "nsContestants2", "nsContestants3", "nuclearAutumnPoints", "numericSwagger", "nunsVisits", "oilPeakProgress", "optimalSwagger", "optimisticCandleProgress", "palindomeDudesDefeated", "parasolUsed", "peaceTurkeyIndex", "pendingMapReflections", "phosphorTracesUses", "pingpongSkill", "pirateRealmPlasticPiratesDefeated", "pirateRealmShipsDestroyed", "pirateRealmStormsEscaped", "pirateSwagger", "plantingDay", "plumberBadgeCost", "plumberCostumeCost", "plumberPoints", "pokefamPoints", "poolSharkCount", "poolSkill", "powerPillProgress", "preworkoutPowderUses", "primaryLabGooIntensity", "prismaticSummons", "procrastinatorLanguageFluency", "promptAboutCrafting", "puzzleChampBonus", "pyramidPosition", "quantumPoints", "reagentSummons", "reanimatorArms", "reanimatorLegs", "reanimatorSkulls", "reanimatorWeirdParts", "reanimatorWings", "recentLocations", "redSnapperProgress", "relayPort", "relocatePygmyJanitor", "relocatePygmyLawyer", "rockinRobinProgress", "romanCandelabraRedCasts", "romanCandelabraBlueCasts", "romanCandelabraYellowCasts", "romanCandelabraGreenCasts", "romanCandelabraPurpleCasts", "ROMOfOptimalityCost", "rumpelstiltskinKidsRescued", "rumpelstiltskinTurnsUsed", "rwbMonsterCount", "safariSwagger", "sausageGrinderUnits", "schoolOfHardKnocksDiplomaCost", "schoolSwagger", "scrapbookCharges", "screechCombats", "scriptMRULength", "seadentConstructKills", "seadentLevel", "seaodesFound", "seaPoints", "SeasoningSwagger", "sexChanges", "shenInitiationDay", "shockingLickCharges", "shrunkenHeadZombieHP", "singleFamiliarRun", "skillBurn3", "skillBurn90", "skillBurn153", "skillBurn154", "skillBurn155", "skillBurn236", "skillBurn237", "skillBurn1019", "skillBurn5017", "skillBurn6014", "skillBurn6015", "skillBurn6016", "skillBurn6020", "skillBurn6021", "skillBurn6022", "skillBurn6023", "skillBurn6024", "skillBurn6026", "skillBurn6028", "skillBurn7323", "skillBurn14008", "skillBurn14028", "skillBurn14038", "skillBurn15011", "skillBurn15028", "skillBurn17005", "skillBurn22034", "skillBurn22035", "skillBurn23301", "skillBurn23302", "skillBurn23303", "skillBurn23304", "skillBurn23305", "skillBurn23306", "skillLevel46", "skillLevel47", "skillLevel48", "skillLevel117", "skillLevel118", "skillLevel121", "skillLevel128", "skillLevel134", "skillLevel135", "skillLevel144", "skillLevel180", "skillLevel188", "skillLevel227", "skillLevel245", "skillLevel7254", "slimelingFullness", "slimelingStacksDropped", "slimelingStacksDue", "smoresEaten", "smutOrcNoncombatProgress", "sneakyPetePoints", "snojoMoxieWins", "snojoMuscleWins", "snojoMysticalityWins", "sourceAgentsDefeated", "sourceEnlightenment", "sourceInterval", "sourcePoints", "sourceTerminalGram", "sourceTerminalPram", "sourceTerminalSpam", "spaceBabyLanguageFluency", "spacePirateLanguageFluency", "spelunkyNextNoncombat", "spelunkySacrifices", "spelunkyWinCount", "spookyPuttyCopiesMade", "spookyVHSTapeMonsterTurn", "statbotUses", "stockCertificateTurn", "sugarCounter4178", "sugarCounter4179", "sugarCounter4180", "sugarCounter4181", "sugarCounter4182", "sugarCounter4183", "sugarCounter4191", "summonAnnoyanceCost", "sweat", "tacoDanCocktailSauce", "tacoDanFishMeat", "takerSpaceAnchor", "takerSpaceGold", "takerSpaceMast", "takerSpaceRum", "takerSpaceSilk", "takerSpaceSpice", "tavernLayout", "telescopeUpgrades", "tempuraSummons", "timeposedTopHats", "timeSpinnerMedals", "timesRested", "tomeSummons", "totalCharitableDonations", "trainsetPosition", "turtleBlessingTurns", "twinPeakProgress", "twoCRSPoints", "unicornHornInflation", "universalSeasoningCost", "usable1HWeapons", "usable1xAccs", "usable2HWeapons", "usable3HWeapons", "usableAccessories", "usableHats", "usableOffhands", "usableOther", "usablePants", "usableShirts", "valueOfAdventure", "valueOfInventory", "valueOfStill", "valueOfTome", "vintnerCharge", "vintnerWineLevel", "violetFogGoal", "walfordBucketProgress", "warehouseProgress", "welcomeBackAdv", "wereProfessorBite", "wereProfessorKick", "wereProfessorLiver", "wereProfessorPoints", "wereProfessorRend", "wereProfessorResearchPoints", "wereProfessorStomach", "wereProfessorTransformTurns", "whetstonesUsed", "wolfPigsEvicted", "wolfTurnsUsed", "writingDesksDefeated", "xoSkeleltonXProgress", "xoSkeleltonOProgress", "yearbookCameraAscensions", "yearbookCameraUpgrades", "youRobotBody", "youRobotBottom", "youRobotLeft", "youRobotPoints", "youRobotRight", "youRobotTop", "zeppelinProgress", "zeppelinProtestors", "zigguratLianas", "zombiePoints", "zootSpecimensPrepared", "zootomistPoints", "_absintheDrops", "_abstractionDropsCrown", "_aguaDrops", "_xenomorphCharge", "_alliedRadioDropsUsed", "_ancestralRecallCasts", "_antihangoverBonus", "_aprilShowerDiscoNap", "_aprilBandInstruments", "_aprilBandSaxophoneUses", "_aprilBandTomUses", "_aprilBandTubaUses", "_aprilBandStaffUses", "_aprilBandPiccoloUses", "_astralDrops", "_augSkillsCast", "_assertYourAuthorityCast", "_automatedFutureManufactures", "_autumnatonQuests", "_backUpUses", "_badlyRomanticArrows", "_badgerCharge", "_balefulHowlUses", "_banderRunaways", "_bastilleCheese", "_bastilleGames", "_bastilleGameTurn", "_bastilleLastCheese", "_batWingsCauldronUsed", "_batWingsFreeFights", "_batWingsRestUsed", "_batWingsSwoopUsed", "_bczBloodGeyserCasts", "_bczRefractedGazeCasts", "_bczSweatBulletsCasts", "_bczBloodBathCasts", "_bczDialitupCasts", "_bczSweatEquityCasts", "_bczBloodThinnerCasts", "_bczSpinalTapasCasts", "_bczPheromoneCocktailCasts", "_beanCannonUses", "_bearHugs", "_beerLensDrops", "_bellydancerPickpockets", "_benettonsCasts", "_beretBlastUses", "_beretBoastUses", "_beretBuskingUses", "_birdsSoughtToday", "_bookOfFactsWishes", "_bookOfFactsTatters", "_boomBoxFights", "_boomBoxSongsLeft", "_bootStomps", "_boxingGloveArrows", "_brickoEyeSummons", "_brickoFights", "_campAwayCloudBuffs", "_campAwaySmileBuffs", "_candyEggsDeviled", "_candySummons", "_captainHagnkUsed", "_carnieCandyDrops", "_carnivorousPottedPlantWins", "_carrotNoseDrops", "_catBurglarCharge", "_catBurglarHeistsComplete", "_cheerleaderSteam", "_chestXRayUsed", "_chibiAdventures", "_chipBags", "_chocolateCigarsUsed", "_chocolateCoveredPingPongBallsUsed", "_chocolateSculpturesUsed", "_chocolatesUsed", "_chronolithActivations", "_chronolithNextCost", "_cinchUsed", "_cinchoRests", "_circadianRhythmsAdventures", "_clanFortuneConsultUses", "_clipartSummons", "_clocksUsed", "_cloversPurchased", "_coldMedicineConsults", "_coldMedicineEquipmentTaken", "_companionshipCasts", "_concoctionDatabaseRefreshes", "_cookbookbatCrafting", "_cookbookbatCombatsUntilNewQuest", "_cosmicBowlingSkillsUsed", "_crimbo21ColdResistance", "_crimboPastDailySpecialPrice", "_cyberFreeFights", "_cyberZone1Turns", "_cyberZone2Turns", "_cyberZone3Turns", "_dailySpecialPrice", "_dartsLeft", "_daycareGymScavenges", "_daycareRecruits", "_deckCardsDrawn", "_deluxeKlawSummons", "_demandSandwich", "_detectiveCasesCompleted", "_disavowed", "_dnaPotionsMade", "_donhosCasts", "_douseFoeUses", "_dreamJarDrops", "_drunkPygmyBanishes", "_durableDolphinWhistleUsed", "_edDefeats", "_edLashCount", "_eldritchTentaclesFoughtToday", "_elfGuardCookingUsed", "_elronsCasts", "_enamorangs", "_energyCollected", "_expertCornerCutterUsed", "_extraTimeUsed", "_favorRareSummons", "_feastUsed", "_feelinTheRhythm", "_feelPrideUsed", "_feelExcitementUsed", "_feelHatredUsed", "_feelLonelyUsed", "_feelNervousUsed", "_feelEnvyUsed", "_feelDisappointedUsed", "_feelSuperiorUsed", "_feelLostUsed", "_feelNostalgicUsed", "_feelPeacefulUsed", "_fingertrapArrows", "_fireExtinguisherCharge", "_fragrantHerbsUsed", "_freeBeachWalksUsed", "_frButtonsPressed", "_fudgeWaspFights", "_gapBuffs", "_garbageFireDrops", "_garbageFireDropsCrown", "_generateIronyUsed", "_genieFightsUsed", "_genieWishesUsed", "_gibbererAdv", "_gibbererCharge", "_gingerbreadCityTurns", "_glarkCableUses", "_glitchMonsterFights", "_gnomeAdv", "_godLobsterFights", "_goldenMoneyCharge", "_gongDrops", "_gothKidCharge", "_gothKidFights", "_greyYouAdventures", "_grimBrotherCharge", "_grimFairyTaleDrops", "_grimFairyTaleDropsCrown", "_grimoireConfiscatorSummons", "_grimoireGeekySummons", "_grimstoneMaskDrops", "_grimstoneMaskDropsCrown", "_grooseCharge", "_grooseDrops", "_grubbyWoolDrops", "_guzzlrDeliveries", "_guzzlrGoldDeliveries", "_guzzlrPlatinumDeliveries", "_hareAdv", "_hareCharge", "_highTopPumps", "_hipsterAdv", "_hoardedCandyDropsCrown", "_hoboUnderlingSummons", "_holidayMultitaskingUsed", "_holoWristDrops", "_holoWristProgress", "_hotAshesDrops", "_hotJellyUses", "_hotTubSoaks", "_humanMuskUses", "_iceballUses", "_inigosCasts", "_ironTricornHeadbuttUsed", "_jerksHealthMagazinesUsed", "_jiggleCheese", "_jiggleCream", "_jiggleLife", "_jiggleSteak", "_jitbCharge", "_juneCleaverAdvs", "_juneCleaverFightsLeft", "_juneCleaverEncounters", "_juneCleaverStench", "_juneCleaverSpooky", "_juneCleaverSleaze", "_juneCleaverHot", "_juneCleaverCold", "_juneCleaverSkips", "_jungDrops", "_kgbClicksUsed", "_kgbDispenserUses", "_kgbTranquilizerDartUses", "_klawSummons", "_kloopCharge", "_kloopDrops", "_knuckleboneDrops", "_knuckleboneRests", "_kolhsAdventures", "_kolhsSavedByTheBell", "_lastDailyDungeonRoom", "_lastFitzsimmonsHatch", "_lastMobiusStripTurn", "_lastSausageMonsterTurn", "_lastZomboEye", "_latteRefillsUsed", "_lawOfAveragesUsed", "_leafblowerML", "_leafLassosCrafted", "_leafMonstersFought", "_leavesBurned", "_legionJackhammerCrafting", "_leprecondoRearrangements", "_leprecondoFurniture", "_llamaCharge", "_longConUsed", "_lovebugsBeachBuck", "_lovebugsChroner", "_lovebugsCoinspiracy", "_lovebugsFreddy", "_lovebugsFunFunds", "_lovebugsHoboNickel", "_lovebugsWalmart", "_loveChocolatesUsed", "_lynyrdSnareUses", "_machineTunnelsAdv", "_macrometeoriteUses", "_mafiaThumbRingAdvs", "_mapToACandyRichBlockDrops", "_mayamRests", "_mayflowerDrops", "_mayflySummons", "_mcHugeLargeAvalancheUses", "_mcHugeLargeSkiPlowUses", "_mcHugeLargeSlashUses", "_mediumSiphons", "_meteoriteAdesUsed", "_meteorShowerUses", "_micrometeoriteUses", "_mildEvilPerpetrated", "_mimicEggsDonated", "_mimicEggsObtained", "_miniKiwiDrops", "_miniMartiniDrops", "_mobiusStripEncounters", "_monkeyPawWishesUsed", "_monsterHabitatsFightsLeft", "_monsterHabitatsRecalled", "_monstersMapped", "_mushroomGardenFights", "_nanorhinoCharge", "_navelRunaways", "_neverendingPartyFreeTurns", "_newYouQuestSharpensDone", "_newYouQuestSharpensToDo", "_nextColdMedicineConsult", "_nextQuantumAlignment", "_nightmareFuelCharges", "_noobSkillCount", "_nuclearStockpileUsed", "_oilExtracted", "_oldSchoolCocktailCraftingUsed", "_olfactionsUsed", "_optimisticCandleDropsCrown", "_oreDropsCrown", "_otoscopeUsed", "_oysterEggsFound", "_pantsgivingBanish", "_pantsgivingCount", "_pantsgivingCrumbs", "_pantsgivingFullness", "_pasteDrops", "_perilsForeseen", "_peteJukeboxFixed", "_peteJumpedShark", "_petePeeledOut", "_photoBoothEffects", "_photoBoothEquipment", "_pieDrops", "_piePartsCount", "_pirateRealmGold", "_pirateRealmGlue", "_pirateRealmGrog", "_pirateRealmGrub", "_pirateRealmGuns", "_pirateRealmIslandMonstersDefeated", "_pirateRealmSailingTurns", "_pirateRealmShipSpeed", "_pixieCharge", "_pocketProfessorLectures", "_poisonArrows", "_pokeGrowFertilizerDrops", "_poolGames", "_powderedGoldDrops", "_powderedMadnessUses", "_powerfulGloveBatteryPowerUsed", "_powerPillDrops", "_powerPillUses", "_precisionCasts", "_questPartyFairItemsOpened", "_radlibSummons", "_raindohCopiesMade", "_rapidPrototypingUsed", "_raveStealCount", "_reflexHammerUsed", "_resolutionAdv", "_resolutionRareSummons", "_riftletAdv", "_robinEggDrops", "_roboDrops", "_rogueProgramCharge", "_romanticFightsLeft", "_saberForceMonsterCount", "_saberForceUses", "_saberMod", "_saltGrainsConsumed", "_sandwormCharge", "_saplingsPlanted", "_sausageFights", "_sausagesEaten", "_sausagesMade", "_seadentLightningUsed", "_sealFigurineUses", "_sealScreeches", "_sealsSummoned", "_shadowBricksUsed", "_shadowRiftCombats", "_shatteringPunchUsed", "_shortOrderCookCharge", "_shrubCharge", "_slimeVialsHarvested", "_sloppyDinerBeachBucks", "_smilesOfMrA", "_smithsnessSummons", "_smoochArmyHQCombats", "_snojoFreeFights", "_snojoParts", "_snokebombUsed", "_snowconeSummons", "_snowglobeDrops", "_snowmanHatPlaceUsed", "_snowSuitCount", "_sourceTerminalDigitizeMonsterCount", "_sourceTerminalDigitizeUses", "_sourceTerminalDuplicateUses", "_sourceTerminalEnhanceUses", "_sourceTerminalExtrudes", "_sourceTerminalPortscanUses", "_spaceFurDropsCrown", "_spacegatePlanetIndex", "_spacegateTurnsLeft", "_spaceJellyfishDrops", "_speakeasyDrinksDrunk", "_speakeasyFreeFights", "_spelunkerCharges", "_spelunkingTalesDrops", "_spikolodonSpikeUses", "_spiritOfTheMountainsAdvs", "_spookyJellyUses", "_stackLumpsUses", "_steamCardDrops", "_stickerSummons", "_stinkyCheeseCount", "_stressBallSqueezes", "_sugarSummons", "_summonResortPassesUsed", "_surprisinglySweetSlashUsed", "_surprisinglySweetStabUsed", "_sweatOutSomeBoozeUsed", "_taffyRareSummons", "_taffyYellowSummons", "_tearawayPantsAdvs", "_thanksgettingFoodsEaten", "_thingfinderCasts", "_thinknerdPackageDrops", "_thorsPliersCrafting", "_timeHelmetAdv", "_timeCopsFoughtToday", "_timeSpinnerMinutesUsed", "_tokenDrops", "_transponderDrops", "_turkeyBlastersUsed", "_turkeyBooze", "_turkeyMuscle", "_turkeyMyst", "_turkeyMoxie", "_unaccompaniedMinerUsed", "_unblemishedPearlAnemoneMineProgress", "_unblemishedPearlDiveBarProgress", "_unblemishedPearlMadnessReefProgress", "_unblemishedPearlMarinaraTrenchProgress", "_unblemishedPearlTheBriniestDeepestsProgress", "_unconsciousCollectiveCharge", "_universalSeasoningsUsed", "_universeCalculated", "_universeImploded", "_usedReplicaBatoomerang", "_vampyreCloakeFormUses", "_villainLairProgress", "_vitachocCapsulesUsed", "_vmaskAdv", "_voidFreeFights", "_volcanoItem1", "_volcanoItem2", "_volcanoItem3", "_volcanoItemCount1", "_volcanoItemCount2", "_volcanoItemCount3", "_voteFreeFights", "_VYKEACompanionLevel", "_warbearAutoAnvilCrafting", "_waxGlobDrops", "_whiteRiceDrops", "_witchessFights", "_xoHugsUsed", "_yellowPixelDropsCrown", "_zapCount", "_zombieSmashPocketsUsed", "lastNoncombat15", "lastNoncombat257", "lastNoncombat270", "lastNoncombat273", "lastNoncombat280", "lastNoncombat283", "lastNoncombat297", "lastNoncombat322", "lastNoncombat323", "lastNoncombat324", "lastNoncombat341", "lastNoncombat343", "lastNoncombat384", "lastNoncombat386", "lastNoncombat391", "lastNoncombat392", "lastNoncombat394", "lastNoncombat405", "lastNoncombat406", "lastNoncombat408", "lastNoncombat439", "lastNoncombat440", "lastNoncombat441", "lastNoncombat450", "lastNoncombat528", "lastNoncombat533", "lastNoncombat539", "lastNoncombat540", "lastNoncombat541", "lastNoncombat588", "lastNoncombat589", "lastNoncombat590", "lastNoncombat591", "lastNoncombat592"], monsterProperties = ["beGregariousMonster", "bodyguardChatMonster", "cameraMonster", "chateauMonster", "clumsinessGroveBoss", "crappyCameraMonster", "crudeMonster", "enamorangMonster", "envyfishMonster", "glacierOfJerksBoss", "holdHandsMonster", "iceSculptureMonster", "lastCopyableMonster", "longConMonster", "maelstromOfLoversBoss", "makeFriendsMonster", "merkinLockkeyMonster", "monkeyPointMonster", "motifMonster", "nosyNoseMonster", "olfactedMonster", "photocopyMonster", "rainDohMonster", "romanticTarget", "rufusDesiredEntity", "rwbMonster", "screencappedMonster", "shrunkenHeadZombieMonster", "spookyPuttyMonster", "spookyVHSTapeMonster", "stenchCursedMonster", "superficiallyInterestedMonster", "waxMonster", "yearbookCameraTarget", "_afterimageMonster", "_chainedRelativityMonster", "_chainedPurpleCandleMonster", "_chainedAfterimageMonster", "_cookbookbatQuestMonster", "_gallapagosMonster", "_jiggleCreamedMonster", "_latteMonster", "_monsterHabitatsMonster", "_nanorhinoBanishedMonster", "_newYouQuestMonster", "_prankCardMonster", "_relativityMonster", "_saberForceMonster", "_sourceTerminalDigitizeMonster", "_trickCoinMonster", "_voteMonster"], monsterNumericProperties = [], locationProperties = ["autumnatonQuestLocation", "currentJunkyardLocation", "doctorBagQuestLocation", "ghostLocation", "guzzlrQuestLocation", "holdHandsLocation", "lastAdventure", "nextAdventure", "nextSpookyravenElizabethRoom", "nextSpookyravenStephenRoom", "rwbLocation", "sourceOracleTarget", "_cookbookbatQuestLastLocation", "_floundryBassLocation", "_floundryCarpLocation", "_floundryCodLocation", "_floundryHatchetfishLocation", "_floundryTroutLocation", "_floundryTunaLocation", "_lastPirateRealmIsland", "_sotParcelLocation"], stringProperties = ["autoLogin", "browserBookmarks", "chatFontSize", "combatHotkey0", "combatHotkey1", "combatHotkey2", "combatHotkey3", "combatHotkey4", "combatHotkey5", "combatHotkey6", "combatHotkey7", "combatHotkey8", "combatHotkey9", "commandBufferGCLI", "commandBufferTabbedChat", "commandLineNamespace", "dailyDeedsOptions", "defaultBorderColor", "displayName", "externalEditor", "getBreakfast", "headerStates", "highlightList", "http.proxyHost", "http.proxyPassword", "http.proxyPort", "http.proxyUser", "https.proxyHost", "https.proxyPassword", "https.proxyPort", "https.proxyUser", "initialDesktop", "initialFrames", "lastRelayUpdate", "lastUserAgent", "lastUsername", "logPreferenceChangeFilter", "loginScript", "loginServerName", "loginWindowLogo", "logoutScript", "pingDefaultTestPage", "pingLatest", "pingLoginAbort", "pingLoginCheck", "pingLoginFail", "pingLongest", "pingShortest", "pingTestPage", "previousNotifyList", "previousUpdateVersion", "saveState", "saveStateActive", "scriptList", "swingLookAndFeel", "userAgent", "8BitColor", "afterAdventureScript", "antiScientificMethod", "autoOlfact", "autoPutty", "autumnatonUpgrades", "backupCameraMode", "banishedMonsters", "banishedPhyla", "banishingShoutMonsters", "batmanStats", "batmanZone", "batmanUpgrades", "battleAction", "beachHeadsUnlocked", "beastSkillsAvailable", "beastSkillsKnown", "beforePVPScript", "betweenBattleScript", "boomBoxSong", "breakfastAlways", "breakfastHardcore", "breakfastSoftcore", "buffBotCasting", "buyScript", "cargoPocketsEmptied", "cargoPocketScraps", "chatbotScript", "chatPlayerScript", "chibiName", "choiceAdventureScript", "chosenTrip", "clanFortuneReply1", "clanFortuneReply2", "clanFortuneReply3", "clanFortuneWord1", "clanFortuneWord2", "clanFortuneWord3", "coolerYetiMode", "counterScript", "copperheadClubHazard", "crimbo23ArmoryControl", "crimbo23BarControl", "crimbo23CafeControl", "crimbo23CottageControl", "crimbo23FoundryControl", "crimbotChassis", "crimbotArm", "crimbotPropulsion", "crystalBallPredictions", "csServicesPerformed", "currentAstralTrip", "currentDistillateMods", "currentEasyBountyItem", "currentHardBountyItem", "currentHippyStore", "currentJunkyardTool", "currentLlamaForm", "currentMood", "currentPVPSeason", "currentPvpVictories", "currentSpecialBountyItem", "currentSITSkill", "customCombatScript", "cyrusAdjectives", "defaultFlowerLossMessage", "defaultFlowerWinMessage", "demonName1", "demonName2", "demonName3", "demonName4", "demonName5", "demonName6", "demonName7", "demonName8", "demonName9", "demonName10", "demonName11", "demonName12", "demonName13", "demonName14", "demonName14Segments", "dinseyGatorStenchDamage", "dinseyRollercoasterStats", "dreadScrollGuesses", "duckAreasCleared", "duckAreasSelected", "edPiece", "enamorangMonsterTurn", "ensorcelee", "EVEDirections", "everfullDartPerks", "extraCosmeticModifiers", "familiarScript", "flagellateFlagonsActive", "forbiddenStores", "gameProBossSpecialPower", "gooseReprocessed", "grimoireSkillsHardcore", "grimoireSkillsSoftcore", "grimstoneMaskPath", "guzzlrQuestClient", "guzzlrQuestTier", "harvestGardenHardcore", "harvestGardenSoftcore", "holdHandsMonsterCount", "hpAutoRecoveryItems", "invalidBuffMessage", "jickSwordModifier", "juneCleaverQueue", "kingLiberatedScript", "lassoTraining", "lastAdventureContainer", "lastAdventureTrail", "lastBangPotion819", "lastBangPotion820", "lastBangPotion821", "lastBangPotion822", "lastBangPotion823", "lastBangPotion824", "lastBangPotion825", "lastBangPotion826", "lastBangPotion827", "lastChanceBurn", "lastChessboard", "lastCombatEnvironments", "lastDwarfDiceRolls", "lastDwarfDigitRunes", "lastDwarfEquipmentRunes", "lastDwarfFactoryItem118", "lastDwarfFactoryItem119", "lastDwarfFactoryItem120", "lastDwarfFactoryItem360", "lastDwarfFactoryItem361", "lastDwarfFactoryItem362", "lastDwarfFactoryItem363", "lastDwarfFactoryItem364", "lastDwarfFactoryItem365", "lastDwarfFactoryItem910", "lastDwarfFactoryItem3199", "lastDwarfOfficeItem3208", "lastDwarfOfficeItem3209", "lastDwarfOfficeItem3210", "lastDwarfOfficeItem3211", "lastDwarfOfficeItem3212", "lastDwarfOfficeItem3213", "lastDwarfOfficeItem3214", "lastDwarfOreRunes", "lastDwarfHopper1", "lastDwarfHopper2", "lastDwarfHopper3", "lastDwarfHopper4", "lastEncounter", "lastMacroError", "lastMessageId", "lastPaperStrip3144", "lastPaperStrip4138", "lastPaperStrip4139", "lastPaperStrip4140", "lastPaperStrip4141", "lastPaperStrip4142", "lastPaperStrip4143", "lastPaperStrip4144", "lastPirateEphemera", "lastPorkoBoard", "lastPorkoPayouts", "lastPorkoExpected", "lastSlimeVial3885", "lastSlimeVial3886", "lastSlimeVial3887", "lastSlimeVial3888", "lastSlimeVial3889", "lastSlimeVial3890", "lastSlimeVial3891", "lastSlimeVial3892", "lastSlimeVial3893", "lastSlimeVial3894", "lastSlimeVial3895", "lastSlimeVial3896", "lastSelectedFaxbot", "lastSuccessfulFaxbot", "latteIngredients", "latteModifier", "latteUnlocks", "ledCandleMode", "leprecondoCurrentNeed", "leprecondoDiscovered", "leprecondoInstalled", "leprecondoNeedOrder", "libramSkillsHardcore", "libramSkillsSoftcore", "louvreOverride", "lovePotion", "lttQuestName", "maximizerList", "maximizerMRUList", "maximizerLastFilters", "mayoInMouth", "mayoMinderSetting", "merkinCatalogChoices", "merkinQuestPath", "mimicEggMonsters", "mineLayout1", "mineLayout2", "mineLayout3", "mineLayout4", "mineLayout5", "mineLayout6", "mineState1", "mineState2", "mineState3", "mineState4", "mineState5", "mineState6", "mpAutoRecoveryItems", "nextDistillateMods", "nextQuantumFamiliarName", "nextQuantumFamiliarOwner", "noncombatForcers", "nsChallenge2", "nsChallenge3", "nsChallenge4", "nsChallenge5", "nsTowerDoorKeysUsed", "oceanAction", "oceanDestination", "parkaMode", "pastaThrall1", "pastaThrall2", "pastaThrall3", "pastaThrall4", "pastaThrall5", "pastaThrall6", "pastaThrall7", "pastaThrall8", "peteMotorbikeTires", "peteMotorbikeGasTank", "peteMotorbikeHeadlight", "peteMotorbikeCowling", "peteMotorbikeMuffler", "peteMotorbikeSeat", "pieStuffing", "plantingDate", "plantingLength", "plantingScript", "plumberCostumeWorn", "pokefamBoosts", "postAscensionScript", "preAscensionScript", "questClumsinessGrove", "questDoctorBag", "questECoBucket", "questESlAudit", "questESlBacteria", "questESlCheeseburger", "questESlCocktail", "questESlDebt", "questESlFish", "questESlMushStash", "questESlSalt", "questESlSprinkles", "questESpClipper", "questESpEVE", "questESpFakeMedium", "questESpGore", "questESpJunglePun", "questESpOutOfOrder", "questESpSerum", "questESpSmokes", "questEStFishTrash", "questEStGiveMeFuel", "questEStNastyBears", "questEStSocialJusticeI", "questEStSocialJusticeII", "questEStSuperLuber", "questEStWorkWithFood", "questEStZippityDooDah", "questEUNewYou", "questF01Primordial", "questF02Hyboria", "questF03Future", "questF04Elves", "questF05Clancy", "questG01Meatcar", "questG02Whitecastle", "questG03Ego", "questG04Nemesis", "questG05Dark", "questG06Delivery", "questG07Myst", "questG08Moxie", "questG09Muscle", "questGlacierOfJerks", "questGuzzlr", "questI01Scapegoat", "questI02Beat", "questL02Larva", "questL03Rat", "questL04Bat", "questL05Goblin", "questL06Friar", "questL07Cyrptic", "questL08Trapper", "questL09Topping", "questL10Garbage", "questL11Black", "questL11Business", "questL11Curses", "questL11Desert", "questL11Doctor", "questL11MacGuffin", "questL11Manor", "questL11Palindome", "questL11Pyramid", "questL11Ron", "questL11Shen", "questL11Spare", "questL11Worship", "questL12HippyFrat", "questL12War", "questL13Final", "questL13Warehouse", "questLTTQuestByWire", "questM01Untinker", "questM02Artist", "questM03Bugbear", "questM05Toot", "questM06Gourd", "questM07Hammer", "questM08Baker", "questM09Rocks", "questM10Azazel", "questM11Postal", "questM12Pirate", "questM13Escape", "questM14Bounty", "questM15Lol", "questM16Temple", "questM17Babies", "questM18Swamp", "questM19Hippy", "questM20Necklace", "questM21Dance", "questM22Shirt", "questM23Meatsmith", "questM24Doc", "questM25Armorer", "questM26Oracle", "questMaelstromOfLovers", "questPAGhost", "questRufus", "questS01OldGuy", "questS02Monkees", "raveCombo1", "raveCombo2", "raveCombo3", "raveCombo4", "raveCombo5", "raveCombo6", "recoveryScript", "relayChatCLITrigger", "relayCounters", "retroCapeSuperhero", "retroCapeWashingInstructions", "royalty", "rufusQuestTarget", "rufusQuestType", "scriptMRUList", "seahorseName", "shadowLabyrinthGoal", "shadowRiftIngress", "shrubGarland", "shrubGifts", "shrubLights", "shrubTopper", "shrunkenHeadZombieAbilities", "sideDefeated", "sidequestArenaCompleted", "sidequestFarmCompleted", "sidequestJunkyardCompleted", "sidequestLighthouseCompleted", "sidequestNunsCompleted", "sidequestOrchardCompleted", "skateParkStatus", "snowsuit", "sourceTerminalChips", "sourceTerminalEducate1", "sourceTerminalEducate2", "sourceTerminalEnquiry", "sourceTerminalEducateKnown", "sourceTerminalEnhanceKnown", "sourceTerminalEnquiryKnown", "sourceTerminalExtrudeKnown", "spadingData", "spadingScript", "speakeasyName", "spelunkyStatus", "spelunkyUpgrades", "spookyravenRecipeUsed", "stationaryButton1", "stationaryButton2", "stationaryButton3", "stationaryButton4", "stationaryButton5", "streamCrossDefaultTarget", "sweetSynthesisBlacklist", "telescope1", "telescope2", "telescope3", "telescope4", "telescope5", "testudinalTeachings", "textColors", "thanksMessage", "tomeSkillsHardcore", "tomeSkillsSoftcore", "trackVoteMonster", "trackedMonsters", "trackedPhyla", "trainsetConfiguration", "umbrellaState", "umdLastObtained", "vintnerWineEffect", "vintnerWineName", "vintnerWineType", "violetFogLayout", "volcanoMaze1", "volcanoMaze2", "volcanoMaze3", "volcanoMaze4", "volcanoMaze5", "warProgress", "watchedPreferences", "wereProfessorAdvancedResearch", "workteaClue", "yourFavoriteBird", "yourFavoriteBirdMods", "youRobotCPUUpgrades", "zootGraftedMods", "zootMilkCrueltyMods", "zootMilkKindnessMods", "_automatedFutureSide", "_bastilleBoosts", "_bastilleChoice1", "_bastilleChoice2", "_bastilleChoice3", "_bastilleCurrentStyles", "_bastilleEnemyCastle", "_bastilleEnemyName", "_bastilleLastBattleResults", "_bastilleLastEncounter", "_bastilleStats", "_beachHeadsUsed", "_beachLayout", "_beachMinutes", "_birdOfTheDay", "_birdOfTheDayMods", "_bittycar", "_campAwaySmileBuffSign", "_citizenZone", "_citizenZoneMods", "_cloudTalkMessage", "_cloudTalkSmoker", "_coatOfPaintModifier", "_cupidBowFamiliars", "_currentDartboard", "_cyberZone1Defense", "_cyberZone1Hacker", "_cyberZone1Owner", "_cyberZone2Defense", "_cyberZone2Hacker", "_cyberZone2Owner", "_cyberZone3Defense", "_cyberZone3Hacker", "_cyberZone3Owner", "_deckCardsSeen", "_feastedFamiliars", "_floristPlantsUsed", "_frAreasUnlocked", "_frHoursLeft", "_frMonstersKilled", "_futuristicCollarModifier", "_futuristicHatModifier", "_futuristicShirtModifier", "_horsery", "_horseryCrazyMox", "_horseryCrazyMus", "_horseryCrazyMys", "_horseryCrazyName", "_horseryCurrentName", "_horseryDarkName", "_horseryNormalName", "_horseryPaleName", "_jickJarAvailable", "_jiggleCheesedMonsters", "_lastCombatActions", "_lastCombatStarted", "_locketMonstersFought", "_mayamSymbolsUsed", "_mummeryMods", "_mummeryUses", "_newYouQuestSkill", "_noHatModifier", "_pantogramModifier", "_perilLocations", "_pirateRealmCrewmate", "_pirateRealmCrewmate1", "_pirateRealmCrewmate2", "_pirateRealmCrewmate3", "_pirateRealmShip", "_pottedPowerPlant", "_questESp", "_questPartyFair", "_questPartyFairProgress", "_questPartyFairQuest", "_questPirateRealm", "_roboDrinks", "_roninStoragePulls", "_savageBeastMods", "_seadentWaveZone", "_spacegateAnimalLife", "_spacegateCoordinates", "_spacegateGear", "_spacegateHazards", "_spacegateIntelligentLife", "_spacegatePlanetName", "_spacegatePlantLife", "_stolenAccordions", "_tempRelayCounters", "_timeSpinnerFoodAvailable", "_trickOrTreatBlock", "_unknownEasyBountyItem", "_unknownHardBountyItem", "_unknownSpecialBountyItem", "_untakenEasyBountyItem", "_untakenHardBountyItem", "_untakenSpecialBountyItem", "_userMods", "_villainLairColor", "_villainLairKey", "_voteLocal1", "_voteLocal2", "_voteLocal3", "_voteLocal4", "_voteMonster1", "_voteMonster2", "_voteModifier", "_VYKEACompanionType", "_VYKEACompanionRune", "_VYKEACompanionName"], numericOrStringProperties = ["statusEngineering", "statusGalley", "statusMedbay", "statusMorgue", "statusNavigation", "statusScienceLab", "statusSonar", "statusSpecialOps", "statusWasteProcessing", "choiceAdventure2", "choiceAdventure3", "choiceAdventure4", "choiceAdventure5", "choiceAdventure6", "choiceAdventure7", "choiceAdventure8", "choiceAdventure9", "choiceAdventure10", "choiceAdventure11", "choiceAdventure12", "choiceAdventure14", "choiceAdventure15", "choiceAdventure16", "choiceAdventure17", "choiceAdventure18", "choiceAdventure19", "choiceAdventure20", "choiceAdventure21", "choiceAdventure22", "choiceAdventure23", "choiceAdventure24", "choiceAdventure25", "choiceAdventure26", "choiceAdventure27", "choiceAdventure28", "choiceAdventure29", "choiceAdventure40", "choiceAdventure41", "choiceAdventure42", "choiceAdventure45", "choiceAdventure46", "choiceAdventure47", "choiceAdventure71", "choiceAdventure72", "choiceAdventure73", "choiceAdventure74", "choiceAdventure75", "choiceAdventure76", "choiceAdventure77", "choiceAdventure86", "choiceAdventure87", "choiceAdventure88", "choiceAdventure89", "choiceAdventure90", "choiceAdventure91", "choiceAdventure105", "choiceAdventure106", "choiceAdventure107", "choiceAdventure108", "choiceAdventure109", "choiceAdventure110", "choiceAdventure111", "choiceAdventure112", "choiceAdventure113", "choiceAdventure114", "choiceAdventure115", "choiceAdventure116", "choiceAdventure117", "choiceAdventure118", "choiceAdventure120", "choiceAdventure123", "choiceAdventure125", "choiceAdventure126", "choiceAdventure127", "choiceAdventure129", "choiceAdventure131", "choiceAdventure132", "choiceAdventure135", "choiceAdventure136", "choiceAdventure137", "choiceAdventure138", "choiceAdventure139", "choiceAdventure140", "choiceAdventure141", "choiceAdventure142", "choiceAdventure143", "choiceAdventure144", "choiceAdventure145", "choiceAdventure146", "choiceAdventure147", "choiceAdventure148", "choiceAdventure149", "choiceAdventure151", "choiceAdventure152", "choiceAdventure153", "choiceAdventure154", "choiceAdventure155", "choiceAdventure156", "choiceAdventure157", "choiceAdventure158", "choiceAdventure159", "choiceAdventure160", "choiceAdventure161", "choiceAdventure162", "choiceAdventure163", "choiceAdventure164", "choiceAdventure165", "choiceAdventure166", "choiceAdventure167", "choiceAdventure168", "choiceAdventure169", "choiceAdventure170", "choiceAdventure171", "choiceAdventure172", "choiceAdventure177", "choiceAdventure178", "choiceAdventure180", "choiceAdventure181", "choiceAdventure182", "choiceAdventure184", "choiceAdventure185", "choiceAdventure186", "choiceAdventure187", "choiceAdventure188", "choiceAdventure189", "choiceAdventure191", "choiceAdventure197", "choiceAdventure198", "choiceAdventure199", "choiceAdventure200", "choiceAdventure201", "choiceAdventure202", "choiceAdventure203", "choiceAdventure204", "choiceAdventure205", "choiceAdventure206", "choiceAdventure207", "choiceAdventure208", "choiceAdventure211", "choiceAdventure212", "choiceAdventure213", "choiceAdventure214", "choiceAdventure215", "choiceAdventure216", "choiceAdventure217", "choiceAdventure218", "choiceAdventure219", "choiceAdventure220", "choiceAdventure221", "choiceAdventure222", "choiceAdventure223", "choiceAdventure224", "choiceAdventure225", "choiceAdventure230", "choiceAdventure272", "choiceAdventure273", "choiceAdventure276", "choiceAdventure277", "choiceAdventure278", "choiceAdventure279", "choiceAdventure280", "choiceAdventure281", "choiceAdventure282", "choiceAdventure283", "choiceAdventure284", "choiceAdventure285", "choiceAdventure286", "choiceAdventure287", "choiceAdventure288", "choiceAdventure289", "choiceAdventure290", "choiceAdventure291", "choiceAdventure292", "choiceAdventure293", "choiceAdventure294", "choiceAdventure295", "choiceAdventure296", "choiceAdventure297", "choiceAdventure298", "choiceAdventure299", "choiceAdventure302", "choiceAdventure303", "choiceAdventure304", "choiceAdventure305", "choiceAdventure306", "choiceAdventure307", "choiceAdventure308", "choiceAdventure309", "choiceAdventure310", "choiceAdventure311", "choiceAdventure317", "choiceAdventure318", "choiceAdventure319", "choiceAdventure320", "choiceAdventure321", "choiceAdventure322", "choiceAdventure326", "choiceAdventure327", "choiceAdventure328", "choiceAdventure329", "choiceAdventure330", "choiceAdventure331", "choiceAdventure332", "choiceAdventure333", "choiceAdventure334", "choiceAdventure335", "choiceAdventure336", "choiceAdventure337", "choiceAdventure338", "choiceAdventure339", "choiceAdventure340", "choiceAdventure341", "choiceAdventure342", "choiceAdventure343", "choiceAdventure344", "choiceAdventure345", "choiceAdventure346", "choiceAdventure347", "choiceAdventure348", "choiceAdventure349", "choiceAdventure350", "choiceAdventure351", "choiceAdventure352", "choiceAdventure353", "choiceAdventure354", "choiceAdventure355", "choiceAdventure356", "choiceAdventure357", "choiceAdventure358", "choiceAdventure360", "choiceAdventure361", "choiceAdventure362", "choiceAdventure363", "choiceAdventure364", "choiceAdventure365", "choiceAdventure366", "choiceAdventure367", "choiceAdventure372", "choiceAdventure376", "choiceAdventure387", "choiceAdventure388", "choiceAdventure389", "choiceAdventure390", "choiceAdventure391", "choiceAdventure392", "choiceAdventure393", "choiceAdventure395", "choiceAdventure396", "choiceAdventure397", "choiceAdventure398", "choiceAdventure399", "choiceAdventure400", "choiceAdventure401", "choiceAdventure402", "choiceAdventure403", "choiceAdventure423", "choiceAdventure424", "choiceAdventure425", "choiceAdventure426", "choiceAdventure427", "choiceAdventure428", "choiceAdventure429", "choiceAdventure430", "choiceAdventure431", "choiceAdventure432", "choiceAdventure433", "choiceAdventure435", "choiceAdventure438", "choiceAdventure439", "choiceAdventure442", "choiceAdventure444", "choiceAdventure445", "choiceAdventure446", "choiceAdventure447", "choiceAdventure448", "choiceAdventure449", "choiceAdventure451", "choiceAdventure452", "choiceAdventure453", "choiceAdventure454", "choiceAdventure455", "choiceAdventure456", "choiceAdventure457", "choiceAdventure458", "choiceAdventure460", "choiceAdventure461", "choiceAdventure462", "choiceAdventure463", "choiceAdventure464", "choiceAdventure465", "choiceAdventure467", "choiceAdventure468", "choiceAdventure469", "choiceAdventure470", "choiceAdventure471", "choiceAdventure472", "choiceAdventure473", "choiceAdventure474", "choiceAdventure475", "choiceAdventure477", "choiceAdventure478", "choiceAdventure480", "choiceAdventure483", "choiceAdventure484", "choiceAdventure485", "choiceAdventure486", "choiceAdventure488", "choiceAdventure489", "choiceAdventure490", "choiceAdventure491", "choiceAdventure496", "choiceAdventure497", "choiceAdventure502", "choiceAdventure503", "choiceAdventure504", "choiceAdventure505", "choiceAdventure506", "choiceAdventure507", "choiceAdventure509", "choiceAdventure510", "choiceAdventure511", "choiceAdventure512", "choiceAdventure513", "choiceAdventure514", "choiceAdventure515", "choiceAdventure517", "choiceAdventure518", "choiceAdventure519", "choiceAdventure521", "choiceAdventure522", "choiceAdventure523", "choiceAdventure527", "choiceAdventure528", "choiceAdventure529", "choiceAdventure530", "choiceAdventure531", "choiceAdventure532", "choiceAdventure533", "choiceAdventure534", "choiceAdventure535", "choiceAdventure536", "choiceAdventure538", "choiceAdventure539", "choiceAdventure542", "choiceAdventure543", "choiceAdventure544", "choiceAdventure546", "choiceAdventure548", "choiceAdventure549", "choiceAdventure550", "choiceAdventure551", "choiceAdventure552", "choiceAdventure553", "choiceAdventure554", "choiceAdventure556", "choiceAdventure557", "choiceAdventure558", "choiceAdventure559", "choiceAdventure560", "choiceAdventure561", "choiceAdventure562", "choiceAdventure563", "choiceAdventure564", "choiceAdventure565", "choiceAdventure566", "choiceAdventure567", "choiceAdventure568", "choiceAdventure569", "choiceAdventure571", "choiceAdventure572", "choiceAdventure573", "choiceAdventure574", "choiceAdventure575", "choiceAdventure576", "choiceAdventure577", "choiceAdventure578", "choiceAdventure579", "choiceAdventure581", "choiceAdventure582", "choiceAdventure583", "choiceAdventure584", "choiceAdventure594", "choiceAdventure595", "choiceAdventure596", "choiceAdventure597", "choiceAdventure598", "choiceAdventure599", "choiceAdventure600", "choiceAdventure603", "choiceAdventure604", "choiceAdventure616", "choiceAdventure634", "choiceAdventure640", "choiceAdventure654", "choiceAdventure655", "choiceAdventure656", "choiceAdventure657", "choiceAdventure658", "choiceAdventure664", "choiceAdventure669", "choiceAdventure670", "choiceAdventure671", "choiceAdventure672", "choiceAdventure673", "choiceAdventure674", "choiceAdventure675", "choiceAdventure676", "choiceAdventure677", "choiceAdventure678", "choiceAdventure679", "choiceAdventure681", "choiceAdventure683", "choiceAdventure684", "choiceAdventure685", "choiceAdventure686", "choiceAdventure687", "choiceAdventure688", "choiceAdventure689", "choiceAdventure690", "choiceAdventure691", "choiceAdventure692", "choiceAdventure693", "choiceAdventure694", "choiceAdventure695", "choiceAdventure696", "choiceAdventure697", "choiceAdventure698", "choiceAdventure700", "choiceAdventure701", "choiceAdventure705", "choiceAdventure706", "choiceAdventure707", "choiceAdventure708", "choiceAdventure709", "choiceAdventure710", "choiceAdventure711", "choiceAdventure712", "choiceAdventure713", "choiceAdventure714", "choiceAdventure715", "choiceAdventure716", "choiceAdventure717", "choiceAdventure721", "choiceAdventure725", "choiceAdventure729", "choiceAdventure733", "choiceAdventure737", "choiceAdventure741", "choiceAdventure745", "choiceAdventure749", "choiceAdventure753", "choiceAdventure771", "choiceAdventure778", "choiceAdventure780", "choiceAdventure781", "choiceAdventure783", "choiceAdventure784", "choiceAdventure785", "choiceAdventure786", "choiceAdventure787", "choiceAdventure788", "choiceAdventure789", "choiceAdventure791", "choiceAdventure793", "choiceAdventure794", "choiceAdventure795", "choiceAdventure796", "choiceAdventure797", "choiceAdventure803", "choiceAdventure805", "choiceAdventure808", "choiceAdventure809", "choiceAdventure813", "choiceAdventure815", "choiceAdventure830", "choiceAdventure832", "choiceAdventure833", "choiceAdventure834", "choiceAdventure835", "choiceAdventure837", "choiceAdventure838", "choiceAdventure839", "choiceAdventure840", "choiceAdventure841", "choiceAdventure842", "choiceAdventure851", "choiceAdventure852", "choiceAdventure853", "choiceAdventure854", "choiceAdventure855", "choiceAdventure856", "choiceAdventure857", "choiceAdventure858", "choiceAdventure866", "choiceAdventure873", "choiceAdventure875", "choiceAdventure876", "choiceAdventure877", "choiceAdventure878", "choiceAdventure879", "choiceAdventure880", "choiceAdventure881", "choiceAdventure882", "choiceAdventure888", "choiceAdventure889", "choiceAdventure918", "choiceAdventure919", "choiceAdventure920", "choiceAdventure921", "choiceAdventure923", "choiceAdventure924", "choiceAdventure925", "choiceAdventure926", "choiceAdventure927", "choiceAdventure928", "choiceAdventure929", "choiceAdventure930", "choiceAdventure931", "choiceAdventure932", "choiceAdventure940", "choiceAdventure941", "choiceAdventure942", "choiceAdventure943", "choiceAdventure944", "choiceAdventure945", "choiceAdventure946", "choiceAdventure950", "choiceAdventure955", "choiceAdventure957", "choiceAdventure958", "choiceAdventure959", "choiceAdventure960", "choiceAdventure961", "choiceAdventure962", "choiceAdventure963", "choiceAdventure964", "choiceAdventure965", "choiceAdventure966", "choiceAdventure970", "choiceAdventure973", "choiceAdventure974", "choiceAdventure975", "choiceAdventure976", "choiceAdventure977", "choiceAdventure979", "choiceAdventure980", "choiceAdventure981", "choiceAdventure982", "choiceAdventure983", "choiceAdventure988", "choiceAdventure989", "choiceAdventure993", "choiceAdventure998", "choiceAdventure1000", "choiceAdventure1003", "choiceAdventure1005", "choiceAdventure1006", "choiceAdventure1007", "choiceAdventure1008", "choiceAdventure1009", "choiceAdventure1010", "choiceAdventure1011", "choiceAdventure1012", "choiceAdventure1013", "choiceAdventure1015", "choiceAdventure1016", "choiceAdventure1017", "choiceAdventure1018", "choiceAdventure1019", "choiceAdventure1020", "choiceAdventure1021", "choiceAdventure1022", "choiceAdventure1023", "choiceAdventure1026", "choiceAdventure1027", "choiceAdventure1028", "choiceAdventure1029", "choiceAdventure1030", "choiceAdventure1031", "choiceAdventure1032", "choiceAdventure1033", "choiceAdventure1034", "choiceAdventure1035", "choiceAdventure1036", "choiceAdventure1037", "choiceAdventure1038", "choiceAdventure1039", "choiceAdventure1040", "choiceAdventure1041", "choiceAdventure1042", "choiceAdventure1044", "choiceAdventure1045", "choiceAdventure1046", "choiceAdventure1048", "choiceAdventure1051", "choiceAdventure1052", "choiceAdventure1053", "choiceAdventure1054", "choiceAdventure1055", "choiceAdventure1056", "choiceAdventure1057", "choiceAdventure1059", "choiceAdventure1060", "choiceAdventure1061", "choiceAdventure1062", "choiceAdventure1065", "choiceAdventure1067", "choiceAdventure1068", "choiceAdventure1069", "choiceAdventure1070", "choiceAdventure1071", "choiceAdventure1073", "choiceAdventure1077", "choiceAdventure1080", "choiceAdventure1081", "choiceAdventure1082", "choiceAdventure1083", "choiceAdventure1084", "choiceAdventure1085", "choiceAdventure1091", "choiceAdventure1094", "choiceAdventure1095", "choiceAdventure1096", "choiceAdventure1097", "choiceAdventure1102", "choiceAdventure1106", "choiceAdventure1107", "choiceAdventure1108", "choiceAdventure1110", "choiceAdventure1114", "choiceAdventure1115", "choiceAdventure1116", "choiceAdventure1118", "choiceAdventure1119", "choiceAdventure1120", "choiceAdventure1121", "choiceAdventure1122", "choiceAdventure1123", "choiceAdventure1171", "choiceAdventure1172", "choiceAdventure1173", "choiceAdventure1174", "choiceAdventure1175", "choiceAdventure1193", "choiceAdventure1195", "choiceAdventure1196", "choiceAdventure1197", "choiceAdventure1198", "choiceAdventure1199", "choiceAdventure1202", "choiceAdventure1203", "choiceAdventure1204", "choiceAdventure1205", "choiceAdventure1206", "choiceAdventure1207", "choiceAdventure1208", "choiceAdventure1209", "choiceAdventure1210", "choiceAdventure1211", "choiceAdventure1212", "choiceAdventure1213", "choiceAdventure1214", "choiceAdventure1215", "choiceAdventure1219", "choiceAdventure1222", "choiceAdventure1223", "choiceAdventure1224", "choiceAdventure1225", "choiceAdventure1226", "choiceAdventure1227", "choiceAdventure1228", "choiceAdventure1229", "choiceAdventure1236", "choiceAdventure1237", "choiceAdventure1238", "choiceAdventure1239", "choiceAdventure1240", "choiceAdventure1241", "choiceAdventure1242", "choiceAdventure1243", "choiceAdventure1244", "choiceAdventure1245", "choiceAdventure1246", "choiceAdventure1247", "choiceAdventure1248", "choiceAdventure1249", "choiceAdventure1250", "choiceAdventure1251", "choiceAdventure1252", "choiceAdventure1253", "choiceAdventure1254", "choiceAdventure1255", "choiceAdventure1256", "choiceAdventure1266", "choiceAdventure1280", "choiceAdventure1281", "choiceAdventure1282", "choiceAdventure1283", "choiceAdventure1284", "choiceAdventure1285", "choiceAdventure1286", "choiceAdventure1287", "choiceAdventure1288", "choiceAdventure1289", "choiceAdventure1290", "choiceAdventure1291", "choiceAdventure1292", "choiceAdventure1293", "choiceAdventure1294", "choiceAdventure1295", "choiceAdventure1296", "choiceAdventure1297", "choiceAdventure1298", "choiceAdventure1299", "choiceAdventure1300", "choiceAdventure1301", "choiceAdventure1302", "choiceAdventure1303", "choiceAdventure1304", "choiceAdventure1305", "choiceAdventure1307", "choiceAdventure1310", "choiceAdventure1312", "choiceAdventure1313", "choiceAdventure1314", "choiceAdventure1315", "choiceAdventure1316", "choiceAdventure1317", "choiceAdventure1318", "choiceAdventure1319", "choiceAdventure1321", "choiceAdventure1322", "choiceAdventure1323", "choiceAdventure1324", "choiceAdventure1325", "choiceAdventure1326", "choiceAdventure1327", "choiceAdventure1328", "choiceAdventure1332", "choiceAdventure1333", "choiceAdventure1335", "choiceAdventure1340", "choiceAdventure1341", "choiceAdventure1345", "choiceAdventure1389", "choiceAdventure1392", "choiceAdventure1397", "choiceAdventure1399", "choiceAdventure1405", "choiceAdventure1411", "choiceAdventure1415", "choiceAdventure1427", "choiceAdventure1428", "choiceAdventure1429", "choiceAdventure1430", "choiceAdventure1431", "choiceAdventure1432", "choiceAdventure1433", "choiceAdventure1434", "choiceAdventure1436", "choiceAdventure1460", "choiceAdventure1461", "choiceAdventure1467", "choiceAdventure1468", "choiceAdventure1469", "choiceAdventure1470", "choiceAdventure1471", "choiceAdventure1472", "choiceAdventure1473", "choiceAdventure1474", "choiceAdventure1475", "choiceAdventure1486", "choiceAdventure1487", "choiceAdventure1488", "choiceAdventure1489", "choiceAdventure1491", "choiceAdventure1494", "choiceAdventure1505", "choiceAdventure1528", "choiceAdventure1534", "choiceAdventure1538", "choiceAdventure1539", "choiceAdventure1540", "choiceAdventure1541", "choiceAdventure1542", "choiceAdventure1545", "choiceAdventure1546", "choiceAdventure1547", "choiceAdventure1548", "choiceAdventure1549", "choiceAdventure1550"], familiarProperties = ["commaFamiliar", "cupidBowLastFamiliar", "nextQuantumFamiliar", "stillsuitFamiliar", "zootGraftedButtCheekLeftFamiliar", "zootGraftedButtCheekRightFamiliar", "zootGraftedFootLeftFamiliar", "zootGraftedFootRightFamiliar", "zootGraftedHandLeftFamiliar", "zootGraftedHandRightFamiliar", "zootGraftedHeadFamiliar", "zootGraftedNippleLeftFamiliar", "zootGraftedNippleRightFamiliar", "zootGraftedShoulderLeftFamiliar", "zootGraftedShoulderRightFamiliar"], familiarNumericProperties = ["cupidBowLastFamiliar", "zootGraftedButtCheekLeftFamiliar", "zootGraftedButtCheekRightFamiliar", "zootGraftedFootLeftFamiliar", "zootGraftedFootRightFamiliar", "zootGraftedHandLeftFamiliar", "zootGraftedHandRightFamiliar", "zootGraftedHeadFamiliar", "zootGraftedNippleLeftFamiliar", "zootGraftedNippleRightFamiliar", "zootGraftedShoulderLeftFamiliar", "zootGraftedShoulderRightFamiliar"], statProperties = ["nsChallenge1", "snojoSetting"], phylumProperties = ["dnaSyringe", "locketPhylum", "redSnapperPhylum", "_circadianRhythmsPhylum"], itemProperties = ["commerceGhostItem", "daycareInstructorItem", "doctorBagQuestItem", "dolphinItem", "eweItem", "guzzlrQuestBooze", "implementGlitchItem", "muffinOnOrder", "rufusDesiredArtifact", "rufusDesiredItems", "shenQuestItem", "trapperOre", "walfordBucketItem", "_cookbookbatQuestIngredient", "_crimboPastDailySpecialItem", "_dailySpecial", "_pirateRealmCurio"], itemNumericProperties = ["daycareInstructorItem", "_crimboPastDailySpecialItem"];
 
 // src/propertyTyping.ts
+init_kolmafia_polyfill();
 var booleanPropertiesSet = new Set(booleanProperties), numericPropertiesSet = new Set(numericProperties), numericOrStringPropertiesSet = new Set(numericOrStringProperties), stringPropertiesSet = new Set(stringProperties), locationPropertiesSet = new Set(locationProperties), monsterPropertiesSet = new Set(monsterProperties), familiarPropertiesSet = new Set(familiarProperties), statPropertiesSet = new Set(statProperties), phylumPropertiesSet = new Set(phylumProperties), itemPropertiesSet = new Set(itemProperties);
 function isBooleanProperty(property) {
   return booleanPropertiesSet.has(property);
@@ -1642,9 +3329,11 @@ var PropertiesManager = /* @__PURE__ */ function() {
 _defineProperty2(PropertiesManager, "EMPTY_PREFERENCE", Symbol("empty preference"));
 
 // src/template-string.ts
+init_kolmafia_polyfill();
 var import_kolmafia3 = require("kolmafia");
 
 // src/utils.ts
+init_kolmafia_polyfill();
 function _createForOfIteratorHelper(r, e) {
   var t = typeof Symbol < "u" && r[Symbol.iterator] || r["@@iterator"];
   if (!t) {
@@ -2217,8 +3906,8 @@ function getWandererChance(wanderer) {
     return 0;
   var counters = get("relayCounters"), re = new RegExp("(\\d+):" + end), matches = counters.match(re);
   if (matches && matches.length === 2) {
-    var window = Number.parseInt(matches[1]) - (0, import_kolmafia4.myTurncount)();
-    return 1 / window;
+    var window2 = Number.parseInt(matches[1]) - (0, import_kolmafia4.myTurncount)();
+    return 1 / window2;
   }
   return 0;
 }
@@ -2651,6 +4340,7 @@ function adventureTargetToWeightedMap(target) {
 }
 
 // src/overlappingNames.ts
+init_kolmafia_polyfill();
 var overlappingItemNames = ["spider web", "really sticky spider web", "dictionary", "NG", "Cloaca-Cola", "yo-yo", "top", "ball", "kite", "yo", "red potion", "blue potion", "bowling ball", "adder", "red button", "tennis ball", "pile of sand", "mushroom", "deluxe mushroom", "spoon"], overlappingSkillNames = ["Lightning Bolt", "Shoot", "Thrust-Smack", "Headbutt", "Toss", "Knife in the Dark", "Sing", "Disarm", "LIGHT", "BURN", "Extract", "Meteor Shower", "Snipe", "Bite", "Kick", "Howl", "Cleave", "Boil", "Slice", "Rainbow", "Lightning Bolt"];
 
 // src/combat.ts
@@ -3746,6 +5436,7 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
 }(Macro);
 
 // src/maximize.ts
+init_kolmafia_polyfill();
 var import_kolmafia6 = require("kolmafia");
 var _templateObject56, _templateObject210, _templateObject310, _templateObject410, _templateObject57, _templateObject62, _templateObject72, _templateObject82, _templateObject92, _templateObject102, _templateObject112, _templateObject122, _templateObject132, _templateObject142, _templateObject152, _templateObject162, _templateObject172, _templateObject182, _templateObject192, _templateObject202, _templateObject212, _templateObject222, _templateObject232, _templateObject242, _templateObject252, _templateObject262, _templateObject272, _templateObject282, _templateObject292, _templateObject302, _templateObject312, _templateObject322, _templateObject332, _templateObject342, _templateObject352, _templateObject362, _templateObject372, _templateObject382, _templateObject392, _templateObject402, _templateObject412, _templateObject422, _templateObject432, _templateObject442, _templateObject452, _templateObject462, _templateObject472, _templateObject482, _templateObject492, _templateObject502;
 function _slicedToArray4(r, e) {
@@ -4516,6 +6207,7 @@ function actionSourcesAvailable(actions) {
 }
 
 // src/actions/Banish.ts
+init_kolmafia_polyfill();
 var import_kolmafia9 = require("kolmafia");
 
 // src/resources/2017/AsdonMartin.ts
@@ -4546,6 +6238,7 @@ __export(AsdonMartin_exports, {
     return isFuelItem;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia8 = require("kolmafia");
 var _templateObject58, _templateObject211, _templateObject311, _templateObject411, _templateObject59, _templateObject63, _templateObject73, _templateObject83, _templateObject93, _templateObject103, _templateObject113, _templateObject123, _templateObject133, _templateObject143, _templateObject153, _templateObject163, _templateObject173, _templateObject183;
 function _slicedToArray5(r, e) {
@@ -4891,6 +6584,7 @@ function ensureBanish(constraints) {
 }
 
 // src/actions/FreeKill.ts
+init_kolmafia_polyfill();
 var import_kolmafia10 = require("kolmafia");
 var _templateObject61, _templateObject215, _templateObject315, _templateObject415, _templateObject511, _templateObject65, _templateObject75, _templateObject85, _templateObject95, _templateObject105, _templateObject115, _templateObject125, _templateObject135, _templateObject145, _templateObject155, _templateObject165, _templateObject175, _templateObject185, _templateObject194, _templateObject204, _templateObject216, _templateObject224, _templateObject234, _templateObject244, _templateObject254, _templateObject264, _templateObject274, _templateObject284, _templateObject294, _templateObject304, _templateObject316, _templateObject324, _templateObject334, _templateObject344, _templateObject354, _templateObject364, _templateObject374, _templateObject384, _templateObject394, _templateObject404, _templateObject416, _templateObject424, _templateObject434, _templateObject444, _templateObject453;
 function _taggedTemplateLiteral5(e, t) {
@@ -5039,6 +6733,7 @@ function ensureFreeKill(constraints) {
 }
 
 // src/actions/FreeRun.ts
+init_kolmafia_polyfill();
 var import_kolmafia13 = require("kolmafia");
 
 // src/resources/2009/Bandersnatch.ts
@@ -5066,6 +6761,7 @@ __export(Bandersnatch_exports, {
     return prepareRunaway;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia11 = require("kolmafia");
 var _templateObject66, _templateObject217, _templateObject317;
 function _createForOfIteratorHelper5(r, e) {
@@ -5186,6 +6882,7 @@ __export(StompingBoots_exports, {
     return prepareRunaway2;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia12 = require("kolmafia");
 var _templateObject67;
 function _taggedTemplateLiteral7(e, t) {
@@ -5350,9 +7047,11 @@ function ensureFreeRun(constraints) {
 }
 
 // src/ascend.ts
+init_kolmafia_polyfill();
 var import_kolmafia82 = require("kolmafia");
 
 // src/moonSign.ts
+init_kolmafia_polyfill();
 var MoonSigns = ["Mongoose", "Wallaby", "Vole", "Platypus", "Opossum", "Marmot", "Wombat", "Blender", "Packrat"];
 function signNameToId(moon) {
   return MoonSigns.indexOf(moon) + 1;
@@ -5360,6 +7059,9 @@ function signNameToId(moon) {
 function signIdToName(id) {
   return MoonSigns[id - 1] || "None";
 }
+
+// src/resources/index.ts
+init_kolmafia_polyfill();
 
 // src/resources/2006/CommaChameleon.ts
 var CommaChameleon_exports = {};
@@ -5374,6 +7076,7 @@ __export(CommaChameleon_exports, {
     return transform;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia14 = require("kolmafia");
 var _templateObject70;
 function _taggedTemplateLiteral9(e, t) {
@@ -5418,6 +7121,7 @@ __export(Stickers_exports, {
     return weapon;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia15 = require("kolmafia");
 var _templateObject71, _templateObject220, _templateObject319, _templateObject418, _templateObject513, _templateObject610, _templateObject77, _templateObject87, _templateObject97, _templateObject107, _templateObject117;
 function _taggedTemplateLiteral10(e, t) {
@@ -5496,6 +7200,7 @@ __export(SpookyPutty_exports, {
     return useSpookyPuttySheet;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia16 = require("kolmafia");
 var _templateObject78;
 function _taggedTemplateLiteral11(e, t) {
@@ -5545,6 +7250,7 @@ __export(CrownOfThrones_exports, {
     return valueRider;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia17 = require("kolmafia");
 var _templateObject79, _templateObject221, _templateObject320, _templateObject419, _templateObject514, _templateObject611, _templateObject710, _templateObject88, _templateObject98, _templateObject108, _templateObject118, _templateObject127, _templateObject137, _templateObject147, _templateObject157, _templateObject167, _templateObject177, _templateObject187, _templateObject196, _templateObject206, _templateObject2110, _templateObject226, _templateObject236, _templateObject246, _templateObject255, _templateObject265, _templateObject275, _templateObject285, _templateObject295, _templateObject305, _templateObject3110, _templateObject325, _templateObject335, _templateObject345, _templateObject355, _templateObject365, _templateObject375, _templateObject385, _templateObject395, _templateObject405, _templateObject4110, _templateObject425, _templateObject435, _templateObject445, _templateObject454, _templateObject463, _templateObject473, _templateObject483, _templateObject493, _templateObject503, _templateObject515, _templateObject522, _templateObject532, _templateObject542, _templateObject552, _templateObject562, _templateObject572, _templateObject582, _templateObject592, _templateObject602, _templateObject612, _templateObject622, _templateObject632, _templateObject642, _templateObject652, _templateObject662, _templateObject672, _templateObject682, _templateObject692, _templateObject702, _templateObject712, _templateObject722, _templateObject732, _templateObject742, _templateObject752, _templateObject762, _templateObject772, _templateObject782, _templateObject792, _templateObject80, _templateObject81, _templateObject822, _templateObject832, _templateObject842, _templateObject852, _templateObject862, _templateObject872, _templateObject882, _templateObject89, _templateObject90, _templateObject91, _templateObject922, _templateObject932, _templateObject942, _templateObject952, _templateObject962, _templateObject972, _templateObject982, _templateObject99, _templateObject100, _templateObject101;
 function ownKeys4(e, r) {
@@ -5972,6 +7678,7 @@ __export(LookingGlass_exports, {
     return tryTeaPartyBuff;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia18 = require("kolmafia");
 var _templateObject109, _templateObject227, _templateObject321, _templateObject420, _templateObject516;
 function _taggedTemplateLiteral13(e, t) {
@@ -6043,9 +7750,11 @@ __export(ObtuseAngel_exports, {
     return prepareBadlyRomanticArrow;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia19 = require("kolmafia");
 
 // src/Copier.ts
+init_kolmafia_polyfill();
 function _defineProperties7(e, r) {
   for (var t = 0; t < r.length; t++) {
     var o = r[t];
@@ -6132,6 +7841,7 @@ __export(RainDoh_exports, {
     return useRainDohBlackBox;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia20 = require("kolmafia");
 var _templateObject111;
 function _taggedTemplateLiteral15(e, t) {
@@ -6172,6 +7882,7 @@ __export(ReagnimatedGnome_exports, {
     return have10;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia21 = require("kolmafia");
 var _templateObject119, _templateObject228, _templateObject326, _templateObject421, _templateObject517, _templateObject613;
 function _taggedTemplateLiteral16(e, t) {
@@ -6338,12 +8049,15 @@ __export(Florist_exports, {
     return isFull;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia23 = require("kolmafia");
 
 // src/modifier.ts
+init_kolmafia_polyfill();
 var import_kolmafia22 = require("kolmafia");
 
 // src/modifierTypes.ts
+init_kolmafia_polyfill();
 var stringModifiers = ["Class", "Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Avatar", "Skill", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie", "Plumber Stat", "Recipe", "Evaluated Modifiers", "Last Available"], stringModifiersSet = new Set(stringModifiers), booleanModifiers = ["Softcore Only", "Single Equip", "Always Fumble", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Randomly", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Alters Page Text", "Attacks Can't Miss", "Pirate", "Blind", "Breakable", "Drops Items", "Drops Meat", "Volleyball or Sombrero", "Extra Pickpocket", "Negative Status Resist"], booleanModifiersSet = new Set(booleanModifiers), numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water", "Spleen Drop", "Potion Drop", "Sauce Spell Damage", "Monster Level Percent", "Food Fairy", "Booze Fairy", "Candy Fairy", "Food Fairy Effectiveness", "Booze Fairy Effectiveness", "Candy Fairy Effectiveness", "Damage Aura", "Sporadic Damage Aura", "Thorns", "Sporadic Thorns", "Stomach Capacity", "Liver Capacity", "Spleen Capacity", "Free Rests", "Leaves", "Elf Warfare Effectiveness", "Pirate Warfare Effectiveness", "MPC Drop", "Piece of Twelve Drop", "Combat Item Damage Percent", "Avoid Attack", "Damage vs. Bugbears", "Damage vs. Werewolves", "Damage vs. Zombies", "Damage vs. Ghosts", "Damage vs. Vampires", "Damage vs. Skeletons", "Damage vs. Undead", "RAM", "Lantern", "Raw Combat Rate"], numericModifiersSet = new Set(numericModifiers), multiStringModifiers = ["Effect", "Rollover Effect", "Conditional Skill (Equipped)", "Conditional Skill (Inventory)", "Lantern Element"], multiStringModifiersSet = new Set(multiStringModifiers);
 
 // src/modifier.ts
@@ -6747,6 +8461,7 @@ __export(JungMan_exports, {
     return makeJar;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia24 = require("kolmafia");
 var _templateObject120, _templateObject229, _templateObject327, _templateObject426, _templateObject518, _templateObject614, _templateObject711, _templateObject810;
 function _slicedToArray7(r, e) {
@@ -6858,6 +8573,7 @@ __export(ConspiracyIsland_exports, {
     return turnInQuest;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia25 = require("kolmafia");
 var _templateObject121, _templateObject230, _templateObject328, _templateObject427, _templateObject519, _templateObject615, _templateObject713, _templateObject811, _templateObject910, _templateObject1010, _templateObject1110;
 function _taggedTemplateLiteral18(e, t) {
@@ -6997,6 +8713,7 @@ __export(CrimboShrub_exports, {
     return have13;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia26 = require("kolmafia");
 var _templateObject128, _templateObject231, _templateObject329, _templateObject428;
 function _taggedTemplateLiteral19(e, t) {
@@ -7084,6 +8801,7 @@ __export(DNALab_exports, {
     return tonicsLeft;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia27 = require("kolmafia");
 var _templateObject129, _templateObject237, _templateObject330, _templateObject429, _templateObject520, _templateObject616, _templateObject714, _templateObject812, _templateObject911, _templateObject1011, _templateObject1111, _templateObject1210, _templateObject138, _templateObject148, _templateObject158, _templateObject168, _templateObject178, _templateObject188, _templateObject197, _templateObject207, _templateObject2111, _templateObject2210, _templateObject238, _templateObject247, _templateObject256, _templateObject266, _templateObject276, _templateObject286, _templateObject296, _templateObject306, _templateObject3111, _templateObject3210, _templateObject336, _templateObject346, _templateObject356, _templateObject366, _templateObject376, _templateObject386, _templateObject396, _templateObject406, _templateObject4111, _templateObject4210, _templateObject436, _templateObject446, _templateObject455, _templateObject464, _templateObject474, _templateObject484, _templateObject494, _templateObject504, _templateObject5110, _templateObject523, _templateObject533, _templateObject543, _templateObject553, _templateObject563, _templateObject573, _templateObject583, _templateObject593, _templateObject603, _templateObject617, _templateObject623, _templateObject633, _templateObject643, _templateObject653, _templateObject663, _templateObject673, _templateObject683, _templateObject693, _templateObject703, _templateObject715, _templateObject723, _templateObject733, _templateObject743, _templateObject753, _templateObject763, _templateObject773, _templateObject783, _templateObject793, _templateObject802, _templateObject813, _templateObject823, _templateObject833, _templateObject843, _templateObject853;
 function _slicedToArray8(r, e) {
@@ -7208,6 +8926,7 @@ __export(WinterGarden_exports, {
     return isUnfinishedIceSculptureUsed;
   }
 });
+init_kolmafia_polyfill();
 var _templateObject130, _templateObject239, _templateObject331, _templateObject430;
 function _taggedTemplateLiteral21(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -7245,6 +8964,7 @@ __export(BarrelShrine_exports, {
     return smashParty;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia28 = require("kolmafia");
 var _templateObject131;
 function _taggedTemplateLiteral22(e, t) {
@@ -7310,6 +9030,7 @@ __export(ChateauMantegna_exports, {
     return paintingMonster;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia29 = require("kolmafia");
 function have17() {
   return get("chateauAvailable");
@@ -7377,6 +9098,7 @@ __export(DeckOfEveryCard_exports, {
     return have18;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia30 = require("kolmafia");
 var _templateObject139;
 function _taggedTemplateLiteral23(e, t) {
@@ -7451,6 +9173,7 @@ __export(Dinseylandfill_exports, {
     return turnInQuest2;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia31 = require("kolmafia");
 var _templateObject140, _templateObject240, _templateObject337, _templateObject431, _templateObject521, _templateObject618, _templateObject716, _templateObject814, _templateObject912, _templateObject1012, _templateObject1112, _templateObject1211, _templateObject1310, _templateObject149, _templateObject159, _templateObject169, _templateObject179, _templateObject189, _templateObject198, _templateObject208, _templateObject2112, _templateObject2211, _templateObject2310, _templateObject248, _templateObject257, _templateObject267, _templateObject277;
 function _createForOfIteratorHelper6(r, e) {
@@ -7643,6 +9366,7 @@ __export(MayoClinic_exports, {
     return setMayoMinder;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia32 = require("kolmafia");
 var _templateObject141, _templateObject241, _templateObject338, _templateObject437, _templateObject524, _templateObject619, _templateObject717, _templateObject815, _templateObject913, _templateObject1013;
 function _taggedTemplateLiteral25(e, t) {
@@ -7695,6 +9419,7 @@ __export(GingerBread_exports, {
     return minutesToNoon;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia33 = require("kolmafia");
 var _templateObject150, _templateObject249, _templateObject339, _templateObject438, _templateObject525, _templateObject620, _templateObject718, _templateObject816, _templateObject914;
 function _taggedTemplateLiteral26(e, t) {
@@ -7828,6 +9553,7 @@ __export(SourceTerminal_exports, {
     return prepareDigitize;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia34 = require("kolmafia");
 var _templateObject151, _templateObject250, _templateObject340, _templateObject439, _templateObject526, _templateObject621, _templateObject719, _templateObject817, _templateObject915, _templateObject1014, _templateObject1113, _templateObject1212, _templateObject1311, _templateObject1410, _templateObject1510, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209, _templateObject2113, _templateObject2212, _templateObject2311, _templateObject2410, _templateObject258, _templateObject268, _templateObject278;
 function _createForOfIteratorHelper7(r, e) {
@@ -8036,6 +9762,7 @@ __export(Witchess_exports, {
     return pieces;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia35 = require("kolmafia");
 var _templateObject160;
 function _taggedTemplateLiteral28(e, t) {
@@ -8078,6 +9805,7 @@ __export(Horsery_exports, {
     return have23;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia36 = require("kolmafia");
 function have23() {
   return get("horseryAvailable");
@@ -8104,6 +9832,7 @@ __export(MummingTrunk_exports, {
     return currentCostumes;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia37 = require("kolmafia");
 function _slicedToArray9(r, e) {
   return _arrayWithHoles9(r) || _iterableToArrayLimit9(r, e) || _unsupportedIterableToArray19(r, e) || _nonIterableRest9();
@@ -8176,6 +9905,7 @@ __export(Pantogram_exports, {
     return makePantsFromObject;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia38 = require("kolmafia");
 var _templateObject161, _templateObject251, _templateObject341, _templateObject440, _templateObject527, _templateObject624, _templateObject720, _templateObject818, _templateObject916, _templateObject1015, _templateObject1114, _templateObject1213, _templateObject1312, _templateObject1411, _templateObject1511, _templateObject1611, _templateObject1711, _templateObject1811, _MiddleSacrifice, _templateObject1910, _templateObject2010, _templateObject2114, _templateObject2213, _templateObject2312, _templateObject2411, _templateObject259, _templateObject269, _templateObject279, _templateObject287, _RightSacrifice;
 function _slicedToArray10(r, e) {
@@ -8328,6 +10058,7 @@ __export(Robortender_exports, {
     return minorDrinks;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia39 = require("kolmafia");
 var _templateObject170, _templateObject260, _templateObject347, _templateObject441, _templateObject528, _templateObject625, _templateObject721, _templateObject819, _templateObject917, _templateObject1016, _templateObject1115, _templateObject1214, _templateObject1313, _templateObject1412, _templateObject1512, _templateObject1612, _templateObject1712, _templateObject1812, _templateObject1911, _templateObject2011, _templateObject2115, _templateObject2214, _templateObject2313, _templateObject2412, _templateObject2510, _templateObject2610, _templateObject2710, _templateObject288, _templateObject297, _templateObject307, _templateObject3112, _templateObject3211, _templateObject3310, _templateObject348, _templateObject357, _templateObject367, _templateObject377;
 function _toConsumableArray13(r) {
@@ -8467,6 +10198,7 @@ __export(Spacegate_exports, {
     return updateStatus;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia40 = require("kolmafia");
 var _templateObject171, _templateObject261, _templateObject349, _templateObject447, _templateObject529;
 function _slicedToArray11(r, e) {
@@ -8635,6 +10367,7 @@ __export(TunnelOfLove_exports, {
     return isUsed;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia41 = require("kolmafia");
 var _templateObject180, _templateObject270;
 function _taggedTemplateLiteral32(e, t) {
@@ -8754,6 +10487,7 @@ __export(BoxingDaycare_exports, {
     return visitSpa;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia42 = require("kolmafia");
 function have28() {
   return get("daycareOpen");
@@ -8859,6 +10593,7 @@ __export(LatteLoversMembersMug_exports, {
     return sniffedMonster;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia44 = require("kolmafia");
 
 // src/counter.ts
@@ -8874,6 +10609,7 @@ __export(counter_exports, {
     return set;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia43 = require("kolmafia");
 function get3(counter) {
   var value = (0, import_kolmafia43.getCounter)(counter);
@@ -9294,6 +11030,7 @@ __export(SongBoom_exports, {
     return songChangesLeft;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia45 = require("kolmafia");
 var _templateObject190;
 function _taggedTemplateLiteral34(e, t) {
@@ -9362,6 +11099,7 @@ __export(BeachComb_exports, {
     return tryHead;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia46 = require("kolmafia");
 var _templateObject191, _templateObject280, _templateObject351, _templateObject450, _templateObject531, _templateObject627, _templateObject725, _templateObject821, _templateObject919, _templateObject1018, _templateObject1117, _templateObject1216, _templateObject1315, _templateObject1414, _templateObject1514, _templateObject1614, _templateObject1714, _templateObject1814, _templateObject1913, _templateObject2013, _templateObject2117;
 function _taggedTemplateLiteral35(e, t) {
@@ -9446,6 +11184,7 @@ __export(CampAway_exports, {
     return have32;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia47 = require("kolmafia");
 var _templateObject200;
 function _taggedTemplateLiteral36(e, t) {
@@ -9501,6 +11240,7 @@ __export(PocketProfessor_exports, {
     return totalAvailableLectures;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia48 = require("kolmafia");
 var _templateObject201, _templateObject281, _templateObject359;
 function _taggedTemplateLiteral37(e, t) {
@@ -9547,6 +11287,7 @@ __export(Snapper_exports, {
     return trackPhylum;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia49 = require("kolmafia");
 function _slicedToArray12(r, e) {
   return _arrayWithHoles12(r) || _iterableToArrayLimit12(r, e) || _unsupportedIterableToArray23(r, e) || _nonIterableRest12();
@@ -9640,6 +11381,7 @@ __export(Cartography_exports, {
     return mapMonster;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia50 = require("kolmafia");
 var _templateObject290, _templateObject291, _templateObject360;
 function _taggedTemplateLiteral38(e, t) {
@@ -9755,6 +11497,7 @@ __export(Guzzlr_exports, {
     return turnsLeftOnQuest;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia51 = require("kolmafia");
 var _templateObject299, _templateObject2100, _templateObject361, _templateObject451, _templateObject535, _templateObject628, _templateObject726, _templateObject824, _templateObject920, _templateObject1019, _templateObject1118, _templateObject1217, _templateObject1316;
 function _slicedToArray13(r, e) {
@@ -9950,6 +11693,7 @@ __export(RetroCape_exports, {
     return tuneToSkill;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia52 = require("kolmafia");
 var _templateObject300, _templateObject2101, _templateObject369, _templateObject457, _templateObject536, _templateObject629, _templateObject727;
 function _toConsumableArray16(r) {
@@ -10095,6 +11839,7 @@ __export(CrystalBall_exports, {
     return ponder;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia53 = require("kolmafia");
 function _slicedToArray14(r, e) {
   return _arrayWithHoles14(r) || _iterableToArrayLimit14(r, e) || _unsupportedIterableToArray26(r, e) || _nonIterableRest14();
@@ -10180,6 +11925,7 @@ __export(DaylightShavings_exports, {
     return nextBuff;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia54 = require("kolmafia");
 var _templateObject301, _templateObject2102;
 function _taggedTemplateLiteral41(e, t) {
@@ -10268,6 +12014,7 @@ __export(AutumnAton_exports, {
     return zoneItems;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia55 = require("kolmafia");
 var _templateObject309, _templateObject2103, _templateObject370, _templateObject458, _templateObject537, _templateObject630, _templateObject728, _templateObject825, _templateObject921;
 function _taggedTemplateLiteral42(e, t) {
@@ -10426,6 +12173,7 @@ __export(CombatLoversLocket_exports, {
     return unlockedLocketMonsters;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia56 = require("kolmafia");
 var _templateObject371;
 function _slicedToArray15(r, e) {
@@ -10556,6 +12304,7 @@ __export(DesignerSweatpants_exports, {
     return useSkill3;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia57 = require("kolmafia");
 var _templateObject379, _templateObject2104, _templateObject380, _templateObject459, _templateObject538, _templateObject631, _templateObject729, _templateObject826, _templateObject923;
 function _taggedTemplateLiteral44(e, t) {
@@ -10630,6 +12379,7 @@ __export(GreyGoose_exports, {
     return have43;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia58 = require("kolmafia");
 var _templateObject381, _templateObject2105, _templateObject388, _templateObject460;
 function _taggedTemplateLiteral45(e, t) {
@@ -10700,6 +12450,7 @@ __export(JuneCleaver_exports, {
     return skipsRemaining;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia59 = require("kolmafia");
 var cleaver = (0, import_kolmafia59.toItem)("June cleaver");
 function have44() {
@@ -10768,6 +12519,7 @@ __export(TrainSet_exports, {
     return setConfiguration;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia60 = require("kolmafia");
 var _templateObject389;
 function _taggedTemplateLiteral46(e, t) {
@@ -10849,6 +12601,7 @@ __export(Stillsuit_exports, {
     return nextDistillateModifiers;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia61 = require("kolmafia");
 var _templateObject390;
 function ownKeys7(e, r) {
@@ -11002,6 +12755,7 @@ __export(AugustScepter_exports, {
     return todaysSkill;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia62 = require("kolmafia");
 var _templateObject391, _templateObject2106;
 function _taggedTemplateLiteral48(e, t) {
@@ -11046,6 +12800,7 @@ __export(BurningLeaves_exports, {
     return numberOfLeaves;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia63 = require("kolmafia");
 var _templateObject398, _templateObject2107, _templateObject399, _templateObject461, _templateObject539, _templateObject634, _templateObject730, _templateObject827, _templateObject924, _templateObject1020, _templateObject1119, _templateObject1218, _templateObject1317, _templateObject1415, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815;
 function _taggedTemplateLiteral49(e, t) {
@@ -11091,6 +12846,7 @@ __export(CinchoDeMayo_exports, {
     return totalAvailableCinch;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia64 = require("kolmafia");
 var _templateObject400, _templateObject2108, _templateObject3100, _templateObject466, _templateObject540, _templateObject635, _templateObject731;
 function _taggedTemplateLiteral50(e, t) {
@@ -11155,6 +12911,7 @@ __export(ClosedCircuitPayphone_exports, {
     return submitQuest;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia65 = require("kolmafia");
 var _templateObject401, _templateObject2109, _templateObject3101, _templateObject467, _templateObject541, _templateObject636, _templateObject734, _templateObject828, _templateObject925, _templateObject1021, _templateObject1120, _templateObject1219, _templateObject1318, _templateObject1416;
 function _taggedTemplateLiteral51(e, t) {
@@ -11254,6 +13011,7 @@ __export(CursedMonkeyPaw_exports, {
     return wishes;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia66 = require("kolmafia");
 var _templateObject408;
 function _taggedTemplateLiteral52(e, t) {
@@ -11390,6 +13148,7 @@ __export(AprilingBandHelmet_exports, {
     return play;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia67 = require("kolmafia");
 var _templateObject409;
 function _slicedToArray16(r, e) {
@@ -11510,6 +13269,7 @@ __export(ChestMimic_exports, {
     return receive;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia68 = require("kolmafia");
 var _templateObject468, _templateObject2118, _templateObject3102, _templateObject469;
 function _taggedTemplateLiteral54(e, t) {
@@ -11629,6 +13389,7 @@ __export(MayamCalendar_exports, {
     return toCombinationString;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia69 = require("kolmafia");
 var _templateObject470, _templateObject2119, _templateObject3103, _templateObject471, _templateObject544, _templateObject637, _templateObject735, _templateObject829, _templateObject926, _templateObject1022, _templateObject1121, _templateObject1220;
 function _slicedToArray17(r, e) {
@@ -11765,6 +13526,7 @@ __export(TearawayPants_exports, {
     return unlockGuild;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia70 = require("kolmafia");
 var _templateObject476, _templateObject2120, _templateObject3104;
 function _taggedTemplateLiteral56(e, t) {
@@ -11816,6 +13578,7 @@ __export(BatWings_exports, {
     return swoopsRemaining;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia71 = require("kolmafia");
 var _templateObject477, _templateObject2121, _templateObject3105, _templateObject478, _templateObject545, _templateObject638;
 function _taggedTemplateLiteral57(e, t) {
@@ -11868,6 +13631,7 @@ __export(EverfullDarts_exports, {
     return perksMaxed;
   }
 });
+init_kolmafia_polyfill();
 var _templateObject479;
 function _taggedTemplateLiteral58(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -11937,6 +13701,7 @@ __export(TakerSpace_exports, {
     return recipeFor;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia72 = require("kolmafia");
 var _templateObject480, _templateObject2122, _templateObject3106, _templateObject481, _templateObject546, _templateObject639, _templateObject736, _templateObject830, _templateObject927, _templateObject1023, _templateObject1122, _templateObject1221, _templateObject1319, _templateObject1417, _templateObject1516, _templateObject1616, _templateObject1716, _templateObject1816;
 function _slicedToArray18(r, e) {
@@ -12054,6 +13819,7 @@ __export(CrepeParachute_exports, {
     return have59;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia73 = require("kolmafia");
 var _templateObject486, _templateObject2123, _templateObject3107;
 function _taggedTemplateLiteral60(e, t) {
@@ -12102,6 +13868,7 @@ __export(ToyCupidBow_exports, {
     return turnsLeft2;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia74 = require("kolmafia");
 var _templateObject487;
 function _taggedTemplateLiteral61(e, t) {
@@ -12172,6 +13939,7 @@ __export(Leprecondo_exports, {
     return setFurniture;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia75 = require("kolmafia");
 var _templateObject488, _templateObject2124, _templateObject3108, _templateObject489, _templateObject547, _templateObject640, _templateObject737, _templateObject831, _templateObject928, _templateObject1024, _templateObject1123, _templateObject1222, _templateObject1320, _templateObject1418, _templateObject1517, _templateObject1617, _templateObject1717, _templateObject1817, _templateObject1914, _templateObject2014, _templateObject2125, _templateObject2216, _templateObject2315, _templateObject2414, _templateObject2512, _templateObject2612, _templateObject2712, _templateObject2810, _templateObject2910, _templateObject3010, _templateObject3114, _templateObject3213, _templateObject3312, _templateObject3411, _templateObject3510, _templateObject3610, _templateObject3710, _templateObject3810, _templateObject3910, _templateObject4010, _templateObject4113, _templateObject4212, _templateObject4311, _templateObject4410;
 function ownKeys8(e, r) {
@@ -12447,6 +14215,7 @@ __export(Raffle_exports, {
     return getRafflePrizes;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia76 = require("kolmafia");
 function accessible() {
   return (0, import_kolmafia76.canAdventure)(import_kolmafia76.Location.get("South of the Border")) && (0, import_kolmafia76.myPath)() !== import_kolmafia76.Path.get("Zombie Slayer");
@@ -12481,6 +14250,7 @@ __export(CyberRealm_exports, {
     return zone3Rewards;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia77 = require("kolmafia");
 var _templateObject490, _templateObject2126, _templateObject3109, _templateObject491, _templateObject548, _templateObject641, _templateObject738, _templateObject834;
 function _taggedTemplateLiteral63(e, t) {
@@ -12532,6 +14302,7 @@ __export(PeridotOfPeril_exports, {
     return zonesToday;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia78 = require("kolmafia");
 var _templateObject496;
 function _taggedTemplateLiteral64(e, t) {
@@ -12585,6 +14356,7 @@ __export(PrismaticBeret_exports, {
     return have64;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia79 = require("kolmafia");
 var _templateObject497, _templateObject2127, _templateObject3115, _templateObject498, _templateObject549, _templateObject644, _templateObject739, _templateObject835, _templateObject929, _templateObject1025, _templateObject1124, _templateObject1223, _templateObject1321, _templateObject1419, _templateObject1518, _templateObject1618, _templateObject1718, _templateObject1818, _templateObject1915, _templateObject2015, _templateObject2128, _templateObject2217, _templateObject2316, _templateObject2415, _templateObject2513, _templateObject2613, _templateObject2713, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3116;
 function _createForOfIteratorHelper8(r, e) {
@@ -12869,6 +14641,7 @@ __export(BloodCubicZirconia_exports, {
     return timesCast;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia80 = require("kolmafia");
 var _templateObject499, _templateObject2129, _templateObject3117, _templateObject4100, _templateObject550, _templateObject645, _templateObject740, _templateObject836, _templateObject930, _templateObject1026, _templateObject1125, _templateObject1224, _templateObject1322, _templateObject1420, _templateObject1519, _templateObject1619, _templateObject1719, _templateObject1819, _templateObject1916, _templateObject2016, _templateObject2130, _templateObject2218, _templateObject2317, _templateObject2416, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2812;
 function _taggedTemplateLiteral66(e, t) {
@@ -12931,6 +14704,7 @@ __export(SkeletonOfCrimboPast_exports, {
     return have66;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia81 = require("kolmafia");
 var _templateObject500, _templateObject2131, _templateObject3118, _templateObject4101, _templateObject551, _templateObject646, _templateObject741, _templateObject837, _templateObject931, _templateObject1027, _templateObject1126, _templateObject1225, _templateObject1323, _templateObject1421, _templateObject1520, _templateObject1620;
 function _slicedToArray20(r, e) {
@@ -13004,6 +14778,7 @@ function expectedBones(target) {
 var CANE_BONUS = 0.1;
 
 // src/resources/putty-likes.ts
+init_kolmafia_polyfill();
 function getTotalPuttyLikeCopiesMade() {
   return getSpookyPuttySheetCopiesMade() + getRainDohBlackBoxCopiesMade();
 }
@@ -13034,7 +14809,11 @@ var SpookyPuttySheet = new Copier(function() {
   return useSpookyPuttySheet();
 });
 
+// src/resources/LibramSummon.ts
+init_kolmafia_polyfill();
+
 // src/resources/2007/CandyHearts.ts
+init_kolmafia_polyfill();
 var _templateObject501, _templateObject2132, _templateObject3119, _templateObject4102, _templateObject554, _templateObject647, _templateObject744;
 function _taggedTemplateLiteral68(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13048,6 +14827,7 @@ function expected() {
 }
 
 // src/resources/2008/DivineFavors.ts
+init_kolmafia_polyfill();
 var _templateObject506, _templateObject2133, _templateObject3120, _templateObject4103, _templateObject555, _templateObject648, _templateObject745;
 function _taggedTemplateLiteral69(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13062,6 +14842,7 @@ function expected2() {
 }
 
 // src/resources/2009/LoveSongs.ts
+init_kolmafia_polyfill();
 var _templateObject507, _templateObject2134, _templateObject3121, _templateObject4104, _templateObject556, _templateObject649, _templateObject746;
 function _taggedTemplateLiteral70(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13075,6 +14856,7 @@ function expected3() {
 }
 
 // src/resources/2010/Brickos.ts
+init_kolmafia_polyfill();
 var _templateObject508, _templateObject2135, _templateObject3122;
 function _taggedTemplateLiteral71(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13089,6 +14871,7 @@ function expected4() {
 }
 
 // src/resources/2011/Gygaxian.ts
+init_kolmafia_polyfill();
 var _templateObject509, _templateObject2136, _templateObject3123, _templateObject4105, _templateObject557, _templateObject650, _templateObject747;
 function _taggedTemplateLiteral72(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13102,6 +14885,7 @@ function expected5() {
 }
 
 // src/resources/2012/Resolutions.ts
+init_kolmafia_polyfill();
 var _templateObject558, _templateObject2137, _templateObject3124, _templateObject4106, _templateObject559, _templateObject651, _templateObject748, _templateObject838, _templateObject933, _templateObject1028;
 function _taggedTemplateLiteral73(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13115,6 +14899,7 @@ function expected6() {
 }
 
 // src/resources/2013/PulledTaffy.ts
+init_kolmafia_polyfill();
 var _templateObject560, _templateObject2138, _templateObject3125, _templateObject4107, _templateObject561, _templateObject654, _templateObject749, _templateObject839;
 function _taggedTemplateLiteral74(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
@@ -13570,7 +15355,18 @@ function prepareAscension() {
   }
 }
 
+// src/Clan.ts
+init_kolmafia_polyfill();
+var import_atob = __toESM(require_atob(), 1);
+
+// node_modules/entities/dist/esm/index.js
+init_kolmafia_polyfill();
+
+// node_modules/entities/dist/esm/decode.js
+init_kolmafia_polyfill();
+
 // node_modules/entities/dist/esm/decode-codepoint.js
+init_kolmafia_polyfill();
 var _a, decodeMap = /* @__PURE__ */ new Map([
   [0, 65533],
   // C1 Unicode control character reference replacements
@@ -13613,7 +15409,11 @@ function replaceCodePoint(codePoint) {
   return codePoint >= 55296 && codePoint <= 57343 || codePoint > 1114111 ? 65533 : (_a2 = decodeMap.get(codePoint)) !== null && _a2 !== void 0 ? _a2 : codePoint;
 }
 
+// node_modules/entities/dist/esm/generated/decode-data-html.js
+init_kolmafia_polyfill();
+
 // node_modules/entities/dist/esm/internal/decode-shared.js
+init_kolmafia_polyfill();
 function decodeBase64(input) {
   for (var binary = (
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -13642,7 +15442,11 @@ function decodeBase64(input) {
 // node_modules/entities/dist/esm/generated/decode-data-html.js
 var htmlDecodeTree = /* @__PURE__ */ decodeBase64("QR08ALkAAgH6AYsDNQR2BO0EPgXZBQEGLAbdBxMISQrvCmQLfQurDKQNLw4fD4YPpA+6D/IPAAAAAAAAAAAAAAAAKhBMEY8TmxUWF2EYLBkxGuAa3RsJHDscWR8YIC8jSCSIJcMl6ie3Ku8rEC0CLjoupS7kLgAIRU1hYmNmZ2xtbm9wcnN0dVQAWgBeAGUAaQBzAHcAfgCBAIQAhwCSAJoAoACsALMAbABpAGcAO4DGAMZAUAA7gCYAJkBjAHUAdABlADuAwQDBQHIiZXZlAAJhAAFpeW0AcgByAGMAO4DCAMJAEGRyAADgNdgE3XIAYQB2AGUAO4DAAMBA8CFoYZFj4SFjcgBhZAAAoFMqAAFncIsAjgBvAG4ABGFmAADgNdg43fAlbHlGdW5jdGlvbgCgYSBpAG4AZwA7gMUAxUAAAWNzpACoAHIAAOA12Jzc6SFnbgCgVCJpAGwAZABlADuAwwDDQG0AbAA7gMQAxEAABGFjZWZvcnN1xQDYANoA7QDxAPYA+QD8AAABY3LJAM8AayNzbGFzaAAAoBYidgHTANUAAKDnKmUAZAAAoAYjeQARZIABY3J0AOAA5QDrAGEidXNlAACgNSLuI291bGxpcwCgLCFhAJJjcgAA4DXYBd1wAGYAAOA12Dnd5SF2ZdhiYwDyAOoAbSJwZXEAAKBOIgAHSE9hY2RlZmhpbG9yc3UXARoBHwE6AVIBVQFiAWQBZgGCAakB6QHtAfIBYwB5ACdkUABZADuAqQCpQIABY3B5ACUBKAE1AfUhdGUGYWmg0iJ0KGFsRGlmZmVyZW50aWFsRAAAoEUhbCJleXMAAKAtIQACYWVpb0EBRAFKAU0B8iFvbgxhZABpAGwAO4DHAMdAcgBjAAhhbiJpbnQAAKAwIm8AdAAKYQABZG5ZAV0BaSJsbGEAuGB0I2VyRG90ALdg8gA5AWkAp2NyImNsZQAAAkRNUFRwAXQBeQF9AW8AdAAAoJkiaSJudXMAAKCWIuwhdXMAoJUiaSJtZXMAAKCXIm8AAAFjc4cBlAFrKndpc2VDb250b3VySW50ZWdyYWwAAKAyImUjQ3VybHkAAAFEUZwBpAFvJXVibGVRdW90ZQAAoB0gdSJvdGUAAKAZIAACbG5wdbABtgHNAdgBbwBuAGWgNyIAoHQqgAFnaXQAvAHBAcUB8iJ1ZW50AKBhIm4AdAAAoC8i7yV1ckludGVncmFsAKAuIgABZnLRAdMBAKACIe8iZHVjdACgECJuLnRlckNsb2Nrd2lzZUNvbnRvdXJJbnRlZ3JhbAAAoDMi7yFzcwCgLypjAHIAAOA12J7ccABDoNMiYQBwAACgTSKABURKU1phY2VmaW9zAAsCEgIVAhgCGwIsAjQCOQI9AnMCfwNvoEUh9CJyYWhkAKARKWMAeQACZGMAeQAFZGMAeQAPZIABZ3JzACECJQIoAuchZXIAoCEgcgAAoKEhaAB2AACg5CoAAWF5MAIzAvIhb24OYRRkbAB0oAciYQCUY3IAAOA12AfdAAFhZkECawIAAWNtRQJnAvIjaXRpY2FsAAJBREdUUAJUAl8CYwJjInV0ZQC0YG8AdAFZAloC2WJiJGxlQWN1dGUA3WJyImF2ZQBgYGkibGRlANxi7yFuZACgxCJmJWVyZW50aWFsRAAAoEYhcAR9AgAAAAAAAIECjgIAABoDZgAA4DXYO91EoagAhQKJAm8AdAAAoNwgcSJ1YWwAAKBQIuIhbGUAA0NETFJVVpkCqAK1Au8C/wIRA28AbgB0AG8AdQByAEkAbgB0AGUAZwByAGEA7ADEAW8AdAKvAgAAAACwAqhgbiNBcnJvdwAAoNMhAAFlb7kC0AJmAHQAgAFBUlQAwQLGAs0CciJyb3cAAKDQIekkZ2h0QXJyb3cAoNQhZQDlACsCbgBnAAABTFLWAugC5SFmdAABQVLcAuECciJyb3cAAKD4J+kkZ2h0QXJyb3cAoPon6SRnaHRBcnJvdwCg+SdpImdodAAAAUFU9gL7AnIicm93AACg0iFlAGUAAKCoInAAQQIGAwAAAAALA3Iicm93AACg0SFvJHduQXJyb3cAAKDVIWUlcnRpY2FsQmFyAACgJSJuAAADQUJMUlRhJAM2AzoDWgNxA3oDciJyb3cAAKGTIUJVLAMwA2EAcgAAoBMpcCNBcnJvdwAAoPUhciJldmUAEWPlIWZ00gJDAwAASwMAAFIDaSVnaHRWZWN0b3IAAKBQKWUkZVZlY3RvcgAAoF4p5SJjdG9yQqC9IWEAcgAAoFYpaSJnaHQA1AFiAwAAaQNlJGVWZWN0b3IAAKBfKeUiY3RvckKgwSFhAHIAAKBXKWUAZQBBoKQiciJyb3cAAKCnIXIAcgBvAPcAtAIAAWN0gwOHA3IA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YwAAoN8i4SFycnCgtiEAoD0pgKIqImJjZG9zACsVMBU6FT4VQRVyImNhcAAAoEgqAAFhdTQVNxVwAACgRipwAACgSipvAHQAAKCNInIAAKBFKgDgKiIA/gACYWxydksVURVuFXMVcgByAG2gtyEAoDwpeQCAAWV2dwBYFWUVaRVxAHACXxUAAAAAYxVyAGUA4wAXFXUA4wAZFWUAZQAAoM4iZSJkZ2UAAKDPImUAbgA7gKQApEBlI2Fycm93AAABbHJ7FX8V5SFmdACgtiFpImdodAAAoLchZQDkAG0VAAFjaYsVkRVvAG4AaQBuAPQAkwFuAHQAAKAxImwiY3R5AACgLSOACUFIYWJjZGVmaGlqbG9yc3R1d3oAuBW7Fb8V1RXgFegV+RUKFhUWHxZUFlcWZRbFFtsW7xb7FgUXChdyAPIAtAJhAHIAAKBlKQACZ2xyc8YVyhXOFdAV5yFlcgCgICDlIXRoAKA4IfIA9QxoAHagECAAoKMiawHZFd4VYSJyb3cAAKAPKWEA4wBfAgABYXnkFecV8iFvbg9hNGQAoUYhYW/tFfQVAAFnciEC8RVyAACgyiF0InNlcQAAoHcqgAFnbG0A/xUCFgUWO4CwALBAdABhALRjcCJ0eXYAAKCxKQABaXIOFhIW8yFodACgfykA4DXYId1hAHIAAAFschsWHRYAoMMhAKDCIYACYWVnc3YAKBauAjYWOhY+Fm0AAKHEIm9zLhY0Fm4AZABzoMQi9SFpdACgZiZhIm1tYQDdY2kAbgAAoPIiAKH3AGlvQxZRFmQAZQAAgfcAO29KFksW90BuI3RpbWVzAACgxyJuAPgAUBZjAHkAUmRjAG8CXhYAAAAAYhZyAG4AAKAeI28AcAAAoA0jgAJscHR1dwBuFnEWdRaSFp4W7CFhciRgZgAA4DXYVd0AotkCZW1wc30WhBaJFo0WcQBkoFAibwB0AACgUSJpIm51cwAAoDgi7CF1cwCgFCLxInVhcmUAoKEiYgBsAGUAYgBhAHIAdwBlAGQAZwDlANcAbgCAAWFkaAClFqoWtBZyAHIAbwD3APUMbwB3AG4AYQByAHIAbwB3APMA8xVhI3Jwb29uAAABbHK8FsAWZQBmAPQAHBZpAGcAaAD0AB4WYgHJFs8WawBhAHIAbwD3AJILbwLUFgAAAADYFnIAbgAAoB8jbwBwAACgDCOAAWNvdADhFukW7BYAAXJ55RboFgDgNdi53FVkbAAAoPYp8iFvaxFhAAFkcvMW9xZvAHQAAKDxImkA5qC/JVsSAAFhaP8WAhdyAPIANQNhAPIA1wvhIm5nbGUAoKYpAAFjaQ4XEBd5AF9k5yJyYXJyAKD/JwAJRGFjZGVmZ2xtbm9wcXJzdHV4MRc4F0YXWxcyBF4XaRd5F40XrBe0F78X2RcVGCEYLRg1GEAYAAFEbzUXgRZvAPQA+BUAAWNzPBdCF3UAdABlADuA6QDpQPQhZXIAoG4qAAJhaW95TRdQF1YXWhfyIW9uG2FyAGOgViI7gOoA6kDsIW9uAKBVIk1kbwB0ABdhAAFEcmIXZhdvAHQAAKBSIgDgNdgi3XKhmipuF3QXYQB2AGUAO4DoAOhAZKCWKm8AdAAAoJgqgKGZKmlscwCAF4UXhxfuInRlcnMAoOcjAKATIWSglSpvAHQAAKCXKoABYXBzAJMXlheiF2MAcgATYXQAeQBzogUinxcAAAAAoRdlAHQAAKAFInAAMaADIDMBqRerFwCgBCAAoAUgAAFnc7AXsRdLYXAAAKACIAABZ3C4F7sXbwBuABlhZgAA4DXYVt2AAWFscwDFF8sXzxdyAHOg1SJsAACg4yl1AHMAAKBxKmkAAKG1A2x21RfYF28AbgC1Y/VjAAJjc3V24BfoF/0XEBgAAWlv5BdWF3IAYwAAoFYiaQLuFwAAAADwF+0ADQThIW50AAFnbPUX+Rd0AHIAAKCWKuUhc3MAoJUqgAFhZWkAAxgGGAoYbABzAD1gcwB0AACgXyJ2AESgYSJEAACgeCrwImFyc2wAoOUpAAFEYRkYHRhvAHQAAKBTInIAcgAAoHEpgAFjZGkAJxgqGO0XcgAAoC8hbwD0AIwCAAFhaDEYMhi3YzuA8ADwQAABbXI5GD0YbAA7gOsA60BvAACgrCCAAWNpcABGGEgYSxhsACFgcwD0ACwEAAFlb08YVxhjAHQAYQB0AGkAbwDuABoEbgBlAG4AdABpAGEAbADlADME4Ql1GAAAgRgAAIMYiBgAAAAAoRilGAAAqhgAALsYvhjRGAAA1xgnGWwAbABpAG4AZwBkAG8AdABzAGUA8QBlF3kARGRtImFsZQAAoEAmgAFpbHIAjRiRGJ0Y7CFpZwCgA/tpApcYAAAAAJoYZwAAoAD7aQBnAACgBPsA4DXYI93sIWlnAKAB++whaWcA4GYAagCAAWFsdACvGLIYthh0AACgbSZpAGcAAKAC+24AcwAAoLElbwBmAJJh8AHCGAAAxhhmAADgNdhX3QABYWvJGMwYbADsAGsEdqDUIgCg2SphI3J0aW50AACgDSoAAWFv2hgiGQABY3PeGB8ZsQPnGP0YBRkSGRUZAAAdGbID7xjyGPQY9xj5GAAA+xg7gL0AvUAAoFMhO4C8ALxAAKBVIQCgWSEAoFshswEBGQAAAxkAoFQhAKBWIbQCCxkOGQAAAAAQGTuAvgC+QACgVyEAoFwhNQAAoFghtgEZGQAAGxkAoFohAKBdITgAAKBeIWwAAKBEIHcAbgAAoCIjYwByAADgNdi73IAIRWFiY2RlZmdpamxub3JzdHYARhlKGVoZXhlmGWkZkhmWGZkZnRmgGa0ZxhnLGc8Z4BkjGmygZyIAoIwqgAFjbXAAUBlTGVgZ9SF0ZfVhbQBhAOSgswM6FgCghipyImV2ZQAfYQABaXliGWUZcgBjAB1hM2RvAHQAIWGAoWUibHFzAMYEcBl6GfGhZSLOBAAAdhlsAGEAbgD0AN8EgKF+KmNkbACBGYQZjBljAACgqSpvAHQAb6CAKmyggioAoIQqZeDbIgD+cwAAoJQqcgAA4DXYJN3noGsirATtIWVsAKA3IWMAeQBTZIChdyJFYWoApxmpGasZAKCSKgCgpSoAoKQqAAJFYWVztBm2Gb0ZwhkAoGkicABwoIoq8iFveACgiipxoIgq8aCIKrUZaQBtAACg5yJwAGYAAOA12FjdYQB2AOUAYwIAAWNp0xnWGXIAAKAKIW0AAKFzImVs3BneGQCgjioAoJAqAIM+ADtjZGxxco0E6xn0GfgZ/BkBGgABY2nvGfEZAKCnKnIAAKB6Km8AdAAAoNci0CFhcgCglSl1ImVzdAAAoHwqgAJhZGVscwAKGvQZFhrVBCAa8AEPGgAAFBpwAHIAbwD4AFkZcgAAoHgpcQAAAWxxxAQbGmwAZQBzAPMASRlpAO0A5AQAAWVuJxouGnIjdG5lcXEAAOBpIgD+xQAsGgAFQWFiY2Vma29zeUAaQxpmGmoabRqDGocalhrCGtMacgDyAMwCAAJpbG1yShpOGlAaVBpyAHMA8ABxD2YAvWBpAGwA9AASBQABZHJYGlsaYwB5AEpkAKGUIWN3YBpkGmkAcgAAoEgpAKCtIWEAcgAAoA8h6SFyYyVhgAFhbHIAcxp7Gn8a8iF0c3WgZSZpAHQAAKBlJuwhaXAAoCYg4yFvbgCguSJyAADgNdgl3XMAAAFld4wakRphInJvdwAAoCUpYSJyb3cAAKAmKYACYW1vcHIAnxqjGqcauhq+GnIAcgAAoP8h9CFodACgOyJrAAABbHKsGrMaZSRmdGFycm93AACgqSHpJGdodGFycm93AKCqIWYAAOA12Fnd4iFhcgCgFSCAAWNsdADIGswa0BpyAADgNdi93GEAcwDoAGka8iFvaydhAAFicNca2xr1IWxsAKBDIOghZW4AoBAg4Qr2GgAA/RoAAAgbExsaGwAAIRs7GwAAAAA+G2IbmRuVG6sbAACyG80b0htjAHUAdABlADuA7QDtQAChYyBpeQEbBhtyAGMAO4DuAO5AOGQAAWN4CxsNG3kANWRjAGwAO4ChAKFAAAFmcssCFhsA4DXYJt1yAGEAdgBlADuA7ADsQIChSCFpbm8AJxsyGzYbAAFpbisbLxtuAHQAAKAMKnQAAKAtIuYhaW4AoNwpdABhAACgKSHsIWlnM2GAAWFvcABDG1sbXhuAAWNndABJG0sbWRtyACthgAFlbHAAcQVRG1UbaQBuAOUAyAVhAHIA9AByBWgAMWFmAACgtyJlAGQAtWEAoggiY2ZvdGkbbRt1G3kb4SFyZQCgBSFpAG4AdKAeImkAZQAAoN0pZABvAPQAWxsAoisiY2VscIEbhRuPG5QbYQBsAACguiIAAWdyiRuNG2UAcgDzACMQ4wCCG2EicmhrAACgFyryIW9kAKA8KgACY2dwdJ8boRukG6gbeQBRZG8AbgAvYWYAAOA12FrdYQC5Y3UAZQBzAHQAO4C/AL9AAAFjabUbuRtyAADgNdi+3G4AAKIIIkVkc3bCG8QbyBvQAwCg+SJvAHQAAKD1Inag9CIAoPMiaaBiIOwhZGUpYesB1hsAANkbYwB5AFZkbAA7gO8A70AAA2NmbW9zdeYb7hvyG/Ub+hsFHAABaXnqG+0bcgBjADVhOWRyAADgNdgn3eEhdGg3YnAAZgAA4DXYW93jAf8bAAADHHIAAOA12L/c8iFjeVhk6yFjeVRkAARhY2ZnaGpvcxUcGhwiHCYcKhwtHDAcNRzwIXBhdqC6A/BjAAFleR4cIRzkIWls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ZmdobG1vcHJzdHV3CiwNLBEsHSwnLDEsQCxLLFIsYix6LIQsjyzLLOgs7Sz/LAotcgDyAAkDYQByAACgYykAAWNyFSwbLHUAdABlADuA+gD6QPIACQ1yAOMBIywAACUseQBeZHYAZQBtYQABaXkrLDAscgBjADuA+wD7QENkgAFhYmgANyw6LD0scgDyANEO7CFhY3FhYQDyAOAOAAFpckQsSCzzIWh0AKB+KQDgNdgy3XIAYQB2AGUAO4D5APlAYQFWLF8scgAAAWxyWixcLACgvyEAoL4hbABrAACggCUAAWN0Zix2LG8CbCwAAAAAcyxyAG4AZaAcI3IAAKAcI28AcAAAoA8jcgBpAACg+CUAAWFsfiyBLGMAcgBrYTuAqACoQAABZ3CILIssbwBuAHNhZgAA4DXYZt0AA2FkaGxzdZksniynLLgsuyzFLHIAcgBvAPcACQ1vAHcAbgBhAHIAcgBvAPcA2A5hI3Jwb29uAAABbHKvLLMsZQBmAPQAWyxpAGcAaAD0AF0sdQDzAKYOaQAAocUDaGzBLMIs0mNvAG4AxWPwI2Fycm93cwCgyCGAAWNpdADRLOEs5CxvAtcsAAAAAN4scgBuAGWgHSNyAACgHSNvAHAAAKAOI24AZwBvYXIAaQAAoPklYwByAADgNdjK3IABZGlyAPMs9yz6LG8AdAAAoPAi7CFkZWlhaQBmoLUlAKC0JQABYW0DLQYtcgDyAMosbAA7gPwA/EDhIm5nbGUAoKcpgAdBQkRhY2RlZmxub3Byc3oAJy0qLTAtNC2bLZ0toS2/LcMtxy3TLdgt3C3gLfwtcgDyABADYQByAHag6CoAoOkqYQBzAOgA/gIAAW5yOC08LechcnQAoJwpgANla25wcnN0AJkpSC1NLVQtXi1iLYItYQBwAHAA4QAaHG8AdABoAGkAbgDnAKEXgAFoaXIAoSmzJFotbwBwAPQAdCVooJUh7wD4JgABaXVmLWotZwBtAOEAuygAAWJwbi14LXMjZXRuZXEAceCKIgD+AODLKgD+cyNldG5lcQBx4IsiAP4A4MwqAP4AAWhyhi2KLWUAdADhABIraSNhbmdsZQAAAWxyki2WLeUhZnQAoLIiaSJnaHQAAKCzInkAMmThIXNoAKCiIoABZWxyAKcttC24LWKiKCKuLQAAAACyLWEAcgAAoLsicQAAoFoi7CFpcACg7iIAAWJ0vC1eD2EA8gBfD3IAAOA12DPddAByAOkAlS1zAHUAAAFicM0t0C0A4IIi0iAA4IMi0iBwAGYAAOA12GfdcgBvAPAAWQt0AHIA6QCaLQABY3XkLegtcgAA4DXYy9wAAWJw7C30LW4AAAFFZXUt8S0A4IoiAP5uAAABRWV/LfktAOCLIgD+6SJnemFnAKCaKYADY2Vmb3BycwANLhAuJS4pLiMuLi40LukhcmN1YQABZGkULiEuAAFiZxguHC5hAHIAAKBfKmUAcaAnIgCgWSLlIXJwAKAYIXIAAOA12DTdcABmAADgNdho3WWgQCJhAHQA6ABqD2MAcgAA4DXYzNzjCuQRUC4AAFQuAABYLmIuAAAAAGMubS5wLnQuAAAAAIguki4AAJouJxIqEnQAcgDpAB0ScgAA4DXYNd0AAUFhWy5eLnIA8gDnAnIA8gCTB75jAAFBYWYuaS5yAPIA4AJyAPIAjAdhAPAAeh5pAHMAAKD7IoABZHB0APgReS6DLgABZmx9LoAuAOA12GnddQDzAP8RaQBtAOUABBIAAUFhiy6OLnIA8gDuAnIA8gCaBwABY3GVLgoScgAA4DXYzdwAAXB0nS6hLmwAdQDzACUScgDpACASAARhY2VmaW9zdbEuvC7ELsguzC7PLtQu2S5jAAABdXm2LrsudABlADuA/QD9QE9kAAFpecAuwy5yAGMAd2FLZG4AO4ClAKVAcgAA4DXYNt1jAHkAV2RwAGYAAOA12GrdYwByAADgNdjO3AABY23dLt8ueQBOZGwAO4D/AP9AAAVhY2RlZmhpb3N38y73Lv8uAi8MLxAvEy8YLx0vIi9jInV0ZQB6YQABYXn7Lv4u8iFvbn5hN2RvAHQAfGEAAWV0Bi8KL3QAcgDmAB8QYQC2Y3IAAOA12DfdYwB5ADZk5yJyYXJyAKDdIXAAZgAA4DXYa91jAHIAAOA12M/cAAFqbiYvKC8AoA0gagAAoAwg");
 
+// node_modules/entities/dist/esm/generated/decode-data-xml.js
+init_kolmafia_polyfill();
+
 // node_modules/entities/dist/esm/internal/bin-trie-flags.js
+init_kolmafia_polyfill();
 var BinTrieFlags;
 (function(BinTrieFlags2) {
   BinTrieFlags2[BinTrieFlags2.VALUE_LENGTH = 49152] = "VALUE_LENGTH", BinTrieFlags2[BinTrieFlags2.FLAG13 = 8192] = "FLAG13", BinTrieFlags2[BinTrieFlags2.BRANCH_LENGTH = 8064] = "BRANCH_LENGTH", BinTrieFlags2[BinTrieFlags2.JUMP_TABLE = 127] = "JUMP_TABLE";
@@ -13969,7 +15773,11 @@ function decodeHTML(htmlString) {
   return htmlDecoder(htmlString, mode);
 }
 
+// node_modules/entities/dist/esm/encode.js
+init_kolmafia_polyfill();
+
 // node_modules/entities/dist/esm/escape.js
+init_kolmafia_polyfill();
 var getCodePoint = (
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   String.prototype.codePointAt == null ? function(c, index) {
@@ -13981,6 +15789,12 @@ var getCodePoint = (
     }
   )
 );
+
+// node_modules/entities/dist/esm/generated/encode-html.js
+init_kolmafia_polyfill();
+
+// node_modules/entities/dist/esm/internal/encode-shared.js
+init_kolmafia_polyfill();
 
 // node_modules/entities/dist/esm/index.js
 var EntityLevel;
@@ -14489,6 +16303,9 @@ var clanIdCache = {}, toPlayerId = function(player) {
   }]);
 }();
 
+// src/challengePaths/index.ts
+init_kolmafia_polyfill();
+
 // src/challengePaths/2014/HeavyRains.ts
 var HeavyRains_exports = {};
 __export(HeavyRains_exports, {
@@ -14514,6 +16331,7 @@ __export(HeavyRains_exports, {
     return wanderers;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia84 = require("kolmafia");
 var _templateObject568, _templateObject2141, _templateObject3128, _templateObject4114, _templateObject569, _templateObject657, _templateObject754, _templateObject844;
 function _taggedTemplateLiteral77(e, t) {
@@ -14543,6 +16361,7 @@ function expectedWanderer(location) {
 var path = $path(_templateObject844 || (_templateObject844 = _taggedTemplateLiteral77(["Heavy Rains"])));
 
 // src/challengePaths/2015/CommunityService.ts
+init_kolmafia_polyfill();
 var import_kolmafia85 = require("kolmafia");
 var _templateObject570, _templateObject2142, _templateObject3129, _templateObject4115, _templateObject571, _templateObject658, _CommunityService, _templateObject755, _templateObject845, _templateObject936, _templateObject1030, _templateObject1128, _templateObject1227, _templateObject1325, _templateObject1423, _templateObject1521, _templateObject1621, _templateObject1720, _templateObject1820, _templateObject1917, _templateObject2017, _templateObject2143, _templateObject2219, _templateObject2318, _templateObject2417, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2813, _templateObject2912, _templateObject3012, _templateObject3130;
 function _slicedToArray24(r, e) {
@@ -14914,6 +16733,7 @@ __export(NuclearAutumn_exports, {
     return spa;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia86 = require("kolmafia");
 var _templateObject574;
 function _taggedTemplateLiteral79(e, t) {
@@ -14931,9 +16751,11 @@ function chronoLab() {
 var path2 = $path(_templateObject574 || (_templateObject574 = _taggedTemplateLiteral79(["Nuclear Autumn"])));
 
 // src/diet/index.ts
+init_kolmafia_polyfill();
 var import_kolmafia87 = require("kolmafia");
 
 // src/diet/knapsack.ts
+init_kolmafia_polyfill();
 function _toConsumableArray23(r) {
   return _arrayWithoutHoles23(r) || _iterableToArray23(r) || _unsupportedIterableToArray37(r) || _nonIterableSpread23();
 }
@@ -15745,6 +17567,7 @@ var DietEntry = /* @__PURE__ */ function() {
 }();
 
 // src/Dungeon.ts
+init_kolmafia_polyfill();
 var import_kolmafia88 = require("kolmafia");
 var _templateObject578, _templateObject2146, _templateObject3133;
 function _taggedTemplateLiteral81(e, t) {
@@ -15965,6 +17788,7 @@ __export(mining_exports, {
     return visit2;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia89 = require("kolmafia");
 var _templateObject579, _templateObject2147, _templateObject3134, _templateObject4118, _templateObject580, _templateObject660, _templateObject757, _templateObject847;
 function _toConsumableArray26(r) {
@@ -16096,6 +17920,7 @@ function countFreeMines() {
 }
 
 // src/mood.ts
+init_kolmafia_polyfill();
 var import_kolmafia90 = require("kolmafia");
 var _templateObject581, _templateObject2148, _templateObject3135, _templateObject4119, _templateObject585, _templateObject661, _templateObject758, _templateObject848, _templateObject938, _templateObject1032, _templateObject1130, _templateObject1229, _templateObject1327, _templateObject1425, _OscusSoda, _templateObject1523, _templateObject1623, _MagicalSausages, _templateObject1722, _templateObject1822, _templateObject1919, _templateObject2019, _templateObject2149, _templateObject2221, _templateObject2320, _templateObject2419, _templateObject2517, _templateObject2617, _templateObject2717, _templateObject2815, _templateObject2914, _templateObject3014, _templateObject3136, _templateObject3215, _templateObject3314, _templateObject3413, _templateObject3512;
 function _toConsumableArray27(r) {
@@ -16621,6 +18446,7 @@ _defineProperty23(Mood, "defaultOptions", {
 });
 
 // src/since.ts
+init_kolmafia_polyfill();
 var import_kolmafia91 = require("kolmafia");
 function _defineProperties19(e, r) {
   for (var t = 0; t < r.length; t++) {
@@ -16750,9 +18576,12 @@ function sinceKolmafiaVersion(majorVersion, minorVersion) {
 }
 
 // src/Kmail.ts
+init_kolmafia_polyfill();
+var import_atob2 = __toESM(require_atob(), 1);
 var import_kolmafia93 = require("kolmafia");
 
 // src/url.ts
+init_kolmafia_polyfill();
 var import_kolmafia92 = require("kolmafia");
 function _toConsumableArray28(r) {
   return _arrayWithoutHoles28(r) || _iterableToArray28(r) || _unsupportedIterableToArray42(r) || _nonIterableSpread28();
@@ -17278,6 +19107,7 @@ __export(console_exports, {
     return warn;
   }
 });
+init_kolmafia_polyfill();
 var import_kolmafia94 = require("kolmafia"), logColor = function(color) {
   return function() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)
@@ -17290,6 +19120,7 @@ var import_kolmafia94 = require("kolmafia"), logColor = function(color) {
 }, log = logColor(), info = logColor("blue"), warn = logColor("red"), error = logColor("red");
 
 // src/session.ts
+init_kolmafia_polyfill();
 var import_kolmafia95 = require("kolmafia");
 var _templateObject586, _templateObject2150, _templateObject3137, _templateObject4120, _templateObject587, _templateObject665, _templateObject759, _templateObject849, _templateObject939, _templateObject1033, _templateObject1131, _templateObject1230, _templateObject1328, _templateObject1426, _templateObject1524, _templateObject1624, _templateObject1723, _templateObject1823, _templateObject1920, _templateObject2020, _templateObject2151, _templateObject2222, _templateObject2321, _templateObject2420, _templateObject2518, _templateObject2618, _templateObject2718, _templateObject2816, _templateObject2915, _templateObject3015, _templateObject3138, _templateObject3216, _templateObject3315;
 function _classCallCheck21(a, n) {

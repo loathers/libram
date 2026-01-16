@@ -878,10 +878,10 @@ export function makeCcs<M extends StrictMacro>(macro: M) {
  * @param initiateCombatAction Callback that initiates the combat to be run.
  * @returns Passed-through value from the callback.
  */
-export function runCombatBy<T>(initiateCombatAction: () => T) {
+export function runCombatBy<T>(initiateCombatAction: () => T, ...combatParams: CombatParams) {
   try {
     const result = initiateCombatAction();
-    while (inMultiFight()) runCombat();
+    while (inMultiFight()) runCombat(...combatParams);
     if (choiceFollowsFight()) visitUrl("choice.php");
     return result;
   } catch (e) {

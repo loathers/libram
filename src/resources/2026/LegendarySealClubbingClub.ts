@@ -8,7 +8,7 @@ import * as Counter from "../../counter.js";
  * @returns Whether you `have` the Legendary Seal-Clubbing Club
  */
 export function have(): boolean {
-  return have_($item`Legendary Seal-Clubbing Club`);
+  return have_($item`legendary seal-clubbing club`);
 }
 
 /**
@@ -43,5 +43,5 @@ export function turnsUntilNextWeekFight(): number {
  * @returns The number of casts of Club 'Em Back In Time available to you right now.
  */
 export function clubBackInTimeAvailable(): number {
-  return have() ? $skill`Club 'Em Back In Time`.dailylimit : 0;
+  return have() ? $skill`Club 'Em Back in Time`.dailylimit : 0;
 }

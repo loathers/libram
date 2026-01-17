@@ -41,7 +41,7 @@ export function clamp(n: number, min: number, max: number): number {
 }
 
 /**
- * Split an {@param array} into {@param chunkSize} sized chunks
+ * Split an array into chunkSize sized chunks
  *
  * @param array Array to split
  * @param chunkSize Size of chunk

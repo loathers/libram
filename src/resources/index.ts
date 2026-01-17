@@ -69,6 +69,7 @@ import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
 import * as PrismaticBeret from "./2025/PrismaticBeret.js";
 import * as BloodCubicZirconia from "./2025/BloodCubicZirconia.js";
 import * as SkeletonOfCrimboPast from "./2025/SkeletonOfCrimboPast.js";
+import * as LegendarySealClubbingClub from "./2026/LegendarySealClubbingClub.js";
 
 export {
   AprilingBandHelmet,
@@ -111,6 +112,7 @@ export {
   JuneCleaver,
   JungMan,
   Latte,
+  LegendarySealClubbingClub,
   Leprecondo,
   LookingGlass,
   MayamCalendar,

@@ -4563,10 +4563,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.28549.0":
-  version: 5.28549.0
-  resolution: "kolmafia@npm:5.28549.0"
-  checksum: 10c0/7273f32bba09178065be938404a0389fd5b41e568567b25784f1ff089d8fac8b3a39f2649f42b02a3297379bdd9bdedd1dc94527dbaf2db88bc98fc06316688d
+"kolmafia@npm:^5.28891.0":
+  version: 5.28891.0
+  resolution: "kolmafia@npm:5.28891.0"
+  checksum: 10c0/39c1336dcc3ae71b4ec2b68228e4867670e019b26c265ba4268b3b62b8ed20295889e28cd6b2d991dd99c0a51451876a52724619f38098bc9cdd1867813ba144
   languageName: node
   linkType: hard
 
@@ -4605,7 +4605,7 @@ __metadata:
     eslint-plugin-libram: "npm:^0.5.3"
     husky: "npm:^9.1.6"
     java-parser: "npm:^2.3.2"
-    kolmafia: "npm:^5.28549.0"
+    kolmafia: "npm:^5.28891.0"
     lint-staged: "npm:^15.2.10"
     lodash-es: "npm:^4.17.21"
     node-fetch: "npm:^3.3.2"

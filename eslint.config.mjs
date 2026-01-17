@@ -5,9 +5,9 @@ import jsdoc from "eslint-plugin-jsdoc";
 import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 import libram, { verifyConstantsSinceRevision } from "eslint-plugin-libram";
-import { defineConfig } from "eslint/config"
+import { defineConfig } from "eslint/config";
 
-const VERIFY_CONSTANTS_SINCE = 28891; 
+const VERIFY_CONSTANTS_SINCE = 28891;
 
 await verifyConstantsSinceRevision(VERIFY_CONSTANTS_SINCE);
 

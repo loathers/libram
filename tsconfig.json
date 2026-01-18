@@ -16,7 +16,7 @@
     "exactOptionalPropertyTypes": true,
     "types": ["node"]
   },
-  "include": ["src/", "setupTests.ts"],
+  "include": ["src/"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

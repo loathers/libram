@@ -19,6 +19,15 @@ export default defineConfig(
   ...libram.configs.recommended,
   {
     rules: {
+      "libram/verify-constants": [
+        "error",
+        {
+          data: {
+            items: [],
+            locations: [],
+          },
+        },
+      ],
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { varsIgnorePattern: "^_" },

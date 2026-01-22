@@ -325,7 +325,17 @@ export type ModifierParser = {
   multiString: (value: string) => string[];
 };
 
-function parseModifierString(
+/**
+ * Parse a modifier string into a Modifiers object
+ * @param modifiers The modifier string to parse
+ * @param parser An optional partial object for transforming string values into modifier values
+ * @param parser.numeric How to translate values into numeric modifiers; defaults to the Number function
+ * @param parser.str How to translate values into string modifiers; defaults to the String function
+ * @param parser.bool How to translate values into boolean modifiers; defaults to checking equality with `"true"`
+ * @param parser.multiString How to parse multistring modifiers; defaults to splitting on `,`
+ * @returns A `Modifiers` object
+ */
+export function parseModifierString(
   modifiers: string,
   {
     numeric = Number,

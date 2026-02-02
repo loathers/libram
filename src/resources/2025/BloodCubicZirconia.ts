@@ -126,12 +126,10 @@ export function cast(skill: Skill, count: number): boolean {
   cliExecute("checkpoint");
   try {
     equip($item`blood cubic zirconia`);
-    let casts = count;
-    while (casts > 0) {
+    for (let i = 0; i < count; i++) {
       if (!useSkill(skill)) {
         return false;
       }
-      --casts;
     }
 
     return true;

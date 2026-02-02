@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "esnext",
     "declaration": true,
     "lib": ["esnext"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "newLine": "LF",
     "strict": true,
     "esModuleInterop": true,
@@ -17,7 +17,6 @@
     "types": ["node"]
   },
   "include": ["src/"],
-  "exclude": ["*.test.ts"],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"]
   }

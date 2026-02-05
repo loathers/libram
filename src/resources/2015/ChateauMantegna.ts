@@ -114,3 +114,26 @@ export function changeNightstand(nightstand: Nightstand): boolean {
   buy(Item.get(nightstand));
   return getNightstand() === nightstand;
 }
+
+/**
+ * @returns Whether we successfully harvested
+ */
+export function harvestDesk(): boolean {
+  if (get("_chateauDeskHarvested")) return false;
+  const currentDesk = getDesk();
+  const deskMap = new Map([
+    ["Swiss piggy bank", 1],
+    ["continental juice bar", 2],
+    ["fancy stationery set", 3],
+  ]);
+  if (currentDesk) {
+    visitUrl(
+      `place.php?whichplace=chateau&action=chateau_desk${deskMap.get(currentDesk)}`,
+      false,
+    );
+  } else {
+    return false;
+  }
+
+  return get("_chateauDeskHarvested");
+}

@@ -9020,6 +9020,9 @@ __export(ChateauMantegna_exports, {
   getNightstand: function() {
     return getNightstand;
   },
+  harvestDesk: function() {
+    return harvestDesk;
+  },
   have: function() {
     return have17;
   },
@@ -9074,6 +9077,15 @@ function changeCeiling(ceiling) {
 }
 function changeNightstand(nightstand) {
   return getNightstand() === nightstand ? !0 : nightstands.includes(nightstand) ? ((0, import_kolmafia29.buy)(import_kolmafia29.Item.get(nightstand)), getNightstand() === nightstand) : !1;
+}
+function harvestDesk() {
+  if (get("_chateauDeskHarvested")) return !1;
+  var currentDesk = getDesk(), deskMap = /* @__PURE__ */ new Map([["Swiss piggy bank", 1], ["continental juice bar", 2], ["fancy stationery set", 3]]);
+  if (currentDesk)
+    (0, import_kolmafia29.visitUrl)("place.php?whichplace=chateau&action=chateau_desk".concat(deskMap.get(currentDesk)), !1);
+  else
+    return !1;
+  return get("_chateauDeskHarvested");
 }
 
 // src/resources/2015/DeckOfEveryCard.ts

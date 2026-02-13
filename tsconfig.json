@@ -18,6 +18,8 @@
   },
   "include": ["src/"],
   "typedocOptions": {
-    "entryPoints": ["src/index.ts"]
+    "entryPoints": ["src/index.ts"],
+    "json": "docs/typedoc.json",
+    "html": "docs"
   }
 }

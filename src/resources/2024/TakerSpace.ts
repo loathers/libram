@@ -35,6 +35,7 @@ const RECIPES = new Map<Item, Recipe>([
   [$item`sleeping profane parrot`, [15, 3, 0, 0, 2, 1]],
   [$item`pirrrate's currrse`, [2, 2, 0, 0, 0, 0]],
   [$item`tankard of spiced rum`, [1, 2, 0, 0, 0, 0]],
+  [$item`tankard of spiced Goldschlepper`, [0, 2, 0, 0, 0, 1]],
   [$item`packaged luxury garment`, [0, 0, 0, 0, 3, 2]],
   [$item`harpoon`, [0, 0, 0, 2, 0, 0]],
   [$item`chili powder cutlass`, [5, 0, 1, 0, 0, 0]],

@@ -223,7 +223,8 @@ export function fillTo(targetUnits: number): boolean {
       // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
       if (
         npcPrice($item`wad of dough`) === 0 &&
-        npcPrice($item`all-purpose flower`) > 0
+        npcPrice($item`all-purpose flower`) > 0 &&
+        !haveItem($item`wad of dough`, count)
       ) {
         const maxTries = Math.ceil(count / 35); // minimum amount of wad of dough created from all-purpose flower is 35
         for (

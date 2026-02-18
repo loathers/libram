@@ -207,16 +207,17 @@ export function fillTo(targetUnits: number): boolean {
     const [bestFuel, secondBest] = canInteract()
       ? getBestFuels()
       : [$item`loaf of soda bread`, undefined];
-
-    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
+    const fuelAdventures =
+      bestFuel === $item`loaf of soda bread`
+        ? 6
+        : getAverageAdventures(bestFuel);
+    const count = Math.ceil(targetUnits / fuelAdventures);
 
     let ceiling: number | undefined = undefined;
     if (secondBest) {
       const efficiencyOfSecondBest =
         mallPrice(secondBest) / getAverageAdventures(secondBest);
-      ceiling = Math.ceil(
-        efficiencyOfSecondBest * getAverageAdventures(bestFuel),
-      );
+      ceiling = Math.ceil(efficiencyOfSecondBest * fuelAdventures);
     }
 
     if (!canInteract()) {

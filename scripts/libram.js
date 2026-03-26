@@ -19497,10 +19497,13 @@ var Session = /* @__PURE__ */ function() {
       function(filename) {
         var val = {
           meat: this.meat,
-          items: Object.fromEntries(this.items),
+          items: Object.fromEntries(_toConsumableArray30(this.items.entries()).sort(function(_ref5, _ref6) {
+            var _ref7 = _slicedToArray30(_ref5, 1), a = _ref7[0], _ref8 = _slicedToArray30(_ref6, 1), b = _ref8[0];
+            return a.id - b.id;
+          })),
           totalTurns: this.totalTurns
         };
-        (0, import_kolmafia96.bufferToFile)(JSON.stringify(val), Session2.getFilepath(filename));
+        (0, import_kolmafia96.bufferToFile)(JSON.stringify(val, null, 2), Session2.getFilepath(filename));
       }
     )
     /**
@@ -19550,8 +19553,8 @@ var Session = /* @__PURE__ */ function() {
     value: function(filename) {
       var fileValue = (0, import_kolmafia96.fileToBuffer)(Session2.getFilepath(filename));
       if (fileValue.length > 0) {
-        var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref5) {
-          var _ref6 = _slicedToArray30(_ref5, 2), itemStr = _ref6[0], quantity = _ref6[1];
+        var _val$totalTurns, val = JSON.parse(fileValue), parsedItems = Object.entries(val.items).map(function(_ref9) {
+          var _ref10 = _slicedToArray30(_ref9, 2), itemStr = _ref10[0], quantity = _ref10[1];
           return [(0, import_kolmafia96.toItem)(itemStr), quantity];
         });
         return new Session2(val.meat, new Map(parsedItems), (_val$totalTurns = val.totalTurns) !== null && _val$totalTurns !== void 0 ? _val$totalTurns : 0);

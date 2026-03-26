@@ -315,10 +315,12 @@ export class Session {
   toFile(filename: string): void {
     const val = {
       meat: this.meat,
-      items: Object.fromEntries(this.items),
+      items: Object.fromEntries(
+        [...this.items.entries()].sort(([a], [b]) => a.id - b.id),
+      ),
       totalTurns: this.totalTurns,
     };
-    bufferToFile(JSON.stringify(val), Session.getFilepath(filename));
+    bufferToFile(JSON.stringify(val, null, 2), Session.getFilepath(filename));
   }
 
   /**

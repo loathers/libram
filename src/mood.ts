@@ -47,11 +47,11 @@ const aprilShieldEffects = new Map([
 const pastaWandEffects = new Map([
   [$skill`Bind Vampieroghi`, $effect`Legendary Bloody Potato Bits`],
   [$skill`Bind Vermincelli`, $effect`Legendary Slinking Noodle Glob`],
-  [$skill`bind angel hair wisp`, $effect`legendary whispering strands`],
-  [$skill`bind elbow macaroni`, $effect`legendary macaroni coating`],
-  [$skill`bind penne dreadful`, $effect`legendary penne fedora`],
+  [$skill`Bind Angel Hair Wisp`, $effect`Legendary Whispering Strands`],
+  [$skill`Bind Undead Elbow Macaroni`, $effect`Legendary Macaroni Coating`],
+  [$skill`Bind Penne Dreadful`, $effect`Legendary Penne Fedora`],
   [$skill`Bind Lasagmbie`, $effect`Legendary Pasta Eyeball`],
-  [$skill`bind spice ghost`, $effect`legendary spice haze`],
+  [$skill`Bind Spice Ghost`, $effect`Legendary Spice Haze`],
 ]);
 
 export abstract class MpSource {

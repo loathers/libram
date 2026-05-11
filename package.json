@@ -45,7 +45,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-jsdoc": "^61.5.0",
-    "eslint-plugin-libram": "^0.5.3",
+    "eslint-plugin-libram": "^0.6.0",
     "husky": "^9.1.6",
     "java-parser": "^2.3.2",
     "kolmafia": "^5.28891.0",

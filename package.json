@@ -14,7 +14,7 @@
     "build:bundled": "node build.mjs",
     "clean": "rm -rf dist",
     "docs": "yarn run typedoc",
-    "format": "yarn run prettier --write .",
+    "format": "yarn run prettier --write . && yarn run eslint --fix .",
     "lint": "yarn run eslint && yarn run prettier --check .",
     "test": "yarn run vitest",
     "prepack": "yarn run build && pinst --disable",

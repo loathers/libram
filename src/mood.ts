@@ -44,6 +44,16 @@ const aprilShieldEffects = new Map([
   [$skill`Moxie of the Mariachi`, $effect`Mariachi Moisture`],
 ]);
 
+const pastaWandEffects = new Map([
+  [$skill`Bind Vampieroghi`, $effect`Legendary Bloody Potato Bits`],
+  [$skill`Bind Vermincelli`, $effect`Legendary Slinking Noodle Glob`],
+  [$skill`Bind Angel Hair Wisp`, $effect`Legendary Whispering Strands`],
+  [$skill`Bind Undead Elbow Macaroni`, $effect`Legendary Macaroni Coating`],
+  [$skill`Bind Penne Dreadful`, $effect`Legendary Penne Fedora`],
+  [$skill`Bind Lasagmbie`, $effect`Legendary Pasta Eyeball`],
+  [$skill`Bind Spice Ghost`, $effect`Legendary Spice Haze`],
+]);
+
 export abstract class MpSource {
   usesRemaining(): number {
     return 0;
@@ -142,9 +152,14 @@ class SkillMoodElement extends MoodElement {
   constructor(skill: Skill, options: SkillEffectOptions) {
     super();
     this.skill = skill;
-    this.effect = options.requireAprilShield
-      ? (aprilShieldEffects.get(skill) ?? $effect.none)
-      : toEffect(skill);
+    if (options.requireAprilShield) {
+      this.effect = aprilShieldEffects.get(skill) ?? $effect.none;
+    } else if (have($item`legendary pasta wand`)) {
+      const legendaryPastaEffect = pastaWandEffects.get(skill);
+      this.effect = legendaryPastaEffect ?? toEffect(skill);
+    } else {
+      this.effect = toEffect(skill);
+    }
     this.options = options;
   }
 

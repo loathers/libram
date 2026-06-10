@@ -123,7 +123,9 @@ export class Clan {
         );
 
         if (!clan) {
-          throw new Error("Player is not whitelisted to clan");
+          throw new Error(
+            `Player is not whitelisted to clan '${clanIdOrName}'`,
+          );
         }
 
         clanIdCache[clanName] = clan.id;

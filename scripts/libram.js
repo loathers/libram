@@ -16346,7 +16346,7 @@ var clanIdCache = {}, toPlayerId = function(player) {
             return c.name.toLowerCase() === clanName;
           });
           if (!clan)
-            throw new Error("Player is not whitelisted to clan");
+            throw new Error("Player is not whitelisted to clan '".concat(clanIdOrName, "'"));
           clanIdCache[clanName] = clan.id;
         }
         clanId = clanIdCache[clanName];

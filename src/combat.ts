@@ -13,10 +13,12 @@ import {
   removeProperty,
   runCombat,
   setAutoAttack,
+  setCcs,
   Skill,
   Stat,
   urlEncode,
   visitUrl,
+  writeCcs,
   xpath,
 } from "kolmafia";
 import { getTodaysHolidayWanderers } from "./lib.js";
@@ -863,6 +865,89 @@ export class Macro {
 }
 
 /**
+ * Create and set a CCS file from a given Macro
+ * @param macro Macro to set as CSS
+ */
+export function makeCcs<M extends StrictMacro>(macro: M) {
+  writeCcs(`[default]\n"${macro.toString()}"`, "libram");
+  setCcs("libram");
+}
+
+/**
+ * Run a combat initiated by a given action, handling multi-fights and choice adventures after combat.
+ * @param initiateCombatAction Callback that initiates the combat to be run.
+ * @returns Passed-through value from the callback.
+ */
+export function runCombatBy<T>(initiateCombatAction: () => T, ...combatParams: CombatParams) {
+  try {
+    const result = initiateCombatAction();
+    while (inMultiFight()) runCombat(...combatParams);
+    if (choiceFollowsFight()) visitUrl("choice.php");
+    return result;
+  } catch (e) {
+    throw `Combat exception! Last macro error: ${get(
+      "lastMacroError",
+    )}. Exception ${e}.`;
+  }
+}
+
+/**
+ * Attempt to perform a nonstandard combat-starting Action with a Macro
+ * @param autoMacro The macro to use as an autoattack.
+ * @param macro The macro to use if the autoattack fails or finishes.
+ * @param action The combat-starting action to attempt
+ * @returns The output of your specified action function (typically void)
+ */
+export function withMacro<T, M extends StrictMacro>(
+  autoMacro: M,
+  macro: M,
+  action: () => T,
+): T;
+/**
+ * Attempt to perform a nonstandard combat-starting Action with a Macro
+ * @param macro The Macro to attempt to use
+ * @param action The combat-starting action to attempt
+ * @param tryAuto Whether or not we should try to resolve the combat with an autoattack; autoattack macros can fail against special monsters, and thus we have to submit a macro via CCS regardless.
+ * @returns The output of your specified action function (typically void)
+ */
+export function withMacro<T, M extends StrictMacro>(
+  macro: M,
+  action: () => T,
+  tryAuto?: boolean,
+): T;
+// eslint-disable-next-line jsdoc/require-jsdoc
+export function withMacro<T, M extends StrictMacro>(
+  macro: M,
+  macroOrAction: M | (() => T),
+  actionOrTryAuto: (() => T) | boolean = false,
+): T {
+  if (getAutoAttack() !== 0) setAutoAttack(0);
+
+  // If we have two macros set, or if we have tryAuto, set an autoattack
+  if (macroOrAction instanceof Macro || actionOrTryAuto === true) {
+    macro.setAutoAttack();
+  }
+
+  // Make a CCS of the macro or, if we have two, the second macro.
+  makeCcs(macroOrAction instanceof Macro ? macroOrAction : macro);
+
+  // Determine the action from the overload
+  let action;
+  if (typeof macroOrAction === "function") {
+    action = macroOrAction;
+  } else if (typeof actionOrTryAuto === "function") {
+    action = actionOrTryAuto;
+  } else {
+    throw new Error("No action provided to withMacro");
+  }
+  try {
+    return runCombatBy(action);
+  } finally {
+    setAutoAttack(0);
+  }
+}
+
+/**
  * Adventure in a location and handle all combats with a given macro.
  * To use this function you will need to create a consult script that runs Macro.load().submit() and a CCS that calls that consult script.
  * See examples/consult.ts for an example.
@@ -872,15 +957,7 @@ export class Macro {
  * @param macro Macro to execute.
  */
 export function adventureMacro(loc: Location, macro: Macro): void {
-  macro.save();
-  setAutoAttack(0);
-  try {
-    adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
-  } finally {
-    Macro.clearSaved();
-  }
+  withMacro(macro, () => adv1(loc, 0, ""));
 }
 
 /**
@@ -898,16 +975,11 @@ export function adventureMacroAuto(
   autoMacro: Macro,
   nextMacro: Macro | null = null,
 ): void {
-  nextMacro = nextMacro ?? Macro.abort();
-  autoMacro.setAutoAttack();
-  nextMacro.save();
-  try {
-    adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
-  } finally {
-    Macro.clearSaved();
+  if (nextMacro) {
+    withMacro(autoMacro, nextMacro, () => adv1(loc, 0, ""));
+    return;
   }
+  withMacro(autoMacro, () => adv1(loc, 0, ""));
 }
 
 export class StrictMacro extends Macro {

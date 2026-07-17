@@ -90,6 +90,8 @@ export function drink(...ingredients: Tuple<Item, 3>): boolean {
   visitUrl(`inventory.php?action=cupof13s&pwd=${myHash()}`, false);
   return runChoice(
     1,
-    [1, 2, 3].map((slot) => `whichitem${slot}`).join("&"),
+    ingredients
+      .map((ingredient, index) => `whichitem${index + 1}=${ingredient.id}`)
+      .join("&"),
   ).includes("and drink the resulting");
 }

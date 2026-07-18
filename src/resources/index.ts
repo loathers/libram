@@ -71,6 +71,7 @@ import * as BloodCubicZirconia from "./2025/BloodCubicZirconia.js";
 import * as SkeletonOfCrimboPast from "./2025/SkeletonOfCrimboPast.js";
 import * as LegendarySealClubbingClub from "./2026/LegendarySealClubbingClub.js";
 import * as EternityCodpiece from "./2026/EternityCodpiece.js";
+import * as CupOfThirteens from "./2026/CupOfThirteens.js";
 export {
   AprilingBandHelmet,
   AsdonMartin,
@@ -96,6 +97,7 @@ export {
   CrimboShrub,
   CrownOfThrones,
   CrystalBall,
+  CupOfThirteens,
   CursedMonkeyPaw,
   CyberRealm,
   DaylightShavings,

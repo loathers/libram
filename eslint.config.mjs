@@ -7,7 +7,7 @@ import prettier from "eslint-config-prettier";
 import libram, { verifyConstantsSinceRevision } from "eslint-plugin-libram";
 import { defineConfig } from "eslint/config";
 
-const VERIFY_CONSTANTS_SINCE = 28891;
+const VERIFY_CONSTANTS_SINCE = 29101;
 
 await verifyConstantsSinceRevision(VERIFY_CONSTANTS_SINCE);
 

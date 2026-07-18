@@ -2145,29 +2145,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/core@npm:^7.0.14":
-  version: 7.0.15
-  resolution: "@mikro-orm/core@npm:7.0.15"
-  peerDependencies:
-    dataloader: 2.2.3
-  peerDependenciesMeta:
-    dataloader:
-      optional: true
-  checksum: 10c0/9dd237c086ef9603f336156557181dcaaa4a74f865b5795dce86f14655832d936186dee011fbb38b7086477e6f6cb13be25cd3bac9c2c62fb80cf306028f6207
-  languageName: node
-  linkType: hard
-
-"@mikro-orm/sql@npm:^7.0.14":
-  version: 7.0.15
-  resolution: "@mikro-orm/sql@npm:7.0.15"
-  dependencies:
-    kysely: "npm:0.28.17"
-  peerDependencies:
-    "@mikro-orm/core": 7.0.15
-  checksum: 10c0/1d7aacccd2da0d80e954367b427253f47dc4a23f4ff4fed14fc69f05a66c0ada97e29a0ed4aab58a4e073684f461eab8600fbee485a60264a73a576360ccac1e
-  languageName: node
-  linkType: hard
-
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -2376,13 +2353,6 @@ __metadata:
   version: 1.0.0
   resolution: "@sindresorhus/base62@npm:1.0.0"
   checksum: 10c0/9a14df0f058fdf4731c30f0f05728a4822144ee42236030039d7fa5a1a1072c2879feba8091fd4a17c8922d1056bc07bada77c31fddc3e15836fc05a266fd918
-  languageName: node
-  linkType: hard
-
-"@sqlite.org/sqlite-wasm@npm:~3.51.2-build9":
-  version: 3.51.2-build9
-  resolution: "@sqlite.org/sqlite-wasm@npm:3.51.2-build9"
-  checksum: 10c0/2b9c4d3df7b2cf84c1b311ac276c19692d8ccad4a4b34a1a739e1eb3b8938c6be4e64a98d51b7ea6e9ad5000a912d4ed0c25eec146f7eb468fa343b7ce491a08
   languageName: node
   linkType: hard
 
@@ -3314,24 +3284,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"data-of-loathing@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "data-of-loathing@npm:3.2.2"
-  dependencies:
-    "@mikro-orm/core": "npm:^7.0.14"
-    "@mikro-orm/sql": "npm:^7.0.14"
-    "@sqlite.org/sqlite-wasm": "npm:~3.51.2-build9"
-    env-paths: "npm:^4.0.0"
-    kysely: "npm:^0.28.17"
-  peerDependencies:
-    vite: ">=5.0.0"
-    vite-plugin-node-polyfills: ^0.26.0
-  peerDependenciesMeta:
-    vite:
-      optional: true
-    vite-plugin-node-polyfills:
-      optional: true
-  checksum: 10c0/c2238b96ef4be0e8c3384ca205ba80cb9b54e2c8e92d09c6d85f5fba0de316bfff642e899fbac874869ff32f50cac0b74bccbfeaec0d542f740f4c16384c832e
+"data-of-loathing@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "data-of-loathing@npm:2.6.2"
+  checksum: 10c0/160be95e0886d797ddde79d25285cd3a09861097ac9131b7ceb5f2119648ba31d5d0ed1322e31a607140e9b610580095b95b4b6f72057790e12b1abd67ecbc17
   languageName: node
   linkType: hard
 
@@ -3458,15 +3414,6 @@ __metadata:
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 10c0/285325677bf00e30845e330eec32894f5105529db97496ee3f598478e50f008c5352a41a30e5e72ec9de8a542b5a570b85699cd63bd2bc646dbcb9f311d83bc4
-  languageName: node
-  linkType: hard
-
-"env-paths@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "env-paths@npm:4.0.0"
-  dependencies:
-    is-safe-filename: "npm:^0.1.0"
-  checksum: 10c0/13ee7fa4047786ca28f1fbf2239606f8a53304bdf71bfc426e95f806e429060181205316f2c45b4ac560e81c854ded5a45fd9dc3105414c01d504b3469a1294b
   languageName: node
   linkType: hard
 
@@ -3751,13 +3698,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "eslint-plugin-libram@npm:0.6.0"
+"eslint-plugin-libram@npm:0.5.3":
+  version: 0.5.3
+  resolution: "eslint-plugin-libram@npm:0.5.3"
   dependencies:
-    data-of-loathing: "npm:^3.2.2"
+    data-of-loathing: "npm:^2.6.2"
     entities: "npm:^7.0.0"
-  checksum: 10c0/3e8e3b3b5905367f787029e474087793e2f80e472f2aee4d4d290cca67b3a8c7a5745145e75e8eeb3c05f27949cb8c57b0fe6a59fbd098ea11e0b9f76aaae8a5
+  checksum: 10c0/23c6605943d80d972e4ecd0bb0fab850f1f227ffbeb73afa75a2be58e5311f8b120ff535dd6d94459ae0f1b08bdb81e1e8089fc0b3a275e2ac7d0e1491f969e2
   languageName: node
   linkType: hard
 
@@ -4387,13 +4334,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-safe-filename@npm:^0.1.0":
-  version: 0.1.1
-  resolution: "is-safe-filename@npm:0.1.1"
-  checksum: 10c0/45c35d2253b96348e2c26590e14feed51d1e6b72aaa567930ccb34e68c0eef00ebcf3b7e01b46bf45e578a27355cd8f5bc12f7d6d79a34d33dc93d4560c0f6b6
-  languageName: node
-  linkType: hard
-
 "is-stream@npm:^3.0.0":
   version: 3.0.0
   resolution: "is-stream@npm:3.0.0"
@@ -4535,17 +4475,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.28891.0":
-  version: 5.28891.0
-  resolution: "kolmafia@npm:5.28891.0"
-  checksum: 10c0/39c1336dcc3ae71b4ec2b68228e4867670e019b26c265ba4268b3b62b8ed20295889e28cd6b2d991dd99c0a51451876a52724619f38098bc9cdd1867813ba144
-  languageName: node
-  linkType: hard
-
-"kysely@npm:0.28.17, kysely@npm:^0.28.17":
-  version: 0.28.17
-  resolution: "kysely@npm:0.28.17"
-  checksum: 10c0/70573292d8d60a1e29be9b432c1b25fe21d4806ecd5e9859b5ba8d2af799769878f4b3d91731ffe3e03744c7291476fe843640d31741f3637e20c3c49afea3c5
+"kolmafia@npm:^5.29107.0":
+  version: 5.29107.0
+  resolution: "kolmafia@npm:5.29107.0"
+  checksum: 10c0/e018b3e9736a7e1c1a5457c2a9d258ebc8e6bf9d8f307204a5a40455c040ffd853f07530c50b8b7882759afcebe2aa6d96d0cd88382f565ac78084acd84bf9f4
   languageName: node
   linkType: hard
 
@@ -4581,10 +4514,10 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.8"
     eslint-import-resolver-typescript: "npm:^4.4.4"
     eslint-plugin-jsdoc: "npm:^61.5.0"
-    eslint-plugin-libram: "npm:^0.6.0"
+    eslint-plugin-libram: "npm:0.5.3"
     husky: "npm:^9.1.6"
     java-parser: "npm:^2.3.2"
-    kolmafia: "npm:^5.28891.0"
+    kolmafia: "npm:^5.29107.0"
     lint-staged: "npm:^15.2.10"
     lodash-es: "npm:^4.17.21"
     node-fetch: "npm:^3.3.2"

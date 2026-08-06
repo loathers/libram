@@ -193,6 +193,8 @@ export function insertFuel(it: Item, quantity = 1): boolean {
   return result.includes("The display updates with a");
 }
 
+const PRICE_DRIFT_TOLERANCE = 1.1;
+
 /**
  * Fill your Asdon Martin to the given fuel level in the cheapest way possible
  *
@@ -204,43 +206,68 @@ export function fillTo(targetUnits: number): boolean {
 
   while (getFuel() < targetUnits) {
     // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    const [bestFuel, secondBest] = canInteract()
+    const fuels: Item[] = canInteract()
       ? getBestFuels()
-      : [$item`loaf of soda bread`, undefined];
+      : [$item`loaf of soda bread`];
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
+    let converted = false;
+    const unbuyable: Item[] = [];
 
-    let ceiling: number | undefined = undefined;
-    if (secondBest) {
-      const efficiencyOfSecondBest =
-        mallPrice(secondBest) / getAverageAdventures(secondBest);
-      ceiling = Math.ceil(
-        efficiencyOfSecondBest * getAverageAdventures(bestFuel),
-      );
+    for (let i = 0; i < fuels.length && !converted; i++) {
+      const bestFuel = fuels[i];
+      const secondBest: Item | undefined = fuels[i + 1];
+
+      const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
+
+      let ceiling: number | undefined = undefined;
+      if (secondBest) {
+        const efficiencyOfSecondBest =
+          mallPrice(secondBest) / getAverageAdventures(secondBest);
+        ceiling = Math.ceil(
+          efficiencyOfSecondBest *
+            getAverageAdventures(bestFuel) *
+            PRICE_DRIFT_TOLERANCE,
+        );
+      }
+
+      if (!canInteract()) {
+        // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
+        if (
+          npcPrice($item`wad of dough`) === 0 &&
+          npcPrice($item`all-purpose flower`) > 0
+        ) {
+          const maxTries = Math.ceil(count / 35); // minimum amount of wad of dough created from all-purpose flower is 35
+          for (
+            let j = 0;
+            j < maxTries && availableAmount($item`wad of dough`) < count;
+            j++
+          ) {
+            buy($item`all-purpose flower`);
+            use($item`all-purpose flower`);
+          }
+          retrieveItem(count, bestFuel);
+        } else retrieveItem(count, bestFuel);
+      } else if (ceiling) buy(count, bestFuel, ceiling);
+      else buy(count, bestFuel);
+
+      const quantity = Math.min(itemAmount(bestFuel), count);
+      if (quantity === 0) {
+        unbuyable.push(bestFuel);
+        continue;
+      }
+
+      if (!insertFuel(bestFuel, quantity)) {
+        throw new Error("Failed to fuel Asdon Martin.");
+      }
+      converted = true;
     }
 
-    if (!canInteract()) {
-      // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
-      if (
-        npcPrice($item`wad of dough`) === 0 &&
-        npcPrice($item`all-purpose flower`) > 0
-      ) {
-        const maxTries = Math.ceil(count / 35); // minimum amount of wad of dough created from all-purpose flower is 35
-        for (
-          let i = 0;
-          i < maxTries && availableAmount($item`wad of dough`) < count;
-          i++
-        ) {
-          buy($item`all-purpose flower`);
-          use($item`all-purpose flower`);
-        }
-        retrieveItem(count, bestFuel);
-      } else retrieveItem(count, bestFuel);
-    } else if (ceiling) buy(count, bestFuel, ceiling);
-    else buy(count, bestFuel);
-
-    if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
-      throw new Error("Failed to fuel Asdon Martin.");
+    if (!converted) {
+      throw new Error(
+        `Could not buy any fuel. None of ${unbuyable.join(
+          ", ",
+        )} could be bought at or under their price ceilings.`,
+      );
     }
   }
   return getFuel() >= targetUnits;

@@ -33,14 +33,11 @@ export function itemsSold(coinmaster: Coinmaster): Item[] {
  * @returns Map of items the coinmaster sells, mapped to their sell price
  */
 export function sellPrices(coinmaster: Coinmaster): Map<Item, number> {
-  const result = new Map<Item, number>();
-  for (const item of itemsSold(coinmaster)) {
-    const price = sellPrice(coinmaster, item);
-    if (price > 0) {
-      result.set(item, sellPrice(coinmaster, item));
-    }
-  }
-  return result;
+  return new Map(
+    itemsSold(coinmaster)
+      .map((item) => [item, sellPrice(coinmaster, item)] as const)
+      .filter(([, price]) => price > 0),
+  );
 }
 
 /**
@@ -54,16 +51,18 @@ export function sellPrices(coinmaster: Coinmaster): Map<Item, number> {
 export function sellCosts(
   coinmaster: Coinmaster,
 ): Map<Item, Map<Item, number>> {
-  const result = new Map<Item, Map<Item, number>>();
-  for (const item of itemsSold(coinmaster)) {
-    const costs = sellCost(coinmaster, item);
-    const itemCosts = new Map<Item, number>();
-    for (const [cost, amount] of Object.entries(costs)) {
-      itemCosts.set(toItem(cost), amount);
-    }
-    result.set(item, itemCosts);
-  }
-  return result;
+  return new Map(
+    itemsSold(coinmaster).map((item) => {
+      return [
+        item,
+        new Map(
+          Object.entries(sellCost(coinmaster, item)).map(
+            ([cost, amount]) => [toItem(cost), amount] as const,
+          ),
+        ),
+      ] as const;
+    }),
+  );
 }
 
 /**
@@ -85,11 +84,11 @@ export function itemsBought(coinmaster: Coinmaster): Item[] {
  * @returns Map of items the coinmaster buys, mapped to their buy price
  */
 export function buyPrices(coinmaster: Coinmaster): Map<Item, number> {
-  const result = new Map<Item, number>();
-  for (const item of itemsBought(coinmaster)) {
-    result.set(item, buyPrice(coinmaster, item));
-  }
-  return result;
+  return new Map<Item, number>(
+    itemsBought(coinmaster).map(
+      (item) => [item, buyPrice(coinmaster, item)] as const,
+    ),
+  );
 }
 
 /**

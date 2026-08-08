@@ -1,9 +1,12 @@
 /** @module Coinmasters */
 import {
+  batchClose,
+  batchOpen,
   buyPrice,
   Coinmaster,
   Item,
   mallPrice,
+  sell,
   sellCost,
   sellPrice,
   toItem,
@@ -130,4 +133,23 @@ export function buyMeatPerToken(item: Item): number {
   if (meat <= 0) return Infinity;
 
   return meat / tokens;
+}
+
+/**
+ * Coinmaster-sell items to the same coinmaster in bulk.
+ *
+ * @category Coinmasters
+ * @param coinmaster The coinmaster to sell to
+ * @param items Map of items to sell, mapped to their quantities
+ * @returns Whether all sales succeeded
+ */
+export function bulkSell(
+  coinmaster: Coinmaster,
+  items: Map<Item, number>,
+): boolean {
+  batchOpen();
+  items
+    .entries()
+    .forEach(([item, quantity]) => sell(coinmaster, quantity, item));
+  return batchClose();
 }

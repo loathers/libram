@@ -11,7 +11,6 @@ import {
   sellPrice,
   toItem,
 } from "kolmafia";
-import { $coinmaster } from "./template-string";
 
 /**
  * Get all items that a coinmaster sells.
@@ -103,7 +102,7 @@ export function buyPrices(coinmaster: Coinmaster): Map<Item, number> {
  * @returns Meat earned if sold per token when buying an item
  */
 export function sellMeatPerToken(item: Item): number {
-  if (item.seller === $coinmaster`none`) return NaN;
+  if (item.seller === Coinmaster.none) return NaN;
   if (!item.tradeable) return Infinity;
 
   const tokens = sellPrice(item.seller, item);
@@ -123,7 +122,7 @@ export function sellMeatPerToken(item: Item): number {
  * @returns Meat cost per token if selling an item
  */
 export function buyMeatPerToken(item: Item): number {
-  if (item.buyer === $coinmaster`none`) return NaN;
+  if (item.buyer === Coinmaster.none) return NaN;
   if (!item.tradeable) return Infinity;
 
   const tokens = buyPrice(item.buyer, item);

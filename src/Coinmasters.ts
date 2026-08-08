@@ -44,6 +44,8 @@ export function sellPrices(coinmaster: Coinmaster): Map<Item, number> {
  * Get a map of items that a coinmaster sells to their sell prices,
  * accounting for multi-token costs.
  *
+ * Only returns sell cost where the token is an item.
+ *
  * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns Map of items the coinmaster sells, mapped to their sell prices per token
@@ -52,16 +54,18 @@ export function sellCosts(
   coinmaster: Coinmaster,
 ): Map<Item, Map<Item, number>> {
   return new Map(
-    itemsSold(coinmaster).map((item) => {
-      return [
-        item,
-        new Map(
-          Object.entries(sellCost(coinmaster, item)).map(
-            ([cost, amount]) => [toItem(cost), amount] as const,
+    itemsSold(coinmaster)
+      .map((item) => {
+        return [
+          item,
+          new Map(
+            Object.entries(sellCost(coinmaster, item))
+              .map(([cost, amount]) => [toItem(cost), amount] as const)
+              .filter(([item, amount]) => item !== Item.none && amount > 0),
           ),
-        ),
-      ] as const;
-    }),
+        ] as const;
+      })
+      .filter(([, map]) => map.size > 0),
   );
 }
 

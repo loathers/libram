@@ -102,8 +102,14 @@ export function buyPrices(coinmaster: Coinmaster): Map<Item, number> {
 export function sellMeatPerToken(item: Item): number {
   if (item.seller === $coinmaster`none`) return NaN;
   if (!item.tradeable) return Infinity;
-  if (mallPrice(item) <= 0) return Infinity;
-  return mallPrice(item) / sellPrice(item.seller, item);
+
+  const tokens = sellPrice(item.seller, item);
+  if (tokens <= 0) return NaN;
+
+  const meat = mallPrice(item);
+  if (meat <= 0) return Infinity;
+
+  return meat / tokens;
 }
 
 /**
@@ -116,6 +122,12 @@ export function sellMeatPerToken(item: Item): number {
 export function buyMeatPerToken(item: Item): number {
   if (item.buyer === $coinmaster`none`) return NaN;
   if (!item.tradeable) return Infinity;
-  if (mallPrice(item) <= 0) return Infinity;
-  return mallPrice(item) / buyPrice(item.buyer, item);
+
+  const tokens = buyPrice(item.buyer, item);
+  if (tokens <= 0) return NaN;
+
+  const meat = mallPrice(item);
+  if (meat <= 0) return Infinity;
+
+  return meat / tokens;
 }

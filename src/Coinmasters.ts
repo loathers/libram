@@ -16,7 +16,7 @@ import { $coinmaster } from "./template-string";
 /**
  * Get all items that a coinmaster sells.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns List of items the coinmaster sells
  */
@@ -29,7 +29,7 @@ export function itemsSold(coinmaster: Coinmaster): Item[] {
  *
  * Only returns items sold for a single token.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns Map of items the coinmaster sells, mapped to their sell price
  */
@@ -48,7 +48,7 @@ export function sellPrices(coinmaster: Coinmaster): Map<Item, number> {
  * Get a map of items that a coinmaster sells to their sell prices,
  * accounting for multi-token costs.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns Map of items the coinmaster sells, mapped to their sell prices per token
  */
@@ -70,7 +70,7 @@ export function sellCosts(
 /**
  * Get all items that a coinmaster buys.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns List of items the coinmaster buys
  */
@@ -81,7 +81,7 @@ export function itemsBought(coinmaster: Coinmaster): Item[] {
 /**
  * Get a map of items that a coinmaster buys to their buy prices.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to query
  * @returns Map of items the coinmaster buys, mapped to their buy price
  */
@@ -98,7 +98,7 @@ export function buyPrices(coinmaster: Coinmaster): Map<Item, number> {
  *
  * Only considers items sold for a single token.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param item The item to query
  * @returns Meat earned if sold per token when buying an item
  */
@@ -118,7 +118,7 @@ export function sellMeatPerToken(item: Item): number {
 /**
  * Calculate the meat cost per token for an item.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param item The item to query
  * @returns Meat cost per token if selling an item
  */
@@ -138,7 +138,7 @@ export function buyMeatPerToken(item: Item): number {
 /**
  * Coinmaster-sell items to the same coinmaster in bulk.
  *
- * @category Coinmasters
+ * @category Coinmaster
  * @param coinmaster The coinmaster to sell to
  * @param items Map of items to sell, mapped to their quantities
  * @returns Whether all sales succeeded

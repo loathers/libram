@@ -633,7 +633,7 @@ export function getAverage(range: string): number {
 }
 
 /**
- * Deternube tge average adventures expected from consuming an Item
+ * Determine the average adventures expected from consuming an Item
  *
  * If item is not a consumable, will just return "0".
  *

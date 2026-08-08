@@ -65,13 +65,11 @@ import {
   putDisplay,
   putShop,
   putStash,
-  sell,
   takeCloset,
   takeDisplay,
   takeShop,
   takeStash,
   takeStorage,
-  Coinmaster,
   repriceShop,
   familiarWeight,
   weightAdjustment,
@@ -1478,15 +1476,6 @@ export const bulkPutShop = (
       putShop(price, limit ?? 0, item);
     }
   }
-  return batchClose();
-};
-/*
- * Coinmaster-sell items to the same coinmaster in bulk
- */
-export const bulkSell = (coinmaster: Coinmaster, items: Map<Item, number>) => {
-  batchOpen();
-  for (const [item, quantity] of items.entries())
-    sell(coinmaster, quantity, item);
   return batchClose();
 };
 /*

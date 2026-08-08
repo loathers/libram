@@ -1,6 +1,7 @@
 export * from "./actions/index.js";
 export * from "./ascend.js";
 export * from "./Clan.js";
+export * from "./Coinmasters.js";
 export * from "./challengePaths/index.js";
 export * from "./combat.js";
 export * as Counter from "./counter.js";

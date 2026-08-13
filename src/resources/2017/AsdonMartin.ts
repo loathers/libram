@@ -202,22 +202,23 @@ export function insertFuel(it: Item, quantity = 1): boolean {
 export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
 
-  while (getFuel() < targetUnits) {
-    // if in Hardcore/ronin, skip the price calculation and just use soda bread
-    const [bestFuel, secondBest] = canInteract()
-      ? getBestFuels()
-      : [$item`loaf of soda bread`, undefined];
+  // if in Hardcore/ronin, skip the price calculation and just use soda bread
+  const bestFuels = canInteract()
+    ? getBestFuels()
+    : [$item`loaf of soda bread`];
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(bestFuel));
+  while (bestFuels.length > 0 && getFuel() < targetUnits) {
+    const curFuel = bestFuels.shift()!;
+    const nextFuel = bestFuels.at(0);
+    const curEfficiency = mallPrice(curFuel) / getAverageAdventures(curFuel);
+    const desiredEfficiency = nextFuel
+      ? mallPrice(nextFuel) / getAverageAdventures(nextFuel)
+      : curEfficiency;
+    const ceiling = Math.floor(
+      mallPrice(curFuel) * (1.0 + desiredEfficiency - curEfficiency),
+    );
 
-    let ceiling: number | undefined = undefined;
-    if (secondBest) {
-      const efficiencyOfSecondBest =
-        mallPrice(secondBest) / getAverageAdventures(secondBest);
-      ceiling = Math.ceil(
-        efficiencyOfSecondBest * getAverageAdventures(bestFuel),
-      );
-    }
+    const count = Math.ceil(targetUnits / getAverageAdventures(curFuel));
 
     if (!canInteract()) {
       // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
@@ -234,12 +235,15 @@ export function fillTo(targetUnits: number): boolean {
           buy($item`all-purpose flower`);
           use($item`all-purpose flower`);
         }
-        retrieveItem(count, bestFuel);
-      } else retrieveItem(count, bestFuel);
-    } else if (ceiling) buy(count, bestFuel, ceiling);
-    else buy(count, bestFuel);
+        retrieveItem(count, curFuel);
+      } else retrieveItem(count, curFuel);
+    } else if (ceiling) buy(count, curFuel, ceiling);
+    else buy(count, curFuel);
 
-    if (!insertFuel(bestFuel, Math.min(itemAmount(bestFuel), count))) {
+    if (
+      itemAmount(curFuel) > 0 &&
+      !insertFuel(curFuel, Math.min(itemAmount(curFuel), count))
+    ) {
       throw new Error("Failed to fuel Asdon Martin.");
     }
   }

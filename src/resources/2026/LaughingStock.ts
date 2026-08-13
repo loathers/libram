@@ -1,6 +1,7 @@
 import {
   daycount,
   Item,
+  myAdventures,
   myClass,
   myDaycount,
   myPath,
@@ -90,46 +91,46 @@ export function have(): boolean {
  * @returns Whether or not you can predict the next Portable Laughingstock drop
  */
 export function canPredict(): boolean {
-  return have() && daycount() <= 4 && get("_laughingStockFruitDropped", 0) < 11;
+  return have() && daycount() <= 4;
 }
 
 /**
+ * @param turnHorizon defines how many turns to check for available drops; defaults to remaining adventures
  * @returns The next predictable Portable Laughing Stock drop and how many
  * combats until it occurs, or null if the next drop is not predictable.
  */
-export function nextDrop(): [Item, number] | null {
+export function nextDrop(turnHorizon = myAdventures()): [Item, number] | null {
   const charges = get("_laughingStockCharges", 0);
-  const fruitsDropped = get("_laughingStockFruitDropped", 0);
 
   if (!canPredict()) {
     return null;
   }
 
-  const dropTurn = fixedDropTurns[fruitsDropped];
-
   const drops = laughingStockDrops(
     myClass().id,
     myPath().id,
     myDaycount(),
-    dropTurn,
+    charges + turnHorizon,
   );
 
-  const item = drops.get(dropTurn);
-
-  if (item === undefined) {
-    return null;
+  for (const [fight, item] of drops) {
+    if (fight > charges) {
+      return [item, fight - charges];
+    }
   }
 
-  return [item, dropTurn - charges];
+  return null;
 }
 
 /**
+ * @param turnHorizon defines how many turns to check for available drops; defaults to remaining adventures
  * @returns All predictable Portable Laughing Stock drops remaining today,
  * in order, or null if the next drop is no longer predictable.
  */
-export function expectedDropsToday(): [Item, number][] | null {
+export function expectedDropsToday(
+  turnHorizon = myAdventures(),
+): [Item, number][] | null {
   const charges = get("_laughingStockCharges", 0);
-  const fruitsDropped = get("_laughingStockFruitDropped", 0);
 
   if (!canPredict()) {
     return null;
@@ -139,30 +140,10 @@ export function expectedDropsToday(): [Item, number][] | null {
     myClass().id,
     myPath().id,
     myDaycount(),
-    fixedDropTurns[fixedDropTurns.length - 1],
+    charges + turnHorizon,
   );
 
-  const result: [Item, number][] = [];
-
-  for (
-    let dropIndex = fruitsDropped;
-    dropIndex < fixedDropTurns.length;
-    dropIndex++
-  ) {
-    const dropTurn = fixedDropTurns[dropIndex];
-
-    if (dropTurn <= charges) {
-      continue;
-    }
-
-    const item = drops.get(dropTurn);
-
-    if (item === undefined) {
-      return null;
-    }
-
-    result.push([item, dropTurn - charges]);
-  }
-
-  return result;
+  return Array.from(drops.entries())
+    .filter(([fight]) => fight > charges)
+    .map(([fight, item]) => [item, fight - charges]);
 }

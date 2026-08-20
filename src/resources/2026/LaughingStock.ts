@@ -7,10 +7,12 @@ import {
   myPath,
   phpMtRand,
   phpSeed,
+  Rng,
 } from "kolmafia";
 import { $item, $items } from "../../template-string";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property";
+import { clamp } from "../../utils";
 
 const basicFruit = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
@@ -18,6 +20,10 @@ const advFruit = $items`classic banana, antique watermelon, quince`;
 
 function getSeed(classId: number, pathId: number, daycount: number): number {
   return classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381;
+}
+
+function getDeterministicDrops(fights: number): number {
+  return fights <= 0 ? 0 : Math.floor((Math.sqrt(8 * fights - 7) - 1) / 2) + 1;
 }
 
 function laughingStockDrops(
@@ -31,47 +37,37 @@ function laughingStockDrops(
   let pityCount = 0;
   let pityThreshold = 10;
 
-  for (let fight = 0; fight < maxFights; fight++) {
-    const seed = getSeed(classId, pathId, daycount) + 381 * fight;
-    const rng = phpSeed(seed);
-
-    let hasDrop: boolean;
-
-    // The first 11 drops occur on fights 1 + triangular(n), n = 0..10.
-    if (fight <= 56) {
-      const n = Math.floor((Math.sqrt(8 * (fight - 1) + 1) - 1) / 2);
-      hasDrop = 1 + (n * (n + 1)) / 2 === fight;
-    } else {
-      hasDrop = phpMtRand(rng, 1, 50) === 1;
-    }
-
-    if (!hasDrop) continue;
-
-    const advP = phpMtRand(rng, 1, 30);
-
-    let threshold = 3;
-    if (pityCount < 3) {
-      threshold = pityThreshold;
-    }
-
-    const isAdv = advP <= threshold;
-
-    let fruit: Item;
+  function getFruit(rng: Rng): Item {
+    const threshold = pityCount < 3 ? pityThreshold : 3;
+    const isAdv = phpMtRand(rng, 1, 30) <= threshold;
 
     if (isAdv) {
       pityCount++;
       pityThreshold = 10;
-
-      const index = phpMtRand(rng, 0, 2);
-      fruit = advFruit[index];
-    } else {
-      pityThreshold += 10;
-
-      const index = phpMtRand(rng, 0, 18);
-      fruit = basicFruit[index];
+      return advFruit[phpMtRand(rng, 0, 2)];
     }
 
-    results.set(fight, fruit);
+    pityThreshold += 10;
+    return basicFruit[phpMtRand(rng, 0, 18)];
+  }
+
+  const deterministicFights = clamp(maxFights, 0, 56);
+  const overage = clamp(maxFights - 56, 0, Infinity);
+
+  for (let i = 0; i < getDeterministicDrops(deterministicFights); i++) {
+    const fight = 1 + (i * (i + 1)) / 2;
+    const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
+
+    results.set(fight - 1, getFruit(rng));
+  }
+
+  for (let i = 0; i < overage; i++) {
+    const fight = 57 + i;
+    const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
+
+    if (phpMtRand(rng, 1, 50) !== 1) continue;
+
+    results.set(fight - 1, getFruit(rng));
   }
 
   return results;

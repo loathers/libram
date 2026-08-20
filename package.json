@@ -17,12 +17,11 @@
     "format": "yarn run prettier --write . && yarn run eslint --fix .",
     "lint": "yarn run eslint && yarn run prettier --check .",
     "test": "yarn run vitest",
-    "prepack": "yarn run build && pinst --disable",
+    "prepack": "yarn run build",
     "updateProps": "node --import tsx ./tools/parseDefaultProperties.ts",
     "updateOverlappingItemSkillNames": "node --import tsx ./tools/parseItemSkillNames.ts",
     "parseModifiers": "node --import tsx ./tools/parseModifiers.ts",
-    "postinstall": "husky install",
-    "postpack": "pinst --enable"
+    "postinstall": "husky install"
   },
   "files": [
     "dist/**/*.js",

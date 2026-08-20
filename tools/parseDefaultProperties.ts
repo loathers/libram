@@ -118,6 +118,7 @@ const fakeItemProps = [
   "currentEasyBountyItem",
   "currentHardBountyItem",
   "currentSpecialBountyItem",
+  "walfordBucketItem",
 ];
 const itemProps = [
   "trapperOre",

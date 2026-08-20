@@ -18,4 +18,5 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: yarn install --immutable
       - run: npm install -g npm@latest
+      - run: yarn pinst --disable
       - run: npm publish

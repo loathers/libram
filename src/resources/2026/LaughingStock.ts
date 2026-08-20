@@ -18,6 +18,10 @@ const basicFruit = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranb
 
 const advFruit = $items`classic banana, antique watermelon, quince`;
 
+function getSeed(classId: number, pathId: number, daycount: number): number {
+  return classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381;
+}
+
 function laughingStockDrops(
   classId: number,
   pathId: number,
@@ -31,8 +35,7 @@ function laughingStockDrops(
   let fixedPtr = 0;
 
   for (let fight = 0; fight < maxFights; fight++) {
-    const seed =
-      classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381 * fight;
+    const seed = getSeed(classId, pathId, daycount) + 381 * fight;
     const rng = phpSeed(seed);
 
     let hasDrop: boolean;
@@ -99,7 +102,9 @@ export function canPredict(): boolean {
  * @returns The next predictable Portable Laughing Stock drop and how many
  * combats until it occurs, or null if the next drop is not predictable.
  */
-export function nextDrop(turnHorizon = myAdventures()): [Item, number] | null {
+export function nextDrop(
+  turnHorizon = myAdventures(),
+): [item: Item, combats: number] | null {
   const charges = get("_laughingStockCharges", 0);
 
   if (!canPredict()) {

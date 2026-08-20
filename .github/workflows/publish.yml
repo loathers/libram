@@ -10,12 +10,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: corepack enable
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
       - run: yarn install --immutable
       - run: npm install -g npm@latest
+      - run: yarn pinst --disable
       - run: npm publish

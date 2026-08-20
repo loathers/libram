@@ -12,8 +12,6 @@ import { $item, $items } from "../../template-string";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property";
 
-const fixedDropTurns = [1, 2, 4, 7, 11, 16, 22, 29, 37, 46, 56];
-
 const basicFruit = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
 const advFruit = $items`classic banana, antique watermelon, quince`;
@@ -32,7 +30,6 @@ function laughingStockDrops(
 
   let pityCount = 0;
   let pityThreshold = 10;
-  let fixedPtr = 0;
 
   for (let fight = 0; fight < maxFights; fight++) {
     const seed = getSeed(classId, pathId, daycount) + 381 * fight;
@@ -40,13 +37,10 @@ function laughingStockDrops(
 
     let hasDrop: boolean;
 
+    // The first 11 drops occur on fights 1 + triangular(n), n = 0..10.
     if (fight <= 56) {
-      if (fixedDropTurns[fixedPtr] === fight) {
-        hasDrop = true;
-        fixedPtr++;
-      } else {
-        hasDrop = false;
-      }
+      const n = Math.floor((Math.sqrt(8 * (fight - 1) + 1) - 1) / 2);
+      hasDrop = 1 + (n * (n + 1)) / 2 === fight;
     } else {
       hasDrop = phpMtRand(rng, 1, 50) === 1;
     }

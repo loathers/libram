@@ -4535,6 +4535,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"kol-rng@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "kol-rng@npm:3.0.0"
+  dependencies:
+    mersenne-twister: "npm:^1.1.0"
+  checksum: 10c0/b355abb72aa4ffb03cdc88d50f76046d39aad005117e1b0634346c34b67b747b55de1b21027d03733b33b6b796deffc445cd901bfc118e63fa458a52d8d3d141
+  languageName: node
+  linkType: hard
+
 "kolmafia@npm:^5.29143.0":
   version: 5.29143.0
   resolution: "kolmafia@npm:5.29143.0"
@@ -4591,6 +4600,7 @@ __metadata:
     eslint-plugin-libram: "npm:^0.6.0"
     husky: "npm:^9.1.6"
     java-parser: "npm:^2.3.2"
+    kol-rng: "npm:^3.0.0"
     kolmafia: "npm:^5.29143.0"
     lint-staged: "npm:^15.2.10"
     lodash-es: "npm:^4.17.21"
@@ -4815,6 +4825,13 @@ __metadata:
   version: 2.0.0
   resolution: "merge-stream@npm:2.0.0"
   checksum: 10c0/867fdbb30a6d58b011449b8885601ec1690c3e41c759ecd5a9d609094f7aed0096c37823ff4a7190ef0b8f22cc86beb7049196ff68c016e3b3c671d0dac91ce5
+  languageName: node
+  linkType: hard
+
+"mersenne-twister@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "mersenne-twister@npm:1.1.0"
+  checksum: 10c0/f6c17af4d323f4ffebb214aa714b404a667e3c6d033318cb164c8894619d20256e637cad7e628de41d0287c24e91f4263742d3ed81389fb917545ab9d8c3b2d9
   languageName: node
   linkType: hard
 

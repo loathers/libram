@@ -47,6 +47,7 @@
     "eslint-plugin-libram": "^0.6.0",
     "husky": "^9.1.6",
     "java-parser": "^2.3.2",
+    "kol-rng": "^3.0.0",
     "kolmafia": "^5.29143.0",
     "lint-staged": "^15.2.10",
     "lodash-es": "^4.17.21",

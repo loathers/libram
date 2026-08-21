@@ -49,19 +49,19 @@ class FruitTracker {
 
 /**
  * Predict the fruit drops from a Portable Laughing Stock over a given number of fights
+ * @param maxFights The maximum number of fights to simulate
  * @param characterClass The character class to use for the RNG seed; defaults to the current class
  * @param path The path to use for the RNG seed; defaults to the current path
  * @param daycount The daycount to use for the RNG seed; defaults to the current daycount
- * @param maxFights The maximum number of fights to simulate
  * @returns A Map of fight numbers to the fruit dropped on that fight
  */
 export function laughingStockDrops(
+  maxFights: number,
   characterClass: Class = myClass(),
   path: Path = myPath(),
   daycount: number = myDaycount(),
-  maxFights: number,
 ): Map<number, Item> {
-  const seed = getSeed(classId, pathId, daycount);
+  const seed = getSeed(characterClass.id, path.id, daycount);
 
   const results = new Map<number, Item>();
   const fruitTracker = new FruitTracker();
@@ -72,7 +72,7 @@ export function laughingStockDrops(
   for (const fight of fixedDropTurns.filter(
     (fight) => fight <= deterministicFights,
   )) {
-    const rng = phpSeed(seed+ 381 * (fight - 1));
+    const rng = phpSeed(seed + 381 * (fight - 1));
 
     results.set(fight, fruitTracker.getFruit(rng));
   }
@@ -118,10 +118,10 @@ export function nextDrop(
   }
 
   const drops = laughingStockDrops(
+    charges + turnHorizon,
     myClass(),
     myPath(),
     myDaycount(),
-    charges + turnHorizon,
   );
 
   for (const [fight, item] of drops) {
@@ -148,10 +148,10 @@ export function expectedDropsToday(
   }
 
   const drops = laughingStockDrops(
+    charges + turnHorizon,
     myClass(),
     myPath(),
     myDaycount(),
-    charges + turnHorizon,
   );
 
   return Array.from(drops.entries())

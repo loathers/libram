@@ -61,8 +61,7 @@ export function laughingStockDrops(
   daycount: number = myDaycount(),
   maxFights: number,
 ): Map<number, Item> {
-  const classId = characterClass.id;
-  const pathId = path.id;
+  const seed = getSeed(classId, pathId, daycount);
 
   const results = new Map<number, Item>();
   const fruitTracker = new FruitTracker();
@@ -73,14 +72,14 @@ export function laughingStockDrops(
   for (const fight of fixedDropTurns.filter(
     (fight) => fight <= deterministicFights,
   )) {
-    const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
+    const rng = phpSeed(seed+ 381 * (fight - 1));
 
     results.set(fight, fruitTracker.getFruit(rng));
   }
 
   for (let i = 0; i < overage; i++) {
     const fight = 57 + i;
-    const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
+    const rng = phpSeed(seed + 381 * (fight - 1));
 
     if (phpMtRand(rng, 1, 50) !== 1) continue;
 

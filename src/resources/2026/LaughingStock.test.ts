@@ -76,24 +76,24 @@ describe("LaughingStock", () => {
   it("predicts today's drops", () => {
     expect(names(LaughingStock.expectedDropsToday(400))).toEqual([
       // The fixed schedule
-      ["cherry", 1],
-      ["classic banana", 2],
-      ["pear", 4],
-      ["cactus fruit", 7],
+      ["antique watermelon", 1],
+      ["cherry", 2],
+      ["quince", 4],
+      ["peach", 7],
       ["quince", 11],
-      ["classic banana", 16],
-      ["quince", 22],
-      ["orange", 29],
-      ["peach", 37],
-      ["orange", 46],
-      ["banana", 56],
+      ["grapes", 16],
+      ["papaya", 22],
+      ["strawberry", 29],
+      ["strawberry", 37],
+      ["banana", 46],
+      ["cactus fruit", 56],
       // 1-in-50 rolls from here on
-      ["grapes", 114],
-      ["orange", 127],
-      ["orange", 218],
-      ["classic banana", 247],
-      ["peach", 256],
-      ["cherry", 377],
+      ["grapes", 115],
+      ["orange", 128],
+      ["orange", 219],
+      ["classic banana", 248],
+      ["peach", 257],
+      ["cherry", 378],
     ]);
   });
 

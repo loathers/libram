@@ -99,7 +99,40 @@ describe("LaughingStock", () => {
 
   it("predicts the next drop", () => {
     const drops = LaughingStock.expectedDropsToday(100);
-    expect(LaughingStock.nextDrop(100)).toEqual(drops?.[0]);
+    expect(LaughingStock.nextDrop()).toEqual(drops?.[0]);
+  });
+
+  it("finds the next drop after the fixed drop schedule", () => {
+    setProperty("_laughingStockCharges", "259");
+
+    expect(LaughingStock.nextDrop()).toEqual([
+      expect.objectContaining({ name: "cherry" }),
+      119,
+    ]);
+  });
+
+  it("predicts all drops through turn 378", () => {
+    setProperty("_laughingStockCharges", "0");
+
+    expect(names(LaughingStock.expectedDropsToday(378))).toEqual([
+      ["antique watermelon", 1],
+      ["cherry", 2],
+      ["quince", 4],
+      ["peach", 7],
+      ["quince", 11],
+      ["grapes", 16],
+      ["papaya", 22],
+      ["strawberry", 29],
+      ["strawberry", 37],
+      ["banana", 46],
+      ["cactus fruit", 56],
+      ["grapes", 115],
+      ["orange", 128],
+      ["orange", 219],
+      ["classic banana", 248],
+      ["peach", 257],
+      ["cherry", 378],
+    ]);
   });
 
   it("accounts for charges already spent today", () => {

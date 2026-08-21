@@ -22,8 +22,11 @@ function getSeed(classId: number, pathId: number, daycount: number): number {
   return classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381;
 }
 
+const fixedDropTurns = Array(11).fill(null).map((_, i) => 1 + (i + 1) * i / 2);
+
 function getDeterministicDrops(fights: number): number {
-  return fights <= 0 ? 0 : Math.floor((Math.sqrt(8 * fights - 7) - 1) / 2) + 1;
+  const index = fixedDropTurns.findIndex((turn) => turn > fights);
+  return index >= 0 ? index : fixedDropTurns.length
 }
 
 function laughingStockDrops(

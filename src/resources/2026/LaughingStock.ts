@@ -75,7 +75,7 @@ export function laughingStockDrops(
   )) {
     const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
 
-    results.set(fight - 1, fruitTracker.getFruit(rng));
+    results.set(fight, fruitTracker.getFruit(rng));
   }
 
   for (let i = 0; i < overage; i++) {
@@ -84,7 +84,7 @@ export function laughingStockDrops(
 
     if (phpMtRand(rng, 1, 50) !== 1) continue;
 
-    results.set(fight - 1, fruitTracker.getFruit(rng));
+    results.set(fight, fruitTracker.getFruit(rng));
   }
 
   return results;

@@ -9,12 +9,10 @@ import {
   Path,
   phpMtRand,
   phpSeed,
-  Rng,
 } from "kolmafia";
 import { $item, $items } from "../../template-string";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property";
-import { clamp } from "../../utils";
 
 const BASIC_FRUIT = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
@@ -31,19 +29,38 @@ const fixedDropTurns = Array(11)
 class FruitTracker {
   private pityCount = 0;
   private pityThreshold = 10;
+  private fight = 0;
 
-  getFruit(rng: Rng): Item {
-    const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
-    const isAdvanced = phpMtRand(rng, 1, 30) <= threshold;
+  constructor(private readonly seed: number) {}
 
-    if (isAdvanced) {
-      this.pityCount++;
-      this.pityThreshold = 10;
-      return ADVANCED_FRUIT[phpMtRand(rng, 0, 2)];
+  getFruit(fight: number): Item | null {
+    while (this.fight < fight) {
+      this.fight++;
+
+      const rng = phpSeed(this.seed + 381 * (this.fight - 1));
+      const guaranteed = fixedDropTurns.includes(this.fight);
+      const randomDrop = this.fight > 56 && phpMtRand(rng, 1, 50) === 1;
+
+      if (!guaranteed && !randomDrop) continue;
+
+      const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
+      const isAdvanced = phpMtRand(rng, 1, 30) <= threshold;
+
+      if (isAdvanced) {
+        this.pityCount++;
+        this.pityThreshold = 10;
+        if (this.fight === fight) {
+          return ADVANCED_FRUIT[phpMtRand(rng, 0, 2)];
+        }
+      } else {
+        this.pityThreshold += 10;
+        if (this.fight === fight) {
+          return BASIC_FRUIT[phpMtRand(rng, 0, 18)];
+        }
+      }
     }
 
-    this.pityThreshold += 10;
-    return BASIC_FRUIT[phpMtRand(rng, 0, 18)];
+    return null;
   }
 }
 
@@ -61,29 +78,18 @@ export function laughingStockDrops(
   path: Path = myPath(),
   daycount: number = myDaycount(),
 ): Map<number, Item> {
-  const seed = getSeed(characterClass.id, path.id, daycount);
+  const tracker = new FruitTracker(
+    getSeed(characterClass.id, path.id, daycount),
+  );
 
   const results = new Map<number, Item>();
-  const fruitTracker = new FruitTracker();
 
-  const deterministicFights = clamp(maxFights, 0, 56);
-  const overage = clamp(maxFights - 56, 0, Infinity);
+  for (let fight = 1; fight <= maxFights; fight++) {
+    const fruit = tracker.getFruit(fight);
 
-  for (const fight of fixedDropTurns.filter(
-    (fight) => fight <= deterministicFights,
-  )) {
-    const rng = phpSeed(seed + 381 * (fight - 1));
-
-    results.set(fight, fruitTracker.getFruit(rng));
-  }
-
-  for (let i = 0; i < overage; i++) {
-    const fight = 57 + i;
-    const rng = phpSeed(seed + 381 * (fight - 1));
-
-    if (phpMtRand(rng, 1, 50) !== 1) continue;
-
-    results.set(fight, fruitTracker.getFruit(rng));
+    if (fruit) {
+      results.set(fight, fruit);
+    }
   }
 
   return results;
@@ -104,33 +110,26 @@ export function canPredict(): boolean {
 }
 
 /**
- * @param turnHorizon defines how many turns to check for available drops; defaults to remaining adventures
  * @returns The next predictable Portable Laughing Stock drop and how many
  * combats until it occurs, or null if the next drop is not predictable.
  */
-export function nextDrop(
-  turnHorizon = myAdventures(),
-): [item: Item, combats: number] | null {
+export function nextDrop(): [item: Item, combats: number] | null {
   const charges = get("_laughingStockCharges", 0);
 
-  if (!canPredict()) {
-    return null;
-  }
+  if (!canPredict()) return null;
 
-  const drops = laughingStockDrops(
-    charges + turnHorizon,
-    myClass(),
-    myPath(),
-    myDaycount(),
-  );
+  const seed = getSeed(myClass().id, myPath().id, myDaycount());
+  const tracker = new FruitTracker(seed);
 
-  for (const [fight, item] of drops) {
-    if (fight > charges) {
-      return [item, fight - charges];
+  for (let fight = 1; ; fight++) {
+    const fruit = tracker.getFruit(fight);
+
+    if (fight <= charges) continue;
+
+    if (fruit) {
+      return [fruit, fight - charges];
     }
   }
-
-  return null;
 }
 
 /**
@@ -143,18 +142,16 @@ export function expectedDropsToday(
 ): [Item, number][] | null {
   const charges = get("_laughingStockCharges", 0);
 
-  if (!canPredict()) {
-    return null;
-  }
+  if (!canPredict()) return null;
 
-  const drops = laughingStockDrops(
-    charges + turnHorizon,
-    myClass(),
-    myPath(),
-    myDaycount(),
-  );
-
-  return Array.from(drops.entries())
+  return Array.from(
+    laughingStockDrops(
+      charges + turnHorizon,
+      myClass(),
+      myPath(),
+      myDaycount(),
+    ),
+  )
     .filter(([fight]) => fight > charges)
     .map(([fight, item]) => [item, fight - charges]);
 }

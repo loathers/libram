@@ -14,7 +14,7 @@ import { have as have_ } from "../../lib.js";
 import { get } from "../../property";
 import { clamp } from "../../utils";
 
-const basicFruit = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
+const BASIC_FRUIT = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
 const ADVANCED_FRUIT = $items`classic banana, antique watermelon, quince`;
 

@@ -1,10 +1,12 @@
 import {
+  Class,
   daycount,
   Item,
   myAdventures,
   myClass,
   myDaycount,
   myPath,
+  Path,
   phpMtRand,
   phpSeed,
   Rng,
@@ -22,46 +24,58 @@ function getSeed(classId: number, pathId: number, daycount: number): number {
   return classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381;
 }
 
-const fixedDropTurns = Array(11).fill(null).map((_, i) => 1 + (i + 1) * i / 2);
+const fixedDropTurns = Array(11)
+  .fill(null)
+  .map((_, i) => 1 + ((i + 1) * i) / 2);
 
-function getDeterministicDrops(fights: number): number {
-  const index = fixedDropTurns.findIndex((turn) => turn > fights);
-  return index >= 0 ? index : fixedDropTurns.length
-}
+class FruitTracker {
+  private pityCount = 0;
+  private pityThreshold = 10;
 
-function laughingStockDrops(
-  classId: number,
-  pathId: number,
-  daycount: number,
-  maxFights: number,
-): Map<number, Item> {
-  const results = new Map<number, Item>();
+  getFruit(rng: Rng): Item {
+    const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
+    const isAdvanced = phpMtRand(rng, 1, 30) <= threshold;
 
-  let pityCount = 0;
-  let pityThreshold = 10;
-
-  function getFruit(rng: Rng): Item {
-    const threshold = pityCount < 3 ? pityThreshold : 3;
-    const isAdv = phpMtRand(rng, 1, 30) <= threshold;
-
-    if (isAdv) {
-      pityCount++;
-      pityThreshold = 10;
-      return advFruit[phpMtRand(rng, 0, 2)];
+    if (isAdvanced) {
+      this.pityCount++;
+      this.pityThreshold = 10;
+      return ADVANCED_FRUIT[phpMtRand(rng, 0, 2)];
     }
 
-    pityThreshold += 10;
-    return basicFruit[phpMtRand(rng, 0, 18)];
+    this.pityThreshold += 10;
+    return BASIC_FRUIT[phpMtRand(rng, 0, 18)];
   }
+}
+
+/**
+ * Predict the fruit drops from a Portable Laughing Stock over a given number of fights
+ * @param characterClass The character class to use for the RNG seed; defaults to the current class
+ * @param path The path to use for the RNG seed; defaults to the current path
+ * @param daycount The daycount to use for the RNG seed; defaults to the current daycount
+ * @param maxFights The maximum number of fights to simulate
+ * @returns A Map of fight numbers to the fruit dropped on that fight
+ */
+export function laughingStockDrops(
+  characterClass: Class = myClass(),
+  path: Path = myPath(),
+  daycount: number = myDaycount(),
+  maxFights: number,
+): Map<number, Item> {
+  const classId = characterClass.id;
+  const pathId = path.id;
+
+  const results = new Map<number, Item>();
+  const fruitTracker = new FruitTracker();
 
   const deterministicFights = clamp(maxFights, 0, 56);
   const overage = clamp(maxFights - 56, 0, Infinity);
 
-  for (let i = 0; i < getDeterministicDrops(deterministicFights); i++) {
-    const fight = 1 + (i * (i + 1)) / 2;
+  for (const fight of fixedDropTurns.filter(
+    (fight) => fight <= deterministicFights,
+  )) {
     const rng = phpSeed(getSeed(classId, pathId, daycount) + 381 * (fight - 1));
 
-    results.set(fight - 1, getFruit(rng));
+    results.set(fight - 1, fruitTracker.getFruit(rng));
   }
 
   for (let i = 0; i < overage; i++) {
@@ -70,7 +84,7 @@ function laughingStockDrops(
 
     if (phpMtRand(rng, 1, 50) !== 1) continue;
 
-    results.set(fight - 1, getFruit(rng));
+    results.set(fight - 1, fruitTracker.getFruit(rng));
   }
 
   return results;
@@ -105,8 +119,8 @@ export function nextDrop(
   }
 
   const drops = laughingStockDrops(
-    myClass().id,
-    myPath().id,
+    myClass(),
+    myPath(),
     myDaycount(),
     charges + turnHorizon,
   );
@@ -135,8 +149,8 @@ export function expectedDropsToday(
   }
 
   const drops = laughingStockDrops(
-    myClass().id,
-    myPath().id,
+    myClass(),
+    myPath(),
     myDaycount(),
     charges + turnHorizon,
   );

@@ -16,7 +16,7 @@ import { clamp } from "../../utils";
 
 const basicFruit = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
-const advFruit = $items`classic banana, antique watermelon, quince`;
+const ADVANCED_FRUIT = $items`classic banana, antique watermelon, quince`;
 
 function getSeed(classId: number, pathId: number, daycount: number): number {
   return classId ** 3 + 84 * pathId + 123 * (daycount - 1) + 381;

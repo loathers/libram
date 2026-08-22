@@ -72,6 +72,7 @@ import * as SkeletonOfCrimboPast from "./2025/SkeletonOfCrimboPast.js";
 import * as LegendarySealClubbingClub from "./2026/LegendarySealClubbingClub.js";
 import * as EternityCodpiece from "./2026/EternityCodpiece.js";
 import * as CupOfThirteens from "./2026/CupOfThirteens.js";
+import * as PulledTaffy from "./2013/PulledTaffy.js";
 export {
   AprilingBandHelmet,
   AsdonMartin,
@@ -126,6 +127,7 @@ export {
   PeridotOfPeril,
   PocketProfessor,
   PrismaticBeret,
+  PulledTaffy,
   Raffle,
   RainDoh,
   ReagnimatedGnome,

@@ -30,8 +30,11 @@ class FruitTracker {
   private pityCount = 0;
   private pityThreshold = 10;
   private fight = 0;
+  private readonly seed: number;
 
-  constructor(private readonly seed: number) {}
+  constructor(seed: number) {
+    this.seed = seed;
+  }
 
   getFruit(fight: number): Item | null {
     while (this.fight < fight) {

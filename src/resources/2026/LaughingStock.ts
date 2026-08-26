@@ -36,34 +36,39 @@ class FruitTracker {
     this.seed = seed;
   }
 
+  private get rng() {
+    return phpSeed(this.seed + 381 * this.fight);
+  }
+
+  private computeFruit(): Item {
+    const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
+    const isAdvanced = phpMtRand(this.rng, 1, 30) <= threshold;
+    if (isAdvanced) {
+      this.pityCount++;
+      this.pityThreshold = 10;
+      return ADVANCED_FRUIT[phpMtRand(this.rng, 0, 2)];
+    } else {
+      this.pityThreshold += 10;
+      return BASIC_FRUIT[phpMtRand(this.rng, 0, 18)];
+    }
+  }
+
   getFruit(fight: number): Item | null {
-    while (this.fight < fight) {
-      this.fight++;
-
-      const rng = phpSeed(this.seed + 381 * (this.fight - 1));
-      const guaranteed = fixedDropTurns.includes(this.fight);
-      const randomDrop = this.fight > 56 && phpMtRand(rng, 1, 50) === 1;
-
-      if (!guaranteed && !randomDrop) continue;
-
-      const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
-      const isAdvanced = phpMtRand(rng, 1, 30) <= threshold;
-
-      if (isAdvanced) {
-        this.pityCount++;
-        this.pityThreshold = 10;
-        if (this.fight === fight) {
-          return ADVANCED_FRUIT[phpMtRand(rng, 0, 2)];
-        }
-      } else {
-        this.pityThreshold += 10;
-        if (this.fight === fight) {
-          return BASIC_FRUIT[phpMtRand(rng, 0, 18)];
+    if (fight < Math.max(...fixedDropTurns)) {
+      for (const drop of fixedDropTurns) {
+        if (drop >= this.fight) {
+          this.fight = drop;
+          return drop === this.fight ? this.computeFruit() : null;
         }
       }
     }
 
-    return null;
+    for (this.fight; this.fight < fight; this.fight++) {
+      if (phpMtRand(this.rng, 1, 50) !== 1) continue;
+      this.computeFruit();
+    }
+
+    return phpMtRand(this.rng, 1, 50) === 1 ? this.computeFruit() : null;
   }
 }
 

@@ -31,13 +31,23 @@ class FruitTracker {
   private pityThreshold = 10;
   private fight = 0;
   private readonly seed: number;
-
+  #rng = phpSeed(this.phpSeed);
+  #seed = this.phpSeed;
   constructor(seed: number) {
     this.seed = seed;
   }
 
+  private get phpSeed() {
+    return this.seed + 381 * (this.fight - 1);
+  }
+
   private get rng() {
-    return phpSeed(this.seed + 381 * this.fight);
+    if (this.#seed !== this.phpSeed) {
+      this.#seed = this.phpSeed;
+      this.#rng = phpSeed(this.#seed);
+    }
+
+    return this.#rng;
   }
 
   private computeFruit(): Item {
@@ -56,10 +66,13 @@ class FruitTracker {
   getFruit(fight: number): Item | null {
     for (const drop of fixedDropTurns) {
       if (drop > this.fight) {
+        if (fight < drop) {
+          this.fight = fight;
+          return null;
+        }
         this.fight = drop;
         const fruit = this.computeFruit();
         if (fight === drop) return fruit;
-        if (fight < drop) return null;
       }
     }
 

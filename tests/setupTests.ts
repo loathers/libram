@@ -1,7 +1,7 @@
 import { decodeHTML } from "entities";
 
 import * as kolmafia from "kolmafia";
-import { vi } from "vitest";
+import { vi, beforeEach } from "vitest";
 
 vi.mock("kolmafia");
 
@@ -114,7 +114,9 @@ vi.mocked(kolmafia).toPlural.mockImplementation((item) => item.plural);
 vi.mocked(kolmafia).toString.mockImplementation((value) => value.toString());
 
 const mockProperties = new Map<string, string>();
-export const clearMockProperties = () => mockProperties.clear();
+beforeEach(() => {
+  mockProperties.clear();
+});
 vi.mocked(kolmafia).getProperty.mockImplementation(
   (key) => mockProperties.get(key) ?? "",
 );

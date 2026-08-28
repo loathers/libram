@@ -58,8 +58,8 @@ const baseSettings = {
 
   watch: watch
     ? {
-      clearScreen: false,
-    }
+        clearScreen: false,
+      }
     : undefined,
 };
 

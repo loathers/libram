@@ -5,7 +5,8 @@ import replace from "@rollup/plugin-replace";
 
 const watch = process.argv.includes("--watch") || process.argv.includes("-w");
 
-const baseSettings = {
+export default {
+  input: { libram: "src/index.ts" },
   output: {
     dir: "KoLmafia/scripts",
     format: "cjs",
@@ -53,6 +54,7 @@ const baseSettings = {
         ],
         "@babel/preset-typescript",
       ],
+      exclude: ["node_modules/**", "**/*.test.ts", "tests/**"],
     }),
   ],
 
@@ -62,8 +64,3 @@ const baseSettings = {
       }
     : undefined,
 };
-
-export default [{ libram: "src/index.ts" }].map((input) => ({
-  input,
-  ...baseSettings,
-}));

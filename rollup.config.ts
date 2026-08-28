@@ -7,7 +7,7 @@ const watch = process.argv.includes("--watch") || process.argv.includes("-w");
 
 const baseSettings = {
   output: {
-    dir: "dist",
+    dir: "KoLmafia/scripts",
     format: "cjs",
     entryFileNames: "[name].js",
     chunkFileNames: "[name].js",
@@ -58,12 +58,12 @@ const baseSettings = {
 
   watch: watch
     ? {
-        clearScreen: false,
-      }
+      clearScreen: false,
+    }
     : undefined,
 };
 
-export default [{ index: "src/index.ts" }].map((input) => ({
+export default [{ libram: "src/index.ts" }].map((input) => ({
   input,
   ...baseSettings,
 }));

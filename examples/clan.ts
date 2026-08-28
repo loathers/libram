@@ -1,5 +1,5 @@
 import { getClanName, itemAmount, printHtml } from "kolmafia";
-import { $item, Clan, console } from "../src/index";
+import { $item, Clan, console } from "../src/index.js";
 
 const piglets = Clan.join("The Piglets of Fate");
 

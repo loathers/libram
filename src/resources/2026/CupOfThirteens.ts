@@ -9,10 +9,10 @@ import {
   runChoice,
   visitUrl,
 } from "kolmafia";
-import { have as have_ } from "../../lib";
-import { $effects, $item, $stats } from "../../template-string";
-import { arrayToCountedMap, clamp, sum, Tuple } from "../../utils";
-import { get } from "../../property";
+import { have as have_ } from "../../lib.js";
+import { $effects, $item, $stats } from "../../template-string.js";
+import { arrayToCountedMap, clamp, sum, Tuple } from "../../utils.js";
+import { get } from "../../property.js";
 
 /**
  * @returns Whether you `have` the Cup of 13s.

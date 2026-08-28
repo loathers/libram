@@ -1,6 +1,6 @@
 import { Monster } from "kolmafia";
 import { have as have_ } from "../../lib.js";
-import { get } from "../../property";
+import { get } from "../../property.js";
 import { $item, $skill } from "../../template-string.js";
 import * as Counter from "../../counter.js";
 

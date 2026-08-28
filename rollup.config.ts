@@ -54,7 +54,7 @@ export default {
         ],
         "@babel/preset-typescript",
       ],
-      exclude: ["node_modules/**", "**/*.test.ts", "tests/**"],
+      exclude: [/node_modules/, /\.test\.ts$/, /^[./]*tests\//],
     }),
   ],
 

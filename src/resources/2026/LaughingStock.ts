@@ -27,43 +27,58 @@ const fixedDropTurns = Array(11)
   .map((_, i) => 1 + ((i + 1) * i) / 2);
 
 class FruitTracker {
-  private pityCount = 0;
-  private pityThreshold = 10;
-  private fight = 0;
-  private readonly seed: number;
+  #pityCount = 0;
+  #pityThreshold = 10;
+  #fight = 0;
+  readonly seed: number;
+
+  #currentRng = phpSeed(this.phpSeed);
+  #currentSeed = this.phpSeed;
 
   constructor(seed: number) {
     this.seed = seed;
   }
 
+  private get phpSeed() {
+    return this.seed + 381 * (this.#fight - 1);
+  }
+
   private get rng() {
-    return phpSeed(this.seed + 381 * this.fight);
+    if (this.#currentSeed !== this.phpSeed) {
+      this.#currentSeed = this.phpSeed;
+      this.#currentRng = phpSeed(this.#currentSeed);
+    }
+
+    return this.#currentRng;
   }
 
   private computeFruit(): Item {
-    const threshold = this.pityCount < 3 ? this.pityThreshold : 3;
+    const threshold = this.#pityCount < 3 ? this.#pityThreshold : 3;
     const isAdvanced = phpMtRand(this.rng, 1, 30) <= threshold;
     if (isAdvanced) {
-      this.pityCount++;
-      this.pityThreshold = 10;
+      this.#pityCount++;
+      this.#pityThreshold = 10;
       return ADVANCED_FRUIT[phpMtRand(this.rng, 0, 2)];
     } else {
-      this.pityThreshold += 10;
+      this.#pityThreshold += 10;
       return BASIC_FRUIT[phpMtRand(this.rng, 0, 18)];
     }
   }
 
   getFruit(fight: number): Item | null {
-    if (fight < Math.max(...fixedDropTurns)) {
-      for (const drop of fixedDropTurns) {
-        if (drop >= this.fight) {
-          this.fight = drop;
-          return drop === this.fight ? this.computeFruit() : null;
+    for (const drop of fixedDropTurns) {
+      if (drop > this.#fight) {
+        if (fight < drop) {
+          this.#fight = fight;
+          return null;
         }
+        this.#fight = drop;
+        const fruit = this.computeFruit();
+        if (fight === drop) return fruit;
       }
     }
 
-    for (this.fight; this.fight < fight; this.fight++) {
+    for (this.#fight; this.#fight < fight; this.#fight++) {
       if (phpMtRand(this.rng, 1, 50) !== 1) continue;
       this.computeFruit();
     }

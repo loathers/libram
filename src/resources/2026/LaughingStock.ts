@@ -10,9 +10,9 @@ import {
   phpMtRand,
   phpSeed,
 } from "kolmafia";
-import { $item, $items } from "../../template-string";
+import { $item, $items } from "../../template-string.js";
 import { have as have_ } from "../../lib.js";
-import { get } from "../../property";
+import { get } from "../../property.js";
 
 const BASIC_FRUIT = $items`orange, grapefruit, grapes, lemon, lime, papaya, cranberries, strawberry, cherry, kumquat, tangerine, raspberry, kiwi, blackberry, banana, cactus fruit, plum, pear, peach`;
 
@@ -56,9 +56,13 @@ class FruitTracker {
   getFruit(fight: number): Item | null {
     if (fight < Math.max(...fixedDropTurns)) {
       for (const drop of fixedDropTurns) {
-        if (drop >= this.fight) {
+        const fruit = this.computeFruit();
+        try {
+          if (drop >= this.fight) {
+            return drop === this.fight ? fruit : null;
+          }
+        } finally {
           this.fight = drop;
-          return drop === this.fight ? this.computeFruit() : null;
         }
       }
     }

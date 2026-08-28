@@ -73,6 +73,7 @@ import * as LegendarySealClubbingClub from "./2026/LegendarySealClubbingClub.js"
 import * as EternityCodpiece from "./2026/EternityCodpiece.js";
 import * as CupOfThirteens from "./2026/CupOfThirteens.js";
 import * as PriceGun from "./evergreen/PriceGun.js";
+import * as LaughingStock from "./2026/LaughingStock.js";
 import * as PulledTaffy from "./2013/PulledTaffy.js";
 export {
   AprilingBandHelmet,
@@ -117,6 +118,7 @@ export {
   JuneCleaver,
   JungMan,
   Latte,
+  LaughingStock,
   LegendarySealClubbingClub,
   Leprecondo,
   LookingGlass,

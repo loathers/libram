@@ -54,16 +54,12 @@ class FruitTracker {
   }
 
   getFruit(fight: number): Item | null {
-    if (fight < Math.max(...fixedDropTurns)) {
-      for (const drop of fixedDropTurns) {
+    for (const drop of fixedDropTurns) {
+      if (drop >= this.fight) {
+        this.fight = drop;
         const fruit = this.computeFruit();
-        if (drop >= this.fight) {
-          try {
-            return drop === this.fight ? fruit : null;
-          } finally {
-            this.fight = drop;
-          }
-        }
+        if (fight === drop) return fruit;
+        if (fight < drop) return null;
       }
     }
 

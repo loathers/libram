@@ -1,5 +1,5 @@
-import { get, set } from "../src";
-import { withProperty } from "../src/property";
+import { get, set } from "../src.js";
+import { withProperty } from "../src/property.js";
 
 const raindoh = get("_raindohCopiesMade");
 const putty = get("spookyPuttyCopiesMade");

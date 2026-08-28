@@ -1,6 +1,6 @@
 // This is an example consult script using the macro handler in src/combat.ts.
 
-import { Macro } from "../src";
+import { Macro } from "../src.js";
 
 /**
  * Main function for the consult script.

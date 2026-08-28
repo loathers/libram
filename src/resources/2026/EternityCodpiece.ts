@@ -1,7 +1,7 @@
 import { Item, equippedItem, stringModifier } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { $item, $slots } from "../../template-string.js";
-import { Modifiers, parseModifierString } from "../../modifier";
+import { Modifiers, parseModifierString } from "../../modifier.js";
 
 /**
  * @returns Whether or not you `have` The Eternity Codpiece

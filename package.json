@@ -24,8 +24,8 @@
     "postinstall": "husky install"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "KoLmafia/scripts/**/*.js",
+    "KoLmafia/scripts/**/*.d.ts"
   ],
   "devDependencies": {
     "@babel/compat-data": "^7.25.4",

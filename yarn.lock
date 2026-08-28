@@ -3285,10 +3285,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.47.0":
-  version: 3.47.0
-  resolution: "core-js@npm:3.47.0"
-  checksum: 10c0/9b1a7088b7c660c7b8f1d4c90bb1816a8d5352ebdcb7bc742e3a0e4eb803316b5aa17bacb8769522342196351a5430178f46914644f2bfdb94ce0ced3c7fd523
+"core-js@npm:^3.50.0":
+  version: 3.50.0
+  resolution: "core-js@npm:3.50.0"
+  checksum: 10c0/1bfcfb1dbdf45b0b1428a9fdcb03697d1fc52c7e9bc336f804a86ff2c2705a301dca7d9d6636d09d49d60298183273b9321681baeaf330c78db5393bc73f3f6a
   languageName: node
   linkType: hard
 
@@ -4589,7 +4589,7 @@ __metadata:
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:^22.5.4"
-    core-js: "npm:^3.47.0"
+    core-js: "npm:^3.50.0"
     entities: "npm:^7.0.0"
     esbuild: "npm:^0.23.1"
     esbuild-plugin-babel: "npm:^0.2.3"

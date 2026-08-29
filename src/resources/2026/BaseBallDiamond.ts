@@ -189,16 +189,6 @@ export function findPitchOrder(
     return null;
   }
 
-  // The requested special pitches must occur in lineup order.
-  if (
-    requests.some(
-      (request, index) =>
-        index > 0 && request.position <= requests[index - 1].position,
-    )
-  ) {
-    return null;
-  }
-
   // A greater pitch requires two previous lesser pitches.
   if (requests.some(({ position }) => position < 2)) {
     return null;

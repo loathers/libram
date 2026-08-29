@@ -15,7 +15,6 @@ import {
 } from "kolmafia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { clearMockProperties } from "../../../tests/setupTests.js";
 import * as LaughingStock from "./LaughingStock.js";
 
 type Rng = ReturnType<typeof phpSeed>;
@@ -36,7 +35,6 @@ function mockRng(): void {
 }
 
 beforeEach(() => {
-  clearMockProperties();
   mockRng();
   vi.mocked(availableAmount).mockReturnValue(1);
   vi.mocked(daycount).mockReturnValue(1);

@@ -578,7 +578,9 @@ export class Macro {
         this.step("else").step(elseEntry);
       }
     }
-    this.step(elseTrain.filter(Boolean).length ? "endelse" : "endif");
+
+    this.step("endif");
+
     return this;
   }
 

@@ -792,14 +792,14 @@ export class Macro {
    * Items will be funkslinged if available.
    *
    * @param items Items to use.
-   * @param predicate PreBALLSPredicate Predicate to use to decide when to stop
+   * @param condition The BALLS condition for the usequeue statement, optional.
    * @returns {Macro} This object itself.
    */
-  itemQueue(...items: ItemOrName[], predicate: ): this {
+  itemQueue(items: ItemOrName[], condition?: PreBALLSPredicate): this {
     if (items.length === 0) return this;
     return this.step(
-      `usequeue ${predicate ? `until ${makeBALLSPredicate(predicate)} :: ` : ''}${items.splice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
-    ).itemQueue(...items, predicate);
+      `usequeue ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(items.slice(20), condition);
   }
 
   /**
@@ -807,13 +807,15 @@ export class Macro {
    * Items will be funkslinged if available.
    *
    * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
    * @returns {Macro} This object itself.
    */
   static itemQueue<T extends Macro>(
     this: Constructor<T>,
-    ...items: ItemOrName[]
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
   ): T {
-    return new this().itemQueue(...items);
+    return new this().itemQueue(items, condition);
   }
 
   /**

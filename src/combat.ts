@@ -469,7 +469,7 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   if_(
@@ -480,12 +480,10 @@ export class Macro {
     this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
 
     if (ifFalse) {
-      this.step("else").step(ifFalse).step("endelf");
-    } else {
-      this.step("endif");
+      this.step("else").step(ifFalse);
     }
 
-    return this;
+    return this.step("endif");
   }
 
   /**
@@ -493,7 +491,7 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static if_<T extends Macro>(
@@ -510,7 +508,7 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the negated condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   ifNot(
@@ -525,7 +523,7 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the negated condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static ifNot<T extends Macro>(

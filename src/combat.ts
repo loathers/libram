@@ -191,7 +191,7 @@ export type ElseIfComponent = {
 };
 export type ElseTrain =
   | ElseIfComponent[]
-  | [...ElseIfComponent[], string | Macro];
+  | [...ElseIfComponent[], undefined | string | Macro];
 
 /**
  * BALLS macro builder for direct submission to KoL.
@@ -567,7 +567,7 @@ export class Macro {
   ): this {
     this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
 
-    for (const elseEntry of elseTrain) {
+    for (const elseEntry of elseTrain.filter(Boolean)) {
       if (typeof elseEntry === "object" && !(elseEntry instanceof Macro)) {
         const { predicate, macro } = elseEntry;
         this.step(`elif ${Macro.makeBALLSPredicate(predicate)}`).step(macro);
@@ -575,7 +575,7 @@ export class Macro {
         this.step("else").step(elseEntry);
       }
     }
-    this.step(elseTrain.length ? "endelse" : "endif");
+    this.step(elseTrain.filter(Boolean).length ? "endelse" : "endif");
     return this;
   }
 

@@ -534,6 +534,14 @@ export class Macro {
       return `monsterphylum ${condition}`;
     } else if (condition instanceof Element) {
       return `monsterelement ${condition}`;
+    } else if (
+      condition === "indoor" ||
+      condition === "outdoor" ||
+      condition === "underground" ||
+      condition === "underwater" ||
+      condition === "none"
+    ) {
+      return `environment ${condition}`;
     }
     return condition;
   }

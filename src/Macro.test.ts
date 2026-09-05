@@ -374,4 +374,28 @@ describe(Macro.makeBALLSPredicate, () => {
   it("string", () => {
     expect(Macro.makeBALLSPredicate("mock")).toEqual("mock");
   });
+
+  it("Environment indoor", () => {
+    expect(Macro.makeBALLSPredicate("indoor")).toEqual("environment indoor");
+  });
+
+  it("Environment outdoor", () => {
+    expect(Macro.makeBALLSPredicate("outdoor")).toEqual("environment outdoor");
+  });
+
+  it("Environment underground", () => {
+    expect(Macro.makeBALLSPredicate("underground")).toEqual(
+      "environment underground",
+    );
+  });
+
+  it("Environment underwater", () => {
+    expect(Macro.makeBALLSPredicate("underwater")).toEqual(
+      "environment underwater",
+    );
+  });
+
+  it("Environment none", () => {
+    expect(Macro.makeBALLSPredicate("none")).toEqual("environment none");
+  });
 });

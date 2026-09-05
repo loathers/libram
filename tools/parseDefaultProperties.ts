@@ -12,13 +12,15 @@ const PROPS_FILE =
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
+
+const fakeNumbers = ["tavernLayout"]
 /**
  * @param property Property name
  * @param value Property value
  * @returns Whether the default value for this property is numeric
  */
-export function hasNumericDefault(property: string, value: string): boolean {
-  return !isNaN(Number(value)) && !isNaN(parseFloat(value));
+export function isNumericProperty(property: string, value: string): boolean {
+  return !isNaN(Number(value)) && !isNaN(parseFloat(value)) && !fakeNumbers.includes(property);
 }
 
 const numericOrStringProperties = [
@@ -196,7 +198,7 @@ async function main() {
 
     if (isMonsterProperty(property)) {
       keys.push("MonsterProperty");
-      if (hasNumericDefault(property, defaultValue)) {
+      if (isNumericProperty(property, defaultValue)) {
         keys.push("MonsterNumericProperty");
       }
     } else if (isLocationProperty(property)) {
@@ -205,14 +207,14 @@ async function main() {
       keys.push("StatProperty");
     } else if (isFamiliarProperty(property)) {
       keys.push("FamiliarProperty");
-      if (hasNumericDefault(property, defaultValue)) {
+      if (isNumericProperty(property, defaultValue)) {
         keys.push("FamiliarNumericProperty");
       }
     } else if (isPhylumProperty(property)) {
       keys.push("PhylumProperty");
     } else if (isItemProperty(property)) {
       keys.push("ItemProperty");
-      if (hasNumericDefault(property, defaultValue)) {
+      if (isNumericProperty(property, defaultValue)) {
         keys.push("ItemNumericProperty");
       }
     } else if (isNumericOrStringProperty(property)) {
@@ -221,7 +223,7 @@ async function main() {
       keys.push("StringProperty");
     } else if (hasBooleanDefault(property, defaultValue)) {
       keys.push("BooleanProperty");
-    } else if (hasNumericDefault(property, defaultValue)) {
+    } else if (isNumericProperty(property, defaultValue)) {
       keys.push("NumericProperty");
     } else {
       keys.push("StringProperty");
@@ -246,9 +248,8 @@ async function main() {
 
     const added = difference(values, current[typeLower]);
     const removed = difference(current[typeLower], values);
-    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
-      removed.length > 0 ? removed.join(", ") : "none"
-    } removed`;
+    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${removed.length > 0 ? removed.join(", ") : "none"
+      } removed`;
 
     console.log(`Storing ${values.length} props of type ${type} - ${report}`);
     contents += `export const ${typeLower} = [${values

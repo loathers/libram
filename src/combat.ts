@@ -549,12 +549,21 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  if_(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.step(`if ${Macro.makeBALLSPredicate(condition)}`)
-      .step(ifTrue)
-      .step("endif");
+  if_(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
+
+    if (ifFalse) {
+      this.step("else").step(ifFalse);
+    }
+
+    return this.step("endif");
   }
 
   /**
@@ -562,39 +571,48 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().if_(condition, ifTrue);
+    return new this().if_(condition, ifTrue, ifFalse);
   }
 
   /**
    * Add an "if" statement to this macro, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue);
+  ifNot(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue, ifFalse);
   }
   /**
    * Create a new macro with an "if" statement, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static ifNot<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().ifNot(condition, ifTrue);
+    return new this().ifNot(condition, ifTrue, ifFalse);
   }
 
   /**

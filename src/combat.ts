@@ -391,6 +391,60 @@ export class Macro {
   }
 
   /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  strict(): this {
+    return this.step("strict");
+  }
+
+  /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static strict<T extends Macro>(this: Constructor<T>): T {
+    return new this().strict();
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  lenient(): this {
+    return this.step("lenient");
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static lenient<T extends Macro>(this: Constructor<T>): T {
+    return new this().lenient();
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  scrollWhenDone(): this {
+    return this.step("scrollwhendone");
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static scrollWhenDone<T extends Macro>(this: Constructor<T>): T {
+    return new this().scrollWhenDone();
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.

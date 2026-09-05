@@ -48,6 +48,18 @@ describe(Macro, () => {
     expect(Macro.abortWithWarning("test").toString()).toEqual(`abort "test";`);
   });
 
+  it("strict", () => {
+    expect(Macro.strict().toString()).toEqual(`strict;`);
+  });
+
+  it("lenient", () => {
+    expect(Macro.lenient().toString()).toEqual(`lenient;`);
+  });
+
+  it("scrollWhenDone", () => {
+    expect(Macro.scrollWhenDone().toString()).toEqual(`scrollwhendone;`);
+  });
+
   it("runaway", () => {
     expect(Macro.runaway().toString()).toEqual(`runaway;`);
   });

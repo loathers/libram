@@ -535,11 +535,9 @@ export class Macro {
     } else if (condition instanceof Element) {
       return `monsterelement ${condition}`;
     } else if (
-      condition === "indoor" ||
-      condition === "outdoor" ||
-      condition === "underground" ||
-      condition === "underwater" ||
-      condition === "none"
+      ["indoor", "outdoor", "underground", "underwater", "none"].includes(
+        condition,
+      )
     ) {
       return `environment ${condition}`;
     }

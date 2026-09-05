@@ -25,6 +25,7 @@ import {
   overlappingSkillNames,
 } from "./overlappingNames.js";
 import { get, set } from "./property.js";
+import { notNullish } from "./utils.js";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -567,7 +568,9 @@ export class Macro {
   ): this {
     this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
 
-    for (const elseEntry of elseTrain.filter(Boolean)) {
+    for (const elseEntry of (elseTrain as ElseTrain[number][]).filter(
+      notNullish,
+    )) {
       if (typeof elseEntry === "object" && !(elseEntry instanceof Macro)) {
         const { predicate, macro } = elseEntry;
         this.step(`elif ${Macro.makeBALLSPredicate(predicate)}`).step(macro);

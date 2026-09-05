@@ -445,6 +445,26 @@ export class Macro {
   }
 
   /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  icon(item: Item): this {
+    return this.step(`icon ${item.image.replace(/\.[^.]+$/, "")}`);
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  static icon<T extends Macro>(this: Constructor<T>, item: Item): T {
+    return new this().icon(item);
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.

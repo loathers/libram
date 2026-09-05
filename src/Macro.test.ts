@@ -30,6 +30,8 @@ describe(Macro, () => {
     const combatItem = $item`mock combat item`;
     // @ts-expect-error TypeScript believes that this is readonly
     combatItem.combat = true;
+    // @ts-expect-error TypeScript believes that this is readonly
+    combatItem.image = `mockcombatitem.gif`;
 
     const sealClubber = $class`Seal Clubber`;
     // @ts-expect-error TypeScript believes that this is readonly
@@ -58,6 +60,11 @@ describe(Macro, () => {
 
   it("scrollWhenDone", () => {
     expect(Macro.scrollWhenDone().toString()).toEqual(`scrollwhendone;`);
+  });
+
+  it("icon", () => {
+    const mock = $item`mock combat item`;
+    expect(Macro.icon(mock).toString()).toEqual(`icon mockcombatitem;`);
   });
 
   it("runaway", () => {

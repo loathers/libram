@@ -30,6 +30,8 @@ describe(Macro, () => {
     const combatItem = $item`mock combat item`;
     // @ts-expect-error TypeScript believes that this is readonly
     combatItem.combat = true;
+    // @ts-expect-error TypeScript believes that this is readonly
+    combatItem.image = `mockcombatitem.gif`;
 
     const sealClubber = $class`Seal Clubber`;
     // @ts-expect-error TypeScript believes that this is readonly
@@ -48,6 +50,23 @@ describe(Macro, () => {
     expect(Macro.abortWithWarning("test").toString()).toEqual(`abort "test";`);
   });
 
+  it("strict", () => {
+    expect(Macro.strict().toString()).toEqual(`strict;`);
+  });
+
+  it("lenient", () => {
+    expect(Macro.lenient().toString()).toEqual(`lenient;`);
+  });
+
+  it("scrollWhenDone", () => {
+    expect(Macro.scrollWhenDone().toString()).toEqual(`scrollwhendone;`);
+  });
+
+  it("icon", () => {
+    const mock = $item`mock combat item`;
+    expect(Macro.icon(mock).toString()).toEqual(`icon mockcombatitem;`);
+  });
+
   it("runaway", () => {
     expect(Macro.runaway().toString()).toEqual(`runaway;`);
   });
@@ -58,10 +77,22 @@ describe(Macro, () => {
     );
   });
 
+  it("if_ / else", () => {
+    expect(Macro.if_("mock", Macro.attack(), Macro.abort()).toString()).toEqual(
+      `if mock;attack;else;abort;endif;`,
+    );
+  });
+
   it("ifNot", () => {
     expect(Macro.ifNot("mock", Macro.abort()).toString()).toEqual(
       `if !mock;abort;endif;`,
     );
+  });
+
+  it("ifNot / else", () => {
+    expect(
+      Macro.ifNot("mock", Macro.attack(), Macro.abort()).toString(),
+    ).toEqual(`if !mock;attack;else;abort;endif;`);
   });
 
   it("while_", () => {
@@ -133,6 +164,45 @@ describe(Macro, () => {
     expect(Macro.item([mock, mock], [mock, mock]).toString()).toEqual(
       `use ${mock.name}, ${mock.name};use ${mock.name}, ${mock.name};`,
     );
+  });
+
+  it("itemqueue single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.itemQueue([mock]).toString()).toEqual(
+      `usequeue ${mock.name};`,
+    );
+  });
+
+  it("itemqueue multiple", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    const mock3 = $item`mock item three`;
+    expect(Macro.itemQueue([mock1, mock2, mock3]).toString()).toEqual(
+      `usequeue ${mock1.name}, ${mock2.name}, ${mock3.name};`,
+    );
+  });
+
+  it("itemqueue more than 20", () => {
+    const mock = $item`mock item`;
+    const items = Array.from({ length: 21 }, () => mock);
+    const expected = `usequeue ${Array(20).fill(mock.name).join(", ")};usequeue ${mock.name};`;
+    expect(Macro.itemQueue(items).toString()).toEqual(expected);
+  });
+
+  it("itemqueue condition", () => {
+    const mock = $item`mock item`;
+    const monster = $monster`mock monster`;
+    expect(Macro.itemQueue([mock], monster).toString()).toEqual(
+      `usequeue until monsterid ${monster.id} :: ${mock.name};`,
+    );
+  });
+
+  it("itemqueue condition more than 20", () => {
+    const mock = $item`mock item`;
+    const monster = $monster`mock monster`;
+    const items = Array.from({ length: 21 }, () => mock);
+    const expected = `usequeue until monsterid ${monster.id} :: ${Array(20).fill(mock.name).join(", ")};usequeue until monsterid ${monster.id} :: ${mock.name};`;
+    expect(Macro.itemQueue(items, monster).toString()).toEqual(expected);
   });
 
   it("tryItem", () => {
@@ -236,6 +306,10 @@ describe(Macro, () => {
     expect(Macro.attack().toString()).toEqual(`attack;`);
   });
 
+  it("jiggle", () => {
+    expect(Macro.jiggle().toString()).toEqual(`jiggle;`);
+  });
+
   it.todo("ifHolidayWanderer");
 
   it.todo("ifNotHolidayWanderer");
@@ -329,5 +403,29 @@ describe(Macro.makeBALLSPredicate, () => {
 
   it("string", () => {
     expect(Macro.makeBALLSPredicate("mock")).toEqual("mock");
+  });
+
+  it("Environment indoor", () => {
+    expect(Macro.makeBALLSPredicate("indoor")).toEqual("environment indoor");
+  });
+
+  it("Environment outdoor", () => {
+    expect(Macro.makeBALLSPredicate("outdoor")).toEqual("environment outdoor");
+  });
+
+  it("Environment underground", () => {
+    expect(Macro.makeBALLSPredicate("underground")).toEqual(
+      "environment underground",
+    );
+  });
+
+  it("Environment underwater", () => {
+    expect(Macro.makeBALLSPredicate("underwater")).toEqual(
+      "environment underwater",
+    );
+  });
+
+  it("Environment none", () => {
+    expect(Macro.makeBALLSPredicate("none")).toEqual("environment none");
   });
 });

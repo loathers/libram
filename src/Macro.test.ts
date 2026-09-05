@@ -135,6 +135,27 @@ describe(Macro, () => {
     );
   });
 
+  it("itemqueue single", () => {
+    const mock = $item`mock item`;
+    expect(Macro.itemQueue(mock).toString()).toEqual(`usequeue ${mock.name};`);
+  });
+
+  it("itemqueue multiple", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    const mock3 = $item`mock item three`;
+    expect(Macro.itemQueue(mock1, mock2, mock3).toString()).toEqual(
+      `usequeue ${mock1.name}, ${mock2.name}, ${mock3.name};`,
+    );
+  });
+
+  it("itemqueue more than 20", () => {
+    const mock = $item`mock item`;
+    const items = Array.from({ length: 21 }, () => mock);
+    const expected = `usequeue ${Array(20).fill(mock.name).join(", ")};usequeue ${mock.name};`;
+    expect(Macro.itemQueue(...items).toString()).toEqual(expected);
+  });
+
   it("tryItem", () => {
     const mock = $item`mock item`;
     expect(Macro.tryItem(mock).toString()).toEqual(

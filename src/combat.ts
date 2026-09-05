@@ -708,6 +708,34 @@ export class Macro {
   }
 
   /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  itemQueue(...items: ItemOrName[]): this {
+    if (items.length === 0) return this;
+    return this.step(
+      `usequeue ${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(...items.slice(20));
+  }
+
+  /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @returns {Macro} This object itself.
+   */
+  static itemQueue<T extends Macro>(
+    this: Constructor<T>,
+    ...items: ItemOrName[]
+  ): T {
+    return new this().itemQueue(...items);
+  }
+
+  /**
    * Add one or more item steps to the macro, where each step checks to see if you have the item first.
    *
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.

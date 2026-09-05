@@ -12,15 +12,18 @@ const PROPS_FILE =
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
-
-const fakeNumbers = ["tavernLayout"]
+const fakeNumbers = ["tavernLayout"];
 /**
  * @param property Property name
  * @param value Property value
  * @returns Whether the default value for this property is numeric
  */
 export function isNumericProperty(property: string, value: string): boolean {
-  return !isNaN(Number(value)) && !isNaN(parseFloat(value)) && !fakeNumbers.includes(property);
+  return (
+    !isNaN(Number(value)) &&
+    !isNaN(parseFloat(value)) &&
+    !fakeNumbers.includes(property)
+  );
 }
 
 const numericOrStringProperties = [
@@ -248,8 +251,9 @@ async function main() {
 
     const added = difference(values, current[typeLower]);
     const removed = difference(current[typeLower], values);
-    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${removed.length > 0 ? removed.join(", ") : "none"
-      } removed`;
+    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
+      removed.length > 0 ? removed.join(", ") : "none"
+    } removed`;
 
     console.log(`Storing ${values.length} props of type ${type} - ${report}`);
     contents += `export const ${typeLower} = [${values

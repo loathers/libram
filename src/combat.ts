@@ -797,8 +797,8 @@ export class Macro {
   itemQueue(...items: ItemOrName[]): this {
     if (items.length === 0) return this;
     return this.step(
-      `usequeue ${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
-    ).itemQueue(...items.slice(20));
+      `usequeue ${items.splice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(...items);
   }
 
   /**

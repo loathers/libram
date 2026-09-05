@@ -77,10 +77,22 @@ describe(Macro, () => {
     );
   });
 
+  it("if_ / else", () => {
+    expect(Macro.if_("mock", Macro.attack(), Macro.abort()).toString()).toEqual(
+      `if mock;attack;else;abort;endif;`,
+    );
+  });
+
   it("ifNot", () => {
     expect(Macro.ifNot("mock", Macro.abort()).toString()).toEqual(
       `if !mock;abort;endif;`,
     );
+  });
+
+  it("ifNot / else", () => {
+    expect(
+      Macro.ifNot("mock", Macro.attack(), Macro.abort()).toString(),
+    ).toEqual(`if !mock;attack;else;abort;endif;`);
   });
 
   it("while_", () => {

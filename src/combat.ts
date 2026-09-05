@@ -563,7 +563,7 @@ export class Macro {
   if_(
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
-    ...elseTrain: ElseTrain<Macro>
+    ...elseTrain: ElseTrain
   ): this {
     this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
 
@@ -575,7 +575,7 @@ export class Macro {
         this.step("else").step(elseEntry);
       }
     }
-    if (elseTrain.length) this.step("endelse");
+    this.step(elseTrain.length ? "endelse" : "endif");
     return this;
   }
 

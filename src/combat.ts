@@ -185,6 +185,14 @@ type Constructor<T> = { new (): T };
 
 export class InvalidMacroError extends Error {}
 
+export type ElseIfComponent = {
+  predicate: PreBALLSPredicate;
+  macro: string | Macro;
+};
+export type ElseTrain =
+  | ElseIfComponent[]
+  | [...ElseIfComponent[], string | Macro];
+
 /**
  * BALLS macro builder for direct submission to KoL.
  * Create a new macro with `new Macro()` and add steps using the instance methods.
@@ -469,22 +477,25 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param elseTrain Spread array of { predicate, macro } elif entries, followed by an final bare string/Macro for the final Else
    * @returns {Macro} This object itself.
    */
   if_(
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
-    ifFalse?: string | Macro,
+    ...elseTrain: ElseTrain<Macro>
   ): this {
     this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
 
-    if (ifFalse) {
-      this.step("else").step(ifFalse).step("endelf");
-    } else {
-      this.step("endif");
+    for (const elseEntry of elseTrain) {
+      if (typeof elseEntry === "object" && !(elseEntry instanceof Macro)) {
+        const { predicate, macro } = elseEntry;
+        this.step(`elif ${Macro.makeBALLSPredicate(predicate)}`).step(macro);
+      } else {
+        this.step("else").step(elseEntry);
+      }
     }
-
+    if (elseTrain.length) this.step("endelse");
     return this;
   }
 
@@ -493,16 +504,16 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
-   * @param ifFalse Optional else-branch for the macro
+   * @param elseTrain Spread array of { predicate, macro } elif entries, followed by an final bare string/Macro for the final Else
    * @returns {Macro} This object itself.
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
-    ifFalse?: string | Macro,
+    ...elseTrain: ElseTrain
   ): T {
-    return new this().if_(condition, ifTrue, ifFalse);
+    return new this().if_(condition, ifTrue, ...elseTrain);
   }
 
   /**

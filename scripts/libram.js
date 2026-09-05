@@ -4815,10 +4815,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        *
        * @param condition The BALLS condition for the if statement.
        * @param ifTrue Continuation if the condition is true.
+       * @param ifFalse Optional else-branch for the macro.
        * @returns {Macro} This object itself.
        */
-      function(condition, ifTrue) {
-        return this.step("if ".concat(Macro2.makeBALLSPredicate(condition))).step(ifTrue).step("endif");
+      function(condition, ifTrue, ifFalse) {
+        return this.step("if ".concat(Macro2.makeBALLSPredicate(condition))).step(ifTrue), ifFalse && this.step("else").step(ifFalse), this.step("endif");
       }
     )
     /**
@@ -4826,6 +4827,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      *
      * @param condition The BALLS condition for the if statement.
      * @param ifTrue Continuation if the condition is true.
+     * @param ifFalse Optional else-branch for the macro.
      * @returns {Macro} This object itself.
      */
   }, {
@@ -4835,18 +4837,20 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        * Add an "if" statement to this macro, inverting the condition.
        *
        * @param condition The BALLS condition for the if statement.
-       * @param ifTrue Continuation if the condition is true.
+       * @param ifTrue Continuation if the negated condition is true.
+       * @param ifFalse Optional else-branch for the macro.
        * @returns {Macro} This object itself.
        */
-      function(condition, ifTrue) {
-        return this.if_("!".concat(Macro2.makeBALLSPredicate(condition)), ifTrue);
+      function(condition, ifTrue, ifFalse) {
+        return this.if_("!".concat(Macro2.makeBALLSPredicate(condition)), ifTrue, ifFalse);
       }
     )
     /**
      * Create a new macro with an "if" statement, inverting the condition.
      *
      * @param condition The BALLS condition for the if statement.
-     * @param ifTrue Continuation if the condition is true.
+     * @param ifTrue Continuation if the negated condition is true.
+     * @param ifFalse Optional else-branch for the macro.
      * @returns {Macro} This object itself.
      */
   }, {
@@ -5288,13 +5292,13 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     }
   }, {
     key: "if_",
-    value: function(condition, ifTrue) {
-      return new this().if_(condition, ifTrue);
+    value: function(condition, ifTrue, ifFalse) {
+      return new this().if_(condition, ifTrue, ifFalse);
     }
   }, {
     key: "ifNot",
-    value: function(condition, ifTrue) {
-      return new this().ifNot(condition, ifTrue);
+    value: function(condition, ifTrue, ifFalse) {
+      return new this().ifNot(condition, ifTrue, ifFalse);
     }
   }, {
     key: "while_",

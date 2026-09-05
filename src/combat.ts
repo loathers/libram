@@ -910,6 +910,24 @@ export class Macro {
   }
 
   /**
+   * Add a "jiggle" step to the macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  jiggle(): this {
+    return this.step("jiggle");
+  }
+
+  /**
+   * Create a new macro with a jiggle step.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static jiggle<T extends Macro>(this: Constructor<T>): T {
+    return new this().jiggle();
+  }
+
+  /**
    * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, unmutated.
    *
    * @param macro The macro to place in the if_ statement

@@ -276,6 +276,10 @@ describe(Macro, () => {
     expect(Macro.attack().toString()).toEqual(`attack;`);
   });
 
+  it("jiggle", () => {
+    expect(Macro.jiggle().toString()).toEqual(`jiggle;`);
+  });
+
   it.todo("ifHolidayWanderer");
 
   it.todo("ifNotHolidayWanderer");

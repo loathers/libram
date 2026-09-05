@@ -391,6 +391,80 @@ export class Macro {
   }
 
   /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  strict(): this {
+    return this.step("strict");
+  }
+
+  /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static strict<T extends Macro>(this: Constructor<T>): T {
+    return new this().strict();
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  lenient(): this {
+    return this.step("lenient");
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static lenient<T extends Macro>(this: Constructor<T>): T {
+    return new this().lenient();
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  scrollWhenDone(): this {
+    return this.step("scrollwhendone");
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static scrollWhenDone<T extends Macro>(this: Constructor<T>): T {
+    return new this().scrollWhenDone();
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  icon(item: Item): this {
+    return this.step(`icon ${item.image.replace(/\.[^.]+$/, "")}`);
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  static icon<T extends Macro>(this: Constructor<T>, item: Item): T {
+    return new this().icon(item);
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.
@@ -460,6 +534,12 @@ export class Macro {
       return `monsterphylum ${condition}`;
     } else if (condition instanceof Element) {
       return `monsterelement ${condition}`;
+    } else if (
+      ["indoor", "outdoor", "underground", "underwater", "none"].includes(
+        condition,
+      )
+    ) {
+      return `environment ${condition}`;
     }
     return condition;
   }
@@ -728,6 +808,37 @@ export class Macro {
   }
 
   /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @returns {Macro} This object itself.
+   */
+  itemQueue(items: ItemOrName[], condition?: PreBALLSPredicate): this {
+    if (items.length === 0) return this;
+    return this.step(
+      `usequeue ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(items.slice(20), condition);
+  }
+
+  /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @returns {Macro} This object itself.
+   */
+  static itemQueue<T extends Macro>(
+    this: Constructor<T>,
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+  ): T {
+    return new this().itemQueue(items, condition);
+  }
+
+  /**
    * Add one or more item steps to the macro, where each step checks to see if you have the item first.
    *
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
@@ -825,6 +936,24 @@ export class Macro {
    */
   static attack<T extends Macro>(this: Constructor<T>): T {
     return new this().attack();
+  }
+
+  /**
+   * Add a "jiggle" step to the macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  jiggle(): this {
+    return this.step("jiggle");
+  }
+
+  /**
+   * Create a new macro with a jiggle step.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static jiggle<T extends Macro>(this: Constructor<T>): T {
+    return new this().jiggle();
   }
 
   /**

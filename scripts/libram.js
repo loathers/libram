@@ -4721,6 +4721,76 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * @returns {Macro} This object itself.
      */
   }, {
+    key: "strict",
+    value: (
+      /**
+       * Add a "strict" step to this macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.step("strict");
+      }
+    )
+    /**
+     * Add a "strict" step to this macro.
+     *
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "lenient",
+    value: (
+      /**
+       * Add a "lenient" step to this macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.step("lenient");
+      }
+    )
+    /**
+     * Add a "lenient" step to this macro.
+     *
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "scrollWhenDone",
+    value: (
+      /**
+       * Add a "scrollwhendone" step to this macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.step("scrollwhendone");
+      }
+    )
+    /**
+     * Add a "scrollwhendone" step to this macro.
+     *
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "icon",
+    value: (
+      /**
+       * Add an "icon [image]" step to this macro.
+       *
+       * @param item The item to use for the image.
+       * @returns {Macro} This object itself.
+       */
+      function(item15) {
+        return this.step("icon ".concat(item15.image.replace(/\.[^.]+$/, "")));
+      }
+    )
+    /**
+     * Add an "icon [image]" step to this macro.
+     *
+     * @param item The item to use for the image.
+     * @returns {Macro} This object itself.
+     */
+  }, {
     key: "runaway",
     value: (
       /**
@@ -4931,6 +5001,29 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * @returns {Macro} This object itself.
      */
   }, {
+    key: "itemQueue",
+    value: (
+      /**
+       * Create a new macro with one or more item queue steps.
+       * Items will be funkslinged if available.
+       *
+       * @param items Items to use.
+       * @param condition The BALLS condition for the usequeue statement, optional.
+       * @returns {Macro} This object itself.
+       */
+      function(items, condition) {
+        return items.length === 0 ? this : this.step("usequeue ".concat(condition ? "until ".concat(Macro2.makeBALLSPredicate(condition), " :: ") : "").concat(items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", "))).itemQueue(items.slice(20), condition);
+      }
+    )
+    /**
+     * Create a new macro with one or more item queue steps.
+     * Items will be funkslinged if available.
+     *
+     * @param items Items to use.
+     * @param condition The BALLS condition for the usequeue statement, optional.
+     * @returns {Macro} This object itself.
+     */
+  }, {
     key: "tryItem",
     value: (
       /**
@@ -5011,6 +5104,23 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     )
     /**
      * Create a new macro with an attack step.
+     *
+     * @returns {Macro} This object itself.
+     */
+  }, {
+    key: "jiggle",
+    value: (
+      /**
+       * Add a "jiggle" step to the macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function() {
+        return this.step("jiggle");
+      }
+    )
+    /**
+     * Create a new macro with a jiggle step.
      *
      * @returns {Macro} This object itself.
      */
@@ -5109,6 +5219,26 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       return new this().abortWithWarning(warning);
     }
   }, {
+    key: "strict",
+    value: function() {
+      return new this().strict();
+    }
+  }, {
+    key: "lenient",
+    value: function() {
+      return new this().lenient();
+    }
+  }, {
+    key: "scrollWhenDone",
+    value: function() {
+      return new this().scrollWhenDone();
+    }
+  }, {
+    key: "icon",
+    value: function(item15) {
+      return new this().icon(item15);
+    }
+  }, {
     key: "runaway",
     value: function() {
       return new this().runaway();
@@ -5151,6 +5281,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
           return "monsterphylum ".concat(condition);
         if (condition instanceof import_kolmafia5.Element)
           return "monsterelement ".concat(condition);
+        if (["indoor", "outdoor", "underground", "underwater", "none"].includes(condition))
+          return "environment ".concat(condition);
       }
       return condition;
     }
@@ -5199,6 +5331,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       return (_this6 = new this()).item.apply(_this6, arguments);
     }
   }, {
+    key: "itemQueue",
+    value: function(items, condition) {
+      return new this().itemQueue(items, condition);
+    }
+  }, {
     key: "tryItem",
     value: function() {
       var _this7;
@@ -5220,6 +5357,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     key: "attack",
     value: function() {
       return new this().attack();
+    }
+  }, {
+    key: "jiggle",
+    value: function() {
+      return new this().jiggle();
     }
   }, {
     key: "ifHolidayWanderer",

@@ -211,7 +211,7 @@ describe(Macro, () => {
     const mock3 = $item`mock item three`;
     expect(
       Macro.itemQueue([mock1, mock2, mock3], undefined, true).toString(),
-    ).toEqual(`usesinglequeue ${mock1.name}, ${mock2.name}, ${mock3.name}`);
+    ).toEqual(`usesinglequeue ${mock1.name}, ${mock2.name}, ${mock3.name};`);
   });
 
   it("tryItem", () => {

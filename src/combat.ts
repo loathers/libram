@@ -811,12 +811,17 @@ export class Macro {
    *
    * @param items Items to use.
    * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
    * @returns {Macro} This object itself.
    */
-  itemQueue(items: ItemOrName[], condition?: PreBALLSPredicate): this {
+  itemQueue(
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+    single = false,
+  ): this {
     if (items.length === 0) return this;
     return this.step(
-      `usequeue ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+      `${single ? "usesinglequeue" : "usequeue"} ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
     ).itemQueue(items.slice(20), condition);
   }
 
@@ -826,14 +831,16 @@ export class Macro {
    *
    * @param items Items to use.
    * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
    * @returns {Macro} This object itself.
    */
   static itemQueue<T extends Macro>(
     this: Constructor<T>,
     items: ItemOrName[],
     condition?: PreBALLSPredicate,
+    single = false,
   ): T {
-    return new this().itemQueue(items, condition);
+    return new this().itemQueue(items, condition, single);
   }
 
   /**

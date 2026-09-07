@@ -25,7 +25,6 @@ import {
   overlappingSkillNames,
 } from "./overlappingNames.js";
 import { get, set } from "./property.js";
-import { m } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**

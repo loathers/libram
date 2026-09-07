@@ -1026,8 +1026,7 @@ export class Macro {
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
   ): MacroIfBlock<this> {
-    this.if_(condition, ifTrue);
-    return new MacroIfBlock(this);
+    return new MacroIfBlock(this, condition, ifTrue);
   }
 
   /**
@@ -1265,9 +1264,12 @@ export class StrictMacro extends Macro {
 class MacroIfBlock<M extends Macro> {
   root: M;
   components: string[] = [];
+  baseClass: typeof Macro & Constructor<M>;
 
-  constructor(macro: M) {
+  constructor(macro: M, condition: PreBALLSPredicate, ifTrue: string | Macro) {
     this.root = macro;
+    this.baseClass = this.root.constructor as typeof Macro & Constructor<M>;
+    this.append(this.baseClass.if_(condition, ifTrue));
   }
 
   private append(...components: (string | M)[]): this {
@@ -1288,7 +1290,7 @@ class MacroIfBlock<M extends Macro> {
    */
   elseIf(condition: PreBALLSPredicate, macro: string | M): this {
     return this.append(
-      `elif ${(this.root.constructor as typeof Macro).makeBALLSPredicate(condition)}`,
+      `elif ${this.baseClass.makeBALLSPredicate(condition)}`,
       macro,
     );
   }

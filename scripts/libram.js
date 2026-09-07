@@ -5016,10 +5016,12 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
        *
        * @param items Items to use.
        * @param condition The BALLS condition for the usequeue statement, optional.
+       * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
        * @returns {Macro} This object itself.
        */
       function(items, condition) {
-        return items.length === 0 ? this : this.step("usequeue ".concat(condition ? "until ".concat(Macro2.makeBALLSPredicate(condition), " :: ") : "").concat(items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", "))).itemQueue(items.slice(20), condition);
+        var single = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : !1;
+        return items.length === 0 ? this : this.step("".concat(single ? "usesinglequeue" : "usequeue", " ").concat(condition ? "until ".concat(Macro2.makeBALLSPredicate(condition), " :: ") : "").concat(items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", "))).itemQueue(items.slice(20), condition);
       }
     )
     /**
@@ -5028,6 +5030,7 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      *
      * @param items Items to use.
      * @param condition The BALLS condition for the usequeue statement, optional.
+     * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
      * @returns {Macro} This object itself.
      */
   }, {
@@ -5340,7 +5343,8 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   }, {
     key: "itemQueue",
     value: function(items, condition) {
-      return new this().itemQueue(items, condition);
+      var single = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : !1;
+      return new this().itemQueue(items, condition, single);
     }
   }, {
     key: "tryItem",

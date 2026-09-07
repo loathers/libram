@@ -565,12 +565,27 @@ export class Macro {
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
     ...elseTrain: ElseTrain
+  ): this;
+  /**
+   * Add an "if" statement to this macro, followed by a long chain of "elif"s, followed optionally by an "else"
+   *
+   * @param elseTrain Spread array of { predicate, macro } elif entries, followed by an final bare string/Macro for the final Else.
+   * @returns {Macro} This object itself.
+   */
+  if_(...elseTrain: ElseTrain): this;
+  if_(
+    leadingArg: PreBALLSPredicate | ElseIfComponent,
+    secondArg: typeof leadingArg extends ElseIfComponent
+      ? ElseIfComponent | undefined
+      : string | Macro,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...rest: any[]
   ): this {
-    this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
+    if (!(typeof leadingArg === "object" && "predicate" in leadingArg)) {
+      this.step(`if ${Macro.makeBALLSPredicate(leadingArg)}`, secondArg);
+    }
 
-    for (const elseEntry of (elseTrain as ElseTrain[number][]).filter(
-      notNullish,
-    )) {
+    for (const elseEntry of (rest as ElseTrain[number][]).filter(notNullish)) {
       if (typeof elseEntry === "object" && !(elseEntry instanceof Macro)) {
         const { predicate, macro } = elseEntry;
         this.step(`elif ${Macro.makeBALLSPredicate(predicate)}`).step(macro);

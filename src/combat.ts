@@ -391,6 +391,80 @@ export class Macro {
   }
 
   /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  strict(): this {
+    return this.step("strict");
+  }
+
+  /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static strict<T extends Macro>(this: Constructor<T>): T {
+    return new this().strict();
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  lenient(): this {
+    return this.step("lenient");
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static lenient<T extends Macro>(this: Constructor<T>): T {
+    return new this().lenient();
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  scrollWhenDone(): this {
+    return this.step("scrollwhendone");
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static scrollWhenDone<T extends Macro>(this: Constructor<T>): T {
+    return new this().scrollWhenDone();
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  icon(item: Item): this {
+    return this.step(`icon ${item.image.replace(/\.[^.]+$/, "")}`);
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  static icon<T extends Macro>(this: Constructor<T>, item: Item): T {
+    return new this().icon(item);
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.
@@ -460,6 +534,12 @@ export class Macro {
       return `monsterphylum ${condition}`;
     } else if (condition instanceof Element) {
       return `monsterelement ${condition}`;
+    } else if (
+      ["indoor", "outdoor", "underground", "underwater", "none"].includes(
+        condition,
+      )
+    ) {
+      return `environment ${condition}`;
     }
     return condition;
   }
@@ -469,12 +549,21 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  if_(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.step(`if ${Macro.makeBALLSPredicate(condition)}`)
-      .step(ifTrue)
-      .step("endif");
+  if_(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
+
+    if (ifFalse) {
+      this.step("else").step(ifFalse);
+    }
+
+    return this.step("endif");
   }
 
   /**
@@ -482,39 +571,48 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().if_(condition, ifTrue);
+    return new this().if_(condition, ifTrue, ifFalse);
   }
 
   /**
    * Add an "if" statement to this macro, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue);
+  ifNot(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue, ifFalse);
   }
   /**
    * Create a new macro with an "if" statement, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static ifNot<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().ifNot(condition, ifTrue);
+    return new this().ifNot(condition, ifTrue, ifFalse);
   }
 
   /**
@@ -708,6 +806,44 @@ export class Macro {
   }
 
   /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
+   * @returns {Macro} This object itself.
+   */
+  itemQueue(
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+    single = false,
+  ): this {
+    if (items.length === 0) return this;
+    return this.step(
+      `${single ? "usesinglequeue" : "usequeue"} ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(items.slice(20), condition);
+  }
+
+  /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
+   * @returns {Macro} This object itself.
+   */
+  static itemQueue<T extends Macro>(
+    this: Constructor<T>,
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+    single = false,
+  ): T {
+    return new this().itemQueue(items, condition, single);
+  }
+
+  /**
    * Add one or more item steps to the macro, where each step checks to see if you have the item first.
    *
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
@@ -805,6 +941,24 @@ export class Macro {
    */
   static attack<T extends Macro>(this: Constructor<T>): T {
     return new this().attack();
+  }
+
+  /**
+   * Add a "jiggle" step to the macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  jiggle(): this {
+    return this.step("jiggle");
+  }
+
+  /**
+   * Create a new macro with a jiggle step.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static jiggle<T extends Macro>(this: Constructor<T>): T {
+    return new this().jiggle();
   }
 
   /**

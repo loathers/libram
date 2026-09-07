@@ -25,6 +25,7 @@ import {
   overlappingSkillNames,
 } from "./overlappingNames.js";
 import { get, set } from "./property.js";
+import { m } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 const MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -1014,6 +1015,22 @@ export class Macro {
   ): T {
     return new this().ifNotHolidayWanderer(macro);
   }
+
+  beginif(
+    predicate: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<this> {
+    this.if_(predicate, ifTrue);
+    return new MacroIfBlock(this);
+  }
+
+  static beginif<T extends Macro>(
+    this: Constructor<T>,
+    predicate: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<T> {
+    return new this().beginif(predicate, ifTrue);
+  }
 }
 
 /**
@@ -1230,5 +1247,39 @@ export class StrictMacro extends Macro {
     ...skills: Skill[]
   ): T {
     return new this().trySkillRepeat(...skills);
+  }
+}
+
+class MacroIfBlock<M extends Macro> {
+  root: M;
+  components: string[] = [];
+
+  constructor(macro: M) {
+    this.root = macro;
+  }
+
+  private append(...components: (string | M)[]) {
+    this.components.push(
+      ...components.flatMap((component) =>
+        component instanceof Macro ? component.components : component,
+      ),
+    );
+  }
+
+  elseIf(predicate: PreBALLSPredicate, macro: string | M): this {
+    this.append(
+      `elif ${(this.root.constructor as typeof Macro).makeBALLSPredicate(predicate)}`,
+      macro,
+    );
+    return this;
+  }
+
+  endif(): M {
+    return this.root.step(...this.components).step("endif");
+  }
+
+  else(macro: string | M): M {
+    this.append("else", macro);
+    return this.endif();
   }
 }

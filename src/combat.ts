@@ -1270,12 +1270,14 @@ class MacroIfBlock<M extends Macro> {
     this.root = macro;
   }
 
-  private append(...components: (string | M)[]) {
+  private append(...components: (string | M)[]): this {
     this.components.push(
       ...components.flatMap((component) =>
         component instanceof Macro ? component.components : component,
       ),
     );
+
+    return this;
   }
 
   /**
@@ -1285,11 +1287,10 @@ class MacroIfBlock<M extends Macro> {
    * @returns This same MacroIfBlock; call endif() or else() to return to your macro.
    */
   elseIf(condition: PreBALLSPredicate, macro: string | M): this {
-    this.append(
+    return this.append(
       `elif ${(this.root.constructor as typeof Macro).makeBALLSPredicate(condition)}`,
       macro,
     );
-    return this;
   }
 
   /**
@@ -1306,7 +1307,6 @@ class MacroIfBlock<M extends Macro> {
    * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
    */
   else(macro: string | M): M {
-    this.append("else", macro);
-    return this.endif();
+    return this.append("else", macro).endif();
   }
 }

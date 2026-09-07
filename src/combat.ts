@@ -1016,20 +1016,32 @@ export class Macro {
     return new this().ifNotHolidayWanderer(macro);
   }
 
+  /**
+   * Create a longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
   beginif(
-    predicate: PreBALLSPredicate,
+    condition: PreBALLSPredicate,
     ifTrue: string | Macro,
   ): MacroIfBlock<this> {
-    this.if_(predicate, ifTrue);
+    this.if_(condition, ifTrue);
     return new MacroIfBlock(this);
   }
 
+  /**
+   * Create a Macro that begins with longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
   static beginif<T extends Macro>(
     this: Constructor<T>,
-    predicate: PreBALLSPredicate,
+    condition: PreBALLSPredicate,
     ifTrue: string | Macro,
   ): MacroIfBlock<T> {
-    return new this().beginif(predicate, ifTrue);
+    return new this().beginif(condition, ifTrue);
   }
 }
 
@@ -1266,18 +1278,33 @@ class MacroIfBlock<M extends Macro> {
     );
   }
 
-  elseIf(predicate: PreBALLSPredicate, macro: string | M): this {
+  /**
+   * Append an elif statement to this if block.
+   * @param condition The condition for the elif statement.
+   * @param macro The macro within the elif statement.
+   * @returns This same MacroIfBlock; call endif() or else() to return to your macro.
+   */
+  elseIf(condition: PreBALLSPredicate, macro: string | M): this {
     this.append(
-      `elif ${(this.root.constructor as typeof Macro).makeBALLSPredicate(predicate)}`,
+      `elif ${(this.root.constructor as typeof Macro).makeBALLSPredicate(condition)}`,
       macro,
     );
     return this;
   }
 
+  /**
+   * End the elif block, and return to your initial macro.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
   endif(): M {
     return this.root.step(...this.components).step("endif");
   }
 
+  /**
+   * End your elif block with a final `else`, and return to your initial macro.
+   * @param macro The macro to pass into the `else` block.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
   else(macro: string | M): M {
     this.append("else", macro);
     return this.endif();

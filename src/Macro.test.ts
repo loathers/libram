@@ -166,7 +166,7 @@ describe(Macro, () => {
     );
   });
 
-  it("itemqueue single", () => {
+  it("itemqueue one item", () => {
     const mock = $item`mock item`;
     expect(Macro.itemQueue([mock]).toString()).toEqual(
       `usequeue ${mock.name};`,
@@ -203,6 +203,15 @@ describe(Macro, () => {
     const items = Array.from({ length: 21 }, () => mock);
     const expected = `usequeue until monsterid ${monster.id} :: ${Array(20).fill(mock.name).join(", ")};usequeue until monsterid ${monster.id} :: ${mock.name};`;
     expect(Macro.itemQueue(items, monster).toString()).toEqual(expected);
+  });
+
+  it("itemqueue single mode", () => {
+    const mock1 = $item`mock item`;
+    const mock2 = $item`mock item two`;
+    const mock3 = $item`mock item three`;
+    expect(
+      Macro.itemQueue([mock1, mock2, mock3], undefined, true).toString(),
+    ).toEqual(`usesinglequeue ${mock1.name}, ${mock2.name}, ${mock3.name};`);
   });
 
   it("tryItem", () => {

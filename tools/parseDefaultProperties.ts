@@ -61,15 +61,18 @@ const otherLocations = [
   "nextAdventure",
   "_lastPirateRealmIsland",
 ];
-const fakeLocations = [
-  "batmanZone"
-]
+const fakeLocations = ["batmanZone"];
 /**
  * @param property Property name
  * @returns Whether the supplied property should be coerced to a
  */
 export function isLocationProperty(property: string): boolean {
-  return (otherLocations.includes(property) || property.endsWith("Location") || property.endsWith("Zone")) && !fakeLocations.includes("batmanZone");
+  return (
+    (otherLocations.includes(property) ||
+      property.endsWith("Location") ||
+      property.endsWith("Zone")) &&
+    !fakeLocations.includes("batmanZone")
+  );
 }
 
 const otherMonsters = [
@@ -254,8 +257,9 @@ async function main() {
 
     const added = difference(values, current[typeLower]);
     const removed = difference(current[typeLower], values);
-    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${removed.length > 0 ? removed.join(", ") : "none"
-      } removed`;
+    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
+      removed.length > 0 ? removed.join(", ") : "none"
+    } removed`;
 
     console.log(`Storing ${values.length} props of type ${type} - ${report}`);
     contents += `export const ${typeLower} = [${values

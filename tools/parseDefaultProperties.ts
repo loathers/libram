@@ -71,7 +71,7 @@ export function isLocationProperty(property: string): boolean {
     (otherLocations.includes(property) ||
       property.endsWith("Location") ||
       property.endsWith("Zone")) &&
-    !fakeLocations.includes("batmanZone")
+    !fakeLocations.includes(property)
   );
 }
 

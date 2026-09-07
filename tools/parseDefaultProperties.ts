@@ -257,8 +257,9 @@ async function main() {
 
     const added = difference(values, current[typeLower]);
     const removed = difference(current[typeLower], values);
-    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${removed.length > 0 ? removed.join(", ") : "none"
-      } removed`;
+    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
+      removed.length > 0 ? removed.join(", ") : "none"
+    } removed`;
 
     console.log(`Storing ${values.length} props of type ${type} - ${report}`);
     contents += `export const ${typeLower} = [${values

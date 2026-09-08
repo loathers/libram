@@ -61,12 +61,18 @@ const otherLocations = [
   "nextAdventure",
   "_lastPirateRealmIsland",
 ];
+const fakeLocations = ["batmanZone"];
 /**
  * @param property Property name
  * @returns Whether the supplied property should be coerced to a
  */
 export function isLocationProperty(property: string): boolean {
-  return otherLocations.includes(property) || property.endsWith("Location");
+  return (
+    (otherLocations.includes(property) ||
+      property.endsWith("Location") ||
+      property.endsWith("Zone")) &&
+    !fakeLocations.includes(property)
+  );
 }
 
 const otherMonsters = [

@@ -162,47 +162,24 @@ export function findPitchOrder(
   monster3?: Monster,
   pitch3?: Pitch,
 ): Pitch[] | null {
-  // The first two baseballTeam entries are not pitchers. The remaining
-  // nine entries correspond to the nine pitches of the game.
-  const lineup = get("baseballTeam").split(",").slice(2).map(Number);
+  // A full team is 9 players in total for the lineup
+  const lineup = get("baseballTeam").split(",").map(Number);
 
   if (lineup.length !== 9) {
     return null;
   }
 
-  const requests = [
+  const requestedPitches = [
     [monster1, pitch1],
     [monster2, pitch2],
     [monster3, pitch3],
-  ]
-    .filter(
-      (entry): entry is [Monster, Pitch] =>
-        entry[0] !== undefined && entry[1] !== undefined,
-    )
-    .map(([monster, pitch]) => ({
-      position: lineup.indexOf(monster.id),
-      pitch,
-    }));
-
-  // Every requested monster must actually be in the nine-pitch lineup.
-  if (requests.some(({ position }) => position < 0)) {
-    return null;
-  }
-
-  // A greater pitch requires two previous lesser pitches.
-  if (requests.some(({ position }) => position < 2)) {
-    return null;
-  }
-
-  // Map each requested lineup position to the special pitch that must occur
-  // there.
-  const required = new Map(
-    requests.map(({ position, pitch }) => [position, pitch]),
+  ].filter(
+    (entry): entry is [Monster, Pitch] =>
+      entry[0] !== undefined && entry[1] !== undefined,
   );
 
   /*
    * State for each element:
-   *
    *   0 = no lesser pitches used
    *   1 = one lesser pitch used
    *   2 = two lesser pitches used; greater is ready
@@ -210,83 +187,77 @@ export function findPitchOrder(
    */
   type State = [number, number, number, number, number];
 
-  /**
-   * Search the remaining pitch positions.
-   *
-   * Because there are only nine positions and five elements, this search is
-   * very small. The state also prevents us from exploring equivalent
-   * sequences repeatedly.
-   */
   const seen = new Set<string>();
 
-  function search(position: number, state: State): Pitch[] | null {
+  function search(
+    position: number,
+    state: State,
+    unmatchedRequests: Array<[Monster, Pitch]>,
+  ): Pitch[] | null {
     if (position === 9) {
-      return [];
+      return unmatchedRequests.length === 0 ? [] : null;
     }
 
-    const stateKey = `${position}:${state.join(",")}`;
+    // Optimization: check if remaining positions are sufficient for remaining requests
+    if (9 - position < unmatchedRequests.length) {
+      return null;
+    }
+
+    const stateKey = `${position}:${state.join(",")}:${unmatchedRequests
+      .map(([m, p]) => `${m.id}-${p}`)
+      .join("|")}`;
 
     if (seen.has(stateKey)) {
       return null;
     }
-
     seen.add(stateKey);
 
-    const requiredPitch = required.get(position);
+    const currentMonsterId = lineup[position];
 
-    /*
-     * This lineup position has a requested special pitch.
-     */
-    if (requiredPitch !== undefined) {
-      const element = PITCH_ELEMENTS[requiredPitch];
-      const index = ELEMENTS.indexOf(element);
+    // Try matching an requested pitch if the monster at this index matches
+    for (let i = 0; i < unmatchedRequests.length; i++) {
+      const [reqMonster, reqPitch] = unmatchedRequests[i];
 
-      // The greater pitch is only available after two lesser pitches.
-      if (state[index] !== 2) {
-        return null;
+      if (reqMonster.id === currentMonsterId) {
+        const element = PITCH_ELEMENTS[reqPitch];
+        const elemIndex = ELEMENTS.indexOf(element);
+
+        // Greater pitch requires 2 prior lesser pitches of this element
+        if (state[elemIndex] === 2) {
+          const nextState = [...state] as State;
+          nextState[elemIndex] = 3;
+
+          const remainingRequests = unmatchedRequests.filter(
+            (_, idx) => idx !== i,
+          );
+          const result = search(position + 1, nextState, remainingRequests);
+
+          if (result !== null) {
+            return [reqPitch, ...result];
+          }
+        }
       }
-
-      const next = [...state] as State;
-      next[index] = 3;
-
-      const result = search(position + 1, next);
-
-      return result === null ? null : [requiredPitch, ...result];
     }
 
-    /*
-     * This is an unrestricted pitch position.
-     *
-     * We can choose any element:
-     *
-     *   0 -> 1: first lesser pitch
-     *   1 -> 2: second lesser pitch
-     *   2 -> 3: greater pitch (now forced)
-     *   3: unavailable because the greater was already used
-     */
+    // Fill position with a standard pitch (lesser or forced greater)
     for (let index = 0; index < ELEMENTS.length; index++) {
       if (state[index] === 3) {
         continue;
       }
 
       const element = ELEMENTS[index];
-      const next = [...state] as State;
-
+      const nextState = [...state] as State;
       let pitch: Pitch;
 
       if (state[index] < 2) {
-        // Lesser pitches may be repeated, so we don't care which of the
-        // two lesser pitches is used.
         pitch = PITCHES_BY_ELEMENT[element][0];
-        next[index]++;
+        nextState[index]++;
       } else {
-        // Once two lesser pitches have been used, the greater pitch is
-        // the only possible pitch for this element.
         pitch = PITCHES_BY_ELEMENT[element][2];
-        next[index] = 3;
+        nextState[index] = 3;
       }
 
-      const result = search(position + 1, next);
+      const result = search(position + 1, nextState, unmatchedRequests);
 
       if (result !== null) {
         return [pitch, ...result];
@@ -296,7 +267,7 @@ export function findPitchOrder(
     return null;
   }
 
-  return search(0, [0, 0, 0, 0, 0]);
+  return search(0, [0, 0, 0, 0, 0], requestedPitches);
 }
 
 /**

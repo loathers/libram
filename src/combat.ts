@@ -1269,6 +1269,7 @@ class MacroIfBlock<M extends Macro> {
     this.root = macro;
     this.baseClass = this.root.constructor as typeof Macro & Constructor<M>;
     this.append(this.baseClass.if_(condition, ifTrue));
+    this.components.pop(); // Remove "endif";
   }
 
   private append(...components: (string | M)[]): this {

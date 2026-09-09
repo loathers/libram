@@ -437,4 +437,14 @@ describe(Macro.makeBALLSPredicate, () => {
   it("Environment none", () => {
     expect(Macro.makeBALLSPredicate("none")).toEqual("environment none");
   });
+
+  it("Macro else-if chain", () => {
+    expect(
+      Macro.beginif("foo", "bar")
+        .elseIf("bing", "baz")
+        .elseIf("bob", "cat")
+        .else("goldthwaight")
+        .toString(),
+    ).toEqual("if foo;bar;elif bing;baz;elif bob;cat;else;goldthwaight;endif;");
+  });
 });

@@ -5178,6 +5178,25 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
      * @param macro The macro to place inside the if_ statement
      * @returns New macro with supplied macro wrapped in if statement matching monsters that are not holiday wanderers
      */
+  }, {
+    key: "beginif",
+    value: (
+      /**
+       * Create a longer if...elif block, starting with this if statement.
+       * @param condition The BALLS condition for the if statement.
+       * @param ifTrue Continuation if the condition is true.
+       * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+       */
+      function(condition, ifTrue) {
+        return new MacroIfBlock(this, condition, ifTrue);
+      }
+    )
+    /**
+     * Create a Macro that begins with longer if...elif block, starting with this if statement.
+     * @param condition The BALLS condition for the if statement.
+     * @param ifTrue Continuation if the condition is true.
+     * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+     */
   }], [{
     key: "rename",
     value: function(name) {
@@ -5383,6 +5402,11 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
     key: "ifNotHolidayWanderer",
     value: function(macro) {
       return new this().ifNotHolidayWanderer(macro);
+    }
+  }, {
+    key: "beginif",
+    value: function(condition, ifTrue) {
+      return new this().beginif(condition, ifTrue);
     }
   }]);
 }();
@@ -5608,7 +5632,52 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
       return (_this16 = new this()).trySkillRepeat.apply(_this16, arguments);
     }
   }]);
-}(Macro);
+}(Macro), MacroIfBlock = /* @__PURE__ */ function() {
+  function MacroIfBlock2(macro, condition, ifTrue) {
+    _classCallCheck4(this, MacroIfBlock2), _defineProperty3(this, "root", void 0), _defineProperty3(this, "components", []), _defineProperty3(this, "baseClass", void 0), this.root = macro, this.baseClass = this.root.constructor, this.append(this.baseClass.if_(condition, ifTrue));
+  }
+  return _createClass4(MacroIfBlock2, [{
+    key: "append",
+    value: function() {
+      for (var _this$components2, _len15 = arguments.length, components = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++)
+        components[_key15] = arguments[_key15];
+      return (_this$components2 = this.components).push.apply(_this$components2, _toConsumableArray4(components.flatMap(function(component) {
+        return component instanceof Macro ? component.components : component;
+      }))), this;
+    }
+    /**
+     * Append an elif statement to this if block.
+     * @param condition The condition for the elif statement.
+     * @param macro The macro within the elif statement.
+     * @returns This same MacroIfBlock; call endif() or else() to return to your macro.
+     */
+  }, {
+    key: "elseIf",
+    value: function(condition, macro) {
+      return this.append("elif ".concat(this.baseClass.makeBALLSPredicate(condition)), macro);
+    }
+    /**
+     * End the elif block, and return to your initial macro.
+     * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+     */
+  }, {
+    key: "endif",
+    value: function() {
+      var _this$root;
+      return (_this$root = this.root).step.apply(_this$root, _toConsumableArray4(this.components)).step("endif");
+    }
+    /**
+     * End your elif block with a final `else`, and return to your initial macro.
+     * @param macro The macro to pass into the `else` block.
+     * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+     */
+  }, {
+    key: "else",
+    value: function(macro) {
+      return this.append("else", macro).endif();
+    }
+  }]);
+}();
 
 // src/maximize.ts
 init_kolmafia_polyfill();

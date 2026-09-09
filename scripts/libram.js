@@ -5634,7 +5634,7 @@ var StrictMacro = /* @__PURE__ */ function(_Macro2) {
   }]);
 }(Macro), MacroIfBlock = /* @__PURE__ */ function() {
   function MacroIfBlock2(macro, condition, ifTrue) {
-    _classCallCheck4(this, MacroIfBlock2), _defineProperty3(this, "root", void 0), _defineProperty3(this, "components", []), _defineProperty3(this, "baseClass", void 0), this.root = macro, this.baseClass = this.root.constructor, this.append(this.baseClass.if_(condition, ifTrue));
+    _classCallCheck4(this, MacroIfBlock2), _defineProperty3(this, "root", void 0), _defineProperty3(this, "components", []), _defineProperty3(this, "baseClass", void 0), this.root = macro, this.baseClass = this.root.constructor, this.append(this.baseClass.if_(condition, ifTrue)), this.components.pop();
   }
   return _createClass4(MacroIfBlock2, [{
     key: "append",

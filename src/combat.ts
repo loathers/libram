@@ -1014,6 +1014,33 @@ export class Macro {
   ): T {
     return new this().ifNotHolidayWanderer(macro);
   }
+
+  /**
+   * Create a longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
+  beginif(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<this> {
+    return new MacroIfBlock(this, condition, ifTrue);
+  }
+
+  /**
+   * Create a Macro that begins with longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
+  static beginif<T extends Macro>(
+    this: Constructor<T>,
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<T> {
+    return new this().beginif(condition, ifTrue);
+  }
 }
 
 /**
@@ -1230,5 +1257,58 @@ export class StrictMacro extends Macro {
     ...skills: Skill[]
   ): T {
     return new this().trySkillRepeat(...skills);
+  }
+}
+
+class MacroIfBlock<M extends Macro> {
+  root: M;
+  components: string[] = [];
+  baseClass: typeof Macro & Constructor<M>;
+
+  constructor(macro: M, condition: PreBALLSPredicate, ifTrue: string | Macro) {
+    this.root = macro;
+    this.baseClass = this.root.constructor as typeof Macro & Constructor<M>;
+    this.append(this.baseClass.if_(condition, ifTrue));
+    this.components.pop(); // Remove "endif";
+  }
+
+  private append(...components: (string | M)[]): this {
+    this.components.push(
+      ...components.flatMap((component) =>
+        component instanceof Macro ? component.components : component,
+      ),
+    );
+
+    return this;
+  }
+
+  /**
+   * Append an elif statement to this if block.
+   * @param condition The condition for the elif statement.
+   * @param macro The macro within the elif statement.
+   * @returns This same MacroIfBlock; call endif() or else() to return to your macro.
+   */
+  elseIf(condition: PreBALLSPredicate, macro: string | M): this {
+    return this.append(
+      `elif ${this.baseClass.makeBALLSPredicate(condition)}`,
+      macro,
+    );
+  }
+
+  /**
+   * End the elif block, and return to your initial macro.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
+  endif(): M {
+    return this.root.step(...this.components).step("endif");
+  }
+
+  /**
+   * End your elif block with a final `else`, and return to your initial macro.
+   * @param macro The macro to pass into the `else` block.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
+  else(macro: string | M): M {
+    return this.append("else", macro).endif();
   }
 }

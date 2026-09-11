@@ -1222,6 +1222,8 @@ export function realmCurrency(realm: RealmType): Item | null {
       return $item`Volcoino`;
     case "fantasy":
       return $item`Rubee™`;
+    case "cyber":
+      return $item`0`;
     default:
       return null;
   }
@@ -1236,7 +1238,8 @@ export function lgrCurrencies(): Item[] {
     .filter(
       (realm) =>
         realmAvailable(realm) &&
-        !(realm === "hot" && get("_luckyGoldRingVolcoino")),
+        // TODO: The other realms have unknown caps now
+        !(realm === "hot" && get("_luckyGoldRingVolcoino") >= 3),
     )
     .map(realmCurrency)
     .filter(notNull);

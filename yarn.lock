@@ -4544,10 +4544,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.29143.0":
-  version: 5.29143.0
-  resolution: "kolmafia@npm:5.29143.0"
-  checksum: 10c0/bdbf171e5fcc1680b61a430b3b78fcc30aa06f89d5efd56fac8121943051cf08035b5686f7b2c7566276e448beccea370bba1b6d4b07281883860d8549d4b061
+"kolmafia@npm:^5.29247.0":
+  version: 5.29248.0
+  resolution: "kolmafia@npm:5.29248.0"
+  checksum: 10c0/21e227b082759130c18a55fae231c4ad51859f581eb5d206e0738e53d6eaf96d32283359f52daedfaf865ea743b6b3b378054560a8a876ab420ba5c63c0b2fd3
   languageName: node
   linkType: hard
 
@@ -4601,7 +4601,7 @@ __metadata:
     husky: "npm:^9.1.6"
     java-parser: "npm:^2.3.2"
     kol-rng: "npm:^3.0.0"
-    kolmafia: "npm:^5.29143.0"
+    kolmafia: "npm:^5.29247.0"
     lint-staged: "npm:^15.2.10"
     lodash-es: "npm:^4.17.21"
     node-fetch: "npm:^3.3.2"
@@ -4614,7 +4614,7 @@ __metadata:
     vitest: "npm:^1.6.0"
     vitest-github-actions-reporter: "npm:^0.11.1"
   peerDependencies:
-    kolmafia: ^5.28100.0
+    kolmafia: ^5.29247.0
   languageName: unknown
   linkType: soft
 

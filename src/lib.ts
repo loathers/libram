@@ -1238,8 +1238,13 @@ export function lgrCurrencies(): Item[] {
     .filter(
       (realm) =>
         realmAvailable(realm) &&
-        // TODO: The other realms have unknown caps now
-        !(realm === "hot" && get("_luckyGoldRingVolcoino") >= 3),
+        !(realm === "sleaze" && get("_luckyGoldRingBeachBuck") >= 25) &&
+        !(realm === "spooky" && get("_luckyGoldRingCoinspiracy") >= 25) &&
+        !(realm === "stench" && get("_luckyGoldRingFunFunds") >= 15) &&
+        !(realm === "cold" && get("_luckyGoldRingWalmart") >= 15) &&
+        !(realm === "hot" && get("_luckyGoldRingVolcoino") >= 2) &&
+        !(realm === "fantasy" && get("_luckyGoldRingRubee") >= 10) &&
+        !(realm === "cyber" && get("_luckyGoldRingBit") >= 10),
     )
     .map(realmCurrency)
     .filter(notNull);

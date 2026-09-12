@@ -74,6 +74,7 @@ import * as EternityCodpiece from "./2026/EternityCodpiece.js";
 import * as CupOfThirteens from "./2026/CupOfThirteens.js";
 import * as LaughingStock from "./2026/LaughingStock.js";
 import * as PulledTaffy from "./2013/PulledTaffy.js";
+import * as BaseballDiamond from "./2026/BaseBallDiamond.js";
 export {
   AprilingBandHelmet,
   AsdonMartin,
@@ -81,6 +82,7 @@ export {
   AutumnAton,
   Bandersnatch,
   BarrelShrine,
+  BaseballDiamond,
   BatWings,
   BeachComb,
   BloodCubicZirconia,

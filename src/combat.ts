@@ -85,7 +85,7 @@ function itemOrItemsBallsMacroName(
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
     const item = itemOrNameToItem(itemOrItems);
-    return !overlappingItemNames.includes(item.name)
+    return !overlappingItemNames.has(item.name)
       ? item.name
       : item.id.toFixed(0);
   }
@@ -154,7 +154,7 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
   return skill.name.match(/^[A-Za-z ]+$/) &&
-    !overlappingSkillNames.includes(skill.name)
+    !overlappingSkillNames.has(skill.name)
     ? skill.name
     : skill.id;
 }

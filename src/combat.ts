@@ -85,7 +85,7 @@ function itemOrItemsBallsMacroName(
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   } else {
     const item = itemOrNameToItem(itemOrItems);
-    return !overlappingItemNames.includes(item.name)
+    return !overlappingItemNames.has(item.name)
       ? item.name
       : item.id.toFixed(0);
   }
@@ -154,7 +154,7 @@ function skillOrNameToSkill(skillOrName: SkillOrName) {
 function skillBallsMacroName(skillOrName: SkillOrName) {
   const skill = skillOrNameToSkill(skillOrName);
   return skill.name.match(/^[A-Za-z ]+$/) &&
-    !overlappingSkillNames.includes(skill.name)
+    !overlappingSkillNames.has(skill.name)
     ? skill.name
     : skill.id;
 }
@@ -391,6 +391,80 @@ export class Macro {
   }
 
   /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  strict(): this {
+    return this.step("strict");
+  }
+
+  /**
+   * Add a "strict" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static strict<T extends Macro>(this: Constructor<T>): T {
+    return new this().strict();
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  lenient(): this {
+    return this.step("lenient");
+  }
+
+  /**
+   * Add a "lenient" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static lenient<T extends Macro>(this: Constructor<T>): T {
+    return new this().lenient();
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  scrollWhenDone(): this {
+    return this.step("scrollwhendone");
+  }
+
+  /**
+   * Add a "scrollwhendone" step to this macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static scrollWhenDone<T extends Macro>(this: Constructor<T>): T {
+    return new this().scrollWhenDone();
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  icon(item: Item): this {
+    return this.step(`icon ${item.image.replace(/\.[^.]+$/, "")}`);
+  }
+
+  /**
+   * Add an "icon [image]" step to this macro.
+   *
+   * @param item The item to use for the image.
+   * @returns {Macro} This object itself.
+   */
+  static icon<T extends Macro>(this: Constructor<T>, item: Item): T {
+    return new this().icon(item);
+  }
+
+  /**
    * Add a "runaway" step to this macro.
    *
    * @returns {Macro} This object itself.
@@ -460,6 +534,12 @@ export class Macro {
       return `monsterphylum ${condition}`;
     } else if (condition instanceof Element) {
       return `monsterelement ${condition}`;
+    } else if (
+      ["indoor", "outdoor", "underground", "underwater", "none"].includes(
+        condition,
+      )
+    ) {
+      return `environment ${condition}`;
     }
     return condition;
   }
@@ -469,12 +549,21 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  if_(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.step(`if ${Macro.makeBALLSPredicate(condition)}`)
-      .step(ifTrue)
-      .step("endif");
+  if_(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    this.step(`if ${Macro.makeBALLSPredicate(condition)}`).step(ifTrue);
+
+    if (ifFalse) {
+      this.step("else").step(ifFalse);
+    }
+
+    return this.step("endif");
   }
 
   /**
@@ -482,39 +571,48 @@ export class Macro {
    *
    * @param condition The BALLS condition for the if statement.
    * @param ifTrue Continuation if the condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().if_(condition, ifTrue);
+    return new this().if_(condition, ifTrue, ifFalse);
   }
 
   /**
    * Add an "if" statement to this macro, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
-  ifNot(condition: PreBALLSPredicate, ifTrue: string | Macro): this {
-    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue);
+  ifNot(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+    ifFalse?: string | Macro,
+  ): this {
+    return this.if_(`!${Macro.makeBALLSPredicate(condition)}`, ifTrue, ifFalse);
   }
   /**
    * Create a new macro with an "if" statement, inverting the condition.
    *
    * @param condition The BALLS condition for the if statement.
-   * @param ifTrue Continuation if the condition is true.
+   * @param ifTrue Continuation if the negated condition is true.
+   * @param ifFalse Optional else-branch for the macro.
    * @returns {Macro} This object itself.
    */
   static ifNot<T extends Macro>(
     this: Constructor<T>,
     condition: PreBALLSPredicate,
     ifTrue: string | Macro,
+    ifFalse?: string | Macro,
   ): T {
-    return new this().ifNot(condition, ifTrue);
+    return new this().ifNot(condition, ifTrue, ifFalse);
   }
 
   /**
@@ -708,6 +806,44 @@ export class Macro {
   }
 
   /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
+   * @returns {Macro} This object itself.
+   */
+  itemQueue(
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+    single = false,
+  ): this {
+    if (items.length === 0) return this;
+    return this.step(
+      `${single ? "usesinglequeue" : "usequeue"} ${condition ? `until ${Macro.makeBALLSPredicate(condition)} :: ` : ""}${items.slice(0, 20).map(itemOrItemsBallsMacroName).join(", ")}`,
+    ).itemQueue(items.slice(20), condition);
+  }
+
+  /**
+   * Create a new macro with one or more item queue steps.
+   * Items will be funkslinged if available.
+   *
+   * @param items Items to use.
+   * @param condition The BALLS condition for the usequeue statement, optional.
+   * @param single Whether we should refrain from funkslinging: `true` if you want to avoid funkslinging, defaults to `false`.
+   * @returns {Macro} This object itself.
+   */
+  static itemQueue<T extends Macro>(
+    this: Constructor<T>,
+    items: ItemOrName[],
+    condition?: PreBALLSPredicate,
+    single = false,
+  ): T {
+    return new this().itemQueue(items, condition, single);
+  }
+
+  /**
    * Add one or more item steps to the macro, where each step checks to see if you have the item first.
    *
    * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
@@ -808,6 +944,24 @@ export class Macro {
   }
 
   /**
+   * Add a "jiggle" step to the macro.
+   *
+   * @returns {Macro} This object itself.
+   */
+  jiggle(): this {
+    return this.step("jiggle");
+  }
+
+  /**
+   * Create a new macro with a jiggle step.
+   *
+   * @returns {Macro} This object itself.
+   */
+  static jiggle<T extends Macro>(this: Constructor<T>): T {
+    return new this().jiggle();
+  }
+
+  /**
    * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, unmutated.
    *
    * @param macro The macro to place in the if_ statement
@@ -859,6 +1013,33 @@ export class Macro {
     macro: Macro,
   ): T {
     return new this().ifNotHolidayWanderer(macro);
+  }
+
+  /**
+   * Create a longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
+  beginif(
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<this> {
+    return new MacroIfBlock(this, condition, ifTrue);
+  }
+
+  /**
+   * Create a Macro that begins with longer if...elif block, starting with this if statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns A MacroIfBlock that holds this macro on it, and will return to this macro upon calling either .else() or .endif()
+   */
+  static beginif<T extends Macro>(
+    this: Constructor<T>,
+    condition: PreBALLSPredicate,
+    ifTrue: string | Macro,
+  ): MacroIfBlock<T> {
+    return new this().beginif(condition, ifTrue);
   }
 }
 
@@ -1076,5 +1257,58 @@ export class StrictMacro extends Macro {
     ...skills: Skill[]
   ): T {
     return new this().trySkillRepeat(...skills);
+  }
+}
+
+class MacroIfBlock<M extends Macro> {
+  root: M;
+  components: string[] = [];
+  baseClass: typeof Macro & Constructor<M>;
+
+  constructor(macro: M, condition: PreBALLSPredicate, ifTrue: string | Macro) {
+    this.root = macro;
+    this.baseClass = this.root.constructor as typeof Macro & Constructor<M>;
+    this.append(this.baseClass.if_(condition, ifTrue));
+    this.components.pop(); // Remove "endif";
+  }
+
+  private append(...components: (string | M)[]): this {
+    this.components.push(
+      ...components.flatMap((component) =>
+        component instanceof Macro ? component.components : component,
+      ),
+    );
+
+    return this;
+  }
+
+  /**
+   * Append an elif statement to this if block.
+   * @param condition The condition for the elif statement.
+   * @param macro The macro within the elif statement.
+   * @returns This same MacroIfBlock; call endif() or else() to return to your macro.
+   */
+  elseIf(condition: PreBALLSPredicate, macro: string | M): this {
+    return this.append(
+      `elif ${this.baseClass.makeBALLSPredicate(condition)}`,
+      macro,
+    );
+  }
+
+  /**
+   * End the elif block, and return to your initial macro.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
+  endif(): M {
+    return this.root.step(...this.components).step("endif");
+  }
+
+  /**
+   * End your elif block with a final `else`, and return to your initial macro.
+   * @param macro The macro to pass into the `else` block.
+   * @returns The macro that started this elif block, with all steps appended and the `if` statement closed.
+   */
+  else(macro: string | M): M {
+    return this.append("else", macro).endif();
   }
 }

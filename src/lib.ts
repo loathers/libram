@@ -1222,6 +1222,8 @@ export function realmCurrency(realm: RealmType): Item | null {
       return $item`Volcoino`;
     case "fantasy":
       return $item`Rubee™`;
+    case "cyber":
+      return $item`0`;
     default:
       return null;
   }
@@ -1236,7 +1238,13 @@ export function lgrCurrencies(): Item[] {
     .filter(
       (realm) =>
         realmAvailable(realm) &&
-        !(realm === "hot" && get("_luckyGoldRingVolcoino")),
+        !(realm === "sleaze" && get("_luckyGoldRingBeachBuck") >= 25) &&
+        !(realm === "spooky" && get("_luckyGoldRingCoinspiracy") >= 25) &&
+        !(realm === "stench" && get("_luckyGoldRingFunFunds") >= 15) &&
+        !(realm === "cold" && get("_luckyGoldRingWalmart") >= 15) &&
+        !(realm === "hot" && get("_luckyGoldRingVolcoino") >= 2) &&
+        !(realm === "fantasy" && get("_luckyGoldRingRubee") >= 10) &&
+        !(realm === "cyber" && get("_luckyGoldRingBit") >= 10),
     )
     .map(realmCurrency)
     .filter(notNull);
@@ -1715,9 +1723,9 @@ export function adventureTargetToWeightedMap(
   if (target instanceof Monster) return new Map([[target, 1]]);
   if (target instanceof Location) {
     return new Map(
-      Object.entries(appearanceRates(target, true)).map(([monster, rate]) =>
-        tuple(toMonster(monster), rate / 100),
-      ),
+      Object.entries(appearanceRates(target, true))
+        .map(([monster, rate]) => tuple(toMonster(monster), rate / 100))
+        .filter(([, weight]) => weight > 0),
     );
   }
   return target;

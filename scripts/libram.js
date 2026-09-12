@@ -4368,7 +4368,7 @@ function adventureTargetToWeightedMap(target) {
 
 // src/overlappingNames.ts
 init_kolmafia_polyfill();
-var overlappingItemNames = ["spider web", "really sticky spider web", "dictionary", "NG", "Cloaca-Cola", "yo-yo", "top", "ball", "kite", "yo", "red potion", "blue potion", "bowling ball", "adder", "red button", "tennis ball", "pile of sand", "mushroom", "deluxe mushroom", "spoon"], overlappingSkillNames = ["Lightning Bolt", "Shoot", "Thrust-Smack", "Headbutt", "Toss", "Knife in the Dark", "Sing", "Disarm", "LIGHT", "BURN", "Extract", "Meteor Shower", "Snipe", "Bite", "Kick", "Howl", "Cleave", "Boil", "Slice", "Rainbow", "Lightning Bolt"];
+var overlappingItemNames = /* @__PURE__ */ new Set(["spider web", "really sticky spider web", "dictionary", "NG", "Cloaca-Cola", "yo-yo", "top", "ball", "kite", "yo", "red potion", "blue potion", "bowling ball", "adder", "red button", "tennis ball", "pile of sand", "mushroom", "deluxe mushroom", "spoon"]), overlappingSkillNames = /* @__PURE__ */ new Set(["Lightning Bolt", "Shoot", "Thrust-Smack", "Headbutt", "Toss", "Knife in the Dark", "Sing", "Disarm", "Static Shock", "LIGHT", "BURN", "Extract", "Meteor Shower", "Snipe", "Bite", "Kick", "Punt", "Howl", "Cleave", "Boil", "Slice", "Rainbow"]);
 
 // src/combat.ts
 function _superPropGet(t, e, o, r) {
@@ -4558,7 +4558,7 @@ function itemOrItemsBallsMacroName(itemOrItems) {
   if (Array.isArray(itemOrItems))
     return itemOrItems.map(itemOrItemsBallsMacroName).join(", ");
   var item15 = itemOrNameToItem(itemOrItems);
-  return overlappingItemNames.includes(item15.name) ? item15.id.toFixed(0) : item15.name;
+  return overlappingItemNames.has(item15.name) ? item15.id.toFixed(0) : item15.name;
 }
 function itemOrItemsBallsMacroPredicate(itemOrItems) {
   return Array.isArray(itemOrItems) ? itemOrItems[0] === itemOrItems[1] ? "hastwocombatitems ".concat(itemOrItemsBallsMacroName(itemOrItems[0])) : itemOrItems.map(itemOrItemsBallsMacroPredicate).join(" && ") : "hascombatitem ".concat(itemOrItemsBallsMacroName(itemOrItems));
@@ -4568,7 +4568,7 @@ function skillOrNameToSkill(skillOrName) {
 }
 function skillBallsMacroName(skillOrName) {
   var skill = skillOrNameToSkill(skillOrName);
-  return skill.name.match(/^[A-Za-z ]+$/) && !overlappingSkillNames.includes(skill.name) ? skill.name : skill.id;
+  return skill.name.match(/^[A-Za-z ]+$/) && !overlappingSkillNames.has(skill.name) ? skill.name : skill.id;
 }
 function funkslingReduce() {
   for (var _len = arguments.length, items = new Array(_len), _key = 0; _key < _len; _key++)

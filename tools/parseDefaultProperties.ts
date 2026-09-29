@@ -8,7 +8,7 @@ import nodeFetch from "node-fetch";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const PROPS_FILE =
-  "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";
+  "https://raw.githubusercontent.com/kolmafia/kolmafia/refs/heads/main/src/main/resources/data/defaults.txt";
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 
@@ -257,9 +257,8 @@ async function main() {
 
     const added = difference(values, current[typeLower]);
     const removed = difference(current[typeLower], values);
-    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
-      removed.length > 0 ? removed.join(", ") : "none"
-    } removed`;
+    const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${removed.length > 0 ? removed.join(", ") : "none"
+      } removed`;
 
     console.log(`Storing ${values.length} props of type ${type} - ${report}`);
     contents += `export const ${typeLower} = [${values

@@ -325,8 +325,14 @@ export function drive(
   const fuelNeeded = 37 * Math.ceil((turns - haveEffect(style)) / 30);
   (preferInventory ? fillWithInventoryTo : fillTo)(fuelNeeded);
 
-  while (getFuel() >= 37 && haveEffect(style) < turns) {
-    cliExecute(`asdonmartin drive ${style.name.replace("Driving ", "")}`);
-  }
+  const casts = Math.min(
+    Math.ceil((turns - haveEffect(style)) / 30),
+    Math.ceil(getFuel() / 37),
+  );
+
+  cliExecute(
+    `asdonmartin drive ${style.name.replace("Driving ", "")} ${casts}`,
+  );
+
   return haveEffect(style) >= turns;
 }

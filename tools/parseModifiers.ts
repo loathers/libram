@@ -13,7 +13,7 @@ import nodeFetch from "node-fetch";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const MODIFIERS_SOURCE_ROOT =
-  "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/net/sourceforge/kolmafia/modifiers";
+  "https://raw.githubusercontent.com/kolmafia/kolmafia/refs/heads/main/src/main/java/net/sourceforge/kolmafia/modifiers/";
 
 const MODIFIERS_FILE = path.join(__dirname, "../src/modifierTypes.ts");
 

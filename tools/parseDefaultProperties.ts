@@ -8,7 +8,7 @@ import nodeFetch from "node-fetch";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const PROPS_FILE =
-  "https://raw.githubusercontent.com/kolmafia/kolmafia/main/src/data/defaults.txt";
+  "https://raw.githubusercontent.com/kolmafia/kolmafia/refs/heads/main/src/main/resources/data/defaults.txt";
 
 const TYPES_FILE = path.join(__dirname, "../src/propertyTypes.ts");
 

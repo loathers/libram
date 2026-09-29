@@ -8,27 +8,22 @@ import {
   getFuel,
   getWorkshed,
   haveEffect,
-  historicalAge,
-  historicalPrice,
   isNpcItem,
   Item,
   itemAmount,
   mallPrice,
-  mallPrices,
   npcPrice,
   retrieveItem,
   use,
   visitUrl,
 } from "kolmafia";
-import { getAverageAdventures, have as haveItem } from "../../lib.js";
+import {
+  getAcquirePrice,
+  getAverageAdventures,
+  have as haveItem,
+} from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
 import { clamp } from "../../utils.js";
-
-enum PriceAge {
-  HISTORICAL, // If Mafia has a historical price stored, use it.
-  RECENT, // Use historical price if less than a week old.
-  TODAY, // Only use a price from this session.
-}
 
 /**
  * @returns Whether the Asdon is our current active workshed
@@ -46,74 +41,23 @@ export function have(): boolean {
 
 const fuelSkiplist = $items`cup of "tea", thermos of "whiskey", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"`;
 
-/**
- * Internal function used to determine whether a historical price is recent enough
- *
- * @param item The item to check
- * @returns Whether a price is too old to trust
- */
-function priceTooOld(item: Item) {
-  return historicalPrice(item) === 0 || historicalAge(item) >= 7;
-}
-
-/**
- * @param item The item in question
- * @returns Mall max if historicalPrice is -1; otherwise, the historical price
- */
-function historicalPriceOrMax(item: Item): number {
-  const historical = historicalPrice(item);
-  return historical < 0 ? 999999999 : historical;
-}
-
-/**
- * @param item The item in question
- * @returns Mall max if historicalPrice is -1; otherwise, the mall price
- */
-function mallPriceOrMax(item: Item): number {
-  const mall = mallPrice(item);
-  return mall < 0 ? 999999999 : mall;
-}
-
-/**
- * Combined internal function to determine the price of an item
- *
- * @param item The item in question
- * @param priceAge How do we decide when to use historical vs real mall prices?
- * @returns The price of the item in question
- */
-function price(item: Item, priceAge: PriceAge) {
-  switch (priceAge) {
-    case PriceAge.HISTORICAL: {
-      const historical = historicalPriceOrMax(item);
-      return historical === 0 ? mallPriceOrMax(item) : historical;
-    }
-    case PriceAge.RECENT:
-      return priceTooOld(item)
-        ? mallPriceOrMax(item)
-        : historicalPriceOrMax(item);
-    case PriceAge.TODAY:
-      return mallPriceOrMax(item);
-  }
-}
-
 function inventoryItems(): Item[] {
   return Item.all()
     .filter(isFuelItem)
     .filter(
       (item) =>
         haveItem(item) &&
-        [100, autosellPrice(item)].includes(price(item, PriceAge.RECENT)),
+        [100, autosellPrice(item)].includes(getAcquirePrice(item)),
     );
 }
 
 /**
  * @param it The item in question
- * @param priceAge The PriceAge option to apply
  * @returns Meat per fuel of an item
  */
-function calculateFuelUnitCost(it: Item, priceAge = PriceAge.RECENT): number {
+function calculateFuelUnitCost(it: Item): number {
   const units = getAverageAdventures(it);
-  return price(it, priceAge) / units;
+  return getAcquirePrice(it) / units;
 }
 
 /**
@@ -136,40 +80,14 @@ export function isFuelItem(it: Item) {
  */
 function getBestFuels(): Item[] {
   // Three stages.
-  // 1. Filter to reasonable items using historical cost (within 5x of historical best).
-  const allFuel = Item.all().filter(isFuelItem);
-  if (allFuel.filter((item) => historicalPrice(item) === 0).length > 100) {
-    mallPrices("food");
-    mallPrices("booze");
-  }
+  // 1. Filter to reasonable items (within 5x of best).
+  const candidates = Item.all().filter(isFuelItem);
 
-  const keyHistorical = (item: Item) =>
-    calculateFuelUnitCost(item, PriceAge.HISTORICAL);
-  allFuel.sort((x, y) => keyHistorical(x) - keyHistorical(y));
-  const bestUnitCost = keyHistorical(allFuel[0]);
-  const firstBadIndex = allFuel.findIndex(
-    (item) => keyHistorical(item) > 5 * bestUnitCost,
+  candidates.sort(
+    (x, y) => calculateFuelUnitCost(x) - calculateFuelUnitCost(y),
   );
-  const potentialFuel =
-    firstBadIndex > 0 ? allFuel.slice(0, firstBadIndex) : allFuel;
 
-  // 2. Filter to top 10 candidates using prices at most a week old.
-  if (potentialFuel.filter((item) => priceTooOld(item)).length > 100) {
-    mallPrices("food");
-    mallPrices("booze");
-  }
-
-  const key1 = (item: Item) => -getAverageAdventures(item);
-  const key2 = (item: Item) => calculateFuelUnitCost(item, PriceAge.RECENT);
-  potentialFuel.sort((x: Item, y: Item) => key1(x) - key1(y));
-  potentialFuel.sort((x: Item, y: Item) => key2(x) - key2(y));
-
-  // 3. Find result using precise price for those top candidates.
-  const candidates = potentialFuel.slice(0, 10);
-  const key3 = (item: Item) => calculateFuelUnitCost(item, PriceAge.TODAY);
-  candidates.sort((x: Item, y: Item) => key3(x) - key3(y));
-
-  if (calculateFuelUnitCost(candidates[0], PriceAge.TODAY) > 100) {
+  if (calculateFuelUnitCost(candidates[0]) > 100) {
     throw new Error(
       "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
         "This means something went wrong.",

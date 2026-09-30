@@ -4105,8 +4105,8 @@ function getSaleValue() {
     items[_key] = arguments[_key];
   return items.map(function(item15) {
     return valueMap.has(item15) || (item15.discardable ? valueMap.set(item15, (0, import_kolmafia4.mallPrice)(item15) > Math.max(2 * (0, import_kolmafia4.autosellPrice)(item15), 100) ? MALL_VALUE_MODIFIER * (0, import_kolmafia4.mallPrice)(item15) : (0, import_kolmafia4.autosellPrice)(item15)) : valueMap.set(item15, (0, import_kolmafia4.mallPrice)(item15) > 100 ? MALL_VALUE_MODIFIER * (0, import_kolmafia4.mallPrice)(item15) : 0)), valueMap.get(item15) || 0;
-  }).reduce(function(s, price2) {
-    return s + price2;
+  }).reduce(function(s, price) {
+    return s + price;
   }, 0) / items.length;
 }
 var Environment = {
@@ -4306,8 +4306,8 @@ var makeBulkFunction = function(action) {
   var _iterator3 = _createForOfIteratorHelper2(items.entries()), _step3;
   try {
     for (_iterator3.s(); !(_step3 = _iterator3.n()).done; ) {
-      var _step3$value = _slicedToArray3(_step3.value, 2), _item2 = _step3$value[0], _step3$value$ = _step3$value[1], quantity = _step3$value$.quantity, limit = _step3$value$.limit, price2 = _step3$value$.price;
-      quantity ? (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, quantity, _item2) : (0, import_kolmafia4.putShop)(price2, limit != null ? limit : 0, _item2);
+      var _step3$value = _slicedToArray3(_step3.value, 2), _item2 = _step3$value[0], _step3$value$ = _step3$value[1], quantity = _step3$value$.quantity, limit = _step3$value$.limit, price = _step3$value$.price;
+      quantity ? (0, import_kolmafia4.putShop)(price, limit != null ? limit : 0, quantity, _item2) : (0, import_kolmafia4.putShop)(price, limit != null ? limit : 0, _item2);
     }
   } catch (err) {
     _iterator3.e(err);
@@ -4320,8 +4320,8 @@ var makeBulkFunction = function(action) {
   var _iterator4 = _createForOfIteratorHelper2(items.entries()), _step4;
   try {
     for (_iterator4.s(); !(_step4 = _iterator4.n()).done; ) {
-      var _step4$value = _slicedToArray3(_step4.value, 2), _item3 = _step4$value[0], _step4$value$ = _step4$value[1], limit = _step4$value$.limit, price2 = _step4$value$.price;
-      limit ? (0, import_kolmafia4.repriceShop)(price2, limit, _item3) : (0, import_kolmafia4.repriceShop)(price2, _item3);
+      var _step4$value = _slicedToArray3(_step4.value, 2), _item3 = _step4$value[0], _step4$value$ = _step4$value[1], limit = _step4$value$.limit, price = _step4$value$.price;
+      limit ? (0, import_kolmafia4.repriceShop)(price, limit, _item3) : (0, import_kolmafia4.repriceShop)(price, _item3);
     }
   } catch (err) {
     _iterator4.e(err);
@@ -6493,9 +6493,6 @@ var _templateObject59, _templateObject211, _templateObject311, _templateObject41
 function _taggedTemplateLiteral3(e, t) {
   return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
 }
-var PriceAge = /* @__PURE__ */ function(PriceAge2) {
-  return PriceAge2[PriceAge2.HISTORICAL = 0] = "HISTORICAL", PriceAge2[PriceAge2.RECENT = 1] = "RECENT", PriceAge2[PriceAge2.TODAY = 2] = "TODAY", PriceAge2;
-}(PriceAge || {});
 function installed() {
   return (0, import_kolmafia8.getWorkshed)() === $item(_templateObject59 || (_templateObject59 = _taggedTemplateLiteral3(["Asdon Martin keyfob (on ring)"])));
 }
@@ -6503,74 +6500,23 @@ function have2() {
   return installed() || have($item(_templateObject211 || (_templateObject211 = _taggedTemplateLiteral3(["Asdon Martin keyfob (on ring)"]))));
 }
 var fuelSkiplist = $items(_templateObject311 || (_templateObject311 = _taggedTemplateLiteral3(['cup of "tea", thermos of "whiskey", Lucky Lindy, Bee\'s Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of "milk"'])));
-function priceTooOld(item15) {
-  return (0, import_kolmafia8.historicalPrice)(item15) === 0 || (0, import_kolmafia8.historicalAge)(item15) >= 7;
-}
-function historicalPriceOrMax(item15) {
-  var historical = (0, import_kolmafia8.historicalPrice)(item15);
-  return historical < 0 ? 999999999 : historical;
-}
-function mallPriceOrMax(item15) {
-  var mall = (0, import_kolmafia8.mallPrice)(item15);
-  return mall < 0 ? 999999999 : mall;
-}
-function price(item15, priceAge) {
-  switch (priceAge) {
-    case PriceAge.HISTORICAL: {
-      var historical = historicalPriceOrMax(item15);
-      return historical === 0 ? mallPriceOrMax(item15) : historical;
-    }
-    case PriceAge.RECENT:
-      return priceTooOld(item15) ? mallPriceOrMax(item15) : historicalPriceOrMax(item15);
-    case PriceAge.TODAY:
-      return mallPriceOrMax(item15);
-  }
-}
 function inventoryItems() {
   return import_kolmafia8.Item.all().filter(isFuelItem).filter(function(item15) {
-    return have(item15) && [100, (0, import_kolmafia8.autosellPrice)(item15)].includes(price(item15, PriceAge.RECENT));
+    return have(item15) && [100, (0, import_kolmafia8.autosellPrice)(item15)].includes(getAcquirePrice(item15));
   });
 }
 function calculateFuelUnitCost(it) {
-  var priceAge = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : PriceAge.RECENT, units = getAverageAdventures(it);
-  return price(it, priceAge) / units;
+  var units = getAverageAdventures(it);
+  return getAcquirePrice(it) / units;
 }
 function isFuelItem(it) {
   return !(0, import_kolmafia8.isNpcItem)(it) && it.fullness + it.inebriety > 0 && getAverageAdventures(it) > 0 && it.tradeable && it.discardable && !fuelSkiplist.includes(it);
 }
 function getBestFuels() {
-  var allFuel = import_kolmafia8.Item.all().filter(isFuelItem);
-  allFuel.filter(function(item15) {
-    return (0, import_kolmafia8.historicalPrice)(item15) === 0;
-  }).length > 100 && ((0, import_kolmafia8.mallPrices)("food"), (0, import_kolmafia8.mallPrices)("booze"));
-  var keyHistorical = function(item15) {
-    return calculateFuelUnitCost(item15, PriceAge.HISTORICAL);
-  };
-  allFuel.sort(function(x, y) {
-    return keyHistorical(x) - keyHistorical(y);
-  });
-  var bestUnitCost = keyHistorical(allFuel[0]), firstBadIndex = allFuel.findIndex(function(item15) {
-    return keyHistorical(item15) > 5 * bestUnitCost;
-  }), potentialFuel = firstBadIndex > 0 ? allFuel.slice(0, firstBadIndex) : allFuel;
-  potentialFuel.filter(function(item15) {
-    return priceTooOld(item15);
-  }).length > 100 && ((0, import_kolmafia8.mallPrices)("food"), (0, import_kolmafia8.mallPrices)("booze"));
-  var key1 = function(item15) {
-    return -getAverageAdventures(item15);
-  }, key2 = function(item15) {
-    return calculateFuelUnitCost(item15, PriceAge.RECENT);
-  };
-  potentialFuel.sort(function(x, y) {
-    return key1(x) - key1(y);
-  }), potentialFuel.sort(function(x, y) {
-    return key2(x) - key2(y);
-  });
-  var candidates = potentialFuel.slice(0, 10), key3 = function(item15) {
-    return calculateFuelUnitCost(item15, PriceAge.TODAY);
-  };
+  var candidates = import_kolmafia8.Item.all().filter(isFuelItem);
   if (candidates.sort(function(x, y) {
-    return key3(x) - key3(y);
-  }), calculateFuelUnitCost(candidates[0], PriceAge.TODAY) > 100)
+    return calculateFuelUnitCost(x) - calculateFuelUnitCost(y);
+  }), calculateFuelUnitCost(candidates[0]) > 100)
     throw new Error("Could not identify any fuel with efficiency better than 100 meat per fuel. This means something went wrong.");
   return candidates;
 }
@@ -17076,8 +17022,8 @@ function sellPrices(coinmaster) {
   return new Map(itemsSold(coinmaster).map(function(item15) {
     return [item15, (0, import_kolmafia87.sellPrice)(coinmaster, item15)];
   }).filter(function(_ref) {
-    var _ref2 = _slicedToArray25(_ref, 2), price2 = _ref2[1];
-    return price2 > 0;
+    var _ref2 = _slicedToArray25(_ref, 2), price = _ref2[1];
+    return price > 0;
   }));
 }
 function sellCosts(coinmaster) {

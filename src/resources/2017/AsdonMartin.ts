@@ -166,7 +166,7 @@ export function fillTo(targetUnits: number): boolean {
       !insertFuel(curFuelItem, Math.min(itemAmount(curFuelItem), count))
     ) {
       throw new Error(
-        "Failed to insert fuel Asdon Martin. Possible inventory desync?",
+        "Failed to insert fuel into Asdon Martin. Possible inventory desync?",
       );
     }
   }

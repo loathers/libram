@@ -6526,18 +6526,21 @@ function insertFuel(it) {
 }
 function fillTo(targetUnits) {
   if (!installed()) return !1;
-  for (var bestFuels = (0, import_kolmafia8.canInteract)() ? getBestFuels() : [$item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral3(["loaf of soda bread"])))]; bestFuels.length > 0 && (0, import_kolmafia8.getFuel)() < targetUnits; ) {
-    var curFuel = bestFuels.shift(), nextFuel = bestFuels.at(0), curEfficiency = (0, import_kolmafia8.mallPrice)(curFuel) / getAverageAdventures(curFuel), desiredEfficiency = nextFuel ? (0, import_kolmafia8.mallPrice)(nextFuel) / getAverageAdventures(nextFuel) : curEfficiency, ceiling = Math.floor((0, import_kolmafia8.mallPrice)(curFuel) * (1 + desiredEfficiency - curEfficiency)), count = Math.ceil(targetUnits / getAverageAdventures(curFuel));
+  for (var bestFuels = (0, import_kolmafia8.canInteract)() ? getBestFuels() : [$item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral3(["loaf of soda bread"])))], _loop = function() {
+    var curFuelItem = bestFuels.shift(), nextFuelItem = bestFuels.at(0), curEfficiency = getAcquirePrice(curFuelItem) / getAverageAdventures(curFuelItem), nextBestEfficiency = nextFuelItem ? getAcquirePrice(nextFuelItem) / getAverageAdventures(nextFuelItem) : curEfficiency, priceCeiling = Math.floor(getAcquirePrice(curFuelItem) * (1 + nextBestEfficiency - curEfficiency)), count = Math.ceil(targetUnits / getAverageAdventures(curFuelItem));
     if ((0, import_kolmafia8.canInteract)())
-      ceiling ? (0, import_kolmafia8.buy)(count, curFuel, ceiling) : (0, import_kolmafia8.buy)(count, curFuel);
+      withProperty("autoBuyPriceLimit", priceCeiling, function() {
+        return (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
+      });
     else if ((0, import_kolmafia8.npcPrice)($item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral3(["wad of dough"])))) === 0 && (0, import_kolmafia8.npcPrice)($item(_templateObject63 || (_templateObject63 = _taggedTemplateLiteral3(["all-purpose flower"])))) > 0) {
       for (var maxTries = Math.ceil(count / 35), i = 0; i < maxTries && (0, import_kolmafia8.availableAmount)($item(_templateObject73 || (_templateObject73 = _taggedTemplateLiteral3(["wad of dough"])))) < count; i++)
         (0, import_kolmafia8.buy)($item(_templateObject83 || (_templateObject83 = _taggedTemplateLiteral3(["all-purpose flower"])))), (0, import_kolmafia8.use)($item(_templateObject93 || (_templateObject93 = _taggedTemplateLiteral3(["all-purpose flower"]))));
-      (0, import_kolmafia8.retrieveItem)(count, curFuel);
-    } else (0, import_kolmafia8.retrieveItem)(count, curFuel);
-    if ((0, import_kolmafia8.itemAmount)(curFuel) > 0 && !insertFuel(curFuel, Math.min((0, import_kolmafia8.itemAmount)(curFuel), count)))
-      throw new Error("Failed to fuel Asdon Martin.");
-  }
+      (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
+    } else (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
+    if ((0, import_kolmafia8.itemAmount)(curFuelItem) > 0 && !insertFuel(curFuelItem, Math.min((0, import_kolmafia8.itemAmount)(curFuelItem), count)))
+      throw new Error("Failed to insert fuel into Asdon Martin. Possible inventory desync?");
+  }; bestFuels.length > 0 && (0, import_kolmafia8.getFuel)() < targetUnits; )
+    _loop();
   return (0, import_kolmafia8.getFuel)() >= targetUnits;
 }
 function fillWithBestInventoryItem(targetUnits) {

@@ -11,7 +11,6 @@ import {
   isNpcItem,
   Item,
   itemAmount,
-  mallPrice,
   npcPrice,
   retrieveItem,
   use,
@@ -24,6 +23,7 @@ import {
 } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
 import { clamp } from "../../utils.js";
+import { withProperty } from "../../property.js";
 
 /**
  * @returns Whether the Asdon is our current active workshed
@@ -76,11 +76,10 @@ export function isFuelItem(it: Item) {
 }
 
 /**
- * @returns The best fuel options available to us at this time
+ * @returns An array of all fuel items sorted by their efficiency
  */
 function getBestFuels(): Item[] {
-  // Three stages.
-  // 1. Filter to reasonable items (within 5x of best).
+  // Find all fuel items and sort them by fuel unit cost
   const candidates = Item.all().filter(isFuelItem);
 
   candidates.sort(
@@ -126,17 +125,18 @@ export function fillTo(targetUnits: number): boolean {
     : [$item`loaf of soda bread`];
 
   while (bestFuels.length > 0 && getFuel() < targetUnits) {
-    const curFuel = bestFuels.shift()!;
-    const nextFuel = bestFuels.at(0);
-    const curEfficiency = mallPrice(curFuel) / getAverageAdventures(curFuel);
-    const desiredEfficiency = nextFuel
-      ? mallPrice(nextFuel) / getAverageAdventures(nextFuel)
+    const curFuelItem = bestFuels.shift()!;
+    const nextFuelItem = bestFuels.at(0);
+    const curEfficiency =
+      getAcquirePrice(curFuelItem) / getAverageAdventures(curFuelItem);
+    const nextBestEfficiency = nextFuelItem
+      ? getAcquirePrice(nextFuelItem) / getAverageAdventures(nextFuelItem)
       : curEfficiency;
-    const ceiling = Math.floor(
-      mallPrice(curFuel) * (1.0 + desiredEfficiency - curEfficiency),
+    const priceCeiling = Math.floor(
+      getAcquirePrice(curFuelItem) * (1.0 + nextBestEfficiency - curEfficiency),
     );
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(curFuel));
+    const count = Math.ceil(targetUnits / getAverageAdventures(curFuelItem));
 
     if (!canInteract()) {
       // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
@@ -153,16 +153,21 @@ export function fillTo(targetUnits: number): boolean {
           buy($item`all-purpose flower`);
           use($item`all-purpose flower`);
         }
-        retrieveItem(count, curFuel);
-      } else retrieveItem(count, curFuel);
-    } else if (ceiling) buy(count, curFuel, ceiling);
-    else buy(count, curFuel);
+        retrieveItem(count, curFuelItem);
+      } else retrieveItem(count, curFuelItem);
+    } else {
+      withProperty("autoBuyPriceLimit", priceCeiling, () =>
+        retrieveItem(count, curFuelItem),
+      );
+    }
 
     if (
-      itemAmount(curFuel) > 0 &&
-      !insertFuel(curFuel, Math.min(itemAmount(curFuel), count))
+      itemAmount(curFuelItem) > 0 &&
+      !insertFuel(curFuelItem, Math.min(itemAmount(curFuelItem), count))
     ) {
-      throw new Error("Failed to fuel Asdon Martin.");
+      throw new Error(
+        "Failed to insert fuel into Asdon Martin. Possible inventory desync?",
+      );
     }
   }
   return getFuel() >= targetUnits;

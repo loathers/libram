@@ -6505,18 +6505,23 @@ function inventoryItems() {
     return have(item15) && [100, (0, import_kolmafia8.autosellPrice)(item15)].includes(getAcquirePrice(item15));
   });
 }
-function calculateFuelUnitCost(it) {
-  var units = getAverageAdventures(it);
-  return getAcquirePrice(it) / units;
+function fuelEfficiency(_ref) {
+  var item15 = _ref.item, price = _ref.price;
+  return getAverageAdventures(item15) / price;
 }
 function isFuelItem(it) {
   return !(0, import_kolmafia8.isNpcItem)(it) && it.fullness + it.inebriety > 0 && getAverageAdventures(it) > 0 && it.tradeable && it.discardable && !fuelSkiplist.includes(it);
 }
 function getBestFuels() {
-  var candidates = import_kolmafia8.Item.all().filter(isFuelItem);
-  if (candidates.sort(function(x, y) {
-    return calculateFuelUnitCost(x) - calculateFuelUnitCost(y);
-  }), calculateFuelUnitCost(candidates[0]) > 100)
+  var candidates = import_kolmafia8.Item.all().filter(isFuelItem).map(function(item15) {
+    return {
+      item: item15,
+      price: getAcquirePrice(item15)
+    };
+  });
+  if (candidates.sort(function(a, b) {
+    return fuelEfficiency(b) - fuelEfficiency(a);
+  }), fuelEfficiency(candidates[0]) < 0.01)
     throw new Error("Could not identify any fuel with efficiency better than 100 meat per fuel. This means something went wrong.");
   return candidates;
 }
@@ -6524,23 +6529,38 @@ function insertFuel(it) {
   var quantity = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1, result = (0, import_kolmafia8.visitUrl)("campground.php?action=fuelconvertor&pwd&qty=".concat(quantity, "&iid=").concat(it.id, "&go=Convert%21"));
   return result.includes("The display updates with a");
 }
+function tryInsert(item15, count) {
+  var amount2 = (0, import_kolmafia8.itemAmount)(item15), insertionAmount = Math.min(amount2, count);
+  if (amount2 > 0 && !insertFuel(item15, insertionAmount))
+    throw new Error("Failed to insert ".concat(insertionAmount, " ").concat(item15.plural, " into Asdon Martin. Possible inventory desync?"));
+}
 function fillTo(targetUnits) {
   if (!installed()) return !1;
-  for (var bestFuels = (0, import_kolmafia8.canInteract)() ? getBestFuels() : [$item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral3(["loaf of soda bread"])))], _loop = function() {
-    var curFuelItem = bestFuels.shift(), nextFuelItem = bestFuels.at(0), curEfficiency = getAcquirePrice(curFuelItem) / getAverageAdventures(curFuelItem), nextBestEfficiency = nextFuelItem ? getAcquirePrice(nextFuelItem) / getAverageAdventures(nextFuelItem) : curEfficiency, priceCeiling = Math.floor(getAcquirePrice(curFuelItem) * (1 + nextBestEfficiency - curEfficiency)), count = Math.ceil(targetUnits / getAverageAdventures(curFuelItem));
-    if ((0, import_kolmafia8.canInteract)())
+  if ((0, import_kolmafia8.canInteract)())
+    for (var bestFuels = getBestFuels(), _loop = function() {
+      var _bestFuels$at, _ref2 = bestFuels.shift(), currentFuel = _ref2.item, currentPrice = _ref2.price;
+      if (logger_default.debug("Fuel: ".concat(currentFuel, ", price: ").concat(currentPrice)), fuelEfficiency({
+        item: currentFuel,
+        price: currentPrice
+      }) < 0.01) return 1;
+      var _ref3 = (_bestFuels$at = bestFuels.at(0)) !== null && _bestFuels$at !== void 0 ? _bestFuels$at : {
+        item: null,
+        price: null
+      }, nextFuel = _ref3.item, nextPrice = _ref3.price, priceCeiling = 1 + (nextFuel ? Math.ceil(nextPrice * getAverageAdventures(currentFuel) / getAverageAdventures(nextFuel)) : currentPrice);
+      logger_default.debug("price ceiling: ".concat(priceCeiling));
+      var count2 = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
       withProperty("autoBuyPriceLimit", priceCeiling, function() {
-        return (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
-      });
-    else if ((0, import_kolmafia8.npcPrice)($item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral3(["wad of dough"])))) === 0 && (0, import_kolmafia8.npcPrice)($item(_templateObject63 || (_templateObject63 = _taggedTemplateLiteral3(["all-purpose flower"])))) > 0) {
-      for (var maxTries = Math.ceil(count / 35), i = 0; i < maxTries && (0, import_kolmafia8.availableAmount)($item(_templateObject73 || (_templateObject73 = _taggedTemplateLiteral3(["wad of dough"])))) < count; i++)
+        return (0, import_kolmafia8.retrieveItem)(count2, currentFuel);
+      }), tryInsert(currentFuel, count2);
+    }; bestFuels.length > 0 && (0, import_kolmafia8.getFuel)() < targetUnits && !_loop(); )
+      ;
+  else {
+    var fuel = $item(_templateObject411 || (_templateObject411 = _taggedTemplateLiteral3(["loaf of soda bread"]))), count = Math.ceil(targetUnits / getAverageAdventures(fuel)), breadToMake = count - (0, import_kolmafia8.itemAmount)(fuel);
+    if ((0, import_kolmafia8.npcPrice)($item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral3(["wad of dough"])))) === 0 && (0, import_kolmafia8.npcPrice)($item(_templateObject63 || (_templateObject63 = _taggedTemplateLiteral3(["all-purpose flower"])))) > 0)
+      for (var maxTries = Math.ceil(breadToMake / 35), i = 0; i < maxTries && (0, import_kolmafia8.availableAmount)($item(_templateObject73 || (_templateObject73 = _taggedTemplateLiteral3(["wad of dough"])))) < breadToMake; i++)
         (0, import_kolmafia8.buy)($item(_templateObject83 || (_templateObject83 = _taggedTemplateLiteral3(["all-purpose flower"])))), (0, import_kolmafia8.use)($item(_templateObject93 || (_templateObject93 = _taggedTemplateLiteral3(["all-purpose flower"]))));
-      (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
-    } else (0, import_kolmafia8.retrieveItem)(count, curFuelItem);
-    if ((0, import_kolmafia8.itemAmount)(curFuelItem) > 0 && !insertFuel(curFuelItem, Math.min((0, import_kolmafia8.itemAmount)(curFuelItem), count)))
-      throw new Error("Failed to insert fuel into Asdon Martin. Possible inventory desync?");
-  }; bestFuels.length > 0 && (0, import_kolmafia8.getFuel)() < targetUnits; )
-    _loop();
+    (0, import_kolmafia8.retrieveItem)(count, fuel), tryInsert(fuel, count);
+  }
   return (0, import_kolmafia8.getFuel)() >= targetUnits;
 }
 function fillWithBestInventoryItem(targetUnits) {

@@ -51,13 +51,8 @@ function inventoryItems(): Item[] {
     );
 }
 
-/**
- * @param it The item in question
- * @returns Meat per fuel of an item
- */
-function calculateFuelUnitCost(it: Item): number {
-  const units = getAverageAdventures(it);
-  return getAcquirePrice(it) / units;
+function fuelEfficiency(it: Item) {
+  return getAverageAdventures(it) / getAcquirePrice(it);
 }
 
 /**
@@ -82,11 +77,9 @@ function getBestFuels(): Item[] {
   // Find all fuel items and sort them by fuel unit cost
   const candidates = Item.all().filter(isFuelItem);
 
-  candidates.sort(
-    (x, y) => calculateFuelUnitCost(x) - calculateFuelUnitCost(y),
-  );
+  candidates.sort((a, b) => fuelEfficiency(b) - fuelEfficiency(a));
 
-  if (calculateFuelUnitCost(candidates[0]) > 100) {
+  if (fuelEfficiency(candidates[0]) < 0.01) {
     throw new Error(
       "Could not identify any fuel with efficiency better than 100 meat per fuel. " +
         "This means something went wrong.",
@@ -125,18 +118,19 @@ export function fillTo(targetUnits: number): boolean {
     : [$item`loaf of soda bread`];
 
   while (bestFuels.length > 0 && getFuel() < targetUnits) {
-    const curFuelItem = bestFuels.shift()!;
-    const nextFuelItem = bestFuels.at(0);
-    const curEfficiency =
-      getAcquirePrice(curFuelItem) / getAverageAdventures(curFuelItem);
-    const nextBestEfficiency = nextFuelItem
-      ? getAcquirePrice(nextFuelItem) / getAverageAdventures(nextFuelItem)
-      : curEfficiency;
-    const priceCeiling = Math.floor(
-      getAcquirePrice(curFuelItem) * (1.0 + nextBestEfficiency - curEfficiency),
-    );
+    const currentFuel = bestFuels.shift()!;
+    const nextFuel = bestFuels.at(0);
+    const currentEfficiency = fuelEfficiency(currentFuel);
+    const nextEfficiency = fuelEfficiency(nextFuel ?? currentFuel);
+    const priceCeiling =
+      1 +
+      (nextFuel
+        ? Math.ceil(
+            getAcquirePrice(nextFuel) * (currentEfficiency / nextEfficiency),
+          )
+        : getAcquirePrice(currentFuel));
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(curFuelItem));
+    const count = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
 
     if (!canInteract()) {
       // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
@@ -153,17 +147,17 @@ export function fillTo(targetUnits: number): boolean {
           buy($item`all-purpose flower`);
           use($item`all-purpose flower`);
         }
-        retrieveItem(count, curFuelItem);
-      } else retrieveItem(count, curFuelItem);
+        retrieveItem(count, currentFuel);
+      } else retrieveItem(count, currentFuel);
     } else {
       withProperty("autoBuyPriceLimit", priceCeiling, () =>
-        retrieveItem(count, curFuelItem),
+        retrieveItem(count, currentFuel),
       );
     }
 
     if (
-      itemAmount(curFuelItem) > 0 &&
-      !insertFuel(curFuelItem, Math.min(itemAmount(curFuelItem), count))
+      itemAmount(currentFuel) > 0 &&
+      !insertFuel(currentFuel, Math.min(itemAmount(currentFuel), count))
     ) {
       throw new Error(
         "Failed to insert fuel into Asdon Martin. Possible inventory desync?",

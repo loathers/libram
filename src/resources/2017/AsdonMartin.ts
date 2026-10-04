@@ -24,6 +24,7 @@ import {
 import { $effect, $item, $items } from "../../template-string.js";
 import { clamp } from "../../utils.js";
 import { withProperty } from "../../property.js";
+import logger from "../../logger.js";
 
 /**
  * @returns Whether the Asdon is our current active workshed
@@ -130,6 +131,7 @@ export function fillTo(targetUnits: number): boolean {
 
     while (bestFuels.length > 0 && getFuel() < targetUnits) {
       const { item: currentFuel, price: currentPrice } = bestFuels.shift()!;
+      logger.debug(`Fuel: ${currentFuel}, price: ${currentPrice}`);
 
       // Surely something has gone wrong if our fuels are this inefficient
       if (fuelEfficiency({ item: currentFuel, price: currentPrice }) < 0.01)
@@ -148,6 +150,7 @@ export function fillTo(targetUnits: number): boolean {
                 getAverageAdventures(nextFuel),
             )
           : currentPrice);
+      logger.debug(`price ceiling: ${priceCeiling}`);
 
       const count = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
 

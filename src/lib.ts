@@ -81,6 +81,7 @@ import {
   isNpcItem,
   npcPrice,
   useFamiliar,
+  knollAvailable,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -93,6 +94,7 @@ import {
   $item,
   $items,
   $monsters,
+  $path,
   $skill,
   $stat,
 } from "./template-string.js";
@@ -1633,6 +1635,45 @@ export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
   ];
 }
 
+function freeCraftingTypes(): string[] {
+  const craftingTypes = [
+    "Meatpasting",
+    "Meatpasting (not untinkerable)",
+    "rolling pin/unrolling pin",
+    "Cooking",
+    "single-use",
+    "Mixing",
+    "globs of wax",
+    "metal meteoroid",
+    "burning newspaper",
+    "grubby wool",
+  ];
+  if (myPath() !== $path`Bees Hate You`) {
+    craftingTypes.push("multi-use (Unavailable in Beecore)");
+    if (have($skill`Torso Awareness`)) {
+      craftingTypes.push(
+        "multi-use (Torso Awareness) (Unavailable in Beecore)",
+      );
+    }
+  }
+  if (knollAvailable()) {
+    craftingTypes.push("Meatsmithing");
+  }
+  if (have($skill`Eldritch Intellect`)) {
+    craftingTypes.push(
+      "multi-use (Eldritch Intellect)",
+      "Cooking (Eldritch Intellect)",
+    );
+  }
+  if (holiday().includes("St. Sneaky Pete's Day")) {
+    craftingTypes.push("Meatpasting (St. Sneaky Pete's Day only)");
+  }
+  if (haveInCampground($item`A Guide to Burning Leaves`)) {
+    craftingTypes.push("Pile of Burning Leaves");
+  }
+
+  return craftingTypes;
+}
 /**
  * Determines the cost of acquiring an item taking into account your valueOfInventory preference
  *
@@ -1650,8 +1691,8 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
     retrievePrice(item, currentAmount);
   const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
-  // If it's easy to meatpaste, just rely on retrieveCost
-  if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
+  // If it's easy to create, just rely on retrieveCost
+  if (freeCraftingTypes().includes(craftType(item)) && retrieveCost > 0) {
     return retrieveCost;
   }
 

@@ -126,7 +126,7 @@ export function fillTo(targetUnits: number): boolean {
       1 +
       (nextFuel
         ? Math.ceil(
-            getAcquirePrice(nextFuel) * (currentEfficiency / nextEfficiency),
+            getAcquirePrice(currentFuel) * (currentEfficiency / nextEfficiency),
           )
         : getAcquirePrice(currentFuel));
 

@@ -130,6 +130,11 @@ export function fillTo(targetUnits: number): boolean {
 
     while (bestFuels.length > 0 && getFuel() < targetUnits) {
       const { item: currentFuel, price: currentPrice } = bestFuels.shift()!;
+
+      // Surely something has gone wrong if our fuels are this inefficient
+      if (fuelEfficiency({ item: currentFuel, price: currentPrice }) < 0.01)
+        break;
+
       const { item: nextFuel, price: nextPrice } = bestFuels.at(0) ?? {
         item: null,
         price: null,

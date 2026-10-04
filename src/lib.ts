@@ -82,6 +82,7 @@ import {
   npcPrice,
   useFamiliar,
   knollAvailable,
+  gnomadsAvailable,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -1637,6 +1638,7 @@ export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
 
 function freeCraftingTypes(): string[] {
   const craftingTypes = [
+    "chewing gum",
     "Meatpasting",
     "Meatpasting (not untinkerable)",
     "rolling pin/unrolling pin",
@@ -1656,8 +1658,19 @@ function freeCraftingTypes(): string[] {
       );
     }
   }
+  if (have($item`jewelry-making pliers`)) {
+    craftingTypes.push("Jewelry-making pliers");
+    if (have($skill`Really Expensive Jewelrycrafting`)) {
+      craftingTypes.push(
+        "Jewelry-making pliers (Really Expensive Jewelrycrafting)",
+      );
+    }
+  }
   if (knollAvailable()) {
     craftingTypes.push("Meatsmithing");
+  }
+  if (gnomadsAvailable()) {
+    craftingTypes.push("Supertinkering");
   }
   if (have($skill`Eldritch Intellect`)) {
     craftingTypes.push(

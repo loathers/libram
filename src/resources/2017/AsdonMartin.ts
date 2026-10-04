@@ -19,6 +19,7 @@ import {
 import {
   getAcquirePrice,
   getAverageAdventures,
+  getRange,
   have as haveItem,
 } from "../../lib.js";
 import { $effect, $item, $items } from "../../template-string.js";
@@ -116,6 +117,45 @@ function tryInsert(item: Item, count: number) {
   }
 }
 
+function fillWith(
+  item: Item,
+  targetUnits: number,
+  obtain: (amount: number) => void,
+) {
+  while (getFuel() < targetUnits) {
+    const [, maxFuelFromItem] = getRange(item.adventures);
+    const unitsNeeded = targetUnits - getFuel();
+    const minimumFuel = Math.ceil(unitsNeeded / maxFuelFromItem);
+    obtain(minimumFuel);
+    const retrievalSuccess = itemAmount(item) >= minimumFuel;
+    tryInsert(item, minimumFuel);
+    if (!retrievalSuccess) break;
+  }
+}
+
+const obtainBread = (amount: number) => {
+  const breadToMake = amount - itemAmount($item`loaf of soda bread`);
+  if (
+    npcPrice($item`wad of dough`) === 0 &&
+    npcPrice($item`all-purpose flower`) > 0
+  ) {
+    const maxTries = Math.ceil(breadToMake / 35); // minimum amount of wad of dough created from all-purpose flower is 35
+    for (
+      let i = 0;
+      i < maxTries && availableAmount($item`wad of dough`) < breadToMake;
+      i++
+    ) {
+      buy($item`all-purpose flower`);
+      use($item`all-purpose flower`);
+    }
+  }
+  try {
+    retrieveItem(amount, $item`loaf of soda bread`);
+  } catch (e) {
+    logger.debug(`error retrieving soda bread: ${e}`);
+  }
+};
+
 /**
  * Fill your Asdon Martin to the given fuel level in the cheapest way possible
  *
@@ -152,35 +192,14 @@ export function fillTo(targetUnits: number): boolean {
           : currentPrice);
       logger.debug(`price ceiling: ${priceCeiling}`);
 
-      const count = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
-
-      withProperty("autoBuyPriceLimit", priceCeiling, () =>
-        retrieveItem(count, currentFuel),
+      fillWith(currentFuel, targetUnits, (amount) =>
+        withProperty("autoBuyPriceLimit", priceCeiling, () =>
+          retrieveItem(amount, currentFuel),
+        ),
       );
-
-      tryInsert(currentFuel, count);
     }
   } else {
-    const fuel = $item`loaf of soda bread`;
-    const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
-
-    const breadToMake = count - itemAmount(fuel);
-    if (
-      npcPrice($item`wad of dough`) === 0 &&
-      npcPrice($item`all-purpose flower`) > 0
-    ) {
-      const maxTries = Math.ceil(breadToMake / 35); // minimum amount of wad of dough created from all-purpose flower is 35
-      for (
-        let i = 0;
-        i < maxTries && availableAmount($item`wad of dough`) < breadToMake;
-        i++
-      ) {
-        buy($item`all-purpose flower`);
-        use($item`all-purpose flower`);
-      }
-    }
-    retrieveItem(count, fuel);
-    tryInsert(fuel, count);
+    fillWith($item`loaf of soda bread`, targetUnits, obtainBread);
   }
   return getFuel() >= targetUnits;
 }

@@ -135,6 +135,7 @@ function fillWith(
 
 const obtainBread = (amount: number) => {
   const breadToMake = amount - itemAmount($item`loaf of soda bread`);
+  if (breadToMake <= 0) return;
   if (
     npcPrice($item`wad of dough`) === 0 &&
     npcPrice($item`all-purpose flower`) > 0

@@ -1635,8 +1635,10 @@ export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
     ...(SPECIAL_ULTS.get(familiar) ?? []),
   ];
 }
-
-function freeCraftingTypes(): string[] {
+/**
+ * @returns An array consisting of return values of the craftType function that correspond to crafting methods that are always turn-free and resource-cheap.
+ */
+function getInnatelyFreeCraftingTypes(): string[] {
   const craftingTypes = [
     "chewing gum",
     "Meatpasting",
@@ -1703,7 +1705,7 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
   const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
   // If it's easy to create, just rely on retrieveCost
-  if (freeCraftingTypes().includes(craftType(item))) {
+  if (getInnatelyFreeCraftingTypes().includes(craftType(item))) {
     const retrieveCost =
       retrievePrice(item, currentAmount + quantity) -
       retrievePrice(item, currentAmount);

@@ -24,6 +24,7 @@ import {
 import { $effect, $item, $items } from "../../template-string.js";
 import { clamp } from "../../utils.js";
 import { withProperty } from "../../property.js";
+import logger from "../../logger.js";
 
 /**
  * @returns Whether the Asdon is our current active workshed
@@ -51,8 +52,8 @@ function inventoryItems(): Item[] {
     );
 }
 
-function fuelEfficiency(it: Item) {
-  return getAverageAdventures(it) / getAcquirePrice(it);
+function fuelEfficiency({ item, price }: { item: Item; price: number }) {
+  return getAverageAdventures(item) / price;
 }
 
 /**
@@ -73,9 +74,11 @@ export function isFuelItem(it: Item) {
 /**
  * @returns An array of all fuel items sorted by their efficiency
  */
-function getBestFuels(): Item[] {
+function getBestFuels(): { item: Item; price: number }[] {
   // Find all fuel items and sort them by fuel unit cost
-  const candidates = Item.all().filter(isFuelItem);
+  const candidates = Item.all()
+    .filter(isFuelItem)
+    .map((item) => ({ item, price: getAcquirePrice(item) }));
 
   candidates.sort((a, b) => fuelEfficiency(b) - fuelEfficiency(a));
 
@@ -103,6 +106,16 @@ export function insertFuel(it: Item, quantity = 1): boolean {
   return result.includes("The display updates with a");
 }
 
+function tryInsert(item: Item, count: number) {
+  const amount = itemAmount(item);
+  const insertionAmount = Math.min(amount, count);
+  if (amount > 0 && !insertFuel(item, insertionAmount)) {
+    throw new Error(
+      `Failed to insert ${insertionAmount} ${item.plural} into Asdon Martin. Possible inventory desync?`,
+    );
+  }
+}
+
 /**
  * Fill your Asdon Martin to the given fuel level in the cheapest way possible
  *
@@ -113,56 +126,61 @@ export function fillTo(targetUnits: number): boolean {
   if (!installed()) return false;
 
   // if in Hardcore/ronin, skip the price calculation and just use soda bread
-  const bestFuels = canInteract()
-    ? getBestFuels()
-    : [$item`loaf of soda bread`];
+  if (canInteract()) {
+    const bestFuels = getBestFuels();
 
-  while (bestFuels.length > 0 && getFuel() < targetUnits) {
-    const currentFuel = bestFuels.shift()!;
-    const nextFuel = bestFuels.at(0);
-    const currentEfficiency = fuelEfficiency(currentFuel);
-    const nextEfficiency = fuelEfficiency(nextFuel ?? currentFuel);
-    const priceCeiling =
-      1 +
-      (nextFuel
-        ? Math.ceil(
-            getAcquirePrice(currentFuel) * (currentEfficiency / nextEfficiency),
-          )
-        : getAcquirePrice(currentFuel));
+    while (bestFuels.length > 0 && getFuel() < targetUnits) {
+      const { item: currentFuel, price: currentPrice } = bestFuels.shift()!;
+      logger.debug(`Fuel: ${currentFuel}, price: ${currentPrice}`);
 
-    const count = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
+      // Surely something has gone wrong if our fuels are this inefficient
+      if (fuelEfficiency({ item: currentFuel, price: currentPrice }) < 0.01)
+        break;
 
-    if (!canInteract()) {
-      // If we can't access the bugbear bakery but do have access to all-purpose flower, use that to get soda bread
-      if (
-        npcPrice($item`wad of dough`) === 0 &&
-        npcPrice($item`all-purpose flower`) > 0
-      ) {
-        const maxTries = Math.ceil(count / 35); // minimum amount of wad of dough created from all-purpose flower is 35
-        for (
-          let i = 0;
-          i < maxTries && availableAmount($item`wad of dough`) < count;
-          i++
-        ) {
-          buy($item`all-purpose flower`);
-          use($item`all-purpose flower`);
-        }
-        retrieveItem(count, currentFuel);
-      } else retrieveItem(count, currentFuel);
-    } else {
+      const { item: nextFuel, price: nextPrice } = bestFuels.at(0) ?? {
+        item: null,
+        price: null,
+      };
+
+      const priceCeiling =
+        1 +
+        (nextFuel
+          ? Math.ceil(
+              (nextPrice * getAverageAdventures(currentFuel)) /
+                getAverageAdventures(nextFuel),
+            )
+          : currentPrice);
+      logger.debug(`price ceiling: ${priceCeiling}`);
+
+      const count = Math.ceil(targetUnits / getAverageAdventures(currentFuel));
+
       withProperty("autoBuyPriceLimit", priceCeiling, () =>
         retrieveItem(count, currentFuel),
       );
-    }
 
-    if (
-      itemAmount(currentFuel) > 0 &&
-      !insertFuel(currentFuel, Math.min(itemAmount(currentFuel), count))
-    ) {
-      throw new Error(
-        "Failed to insert fuel into Asdon Martin. Possible inventory desync?",
-      );
+      tryInsert(currentFuel, count);
     }
+  } else {
+    const fuel = $item`loaf of soda bread`;
+    const count = Math.ceil(targetUnits / getAverageAdventures(fuel));
+
+    const breadToMake = count - itemAmount(fuel);
+    if (
+      npcPrice($item`wad of dough`) === 0 &&
+      npcPrice($item`all-purpose flower`) > 0
+    ) {
+      const maxTries = Math.ceil(breadToMake / 35); // minimum amount of wad of dough created from all-purpose flower is 35
+      for (
+        let i = 0;
+        i < maxTries && availableAmount($item`wad of dough`) < breadToMake;
+        i++
+      ) {
+        buy($item`all-purpose flower`);
+        use($item`all-purpose flower`);
+      }
+    }
+    retrieveItem(count, fuel);
+    tryInsert(fuel, count);
   }
   return getFuel() >= targetUnits;
 }

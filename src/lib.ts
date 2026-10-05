@@ -1645,14 +1645,15 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
 
   const currentAmount = availableAmount(item);
   const amountNeeded = Math.max(0, quantity - currentAmount);
-  const retrieveCost =
-    retrievePrice(item, currentAmount + quantity) -
-    retrievePrice(item, currentAmount);
+
   const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
   // If it's easy to meatpaste, just rely on retrieveCost
-  if (craftType(item) === "Meatpasting" && retrieveCost > 0) {
-    return retrieveCost;
+  if (craftType(item) === "Meatpasting") {
+    const retrieveCost =
+      retrievePrice(item, currentAmount + quantity) -
+      retrievePrice(item, currentAmount);
+    if (retrieveCost > 0) return retrieveCost;
   }
 
   if (

@@ -57,6 +57,8 @@ function fuelEfficiency({ item, price }: { item: Item; price: number }) {
   return getAverageAdventures(item) / price;
 }
 
+const ILLEGAL_FUELS = new Set($items`large tankard of ale`);
+
 /**
  * @param it the item in question
  * @returns Can `it` be used as Asdon fuel?
@@ -64,6 +66,7 @@ function fuelEfficiency({ item, price }: { item: Item; price: number }) {
 export function isFuelItem(it: Item) {
   return (
     !isNpcItem(it) &&
+    !ILLEGAL_FUELS.has(it) &&
     it.fullness + it.inebriety > 0 &&
     getAverageAdventures(it) > 0 &&
     it.tradeable &&
@@ -110,10 +113,21 @@ export function insertFuel(it: Item, quantity = 1): boolean {
 function tryInsert(item: Item, count: number) {
   const amount = itemAmount(item);
   const insertionAmount = Math.min(amount, count);
-  if (amount > 0 && !insertFuel(item, insertionAmount)) {
-    throw new Error(
-      `Failed to insert ${insertionAmount} ${item.plural} into Asdon Martin. Possible inventory desync?`,
-    );
+  return amount > 0 && !insertFuel(item, insertionAmount);
+}
+
+function insertOrBan(item: Item, count: number) {
+  if (!tryInsert(item, count)) {
+    cliExecute("refresh inventory");
+    if (!tryInsert(item, count)) {
+      logger.debug(
+        `Failed to insert ${count} ${item}, even after refreshing inventory. Adding to ILLEGAL_FUELS.`,
+      );
+      ILLEGAL_FUELS.add(item);
+      logger.debug(
+        `ILLEGAL_FUELS now contains ${[...ILLEGAL_FUELS].map(String).join(", ")}`,
+      );
+    }
   }
 }
 
@@ -128,7 +142,7 @@ function fillWith(
     const minimumFuel = Math.ceil(unitsNeeded / maxFuelFromItem);
     obtain(minimumFuel);
     const retrievalSuccess = itemAmount(item) >= minimumFuel;
-    tryInsert(item, minimumFuel);
+    insertOrBan(item, minimumFuel);
     if (!retrievalSuccess) break;
   }
 }

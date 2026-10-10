@@ -121,11 +121,11 @@ function insertOrBan(item: Item, count: number) {
     cliExecute("refresh inventory");
     if (!tryInsert(item, count)) {
       logger.debug(
-        `Failed to insert ${count} ${item}, even after refreshing inventory. Adding to ILLEGAL_FUELS.`,
+        `AsdonMartin: Failed to insert ${count} ${item}, even after refreshing inventory. Adding to ILLEGAL_FUELS.`,
       );
       ILLEGAL_FUELS.add(item);
       logger.debug(
-        `ILLEGAL_FUELS now contains ${[...ILLEGAL_FUELS].map(String).join(", ")}`,
+        `AsdonMartin: ILLEGAL_FUELS now contains ${[...ILLEGAL_FUELS].map(String).join(", ")}`,
       );
     }
   }
@@ -167,7 +167,7 @@ const obtainBread = (amount: number) => {
   try {
     retrieveItem(amount, $item`loaf of soda bread`);
   } catch (e) {
-    logger.debug(`error retrieving soda bread: ${e}`);
+    logger.debug(`AsdonMartin: error retrieving soda bread: ${e}`);
   }
 };
 
@@ -186,7 +186,7 @@ export function fillTo(targetUnits: number): boolean {
 
     while (bestFuels.length > 0 && getFuel() < targetUnits) {
       const { item: currentFuel, price: currentPrice } = bestFuels.shift()!;
-      logger.debug(`Fuel: ${currentFuel}, price: ${currentPrice}`);
+      logger.debug(`AsdonMartin: Fuel: ${currentFuel}, price: ${currentPrice}`);
 
       // Surely something has gone wrong if our fuels are this inefficient
       if (fuelEfficiency({ item: currentFuel, price: currentPrice }) < 0.01)
@@ -205,7 +205,7 @@ export function fillTo(targetUnits: number): boolean {
                 getAverageAdventures(nextFuel),
             )
           : currentPrice);
-      logger.debug(`price ceiling: ${priceCeiling}`);
+      logger.debug(`AsdonMartin: price ceiling: ${priceCeiling}`);
 
       fillWith(currentFuel, targetUnits, (amount) =>
         withProperty("autoBuyPriceLimit", priceCeiling, () =>

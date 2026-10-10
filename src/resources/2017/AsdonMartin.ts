@@ -127,6 +127,10 @@ function insertOrBan(item: Item, count: number) {
       logger.debug(
         `AsdonMartin: ILLEGAL_FUELS now contains ${[...ILLEGAL_FUELS].map(String).join(", ")}`,
       );
+      if (ILLEGAL_FUELS.size >= 23)
+        throw new Error(
+          "We have marked at least 23 asdon fuel items as illegal this session, something has gone wrong.",
+        );
     }
   }
 }

@@ -81,6 +81,8 @@ import {
   isNpcItem,
   npcPrice,
   useFamiliar,
+  knollAvailable,
+  gnomadsAvailable,
 } from "kolmafia";
 
 import logger from "./logger.js";
@@ -93,6 +95,7 @@ import {
   $item,
   $items,
   $monsters,
+  $path,
   $skill,
   $stat,
 } from "./template-string.js";
@@ -1632,7 +1635,60 @@ export function getAllFamiliarTags(familiar: Familiar): FamiliarTag[] {
     ...(SPECIAL_ULTS.get(familiar) ?? []),
   ];
 }
+/**
+ * @returns An array consisting of return values of the craftType function that correspond to crafting methods that are always turn-free and resource-cheap.
+ */
+function getInnatelyFreeCraftingTypes(): string[] {
+  const craftingTypes = [
+    "chewing gum",
+    "Meatpasting",
+    "Meatpasting (not untinkerable)",
+    "rolling pin/unrolling pin",
+    "Cooking",
+    "single-use",
+    "Mixing",
+    "globs of wax",
+    "metal meteoroid",
+    "burning newspaper",
+    "grubby wool",
+  ];
+  if (myPath() !== $path`Bees Hate You`) {
+    craftingTypes.push("multi-use (Unavailable in Beecore)");
+    if (have($skill`Torso Awareness`)) {
+      craftingTypes.push(
+        "multi-use (Torso Awareness) (Unavailable in Beecore)",
+      );
+    }
+  }
+  if (have($item`jewelry-making pliers`)) {
+    craftingTypes.push("Jewelry-making pliers");
+    if (have($skill`Really Expensive Jewelrycrafting`)) {
+      craftingTypes.push(
+        "Jewelry-making pliers (Really Expensive Jewelrycrafting)",
+      );
+    }
+  }
+  if (knollAvailable()) {
+    craftingTypes.push("Meatsmithing");
+  }
+  if (gnomadsAvailable()) {
+    craftingTypes.push("Supertinkering");
+  }
+  if (have($skill`Eldritch Intellect`)) {
+    craftingTypes.push(
+      "multi-use (Eldritch Intellect)",
+      "Cooking (Eldritch Intellect)",
+    );
+  }
+  if (holiday().includes("St. Sneaky Pete's Day")) {
+    craftingTypes.push("Meatpasting (St. Sneaky Pete's Day only)");
+  }
+  if (haveInCampground($item`A Guide to Burning Leaves`)) {
+    craftingTypes.push("Pile of Burning Leaves");
+  }
 
+  return craftingTypes;
+}
 /**
  * Determines the cost of acquiring an item taking into account your valueOfInventory preference
  *
@@ -1648,8 +1704,8 @@ export function getAcquirePrice(item: Item, quantity = 1): number {
 
   const mallMinPrice = Math.max(100, 2 * autosellPrice(item));
 
-  // If it's easy to meatpaste, just rely on retrieveCost
-  if (craftType(item) === "Meatpasting") {
+  // If it's easy to create, just rely on retrieveCost
+  if (getInnatelyFreeCraftingTypes().includes(craftType(item))) {
     const retrieveCost =
       retrievePrice(item, currentAmount + quantity) -
       retrievePrice(item, currentAmount);

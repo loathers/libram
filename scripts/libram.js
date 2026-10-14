@@ -6590,7 +6590,7 @@ function insertFuel(it) {
 }
 function tryInsert(item15, count) {
   var amount2 = (0, import_kolmafia8.itemAmount)(item15), insertionAmount = Math.min(amount2, count);
-  return amount2 > 0 && !insertFuel(item15, insertionAmount);
+  return amount2 > 0 && insertFuel(item15, insertionAmount);
 }
 function insertOrBan(item15, count) {
   if (!tryInsert(item15, count) && ((0, import_kolmafia8.cliExecute)("refresh inventory"), !tryInsert(item15, count) && (logger_default.debug("AsdonMartin: Failed to insert ".concat(count, " ").concat(item15, ", even after refreshing inventory. Adding to ILLEGAL_FUELS.")), ILLEGAL_FUELS.add(item15), logger_default.debug("AsdonMartin: ILLEGAL_FUELS now contains ".concat(_toConsumableArray7(ILLEGAL_FUELS).map(String).join(", "))), ILLEGAL_FUELS.size >= 23)))

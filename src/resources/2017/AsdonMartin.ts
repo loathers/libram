@@ -113,7 +113,7 @@ export function insertFuel(it: Item, quantity = 1): boolean {
 function tryInsert(item: Item, count: number) {
   const amount = itemAmount(item);
   const insertionAmount = Math.min(amount, count);
-  return amount > 0 && !insertFuel(item, insertionAmount);
+  return amount > 0 && insertFuel(item, insertionAmount);
 }
 
 function insertOrBan(item: Item, count: number) {

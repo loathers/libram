@@ -8,9 +8,10 @@ import {
   availableChoiceExtras,
   runCombat,
   runChoice,
+  toMonster,
 } from "kolmafia";
 import { CombatParams, have as have_, haveInCampground } from "../../lib.js";
-import { $effect, $item } from "../../template-string";
+import { $effect, $item, $monster } from "../../template-string";
 import { get } from "../../property.js";
 import { clamp } from "../../utils.js";
 
@@ -54,31 +55,31 @@ export function freeKillsRemaining(): number {
 }
 
 type FountainOption = {
-  effect: Effect;
   canAcquire(): boolean;
+  option: number;
 };
 
-const fountainBuffs = new Map<number, FountainOption>([
+const fountainBuffs = new Map<Effect, FountainOption>([
   [
-    1,
+    $effect`Black Rosacea`,
     {
-      effect: $effect`Black Rosacea`,
       canAcquire: () => myMeat() >= 1,
+      option: 1,
     },
   ],
   [
-    2,
+    $effect`Black Rose Guardin'`,
     {
-      effect: $effect`Black Rose Guardin'`,
       canAcquire: () => myMeat() >= 1000,
+      option: 2,
     },
   ],
   [
-    3,
+    $effect`Lucky!`,
     {
-      effect: $effect`Lucky!`,
       canAcquire: () =>
         !have_($effect`Lucky!`) && itemAmount($item`black rose pentacle`) > 0,
+      option: 3,
     },
   ],
 ]);
@@ -90,22 +91,17 @@ const fountainBuffs = new Map<number, FountainOption>([
 export function useBloodFountain(effect: Effect): boolean {
   if (!have() || !installed()) return false;
 
-  const buff = [...fountainBuffs.entries()].find(
-    ([, option]) => option.effect === effect,
-  );
+  const buff = fountainBuffs.get(effect);
+  if (!buff || !buff.canAcquire()) return false;
 
-  if (!buff || !buff[1].canAcquire()) return false;
-
-  const choices = getRoseChoices();
-  const fountain = [...choices.entries()].find(([, choice]) =>
+  const fountain = [...getRoseChoices()].find(([, choice]) =>
     choice.text.startsWith("Drink from the blood fountain"),
   );
 
   if (!fountain) return false;
 
   const [decision, choice] = fountain;
-
-  runChoice(decision, `${choice.extras}&option=${buff[0]}`);
+  runChoice(decision, `${choice.extras}&option=${buff.option}`);
 
   return have_(effect);
 }
@@ -126,11 +122,10 @@ function getRoseChoices(): Map<number, RoseChoice> {
   )) {
     const monsterText = label.match(/^Fight (.+) at position \d+,\d+$/);
 
-    if (monsterText) continue;
-
     choices.set(decision, {
       text: label,
       extras: extras_joined,
+      ...(monsterText ? { monster: toMonster(monsterText[1]) } : {}),
     });
   }
 

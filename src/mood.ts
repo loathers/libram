@@ -123,6 +123,34 @@ export class MagicalSausages extends MpSource {
   }
 }
 
+export class BatWingsRest extends MpSource {
+  static instance = new BatWingsRest();
+
+  available(): boolean {
+    return have($item`bat wings`);
+  }
+
+  usesRemaining(): number {
+    return this.available() ? clamp(11 - get("_batWingsRestUsed"), 0, 11) : 0;
+  }
+
+  availableMpMin(): number {
+    return this.available()
+      ? Math.min(myMaxmp(), 1000) * this.usesRemaining()
+      : 0;
+  }
+
+  execute(): void {
+    const mpSpaceAvailable = myMaxmp() - myMp();
+    if (mpSpaceAvailable < 700) return;
+    const maxUses = Math.min(
+      this.usesRemaining(),
+      Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 1000)),
+    );
+    useSkill(maxUses, $skill`Rest upside down`);
+  }
+}
+
 type MoodOptions = {
   songSlots: Effect[][];
   mpSources: MpSource[];
@@ -374,7 +402,11 @@ class AsdonMoodElement extends MoodElement {
 export class Mood {
   static defaultOptions: MoodOptions = {
     songSlots: [],
-    mpSources: [MagicalSausages.instance, OscusSoda.instance],
+    mpSources: [
+      MagicalSausages.instance,
+      OscusSoda.instance,
+      BatWingsRest.instance,
+    ],
     reserveMp: 0,
     useNativeRestores: false,
   };

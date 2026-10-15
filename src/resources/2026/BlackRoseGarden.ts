@@ -35,7 +35,7 @@ export function installed(): boolean {
  * @returns whether you successfull retrieved all free rose garden items
  */
 export function getItems(): boolean {
-  if (!have()) return false;
+  if (!have() && !installed()) return false;
 
   for (const [decision, choice] of getRoseChoices()) {
     if (!choice.text.startsWith("Take the ")) continue;

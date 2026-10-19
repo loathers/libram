@@ -133,6 +133,17 @@ function getRoseChoices(): Map<number, RoseChoice> {
 }
 
 /**
+ * @returns the Monsters currently available to fight in the Rose Garden
+ */
+export function availableRoseMonsters(): Monster[] {
+  if (!have() || !installed()) return [];
+
+  return [...getRoseChoices().values()].flatMap((choice) =>
+    choice.monster ? [choice.monster] : [],
+  );
+}
+
+/**
  * Fight a Monster in the Rose Garden.
  *
  * @param monster The Monster to fight

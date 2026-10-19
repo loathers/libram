@@ -11,7 +11,7 @@ import {
   toMonster,
 } from "kolmafia";
 import { CombatParams, have as have_, haveInCampground } from "../../lib.js";
-import { $effect, $item, $monster } from "../../template-string";
+import { $effect, $item } from "../../template-string";
 import { get } from "../../property.js";
 import { clamp } from "../../utils.js";
 

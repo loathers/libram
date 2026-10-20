@@ -291,6 +291,19 @@ export enum Wanderer {
   Vote = "Vote Monster",
 }
 
+export const GARDEN_ITEMS: Record<string, Item> = {
+  pumpkin: $item`packet of pumpkin seeds`,
+  peppermint: $item`Peppermint Pip Packet`,
+  skeleton: $item`packet of dragon's teeth`,
+  beer: $item`packet of beer seeds`,
+  winter: $item`packet of winter seeds`,
+  thanksgarden: $item`packet of thanksgarden seeds`,
+  grass: $item`packet of tall grass seeds`,
+  mushroom: $item`packet of mushroom spores`,
+  rock: $item`packet of rock seeds`,
+  black_rose: $item`black garden rose`,
+};
+
 const deterministicWanderers = [Wanderer.Digitize, Wanderer.Portscan];
 
 /**

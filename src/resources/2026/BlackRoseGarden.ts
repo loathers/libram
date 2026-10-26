@@ -149,7 +149,7 @@ export function withGarden<T>(action: (choices: RoseChoices) => T): T {
  */
 export function obtainItems(): Item[] {
   const obtainedItems: Item[] = [];
-  if (!have() && !installed()) return obtainedItems;
+  if (!installed()) return obtainedItems;
 
   return withGarden(({ items }) => {
     for (const { option, choiceExtras, item } of items) {
@@ -200,7 +200,7 @@ const fountainBuffs = new Map<Effect, FountainOption>([
  * @returns whether you successfully gained the effect
  */
 export function useBloodFountain(effect: FountainEffect): boolean {
-  if (!have() || !installed()) return false;
+  if (!installed()) return false;
 
   const fountainEffect = typeof effect === "string" ? toEffect(effect) : effect;
 
@@ -223,7 +223,7 @@ export function useBloodFountain(effect: FountainEffect): boolean {
  * @returns the Monsters currently available to fight in the Rose Garden
  */
 export function availableMonsters(): Monster[] {
-  if (!have() || !installed()) return [];
+  if (!installed()) return [];
 
   return withGarden(({ monsters }) => monsters.map(({ monster }) => monster));
 }
@@ -239,7 +239,7 @@ export function fightMonster(
   monster: Monster,
   ...combatParams: CombatParams
 ): boolean {
-  if (!have() || !installed()) return false;
+  if (!installed()) return false;
 
   return withGarden(({ monsters }) => {
     const choice = monsters.find((choice) => choice.monster === monster);

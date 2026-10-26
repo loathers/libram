@@ -11,12 +11,11 @@ import {
   toMonster,
   toEffect,
   Item,
-  append,
 } from "kolmafia";
 import { CombatParams, have as have_, haveInCampground } from "../../lib.js";
 import { $effect, $item } from "../../template-string";
 import { get } from "../../property.js";
-import { clamp, ValueOf } from "../../utils.js";
+import { clamp } from "../../utils.js";
 
 export const FOUNTAIN_OPTIONS = [
   "Black Rosacea",

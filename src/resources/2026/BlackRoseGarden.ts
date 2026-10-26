@@ -11,11 +11,12 @@ import {
   toMonster,
   toEffect,
   Item,
+  append,
 } from "kolmafia";
 import { CombatParams, have as have_, haveInCampground } from "../../lib.js";
 import { $effect, $item } from "../../template-string";
 import { get } from "../../property.js";
-import { clamp } from "../../utils.js";
+import { clamp, ValueOf } from "../../utils.js";
 
 export const FOUNTAIN_OPTIONS = [
   "Black Rosacea",
@@ -49,26 +50,17 @@ export function freeKillsRemaining(): number {
   return clamp(11 - get("_partialTombstonesUsed"), 0, 11);
 }
 
-/**
- * @returns The list of items you've successfully obtained
- */
-export function obtainItems(): Item[] {
-  const obtainedItems: Item[] = [];
-  if (!have() && !installed()) return obtainedItems;
+type BaseRoseChoice<T extends string, O> = {
+  option: number;
+  choiceExtras: string;
+  kind: T;
+} & { [k in T]: O };
 
-  return withRoseGarden(({ items }) => {
-    for (const { option, choiceExtras, item } of items) {
-      try {
-        runChoice(option, choiceExtras);
-      } catch {
-        continue;
-      }
-      obtainedItems.push(item);
-    }
-
-    return obtainedItems;
-  });
-}
+type RoseChoices = {
+  monsters: BaseRoseChoice<"monster", Monster>[];
+  items: BaseRoseChoice<"item", Item>[];
+  misc: BaseRoseChoice<"other", string>[];
+};
 
 const MONSTER_PATTERN = /^Fight (.+) at position \d+,\d+$/;
 const ITEM_PATTERN = /^Take the (.+) at position \d+,\d+$/;
@@ -88,49 +80,48 @@ const ITEM_MAP = {
   wine: $item`black garden rosé`,
 } as Record<string, Item>;
 
+function appendChoice<K extends keyof RoseChoices>(
+  choices: RoseChoices,
+  key: K,
+  choice: RoseChoices[K][number],
+) {
+  return { ...choices, [key]: [...choices[key], choice] };
+}
+
 function getChoices(): RoseChoices {
   return Object.values(availableChoiceExtras()).reduce(
-    (accumulator, { decision, extras_joined, label }) => {
+    (choices, { decision, extras_joined, label }) => {
       const base = { option: decision, choiceExtras: extras_joined } as const;
 
       const monsterText = label.match(MONSTER_PATTERN);
       if (monsterText) {
-        return {
-          ...accumulator,
-          monsters: [
-            ...accumulator.monsters,
-            { ...base, kind: "monster", monster: toMonster(monsterText[1]) },
-          ],
-        };
+        return appendChoice(choices, "monsters", {
+          ...base,
+          kind: "monster",
+          monster: toMonster(monsterText[1]),
+        });
       }
       const itemText = label.match(ITEM_PATTERN);
       if (itemText) {
         const item = ITEM_MAP[itemText[1]] ?? $item.none;
-        return {
-          ...accumulator,
-          items: [...accumulator.items, { ...base, kind: "item", item }],
-        };
+        return appendChoice(choices, "items", { ...base, kind: "item", item });
       }
 
       for (const { name, pattern } of MISC_PATTERNS) {
         if (label.match(pattern)) {
-          return {
-            ...accumulator,
-            misc: [
-              ...accumulator.misc,
-              { ...base, kind: "other", other: name },
-            ],
-          };
+          return appendChoice(choices, "misc", {
+            ...base,
+            kind: "other",
+            other: name,
+          });
         }
       }
 
-      return {
-        ...accumulator,
-        misc: [
-          ...accumulator.misc,
-          { ...base, kind: "other", other: "unknown" },
-        ],
-      };
+      return appendChoice(choices, "misc", {
+        ...base,
+        kind: "other",
+        other: "unknown",
+      });
     },
     {
       monsters: [],
@@ -147,6 +138,27 @@ function withRoseGarden<T>(action: (choices: RoseChoices) => T): T {
   } finally {
     visitUrl("main.php");
   }
+}
+
+/**
+ * @returns The list of items you've successfully obtained
+ */
+export function obtainItems(): Item[] {
+  const obtainedItems: Item[] = [];
+  if (!have() && !installed()) return obtainedItems;
+
+  return withRoseGarden(({ items }) => {
+    for (const { option, choiceExtras, item } of items) {
+      try {
+        runChoice(option, choiceExtras);
+      } catch {
+        continue;
+      }
+      obtainedItems.push(item);
+    }
+
+    return obtainedItems;
+  });
 }
 
 type FountainOption = {
@@ -202,18 +214,6 @@ export function useBloodFountain(effect: FountainEffect): boolean {
     return have_(fountainEffect);
   });
 }
-
-type BaseRoseChoice<T extends string, O> = {
-  option: number;
-  choiceExtras: string;
-  kind: T;
-} & { [k in T]: O };
-
-type RoseChoices = {
-  monsters: BaseRoseChoice<"monster", Monster>[];
-  items: BaseRoseChoice<"item", Item>[];
-  misc: BaseRoseChoice<"other", string>[];
-};
 
 /**
  * @returns the Monsters currently available to fight in the Rose Garden

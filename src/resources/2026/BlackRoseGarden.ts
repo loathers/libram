@@ -54,8 +54,8 @@ export function freeKillsRemaining(): number {
 export function obtainItems(): boolean {
   if (!have() && !installed()) return false;
 
-  return withRoseGarden(() => {
-    for (const { decision, extras, text } of getChoices()) {
+  return withRoseGarden((choices) => {
+    for (const { decision, extras, text } of choices) {
       if (!text.startsWith("Take the ")) continue;
 
       runChoice(decision, extras);
@@ -65,10 +65,23 @@ export function obtainItems(): boolean {
   });
 }
 
-function withRoseGarden<T>(action: () => T): T {
+function withRoseGarden<T>(action: (choices: RoseChoice[]) => T): T {
   visitUrl("campground.php?action=rosegarden&pwd");
   try {
-    return action();
+    return action(
+      Object.values(availableChoiceExtras()).map(
+        ({ decision, extras_joined, label }) => {
+          const monsterText = label.match(/^Fight (.+) at position \d+,\d+$/);
+
+          return {
+            decision,
+            extras: extras_joined,
+            text: label,
+            ...(monsterText ? { monster: toMonster(monsterText[1]) } : {}),
+          };
+        },
+      ),
+    );
   } finally {
     visitUrl("main.php");
   }
@@ -116,8 +129,8 @@ export function useBloodFountain(effect: FountainEffect): boolean {
   const buff = fountainBuffs.get(fountainEffect);
   if (!buff || !buff.canAcquire()) return false;
 
-  return withRoseGarden(() => {
-    const fountain = getChoices().find((choice) =>
+  return withRoseGarden((choices) => {
+    const fountain = choices.find((choice) =>
       choice.text.startsWith("Drink from the blood fountain"),
     );
 
@@ -137,29 +150,14 @@ type RoseChoice = {
   monster?: Monster;
 };
 
-function getChoices(): RoseChoice[] {
-  return Object.values(availableChoiceExtras()).map(
-    ({ decision, extras_joined, label }) => {
-      const monsterText = label.match(/^Fight (.+) at position \d+,\d+$/);
-
-      return {
-        decision,
-        extras: extras_joined,
-        text: label,
-        ...(monsterText ? { monster: toMonster(monsterText[1]) } : {}),
-      };
-    },
-  );
-}
-
 /**
  * @returns the Monsters currently available to fight in the Rose Garden
  */
 export function availableMonsters(): Monster[] {
   if (!have() || !installed()) return [];
 
-  return withRoseGarden(() =>
-    getChoices().flatMap((choice) => (choice.monster ? [choice.monster] : [])),
+  return withRoseGarden((choices) =>
+    choices.flatMap((choice) => (choice.monster ? [choice.monster] : [])),
   );
 }
 
@@ -176,8 +174,8 @@ export function fightMonster(
 ): boolean {
   if (!have() || !installed()) return false;
 
-  return withRoseGarden(() => {
-    const choice = getChoices().find((choice) => choice.monster === monster);
+  return withRoseGarden((choices) => {
+    const choice = choices.find((choice) => choice.monster === monster);
 
     if (!choice) return false;
 

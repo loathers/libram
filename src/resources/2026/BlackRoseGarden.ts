@@ -131,7 +131,12 @@ function getChoices(): RoseChoices {
   );
 }
 
-function withRoseGarden<T>(action: (choices: RoseChoices) => T): T {
+/**
+ * Enters the rose garden, parses your available options, and does what you ask of it.
+ * @param action What to do with your time in the garden.
+ * @returns The return value of `action`.
+ */
+export function withGarden<T>(action: (choices: RoseChoices) => T): T {
   visitUrl("campground.php?action=rosegarden&pwd");
   try {
     return action(getChoices());
@@ -147,7 +152,7 @@ export function obtainItems(): Item[] {
   const obtainedItems: Item[] = [];
   if (!have() && !installed()) return obtainedItems;
 
-  return withRoseGarden(({ items }) => {
+  return withGarden(({ items }) => {
     for (const { option, choiceExtras, item } of items) {
       try {
         runChoice(option, choiceExtras);
@@ -203,7 +208,7 @@ export function useBloodFountain(effect: FountainEffect): boolean {
   const buff = fountainBuffs.get(fountainEffect);
   if (!buff || !buff.canAcquire()) return false;
 
-  return withRoseGarden(({ misc }) => {
+  return withGarden(({ misc }) => {
     const fountain = misc.find(({ other }) => other === "fountain");
 
     if (!fountain) return false;
@@ -221,9 +226,7 @@ export function useBloodFountain(effect: FountainEffect): boolean {
 export function availableMonsters(): Monster[] {
   if (!have() || !installed()) return [];
 
-  return withRoseGarden(({ monsters }) =>
-    monsters.map(({ monster }) => monster),
-  );
+  return withGarden(({ monsters }) => monsters.map(({ monster }) => monster));
 }
 
 /**
@@ -239,7 +242,7 @@ export function fightMonster(
 ): boolean {
   if (!have() || !installed()) return false;
 
-  return withRoseGarden(({ monsters }) => {
+  return withGarden(({ monsters }) => {
     const choice = monsters.find((choice) => choice.monster === monster);
 
     if (!choice) return false;

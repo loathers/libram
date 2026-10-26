@@ -153,12 +153,11 @@ export function obtainItems(): Item[] {
 
   return withGarden(({ items }) => {
     for (const { option, choiceExtras, item } of items) {
-      try {
-        runChoice(option, choiceExtras);
-      } catch {
-        continue;
+      if (
+        runChoice(option, choiceExtras).includes(`You acquire an item: ${item}`)
+      ) {
+        obtainedItems.push(item);
       }
-      obtainedItems.push(item);
     }
 
     return obtainedItems;

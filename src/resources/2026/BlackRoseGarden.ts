@@ -50,17 +50,23 @@ export function freeKillsRemaining(): number {
 }
 
 /**
- * @returns whether you successfully retrieved all free rose garden items
+ * @returns The list of items you've successfully obtained
  */
-export function obtainItems(): boolean {
-  if (!have() && !installed()) return false;
+export function obtainItems(): Item[] {
+  const obtainedItems: Item[] = [];
+  if (!have() && !installed()) return obtainedItems;
 
   return withRoseGarden(({ items }) => {
     for (const { option, choiceExtras, item } of items) {
-      runChoice(option, choiceExtras);
+      try {
+        runChoice(option, choiceExtras);
+      } catch {
+        continue;
+      }
+      obtainedItems.push(item);
     }
 
-    return true;
+    return obtainedItems;
   });
 }
 

@@ -49,16 +49,16 @@ export function freeKillsRemaining(): number {
   return clamp(11 - get("_partialTombstonesUsed"), 0, 11);
 }
 
-type BaseRoseChoice<T extends string, O> = {
+type BaseChoice<T extends string, O> = {
   option: number;
   choiceExtras: string;
   kind: T;
 } & { [k in T]: O };
 
-type RoseChoices = {
-  monsters: BaseRoseChoice<"monster", Monster>[];
-  items: BaseRoseChoice<"item", Item>[];
-  misc: BaseRoseChoice<"other", string>[];
+export type Choices = {
+  monsters: BaseChoice<"monster", Monster>[];
+  items: BaseChoice<"item", Item>[];
+  misc: BaseChoice<"other", string>[];
 };
 
 const MONSTER_PATTERN = /^Fight (.+) at position \d+,\d+$/;
@@ -79,15 +79,15 @@ const ITEM_MAP = {
   wine: $item`black garden rosé`,
 } as Record<string, Item>;
 
-function appendChoice<K extends keyof RoseChoices>(
-  choices: RoseChoices,
+function appendChoice<K extends keyof Choices>(
+  choices: Choices,
   key: K,
-  choice: RoseChoices[K][number],
+  choice: Choices[K][number],
 ) {
   return { ...choices, [key]: [...choices[key], choice] };
 }
 
-function getChoices(): RoseChoices {
+function getChoices(): Choices {
   return Object.values(availableChoiceExtras()).reduce(
     (choices, { decision, extras_joined, label }) => {
       const base = { option: decision, choiceExtras: extras_joined } as const;
@@ -126,7 +126,7 @@ function getChoices(): RoseChoices {
       monsters: [],
       items: [],
       misc: [],
-    } as RoseChoices,
+    } as Choices,
   );
 }
 
@@ -135,7 +135,7 @@ function getChoices(): RoseChoices {
  * @param action What to do with your time in the garden.
  * @returns The return value of `action`.
  */
-export function withGarden<T>(action: (choices: RoseChoices) => T): T {
+export function withGarden<T>(action: (choices: Choices) => T): T {
   visitUrl("campground.php?action=rosegarden&pwd");
   try {
     return action(getChoices());

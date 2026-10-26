@@ -16,17 +16,13 @@ import { $effect, $item } from "../../template-string";
 import { get } from "../../property.js";
 import { clamp } from "../../utils.js";
 
-export const FOUNTAIN_OPTIONS = Object.freeze([
+export const FOUNTAIN_OPTIONS = [
   "Black Rosacea",
   "Black Rose Guardin'",
   "Lucky!",
-] as const);
+] as const;
 
-export const FOUNTAIN_EFFECTS = Object.freeze(
-  FOUNTAIN_OPTIONS.map((ef) => toEffect(ef)),
-);
-
-export type FountainEffect = (typeof FOUNTAIN_EFFECTS)[number];
+export type FountainEffect = (typeof FOUNTAIN_OPTIONS)[number] | Effect;
 
 /**
  * @returns whether you have the rose garden
@@ -58,13 +54,24 @@ export function freeKillsRemaining(): number {
 export function obtainItems(): boolean {
   if (!have() && !installed()) return false;
 
-  for (const { decision, extras, text } of getChoices()) {
-    if (!text.startsWith("Take the ")) continue;
+  return withRoseGarden(() => {
+    for (const { decision, extras, text } of getChoices()) {
+      if (!text.startsWith("Take the ")) continue;
 
-    runChoice(decision, extras);
+      runChoice(decision, extras);
+    }
+
+    return true;
+  });
+}
+
+function withRoseGarden<T>(action: () => T): T {
+  visitUrl("campground.php?action=rosegarden&pwd");
+  try {
+    return action();
+  } finally {
+    visitUrl("main.php");
   }
-
-  return true;
 }
 
 type FountainOption = {
@@ -104,18 +111,23 @@ const fountainBuffs = new Map<Effect, FountainOption>([
 export function useBloodFountain(effect: FountainEffect): boolean {
   if (!have() || !installed()) return false;
 
-  const buff = fountainBuffs.get(effect);
+  const fountainEffect = typeof effect === "string" ? toEffect(effect) : effect;
+
+  const buff = fountainBuffs.get(fountainEffect);
   if (!buff || !buff.canAcquire()) return false;
 
-  const fountain = getChoices().find((choice) =>
-    choice.text.startsWith("Drink from the blood fountain"),
-  );
+  return withRoseGarden(() => {
+    const fountain = getChoices().find((choice) =>
+      choice.text.startsWith("Drink from the blood fountain"),
+    );
 
-  if (!fountain) return false;
+    if (!fountain) return false;
 
-  runChoice(fountain.decision, `${fountain.extras}&option=${buff.option}`);
+    runChoice(fountain.decision, fountain.extras);
+    runChoice(buff.option);
 
-  return have_(toEffect(effect.name));
+    return have_(fountainEffect);
+  });
 }
 
 type RoseChoice = {
@@ -126,8 +138,6 @@ type RoseChoice = {
 };
 
 function getChoices(): RoseChoice[] {
-  visitUrl("campground.php?action=rosegarden&pwd");
-
   return Object.values(availableChoiceExtras()).map(
     ({ decision, extras_joined, label }) => {
       const monsterText = label.match(/^Fight (.+) at position \d+,\d+$/);
@@ -148,8 +158,8 @@ function getChoices(): RoseChoice[] {
 export function availableMonsters(): Monster[] {
   if (!have() || !installed()) return [];
 
-  return getChoices().flatMap((choice) =>
-    choice.monster ? [choice.monster] : [],
+  return withRoseGarden(() =>
+    getChoices().flatMap((choice) => (choice.monster ? [choice.monster] : [])),
   );
 }
 
@@ -166,12 +176,14 @@ export function fightMonster(
 ): boolean {
   if (!have() || !installed()) return false;
 
-  const choice = getChoices().find((choice) => choice.monster === monster);
+  return withRoseGarden(() => {
+    const choice = getChoices().find((choice) => choice.monster === monster);
 
-  if (!choice) return false;
+    if (!choice) return false;
 
-  runChoice(choice.decision, choice.extras);
-  runCombat(...combatParams);
+    runChoice(choice.decision, choice.extras);
+    runCombat(...combatParams);
 
-  return true;
+    return true;
+  });
 }

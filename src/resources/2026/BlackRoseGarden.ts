@@ -252,3 +252,17 @@ export function fightMonster(
     return true;
   });
 }
+
+/**
+ * @returns Whether we have successfully opened a Black Rose Garden chest.
+ */
+export function openChest(): boolean {
+  if (!installed()) return false;
+  if (!have_($item`black thorn key`)) return false;
+  return withGarden(({ misc }) => {
+    const choice = misc.find(({ other }) => other === "chest");
+    if (!choice) return false;
+    runChoice(choice.option, choice.choiceExtras);
+    return true;
+  });
+}

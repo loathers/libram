@@ -8,10 +8,9 @@ import {
   toEffect,
   monkeyPaw,
   prepareForAdventure,
-  cliExecute,
   Monster,
 } from "kolmafia";
-import { have as have_ } from "../../lib.js";
+import { have as have_, withOutfitCheckpoint } from "../../lib.js";
 import logger from "../../logger.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
@@ -118,6 +117,18 @@ export function isWishable(wish: Effect | Item): boolean {
   }
 }
 
+function makeWish(wish: Item, locations: Location[]): boolean {
+  const result = monkeyPaw(wish);
+  if (!result) {
+    logger.debug(
+      `Failed to monkeyPaw wish for ${wish}; assumed it was available in locations ${locations.join(
+        ", ",
+      )}`,
+    );
+  }
+  return result;
+}
+
 /**
  * Wish for a given Item or Effect.
  * If it's an item, will `prepareForAdventure`; if an item is available in multiple locations this will pick the first one.
@@ -139,21 +150,10 @@ export function wishFor(wish: Effect | Item): boolean {
       ),
   );
 
-  try {
-    if (locations.length) {
-      cliExecute("checkpoint");
-      prepareForAdventure(locations[0]);
-    }
-    const result = monkeyPaw(wish);
-    if (!result) {
-      logger.debug(
-        `Failed to monkeyPaw wish for ${wish}; assumed it was available in locations ${locations.join(
-          ", ",
-        )}`,
-      );
-    }
-    return result;
-  } finally {
-    if (locations.length) cliExecute("outfit checkpoint");
-  }
+  if (!locations.length) return makeWish(wish, locations);
+
+  return withOutfitCheckpoint(() => {
+    prepareForAdventure(locations[0]);
+    return makeWish(wish, locations);
+  });
 }

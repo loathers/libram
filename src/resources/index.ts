@@ -74,6 +74,7 @@ import * as EternityCodpiece from "./2026/EternityCodpiece.js";
 import * as CupOfThirteens from "./2026/CupOfThirteens.js";
 import * as LaughingStock from "./2026/LaughingStock.js";
 import * as PulledTaffy from "./2013/PulledTaffy.js";
+import * as BlackRose from "./2026/BlackRoseGarden.js";
 export {
   AprilingBandHelmet,
   AsdonMartin,
@@ -83,6 +84,7 @@ export {
   BarrelShrine,
   BatWings,
   BeachComb,
+  BlackRose,
   BloodCubicZirconia,
   BoxingDaycare,
   BurningLeaves,

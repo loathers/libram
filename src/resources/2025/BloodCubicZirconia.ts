@@ -1,6 +1,6 @@
 import { equip, myBasestat, Skill, Stat, useSkill } from "kolmafia";
 import { $item, $skill, $stat } from "../../template-string.js";
-import { have as have_, withCheckpoint } from "../../lib.js";
+import { have as have_, withOutfitCheckpoint } from "../../lib.js";
 import { get } from "../../property.js";
 import { NumericProperty } from "../../propertyTypes.js";
 
@@ -123,7 +123,7 @@ export function castDownTo(skill: Skill, statFloor: number): boolean {
  */
 export function cast(skill: Skill, count: number): boolean {
   if (!have() || !COSTS.get(skill) || count <= 0) return false;
-  return withCheckpoint(() => {
+  return withOutfitCheckpoint(() => {
     equip($item`blood cubic zirconia`);
     for (let i = 0; i < count; i++) {
       if (!useSkill(skill)) {

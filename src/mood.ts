@@ -33,7 +33,7 @@ import {
   have,
   isSong,
   unequip,
-  withCheckpoint,
+  withOutfitCheckpoint,
 } from "./lib.js";
 import { get } from "./property.js";
 import { AsdonMartin } from "./resources/index.js";
@@ -153,7 +153,7 @@ export class BatWingsRest extends MpSource {
       this.usesRemaining(),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 1000)),
     );
-    withCheckpoint(() => {
+    withOutfitCheckpoint(() => {
       equip($item`bat wings`);
       useSkill(maxUses, $skill`Rest upside down`);
     });
@@ -227,7 +227,7 @@ class SkillMoodElement extends MoodElement {
     if (initialTurns >= ensureTurns) return true;
     if (!haveSkill(this.skill)) return false;
 
-    return withCheckpoint(() => {
+    return withOutfitCheckpoint(() => {
       if (this.aprilShieldRestricted && shieldSlot) {
         unequip($item`April Shower Thoughts shield`);
       }

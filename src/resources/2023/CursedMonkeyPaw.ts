@@ -10,7 +10,7 @@ import {
   prepareForAdventure,
   Monster,
 } from "kolmafia";
-import { have as have_, withCheckpoint } from "../../lib.js";
+import { have as have_, withOutfitCheckpoint } from "../../lib.js";
 import logger from "../../logger.js";
 import { get } from "../../property.js";
 import { $item } from "../../template-string.js";
@@ -152,7 +152,7 @@ export function wishFor(wish: Effect | Item): boolean {
 
   if (!locations.length) return makeWish(wish, locations);
 
-  return withCheckpoint(() => {
+  return withOutfitCheckpoint(() => {
     prepareForAdventure(locations[0]);
     return makeWish(wish, locations);
   });

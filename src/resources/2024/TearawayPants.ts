@@ -1,5 +1,5 @@
 import { myClass, equip, visitUrl } from "kolmafia";
-import { have as have_, questStep, withCheckpoint } from "../../lib.js";
+import { have as have_, questStep, withOutfitCheckpoint } from "../../lib.js";
 import { get } from "../../property.js";
 import { $classes, $item, $slot } from "../../template-string.js";
 
@@ -51,7 +51,7 @@ export function unlockGuild(): boolean {
     return false;
   if (questStep("questG08Moxie") >= 999) return true;
   if (!have()) return false;
-  withCheckpoint(() => {
+  withOutfitCheckpoint(() => {
     equip($slot`pants`, item);
     visitUrl("guild.php?place=challenge");
   });

@@ -1729,7 +1729,7 @@ export function withFamiliar<T>(
  * @param action Action to perform while using an equipment checkpoint
  * @returns The return value of the action
  */
-export function withCheckpoint<T>(action: () => T): T {
+export function withOutfitCheckpoint<T>(action: () => T): T {
   cliExecute("checkpoint");
   try {
     return action();

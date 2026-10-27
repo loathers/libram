@@ -19128,7 +19128,7 @@ function countFreeMines() {
 // src/mood.ts
 init_kolmafia_polyfill();
 var import_kolmafia96 = require("kolmafia");
-var _templateObject591, _templateObject2155, _templateObject3140, _templateObject4121, _templateObject595, _templateObject668, _templateObject760, _templateObject851, _templateObject940, _templateObject1034, _templateObject1132, _templateObject1230, _templateObject1328, _templateObject1426, _templateObject1524, _templateObject1624, _templateObject1723, _templateObject1823, _templateObject1922, _templateObject2021, _templateObject2156, _templateObject2222, _templateObject2321, _templateObject2420, _templateObject2518, _templateObject2618, _templateObject2718, _templateObject2816, _OscusSoda, _templateObject2916, _templateObject3015, _MagicalSausages, _templateObject3141, _templateObject3216, _templateObject3315, _templateObject3414, _templateObject3513, _BatWingsRest, _templateObject3612, _templateObject3712, _templateObject3812, _templateObject3912, _templateObject4012, _templateObject4122, _templateObject4214, _templateObject4313, _templateObject4412, _templateObject4511, _templateObject4611, _templateObject4711, _templateObject4811, _templateObject4911, _templateObject5011, _templateObject5113, _templateObject5212;
+var _templateObject591, _templateObject2155, _templateObject3140, _templateObject4121, _templateObject595, _templateObject668, _templateObject760, _templateObject851, _templateObject940, _templateObject1034, _templateObject1132, _templateObject1230, _templateObject1328, _templateObject1426, _templateObject1524, _templateObject1624, _templateObject1723, _templateObject1823, _templateObject1922, _templateObject2021, _templateObject2156, _templateObject2222, _templateObject2321, _templateObject2420, _templateObject2518, _templateObject2618, _templateObject2718, _templateObject2816, _OscusSoda, _templateObject2916, _templateObject3015, _MagicalSausages, _templateObject3141, _templateObject3216, _templateObject3315, _templateObject3414, _templateObject3513, _BatWingsRest, _templateObject3612, _templateObject3712, _templateObject3812, _templateObject3912, _templateObject4012, _templateObject4122, _templateObject4214, _templateObject4313, _templateObject4412, _templateObject4511, _templateObject4611, _templateObject4711, _templateObject4811, _templateObject4911, _templateObject5011, _templateObject5113, _templateObject5212, _templateObject5311;
 function _toConsumableArray30(r) {
   return _arrayWithoutHoles30(r) || _iterableToArray30(r) || _unsupportedIterableToArray45(r) || _nonIterableSpread30();
 }
@@ -19379,7 +19379,7 @@ var BatWingsRest = /* @__PURE__ */ function(_MpSource3) {
       var mpSpaceAvailable = (0, import_kolmafia96.myMaxmp)() - (0, import_kolmafia96.myMp)();
       if (!(mpSpaceAvailable < 700)) {
         var maxUses = Math.min(this.usesRemaining(), Math.floor(((0, import_kolmafia96.myMaxmp)() - (0, import_kolmafia96.myMp)()) / Math.min((0, import_kolmafia96.myMaxmp)() - (0, import_kolmafia96.myMp)(), 1e3)));
-        (0, import_kolmafia96.useSkill)(maxUses, $skill(_templateObject3712 || (_templateObject3712 = _taggedTemplateLiteral88(["Rest upside down"]))));
+        (0, import_kolmafia96.cliExecute)("checkpoint"), (0, import_kolmafia96.equip)($item(_templateObject3712 || (_templateObject3712 = _taggedTemplateLiteral88(["bat wings"])))), (0, import_kolmafia96.useSkill)(maxUses, $skill(_templateObject3812 || (_templateObject3812 = _taggedTemplateLiteral88(["Rest upside down"])))), (0, import_kolmafia96.cliExecute)("outfit checkpoint");
       }
     }
   }]);
@@ -19407,7 +19407,7 @@ var MoodElement = /* @__PURE__ */ function() {
     if (_classCallCheck19(this, SkillMoodElement2), _this = _callSuper4(this, SkillMoodElement2), _defineProperty25(_this, "skill", void 0), _defineProperty25(_this, "effect", void 0), _defineProperty25(_this, "options", void 0), _this.skill = skill, options.requireAprilShield) {
       var _aprilShieldEffects$g;
       _this.effect = (_aprilShieldEffects$g = aprilShieldEffects.get(skill)) !== null && _aprilShieldEffects$g !== void 0 ? _aprilShieldEffects$g : $effect.none;
-    } else if (have($item(_templateObject3812 || (_templateObject3812 = _taggedTemplateLiteral88(["legendary pasta wand"]))))) {
+    } else if (have($item(_templateObject3912 || (_templateObject3912 = _taggedTemplateLiteral88(["legendary pasta wand"]))))) {
       var legendaryPastaEffect = pastaWandEffects.get(skill);
       _this.effect = legendaryPastaEffect != null ? legendaryPastaEffect : (0, import_kolmafia96.toEffect)(skill);
     } else
@@ -19417,7 +19417,7 @@ var MoodElement = /* @__PURE__ */ function() {
   return _inherits5(SkillMoodElement2, _MoodElement), _createClass19(SkillMoodElement2, [{
     key: "aprilShieldRestricted",
     get: function() {
-      return !this.options.requireAprilShield && this.skill === $skill(_templateObject3912 || (_templateObject3912 = _taggedTemplateLiteral88(["Empathy of the Newt"])));
+      return !this.options.requireAprilShield && this.skill === $skill(_templateObject4012 || (_templateObject4012 = _taggedTemplateLiteral88(["Empathy of the Newt"])));
     }
   }, {
     key: "mpCostPerTurn",
@@ -19436,11 +19436,11 @@ var MoodElement = /* @__PURE__ */ function() {
       var _this2 = this;
       if (this.effect === $effect.none) return !1;
       var initialTurns = (0, import_kolmafia96.haveEffect)(this.effect), shieldSlot = import_kolmafia96.Slot.all().find(function(slot) {
-        return (0, import_kolmafia96.equippedItem)(slot) === $item(_templateObject4012 || (_templateObject4012 = _taggedTemplateLiteral88(["April Shower Thoughts shield"])));
-      }), initialOffhand = (0, import_kolmafia96.equippedItem)($slot(_templateObject4122 || (_templateObject4122 = _taggedTemplateLiteral88(["off-hand"])))), initialWeapon = (0, import_kolmafia96.equippedItem)($slot(_templateObject4214 || (_templateObject4214 = _taggedTemplateLiteral88(["weapon"]))));
+        return (0, import_kolmafia96.equippedItem)(slot) === $item(_templateObject4122 || (_templateObject4122 = _taggedTemplateLiteral88(["April Shower Thoughts shield"])));
+      }), initialOffhand = (0, import_kolmafia96.equippedItem)($slot(_templateObject4214 || (_templateObject4214 = _taggedTemplateLiteral88(["off-hand"])))), initialWeapon = (0, import_kolmafia96.equippedItem)($slot(_templateObject4313 || (_templateObject4313 = _taggedTemplateLiteral88(["weapon"]))));
       if (initialTurns >= ensureTurns) return !0;
       if (!(0, import_kolmafia96.haveSkill)(this.skill)) return !1;
-      if (this.aprilShieldRestricted && shieldSlot && unequip($item(_templateObject4313 || (_templateObject4313 = _taggedTemplateLiteral88(["April Shower Thoughts shield"])))), mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
+      if (this.aprilShieldRestricted && shieldSlot && unequip($item(_templateObject4412 || (_templateObject4412 = _taggedTemplateLiteral88(["April Shower Thoughts shield"])))), mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
         var activeSongs = getActiveSongs(), _iterator = _createForOfIteratorHelper17(activeSongs), _step;
         try {
           var _loop = function() {
@@ -19461,7 +19461,7 @@ var MoodElement = /* @__PURE__ */ function() {
       var oldRemainingCasts = -1, remainingCasts = Math.ceil((ensureTurns - (0, import_kolmafia96.haveEffect)(this.effect)) / (0, import_kolmafia96.turnsPerCast)(this.skill));
       try {
         for (; remainingCasts > 0 && oldRemainingCasts !== remainingCasts; ) {
-          if (this.options.requireAprilShield && !shieldSlot && ((0, import_kolmafia96.weaponHands)(initialWeapon) > 1 && unequip(initialWeapon), !(0, import_kolmafia96.equip)($item(_templateObject4412 || (_templateObject4412 = _taggedTemplateLiteral88(["April Shower Thoughts shield"]))))))
+          if (this.options.requireAprilShield && !shieldSlot && ((0, import_kolmafia96.weaponHands)(initialWeapon) > 1 && unequip(initialWeapon), !(0, import_kolmafia96.equip)($item(_templateObject4511 || (_templateObject4511 = _taggedTemplateLiteral88(["April Shower Thoughts shield"]))))))
             return !1;
           var maxCasts = 0;
           if ((0, import_kolmafia96.hpCost)(this.skill) > 0)
@@ -19478,7 +19478,7 @@ var MoodElement = /* @__PURE__ */ function() {
         }
         return (0, import_kolmafia96.haveEffect)(this.effect) >= ensureTurns;
       } finally {
-        shieldSlot && (0, import_kolmafia96.equip)($item(_templateObject4511 || (_templateObject4511 = _taggedTemplateLiteral88(["April Shower Thoughts shield"]))), shieldSlot), initialOffhand !== (0, import_kolmafia96.equippedItem)($slot(_templateObject4611 || (_templateObject4611 = _taggedTemplateLiteral88(["off-hand"])))) && (0, import_kolmafia96.equip)(initialOffhand, $slot(_templateObject4711 || (_templateObject4711 = _taggedTemplateLiteral88(["off-hand"])))), initialWeapon !== (0, import_kolmafia96.equippedItem)($slot(_templateObject4811 || (_templateObject4811 = _taggedTemplateLiteral88(["weapon"])))) && (0, import_kolmafia96.equip)(initialWeapon, $slot(_templateObject4911 || (_templateObject4911 = _taggedTemplateLiteral88(["weapon"]))));
+        shieldSlot && (0, import_kolmafia96.equip)($item(_templateObject4611 || (_templateObject4611 = _taggedTemplateLiteral88(["April Shower Thoughts shield"]))), shieldSlot), initialOffhand !== (0, import_kolmafia96.equippedItem)($slot(_templateObject4711 || (_templateObject4711 = _taggedTemplateLiteral88(["off-hand"])))) && (0, import_kolmafia96.equip)(initialOffhand, $slot(_templateObject4811 || (_templateObject4811 = _taggedTemplateLiteral88(["off-hand"])))), initialWeapon !== (0, import_kolmafia96.equippedItem)($slot(_templateObject4911 || (_templateObject4911 = _taggedTemplateLiteral88(["weapon"])))) && (0, import_kolmafia96.equip)(initialWeapon, $slot(_templateObject5011 || (_templateObject5011 = _taggedTemplateLiteral88(["weapon"]))));
       }
     }
   }]);
@@ -19516,9 +19516,9 @@ var MoodElement = /* @__PURE__ */ function() {
     key: "execute",
     value: function(mood, ensureTurns) {
       if ((0, import_kolmafia96.haveEffect)(this.effect) >= ensureTurns) return !0;
-      var neededWishes = Math.ceil(((0, import_kolmafia96.haveEffect)(this.effect) - ensureTurns) / 20), wishesToBuy = clamp(neededWishes - (0, import_kolmafia96.availableAmount)($item(_templateObject5011 || (_templateObject5011 = _taggedTemplateLiteral88(["pocket wish"])))), 0, 20);
-      (0, import_kolmafia96.buy)(wishesToBuy, $item(_templateObject5113 || (_templateObject5113 = _taggedTemplateLiteral88(["pocket wish"]))), 5e4);
-      for (var wishesToUse = clamp(neededWishes, 0, (0, import_kolmafia96.availableAmount)($item(_templateObject5212 || (_templateObject5212 = _taggedTemplateLiteral88(["pocket wish"]))))); wishesToUse > 0; wishesToUse--)
+      var neededWishes = Math.ceil(((0, import_kolmafia96.haveEffect)(this.effect) - ensureTurns) / 20), wishesToBuy = clamp(neededWishes - (0, import_kolmafia96.availableAmount)($item(_templateObject5113 || (_templateObject5113 = _taggedTemplateLiteral88(["pocket wish"])))), 0, 20);
+      (0, import_kolmafia96.buy)(wishesToBuy, $item(_templateObject5212 || (_templateObject5212 = _taggedTemplateLiteral88(["pocket wish"]))), 5e4);
+      for (var wishesToUse = clamp(neededWishes, 0, (0, import_kolmafia96.availableAmount)($item(_templateObject5311 || (_templateObject5311 = _taggedTemplateLiteral88(["pocket wish"]))))); wishesToUse > 0; wishesToUse--)
         (0, import_kolmafia96.cliExecute)("genie effect ".concat(this.effect.name));
       return (0, import_kolmafia96.haveEffect)(this.effect) >= ensureTurns;
     }

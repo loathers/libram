@@ -147,8 +147,10 @@ export class BatWingsRest extends MpSource {
       this.usesRemaining(),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 1000)),
     );
+    cliExecute("checkpoint");
     equip($item`bat wings`);
     useSkill(maxUses, $skill`Rest upside down`);
+    cliExecute("outfit checkpoint");
   }
 }
 

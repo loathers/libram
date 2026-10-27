@@ -1838,7 +1838,7 @@ __export(src_exports, {
   BeachComb: function() {
     return BeachComb_exports;
   },
-  BlackRose: function() {
+  BlackRoseGarden: function() {
     return BlackRoseGarden_exports;
   },
   BloodCubicZirconia: function() {
@@ -20788,7 +20788,7 @@ var Session = /* @__PURE__ */ function() {
   BatWings,
   BatWingsRest,
   BeachComb,
-  BlackRose,
+  BlackRoseGarden,
   BloodCubicZirconia,
   BoxingDaycare,
   BurningLeaves,

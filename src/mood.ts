@@ -28,7 +28,13 @@ import {
   useSkill,
   weaponHands,
 } from "kolmafia";
-import { getActiveSongs, have, isSong, unequip } from "./lib.js";
+import {
+  getActiveSongs,
+  have,
+  isSong,
+  unequip,
+  withCheckpoint,
+} from "./lib.js";
 import { get } from "./property.js";
 import { AsdonMartin } from "./resources/index.js";
 import { $effect, $item, $skill, $slot } from "./template-string.js";
@@ -147,10 +153,10 @@ export class BatWingsRest extends MpSource {
       this.usesRemaining(),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 1000)),
     );
-    cliExecute("checkpoint");
-    equip($item`bat wings`);
-    useSkill(maxUses, $skill`Rest upside down`);
-    cliExecute("outfit checkpoint");
+    withCheckpoint(() => {
+      equip($item`bat wings`);
+      useSkill(maxUses, $skill`Rest upside down`);
+    });
   }
 }
 
@@ -214,36 +220,36 @@ class SkillMoodElement extends MoodElement {
     if (this.effect === $effect.none) return false;
 
     const initialTurns = haveEffect(this.effect);
-    // Track these separately because of LHM
     const shieldSlot = Slot.all().find(
       (slot) => equippedItem(slot) === $item`April Shower Thoughts shield`,
     );
-    const initialOffhand = equippedItem($slot`off-hand`);
     const initialWeapon = equippedItem($slot`weapon`);
     if (initialTurns >= ensureTurns) return true;
     if (!haveSkill(this.skill)) return false;
 
-    if (this.aprilShieldRestricted && shieldSlot) {
-      unequip($item`April Shower Thoughts shield`);
-    }
+    return withCheckpoint(() => {
+      if (this.aprilShieldRestricted && shieldSlot) {
+        unequip($item`April Shower Thoughts shield`);
+      }
 
-    if (mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
-      const activeSongs = getActiveSongs();
-      for (const song of activeSongs) {
-        const slot = mood.options.songSlots.find((slot) => slot.includes(song));
-        if (!slot || slot.includes(this.effect)) {
-          cliExecute(`shrug ${song}`);
-          break;
+      if (mood.options.songSlots && isSong(this.skill) && !have(this.effect)) {
+        const activeSongs = getActiveSongs();
+        for (const song of activeSongs) {
+          const slot = mood.options.songSlots.find((slot) =>
+            slot.includes(song),
+          );
+          if (!slot || slot.includes(this.effect)) {
+            cliExecute(`shrug ${song}`);
+            break;
+          }
         }
       }
-    }
 
-    let oldRemainingCasts = -1;
-    let remainingCasts = Math.ceil(
-      (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
-    );
+      let oldRemainingCasts = -1;
+      let remainingCasts = Math.ceil(
+        (ensureTurns - haveEffect(this.effect)) / turnsPerCast(this.skill),
+      );
 
-    try {
       while (remainingCasts > 0 && oldRemainingCasts !== remainingCasts) {
         if (this.options.requireAprilShield && !shieldSlot) {
           if (weaponHands(initialWeapon) > 1) unequip(initialWeapon);
@@ -274,13 +280,7 @@ class SkillMoodElement extends MoodElement {
       }
 
       return haveEffect(this.effect) >= ensureTurns;
-    } finally {
-      if (shieldSlot) equip($item`April Shower Thoughts shield`, shieldSlot);
-      if (initialOffhand !== equippedItem($slot`off-hand`))
-        equip(initialOffhand, $slot`off-hand`);
-      if (initialWeapon !== equippedItem($slot`weapon`))
-        equip(initialWeapon, $slot`weapon`);
-    }
+    });
   }
 }
 

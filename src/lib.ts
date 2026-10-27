@@ -1724,6 +1724,20 @@ export function withFamiliar<T>(
   }
 }
 
+/**
+ * Perform an action and restore your equipment afterwards
+ * @param action Action to perform while using an equipment checkpoint
+ * @returns The return value of the action
+ */
+export function withCheckpoint<T>(action: () => T): T {
+  cliExecute("checkpoint");
+  try {
+    return action();
+  } finally {
+    cliExecute("outfit checkpoint");
+  }
+}
+
 export type AdventureTarget = Monster | Location | Map<Monster, number>;
 
 /**

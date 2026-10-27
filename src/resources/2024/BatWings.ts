@@ -1,7 +1,7 @@
-import { equip, equippedItem, visitUrl } from "kolmafia";
-import { have as have_, questStep } from "../../lib.js";
+import { equip, visitUrl } from "kolmafia";
+import { have as have_, questStep, withCheckpoint } from "../../lib.js";
 import { get } from "../../property.js";
-import { $item, $skill, $slot } from "../../template-string.js";
+import { $item, $skill } from "../../template-string.js";
 
 /**
  * @returns Whether you `have` the Bat Wings
@@ -55,10 +55,10 @@ export function jumpBridge(): boolean {
   if (get("chasmBridgeProgress") === 30 || questStep("questL09Topping") >= 1) {
     return true;
   }
-  const back = equippedItem($slot`back`);
-  equip($item`bat wings`);
-  visitUrl("place.php?whichplace=orc_chasm&action=bridge_jump"); // Jump the bridge
-  visitUrl("place.php?whichplace=highlands&action=highlands_dude"); // Tell mafia you jumped the bridge
-  equip(back);
+  withCheckpoint(() => {
+    equip($item`bat wings`);
+    visitUrl("place.php?whichplace=orc_chasm&action=bridge_jump"); // Jump the bridge
+    visitUrl("place.php?whichplace=highlands&action=highlands_dude"); // Tell mafia you jumped the bridge
+  });
   return questStep("questL09Topping") >= 2; // have spoken to the highland lord
 }

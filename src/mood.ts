@@ -147,6 +147,7 @@ export class BatWingsRest extends MpSource {
       this.usesRemaining(),
       Math.floor((myMaxmp() - myMp()) / Math.min(myMaxmp() - myMp(), 1000)),
     );
+    equip($item`bat wings`);
     useSkill(maxUses, $skill`Rest upside down`);
   }
 }

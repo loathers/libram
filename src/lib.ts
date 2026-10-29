@@ -105,7 +105,11 @@ import {
   ValueOf,
   tuple,
 } from "./utils.js";
-import { BooleanProperty, StringProperty } from "./propertyTypes.js";
+import {
+  BooleanProperty,
+  QuestProperty,
+  StringProperty,
+} from "./propertyTypes.js";
 
 /**
  * Determines the current maximum Accordion Thief songs the player can have in their head
@@ -794,22 +798,61 @@ export function getPlayerFromIdOrName(
   }
 }
 
+// Map the non-numeric quest steps to sensible values for comparison
+export enum QuestState {
+  UNSTARTED = -1,
+  STARTED = 0,
+  FINISHED = 999,
+  // no quest status; rejected the call to adventure
+  BLANK = Infinity,
+}
+
+/**
+ * Get a sensible numeric value for progress on a quest, for numeric comparison.
+ *
+ * @param property Quest preference to read
+ * @param default_ Numeric value to use when the preference is blank
+ * @returns A number, either referring directly to the step value or referring to the QuestState enum.
+ */
+export function getStep(
+  property: QuestProperty,
+  default_: number = QuestState.BLANK,
+): number {
+  const step = get(property);
+  switch (step) {
+    case "unstarted":
+      return QuestState.UNSTARTED;
+    case "started":
+      return QuestState.STARTED;
+    case "completed":
+    case "finished":
+      return QuestState.FINISHED;
+    case "":
+      return default_;
+    default:
+      if (/^step\d+(?:\.\d+)?$/.test(step)) return Number(step.slice(4));
+      throw new Error(`Quest state parsing error: ${property} was ${step}.`);
+  }
+}
+
 /**
  * Determine the step as a number for a given quest property.
+ *
+ * @deprecated Use getStep instead for typed quest property names.
  *
  * @param questName Name of quest property to check.
  * @returns Quest step
  */
 export function questStep(questName: string): number {
-  const stringStep = get(questName);
-  if (stringStep === "unstarted") return -1;
-  else if (stringStep === "started") return 0;
-  else if (stringStep === "finished" || stringStep === "") return 999;
+  const step = get(questName);
+  if (step === "unstarted") return -1;
+  else if (step === "started") return 0;
+  else if (step === "finished" || step === "") return 999;
   else {
-    if (stringStep.substring(0, 4) !== "step") {
+    if (step.substring(0, 4) !== "step") {
       throw new Error("Quest state parsing error.");
     }
-    return parseInt(stringStep.substring(4), 10);
+    return parseInt(step.substring(4), 10);
   }
 }
 

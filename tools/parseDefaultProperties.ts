@@ -152,6 +152,18 @@ export function isItemProperty(property: string): boolean {
   );
 }
 
+/**
+ * @param property Property name
+ * @param defaultValue Property default
+ * @returns Whether the supplied property stores a quest status
+ */
+export function isQuestProperty(
+  property: string,
+  defaultValue: string,
+): boolean {
+  return /^_?quest/.test(property) && defaultValue === "unstarted";
+}
+
 function isDeprecated(attrs: string | undefined): boolean {
   if (!attrs) return false;
   return attrs.includes("deprecated");
@@ -176,6 +188,7 @@ async function main() {
     PhylumProperty: [] as string[],
     ItemProperty: [] as string[],
     ItemNumericProperty: [] as string[],
+    QuestProperty: [] as string[],
   };
 
   const deprecatedProps: Record<keyof typeof propTypes, string[]> = {
@@ -192,6 +205,7 @@ async function main() {
     PhylumProperty: [],
     ItemProperty: [],
     ItemNumericProperty: [],
+    QuestProperty: [],
   };
 
   for (const prop of props) {
@@ -205,7 +219,9 @@ async function main() {
     const deprecated = isDeprecated(attrs);
     const keys: (keyof typeof propTypes)[] = [];
 
-    if (isMonsterProperty(property)) {
+    if (isQuestProperty(property, defaultValue)) {
+      keys.push("QuestProperty");
+    } else if (isMonsterProperty(property)) {
       keys.push("MonsterProperty");
       if (isNumericProperty(property, defaultValue)) {
         keys.push("MonsterNumericProperty");
@@ -255,8 +271,8 @@ async function main() {
     // e.g. StringProperty -> stringProperties
     const typeLower = `${type[0].toLowerCase()}${type.slice(1, -1)}ies`;
 
-    const added = difference(values, current[typeLower]);
-    const removed = difference(current[typeLower], values);
+    const added = difference(values, current[typeLower] ?? []);
+    const removed = difference(current[typeLower] ?? [], values);
     const report = `${added.length > 0 ? added.join(", ") : "none"} added, ${
       removed.length > 0 ? removed.join(", ") : "none"
     } removed`;

@@ -332,6 +332,61 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
     drops: $items`hot nuggets`,
     probability: 1,
   },
+  {
+    familiar: $familiar`Hobo in Sheep's Clothing`,
+    drops: $items`green pixel`,
+    probability: 0.03,
+  },
+  {
+    familiar: $familiar`Piranha Plant`,
+    drops: $items`green pixel`,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`He-Boulder`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Mini-Adventurer`,
+    drops: 60,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Nanorhino`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Spirit Hobo`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Temporal Riftlet`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Wereturtle`,
+    drops: 30,
+    probability: 1,
+  },
+  // {
+  //   familiar: $familiar`Cocoabo`,
+  //   drops: $items`white chocolate chips`,
+  //   probability: "spade me",
+  // },
+  // {
+  //   familiar: $familiar`Crimbo Elf`,
+  //   drops: $items`candy cane, Cold Hots candy, Wint-O-Fresh mint`,
+  //   probability: "spade me",
+  // },
+  // {
+  //   familiar: $familiar`Cookbookbat`,
+  //   drops: $items`bowl of cottage cheese, flat dough, magicalness-in-a-can, spices, strawberry, wad of dough`,
+  //   probability: "spade me",
+  // },
 ] as const;
 
 const FULL_RIDING_LIST = [

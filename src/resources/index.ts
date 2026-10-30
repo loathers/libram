@@ -41,6 +41,7 @@ import * as Guzzlr from "./2020/Guzzlr.js";
 import * as RetroCape from "./2020/RetroCape.js";
 import * as CrystalBall from "./2021/CrystalBall.js";
 import * as DaylightShavings from "./2021/DaylightShavings.js";
+import * as ShorterOrderCook from "./2021/ShorterOrderCook.js";
 import * as AutumnAton from "./2022/AutumnAton.js";
 import * as CombatLoversLocket from "./2022/CombatLoversLocket.js";
 import * as DesignerSweatpants from "./2022/DesignerSweatpants.js";
@@ -137,6 +138,7 @@ export {
   ReagnimatedGnome,
   RetroCape,
   Robortender,
+  ShorterOrderCook,
   SkeletonOfCrimboPast,
   Snapper,
   SongBoom,

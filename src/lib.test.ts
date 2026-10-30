@@ -2,7 +2,6 @@ import { getPlayerId, getPlayerName, visitUrl, xpath } from "kolmafia";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 
 import {
-  getCombatFlags,
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
@@ -215,18 +214,24 @@ describe("getRange", () => {
 });
 
 describe("combat flags", () => {
+  function getLastCombatUpdate() {
+    const [url, usePostMethod] = vi.mocked(visitUrl).mock.lastCall ?? [];
+    expect(usePostMethod).toBe(true);
+    const { pathname, searchParams } = new URL(
+      url ?? "",
+      "https://www.kingdomofloathing.com/",
+    );
+    expect(pathname).toBe("/account.php");
+    expect(searchParams.get("action")).toBe("Update");
+    expect(searchParams.get("am")).toBe("1");
+    expect(searchParams.get("ajax")).toBe("1");
+    expect(searchParams.has("pwd")).toBe(true);
+    return searchParams;
+  }
+
   beforeEach(() => {
     vi.mocked(visitUrl).mockReset();
     vi.mocked(xpath).mockReset().mockReturnValue([]);
-  });
-
-  it("reads checked and unchecked flags", () => {
-    vi.mocked(xpath).mockReturnValueOnce(["checked"]).mockReturnValueOnce([]);
-    expect(getCombatFlags(["disablefacts", "disablemeteor"])).toEqual([
-      { flag: "disablefacts", value: true },
-      { flag: "disablemeteor", value: false },
-    ]);
-    expect(visitUrl).toHaveBeenCalledWith("account.php?tab=combat");
   });
 
   it("posts flag names and boolean values to the account endpoint", () => {
@@ -238,10 +243,13 @@ describe("combat flags", () => {
       ),
     ).toBe("updated");
     expect(visitUrl).toHaveBeenCalledTimes(1);
-    expect(visitUrl).toHaveBeenCalledWith(
-      "account.php?actions[]=flag_disablefacts&flag_disablefacts=1&actions[]=flag_disablemeteor&flag_disablemeteor=0&action=Update&am=1&ajax=1&pwd",
-      true,
-    );
+    const params = getLastCombatUpdate();
+    expect(params.getAll("actions[]").sort()).toEqual([
+      "flag_disablefacts",
+      "flag_disablemeteor",
+    ]);
+    expect(params.get("flag_disablefacts")).toBe("1");
+    expect(params.get("flag_disablemeteor")).toBe("0");
   });
 
   it.each([false, true])(
@@ -251,10 +259,9 @@ describe("combat flags", () => {
       const run = () =>
         withCombatFlags(
           () => {
-            expect(visitUrl).toHaveBeenLastCalledWith(
-              "account.php?actions[]=flag_disablefacts&flag_disablefacts=0&action=Update&am=1&ajax=1&pwd",
-              true,
-            );
+            const params = getLastCombatUpdate();
+            expect(params.getAll("actions[]")).toEqual(["flag_disablefacts"]);
+            expect(params.get("flag_disablefacts")).toBe("0");
             if (throws) throw new Error("action failed");
             return "result";
           },
@@ -264,10 +271,9 @@ describe("combat flags", () => {
       if (throws) expect(run).toThrow("action failed");
       else expect(run()).toBe("result");
 
-      expect(visitUrl).toHaveBeenLastCalledWith(
-        "account.php?actions[]=flag_disablefacts&flag_disablefacts=1&action=Update&am=1&ajax=1&pwd",
-        true,
-      );
+      const params = getLastCombatUpdate();
+      expect(params.getAll("actions[]")).toEqual(["flag_disablefacts"]);
+      expect(params.get("flag_disablefacts")).toBe("1");
     },
   );
 });

@@ -1,11 +1,14 @@
-import { getPlayerId, getPlayerName } from "kolmafia";
-import { describe, it, expect, vi } from "vitest";
+import { getPlayerId, getPlayerName, visitUrl, xpath } from "kolmafia";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 
 import {
+  getCombatFlags,
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
   getRange,
+  setCombatFlags,
+  withCombatFlags,
 } from "./lib.js";
 
 vi.mocked(getPlayerName).mockImplementation((id: number) => {
@@ -209,4 +212,62 @@ describe("getRange", () => {
   ])("should return the range for %p", (input, expected) => {
     expect(getRange(input)).toEqual(expected);
   });
+});
+
+describe("combat flags", () => {
+  beforeEach(() => {
+    vi.mocked(visitUrl).mockReset();
+    vi.mocked(xpath).mockReset().mockReturnValue([]);
+  });
+
+  it("reads checked and unchecked flags", () => {
+    vi.mocked(xpath).mockReturnValueOnce(["checked"]).mockReturnValueOnce([]);
+    expect(getCombatFlags(["disablefacts", "disablemeteor"])).toEqual([
+      { flag: "disablefacts", value: true },
+      { flag: "disablemeteor", value: false },
+    ]);
+    expect(visitUrl).toHaveBeenCalledWith("account.php?tab=combat");
+  });
+
+  it("posts flag names and boolean values to the account endpoint", () => {
+    vi.mocked(visitUrl).mockReturnValue("updated");
+    expect(
+      setCombatFlags(
+        { flag: "disablefacts", value: true },
+        { flag: "disablemeteor", value: false },
+      ),
+    ).toBe("updated");
+    expect(visitUrl).toHaveBeenCalledTimes(1);
+    expect(visitUrl).toHaveBeenCalledWith(
+      "account.php?actions[]=flag_disablefacts&flag_disablefacts=1&actions[]=flag_disablemeteor&flag_disablemeteor=0&action=Update&am=1&ajax=1&pwd",
+      true,
+    );
+  });
+
+  it.each([false, true])(
+    "applies flags before the action and restores them afterward (throws: %s)",
+    (throws) => {
+      vi.mocked(xpath).mockReturnValue(["checked"]);
+      const run = () =>
+        withCombatFlags(
+          () => {
+            expect(visitUrl).toHaveBeenLastCalledWith(
+              "account.php?actions[]=flag_disablefacts&flag_disablefacts=0&action=Update&am=1&ajax=1&pwd",
+              true,
+            );
+            if (throws) throw new Error("action failed");
+            return "result";
+          },
+          { flag: "disablefacts", value: false },
+        );
+
+      if (throws) expect(run).toThrow("action failed");
+      else expect(run()).toBe("result");
+
+      expect(visitUrl).toHaveBeenLastCalledWith(
+        "account.php?actions[]=flag_disablefacts&flag_disablefacts=1&action=Update&am=1&ajax=1&pwd",
+        true,
+      );
+    },
+  );
 });

@@ -1270,6 +1270,8 @@ const ACCOUNT_COMBAT_FLAGS = [
   "compactmanuel",
   "eternalmrj",
   "disablelovebugs",
+  "disablefacts",
+  "disablemeteor",
   "boringdarts",
 ] as const;
 /**
@@ -1278,8 +1280,10 @@ const ACCOUNT_COMBAT_FLAGS = [
  * wowbar refers to the flag to use the Combat Action Bar
  * bothcombatinterf refers to the flag to use both the CAB
  * compactmanuel refers to the flag to display monster manuel data horizontally
- * eternalmrg refers to the flag to enable endless factoid delight
+ * eternalmrj refers to the flag to enable endless factoid delight
  * disablelovebugs disables love bugs
+ * disablefacts temporarily disables Just the Facts
+ * disablemeteor temporarily disables Meteor Lore
  * boringdarts avoid rendering the dartboard in combat
  */
 export type AccountCombatFlag = (typeof ACCOUNT_COMBAT_FLAGS)[number];
@@ -1316,19 +1320,17 @@ export function setCombatFlags(
   ...flags: { flag: AccountCombatFlag; value: boolean }[]
 ): string {
   return visitUrl(
-    `account.php?${
-      ([
-        ...flags.flatMap(({ flag, value }) => [
-          `actions[]=flag_${flag}`,
-          `flag_${flag}=${Number(value)}`,
-        ]),
-        "action=Update",
-        "am=1",
-        "ajax=1",
-        "pwd",
-      ].join("&"),
-      true)
-    }`,
+    `account.php?${[
+      ...flags.flatMap(({ flag, value }) => [
+        `actions[]=flag_${flag}`,
+        `flag_${flag}=${Number(value)}`,
+      ]),
+      "action=Update",
+      "am=1",
+      "ajax=1",
+      "pwd",
+    ].join("&")}`,
+    true,
   );
 }
 
@@ -1345,6 +1347,7 @@ export function withCombatFlags<T>(
 ) {
   const initialValues = getCombatFlags(flags.map(({ flag }) => flag));
   try {
+    setCombatFlags(...flags);
     return action();
   } finally {
     setCombatFlags(...initialValues);

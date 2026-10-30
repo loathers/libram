@@ -6,9 +6,11 @@ import {
   Path,
   myPath,
   Skill,
+  myAdventures,
 } from "kolmafia";
 
 import { Copier } from "../../Copier.js";
+import * as Counter from "../../counter.js";
 import { haveInCampground } from "../../lib.js";
 import { get } from "../../property.js";
 import { $effect, $item, $skill } from "../../template-string.js";
@@ -259,6 +261,79 @@ export function prepareDigitize(): boolean {
  */
 export function canDigitize(): boolean {
   return couldDigitize() && getSkills().includes(Skills.Digitize);
+}
+
+function digitizeTurnsForMonsters(monsters: number): number {
+  return monsters === 0 ? 0 : monsters * (monsters + 1) * 5 - 3;
+}
+
+function untangleDigitizes(
+  turnCount: number,
+  chunks: number,
+  currentChainMonsters = 0,
+): number {
+  if (chunks <= 0 || turnCount <= 0) return 0;
+
+  const monstersPerChunk = Math.floor(
+    Math.sqrt((turnCount / chunks + 3) / 5 + 1 / 4) - 1 / 2,
+  );
+  // Encounters already assigned to the current chain cannot be redistributed.
+  if (monstersPerChunk < currentChainMonsters) {
+    return (
+      currentChainMonsters +
+      untangleDigitizes(
+        turnCount - digitizeTurnsForMonsters(currentChainMonsters),
+        chunks - 1,
+      )
+    );
+  }
+
+  const remainingTurns =
+    turnCount - chunks * digitizeTurnsForMonsters(monstersPerChunk);
+  const nextInterval = monstersPerChunk === 0 ? 7 : 10 * (monstersPerChunk + 1);
+  return chunks * monstersPerChunk + Math.floor(remainingTurns / nextInterval);
+}
+
+/**
+ * Estimate remaining Digitize encounters encounterable in a given turncount using optimal digitize strategy.
+ * @param estimatedTurns The number of turns over which you'll be encountering digitize copies.
+ * @returns Estimated encounters when maximizing the total number of copies
+ */
+export function digitizedMonstersRemainingForTurns(
+  estimatedTurns = myAdventures(),
+): number {
+  if (!have() || estimatedTurns <= 0) return 0;
+
+  const digitizesLeft = getDigitizeUsesRemaining();
+  if (digitizesLeft === getMaximumDigitizeUses()) {
+    return untangleDigitizes(estimatedTurns, getMaximumDigitizeUses());
+  }
+
+  const monsterCount = getDigitizeMonsterCount() + 1;
+
+  const turnsLeftAtNextMonster =
+    estimatedTurns - Counter.get("Digitize Monster");
+  if (turnsLeftAtNextMonster <= 0) return 0;
+  const turnsAtLastDigitize =
+    turnsLeftAtNextMonster + digitizeTurnsForMonsters(monsterCount);
+  return (
+    untangleDigitizes(turnsAtLastDigitize, digitizesLeft + 1, monsterCount) -
+    getDigitizeMonsterCount()
+  );
+}
+
+/**
+ * Determine whether it's optimal to digitize again, if your goal is to maximize copies.
+ * @param estimatedTurns The number of turns over which you'll be encountering digitize copies.
+ * @returns Whether you should re-digitize.
+ */
+export function shouldRedigitize(estimatedTurns = myAdventures()): boolean {
+  if (!have() || !canDigitize()) return false;
+  const digitizeChunks = 1 + getDigitizeUsesRemaining();
+  const monsterCount = getDigitizeMonsterCount() + 1;
+  return (
+    estimatedTurns / digitizeChunks < digitizeTurnsForMonsters(monsterCount)
+  );
 }
 
 export const Digitize = new Copier(

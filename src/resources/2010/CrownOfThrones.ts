@@ -445,7 +445,7 @@ const DEFAULTS = {
  * @param details.modifierValueFunction Function to value a familiar itself, often using modifiers,
  * @param details.dropsValueFunction Function to value the drops of a familiar, which are stored as an `Item[]` or `Map<Item, number>`
  * @param details.ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
- * @param details.excludeCurrentFamiliar Whether to exclude the player's current familiar
+ * @param details.excludeCurrentFamiliar Whether to exclude the active familiar supplied to `pickRider`
  * @returns Map of all rider modes created this session, including the one that was just made
  */
 export function createRiderMode(
@@ -469,9 +469,13 @@ const riderLists = new Map<string, FamiliarRider[]>();
  * Pick a rider
  *
  * @param mode Mode by which to select possible riders
- * @returns Picked faimiliar rider or null if no rider could be selected
+ * @param activeFamiliar Familiar to exclude when the mode excludes the active familiar; defaults to the player's current familiar
+ * @returns Picked familiar rider or null if no rider could be selected
  */
-export function pickRider(mode: string): FamiliarRider | null {
+export function pickRider(
+  mode: string,
+  activeFamiliar = myFamiliar(),
+): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;
   const {
@@ -503,7 +507,7 @@ export function pickRider(mode: string): FamiliarRider | null {
     const riderToReturn = list.find(
       ({ dropPredicate, familiar }) =>
         (dropPredicate?.() ?? true) &&
-        (!excludeCurrentFamiliar || myFamiliar() !== familiar),
+        (!excludeCurrentFamiliar || activeFamiliar !== familiar),
     );
     return riderToReturn ?? null;
   }

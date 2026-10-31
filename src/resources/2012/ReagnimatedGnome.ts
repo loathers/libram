@@ -1,5 +1,5 @@
 import { Item, runChoice, visitUrl } from "kolmafia";
-import { have as _have } from "../../lib.js";
+import { have as _have, totalFamiliarWeight } from "../../lib.js";
 import { $familiar, $item } from "../../template-string.js";
 
 /**
@@ -48,6 +48,8 @@ export function choosePart(part: BodyPart): boolean {
  * @param weight Buffed familiar weight
  * @returns Expected adventures
  */
-export function expectedAdvsPerCombat(weight: number): number {
+export function expectedAdvsPerCombat(
+  weight = totalFamiliarWeight($familiar`Reagnimated Gnome`),
+): number {
   return 0.01 + (Math.min(weight, 222) / 1000) * 0.99;
 }

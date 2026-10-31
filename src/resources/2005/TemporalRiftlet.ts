@@ -1,4 +1,4 @@
-import { have as _have } from "../../lib.js";
+import { have as _have, totalFamiliarWeight } from "../../lib.js";
 import { $familiar } from "../../template-string.js";
 
 /**
@@ -14,6 +14,8 @@ export function have(): boolean {
  * @param weight Buffed familiar weight
  * @returns Expected adventures
  */
-export function expectedAdvsPerCombat(weight: number): number {
+export function expectedAdvsPerCombat(
+  weight = totalFamiliarWeight($familiar`Temporal Riftlet`),
+): number {
   return Math.min(weight, 222) / 1000;
 }

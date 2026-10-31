@@ -22,7 +22,7 @@ import { have, totalFamiliarWeight } from "../../lib.js";
 import { Requirement } from "../../maximize.js";
 import { NumericModifier } from "../../modifierTypes.js";
 import { get } from "../../property.js";
-import { MummingTrunk } from "../../resources/index.js";
+import * as MummingTrunk from "../../resources/2017/MummingTrunk.js";
 import {
   $effect,
   $familiar,

@@ -1,11 +1,13 @@
-import { getPlayerId, getPlayerName } from "kolmafia";
-import { describe, it, expect, vi } from "vitest";
+import { getPlayerId, getPlayerName, visitUrl, xpath } from "kolmafia";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 
 import {
   getPlayerFromIdOrName,
   getPlayerIdFromName,
   getPlayerNameFromId,
   getRange,
+  setCombatFlags,
+  withCombatFlags,
 } from "./lib.js";
 
 vi.mocked(getPlayerName).mockImplementation((id: number) => {
@@ -209,4 +211,69 @@ describe("getRange", () => {
   ])("should return the range for %p", (input, expected) => {
     expect(getRange(input)).toEqual(expected);
   });
+});
+
+describe("combat flags", () => {
+  function getLastCombatUpdate() {
+    const [url, usePostMethod] = vi.mocked(visitUrl).mock.lastCall ?? [];
+    expect(usePostMethod).toBe(true);
+    const { pathname, searchParams } = new URL(
+      url ?? "",
+      "https://www.kingdomofloathing.com/",
+    );
+    expect(pathname).toBe("/account.php");
+    expect(searchParams.get("action")).toBe("Update");
+    expect(searchParams.get("am")).toBe("1");
+    expect(searchParams.get("ajax")).toBe("1");
+    expect(searchParams.has("pwd")).toBe(true);
+    return searchParams;
+  }
+
+  beforeEach(() => {
+    vi.mocked(visitUrl).mockReset();
+    vi.mocked(xpath).mockReset().mockReturnValue([]);
+  });
+
+  it("posts flag names and boolean values to the account endpoint", () => {
+    vi.mocked(visitUrl).mockReturnValue("updated");
+    expect(
+      setCombatFlags(
+        { flag: "disablefacts", value: true },
+        { flag: "disablemeteor", value: false },
+      ),
+    ).toBe("updated");
+    expect(visitUrl).toHaveBeenCalledTimes(1);
+    const params = getLastCombatUpdate();
+    expect(params.getAll("actions[]").sort()).toEqual([
+      "flag_disablefacts",
+      "flag_disablemeteor",
+    ]);
+    expect(params.get("flag_disablefacts")).toBe("1");
+    expect(params.get("flag_disablemeteor")).toBe("0");
+  });
+
+  it.each([false, true])(
+    "applies flags before the action and restores them afterward (throws: %s)",
+    (throws) => {
+      vi.mocked(xpath).mockReturnValue(["checked"]);
+      const run = () =>
+        withCombatFlags(
+          () => {
+            const params = getLastCombatUpdate();
+            expect(params.getAll("actions[]")).toEqual(["flag_disablefacts"]);
+            expect(params.get("flag_disablefacts")).toBe("0");
+            if (throws) throw new Error("action failed");
+            return "result";
+          },
+          { flag: "disablefacts", value: false },
+        );
+
+      if (throws) expect(run).toThrow("action failed");
+      else expect(run()).toBe("result");
+
+      const params = getLastCombatUpdate();
+      expect(params.getAll("actions[]")).toEqual(["flag_disablefacts"]);
+      expect(params.get("flag_disablefacts")).toBe("1");
+    },
+  );
 });

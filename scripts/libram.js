@@ -11854,6 +11854,9 @@ __export(Cartography_exports, {
   },
   mapMonster: function() {
     return mapMonster;
+  },
+  tryMapMonster: function() {
+    return tryMapMonster;
   }
 });
 init_kolmafia_polyfill();
@@ -11866,16 +11869,19 @@ var passive = $skill(_templateObject299 || (_templateObject299 = _taggedTemplate
 function have36() {
   return have(passive);
 }
+function tryMapMonster(location, monster) {
+  return !have36() || !(0, import_kolmafia50.canAdventure)(location) || (0, import_kolmafia50.currentRound)() > 0 || !currentlyMapping() && (get("_monstersMapped") >= 3 || ((0, import_kolmafia50.useSkill)($skill(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral39(["Map the Monsters"])))), !currentlyMapping())) ? "failed" : withChoice(1435, "1&heyscriptswhatsupwinkwink=".concat(monster.id), function() {
+    var adventured = (0, import_kolmafia50.adv1)(location, -1, "");
+    return ((0, import_kolmafia50.choiceFollowsFight)() || (0, import_kolmafia50.handlingChoice)()) && (0, import_kolmafia50.runChoice)(-1), currentlyMapping() ? !adventured || (0, import_kolmafia50.currentRound)() > 0 || (0, import_kolmafia50.handlingChoice)() ? "failed" : "interrupted" : "mapped";
+  });
+}
 function mapMonster(location, monster) {
-  if (!have36() || get("_monstersMapped") >= 3 || !(0, import_kolmafia50.canAdventure)(location) || ((0, import_kolmafia50.useSkill)($skill(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral39(["Map the Monsters"])))), !get("mappingMonsters"))) return !1;
-  for (var turns2 = (0, import_kolmafia50.myTurncount)(); (0, import_kolmafia50.currentRound)() < 1; ) {
+  for (var turns2 = (0, import_kolmafia50.myTurncount)(); ; ) {
+    var result = tryMapMonster(location, monster);
+    if (result !== "interrupted") return result === "mapped";
     if ((0, import_kolmafia50.myTurncount)() > turns2)
       throw new Error("Map the Monsters unsuccessful?");
-    if ((0, import_kolmafia50.visitUrl)((0, import_kolmafia50.toUrl)(location)), (0, import_kolmafia50.handlingChoice)() && (0, import_kolmafia50.lastChoice)() === 1435)
-      return (0, import_kolmafia50.runChoice)(1, "heyscriptswhatsupwinkwink=".concat(monster.id)), !0;
-    (0, import_kolmafia50.runChoice)(-1, !1);
   }
-  return !1;
 }
 function availableMaps() {
   return have36() ? $skill(_templateObject360 || (_templateObject360 = _taggedTemplateLiteral39(["Map the Monsters"]))).dailylimit : 0;

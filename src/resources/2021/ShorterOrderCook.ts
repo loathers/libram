@@ -1,7 +1,7 @@
-import { canEquip, Familiar, familiarEquippedEquipment, Item } from "kolmafia";
+import { canEquip, Familiar, familiarEquippedEquipment } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
-import { $familiar, $familiars, $item, $items } from "../../template-string.js";
+import { $familiar, $familiars, $item } from "../../template-string.js";
 import { clamp } from "../../utils.js";
 
 const cook = $familiar`Shorter-Order Cook`;

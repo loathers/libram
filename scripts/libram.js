@@ -15782,6 +15782,9 @@ __export(BlackRoseGarden_exports, {
   openChest: function() {
     return openChest;
   },
+  swappedToday: function() {
+    return swappedToday;
+  },
   useBloodFountain: function() {
     return useBloodFountain;
   },
@@ -16038,6 +16041,9 @@ function openChest() {
     });
     return choice ? ((0, import_kolmafia85.runChoice)(choice.option, choice.choiceExtras), !0) : !1;
   });
+}
+function swappedToday() {
+  return get("_blackRoseGardenReset");
 }
 
 // src/resources/putty-likes.ts

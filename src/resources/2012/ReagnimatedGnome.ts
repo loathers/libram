@@ -41,11 +41,13 @@ export function choosePart(part: BodyPart): boolean {
 }
 
 /**
- * Calculate expected adventures from a given combat for a Reagnimated Gnome at a given weight
+ * Estimate average adventures per combat victory for a Reagnimated Gnome
+ * wearing a gnomish housemaid's kgnee.
+ * This averages over counter progress rather than predicting the next combat.
  *
- * @param weight Weight with which to calculuate
+ * @param weight Buffed familiar weight
  * @returns Expected adventures
  */
 export function expectedAdvsPerCombat(weight: number): number {
-  return Math.min(0.01 + (weight / 1000) * 0.99, 1);
+  return 0.01 + (Math.min(weight, 222) / 1000) * 0.99;
 }

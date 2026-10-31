@@ -1,3 +1,4 @@
+import * as TemporalRiftlet from "./2005/TemporalRiftlet.js";
 import * as CommaChameleon from "./2006/CommaChameleon.js";
 import * as Stickers from "./2008/Stickers.js";
 import * as Bandersnatch from "./2009/Bandersnatch.js";
@@ -148,6 +149,7 @@ export {
   StompingBoots,
   TakerSpace,
   TearawayPants,
+  TemporalRiftlet,
   ToyCupidBow,
   TrainSet,
   TunnelOfLove,

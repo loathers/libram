@@ -4249,7 +4249,7 @@ function lgrCurrencies() {
     return realmAvailable(realm) && !(realm === "sleaze" && get("_luckyGoldRingBeachBuck") >= 25) && !(realm === "spooky" && get("_luckyGoldRingCoinspiracy") >= 25) && !(realm === "stench" && get("_luckyGoldRingFunFunds") >= 15) && !(realm === "cold" && get("_luckyGoldRingWalmart") >= 15) && !(realm === "hot" && get("_luckyGoldRingVolcoino") >= 2) && !(realm === "fantasy" && get("_luckyGoldRingRubee") >= 10) && !(realm === "cyber" && get("_luckyGoldRingBit") >= 10);
   }).map(realmCurrency).filter(notNull);
 }
-var ACCOUNT_COMBAT_FLAGS = ["aabosses", "wowbar", "bothcombatinterf", "compactmanuel", "eternalmrj", "disablelovebugs", "boringdarts"];
+var ACCOUNT_COMBAT_FLAGS = ["aabosses", "wowbar", "bothcombatinterf", "compactmanuel", "eternalmrj", "disablelovebugs", "disablefacts", "disablemeteor", "boringdarts"];
 function getCombatFlags() {
   var flags = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [].concat(ACCOUNT_COMBAT_FLAGS), accountPage = (0, import_kolmafia4.visitUrl)("account.php?tab=combat");
   return flags.map(function(flag) {
@@ -4262,10 +4262,10 @@ function getCombatFlags() {
 function setCombatFlags() {
   for (var _len2 = arguments.length, flags = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++)
     flags[_key2] = arguments[_key2];
-  return (0, import_kolmafia4.visitUrl)("account.php?".concat(([].concat(_toConsumableArray3(flags.flatMap(function(_ref13) {
+  return (0, import_kolmafia4.visitUrl)("account.php?".concat([].concat(_toConsumableArray3(flags.flatMap(function(_ref13) {
     var flag = _ref13.flag, value = _ref13.value;
     return ["actions[]=flag_".concat(flag), "flag_".concat(flag, "=").concat(Number(value))];
-  })), ["action=Update", "am=1", "ajax=1", "pwd"]).join("&"), !0)));
+  })), ["action=Update", "am=1", "ajax=1", "pwd"]).join("&")), !0);
 }
 function withCombatFlags(action) {
   for (var _len3 = arguments.length, flags = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++)
@@ -4275,7 +4275,7 @@ function withCombatFlags(action) {
     return flag;
   }));
   try {
-    return action();
+    return setCombatFlags.apply(void 0, flags), action();
   } finally {
     setCombatFlags.apply(void 0, _toConsumableArray3(initialValues));
   }

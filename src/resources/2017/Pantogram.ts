@@ -1,5 +1,6 @@
-import { Item, visitUrl } from "kolmafia";
-import { directlyUse, have as haveItem } from "../../lib.js";
+import { Item, use } from "kolmafia";
+import { have as haveItem } from "../../lib.js";
+import { withChoice } from "../../property.js";
 import { $item } from "../../template-string.js";
 
 const pantogram = $item`portable pantogram`;
@@ -207,10 +208,11 @@ export function makePants(
   const s2 = sacrificePairToURL(getRightSacPair(rightSac));
   const s3 = sacrificePairToURL(getMiddleSacPair(middleSac));
 
-  const url = `choice.php?whichchoice=1270&pwd&option=1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`;
-
-  directlyUse(pantogram);
-  visitUrl(url);
+  withChoice(
+    1270,
+    `1&m=${Alignment[alignment]}&e=${Element[element]}&s1=${s1}&s2=${s2}&s3=${s3}`,
+    () => use(pantogram),
+  );
   return haveItem(pants);
 }
 

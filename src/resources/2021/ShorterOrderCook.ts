@@ -1,7 +1,7 @@
-import { canEquip, Familiar, familiarEquippedEquipment } from "kolmafia";
+import { canEquip, Familiar, familiarEquippedEquipment, Item } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { get } from "../../property.js";
-import { $familiar, $familiars, $item } from "../../template-string.js";
+import { $familiar, $familiars, $item, $items } from "../../template-string.js";
 import { clamp } from "../../utils.js";
 
 const cook = $familiar`Shorter-Order Cook`;
@@ -42,4 +42,17 @@ export function pendingExperience(
  */
 export function fightsUntilDrop(): number {
   return clamp(11 - get("_shortOrderCookCharge"), 1, 11);
+}
+
+const drops = $items`short stack of pancakes, short stick of butter, short glass of water, short white, short beer`;
+
+/**
+ * Predict the next potion in the cook's drop rotation.
+ *
+ * @returns The next potion the cook will drop.
+ */
+export function nextDrop(): Item {
+  const lastDrop = get("shortOrderCookLastDrop");
+  const index = drops.findIndex((item) => item.name === lastDrop);
+  return drops[(index + 1) % drops.length];
 }

@@ -36,7 +36,7 @@ import {
   withOutfitCheckpoint,
 } from "./lib.js";
 import { get } from "./property.js";
-import { AsdonMartin } from "./resources/index.js";
+import * as AsdonMartin from "./resources/2017/AsdonMartin.js";
 import { $effect, $item, $skill, $slot } from "./template-string.js";
 import { clamp, sum } from "./utils.js";
 

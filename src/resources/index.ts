@@ -70,6 +70,7 @@ import * as CyberRealm from "./2025/CyberRealm.js";
 import * as PeridotOfPeril from "./2025/PeridotOfPeril.js";
 import * as PrismaticBeret from "./2025/PrismaticBeret.js";
 import * as BloodCubicZirconia from "./2025/BloodCubicZirconia.js";
+import * as MonodentOfTheSea from "./2025/MonodentOfTheSea.js";
 import * as SkeletonOfCrimboPast from "./2025/SkeletonOfCrimboPast.js";
 import * as LegendarySealClubbingClub from "./2026/LegendarySealClubbingClub.js";
 import * as EternityCodpiece from "./2026/EternityCodpiece.js";
@@ -127,6 +128,7 @@ export {
   LookingGlass,
   MayamCalendar,
   MayoClinic,
+  MonodentOfTheSea,
   MummingTrunk,
   ObtuseAngel,
   Pantogram,

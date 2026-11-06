@@ -15,6 +15,8 @@ import {
   NumericProperty,
   phylumProperties,
   PhylumProperty,
+  questProperties,
+  QuestProperty,
   statProperties,
   StatProperty,
   stringProperties,
@@ -31,6 +33,7 @@ const familiarPropertiesSet = new Set(familiarProperties);
 const statPropertiesSet = new Set(statProperties);
 const phylumPropertiesSet = new Set(phylumProperties);
 const itemPropertiesSet = new Set(itemProperties);
+const questPropertiesSet = new Set(questProperties);
 
 /**
  * Determine whether a property has a boolean value
@@ -144,6 +147,24 @@ export function isItemProperty(property: string): property is ItemProperty {
   return (itemPropertiesSet as Set<string>).has(property);
 }
 
+/**
+ * Determine whether a property stores a quest status.
+ *
+ * @param property Property to check
+ * @returns Whether the property is a known quest status preference
+ */
+export function isQuestProperty(property: string): property is QuestProperty {
+  return (questPropertiesSet as Set<string>).has(property);
+}
+
+export type QuestStatus =
+  | "unstarted"
+  | `step${number}`
+  | "started"
+  | "completed"
+  | "finished"
+  | "";
+
 export type KnownProperty =
   | NumericProperty
   | BooleanProperty
@@ -154,4 +175,5 @@ export type KnownProperty =
   | ItemProperty
   | StatProperty
   | StringProperty
-  | NumericOrStringProperty;
+  | NumericOrStringProperty
+  | QuestProperty;

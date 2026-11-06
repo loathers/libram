@@ -48,6 +48,7 @@ import {
   DeprecatedNumericOrStringProperty,
   DeprecatedNumericProperty,
   DeprecatedPhylumProperty,
+  DeprecatedQuestProperty,
   DeprecatedStatProperty,
   DeprecatedStringProperty,
   familiarNumericProperties,
@@ -60,6 +61,7 @@ import {
   NumericOrStringProperty,
   NumericProperty,
   PhylumProperty,
+  QuestProperty,
   StatProperty,
   StringProperty,
 } from "./propertyTypes.js";
@@ -72,9 +74,11 @@ import {
   isNumericOrStringProperty,
   isNumericProperty,
   isPhylumProperty,
+  isQuestProperty,
   isStatProperty,
   isStringProperty,
   KnownProperty,
+  QuestStatus,
 } from "./propertyTyping.js";
 
 const createPropertyGetter =
@@ -202,6 +206,13 @@ export function get(
   _default: number | string,
 ): number | string;
 /** @deprecated This property is deprecated */
+export function get(property: DeprecatedQuestProperty): QuestStatus;
+export function get(property: QuestProperty): QuestStatus;
+export function get(
+  property: QuestProperty,
+  _default: QuestStatus,
+): QuestStatus;
+/** @deprecated This property is deprecated */
 export function get(property: DeprecatedStringProperty): boolean;
 export function get(property: StringProperty): string;
 export function get(property: StringProperty, _default: string): string;
@@ -266,7 +277,7 @@ export function get(property: string, _default?: unknown): unknown {
     return getPhylum(property, _default as Phylum | undefined);
   } else if (isItemProperty(property)) {
     return getItem(property, _default as Item | undefined);
-  } else if (isStringProperty(property)) {
+  } else if (isQuestProperty(property) || isStringProperty(property)) {
     return value === "" && _default !== undefined ? _default : value;
   }
 
@@ -430,7 +441,7 @@ export function withProperties<T>(
   callback: () => T,
 ): T {
   const propertiesBackup = Object.fromEntries(
-    Object.entries(properties).map(([prop]) => [prop, get(prop)]),
+    Object.entries(properties).map(([prop]) => [prop, getString(prop)]),
   ) as Properties;
   setProperties(properties);
   try {
@@ -513,7 +524,7 @@ export class PropertiesManager {
         this.properties[propertyName as KnownProperty] = propertyExists(
           propertyName,
         )
-          ? get(propertyName)
+          ? getString(propertyName)
           : PropertiesManager.EMPTY_PREFERENCE;
       }
       set(propertyName, propertyValue as { toString(): string });

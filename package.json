@@ -1,6 +1,6 @@
 {
   "name": "libram",
-  "version": "0.11.40",
+  "version": "0.11.41",
   "description": "JavaScript helper library for KoLmafia",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   "author": "Samuel Gaus <sam@gaus.co.uk>",
   "license": "MIT",
   "scripts": {
-    "build": "yarn run updateOverlappingItemSkillNames && yarn run build:tsc && yarn run build:bundled",
+    "build": "yarn run build:tsc && yarn run build:bundled",
     "build:tsc": "tsc",
     "build:bundled": "node build.mjs",
     "clean": "rm -rf dist",

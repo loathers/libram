@@ -1,18 +1,17 @@
 import {
+  adv1,
   canAdventure,
+  choiceFollowsFight,
   currentRound,
   handlingChoice,
-  lastChoice,
   Location,
   Monster,
   myTurncount,
   runChoice,
-  toUrl,
   useSkill,
-  visitUrl,
 } from "kolmafia";
 import { have as _have } from "../../lib.js";
-import { get } from "../../property.js";
+import { get, withChoice } from "../../property.js";
 import { $skill } from "../../template-string.js";
 
 const passive = $skill`Comprehensive Cartography`;
@@ -27,7 +26,36 @@ export function have(): boolean {
 }
 
 /**
- * Map a particular monster in a particular location
+ * Map a particular monster in a particular location, terminating after one `adv1` independent of success.
+ * You'll need to set your autoattack or CCS in advance of using this. Additionally, it will loop to try to avoid time-spinner pranks or zone intro adventures
+ *
+ *
+ * @param location The location to target
+ * @param monster The monster to target
+ * @returns One of three states: `mapped` for a complete success, `failed` if we couldn’t begin mapping or finish the attempted adventure, `interrupted` otherwise.
+ */
+export function tryMapMonster(
+  location: Location,
+  monster: Monster,
+): "mapped" | "interrupted" | "failed" {
+  if (!have() || !canAdventure(location) || currentRound() > 0) return "failed";
+
+  if (!currentlyMapping()) {
+    if (get("_monstersMapped") >= 3) return "failed";
+    useSkill($skill`Map the Monsters`);
+    if (!currentlyMapping()) return "failed";
+  }
+
+  return withChoice(1435, `1&heyscriptswhatsupwinkwink=${monster.id}`, () => {
+    const adventured = adv1(location, -1, "");
+    if (choiceFollowsFight() || handlingChoice()) runChoice(-1);
+    if (!currentlyMapping()) return "mapped";
+    if (!adventured || currentRound() > 0 || handlingChoice()) return "failed";
+    return "interrupted";
+  });
+}
+/**
+ * Map a particular monster in a particular location, looping until we either waste a turn or succeed.
  * You'll need to set your autoattack or CCS in advance of using this. Additionally, it will loop to try to avoid time-spinner pranks or zone intro adventures
  *
  * @param location The location to target
@@ -35,28 +63,14 @@ export function have(): boolean {
  * @returns Whether we successfully mapped the monster
  */
 export function mapMonster(location: Location, monster: Monster): boolean {
-  if (!have()) return false;
-  if (get("_monstersMapped") >= 3) return false;
-  if (!canAdventure(location)) return false;
-
-  useSkill($skill`Map the Monsters`);
-  if (!get("mappingMonsters")) return false;
-
   const turns = myTurncount();
-  while (currentRound() < 1) {
-    // Not in combat
+  while (true) {
+    const result = tryMapMonster(location, monster);
+    if (result !== "interrupted") return result === "mapped";
     if (myTurncount() > turns) {
       throw new Error("Map the Monsters unsuccessful?");
     }
-    visitUrl(toUrl(location));
-    if (handlingChoice() && lastChoice() === 1435) {
-      runChoice(1, `heyscriptswhatsupwinkwink=${monster.id}`);
-      return true;
-    } else {
-      runChoice(-1, false);
-    }
   }
-  return false;
 }
 
 /**

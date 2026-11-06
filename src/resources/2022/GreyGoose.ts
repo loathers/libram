@@ -2,7 +2,8 @@ import { myClass } from "kolmafia";
 import { have as have_ } from "../../lib.js";
 import { get as getModifier } from "../../modifier.js";
 import { get } from "../../property.js";
-import { $familiar, $item, $skill } from "../../template-string.js";
+import { $familiar, $skill } from "../../template-string.js";
+import { pendingExperience } from "../2021/ShorterOrderCook.js";
 
 const goose = $familiar`Grey Goose`;
 
@@ -21,11 +22,7 @@ export function have(): boolean {
  * @returns Your current expected Grey Goose experience, paying attention to potential experience from the Shorter-Order Cook
  */
 export function currentExperience(): number {
-  const postAscensionBaseExperience =
-    have_($familiar`Shorter-Order Cook`) && !get("gooseReprocessed")
-      ? 81 + (have_($item`blue plate`) ? 19 : 0)
-      : 0;
-  return goose.experience || postAscensionBaseExperience;
+  return goose.experience + pendingExperience(goose);
 }
 
 /**

@@ -265,3 +265,10 @@ export function openChest(): boolean {
     return true;
   });
 }
+
+/**
+ * @returns Whether you've swapped out the Bblack Rose Garden today.
+ */
+export function swappedToday(): boolean {
+  return get("_blackRoseGardenReset");
+}

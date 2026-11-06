@@ -54,12 +54,16 @@ function makePerkFunction(
   perkOrPerks: readonly Perk[] | Perk,
   formula: (perks: number) => number,
 ) {
-  const current = currentPerks();
   if (Array.isArray(perkOrPerks)) {
-    return () =>
-      formula(perkOrPerks.filter((perk) => current.includes(perk)).length);
+    return () => {
+      const current = currentPerks();
+      return formula(
+        perkOrPerks.filter((perk) => current.includes(perk)).length,
+      );
+    };
   }
-  return () => formula(current.filter((perk) => perk === perkOrPerks).length);
+  return () =>
+    formula(currentPerks().filter((perk) => perk === perkOrPerks).length);
 }
 
 const BULLSEYE_ACCURACY_PERKS = [

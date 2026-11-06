@@ -332,6 +332,61 @@ export const ridingFamiliars: readonly FamiliarRider[] = [
     drops: $items`hot nuggets`,
     probability: 1,
   },
+  {
+    familiar: $familiar`Hobo in Sheep's Clothing`,
+    drops: $items`green pixel`,
+    probability: 0.03,
+  },
+  {
+    familiar: $familiar`Piranha Plant`,
+    drops: $items`green pixel`,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`He-Boulder`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Mini-Adventurer`,
+    drops: 60,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Nanorhino`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Spirit Hobo`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Temporal Riftlet`,
+    drops: 30,
+    probability: 1,
+  },
+  {
+    familiar: $familiar`Wereturtle`,
+    drops: 30,
+    probability: 1,
+  },
+  // {
+  //   familiar: $familiar`Cocoabo`,
+  //   drops: $items`white chocolate chips`,
+  //   probability: "spade me",
+  // },
+  // {
+  //   familiar: $familiar`Crimbo Elf`,
+  //   drops: $items`candy cane, Cold Hots candy, Wint-O-Fresh mint`,
+  //   probability: "spade me",
+  // },
+  // {
+  //   familiar: $familiar`Cookbookbat`,
+  //   drops: $items`bowl of cottage cheese, flat dough, magicalness-in-a-can, spices, strawberry, wad of dough`,
+  //   probability: "spade me",
+  // },
 ] as const;
 
 const FULL_RIDING_LIST = [
@@ -390,7 +445,7 @@ const DEFAULTS = {
  * @param details.modifierValueFunction Function to value a familiar itself, often using modifiers,
  * @param details.dropsValueFunction Function to value the drops of a familiar, which are stored as an `Item[]` or `Map<Item, number>`
  * @param details.ignoreLimitedDrops Whether to ignore daily or otherwise limited drops
- * @param details.excludeCurrentFamiliar Whether to exclude the player's current familiar
+ * @param details.excludeCurrentFamiliar Whether to exclude the active familiar supplied to `pickRider`
  * @returns Map of all rider modes created this session, including the one that was just made
  */
 export function createRiderMode(
@@ -414,9 +469,13 @@ const riderLists = new Map<string, FamiliarRider[]>();
  * Pick a rider
  *
  * @param mode Mode by which to select possible riders
- * @returns Picked faimiliar rider or null if no rider could be selected
+ * @param activeFamiliar Familiar to exclude when the mode excludes the active familiar; defaults to the player's current familiar
+ * @returns Picked familiar rider or null if no rider could be selected
  */
-export function pickRider(mode: string): FamiliarRider | null {
+export function pickRider(
+  mode: string,
+  activeFamiliar = myFamiliar(),
+): FamiliarRider | null {
   const modeData = riderModes.get(mode);
   if (!modeData) return null;
   const {
@@ -448,7 +507,7 @@ export function pickRider(mode: string): FamiliarRider | null {
     const riderToReturn = list.find(
       ({ dropPredicate, familiar }) =>
         (dropPredicate?.() ?? true) &&
-        (!excludeCurrentFamiliar || myFamiliar() !== familiar),
+        (!excludeCurrentFamiliar || activeFamiliar !== familiar),
     );
     return riderToReturn ?? null;
   }

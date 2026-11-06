@@ -14160,13 +14160,13 @@ function perksMaxed() {
   return currentPerks().length === PERKS.length;
 }
 function makePerkFunction(perkOrPerks, formula) {
-  var current2 = currentPerks();
   return Array.isArray(perkOrPerks) ? function() {
+    var current2 = currentPerks();
     return formula(perkOrPerks.filter(function(perk) {
       return current2.includes(perk);
     }).length);
   } : function() {
-    return formula(current2.filter(function(perk) {
+    return formula(currentPerks().filter(function(perk) {
       return perk === perkOrPerks;
     }).length);
   };

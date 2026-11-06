@@ -346,7 +346,7 @@ export function buskAt(power: number, buyItems = true): boolean {
     if (sumEquipmentPower() !== power) {
       return false;
     }
-    useSkill($skill`Beret Busking`);
+    useSkill(1, $skill`Beret Busking`);
     return initialUses !== get("_beretBuskingUses");
   } finally {
     $slots`hat, shirt, pants`.forEach((slot, index) =>

@@ -19,7 +19,7 @@ import { $monster, $path, $skill } from "../../template-string.js";
 export function rainMan(target: Monster): void {
   if (canRainMan(target)) {
     withChoice(970, `1&whichmonster=${target.id}`, () =>
-      useSkill($skill`Rain Man`),
+      useSkill(1, $skill`Rain Man`),
     );
   }
 }

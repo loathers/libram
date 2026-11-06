@@ -126,7 +126,7 @@ export function cast(skill: Skill, count: number): boolean {
   return withOutfitCheckpoint(() => {
     equip($item`blood cubic zirconia`);
     for (let i = 0; i < count; i++) {
-      if (!useSkill(skill)) {
+      if (!useSkill(1, skill)) {
         return false;
       }
     }

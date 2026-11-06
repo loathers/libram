@@ -7179,7 +7179,7 @@ function prepareRunaway(songsToRemove) {
         _iterator.f();
       }
     }
-    if (!(0, import_kolmafia11.useSkill)(odeSkill))
+    if (!(0, import_kolmafia11.useSkill)(1, odeSkill))
       return !1;
   }
   return (0, import_kolmafia11.useFamiliar)(familiar);
@@ -11915,7 +11915,7 @@ function have36() {
   return have(passive);
 }
 function tryMapMonster(location, monster) {
-  return !have36() || !(0, import_kolmafia50.canAdventure)(location) || (0, import_kolmafia50.currentRound)() > 0 || !currentlyMapping() && (get("_monstersMapped") >= 3 || ((0, import_kolmafia50.useSkill)($skill(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral39(["Map the Monsters"])))), !currentlyMapping())) ? "failed" : withChoice(1435, "1&heyscriptswhatsupwinkwink=".concat(monster.id), function() {
+  return !have36() || !(0, import_kolmafia50.canAdventure)(location) || (0, import_kolmafia50.currentRound)() > 0 || !currentlyMapping() && (get("_monstersMapped") >= 3 || ((0, import_kolmafia50.useSkill)(1, $skill(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral39(["Map the Monsters"])))), !currentlyMapping())) ? "failed" : withChoice(1435, "1&heyscriptswhatsupwinkwink=".concat(monster.id), function() {
     var adventured = (0, import_kolmafia50.adv1)(location, -1, "");
     return ((0, import_kolmafia50.choiceFollowsFight)() || (0, import_kolmafia50.handlingChoice)()) && (0, import_kolmafia50.runChoice)(-1), currentlyMapping() ? !adventured || (0, import_kolmafia50.currentRound)() > 0 || (0, import_kolmafia50.handlingChoice)() ? "failed" : "interrupted" : "mapped";
   });
@@ -15161,7 +15161,7 @@ function buskAt(power) {
   }), initialFamiliar = (0, import_kolmafia80.myFamiliar)(), initialFamequip = (0, import_kolmafia80.equippedItem)($slot(_templateObject2016 || (_templateObject2016 = _taggedTemplateLiteral67(["familiar"])))), hat = outfit2.hat, pants2 = outfit2.pants, shirt = outfit2.shirt;
   (0, import_kolmafia80.equip)($slot(_templateObject2131 || (_templateObject2131 = _taggedTemplateLiteral67(["hat"]))), hat), hat !== beret && ((0, import_kolmafia80.useFamiliar)($familiar(_templateObject2217 || (_templateObject2217 = _taggedTemplateLiteral67(["Mad Hatrack"])))), (0, import_kolmafia80.equip)($slot(_templateObject2316 || (_templateObject2316 = _taggedTemplateLiteral67(["familiar"]))), beret)), (0, import_kolmafia80.equip)($slot(_templateObject2415 || (_templateObject2415 = _taggedTemplateLiteral67(["shirt"]))), shirt), (0, import_kolmafia80.equip)($slot(_templateObject2514 || (_templateObject2514 = _taggedTemplateLiteral67(["pants"]))), pants2);
   try {
-    return sumEquipmentPower() !== power ? !1 : ((0, import_kolmafia80.useSkill)($skill(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral67(["Beret Busking"])))), initialUses !== get("_beretBuskingUses"));
+    return sumEquipmentPower() !== power ? !1 : ((0, import_kolmafia80.useSkill)(1, $skill(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral67(["Beret Busking"])))), initialUses !== get("_beretBuskingUses"));
   } finally {
     $slots(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral67(["hat, shirt, pants"]))).forEach(function(slot, index) {
       return (0, import_kolmafia80.equip)(slot, initialEquips[index]);
@@ -15249,7 +15249,7 @@ function cast(skill, count) {
   return !have67() || !COSTS.get(skill) || count <= 0 ? !1 : withOutfitCheckpoint(function() {
     (0, import_kolmafia81.equip)($item(_templateObject2912 || (_templateObject2912 = _taggedTemplateLiteral68(["blood cubic zirconia"]))));
     for (var i = 0; i < count; i++)
-      if (!(0, import_kolmafia81.useSkill)(skill))
+      if (!(0, import_kolmafia81.useSkill)(1, skill))
         return !1;
     return !0;
   });
@@ -17879,7 +17879,7 @@ function _taggedTemplateLiteral85(e, t) {
 }
 function rainMan(target) {
   canRainMan(target) && withChoice(970, "1&whichmonster=".concat(target.id), function() {
-    return (0, import_kolmafia91.useSkill)($skill(_templateObject581 || (_templateObject581 = _taggedTemplateLiteral85(["Rain Man"]))));
+    return (0, import_kolmafia91.useSkill)(1, $skill(_templateObject581 || (_templateObject581 = _taggedTemplateLiteral85(["Rain Man"]))));
   });
 }
 function canRainMan(target) {

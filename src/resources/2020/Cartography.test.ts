@@ -123,7 +123,7 @@ describe("tryMapMonster", () => {
 describe("mapMonster", () => {
   it("maps using normal adventure automation and restores the choice setting", () => {
     expect(mapMonster(location, monster)).toBe(true);
-    expect(useSkill).toHaveBeenCalledWith($skill`Map the Monsters`);
+    expect(useSkill).toHaveBeenCalledWith(1, $skill`Map the Monsters`);
     expect(adv1).toHaveBeenCalledTimes(1);
     expect(adv1).toHaveBeenCalledWith(location, -1, "");
     expect(getProperty("choiceAdventure1435")).toBe(previousChoice);

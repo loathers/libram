@@ -105,7 +105,7 @@ export function prepareRunaway(songsToRemove: Effect[]): boolean {
       }
     }
 
-    if (!useSkill(odeSkill)) {
+    if (!useSkill(1, odeSkill)) {
       return false;
     }
   }

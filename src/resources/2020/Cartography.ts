@@ -42,7 +42,7 @@ export function tryMapMonster(
 
   if (!currentlyMapping()) {
     if (get("_monstersMapped") >= 3) return "failed";
-    useSkill($skill`Map the Monsters`);
+    useSkill(1, $skill`Map the Monsters`);
     if (!currentlyMapping()) return "failed";
   }
 

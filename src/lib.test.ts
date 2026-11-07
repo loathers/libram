@@ -1,4 +1,4 @@
-import { getPlayerId, getPlayerName, visitUrl, xpath } from "kolmafia";
+import { getPlayerId, getPlayerName, holiday, visitUrl, xpath } from "kolmafia";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 
 import {
@@ -6,9 +6,11 @@ import {
   getPlayerIdFromName,
   getPlayerNameFromId,
   getRange,
+  getTodaysHolidayWanderers,
   setCombatFlags,
   withCombatFlags,
 } from "./lib.js";
+import { $monsters } from "./template-string.js";
 
 vi.mocked(getPlayerName).mockImplementation((id: number) => {
   switch (id) {
@@ -189,6 +191,36 @@ describe(getPlayerFromIdOrName, () => {
         expect(getPlayerFromIdOrName(idOrName, "return-null")).toBeNull();
       },
     );
+  });
+});
+
+describe(getTodaysHolidayWanderers, () => {
+  it.each([
+    "El Dia De Los Muertos Borrachos",
+    "El Dia De Los Muertos Borrachos / Halloween",
+    "Halloween / El Dia De Los Muertos Borrachos",
+  ])("returns holiday wanderers for %s", (today) => {
+    vi.mocked(holiday).mockReturnValue(today);
+
+    expect(getTodaysHolidayWanderers()).toEqual(
+      $monsters`Novia Cadáver, Novio Cadáver, Padre Cadáver, Persona Inocente Cadáver`,
+    );
+  });
+
+  it("combines wanderers from simultaneous holidays", () => {
+    vi.mocked(holiday).mockReturnValue(
+      "El Dia De Los Muertos Borrachos / Talk Like a Pirate Day",
+    );
+
+    expect(getTodaysHolidayWanderers()).toEqual(
+      $monsters`Novia Cadáver, Novio Cadáver, Padre Cadáver, Persona Inocente Cadáver, ambulatory pirate, migratory pirate, peripatetic pirate`,
+    );
+  });
+
+  it.each(["", "Halloween"])("returns no wanderers for %j", (today) => {
+    vi.mocked(holiday).mockReturnValue(today);
+
+    expect(getTodaysHolidayWanderers()).toEqual([]);
   });
 });
 

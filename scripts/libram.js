@@ -9236,9 +9236,7 @@ function isDecoratedWith(topper, lights, garland, gifts) {
   });
 }
 function decorate(topper, lights, garland, gifts) {
-  return have14() ? (get("_shrubDecorated") || (have($item(_templateObject237 || (_templateObject237 = _taggedTemplateLiteral20(["box of old Crimbo decorations"])))) || (0, import_kolmafia26.useFamiliar)($familiar(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral20(["Crimbo Shrub"])))), withChoice(999, "1&topper=".concat(Toppers[topper], "&lights=").concat(Lights[lights], "&garland=").concat(Garland[garland], "&gift=").concat(Gifts[gifts]), function() {
-    return (0, import_kolmafia26.use)($item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral20(["box of old Crimbo decorations"]))));
-  })), isDecoratedWith(topper, lights, garland, gifts)) : !1;
+  return have14() ? (get("_shrubDecorated") || (have($item(_templateObject237 || (_templateObject237 = _taggedTemplateLiteral20(["box of old Crimbo decorations"])))) || (0, import_kolmafia26.useFamiliar)($familiar(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral20(["Crimbo Shrub"])))), directlyUse($item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral20(["box of old Crimbo decorations"])))), (0, import_kolmafia26.visitUrl)("choice.php?whichchoice=999&pwd=&option=1&topper=".concat(Toppers[topper], "&lights=").concat(Lights[lights], "&garland=").concat(Garland[garland], "&gift=").concat(Gifts[gifts]))), isDecoratedWith(topper, lights, garland, gifts)) : !1;
 }
 
 // src/resources/2014/DNALab.ts
@@ -10569,10 +10567,8 @@ function makePants(alignment, element, leftSac, middleSac, rightSac) {
     return !have(item16, quantity);
   }))
     return !1;
-  var s1 = sacrificePairToURL(getLeftSacPair(leftSac)), s2 = sacrificePairToURL(getRightSacPair(rightSac)), s3 = sacrificePairToURL(getMiddleSacPair(middleSac));
-  return withChoice(1270, "1&m=".concat(Alignment[alignment], "&e=").concat(Element4[element], "&s1=").concat(s1, "&s2=").concat(s2, "&s3=").concat(s3), function() {
-    return (0, import_kolmafia39.use)(pantogram);
-  }), have(pants);
+  var s1 = sacrificePairToURL(getLeftSacPair(leftSac)), s2 = sacrificePairToURL(getRightSacPair(rightSac)), s3 = sacrificePairToURL(getMiddleSacPair(middleSac)), url = "choice.php?whichchoice=1270&pwd&option=1&m=".concat(Alignment[alignment], "&e=").concat(Element4[element], "&s1=").concat(s1, "&s2=").concat(s2, "&s3=").concat(s3);
+  return directlyUse(pantogram), (0, import_kolmafia39.visitUrl)(url), have(pants);
 }
 function makePantsFromObject(pants2) {
   return makePants(pants2.alignment, pants2.element, pants2.leftSac, pants2.middleSac, pants2.rightSac);

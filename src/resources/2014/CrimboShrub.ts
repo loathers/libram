@@ -1,6 +1,6 @@
-import { use, useFamiliar } from "kolmafia";
-import { have as have_ } from "../../lib.js";
-import { get, withChoice } from "../../property.js";
+import { useFamiliar, visitUrl } from "kolmafia";
+import { directlyUse, have as have_ } from "../../lib.js";
+import { get } from "../../property.js";
 import { $familiar, $item } from "../../template-string.js";
 
 /**
@@ -111,10 +111,9 @@ export function decorate(
     useFamiliar($familiar`Crimbo Shrub`);
   }
 
-  withChoice(
-    999,
-    `1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`,
-    () => use($item`box of old Crimbo decorations`),
+  directlyUse($item`box of old Crimbo decorations`);
+  visitUrl(
+    `choice.php?whichchoice=999&pwd=&option=1&topper=${Toppers[topper]}&lights=${Lights[lights]}&garland=${Garland[garland]}&gift=${Gifts[gifts]}`,
   );
 
   return isDecoratedWith(topper, lights, garland, gifts);

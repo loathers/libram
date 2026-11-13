@@ -15,7 +15,7 @@ import {
 } from "kolmafia";
 import { MoonSign, signNameToId } from "./moonSign.js";
 import { get } from "./property.js";
-import { ChateauMantegna } from "./resources/index.js";
+import * as ChateauMantegna from "./resources/2015/ChateauMantegna.js";
 import { $item, $items, $stat } from "./template-string.js";
 import { arrayContains, tc } from "./utils.js";
 
